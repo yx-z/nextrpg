@@ -1,0 +1,9 @@
+black
+build
+isort
+mypy
+pylint
+pytest
+setuptools
+twine
+wheel

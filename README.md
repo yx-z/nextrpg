@@ -1,28 +1,19 @@
-# PyRPGMaker
+# nextrpg
 
-A Python-based RPG Maker tool for creating role-playing games.
+Build your next RPG (Role Playing Game).
 
 ## Installation
 
 ```bash
-pip install pyrpgmaker
+pip install nextrpg
 ```
+## Example
 
-## Usage
-
-```python
-from pyrpgmaker import Game
-
-# Create a new game
-game = Game()
-```
+Work in progress.
 
 ## Features
 
-- Create and manage RPG games
-- Customizable characters and maps
-- Event system
-- Battle system
+Work in progress.
 
 ## License
 
