@@ -1,9 +1,0 @@
-LICENSE
-README.md
-setup.py
-pyrpgmaker/__init__.py
-pyrpgmaker.egg-info/PKG-INFO
-pyrpgmaker.egg-info/SOURCES.txt
-pyrpgmaker.egg-info/dependency_links.txt
-pyrpgmaker.egg-info/requires.txt
-pyrpgmaker.egg-info/top_level.txt

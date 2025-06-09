@@ -1,0 +1,53 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "interior.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "base.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "builder.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "interior.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 646.6666666666665,
+                "y": 419.66666666666663
+            }
+        },
+        "objects.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/yxz/Desktop/nextrpg/example/assets",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 48,
+    "map.tileWidth": 48,
+    "openFiles": [
+        "interior.tmx",
+        "base.tsx"
+    ],
+    "project": "example.tiled-project",
+    "recentFiles": [
+        "base.tsx",
+        "interior.tmx",
+        "objects.tsx",
+        "builder.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 48,
+        "width": 48
+    }
+}

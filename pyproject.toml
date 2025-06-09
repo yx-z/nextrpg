@@ -1,0 +1,19 @@
+[project]
+name = "nextrpg"
+version = "0.1.1"
+description = "Build your next RPG (Role Playing Game)."
+authors = [{ name = "yx-z", email = "yx-z@outlook.com" }]
+requires-python = ">=3.12"
+readme = "README.md"
+
+dependencies = ["pygame-ce", "pytmx"]
+
+[tool.black]
+line-length = 80
+
+[tool.isort]
+profile = "black"
+
+[tool.pylint]
+max-line-length = 80
+ignored-modules = "pygame"
