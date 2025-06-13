@@ -22,7 +22,7 @@ from nextrpg.common_types import Direction, Millisecond, Pixel
 from nextrpg.config import config
 from nextrpg.draw_on_screen import Coordinate, Drawing, Size
 from nextrpg.frames import FrameExhaustedOption, FrameIndex, Frames
-from util import assert_not_none
+from nextrpg.util import assert_not_none
 
 
 class Style(Enum):
