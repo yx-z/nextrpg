@@ -5,9 +5,9 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.common_types import (
     Coordinate,
     Direction,
+    DirectionalOffset,
     Millisecond,
     Pixel,
-    PolarVector,
     Rectangle,
 )
 from nextrpg.config import config
@@ -34,7 +34,7 @@ class CharacterOnScreen:
         collisions: list[Rectangle],
         speed: Pixel | None = None,
     ) -> None:
-        self._sprite: Final[CharacterDrawing] = character_sprite
+        self._sprite: CharacterDrawing = character_sprite
         self._speed: Final[Pixel] = (
             config().character.default_move_speed if speed is None else speed
         )
@@ -64,15 +64,15 @@ class CharacterOnScreen:
         return self._coordinate
 
     @singledispatchmethod
-    def event(self, event: PygameEvent) -> None:
+    def event(self, e: PygameEvent) -> None:
         pass
 
     @event.register
-    def _turn_direction(self, event: KeyPressDown | KeyPressUp) -> None:
-        if (key := event.key) not in _MOVEMENT_KEYS:
+    def _turn_direction(self, e: KeyPressDown | KeyPressUp) -> None:
+        if (key := e.key) not in _MOVEMENT_KEYS:
             return
 
-        if isinstance(event, KeyPressDown):
+        if isinstance(e, KeyPressDown):
             self._movement_keys.add(key)
         else:
             self._movement_keys.discard(key)
@@ -82,6 +82,25 @@ class CharacterOnScreen:
         ) in config().character.move_directions:
             self._direction = d
 
+    def draw_on_screen(self, time_delta: Millisecond) -> CharacterAndVisuals:
+        if self._move(
+            time_delta, self._sprite.peek_move(time_delta, self.direction)
+        ):
+            self._sprite = self._sprite.move(time_delta, self.direction)
+            drawing = self._sprite.draw_move(self.direction)
+        else:
+            self._sprite = self._sprite.idle(time_delta, self.direction)
+            drawing = self._sprite.draw_idle(self.direction)
+
+        return CharacterAndVisuals(
+            DrawOnScreen(self.coordinate, drawing),
+            (
+                [DrawOnScreen.from_rectangle(c) for c in self._collisions]
+                if config().debug
+                else []
+            ),
+        )
+
     def _move(self, time_delta: Millisecond, drawing: Drawing) -> bool:
         """
         Returns:
@@ -90,8 +109,7 @@ class CharacterOnScreen:
         """
         if not self._movement_keys:
             return False
-
-        coord = self.coordinate + PolarVector(
+        coord = self.coordinate + DirectionalOffset(
             self.direction, self._speed * time_delta
         )
         if is_moving := self._can_move(coord, drawing):
@@ -99,7 +117,7 @@ class CharacterOnScreen:
         return is_moving
 
     def _can_move(self, coordinate: Coordinate, drawing: Drawing) -> bool:
-        rect = Rectangle(coordinate, drawing.size)
+        rect = DrawOnScreen(coordinate, drawing).visible_rectangle
         hit_coord = {
             Direction.LEFT: {rect.bottom_left},
             Direction.RIGHT: {rect.bottom_right},
@@ -117,20 +135,6 @@ class CharacterOnScreen:
         return all(
             all(h not in collision for h in hit_coord)
             for collision in self._collisions
-        )
-
-    def draw_on_screen(self, time_delta: Millisecond) -> CharacterAndVisuals:
-        moved = self._sprite.draw(time_delta, self.direction, is_moving=True)
-        drawing = self._sprite.draw(
-            time_delta, self.direction, self._move(time_delta, moved)
-        )
-        return CharacterAndVisuals(
-            DrawOnScreen(self.coordinate, drawing),
-            (
-                [DrawOnScreen.from_rectangle(c) for c in self._collisions]
-                if config().debug
-                else []
-            ),
         )
 
 

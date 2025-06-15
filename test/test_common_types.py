@@ -3,45 +3,45 @@ from pytest import approx, raises
 from nextrpg.common_types import (
     Coordinate,
     Direction,
-    PolarVector,
+    DirectionalOffset,
     Rectangle,
     Size,
 )
 
 
-def test_vector() -> None:
-    assert PolarVector(Direction.UP, 10).direction is Direction.UP
-    assert PolarVector(Direction.UP, 10).offset == 10
+def test_directional_offset() -> None:
+    assert DirectionalOffset(Direction.UP, 10).direction is Direction.UP
+    assert DirectionalOffset(Direction.UP, 10).offset == 10
 
 
 def test_coordinate() -> None:
     assert Coordinate(10, 20) * 2 == Coordinate(20, 40)
-    assert Coordinate(10, 20) + PolarVector(Direction.UP, 5) == Coordinate(
-        10, 15
-    )
-    assert Coordinate(10, 20) + PolarVector(Direction.DOWN, 5) == Coordinate(
-        10, 25
-    )
-    assert Coordinate(10, 20) + PolarVector(Direction.LEFT, 5) == Coordinate(
-        5, 20
-    )
-    assert Coordinate(10, 20) + PolarVector(Direction.RIGHT, 5) == Coordinate(
-        15, 20
-    )
-    assert Coordinate(10, 20) + PolarVector(Direction.UP_LEFT, 10) == approx(
-        Coordinate(2.9289321881345254, 12.928932188134524)
-    )
-    assert Coordinate(10, 20) + PolarVector(Direction.UP_RIGHT, 10) == approx(
-        Coordinate(17.071067811865476, 12.928932188134524)
-    )
-    assert Coordinate(10, 20) + PolarVector(Direction.DOWN_LEFT, 10) == approx(
-        Coordinate(2.9289321881345254, 27.071067811865476)
-    )
-    assert Coordinate(10, 20) + PolarVector(Direction.DOWN_RIGHT, 10) == approx(
-        Coordinate(17.071067811865476, 27.071067811865476)
-    )
+    assert Coordinate(10, 20) + DirectionalOffset(
+        Direction.UP, 5
+    ) == Coordinate(10, 15)
+    assert Coordinate(10, 20) + DirectionalOffset(
+        Direction.DOWN, 5
+    ) == Coordinate(10, 25)
+    assert Coordinate(10, 20) + DirectionalOffset(
+        Direction.LEFT, 5
+    ) == Coordinate(5, 20)
+    assert Coordinate(10, 20) + DirectionalOffset(
+        Direction.RIGHT, 5
+    ) == Coordinate(15, 20)
+    assert Coordinate(10, 20) + DirectionalOffset(
+        Direction.UP_LEFT, 10
+    ) == approx(Coordinate(2.9289321881345254, 12.928932188134524))
+    assert Coordinate(10, 20) + DirectionalOffset(
+        Direction.UP_RIGHT, 10
+    ) == approx(Coordinate(17.071067811865476, 12.928932188134524))
+    assert Coordinate(10, 20) + DirectionalOffset(
+        Direction.DOWN_LEFT, 10
+    ) == approx(Coordinate(2.9289321881345254, 27.071067811865476))
+    assert Coordinate(10, 20) + DirectionalOffset(
+        Direction.DOWN_RIGHT, 10
+    ) == approx(Coordinate(17.071067811865476, 27.071067811865476))
     with raises(ValueError):
-        Coordinate(1, 2) + PolarVector("INVALID_DIRECTION", 1)  # type: ignore
+        Coordinate(1, 2) + DirectionalOffset("INVALID_DIRECTION", 1)  # type: ignore
 
 
 def test_size() -> None:
@@ -65,7 +65,7 @@ def test_rectangle() -> None:
     assert rect.center_right == Coordinate(11, 21)
     assert rect.center == Coordinate(10.5, 21)
     assert rect * 2 == Rectangle(Coordinate(20, 40), Size(2, 4))
-    assert rect + PolarVector(Direction.UP, 5) == Rectangle(
+    assert rect + DirectionalOffset(Direction.UP, 5) == Rectangle(
         Coordinate(10, 15), Size(1, 2)
     )
     rect2 = Rectangle(Coordinate(11, 20), Size(1, 2))

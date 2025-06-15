@@ -5,6 +5,7 @@ Common types referenced across `nextrpg`.
 from dataclasses import dataclass
 from enum import Enum, auto
 from math import ceil, sqrt
+from typing import Union, overload
 
 
 @dataclass(frozen=True)
@@ -87,9 +88,9 @@ Number of pixel on screen.
 
 
 @dataclass(frozen=True)
-class PolarVector:
+class DirectionalOffset:
     """
-    Represents a vector with direction and magnitude for movement calculations.
+    Represents a directional offset for movement calculations.
 
     This class combines a direction (one of eight possible directions) with
     an offset value to define movement in 2D space. The vector can be used
@@ -142,7 +143,8 @@ class Coordinate:
         """
         return Coordinate(ceil(self.left * scale), ceil(self.top * scale))
 
-    def __add__(self, vector: PolarVector) -> "Coordinate":
+    @overload
+    def __add__(self, offset: DirectionalOffset) -> "Coordinate":
         """
         Shifts the coordinate in the specified direction by a given offset.
         Supports both orthogonal and diagonal directions.
@@ -152,24 +154,43 @@ class Coordinate:
         the coordinate `Pixel(1)` in both `UP` and `LEFT` directions.
 
         Args:
-            `vector`: A `PolarVector` representing the direction and offset.
+            `offset`: A `DirectionalOffset` representing the direction and offset.
 
         Returns:
             `Coordinate`: A new coordinate shifted by the specified offset in
             the given direction.
         """
-        match vector.direction:
-            case Direction.UP:
-                return Coordinate(self.left, self.top - vector.offset)
-            case Direction.DOWN:
-                return Coordinate(self.left, self.top + vector.offset)
-            case Direction.LEFT:
-                return Coordinate(self.left - vector.offset, self.top)
-            case Direction.RIGHT:
-                return Coordinate(self.left + vector.offset, self.top)
 
-        diag = vector.offset / sqrt(2)
-        match vector.direction:
+    @overload
+    def __add__(self, offset: "Coordinate") -> "Coordinate":
+        """
+        Add two coordinates together.
+
+        Args:
+            `offset`: A `Coordinate`.
+
+        Returns:
+            `Coordinate`: A new coordinate shifted by the specified offset.
+        """
+
+    def __add__(
+        self, offset: Union[DirectionalOffset, "Coordinate"]
+    ) -> "Coordinate":
+        if isinstance(offset, Coordinate):
+            return Coordinate(self.left + offset.left, self.top + offset.top)
+
+        match offset.direction:
+            case Direction.UP:
+                return Coordinate(self.left, self.top - offset.offset)
+            case Direction.DOWN:
+                return Coordinate(self.left, self.top + offset.offset)
+            case Direction.LEFT:
+                return Coordinate(self.left - offset.offset, self.top)
+            case Direction.RIGHT:
+                return Coordinate(self.left + offset.offset, self.top)
+
+        diag = offset.offset / sqrt(2)
+        match offset.direction:
             case Direction.UP_LEFT:
                 return Coordinate(self.left - diag, self.top - diag)
             case Direction.UP_RIGHT:
@@ -179,7 +200,7 @@ class Coordinate:
             case Direction.DOWN_RIGHT:
                 return Coordinate(self.left + diag, self.top + diag)
             case _:
-                raise ValueError(f"Invalid direction: {vector.direction}")
+                raise ValueError(f"Invalid direction: {offset.direction}")
 
     @property
     def tuple(self) -> tuple[Pixel, Pixel]:
@@ -203,9 +224,9 @@ class Size:
     in pixel measurements.
 
     Attributes:
-        width: The width of the size in pixels.
+        `width`: The width of the size in pixels.
 
-        height: The height of the size in pixels.
+        `height`: The height of the size in pixels.
     """
 
     width: Pixel
@@ -412,7 +433,7 @@ class Rectangle:
         """
         return Rectangle(self.top_left * scale, self.size * scale)
 
-    def __add__(self, vector: PolarVector) -> "Rectangle":
+    def __add__(self, vector: DirectionalOffset) -> "Rectangle":
         """Shifts the rectangle in the specified direction by a given offset.
         Supports both orthogonal and diagonal directions.
 

@@ -3,8 +3,9 @@ Drawable sprites on screen.
 """
 
 from dataclasses import dataclass
-from functools import cached_property, lru_cache
+from functools import cached_property
 from itertools import product
+from math import ceil
 from pathlib import Path
 from typing import Final
 
@@ -12,7 +13,7 @@ from pygame import SRCALPHA, Surface, transform
 from pygame.image import load
 
 from nextrpg.common_types import Coordinate, Pixel, Rectangle, Size
-from nextrpg.config import DebugConfig, config
+from nextrpg.config import config
 
 
 class Drawing:
@@ -80,16 +81,7 @@ class Drawing:
         Returns:
             `pygame.Surface`: The underlying `pygame.Surface`.
         """
-        if debug := config().debug:
-            return self._debug_surface(debug)
-        return self._surface
-
-    @lru_cache
-    def _debug_surface(self, debug: DebugConfig) -> Surface:
-        surface = Surface(self.size.tuple, SRCALPHA)
-        surface.fill(debug.drawing_background_color.tuple)
-        surface.blit(self._surface, Coordinate(0, 0).tuple)
-        return surface
+        return self._debug_surface or self._surface
 
     def crop(self, left_top: Coordinate, size: Size) -> "Drawing":
         """
@@ -131,6 +123,15 @@ class Drawing:
             transform.scale(self._surface, (self.size * scale).tuple)
         )
 
+    @property
+    def _debug_surface(self) -> Surface | None:
+        if not (debug := config().debug):
+            return None
+        surface = Surface(self.size.tuple, SRCALPHA)
+        surface.fill(debug.drawing_background_color.tuple)
+        surface.blit(self._surface, Coordinate(0, 0).tuple)
+        return surface
+
 
 @dataclass(frozen=True)
 class DrawOnScreen:
@@ -161,6 +162,25 @@ class DrawOnScreen:
         """
         return Rectangle(self.top_left, self.drawing.size)
 
+    @cached_property
+    def visible_rectangle(self) -> Rectangle:
+        visible_coords = [
+            Coordinate(x, y)
+            for x, y in product(
+                range(ceil(self.drawing.width)),
+                range(ceil(self.drawing.height)),
+            )
+            if self.drawing._surface.get_at((x, y)).a
+        ]
+        min_x = min(visible_coords, key=lambda c: c.left).left
+        min_y = min(visible_coords, key=lambda c: c.top).top
+        max_x = max(visible_coords, key=lambda c: c.left).left
+        max_y = max(visible_coords, key=lambda c: c.top).top
+        return Rectangle(
+            self.top_left + Coordinate(min_x, min_y),
+            Size(max_x - min_x, max_y - min_y),
+        )
+
     @property
     def pygame(self) -> tuple[Surface, tuple[Pixel, Pixel]]:
         """
@@ -172,14 +192,6 @@ class DrawOnScreen:
                 and top coordinates (x, y).
         """
         return self.drawing.pygame, self.top_left.tuple
-
-    @cached_property
-    def visual_bottom(self) -> Pixel:
-        width, height = self.drawing.size.tuple
-        for h, w in product(reversed(range(int(height))), range(int(width))):
-            if not self.drawing.pygame.get_at((w, h)).a:
-                return h
-        return self.top_left.top
 
     def __mul__(self, scale: float) -> "DrawOnScreen":
         """

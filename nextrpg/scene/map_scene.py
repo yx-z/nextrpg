@@ -20,20 +20,16 @@ from nextrpg.util import partition
 
 
 class MapScene(Scene):
-    def __init__(self, tmx_map: Path, player_sprite: CharacterDrawing) -> None:
-        tile_map = load_pygame(str(tmx_map))
-        self._tile_size: Final[Size] = Size(
-            tile_map.tilewidth, tile_map.tileheight
-        )
+    def __init__(self, tmx_file: Path, player: CharacterDrawing) -> None:
+        tmx = load_pygame(str(tmx_file))
+        self._tile_size: Final[Size] = Size(tmx.tilewidth, tmx.tileheight)
         self._background: Final[list[DrawOnScreen]] = self._draw_layers(
-            _load_layers(tile_map, config().map.background_layer_prefix)
+            _load_layers(tmx, config().map.background_layer_prefix)
         )
         self._foreground: Final[list[DrawOnScreen]] = self._draw_layers(
-            _load_layers(tile_map, config().map.foreground_layer_prefix)
+            _load_layers(tmx, config().map.foreground_layer_prefix)
         )
-        self._player: Final[CharacterOnScreen] = _load_player(
-            player_sprite, tile_map
-        )
+        self._player: Final[CharacterOnScreen] = _load_player(player, tmx)
 
     @override
     def event(self, event: PygameEvent) -> None:
@@ -44,8 +40,8 @@ class MapScene(Scene):
         character, visuals = self._player.draw_on_screen(time_delta)
         below_character, above_character = partition(
             self._foreground,
-            lambda d: d.visual_bottom < character.rectangle.bottom
-            and d.rectangle.collides(character.rectangle),
+            lambda d: d.visible_rectangle.bottom
+            < character.visible_rectangle.bottom,
         )
         return (
             self._background

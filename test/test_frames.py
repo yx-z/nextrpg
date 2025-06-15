@@ -1,13 +1,7 @@
 from dataclasses import dataclass
 
-from pytest_mock import MockerFixture
-
 from nextrpg.draw_on_screen import Drawing
-from nextrpg.frames import FrameExhaustedOption, Frames
-
-
-def test_frame_exhausted_option() -> None:
-    assert len(FrameExhaustedOption) == 3
+from nextrpg.frames import CyclicFrames
 
 
 @dataclass(frozen=True)
@@ -15,56 +9,14 @@ class MockDrawing(Drawing):
     data: str
 
 
-def test_keep_last_frame(mocker: MockerFixture) -> None:
-    mocker.patch("nextrpg.frames.Drawing", MockDrawing)
-    frames = Frames(
-        [MockDrawing("a"), MockDrawing("b")],
-        FrameExhaustedOption.KEEP_LAST_FRAME,
+def test_cyclic_frames() -> None:
+    frames = CyclicFrames(
+        [MockDrawing(x) for x in ["a", "b", "c"]], frame_duration=5
     )
-    assert frames.current_frame() == MockDrawing("a")
-    assert frames.next_frame() == MockDrawing("b")
-    assert frames.next_frame() == MockDrawing("b")
-    assert frames.current_frame() == MockDrawing("b")
-
-    frames.reset()
-    assert frames.current_frame() == MockDrawing("a")
-    assert frames.next_frame() == MockDrawing("b")
-    assert frames.next_frame() == MockDrawing("b")
-    assert frames.current_frame() == MockDrawing("b")
-
-
-def test_cycle(mocker: MockerFixture) -> None:
-    mocker.patch("nextrpg.frames.Drawing", MockDrawing)
-    frames = Frames(
-        [MockDrawing("a"), MockDrawing("b"), MockDrawing("c")],
-        FrameExhaustedOption.CYCLE,
-    )
-    assert frames.current_frame() == MockDrawing("a")
-    assert frames.next_frame() == MockDrawing("b")
-    assert frames.current_frame() == MockDrawing("b")
-    assert frames.next_frame() == MockDrawing("c")
-    assert frames.next_frame() == MockDrawing("a")
-    assert frames.next_frame() == MockDrawing("b")
-    assert frames.current_frame() == MockDrawing("b")
-
-    frames.reset()
-    assert frames.current_frame() == MockDrawing("a")
-    assert frames.next_frame() == MockDrawing("b")
-    assert frames.next_frame() == MockDrawing("c")
-
-
-def test_disappear(mocker: MockerFixture) -> None:
-    mocker.patch("nextrpg.frames.Drawing", MockDrawing)
-    frames = Frames(
-        [MockDrawing("a"), MockDrawing("b")], FrameExhaustedOption.DISAPPEAR
-    )
-    assert frames.current_frame() == MockDrawing("a")
-    assert frames.next_frame() == MockDrawing("b")
-    assert not frames.next_frame()
-    assert not frames.next_frame()
-    assert not frames.current_frame()
-
-    frames.reset()
-    assert frames.current_frame() == MockDrawing("a")
-    assert frames.next_frame() == MockDrawing("b")
-    assert not frames.next_frame()
+    assert frames.current_frame == MockDrawing("a")
+    assert frames.peek(1) == MockDrawing("a")
+    assert frames.peek(5) == MockDrawing("b")
+    assert frames.peek(10) == MockDrawing("c")
+    assert frames.peek(20) == MockDrawing("b")
+    assert frames.step(1).step(4).current_frame == MockDrawing("b")
+    assert frames.step(6).reset().current_frame == MockDrawing("a")

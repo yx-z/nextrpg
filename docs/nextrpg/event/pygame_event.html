@@ -96,6 +96,9 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="function" href="#to_typed_event">to_typed_event</a>
+            </li>
     </ul>
 
 
@@ -233,7 +236,7 @@
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>
 </span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_typed_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PygameEvent</span><span class="p">:</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="k">def</span><span class="w"> </span><span class="nf">to_typed_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PygameEvent</span><span class="p">:</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="sd">    Creates a typed event wrapper for pygame events.</span>
 </span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>
@@ -678,6 +681,53 @@
             </div>
                                 </dl>
                             </div>
+                </section>
+                <section id="to_typed_event">
+                            <input id="to_typed_event-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">to_typed_event</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span></span><span class="return-annotation">) -> <span class="n"><a href="#PygameEvent">PygameEvent</a></span>:</span></span>
+
+                <label class="view-source-button" for="to_typed_event-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#to_typed_event"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="to_typed_event-116"><a href="#to_typed_event-116"><span class="linenos">116</span></a><span class="k">def</span><span class="w"> </span><span class="nf">to_typed_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PygameEvent</span><span class="p">:</span>
+</span><span id="to_typed_event-117"><a href="#to_typed_event-117"><span class="linenos">117</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="to_typed_event-118"><a href="#to_typed_event-118"><span class="linenos">118</span></a><span class="sd">    Creates a typed event wrapper for pygame events.</span>
+</span><span id="to_typed_event-119"><a href="#to_typed_event-119"><span class="linenos">119</span></a>
+</span><span id="to_typed_event-120"><a href="#to_typed_event-120"><span class="linenos">120</span></a><span class="sd">    Arguments:</span>
+</span><span id="to_typed_event-121"><a href="#to_typed_event-121"><span class="linenos">121</span></a><span class="sd">        `event`: The pygame event to wrap</span>
+</span><span id="to_typed_event-122"><a href="#to_typed_event-122"><span class="linenos">122</span></a>
+</span><span id="to_typed_event-123"><a href="#to_typed_event-123"><span class="linenos">123</span></a><span class="sd">    Returns:</span>
+</span><span id="to_typed_event-124"><a href="#to_typed_event-124"><span class="linenos">124</span></a><span class="sd">        `PygameEvent`: subclass instance based on the event type</span>
+</span><span id="to_typed_event-125"><a href="#to_typed_event-125"><span class="linenos">125</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="to_typed_event-126"><a href="#to_typed_event-126"><span class="linenos">126</span></a>    <span class="k">return</span> <span class="p">{</span>
+</span><span id="to_typed_event-127"><a href="#to_typed_event-127"><span class="linenos">127</span></a>        <span class="n">QUIT</span><span class="p">:</span> <span class="n">Quit</span><span class="p">,</span>
+</span><span id="to_typed_event-128"><a href="#to_typed_event-128"><span class="linenos">128</span></a>        <span class="n">VIDEORESIZE</span><span class="p">:</span> <span class="n">GuiResize</span><span class="p">,</span>
+</span><span id="to_typed_event-129"><a href="#to_typed_event-129"><span class="linenos">129</span></a>        <span class="n">KEYDOWN</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">,</span>
+</span><span id="to_typed_event-130"><a href="#to_typed_event-130"><span class="linenos">130</span></a>        <span class="n">KEYUP</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">,</span>
+</span><span id="to_typed_event-131"><a href="#to_typed_event-131"><span class="linenos">131</span></a>    <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">PygameEvent</span><span class="p">)(</span><span class="n">event</span><span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Creates a typed event wrapper for pygame events.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong><code>event</code>:</strong>  The pygame event to wrap</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code><a href="#PygameEvent">PygameEvent</a></code>: subclass instance based on the event type</p>
+</blockquote>
+</div>
+
+
                 </section>
     </main>
 <script>
