@@ -1,6 +1,6 @@
 from pygame import Color, SRCALPHA, Surface
 
-from nextrpg.common_types import Coordinate, Rectangle, Size
+from nextrpg.common_types import Coordinate, Rectangle, Rgba, Size
 from nextrpg.config import Config, DebugConfig, config, set_config
 from nextrpg.draw_on_screen import DrawOnScreen, Drawing
 
@@ -34,5 +34,7 @@ def test_draw_on_screen() -> None:
     assert scaled.drawing.size == Size(2, 4)
     assert scaled.top_left == Coordinate(20, 40)
 
-    drawn = DrawOnScreen.from_rectangle(Rectangle(Coordinate(0, 0), Size(1, 2)))
+    drawn = DrawOnScreen.from_rectangle(
+        Rectangle(Coordinate(0, 0), Size(1, 2)), Rgba(0, 0, 0, 0)
+    )
     assert drawn.top_left == Coordinate(0, 0)

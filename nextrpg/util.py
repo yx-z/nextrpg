@@ -3,25 +3,7 @@ Utilities.
 """
 
 from collections.abc import Iterable
-from typing import Callable
-
-
-def assert_not_none[T](x: T | None, /) -> T:
-    """
-    Assert that the provided argument is not `None` and returns it.
-
-    Args:
-        `x`: The value to be checked.
-
-    Returns:
-        The same value as provided in the argument, but never `None`. The result
-        retains the type of the input value.
-
-    Raises:
-        `AssertionError`: If the provided argument is None.
-    """
-    assert x is not None
-    return x
+from typing import Any, Callable
 
 
 def partition[T](
@@ -31,13 +13,14 @@ def partition[T](
     Split an iterable into two parts based on a predicate function.
 
     Args:
-        `iterable`: The input iterable to be partitioned.
+        `iterable`: The input iterable to be partitioned
 
-        `predicate`: Function that takes an element and returns `True`/`False`.
+        `predicate`: Function that takes an element and returns `True`/`False`
+
     Returns:
-        `tuple[list[T], list[T]]`: A tuple containing two lists -
-            The first list contains elements for which predicate returns `True`.
-            The second contains elements for which predicate returns `False`.
+        `tuple[list[T], list[T]]`: A tuple containing two lists.
+            The first list contains elements for which predicate gives `True`.
+            The second list contains elements for which predicate gives `False`.
     """
     true = []
     false = []
@@ -47,3 +30,21 @@ def partition[T](
         else:
             false.append(x)
     return true, false
+
+
+def clone[T](t: T, /, **kwargs: Any) -> T:
+    """
+    Create a copy of an object with optional attribute overrides.
+
+    Args:
+        `t`: The object to clone.
+
+        `**kwargs`: Keyword arguments specifying attributes to override.
+
+    Returns:
+        `T`: A new instance of the same type as the input with overrides.
+    """
+
+    return type(t)(
+        **{k: v for k, v in vars(t).items() if k not in kwargs}, **kwargs
+    )

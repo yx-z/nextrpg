@@ -34,7 +34,19 @@
                     <a class="class" href="#CharacterDrawing">CharacterDrawing</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#CharacterDrawing.draw">draw</a>
+                                <a class="variable" href="#CharacterDrawing.direction">direction</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#CharacterDrawing.drawing">drawing</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#CharacterDrawing.turn">turn</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#CharacterDrawing.move">move</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#CharacterDrawing.idle">idle</a>
                         </li>
                 </ul>
 
@@ -77,26 +89,49 @@
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">    Interface for drawing characters on screen.</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">is_moving</span><span class="p">:</span> <span class="nb">bool</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">        Draws the character on the screen based on the given parameters.</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">        Generates the visual representation of the character taking into account</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">        the time elapsed, facing direction and movement state.</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="nd">@property</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">        Get the current direction of the character.</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">        Returns:</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">            `Direction`: The current direction of the character.</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">            `time_delta`: Time has elapsed since the last frame in milliseconds.</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">            `direction`: Current facing direction of the character.</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">            `is_moving`: Flag indicating whether the character is in motion.</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">        Returns:</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">            `Drawing`: Contains the character&#39;s visual representation</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="nd">@property</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">        Draw the character&#39;s moving visual representation.</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">        Returns:</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">            `Drawing`: Contains the character&#39;s visual representation.</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CharacterDrawing&quot;</span><span class="p">:</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">        Args:</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">            `direction`: Turn the character facing to this direction.</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">        Returns:</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">            `CharacterDrawing`: The updated drawing.</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CharacterDrawing&quot;</span><span class="p">:</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">        Returns:</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">            `CharacterDrawing`:</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CharacterDrawing&quot;</span><span class="p">:</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">        Returns:</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">            `CharacterDrawing`:</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -117,26 +152,49 @@
 </span><span id="CharacterDrawing-14"><a href="#CharacterDrawing-14"><span class="linenos">14</span></a><span class="sd">    Interface for drawing characters on screen.</span>
 </span><span id="CharacterDrawing-15"><a href="#CharacterDrawing-15"><span class="linenos">15</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="CharacterDrawing-16"><a href="#CharacterDrawing-16"><span class="linenos">16</span></a>
-</span><span id="CharacterDrawing-17"><a href="#CharacterDrawing-17"><span class="linenos">17</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing-18"><a href="#CharacterDrawing-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span>
-</span><span id="CharacterDrawing-19"><a href="#CharacterDrawing-19"><span class="linenos">19</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">is_moving</span><span class="p">:</span> <span class="nb">bool</span>
-</span><span id="CharacterDrawing-20"><a href="#CharacterDrawing-20"><span class="linenos">20</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
-</span><span id="CharacterDrawing-21"><a href="#CharacterDrawing-21"><span class="linenos">21</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterDrawing-22"><a href="#CharacterDrawing-22"><span class="linenos">22</span></a><span class="sd">        Draws the character on the screen based on the given parameters.</span>
-</span><span id="CharacterDrawing-23"><a href="#CharacterDrawing-23"><span class="linenos">23</span></a>
-</span><span id="CharacterDrawing-24"><a href="#CharacterDrawing-24"><span class="linenos">24</span></a><span class="sd">        Generates the visual representation of the character taking into account</span>
-</span><span id="CharacterDrawing-25"><a href="#CharacterDrawing-25"><span class="linenos">25</span></a><span class="sd">        the time elapsed, facing direction and movement state.</span>
+</span><span id="CharacterDrawing-17"><a href="#CharacterDrawing-17"><span class="linenos">17</span></a>    <span class="nd">@property</span>
+</span><span id="CharacterDrawing-18"><a href="#CharacterDrawing-18"><span class="linenos">18</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing-19"><a href="#CharacterDrawing-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
+</span><span id="CharacterDrawing-20"><a href="#CharacterDrawing-20"><span class="linenos">20</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-21"><a href="#CharacterDrawing-21"><span class="linenos">21</span></a><span class="sd">        Get the current direction of the character.</span>
+</span><span id="CharacterDrawing-22"><a href="#CharacterDrawing-22"><span class="linenos">22</span></a>
+</span><span id="CharacterDrawing-23"><a href="#CharacterDrawing-23"><span class="linenos">23</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing-24"><a href="#CharacterDrawing-24"><span class="linenos">24</span></a><span class="sd">            `Direction`: The current direction of the character.</span>
+</span><span id="CharacterDrawing-25"><a href="#CharacterDrawing-25"><span class="linenos">25</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="CharacterDrawing-26"><a href="#CharacterDrawing-26"><span class="linenos">26</span></a>
-</span><span id="CharacterDrawing-27"><a href="#CharacterDrawing-27"><span class="linenos">27</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterDrawing-28"><a href="#CharacterDrawing-28"><span class="linenos">28</span></a><span class="sd">            `time_delta`: Time has elapsed since the last frame in milliseconds.</span>
-</span><span id="CharacterDrawing-29"><a href="#CharacterDrawing-29"><span class="linenos">29</span></a>
-</span><span id="CharacterDrawing-30"><a href="#CharacterDrawing-30"><span class="linenos">30</span></a><span class="sd">            `direction`: Current facing direction of the character.</span>
-</span><span id="CharacterDrawing-31"><a href="#CharacterDrawing-31"><span class="linenos">31</span></a>
-</span><span id="CharacterDrawing-32"><a href="#CharacterDrawing-32"><span class="linenos">32</span></a><span class="sd">            `is_moving`: Flag indicating whether the character is in motion.</span>
-</span><span id="CharacterDrawing-33"><a href="#CharacterDrawing-33"><span class="linenos">33</span></a>
-</span><span id="CharacterDrawing-34"><a href="#CharacterDrawing-34"><span class="linenos">34</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterDrawing-35"><a href="#CharacterDrawing-35"><span class="linenos">35</span></a><span class="sd">            `Drawing`: Contains the character&#39;s visual representation</span>
-</span><span id="CharacterDrawing-36"><a href="#CharacterDrawing-36"><span class="linenos">36</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-27"><a href="#CharacterDrawing-27"><span class="linenos">27</span></a>    <span class="nd">@property</span>
+</span><span id="CharacterDrawing-28"><a href="#CharacterDrawing-28"><span class="linenos">28</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing-29"><a href="#CharacterDrawing-29"><span class="linenos">29</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
+</span><span id="CharacterDrawing-30"><a href="#CharacterDrawing-30"><span class="linenos">30</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-31"><a href="#CharacterDrawing-31"><span class="linenos">31</span></a><span class="sd">        Draw the character&#39;s moving visual representation.</span>
+</span><span id="CharacterDrawing-32"><a href="#CharacterDrawing-32"><span class="linenos">32</span></a>
+</span><span id="CharacterDrawing-33"><a href="#CharacterDrawing-33"><span class="linenos">33</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing-34"><a href="#CharacterDrawing-34"><span class="linenos">34</span></a><span class="sd">            `Drawing`: Contains the character&#39;s visual representation.</span>
+</span><span id="CharacterDrawing-35"><a href="#CharacterDrawing-35"><span class="linenos">35</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-36"><a href="#CharacterDrawing-36"><span class="linenos">36</span></a>
+</span><span id="CharacterDrawing-37"><a href="#CharacterDrawing-37"><span class="linenos">37</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing-38"><a href="#CharacterDrawing-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CharacterDrawing&quot;</span><span class="p">:</span>
+</span><span id="CharacterDrawing-39"><a href="#CharacterDrawing-39"><span class="linenos">39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-40"><a href="#CharacterDrawing-40"><span class="linenos">40</span></a><span class="sd">        Args:</span>
+</span><span id="CharacterDrawing-41"><a href="#CharacterDrawing-41"><span class="linenos">41</span></a><span class="sd">            `direction`: Turn the character facing to this direction.</span>
+</span><span id="CharacterDrawing-42"><a href="#CharacterDrawing-42"><span class="linenos">42</span></a>
+</span><span id="CharacterDrawing-43"><a href="#CharacterDrawing-43"><span class="linenos">43</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing-44"><a href="#CharacterDrawing-44"><span class="linenos">44</span></a><span class="sd">            `CharacterDrawing`: The updated drawing.</span>
+</span><span id="CharacterDrawing-45"><a href="#CharacterDrawing-45"><span class="linenos">45</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-46"><a href="#CharacterDrawing-46"><span class="linenos">46</span></a>
+</span><span id="CharacterDrawing-47"><a href="#CharacterDrawing-47"><span class="linenos">47</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing-48"><a href="#CharacterDrawing-48"><span class="linenos">48</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CharacterDrawing&quot;</span><span class="p">:</span>
+</span><span id="CharacterDrawing-49"><a href="#CharacterDrawing-49"><span class="linenos">49</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-50"><a href="#CharacterDrawing-50"><span class="linenos">50</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing-51"><a href="#CharacterDrawing-51"><span class="linenos">51</span></a><span class="sd">            `CharacterDrawing`:</span>
+</span><span id="CharacterDrawing-52"><a href="#CharacterDrawing-52"><span class="linenos">52</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-53"><a href="#CharacterDrawing-53"><span class="linenos">53</span></a>
+</span><span id="CharacterDrawing-54"><a href="#CharacterDrawing-54"><span class="linenos">54</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing-55"><a href="#CharacterDrawing-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CharacterDrawing&quot;</span><span class="p">:</span>
+</span><span id="CharacterDrawing-56"><a href="#CharacterDrawing-56"><span class="linenos">56</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-57"><a href="#CharacterDrawing-57"><span class="linenos">57</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing-58"><a href="#CharacterDrawing-58"><span class="linenos">58</span></a><span class="sd">            `CharacterDrawing`:</span>
+</span><span id="CharacterDrawing-59"><a href="#CharacterDrawing-59"><span class="linenos">59</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -144,58 +202,164 @@
 </div>
 
 
-                            <div id="CharacterDrawing.draw" class="classattr">
-                                        <input id="CharacterDrawing.draw-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="CharacterDrawing.direction" class="classattr">
+                                        <input id="CharacterDrawing.direction-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">direction</span><span class="annotation">: <a href="../common_types.html#Direction">nextrpg.common_types.Direction</a></span>
+
+                <label class="view-source-button" for="CharacterDrawing.direction-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#CharacterDrawing.direction"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.direction-17"><a href="#CharacterDrawing.direction-17"><span class="linenos">17</span></a>    <span class="nd">@property</span>
+</span><span id="CharacterDrawing.direction-18"><a href="#CharacterDrawing.direction-18"><span class="linenos">18</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing.direction-19"><a href="#CharacterDrawing.direction-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
+</span><span id="CharacterDrawing.direction-20"><a href="#CharacterDrawing.direction-20"><span class="linenos">20</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing.direction-21"><a href="#CharacterDrawing.direction-21"><span class="linenos">21</span></a><span class="sd">        Get the current direction of the character.</span>
+</span><span id="CharacterDrawing.direction-22"><a href="#CharacterDrawing.direction-22"><span class="linenos">22</span></a>
+</span><span id="CharacterDrawing.direction-23"><a href="#CharacterDrawing.direction-23"><span class="linenos">23</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing.direction-24"><a href="#CharacterDrawing.direction-24"><span class="linenos">24</span></a><span class="sd">            `Direction`: The current direction of the character.</span>
+</span><span id="CharacterDrawing.direction-25"><a href="#CharacterDrawing.direction-25"><span class="linenos">25</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Get the current direction of the character.</p>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code>Direction</code>: The current direction of the character.</p>
+</blockquote>
+</div>
+
+
+                            </div>
+                            <div id="CharacterDrawing.drawing" class="classattr">
+                                        <input id="CharacterDrawing.drawing-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">drawing</span><span class="annotation">: <a href="../draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawing</a></span>
+
+                <label class="view-source-button" for="CharacterDrawing.drawing-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#CharacterDrawing.drawing"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.drawing-27"><a href="#CharacterDrawing.drawing-27"><span class="linenos">27</span></a>    <span class="nd">@property</span>
+</span><span id="CharacterDrawing.drawing-28"><a href="#CharacterDrawing.drawing-28"><span class="linenos">28</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing.drawing-29"><a href="#CharacterDrawing.drawing-29"><span class="linenos">29</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
+</span><span id="CharacterDrawing.drawing-30"><a href="#CharacterDrawing.drawing-30"><span class="linenos">30</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing.drawing-31"><a href="#CharacterDrawing.drawing-31"><span class="linenos">31</span></a><span class="sd">        Draw the character&#39;s moving visual representation.</span>
+</span><span id="CharacterDrawing.drawing-32"><a href="#CharacterDrawing.drawing-32"><span class="linenos">32</span></a>
+</span><span id="CharacterDrawing.drawing-33"><a href="#CharacterDrawing.drawing-33"><span class="linenos">33</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing.drawing-34"><a href="#CharacterDrawing.drawing-34"><span class="linenos">34</span></a><span class="sd">            `Drawing`: Contains the character&#39;s visual representation.</span>
+</span><span id="CharacterDrawing.drawing-35"><a href="#CharacterDrawing.drawing-35"><span class="linenos">35</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Draw the character's moving visual representation.</p>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code>Drawing</code>: Contains the character's visual representation.</p>
+</blockquote>
+</div>
+
+
+                            </div>
+                            <div id="CharacterDrawing.turn" class="classattr">
+                                        <input id="CharacterDrawing.turn-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator decorator-abstractmethod">@abstractmethod</div>
 
         <span class="def">def</span>
-        <span class="name">draw</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span>,</span><span class="param">	<span class="n">direction</span><span class="p">:</span> <span class="n"><a href="../common_types.html#Direction">nextrpg.common_types.Direction</a></span>,</span><span class="param">	<span class="n">is_moving</span><span class="p">:</span> <span class="nb">bool</span></span><span class="return-annotation">) -> <span class="n"><a href="../draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawing</a></span>:</span></span>
+        <span class="name">turn</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">direction</span><span class="p">:</span> <span class="n"><a href="../common_types.html#Direction">nextrpg.common_types.Direction</a></span></span><span class="return-annotation">) -> <span class="n"><a href="#CharacterDrawing">CharacterDrawing</a></span>:</span></span>
 
-                <label class="view-source-button" for="CharacterDrawing.draw-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="CharacterDrawing.turn-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#CharacterDrawing.draw"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.draw-17"><a href="#CharacterDrawing.draw-17"><span class="linenos">17</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing.draw-18"><a href="#CharacterDrawing.draw-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span>
-</span><span id="CharacterDrawing.draw-19"><a href="#CharacterDrawing.draw-19"><span class="linenos">19</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">is_moving</span><span class="p">:</span> <span class="nb">bool</span>
-</span><span id="CharacterDrawing.draw-20"><a href="#CharacterDrawing.draw-20"><span class="linenos">20</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
-</span><span id="CharacterDrawing.draw-21"><a href="#CharacterDrawing.draw-21"><span class="linenos">21</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterDrawing.draw-22"><a href="#CharacterDrawing.draw-22"><span class="linenos">22</span></a><span class="sd">        Draws the character on the screen based on the given parameters.</span>
-</span><span id="CharacterDrawing.draw-23"><a href="#CharacterDrawing.draw-23"><span class="linenos">23</span></a>
-</span><span id="CharacterDrawing.draw-24"><a href="#CharacterDrawing.draw-24"><span class="linenos">24</span></a><span class="sd">        Generates the visual representation of the character taking into account</span>
-</span><span id="CharacterDrawing.draw-25"><a href="#CharacterDrawing.draw-25"><span class="linenos">25</span></a><span class="sd">        the time elapsed, facing direction and movement state.</span>
-</span><span id="CharacterDrawing.draw-26"><a href="#CharacterDrawing.draw-26"><span class="linenos">26</span></a>
-</span><span id="CharacterDrawing.draw-27"><a href="#CharacterDrawing.draw-27"><span class="linenos">27</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterDrawing.draw-28"><a href="#CharacterDrawing.draw-28"><span class="linenos">28</span></a><span class="sd">            `time_delta`: Time has elapsed since the last frame in milliseconds.</span>
-</span><span id="CharacterDrawing.draw-29"><a href="#CharacterDrawing.draw-29"><span class="linenos">29</span></a>
-</span><span id="CharacterDrawing.draw-30"><a href="#CharacterDrawing.draw-30"><span class="linenos">30</span></a><span class="sd">            `direction`: Current facing direction of the character.</span>
-</span><span id="CharacterDrawing.draw-31"><a href="#CharacterDrawing.draw-31"><span class="linenos">31</span></a>
-</span><span id="CharacterDrawing.draw-32"><a href="#CharacterDrawing.draw-32"><span class="linenos">32</span></a><span class="sd">            `is_moving`: Flag indicating whether the character is in motion.</span>
-</span><span id="CharacterDrawing.draw-33"><a href="#CharacterDrawing.draw-33"><span class="linenos">33</span></a>
-</span><span id="CharacterDrawing.draw-34"><a href="#CharacterDrawing.draw-34"><span class="linenos">34</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterDrawing.draw-35"><a href="#CharacterDrawing.draw-35"><span class="linenos">35</span></a><span class="sd">            `Drawing`: Contains the character&#39;s visual representation</span>
-</span><span id="CharacterDrawing.draw-36"><a href="#CharacterDrawing.draw-36"><span class="linenos">36</span></a><span class="sd">        &quot;&quot;&quot;</span>
+    <a class="headerlink" href="#CharacterDrawing.turn"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.turn-37"><a href="#CharacterDrawing.turn-37"><span class="linenos">37</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing.turn-38"><a href="#CharacterDrawing.turn-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CharacterDrawing&quot;</span><span class="p">:</span>
+</span><span id="CharacterDrawing.turn-39"><a href="#CharacterDrawing.turn-39"><span class="linenos">39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing.turn-40"><a href="#CharacterDrawing.turn-40"><span class="linenos">40</span></a><span class="sd">        Args:</span>
+</span><span id="CharacterDrawing.turn-41"><a href="#CharacterDrawing.turn-41"><span class="linenos">41</span></a><span class="sd">            `direction`: Turn the character facing to this direction.</span>
+</span><span id="CharacterDrawing.turn-42"><a href="#CharacterDrawing.turn-42"><span class="linenos">42</span></a>
+</span><span id="CharacterDrawing.turn-43"><a href="#CharacterDrawing.turn-43"><span class="linenos">43</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing.turn-44"><a href="#CharacterDrawing.turn-44"><span class="linenos">44</span></a><span class="sd">            `CharacterDrawing`: The updated drawing.</span>
+</span><span id="CharacterDrawing.turn-45"><a href="#CharacterDrawing.turn-45"><span class="linenos">45</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Draws the character on the screen based on the given parameters.</p>
-
-<p>Generates the visual representation of the character taking into account
-the time elapsed, facing direction and movement state.</p>
-
-<h6 id="arguments">Arguments:</h6>
+            <div class="docstring"><h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code>time_delta</code>:</strong>  Time has elapsed since the last frame in milliseconds.</li>
-<li><strong><code>direction</code>:</strong>  Current facing direction of the character.</li>
-<li><strong><code>is_moving</code>:</strong>  Flag indicating whether the character is in motion.</li>
+<li><strong><code><a href="#CharacterDrawing.direction">direction</a></code>:</strong>  Turn the character facing to this direction.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>Drawing</code>: Contains the character's visual representation</p>
+  <p><code><a href="#CharacterDrawing">CharacterDrawing</a></code>: The updated drawing.</p>
+</blockquote>
+</div>
+
+
+                            </div>
+                            <div id="CharacterDrawing.move" class="classattr">
+                                        <input id="CharacterDrawing.move-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+                    <div class="decorator decorator-abstractmethod">@abstractmethod</div>
+
+        <span class="def">def</span>
+        <span class="name">move</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n"><a href="#CharacterDrawing">CharacterDrawing</a></span>:</span></span>
+
+                <label class="view-source-button" for="CharacterDrawing.move-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#CharacterDrawing.move"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.move-47"><a href="#CharacterDrawing.move-47"><span class="linenos">47</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing.move-48"><a href="#CharacterDrawing.move-48"><span class="linenos">48</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CharacterDrawing&quot;</span><span class="p">:</span>
+</span><span id="CharacterDrawing.move-49"><a href="#CharacterDrawing.move-49"><span class="linenos">49</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing.move-50"><a href="#CharacterDrawing.move-50"><span class="linenos">50</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing.move-51"><a href="#CharacterDrawing.move-51"><span class="linenos">51</span></a><span class="sd">            `CharacterDrawing`:</span>
+</span><span id="CharacterDrawing.move-52"><a href="#CharacterDrawing.move-52"><span class="linenos">52</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code><a href="#CharacterDrawing">CharacterDrawing</a></code>:</p>
+</blockquote>
+</div>
+
+
+                            </div>
+                            <div id="CharacterDrawing.idle" class="classattr">
+                                        <input id="CharacterDrawing.idle-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+                    <div class="decorator decorator-abstractmethod">@abstractmethod</div>
+
+        <span class="def">def</span>
+        <span class="name">idle</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n"><a href="#CharacterDrawing">CharacterDrawing</a></span>:</span></span>
+
+                <label class="view-source-button" for="CharacterDrawing.idle-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#CharacterDrawing.idle"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.idle-54"><a href="#CharacterDrawing.idle-54"><span class="linenos">54</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing.idle-55"><a href="#CharacterDrawing.idle-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CharacterDrawing&quot;</span><span class="p">:</span>
+</span><span id="CharacterDrawing.idle-56"><a href="#CharacterDrawing.idle-56"><span class="linenos">56</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing.idle-57"><a href="#CharacterDrawing.idle-57"><span class="linenos">57</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing.idle-58"><a href="#CharacterDrawing.idle-58"><span class="linenos">58</span></a><span class="sd">            `CharacterDrawing`:</span>
+</span><span id="CharacterDrawing.idle-59"><a href="#CharacterDrawing.idle-59"><span class="linenos">59</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code><a href="#CharacterDrawing">CharacterDrawing</a></code>:</p>
 </blockquote>
 </div>
 

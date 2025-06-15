@@ -2,10 +2,10 @@
 RPG Maker character drawing implementation.
 
 This module provides functionality for rendering RPG Maker-style character
-sprites with support for different sprite sheet formats and animation patterns.
+drawing with support for different sprite sheet formats and animation patterns.
 
-Note that `nextrpg` is only compatible with RPG Maker character sprite,
-to be able to re-use existing resources.
+Note that `nextrpg` is only compatible with the
+RPG Maker character sprite sheet, to be able to re-use existing resources.
 
 However, using RPG Maker's
 [Runtime Time Package (RTP)](https://www.rpgmakerweb.com/run-time-package)
@@ -14,32 +14,52 @@ even if you own a copy of RPG Maker.
 """
 
 from dataclasses import dataclass
-from enum import Enum, IntEnum, auto
-from typing import Final, override
+from enum import IntEnum
+from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.common_types import Direction, Millisecond, Pixel
+from nextrpg.common_types import Direction, Millisecond
 from nextrpg.config import config
 from nextrpg.draw_on_screen import Coordinate, Drawing, Size
-from nextrpg.frames import FrameExhaustedOption, FrameIndex, Frames
-from nextrpg.util import assert_not_none
+from nextrpg.frames import CyclicFrames
+from nextrpg.util import clone
 
 
-class Style(Enum):
+class DefaultFrameType(IntEnum):
     """
-    Sprite sheet style enumeration.
-
-    Defines different RPG Maker sprite sheet formats that can be used
-    for character animation.
-
-    Arguments:
-        `DEFAULT`: RPG Maker VX/VX Ace/MV/MZ sprite sheet format.
-
-        `XP`: RPG Maker XP style sprite sheet format.
+    RPG Maker VX/VX Ace/MV/MZ sprite sheet format (4 direction x 3 frames).
     """
 
-    DEFAULT = auto()
-    XP = auto()
+    _RIGHT_FOOT = 0
+    _IDLE = 1
+    _LEFT_FOOT = 2
+
+    @classmethod
+    def frame_indices(cls) -> list[int]:
+        return [
+            DefaultFrameType._IDLE,
+            DefaultFrameType._RIGHT_FOOT,
+            DefaultFrameType._IDLE,
+            DefaultFrameType._LEFT_FOOT,
+        ]
+
+
+class XpFrameType(IntEnum):
+    """
+    RPG Maker XP sprite sheet format (4 direction x 4 frames).
+    """
+
+    _IDLE = 0
+    _RIGHT_FOOT = 1
+    _IDLE_AGAIN = 2
+    _LEFT_FOOT = 3
+
+    @classmethod
+    def frame_indices(cls) -> list[int]:
+        return list(cls)
+
+
+type FrameType = type[DefaultFrameType | XpFrameType]
 
 
 @dataclass(frozen=True)
@@ -47,17 +67,19 @@ class SpriteSheetSelection:
     """
     Configuration for selecting a portion of a sprite sheet.
 
-    Defines the position and boundaries for extracting a specific character sprite
-    from a larger sprite sheet containing multiple characters.
+    Defines the position and boundaries for extracting a specific character
+    sprite sheet from a larger sprite sheet containing multiple characters.
 
     Arguments:
-        `row`: Row index of the character sprite in the sprite sheet.
+        `row`: Row index of the character in the sprite sheet.
 
-        `column`: Column index of the character sprite in the sprite sheet.
+        `column`: Column index of the character in the sprite sheet.
 
         `max_rows`: Total number of rows in the sprite sheet.
+            Default to two rows.
 
         `max_columns`: Total number of columns in the sprite sheet.
+            Default to four columns.
     """
 
     row: int
@@ -67,35 +89,11 @@ class SpriteSheetSelection:
 
 
 @dataclass(frozen=True)
-class Margin:
-    """
-    Margin settings for sprite sheet frames.
-
-    Defines the padding around individual sprite frames that should be trimmed
-    during rendering.
-
-    Arguments:
-        `top`: Number of pixels to trim from the top.
-
-        `bottom`: Number of pixels to trim from the bottom.
-
-        `left`: Number of pixels to trim from the left.
-
-        `right`: Number of pixels to trim from the right.
-    """
-
-    top: Pixel = 0
-    bottom: Pixel = 0
-    left: Pixel = 0
-    right: Pixel = 0
-
-
-@dataclass(frozen=True)
 class SpriteSheet:
     """
     Container for sprite sheet configuration.
 
-    Holds all necessary information to process and render character sprites
+    Holds all necessary information to process and render character
     from a sprite sheet image.
 
     Arguments:
@@ -103,144 +101,113 @@ class SpriteSheet:
 
         `selection`: Optional for selecting a portion of the sprite sheet.
 
-        `margin`: Margin settings for trimming individual frames.
-
         `style`: The sprite sheet format style to use.
     """
 
     drawing: Drawing
     selection: SpriteSheetSelection | None = None
-    margin: Margin = Margin()
-    style: Style = Style.DEFAULT
+    style: FrameType = DefaultFrameType
 
 
+@dataclass(frozen=True)
 class RpgMakerCharacterDrawing(CharacterDrawing):
-    """
-    RPG Maker style character drawing implementation.
+    _animate_on_idle: bool
+    _frames: dict[Direction, CyclicFrames]
+    _direction: Direction
 
-    Handles character animation using RPG Maker style sprite sheets with support
-    for different directions and movement states.
-
-    Arguments:
-        `sprite_sheet`: Configuration for the character's sprite sheet.
-
-        `animate_on_idle`: Whether to animate the character when not moving.
-
-        `frame_duration`: Duration for each animation frame in milliseconds.
-            If not specified, the default duration from `Config` is used.
-    """
-
-    def __init__(
-        self,
+    @classmethod
+    def load(
+        cls,
         sprite_sheet: SpriteSheet,
-        animate_on_idle: bool = False,
+        animate_on_idle: bool | None = None,
         frame_duration: Millisecond | None = None,
-    ) -> None:
-        self._frames: Final[dict[Direction, Frames]] = _load_sprite_frames(
-            sprite_sheet
-        )
-        self._animate_on_idle: Final[bool] = animate_on_idle
-        self._frame_duration: Final[Millisecond] = (
-            frame_duration
-            or config().rpg_maker_character_sprite.default_frame_duration
-        )
-        self._frame_elapsed = 0
-
-    @override
-    def draw(
-        self, time_delta: Millisecond, direction: Direction, is_moving: bool
-    ) -> Drawing:
+        direction: Direction | None = None,
+    ) -> "CharacterDrawing":
         """
-        The `draw` method determines the appropriate sprite frame to display
-        based on the direction, movement state, and elapsed time.
-        It adjusts the direction of the sprite,
-        calculates frame timing for animations, and handles transitioning to
-        the next or current frame of the sprite animation.
+        Load RPG Maker style character drawing.
 
         Arguments:
-            `time_delta`:
-                The time in milliseconds that has passed since the last frame.
-                This is used to calculate the frame timing for animations.
+            `sprite_sheet`: Configuration for the character's sprite sheet.
 
-            `direction`:
-                The direction in which the object is currently facing or moving.
-                This affects the selection of the sprite frame.
+            `animate_on_idle`: Whether to animate the character when not moving.
 
-            `is_moving`: Indicates if the object is in motion.
-                This affects whether animations for the sprite
-                are played or reset.
+            `frame_duration`: Duration for each animation frame in milliseconds.
+                If not specified, the default duration from `Config` is used.
 
-        Returns:
-            `Drawing`:
-                An object that represents the current frame or sprite based on
-                the direction and movement state of the object.
+            `initial_direction`: Initial direction for the character.
+                If not specified, the default direction from `Config` is used.
         """
-        adjusted_direction = _EIGHT_TO_FOUR[direction]
-        for other_direction in filter(
-            lambda d: d != adjusted_direction, self._frames
-        ):
-            self._frames[other_direction].reset()
+        cfg = config().rpg_maker_character
+        return RpgMakerCharacterDrawing(
+            cfg.animate_on_idle if animate_on_idle is None else animate_on_idle,
+            _load_frames(
+                sprite_sheet,
+                (
+                    cfg.frame_duration
+                    if frame_duration is None
+                    else frame_duration
+                ),
+            ),
+            direction or cfg.direction,
+        )
 
-        if is_moving or self._animate_on_idle:
-            self._frame_elapsed += time_delta
-            if self._frame_elapsed > self._frame_duration:
-                self._frame_elapsed = 0
-                return assert_not_none(
-                    self._frames[adjusted_direction].next_frame()
+    @property
+    @override
+    def direction(self) -> Direction:
+        return self._direction
+
+    @property
+    @override
+    def drawing(self) -> Drawing:
+        return self._frames[_adjust(self._direction)].current_frame
+
+    @override
+    def turn(self, direction: Direction) -> "CharacterDrawing":
+        return clone(
+            self,
+            _frames={
+                d: frames if d == _adjust(direction) else frames.reset()
+                for d, frames in self._frames.items()
+            },
+            _direction=direction,
+        )
+
+    @override
+    def move(self, time_delta: Millisecond) -> "CharacterDrawing":
+        return clone(
+            self,
+            _frames={
+                direction: (
+                    frames.step(time_delta)
+                    if direction == _adjust(self._direction)
+                    else frames
                 )
-        else:
-            self._frames[adjusted_direction].reset()
-        return assert_not_none(self._frames[adjusted_direction].current_frame())
+                for direction, frames in self._frames.items()
+            },
+        )
 
-
-class _DefaultFrameType(IntEnum):
-    RIGHT = 0
-    IDLE = 1
-    LEFT = 2
-
-    @classmethod
-    def frame_indices(cls) -> list[FrameIndex]:
-        return [
-            _DefaultFrameType.IDLE,
-            _DefaultFrameType.RIGHT,
-            _DefaultFrameType.IDLE,
-            _DefaultFrameType.LEFT,
-        ]
-
-
-class _XpFrameType(IntEnum):
-    IDLE = 0
-    RIGHT = 1
-    IDLE_AGAIN = 2
-    LEFT = 3
-
-    @classmethod
-    def frame_indices(cls) -> list[FrameIndex]:
-        return list(cls)
-
-
-def _crop_margin(drawing: Drawing, margin: Margin) -> Drawing:
-    return drawing.crop(
-        Coordinate(margin.left, margin.top),
-        Size(
-            drawing.width - margin.left - margin.right,
-            drawing.height - margin.top - margin.bottom,
-        ),
-    )
+    @override
+    def idle(self, time_delta: Millisecond) -> "CharacterDrawing":
+        return (
+            self.move(time_delta)
+            if self._animate_on_idle
+            else clone(
+                self,
+                _frames={
+                    d: frames.reset() for d, frames in self._frames.items()
+                },
+            )
+        )
 
 
 def _crop_into_frames_at_row(
-    drawing: Drawing, row: int, num_frames: int, margin: Margin
+    drawing: Drawing, frame_type: FrameType, row: int
 ) -> list[Drawing]:
+    num_frames = len(frame_type)
     width = drawing.width / num_frames
     height = drawing.height / 4
     return [
-        _crop_margin(
-            drawing.crop(
-                Coordinate(width * i, height * row), Size(width, height)
-            ),
-            margin,
-        )
+        drawing.crop(Coordinate(width * i, height * row), Size(width, height))
         for i in range(num_frames)
     ]
 
@@ -257,46 +224,45 @@ def _crop_by_selection(
     )
 
 
-def _load_sprite_frames(sprite_sheet: SpriteSheet) -> dict[Direction, Frames]:
+def _load_frames_row(
+    drawing: Drawing,
+    frame_type: FrameType,
+    row: int,
+    frame_duration: Millisecond,
+) -> CyclicFrames:
+    frames = _crop_into_frames_at_row(drawing, frame_type, row)
+    return CyclicFrames(
+        [frames[i] for i in frame_type.frame_indices()], frame_duration
+    )
+
+
+def _load_frames(
+    sprite_sheet: SpriteSheet, frame_duration: Millisecond
+) -> dict[Direction, CyclicFrames]:
     drawing = (
         _crop_by_selection(sprite_sheet.drawing, sprite_sheet.selection)
         if sprite_sheet.selection
         else sprite_sheet.drawing
     )
     return {
-        direction: Frames(
-            _crop_into_frames_at_row(
-                drawing,
-                row,
-                len(frame_type := _FRAME_TYPES[sprite_sheet.style]),
-                sprite_sheet.margin,
-            ),
-            FrameExhaustedOption.CYCLE,
-            frame_type.frame_indices(),
-        )
-        for direction, row in _DIRECTION_TO_ROW.items()
+        d: _load_frames_row(drawing, sprite_sheet.style, row, frame_duration)
+        for d, row in {
+            Direction.DOWN: 0,
+            Direction.LEFT: 1,
+            Direction.RIGHT: 2,
+            Direction.UP: 3,
+        }.items()
     }
 
 
-_FRAME_TYPES: dict[Style, type[_DefaultFrameType | _XpFrameType]] = {
-    Style.DEFAULT: _DefaultFrameType,
-    Style.XP: _XpFrameType,
-}
-
-_DIRECTION_TO_ROW = {
-    Direction.DOWN: 0,
-    Direction.LEFT: 1,
-    Direction.RIGHT: 2,
-    Direction.UP: 3,
-}
-
-_EIGHT_TO_FOUR = {
-    Direction.RIGHT: Direction.RIGHT,
-    Direction.LEFT: Direction.LEFT,
-    Direction.UP: Direction.UP,
-    Direction.DOWN: Direction.DOWN,
-    Direction.DOWN_LEFT: Direction.DOWN,
-    Direction.DOWN_RIGHT: Direction.DOWN,
-    Direction.UP_LEFT: Direction.UP,
-    Direction.UP_RIGHT: Direction.UP,
-}
+def _adjust(direction: Direction) -> Direction:
+    return {
+        Direction.RIGHT: Direction.RIGHT,
+        Direction.LEFT: Direction.LEFT,
+        Direction.UP: Direction.UP,
+        Direction.DOWN: Direction.DOWN,
+        Direction.DOWN_LEFT: Direction.DOWN,
+        Direction.DOWN_RIGHT: Direction.DOWN,
+        Direction.UP_LEFT: Direction.LEFT,
+        Direction.UP_RIGHT: Direction.RIGHT,
+    }[direction]

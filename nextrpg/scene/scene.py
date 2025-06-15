@@ -18,8 +18,21 @@ class Scene(ABC):
     implement these methods.
     """
 
+    @property
     @abstractmethod
-    def event(self, event: PygameEvent) -> None:
+    def draw_on_screen(self) -> list[DrawOnScreen]:
+        """
+        Generates the list of drawings to be rendered on screen.
+
+        Arguments:
+            `time_delta`: Time has elapsed since the last frame in milliseconds.
+
+        Returns:
+           `list[DrawOnScreen]`: objects to be rendered
+        """
+
+    @abstractmethod
+    def event(self, event: PygameEvent) -> "Scene":
         """
         Handles events for the scene.
 
@@ -29,19 +42,19 @@ class Scene(ABC):
         ```python
         class MyScene(Scene):
             @singledispatchmethod
-            def event(self, event: PygameEvent) -> None:
+            def event(self, event: PygameEvent) -> Scene:
                 pass
 
             @event.register
-            def _on_key_press_down(self, event: KeyPressDown) -> None:
+            def _on_key_press_down(self, event: KeyPressDown) -> Scene:
                 ...
 
             @event.register
-            def _on_key_press_up(self, event: KeyPressUp) -> None:
+            def _on_key_press_up(self, event: KeyPressUp) -> Scene:
                 ...
 
             @event.register
-            def _on_key_press_up(self, event: GuiResize | Quit) -> None:
+            def _on_key_press_up(self, event: GuiResize | Quit) -> Scene:
                 ...
         ```
 
@@ -49,17 +62,11 @@ class Scene(ABC):
             `event`: The pygame event to process
 
         Returns:
-            `None`
+            `Scene`
         """
 
     @abstractmethod
-    def draw_on_screen(self, time_delta: Millisecond) -> list[DrawOnScreen]:
+    def step(self, time_delta: Millisecond) -> "Scene":
         """
-        Generates the list of drawings to be rendered on screen.
-
-        Arguments:
-            `time_delta`: Time has elapsed since the last frame in milliseconds.
-
-        Returns:
-           `list[DrawOnScreen]`: objects to be rendered
+        Step forward to the current scene.
         """

@@ -1,13 +1,14 @@
+from dataclasses import dataclass, field
 from functools import singledispatchmethod
-from typing import Final, NamedTuple
+from typing import NamedTuple, Self
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.common_types import (
     Coordinate,
     Direction,
+    DirectionalOffset,
     Millisecond,
     Pixel,
-    PolarVector,
     Rectangle,
 )
 from nextrpg.config import config
@@ -18,6 +19,7 @@ from nextrpg.event.pygame_event import (
     KeyboardKey,
     PygameEvent,
 )
+from nextrpg.util import clone
 
 
 class CharacterAndVisuals(NamedTuple):
@@ -25,81 +27,100 @@ class CharacterAndVisuals(NamedTuple):
     visuals: list[DrawOnScreen]
 
 
+@dataclass(frozen=True)
 class CharacterOnScreen:
-    def __init__(
-        self,
-        character_sprite: CharacterDrawing,
-        coordinate: Coordinate,
-        direction: Direction,
-        collisions: list[Rectangle],
-        speed: Pixel | None = None,
-    ) -> None:
-        self._sprite: Final[CharacterDrawing] = character_sprite
-        self._speed: Final[Pixel] = (
-            config().character.default_move_speed if speed is None else speed
+    character_drawing: CharacterDrawing
+    coordinate: Coordinate
+    collisions: list[Rectangle]
+    speed: Pixel
+    _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
+
+    @property
+    def draw_on_screen(self) -> CharacterAndVisuals:
+        return CharacterAndVisuals(
+            DrawOnScreen(self.coordinate, self.character_drawing.drawing),
+            (
+                [
+                    DrawOnScreen.from_rectangle(
+                        c, debug.collision_rectangle_color
+                    )
+                    for c in self.collisions
+                ]
+                if (debug := config().debug)
+                else []
+            ),
         )
-        self._collisions: Final[list[Rectangle]] = collisions
-        self._coordinate = coordinate
-        self._direction = direction
-        self._movement_keys: set[KeyboardKey] = set()
-
-    @property
-    def direction(self) -> Direction:
-        """
-        Gets the current direction of the character.
-
-        Returns:
-            `Direction`: The current direction that the character is facing.
-        """
-        return self._direction
-
-    @property
-    def coordinate(self) -> Coordinate:
-        """
-        Gets the current coordinate of the character.
-
-        Returns:
-            `Coordinate`: The current position of the character on screen.
-        """
-        return self._coordinate
 
     @singledispatchmethod
-    def event(self, event: PygameEvent) -> None:
-        pass
+    def event(self, event: PygameEvent) -> Self:
+        return self
 
     @event.register
-    def _turn_direction(self, event: KeyPressDown | KeyPressUp) -> None:
-        if (key := event.key) not in _MOVEMENT_KEYS:
-            return
-
-        if isinstance(event, KeyPressDown):
-            self._movement_keys.add(key)
-        else:
-            self._movement_keys.discard(key)
-
-        if (
-            d := _DIRECTIONS.get(frozenset(self._movement_keys))
-        ) in config().character.move_directions:
-            self._direction = d
-
-    def _move(self, time_delta: Millisecond, drawing: Drawing) -> bool:
-        """
-        Returns:
-            `bool`: Whether the character is moving,
-                based on current movement keys.
-        """
-        if not self._movement_keys:
-            return False
-
-        coord = self.coordinate + PolarVector(
-            self.direction, self._speed * time_delta
+    def _on_key(self, e: KeyPressDown | KeyPressUp) -> Self:
+        updated_keys = self._on_movement_key(e)
+        return clone(
+            self,
+            character_drawing=(
+                self.character_drawing.turn(direction)
+                if (direction := _key_to_dir(updated_keys))
+                in config().character.directions
+                else self.character_drawing
+            ),
+            _movement_keys=updated_keys,
         )
-        if is_moving := self._can_move(coord, drawing):
-            self._coordinate = coord
-        return is_moving
 
-    def _can_move(self, coordinate: Coordinate, drawing: Drawing) -> bool:
-        rect = Rectangle(coordinate, drawing.size)
+    def _on_movement_key(
+        self, e: KeyPressDown | KeyPressUp
+    ) -> frozenset[KeyboardKey]:
+        return (
+            self._movement_keys | {e.key}
+            if isinstance(e, KeyPressDown)
+            else (self._movement_keys - {e.key})
+        )
+
+    def step(self, time_delta: Millisecond) -> "CharacterOnScreen":
+        moved_drawing = self.character_drawing.move(time_delta)
+        moved_coordinate = self._move(time_delta, moved_drawing.drawing)
+        return clone(
+            self,
+            coordinate=moved_coordinate or self.coordinate,
+            character_drawing=(
+                moved_drawing
+                if moved_coordinate
+                else self.character_drawing.idle(time_delta)
+            ),
+        )
+
+    def _move(
+        self, time_delta: Millisecond, character_drawing: Drawing
+    ) -> Coordinate | None:
+        """
+        Get the moved coordinate if the character can move.
+
+        Returns:
+            `Coordinate | None`: Updated `Coordinate` if the character moves.
+                `None` otherwise.
+        """
+        return (
+            moved_coord
+            if self._movement_keys
+            and self._can_move(
+                (
+                    moved_coord := self.coordinate
+                    + DirectionalOffset(
+                        self.character_drawing.direction,
+                        self.speed * time_delta,
+                    )
+                ),
+                character_drawing,
+            )
+            else None
+        )
+
+    def _can_move(
+        self, coordinate: Coordinate, character_drawing: Drawing
+    ) -> bool:
+        rect = DrawOnScreen(coordinate, character_drawing).visible_rectangle
         hit_coord = {
             Direction.LEFT: {rect.bottom_left},
             Direction.RIGHT: {rect.bottom_right},
@@ -113,41 +134,36 @@ class CharacterOnScreen:
             Direction.UP_RIGHT: {rect.center_right},
             Direction.DOWN_LEFT: {rect.bottom_left, rect.bottom_center},
             Direction.DOWN_RIGHT: {rect.bottom_right, rect.bottom_center},
-        }[self.direction]
+        }[self.character_drawing.direction]
         return all(
             all(h not in collision for h in hit_coord)
-            for collision in self._collisions
-        )
-
-    def draw_on_screen(self, time_delta: Millisecond) -> CharacterAndVisuals:
-        moved = self._sprite.draw(time_delta, self.direction, is_moving=True)
-        drawing = self._sprite.draw(
-            time_delta, self.direction, self._move(time_delta, moved)
-        )
-        return CharacterAndVisuals(
-            DrawOnScreen(self.coordinate, drawing),
-            (
-                [DrawOnScreen.from_rectangle(c) for c in self._collisions]
-                if config().debug
-                else []
-            ),
+            for collision in self.collisions
         )
 
 
-_MOVEMENT_KEYS = {
-    KeyboardKey.LEFT,
-    KeyboardKey.RIGHT,
-    KeyboardKey.UP,
-    KeyboardKey.DOWN,
-}
-
-_DIRECTIONS: dict[frozenset[KeyboardKey], Direction] = {
-    frozenset({KeyboardKey.LEFT}): Direction.LEFT,
-    frozenset({KeyboardKey.RIGHT}): Direction.RIGHT,
-    frozenset({KeyboardKey.UP}): Direction.UP,
-    frozenset({KeyboardKey.DOWN}): Direction.DOWN,
-    frozenset({KeyboardKey.LEFT, KeyboardKey.UP}): Direction.UP_LEFT,
-    frozenset({KeyboardKey.LEFT, KeyboardKey.DOWN}): Direction.DOWN_LEFT,
-    frozenset({KeyboardKey.RIGHT, KeyboardKey.UP}): Direction.UP_RIGHT,
-    frozenset({KeyboardKey.RIGHT, KeyboardKey.DOWN}): Direction.DOWN_RIGHT,
-}
+def _key_to_dir(current_keys: frozenset[KeyboardKey]) -> Direction | None:
+    return next(
+        (
+            direction
+            for configured_keys, direction in {
+                frozenset(
+                    {KeyboardKey.LEFT, KeyboardKey.UP}
+                ): Direction.UP_LEFT,
+                frozenset(
+                    {KeyboardKey.LEFT, KeyboardKey.DOWN}
+                ): Direction.DOWN_LEFT,
+                frozenset(
+                    {KeyboardKey.RIGHT, KeyboardKey.UP}
+                ): Direction.UP_RIGHT,
+                frozenset(
+                    {KeyboardKey.RIGHT, KeyboardKey.DOWN}
+                ): Direction.DOWN_RIGHT,
+                frozenset({KeyboardKey.LEFT}): Direction.LEFT,
+                frozenset({KeyboardKey.RIGHT}): Direction.RIGHT,
+                frozenset({KeyboardKey.UP}): Direction.UP,
+                frozenset({KeyboardKey.DOWN}): Direction.DOWN,
+            }.items()
+            if configured_keys <= current_keys
+        ),
+        None,
+    )

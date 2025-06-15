@@ -112,7 +112,7 @@ class KeyPressUp(_KeyPressEvent):
     """
 
 
-def _typed_event(event: Event) -> PygameEvent:
+def to_typed_event(event: Event) -> PygameEvent:
     """
     Creates a typed event wrapper for pygame events.
 

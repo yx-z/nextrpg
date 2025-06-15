@@ -13,23 +13,46 @@ class CharacterDrawing(ABC):
     Interface for drawing characters on screen.
     """
 
+    @property
     @abstractmethod
-    def draw(
-        self, time_delta: Millisecond, direction: Direction, is_moving: bool
-    ) -> Drawing:
+    def direction(self) -> Direction:
         """
-        Draws the character on the screen based on the given parameters.
-
-        Generates the visual representation of the character taking into account
-        the time elapsed, facing direction and movement state.
-
-        Arguments:
-            `time_delta`: Time has elapsed since the last frame in milliseconds.
-
-            `direction`: Current facing direction of the character.
-
-            `is_moving`: Flag indicating whether the character is in motion.
+        Get the current direction of the character.
 
         Returns:
-            `Drawing`: Contains the character's visual representation
+            `Direction`: The current direction of the character.
+        """
+
+    @property
+    @abstractmethod
+    def drawing(self) -> Drawing:
+        """
+        Draw the character's moving visual representation.
+
+        Returns:
+            `Drawing`: Contains the character's visual representation.
+        """
+
+    @abstractmethod
+    def turn(self, direction: Direction) -> "CharacterDrawing":
+        """
+        Args:
+            `direction`: Turn the character facing to this direction.
+
+        Returns:
+            `CharacterDrawing`: The updated drawing.
+        """
+
+    @abstractmethod
+    def move(self, time_delta: Millisecond) -> "CharacterDrawing":
+        """
+        Returns:
+            `CharacterDrawing`:
+        """
+
+    @abstractmethod
+    def idle(self, time_delta: Millisecond) -> "CharacterDrawing":
+        """
+        Returns:
+            `CharacterDrawing`:
         """
