@@ -2,10 +2,10 @@
 RPG Maker character drawing implementation.
 
 This module provides functionality for rendering RPG Maker-style character
-sprites with support for different sprite sheet formats and animation patterns.
+drawing with support for different sprite sheet formats and animation patterns.
 
-Note that `nextrpg` is only compatible with RPG Maker character sprite,
-to be able to re-use existing resources.
+Note that `nextrpg` is only compatible with the
+RPG Maker character sprite sheet, to be able to re-use existing resources.
 
 However, using RPG Maker's
 [Runtime Time Package (RTP)](https://www.rpgmakerweb.com/run-time-package)
@@ -21,7 +21,8 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.common_types import Direction, Millisecond
 from nextrpg.config import config
 from nextrpg.draw_on_screen import Coordinate, Drawing, Size
-from nextrpg.frames import CyclicFrames, FrameIndex
+from nextrpg.frames import CyclicFrames
+from nextrpg.util import clone
 
 
 class DefaultFrameType(IntEnum):
@@ -34,7 +35,7 @@ class DefaultFrameType(IntEnum):
     _LEFT_FOOT = 2
 
     @classmethod
-    def frame_indices(cls) -> list[FrameIndex]:
+    def frame_indices(cls) -> list[int]:
         return [
             DefaultFrameType._IDLE,
             DefaultFrameType._RIGHT_FOOT,
@@ -54,7 +55,7 @@ class XpFrameType(IntEnum):
     _LEFT_FOOT = 3
 
     @classmethod
-    def frame_indices(cls) -> list[FrameIndex]:
+    def frame_indices(cls) -> list[int]:
         return list(cls)
 
 
@@ -67,16 +68,18 @@ class SpriteSheetSelection:
     Configuration for selecting a portion of a sprite sheet.
 
     Defines the position and boundaries for extracting a specific character
-    sprite from a larger sprite sheet containing multiple characters.
+    sprite sheet from a larger sprite sheet containing multiple characters.
 
     Arguments:
-        `row`: Row index of the character sprite in the sprite sheet.
+        `row`: Row index of the character in the sprite sheet.
 
-        `column`: Column index of the character sprite in the sprite sheet.
+        `column`: Column index of the character in the sprite sheet.
 
         `max_rows`: Total number of rows in the sprite sheet.
+            Default to two rows.
 
         `max_columns`: Total number of columns in the sprite sheet.
+            Default to four columns.
     """
 
     row: int
@@ -90,7 +93,7 @@ class SpriteSheet:
     """
     Container for sprite sheet configuration.
 
-    Holds all necessary information to process and render character sprites
+    Holds all necessary information to process and render character
     from a sprite sheet image.
 
     Arguments:
@@ -106,84 +109,95 @@ class SpriteSheet:
     style: FrameType = DefaultFrameType
 
 
-def load_sprite_sheet(
-    sprite_sheet: SpriteSheet,
-    animate_on_idle: bool = False,
-    frame_duration: Millisecond | None = None,
-) -> CharacterDrawing:
-    """
-    Load RPG Maker style character drawing.
-
-    Arguments:
-        `sprite_sheet`: Configuration for the character's sprite sheet.
-
-        `animate_on_idle`: Whether to animate the character when not moving.
-
-        `frame_duration`: Duration for each animation frame in milliseconds.
-            If not specified, the default duration from `Config` is used.
-    """
-    return _RpgMakerCharacterDrawing(
-        animate_on_idle,
-        _load_sprite_frames(
-            sprite_sheet,
-            frame_duration
-            or config().rpg_maker_character_sprite.default_frame_duration,
-        ),
-    )
-
-
 @dataclass(frozen=True)
-class _RpgMakerCharacterDrawing(CharacterDrawing):
+class RpgMakerCharacterDrawing(CharacterDrawing):
     _animate_on_idle: bool
     _frames: dict[Direction, CyclicFrames]
+    _direction: Direction
+
+    @classmethod
+    def load(
+        cls,
+        sprite_sheet: SpriteSheet,
+        animate_on_idle: bool | None = None,
+        frame_duration: Millisecond | None = None,
+        direction: Direction | None = None,
+    ) -> "CharacterDrawing":
+        """
+        Load RPG Maker style character drawing.
+
+        Arguments:
+            `sprite_sheet`: Configuration for the character's sprite sheet.
+
+            `animate_on_idle`: Whether to animate the character when not moving.
+
+            `frame_duration`: Duration for each animation frame in milliseconds.
+                If not specified, the default duration from `Config` is used.
+
+            `initial_direction`: Initial direction for the character.
+                If not specified, the default direction from `Config` is used.
+        """
+        cfg = config().rpg_maker_character
+        return RpgMakerCharacterDrawing(
+            cfg.animate_on_idle if animate_on_idle is None else animate_on_idle,
+            _load_frames(
+                sprite_sheet,
+                (
+                    cfg.frame_duration
+                    if frame_duration is None
+                    else frame_duration
+                ),
+            ),
+            direction or cfg.direction,
+        )
+
+    @property
+    @override
+    def direction(self) -> Direction:
+        return self._direction
+
+    @property
+    @override
+    def drawing(self) -> Drawing:
+        return self._frames[_adjust(self._direction)].current_frame
 
     @override
-    def draw_move(self, direction: Direction) -> Drawing:
-        return self._current_frame(direction)
-
-    @override
-    def peek_move(
-        self, time_delta: Millisecond, direction: Direction
-    ) -> Drawing:
-        return self._frames[_adjust(direction)].peek(time_delta)
-
-    @override
-    def move(
-        self, time_delta: Millisecond, direction: Direction
-    ) -> CharacterDrawing:
-        return _RpgMakerCharacterDrawing(
-            self._animate_on_idle,
-            {
-                d: (
-                    frames.step(time_delta)
-                    if d == _adjust(direction)
-                    else frames.reset()
-                )
+    def turn(self, direction: Direction) -> "CharacterDrawing":
+        return clone(
+            self,
+            _frames={
+                d: frames if d == _adjust(direction) else frames.reset()
                 for d, frames in self._frames.items()
+            },
+            _direction=direction,
+        )
+
+    @override
+    def move(self, time_delta: Millisecond) -> "CharacterDrawing":
+        return clone(
+            self,
+            _frames={
+                direction: (
+                    frames.step(time_delta)
+                    if direction == _adjust(self._direction)
+                    else frames
+                )
+                for direction, frames in self._frames.items()
             },
         )
 
     @override
-    def draw_idle(self, direction: Direction) -> Drawing:
-        return self._current_frame(direction)
-
-    @override
-    def idle(self, time_delta: Millisecond, direction) -> "CharacterDrawing":
+    def idle(self, time_delta: Millisecond) -> "CharacterDrawing":
         return (
-            self.move(time_delta, direction)
+            self.move(time_delta)
             if self._animate_on_idle
-            else self.stop()
+            else clone(
+                self,
+                _frames={
+                    d: frames.reset() for d, frames in self._frames.items()
+                },
+            )
         )
-
-    @override
-    def stop(self) -> CharacterDrawing:
-        return _RpgMakerCharacterDrawing(
-            self._animate_on_idle,
-            {d: frames.reset() for d, frames in self._frames.items()},
-        )
-
-    def _current_frame(self, direction: Direction) -> Drawing:
-        return self._frames[_adjust(direction)].current_frame
 
 
 def _crop_into_frames_at_row(
@@ -222,7 +236,7 @@ def _load_frames_row(
     )
 
 
-def _load_sprite_frames(
+def _load_frames(
     sprite_sheet: SpriteSheet, frame_duration: Millisecond
 ) -> dict[Direction, CyclicFrames]:
     drawing = (

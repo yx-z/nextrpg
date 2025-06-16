@@ -24,6 +24,7 @@ class DebugConfig:
     """
 
     drawing_background_color: Rgba = Rgba(0, 0, 255, 64)
+    collision_rectangle_color: Rgba = Rgba(255, 0, 0, 64)
 
 
 @dataclass(frozen=True)
@@ -42,33 +43,22 @@ class GuiConfig:
         `frames_per_second`: The target frame rate for the application's
             rendering performance.
 
-        `allow_resize`: Indicates if the GUI window allows resizing by the
-            user. And upon resize, the sprites will all be scaled accordingly.
+        `resize`: Indicates if the GUI window allows resizing by the user.
+            And upon resize, the drawings will all be scaled accordingly.
+
+        `background_color`: The background color of the GUI window.
     """
 
     title: str = "NextRPG"
     size: Size = Size(1280, 800)
     frames_per_second: int = 60
-    allow_resize: bool = True
+    resize: bool = True
+    background_color: Rgba = Rgba(0, 0, 0, 0)
 
 
 @dataclass(frozen=True)
-class TileMapProperties:
-    """Configuration class for tile map object properties.
-
-    Used by `nextrpg.scene.map_scene.MapScene` to identify special properties
-    in tmx files that define character behaviors.
-
-    Attributes:
-        `character_direction_property`: Property name for specifying an initial
-            character direction in the map for both player and NPCs.
-
-        `character_speed_property`: Property name for specifying character
-            movement speed in the map.
-    """
-
-    character_direction = "direction"
-    character_speed = "speed"
+class TileMapCustomProperties:
+    speed = "speed"
 
 
 @dataclass(frozen=True)
@@ -80,32 +70,28 @@ class TileMapConfig:
     This config is used by `nextrpg.scene.map_scene.MapScene`.
 
     Attributes:
-        `background_layer_prefix`:
-            Prefix of layer name to identify all background layers.
+        `background`:
+            Prefix of layer name to be identified as background layer.
 
-        `foreground_layer_prefix`:
-            Prefix of layer name to identify all foreground layers.
+        `foreground`:
+            Prefix of layer name to be identified as foreground layer.
 
-        `collision_layer_prefix`:
-            Prefix of layer name to identify all collision layers.
+        `collision`:
+            Prefix of layer name to be identified as collision layer.
 
-        `object_layer_prefix`:
-            Prefix of layer name to identify all object layers.
+        `object`:
+            Prefix of layer name to be identified as object layer.
 
-        `player_object`:
+        `player`:
             Name for the player object within object layers.
-
-        `character_direction_property`:
-            Property name for specifying the initial character direction
-            in the map for both player and NPCs.
     """
 
-    background_layer_prefix: str = "background"
-    foreground_layer_prefix: str = "foreground"
-    collision_layer_prefix: str = "collision"
-    object_layer_prefix: str = "object"
-    player_object: str = "player"
-    properties: TileMapProperties = TileMapProperties()
+    background: str = "background"
+    foreground: str = "foreground"
+    collision: str = "collision"
+    object: str = "object"
+    player: str = "player"
+    properties: TileMapCustomProperties = TileMapCustomProperties
 
 
 @dataclass(frozen=True)
@@ -116,30 +102,28 @@ class CharacterConfig:
     This config is used by `nextrpg.character.character.Character`.
 
     Attributes:
-        `default_move_speed`: The default speed of the character's movement
+        `speed`: The default speed of the character's movement
             in pixels on screen per physical millisecond.
             The number of pixels is consumed before screen scaling, if any.
 
-        `move_directions`: The set of directions that the character can move.
+        `directions`: The set of directions that the character can move.
             Default to all directions (up, left, right, down, and diagonal).
     """
 
-    default_move_speed: Pixel = 0.25
-    move_directions: set[Direction] = field(
-        default_factory=lambda: set(Direction)
-    )
+    speed: Pixel = 0.25
+    directions: set[Direction] = field(default_factory=lambda: set(Direction))
 
 
 @dataclass(frozen=True)
-class RpgMakerCharacterSpriteConfig:
+class RpgMakerCharacterDrawingConfig:
     """
-    Configuration class for RPG Maker character sprites.
+    Configuration class for RPG Maker character drawings.
 
     This config is used by
-    `nextrpg.character.rpg_maker_sprite.RpgMakerCharacterSprite`.
+    `nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing`.
 
-    Note that `nextrpg` is only compatible with RPG Maker character sprite,
-    to be able to re-use existing resources.
+    Note that `nextrpg` is only compatible with the RPG Maker character
+    sprite sheet, to be able to re-use existing resources.
 
     However, using RPG Maker's
     [Runtime Time Package (RTP)](https://www.rpgmakerweb.com/run-time-package)
@@ -147,11 +131,17 @@ class RpgMakerCharacterSpriteConfig:
     even if you own a copy of RPG Maker.
 
     Attributes:
-        `default_frame_duration`: The default duration for
-            a single frame in the character sprite.
+        `animate_on_idle`: Whether to animate the character when not moving.
+
+        `frame_duration`: The default duration for a single frame for
+            the character.
+
+        `direction`: The default initial direction.
     """
 
-    default_frame_duration: Millisecond = 200
+    animate_on_idle: bool = False
+    frame_duration: Millisecond = 200
+    direction: Direction = Direction.DOWN
 
 
 type KeyCode = int
@@ -209,8 +199,8 @@ class Config:
     gui: GuiConfig = GuiConfig()
     map: TileMapConfig = TileMapConfig()
     character: CharacterConfig = CharacterConfig()
-    rpg_maker_character_sprite: RpgMakerCharacterSpriteConfig = (
-        RpgMakerCharacterSpriteConfig()
+    rpg_maker_character: RpgMakerCharacterDrawingConfig = (
+        RpgMakerCharacterDrawingConfig()
     )
     key_mapping: KeyMappingConfig = KeyMappingConfig()
     debug: DebugConfig | None = None

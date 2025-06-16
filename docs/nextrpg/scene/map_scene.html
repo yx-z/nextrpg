@@ -37,10 +37,16 @@
                                 <a class="function" href="#MapScene.__init__">MapScene</a>
                         </li>
                         <li>
+                                <a class="function" href="#MapScene.load">load</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#MapScene.draw_on_screen">draw_on_screen</a>
+                        </li>
+                        <li>
                                 <a class="function" href="#MapScene.event">event</a>
                         </li>
                         <li>
-                                <a class="function" href="#MapScene.draw_on_screen">draw_on_screen</a>
+                                <a class="function" href="#MapScene.step">step</a>
                         </li>
                 </ul>
 
@@ -66,100 +72,105 @@
 
                         <label class="view-source-button" for="mod-map_scene-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Final</span><span class="p">,</span> <span class="n">override</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pytmx</span><span class="w"> </span><span class="kn">import</span> <span class="n">TiledMap</span><span class="p">,</span> <span class="n">TiledTileLayer</span><span class="p">,</span> <span class="n">load_pygame</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterOnScreen</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.common_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Millisecond</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">Coordinate</span><span class="p">,</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">DrawOnScreen</span><span class="p">,</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">Drawing</span><span class="p">,</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">Rectangle</span><span class="p">,</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">Size</span><span class="p">,</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="p">)</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">PygameEvent</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">partition</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pytmx</span><span class="w"> </span><span class="kn">import</span> <span class="n">TiledMap</span><span class="p">,</span> <span class="n">TiledTileLayer</span><span class="p">,</span> <span class="n">load_pygame</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterOnScreen</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.common_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">Coordinate</span><span class="p">,</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">DrawOnScreen</span><span class="p">,</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">Drawing</span><span class="p">,</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">Rectangle</span><span class="p">,</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">Size</span><span class="p">,</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="p">)</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">PygameEvent</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">clone</span><span class="p">,</span> <span class="n">partition</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MapScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmx_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">player</span><span class="p">:</span> <span class="n">CharacterDrawing</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="n">tmx</span> <span class="o">=</span> <span class="n">load_pygame</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">tmx_file</span><span class="p">))</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_tile_size</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="n">Size</span><span class="p">]</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">tmx</span><span class="o">.</span><span class="n">tilewidth</span><span class="p">,</span> <span class="n">tmx</span><span class="o">.</span><span class="n">tileheight</span><span class="p">)</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_background</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_draw_layers</span><span class="p">(</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>            <span class="n">_load_layers</span><span class="p">(</span><span class="n">tmx</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">background_layer_prefix</span><span class="p">)</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>        <span class="p">)</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_foreground</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_draw_layers</span><span class="p">(</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>            <span class="n">_load_layers</span><span class="p">(</span><span class="n">tmx</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">foreground_layer_prefix</span><span class="p">)</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>        <span class="p">)</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="n">CharacterOnScreen</span><span class="p">]</span> <span class="o">=</span> <span class="n">_load_player</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">tmx</span><span class="p">)</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="nd">@override</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="nd">@override</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>        <span class="n">character</span><span class="p">,</span> <span class="n">visuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>        <span class="n">below_character</span><span class="p">,</span> <span class="n">above_character</span> <span class="o">=</span> <span class="n">partition</span><span class="p">(</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_foreground</span><span class="p">,</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>            <span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">visual_bottom</span> <span class="o">&lt;</span> <span class="n">character</span><span class="o">.</span><span class="n">rectangle</span><span class="o">.</span><span class="n">bottom</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>            <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">rectangle</span><span class="o">.</span><span class="n">collides</span><span class="p">(</span><span class="n">character</span><span class="o">.</span><span class="n">rectangle</span><span class="p">),</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>        <span class="p">)</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_background</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>            <span class="o">+</span> <span class="n">below_character</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>            <span class="o">+</span> <span class="p">[</span><span class="n">character</span><span class="p">]</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>            <span class="o">+</span> <span class="n">visuals</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>            <span class="o">+</span> <span class="n">above_character</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>        <span class="p">)</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">TiledTileLayer</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="k">return</span> <span class="p">[</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>            <span class="n">DrawOnScreen</span><span class="p">(</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>                <span class="n">Coordinate</span><span class="p">(</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>                    <span class="n">left</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tile_size</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">top</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tile_size</span><span class="o">.</span><span class="n">height</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>                <span class="p">),</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>                <span class="n">Drawing</span><span class="p">(</span><span class="n">surface</span><span class="p">),</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>            <span class="p">)</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>            <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>            <span class="k">for</span> <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">surface</span> <span class="ow">in</span> <span class="n">layer</span><span class="o">.</span><span class="n">tiles</span><span class="p">()</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>        <span class="p">]</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MapScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">_background</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">_foreground</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">_player</span><span class="p">:</span> <span class="n">CharacterOnScreen</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">_tile_size</span><span class="p">:</span> <span class="n">Size</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="nd">@classmethod</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">tmx_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">player</span><span class="p">:</span> <span class="n">CharacterDrawing</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>        <span class="n">tmx</span> <span class="o">=</span> <span class="n">load_pygame</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">tmx_file</span><span class="p">))</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>        <span class="n">tile_size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">tmx</span><span class="o">.</span><span class="n">tilewidth</span><span class="p">,</span> <span class="n">tmx</span><span class="o">.</span><span class="n">tileheight</span><span class="p">)</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>        <span class="k">return</span> <span class="n">MapScene</span><span class="p">(</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>            <span class="n">_draw</span><span class="p">(</span><span class="n">_load_layers</span><span class="p">(</span><span class="n">tmx</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">foreground</span><span class="p">),</span> <span class="n">tile_size</span><span class="p">),</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>            <span class="n">_draw</span><span class="p">(</span><span class="n">_load_layers</span><span class="p">(</span><span class="n">tmx</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">background</span><span class="p">),</span> <span class="n">tile_size</span><span class="p">),</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>            <span class="n">_load_player</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">tmx</span><span class="p">),</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>            <span class="n">tile_size</span><span class="p">,</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>        <span class="p">)</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="nd">@property</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="nd">@override</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>        <span class="n">character</span><span class="p">,</span> <span class="n">visuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">draw_on_screen</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>        <span class="n">below_character</span><span class="p">,</span> <span class="n">above_character</span> <span class="o">=</span> <span class="n">partition</span><span class="p">(</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_foreground</span><span class="p">,</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>            <span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">visible_rectangle</span><span class="o">.</span><span class="n">bottom</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>            <span class="o">&lt;</span> <span class="n">character</span><span class="o">.</span><span class="n">visible_rectangle</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="p">)</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_background</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>            <span class="o">+</span> <span class="n">below_character</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>            <span class="o">+</span> <span class="p">[</span><span class="n">character</span><span class="p">]</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>            <span class="o">+</span> <span class="n">visuals</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>            <span class="o">+</span> <span class="n">above_character</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>        <span class="p">)</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="nd">@override</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>        <span class="k">return</span> <span class="n">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_player</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="nd">@override</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="n">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_player</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>
 </span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_load_layers</span><span class="p">(</span><span class="n">tile_map</span><span class="p">:</span> <span class="n">TiledMap</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">TiledTileLayer</span><span class="p">]:</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="k">return</span> <span class="p">[</span><span class="n">layer</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">tile_map</span><span class="o">.</span><span class="n">layers</span> <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">)]</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_load_player</span><span class="p">(</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="n">sprite_sheet</span><span class="p">:</span> <span class="n">CharacterDrawing</span><span class="p">,</span> <span class="n">tile_map</span><span class="p">:</span> <span class="n">TiledMap</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterOnScreen</span><span class="p">:</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>    <span class="n">player</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>        <span class="n">obj</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">_load_layers</span><span class="p">(</span><span class="n">tile_map</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">object_layer_prefix</span><span class="p">)</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">layer</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">player_object</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>    <span class="p">)</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="k">return</span> <span class="n">CharacterOnScreen</span><span class="p">(</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="n">sprite_sheet</span><span class="p">,</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>        <span class="n">Coordinate</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span><span class="p">),</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>        <span class="n">Direction</span><span class="p">[</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>            <span class="n">player</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">character_direction</span><span class="p">]</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>        <span class="p">],</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>        <span class="n">collisions</span><span class="o">=</span><span class="p">[</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>            <span class="n">Rectangle</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">Size</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">))</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a>            <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">_load_layers</span><span class="p">(</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>                <span class="n">tile_map</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">collision_layer_prefix</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>            <span class="p">)</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a>            <span class="k">for</span> <span class="n">rect</span> <span class="ow">in</span> <span class="n">layer</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a>        <span class="p">],</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a>        <span class="n">speed</span><span class="o">=</span><span class="n">player</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">character_speed</span><span class="p">),</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a>    <span class="p">)</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_draw</span><span class="p">(</span><span class="n">layers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">TiledTileLayer</span><span class="p">],</span> <span class="n">tile_size</span><span class="p">:</span> <span class="n">Size</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="k">return</span> <span class="p">[</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>        <span class="n">DrawOnScreen</span><span class="p">(</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>            <span class="n">Coordinate</span><span class="p">(</span><span class="n">left</span> <span class="o">*</span> <span class="n">tile_size</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">top</span> <span class="o">*</span> <span class="n">tile_size</span><span class="o">.</span><span class="n">height</span><span class="p">),</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>            <span class="n">Drawing</span><span class="p">(</span><span class="n">surface</span><span class="p">),</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="p">)</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>        <span class="k">for</span> <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">surface</span> <span class="ow">in</span> <span class="n">layer</span><span class="o">.</span><span class="n">tiles</span><span class="p">()</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>    <span class="p">]</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_load_layers</span><span class="p">(</span><span class="n">tile_map</span><span class="p">:</span> <span class="n">TiledMap</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">TiledTileLayer</span><span class="p">]:</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>    <span class="k">return</span> <span class="p">[</span><span class="n">layer</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">tile_map</span><span class="o">.</span><span class="n">layers</span> <span class="k">if</span> <span class="n">layer</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">name</span><span class="p">)]</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_load_player</span><span class="p">(</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="n">character_drawing</span><span class="p">:</span> <span class="n">CharacterDrawing</span><span class="p">,</span> <span class="n">tile_map</span><span class="p">:</span> <span class="n">TiledMap</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterOnScreen</span><span class="p">:</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>    <span class="n">player</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>        <span class="n">obj</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">_load_layers</span><span class="p">(</span><span class="n">tile_map</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a>        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">layer</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">player</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>    <span class="p">)</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a>    <span class="k">return</span> <span class="n">CharacterOnScreen</span><span class="p">(</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a>        <span class="n">character_drawing</span><span class="p">,</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a>        <span class="n">Coordinate</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span><span class="p">),</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a>        <span class="n">collisions</span><span class="o">=</span><span class="p">[</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos">95</span></a>            <span class="n">Rectangle</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">y</span><span class="p">),</span> <span class="n">Size</span><span class="p">(</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">))</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos">96</span></a>            <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">_load_layers</span><span class="p">(</span><span class="n">tile_map</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">collision</span><span class="p">)</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos">97</span></a>            <span class="k">for</span> <span class="n">rect</span> <span class="ow">in</span> <span class="n">layer</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos">98</span></a>        <span class="p">],</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos">99</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -167,7 +178,8 @@
                 <section id="MapScene">
                             <input id="MapScene-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-            
+                    <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
+
     <span class="def">class</span>
     <span class="name">MapScene</span><wbr>(<span class="base"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>):
 
@@ -175,171 +187,118 @@
 
     </div>
     <a class="headerlink" href="#MapScene"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MapScene-23"><a href="#MapScene-23"><span class="linenos">23</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MapScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
-</span><span id="MapScene-24"><a href="#MapScene-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmx_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">player</span><span class="p">:</span> <span class="n">CharacterDrawing</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="MapScene-25"><a href="#MapScene-25"><span class="linenos">25</span></a>        <span class="n">tmx</span> <span class="o">=</span> <span class="n">load_pygame</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">tmx_file</span><span class="p">))</span>
-</span><span id="MapScene-26"><a href="#MapScene-26"><span class="linenos">26</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_tile_size</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="n">Size</span><span class="p">]</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">tmx</span><span class="o">.</span><span class="n">tilewidth</span><span class="p">,</span> <span class="n">tmx</span><span class="o">.</span><span class="n">tileheight</span><span class="p">)</span>
-</span><span id="MapScene-27"><a href="#MapScene-27"><span class="linenos">27</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_background</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_draw_layers</span><span class="p">(</span>
-</span><span id="MapScene-28"><a href="#MapScene-28"><span class="linenos">28</span></a>            <span class="n">_load_layers</span><span class="p">(</span><span class="n">tmx</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">background_layer_prefix</span><span class="p">)</span>
-</span><span id="MapScene-29"><a href="#MapScene-29"><span class="linenos">29</span></a>        <span class="p">)</span>
-</span><span id="MapScene-30"><a href="#MapScene-30"><span class="linenos">30</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_foreground</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_draw_layers</span><span class="p">(</span>
-</span><span id="MapScene-31"><a href="#MapScene-31"><span class="linenos">31</span></a>            <span class="n">_load_layers</span><span class="p">(</span><span class="n">tmx</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">foreground_layer_prefix</span><span class="p">)</span>
-</span><span id="MapScene-32"><a href="#MapScene-32"><span class="linenos">32</span></a>        <span class="p">)</span>
-</span><span id="MapScene-33"><a href="#MapScene-33"><span class="linenos">33</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="n">CharacterOnScreen</span><span class="p">]</span> <span class="o">=</span> <span class="n">_load_player</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">tmx</span><span class="p">)</span>
-</span><span id="MapScene-34"><a href="#MapScene-34"><span class="linenos">34</span></a>
-</span><span id="MapScene-35"><a href="#MapScene-35"><span class="linenos">35</span></a>    <span class="nd">@override</span>
-</span><span id="MapScene-36"><a href="#MapScene-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="MapScene-37"><a href="#MapScene-37"><span class="linenos">37</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-</span><span id="MapScene-38"><a href="#MapScene-38"><span class="linenos">38</span></a>
-</span><span id="MapScene-39"><a href="#MapScene-39"><span class="linenos">39</span></a>    <span class="nd">@override</span>
-</span><span id="MapScene-40"><a href="#MapScene-40"><span class="linenos">40</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
-</span><span id="MapScene-41"><a href="#MapScene-41"><span class="linenos">41</span></a>        <span class="n">character</span><span class="p">,</span> <span class="n">visuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MapScene-42"><a href="#MapScene-42"><span class="linenos">42</span></a>        <span class="n">below_character</span><span class="p">,</span> <span class="n">above_character</span> <span class="o">=</span> <span class="n">partition</span><span class="p">(</span>
-</span><span id="MapScene-43"><a href="#MapScene-43"><span class="linenos">43</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_foreground</span><span class="p">,</span>
-</span><span id="MapScene-44"><a href="#MapScene-44"><span class="linenos">44</span></a>            <span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">visual_bottom</span> <span class="o">&lt;</span> <span class="n">character</span><span class="o">.</span><span class="n">rectangle</span><span class="o">.</span><span class="n">bottom</span>
-</span><span id="MapScene-45"><a href="#MapScene-45"><span class="linenos">45</span></a>            <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">rectangle</span><span class="o">.</span><span class="n">collides</span><span class="p">(</span><span class="n">character</span><span class="o">.</span><span class="n">rectangle</span><span class="p">),</span>
-</span><span id="MapScene-46"><a href="#MapScene-46"><span class="linenos">46</span></a>        <span class="p">)</span>
-</span><span id="MapScene-47"><a href="#MapScene-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="MapScene-48"><a href="#MapScene-48"><span class="linenos">48</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_background</span>
-</span><span id="MapScene-49"><a href="#MapScene-49"><span class="linenos">49</span></a>            <span class="o">+</span> <span class="n">below_character</span>
-</span><span id="MapScene-50"><a href="#MapScene-50"><span class="linenos">50</span></a>            <span class="o">+</span> <span class="p">[</span><span class="n">character</span><span class="p">]</span>
-</span><span id="MapScene-51"><a href="#MapScene-51"><span class="linenos">51</span></a>            <span class="o">+</span> <span class="n">visuals</span>
-</span><span id="MapScene-52"><a href="#MapScene-52"><span class="linenos">52</span></a>            <span class="o">+</span> <span class="n">above_character</span>
-</span><span id="MapScene-53"><a href="#MapScene-53"><span class="linenos">53</span></a>        <span class="p">)</span>
-</span><span id="MapScene-54"><a href="#MapScene-54"><span class="linenos">54</span></a>
-</span><span id="MapScene-55"><a href="#MapScene-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">TiledTileLayer</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
-</span><span id="MapScene-56"><a href="#MapScene-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="p">[</span>
-</span><span id="MapScene-57"><a href="#MapScene-57"><span class="linenos">57</span></a>            <span class="n">DrawOnScreen</span><span class="p">(</span>
-</span><span id="MapScene-58"><a href="#MapScene-58"><span class="linenos">58</span></a>                <span class="n">Coordinate</span><span class="p">(</span>
-</span><span id="MapScene-59"><a href="#MapScene-59"><span class="linenos">59</span></a>                    <span class="n">left</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tile_size</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">top</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tile_size</span><span class="o">.</span><span class="n">height</span>
-</span><span id="MapScene-60"><a href="#MapScene-60"><span class="linenos">60</span></a>                <span class="p">),</span>
-</span><span id="MapScene-61"><a href="#MapScene-61"><span class="linenos">61</span></a>                <span class="n">Drawing</span><span class="p">(</span><span class="n">surface</span><span class="p">),</span>
-</span><span id="MapScene-62"><a href="#MapScene-62"><span class="linenos">62</span></a>            <span class="p">)</span>
-</span><span id="MapScene-63"><a href="#MapScene-63"><span class="linenos">63</span></a>            <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span>
-</span><span id="MapScene-64"><a href="#MapScene-64"><span class="linenos">64</span></a>            <span class="k">for</span> <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">surface</span> <span class="ow">in</span> <span class="n">layer</span><span class="o">.</span><span class="n">tiles</span><span class="p">()</span>
-</span><span id="MapScene-65"><a href="#MapScene-65"><span class="linenos">65</span></a>        <span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MapScene-24"><a href="#MapScene-24"><span class="linenos">24</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="MapScene-25"><a href="#MapScene-25"><span class="linenos">25</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MapScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
+</span><span id="MapScene-26"><a href="#MapScene-26"><span class="linenos">26</span></a>    <span class="n">_background</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]</span>
+</span><span id="MapScene-27"><a href="#MapScene-27"><span class="linenos">27</span></a>    <span class="n">_foreground</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]</span>
+</span><span id="MapScene-28"><a href="#MapScene-28"><span class="linenos">28</span></a>    <span class="n">_player</span><span class="p">:</span> <span class="n">CharacterOnScreen</span>
+</span><span id="MapScene-29"><a href="#MapScene-29"><span class="linenos">29</span></a>    <span class="n">_tile_size</span><span class="p">:</span> <span class="n">Size</span>
+</span><span id="MapScene-30"><a href="#MapScene-30"><span class="linenos">30</span></a>
+</span><span id="MapScene-31"><a href="#MapScene-31"><span class="linenos">31</span></a>    <span class="nd">@classmethod</span>
+</span><span id="MapScene-32"><a href="#MapScene-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">tmx_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">player</span><span class="p">:</span> <span class="n">CharacterDrawing</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="MapScene-33"><a href="#MapScene-33"><span class="linenos">33</span></a>        <span class="n">tmx</span> <span class="o">=</span> <span class="n">load_pygame</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">tmx_file</span><span class="p">))</span>
+</span><span id="MapScene-34"><a href="#MapScene-34"><span class="linenos">34</span></a>        <span class="n">tile_size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">tmx</span><span class="o">.</span><span class="n">tilewidth</span><span class="p">,</span> <span class="n">tmx</span><span class="o">.</span><span class="n">tileheight</span><span class="p">)</span>
+</span><span id="MapScene-35"><a href="#MapScene-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="n">MapScene</span><span class="p">(</span>
+</span><span id="MapScene-36"><a href="#MapScene-36"><span class="linenos">36</span></a>            <span class="n">_draw</span><span class="p">(</span><span class="n">_load_layers</span><span class="p">(</span><span class="n">tmx</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">foreground</span><span class="p">),</span> <span class="n">tile_size</span><span class="p">),</span>
+</span><span id="MapScene-37"><a href="#MapScene-37"><span class="linenos">37</span></a>            <span class="n">_draw</span><span class="p">(</span><span class="n">_load_layers</span><span class="p">(</span><span class="n">tmx</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">background</span><span class="p">),</span> <span class="n">tile_size</span><span class="p">),</span>
+</span><span id="MapScene-38"><a href="#MapScene-38"><span class="linenos">38</span></a>            <span class="n">_load_player</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">tmx</span><span class="p">),</span>
+</span><span id="MapScene-39"><a href="#MapScene-39"><span class="linenos">39</span></a>            <span class="n">tile_size</span><span class="p">,</span>
+</span><span id="MapScene-40"><a href="#MapScene-40"><span class="linenos">40</span></a>        <span class="p">)</span>
+</span><span id="MapScene-41"><a href="#MapScene-41"><span class="linenos">41</span></a>
+</span><span id="MapScene-42"><a href="#MapScene-42"><span class="linenos">42</span></a>    <span class="nd">@property</span>
+</span><span id="MapScene-43"><a href="#MapScene-43"><span class="linenos">43</span></a>    <span class="nd">@override</span>
+</span><span id="MapScene-44"><a href="#MapScene-44"><span class="linenos">44</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
+</span><span id="MapScene-45"><a href="#MapScene-45"><span class="linenos">45</span></a>        <span class="n">character</span><span class="p">,</span> <span class="n">visuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">draw_on_screen</span>
+</span><span id="MapScene-46"><a href="#MapScene-46"><span class="linenos">46</span></a>        <span class="n">below_character</span><span class="p">,</span> <span class="n">above_character</span> <span class="o">=</span> <span class="n">partition</span><span class="p">(</span>
+</span><span id="MapScene-47"><a href="#MapScene-47"><span class="linenos">47</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_foreground</span><span class="p">,</span>
+</span><span id="MapScene-48"><a href="#MapScene-48"><span class="linenos">48</span></a>            <span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">visible_rectangle</span><span class="o">.</span><span class="n">bottom</span>
+</span><span id="MapScene-49"><a href="#MapScene-49"><span class="linenos">49</span></a>            <span class="o">&lt;</span> <span class="n">character</span><span class="o">.</span><span class="n">visible_rectangle</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span>
+</span><span id="MapScene-50"><a href="#MapScene-50"><span class="linenos">50</span></a>        <span class="p">)</span>
+</span><span id="MapScene-51"><a href="#MapScene-51"><span class="linenos">51</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="MapScene-52"><a href="#MapScene-52"><span class="linenos">52</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_background</span>
+</span><span id="MapScene-53"><a href="#MapScene-53"><span class="linenos">53</span></a>            <span class="o">+</span> <span class="n">below_character</span>
+</span><span id="MapScene-54"><a href="#MapScene-54"><span class="linenos">54</span></a>            <span class="o">+</span> <span class="p">[</span><span class="n">character</span><span class="p">]</span>
+</span><span id="MapScene-55"><a href="#MapScene-55"><span class="linenos">55</span></a>            <span class="o">+</span> <span class="n">visuals</span>
+</span><span id="MapScene-56"><a href="#MapScene-56"><span class="linenos">56</span></a>            <span class="o">+</span> <span class="n">above_character</span>
+</span><span id="MapScene-57"><a href="#MapScene-57"><span class="linenos">57</span></a>        <span class="p">)</span>
+</span><span id="MapScene-58"><a href="#MapScene-58"><span class="linenos">58</span></a>
+</span><span id="MapScene-59"><a href="#MapScene-59"><span class="linenos">59</span></a>    <span class="nd">@override</span>
+</span><span id="MapScene-60"><a href="#MapScene-60"><span class="linenos">60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="MapScene-61"><a href="#MapScene-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="n">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_player</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>
+</span><span id="MapScene-62"><a href="#MapScene-62"><span class="linenos">62</span></a>
+</span><span id="MapScene-63"><a href="#MapScene-63"><span class="linenos">63</span></a>    <span class="nd">@override</span>
+</span><span id="MapScene-64"><a href="#MapScene-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="MapScene-65"><a href="#MapScene-65"><span class="linenos">65</span></a>        <span class="k">return</span> <span class="n">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_player</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Abstract base class representing a game scene.</p>
-
-<p>This class defines the interface for game scenes, providing methods for
-handling events and drawing content on the screen. All game scenes must
-implement these methods.</p>
-</div>
-
+    
 
                             <div id="MapScene.__init__" class="classattr">
-                                        <input id="MapScene.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
+                                <div class="attr function">
             
-        <span class="name">MapScene</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">tmx_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span>,</span><span class="param">	<span class="n">player</span><span class="p">:</span> <span class="n"><a href="../character/character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span></span>)</span>
+        <span class="name">MapScene</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">_background</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n"><a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a></span><span class="p">]</span>,</span><span class="param">	<span class="n">_foreground</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n"><a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a></span><span class="p">]</span>,</span><span class="param">	<span class="n">_player</span><span class="p">:</span> <span class="n"><a href="../character/character_on_screen.html#CharacterOnScreen">nextrpg.character.character_on_screen.CharacterOnScreen</a></span>,</span><span class="param">	<span class="n">_tile_size</span><span class="p">:</span> <span class="n"><a href="../common_types.html#Size">nextrpg.common_types.Size</a></span></span>)</span>
 
-                <label class="view-source-button" for="MapScene.__init__-view-source"><span>View Source</span></label>
-
+        
     </div>
     <a class="headerlink" href="#MapScene.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MapScene.__init__-24"><a href="#MapScene.__init__-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmx_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">player</span><span class="p">:</span> <span class="n">CharacterDrawing</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="MapScene.__init__-25"><a href="#MapScene.__init__-25"><span class="linenos">25</span></a>        <span class="n">tmx</span> <span class="o">=</span> <span class="n">load_pygame</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">tmx_file</span><span class="p">))</span>
-</span><span id="MapScene.__init__-26"><a href="#MapScene.__init__-26"><span class="linenos">26</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_tile_size</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="n">Size</span><span class="p">]</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">tmx</span><span class="o">.</span><span class="n">tilewidth</span><span class="p">,</span> <span class="n">tmx</span><span class="o">.</span><span class="n">tileheight</span><span class="p">)</span>
-</span><span id="MapScene.__init__-27"><a href="#MapScene.__init__-27"><span class="linenos">27</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_background</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_draw_layers</span><span class="p">(</span>
-</span><span id="MapScene.__init__-28"><a href="#MapScene.__init__-28"><span class="linenos">28</span></a>            <span class="n">_load_layers</span><span class="p">(</span><span class="n">tmx</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">background_layer_prefix</span><span class="p">)</span>
-</span><span id="MapScene.__init__-29"><a href="#MapScene.__init__-29"><span class="linenos">29</span></a>        <span class="p">)</span>
-</span><span id="MapScene.__init__-30"><a href="#MapScene.__init__-30"><span class="linenos">30</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_foreground</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_draw_layers</span><span class="p">(</span>
-</span><span id="MapScene.__init__-31"><a href="#MapScene.__init__-31"><span class="linenos">31</span></a>            <span class="n">_load_layers</span><span class="p">(</span><span class="n">tmx</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">foreground_layer_prefix</span><span class="p">)</span>
-</span><span id="MapScene.__init__-32"><a href="#MapScene.__init__-32"><span class="linenos">32</span></a>        <span class="p">)</span>
-</span><span id="MapScene.__init__-33"><a href="#MapScene.__init__-33"><span class="linenos">33</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="n">CharacterOnScreen</span><span class="p">]</span> <span class="o">=</span> <span class="n">_load_player</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">tmx</span><span class="p">)</span>
+    
+    
+
+                            </div>
+                            <div id="MapScene.load" class="classattr">
+                                        <input id="MapScene.load-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+                    <div class="decorator decorator-classmethod">@classmethod</div>
+
+        <span class="def">def</span>
+        <span class="name">load</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">tmx_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span>,</span><span class="param">	<span class="n">player</span><span class="p">:</span> <span class="n"><a href="../character/character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span></span><span class="return-annotation">) -> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>:</span></span>
+
+                <label class="view-source-button" for="MapScene.load-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#MapScene.load"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MapScene.load-31"><a href="#MapScene.load-31"><span class="linenos">31</span></a>    <span class="nd">@classmethod</span>
+</span><span id="MapScene.load-32"><a href="#MapScene.load-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">tmx_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">player</span><span class="p">:</span> <span class="n">CharacterDrawing</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="MapScene.load-33"><a href="#MapScene.load-33"><span class="linenos">33</span></a>        <span class="n">tmx</span> <span class="o">=</span> <span class="n">load_pygame</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">tmx_file</span><span class="p">))</span>
+</span><span id="MapScene.load-34"><a href="#MapScene.load-34"><span class="linenos">34</span></a>        <span class="n">tile_size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">tmx</span><span class="o">.</span><span class="n">tilewidth</span><span class="p">,</span> <span class="n">tmx</span><span class="o">.</span><span class="n">tileheight</span><span class="p">)</span>
+</span><span id="MapScene.load-35"><a href="#MapScene.load-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="n">MapScene</span><span class="p">(</span>
+</span><span id="MapScene.load-36"><a href="#MapScene.load-36"><span class="linenos">36</span></a>            <span class="n">_draw</span><span class="p">(</span><span class="n">_load_layers</span><span class="p">(</span><span class="n">tmx</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">foreground</span><span class="p">),</span> <span class="n">tile_size</span><span class="p">),</span>
+</span><span id="MapScene.load-37"><a href="#MapScene.load-37"><span class="linenos">37</span></a>            <span class="n">_draw</span><span class="p">(</span><span class="n">_load_layers</span><span class="p">(</span><span class="n">tmx</span><span class="p">,</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">background</span><span class="p">),</span> <span class="n">tile_size</span><span class="p">),</span>
+</span><span id="MapScene.load-38"><a href="#MapScene.load-38"><span class="linenos">38</span></a>            <span class="n">_load_player</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">tmx</span><span class="p">),</span>
+</span><span id="MapScene.load-39"><a href="#MapScene.load-39"><span class="linenos">39</span></a>            <span class="n">tile_size</span><span class="p">,</span>
+</span><span id="MapScene.load-40"><a href="#MapScene.load-40"><span class="linenos">40</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
     
 
                             </div>
-                            <div id="MapScene.event" class="classattr">
-                                        <input id="MapScene.event-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-                    <div class="decorator decorator-override">@override</div>
-
-        <span class="def">def</span>
-        <span class="name">event</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">event</span><span class="p">:</span> <span class="n"><a href="../event/pygame_event.html#PygameEvent">nextrpg.event.pygame_event.PygameEvent</a></span></span><span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
-
-                <label class="view-source-button" for="MapScene.event-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#MapScene.event"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MapScene.event-35"><a href="#MapScene.event-35"><span class="linenos">35</span></a>    <span class="nd">@override</span>
-</span><span id="MapScene.event-36"><a href="#MapScene.event-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="MapScene.event-37"><a href="#MapScene.event-37"><span class="linenos">37</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Handles events for the scene.</p>
-
-<p>The recommended implementation is via <code>@singledispatchmethod</code>.
-And implement events of interesting <code><a href="../event/pygame_event.html">nextrpg.event.pygame_event</a></code> types.</p>
-
-<div class="pdoc-code codehilite">
-<pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MyScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
-    <span class="nd">@singledispatchmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">pass</span>
-
-    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">GuiResize</span> <span class="o">|</span> <span class="n">Quit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="o">...</span>
-</code></pre>
-</div>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code><a href="#MapScene.event">event</a></code>:</strong>  The pygame event to process</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>None</code></p>
-</blockquote>
-</div>
-
-
-                            </div>
                             <div id="MapScene.draw_on_screen" class="classattr">
                                         <input id="MapScene.draw_on_screen-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-                    <div class="decorator decorator-override">@override</div>
-
-        <span class="def">def</span>
-        <span class="name">draw_on_screen</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="nb">list</span><span class="p">[</span><span class="n"><a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a></span><span class="p">]</span>:</span></span>
+<div class="attr variable">
+            <span class="name">draw_on_screen</span><span class="annotation">: list[<a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a>]</span>
 
                 <label class="view-source-button" for="MapScene.draw_on_screen-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#MapScene.draw_on_screen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MapScene.draw_on_screen-39"><a href="#MapScene.draw_on_screen-39"><span class="linenos">39</span></a>    <span class="nd">@override</span>
-</span><span id="MapScene.draw_on_screen-40"><a href="#MapScene.draw_on_screen-40"><span class="linenos">40</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
-</span><span id="MapScene.draw_on_screen-41"><a href="#MapScene.draw_on_screen-41"><span class="linenos">41</span></a>        <span class="n">character</span><span class="p">,</span> <span class="n">visuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MapScene.draw_on_screen-42"><a href="#MapScene.draw_on_screen-42"><span class="linenos">42</span></a>        <span class="n">below_character</span><span class="p">,</span> <span class="n">above_character</span> <span class="o">=</span> <span class="n">partition</span><span class="p">(</span>
-</span><span id="MapScene.draw_on_screen-43"><a href="#MapScene.draw_on_screen-43"><span class="linenos">43</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_foreground</span><span class="p">,</span>
-</span><span id="MapScene.draw_on_screen-44"><a href="#MapScene.draw_on_screen-44"><span class="linenos">44</span></a>            <span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">visual_bottom</span> <span class="o">&lt;</span> <span class="n">character</span><span class="o">.</span><span class="n">rectangle</span><span class="o">.</span><span class="n">bottom</span>
-</span><span id="MapScene.draw_on_screen-45"><a href="#MapScene.draw_on_screen-45"><span class="linenos">45</span></a>            <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">rectangle</span><span class="o">.</span><span class="n">collides</span><span class="p">(</span><span class="n">character</span><span class="o">.</span><span class="n">rectangle</span><span class="p">),</span>
-</span><span id="MapScene.draw_on_screen-46"><a href="#MapScene.draw_on_screen-46"><span class="linenos">46</span></a>        <span class="p">)</span>
-</span><span id="MapScene.draw_on_screen-47"><a href="#MapScene.draw_on_screen-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="MapScene.draw_on_screen-48"><a href="#MapScene.draw_on_screen-48"><span class="linenos">48</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_background</span>
-</span><span id="MapScene.draw_on_screen-49"><a href="#MapScene.draw_on_screen-49"><span class="linenos">49</span></a>            <span class="o">+</span> <span class="n">below_character</span>
-</span><span id="MapScene.draw_on_screen-50"><a href="#MapScene.draw_on_screen-50"><span class="linenos">50</span></a>            <span class="o">+</span> <span class="p">[</span><span class="n">character</span><span class="p">]</span>
-</span><span id="MapScene.draw_on_screen-51"><a href="#MapScene.draw_on_screen-51"><span class="linenos">51</span></a>            <span class="o">+</span> <span class="n">visuals</span>
-</span><span id="MapScene.draw_on_screen-52"><a href="#MapScene.draw_on_screen-52"><span class="linenos">52</span></a>            <span class="o">+</span> <span class="n">above_character</span>
-</span><span id="MapScene.draw_on_screen-53"><a href="#MapScene.draw_on_screen-53"><span class="linenos">53</span></a>        <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MapScene.draw_on_screen-42"><a href="#MapScene.draw_on_screen-42"><span class="linenos">42</span></a>    <span class="nd">@property</span>
+</span><span id="MapScene.draw_on_screen-43"><a href="#MapScene.draw_on_screen-43"><span class="linenos">43</span></a>    <span class="nd">@override</span>
+</span><span id="MapScene.draw_on_screen-44"><a href="#MapScene.draw_on_screen-44"><span class="linenos">44</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
+</span><span id="MapScene.draw_on_screen-45"><a href="#MapScene.draw_on_screen-45"><span class="linenos">45</span></a>        <span class="n">character</span><span class="p">,</span> <span class="n">visuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">draw_on_screen</span>
+</span><span id="MapScene.draw_on_screen-46"><a href="#MapScene.draw_on_screen-46"><span class="linenos">46</span></a>        <span class="n">below_character</span><span class="p">,</span> <span class="n">above_character</span> <span class="o">=</span> <span class="n">partition</span><span class="p">(</span>
+</span><span id="MapScene.draw_on_screen-47"><a href="#MapScene.draw_on_screen-47"><span class="linenos">47</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_foreground</span><span class="p">,</span>
+</span><span id="MapScene.draw_on_screen-48"><a href="#MapScene.draw_on_screen-48"><span class="linenos">48</span></a>            <span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">visible_rectangle</span><span class="o">.</span><span class="n">bottom</span>
+</span><span id="MapScene.draw_on_screen-49"><a href="#MapScene.draw_on_screen-49"><span class="linenos">49</span></a>            <span class="o">&lt;</span> <span class="n">character</span><span class="o">.</span><span class="n">visible_rectangle</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span>
+</span><span id="MapScene.draw_on_screen-50"><a href="#MapScene.draw_on_screen-50"><span class="linenos">50</span></a>        <span class="p">)</span>
+</span><span id="MapScene.draw_on_screen-51"><a href="#MapScene.draw_on_screen-51"><span class="linenos">51</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="MapScene.draw_on_screen-52"><a href="#MapScene.draw_on_screen-52"><span class="linenos">52</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_background</span>
+</span><span id="MapScene.draw_on_screen-53"><a href="#MapScene.draw_on_screen-53"><span class="linenos">53</span></a>            <span class="o">+</span> <span class="n">below_character</span>
+</span><span id="MapScene.draw_on_screen-54"><a href="#MapScene.draw_on_screen-54"><span class="linenos">54</span></a>            <span class="o">+</span> <span class="p">[</span><span class="n">character</span><span class="p">]</span>
+</span><span id="MapScene.draw_on_screen-55"><a href="#MapScene.draw_on_screen-55"><span class="linenos">55</span></a>            <span class="o">+</span> <span class="n">visuals</span>
+</span><span id="MapScene.draw_on_screen-56"><a href="#MapScene.draw_on_screen-56"><span class="linenos">56</span></a>            <span class="o">+</span> <span class="n">above_character</span>
+</span><span id="MapScene.draw_on_screen-57"><a href="#MapScene.draw_on_screen-57"><span class="linenos">57</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -356,6 +315,87 @@ And implement events of interesting <code><a href="../event/pygame_event.html">n
 <blockquote>
   <p><code>list[DrawOnScreen]</code>: objects to be rendered</p>
 </blockquote>
+</div>
+
+
+                            </div>
+                            <div id="MapScene.event" class="classattr">
+                                        <input id="MapScene.event-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+                    <div class="decorator decorator-override">@override</div>
+
+        <span class="def">def</span>
+        <span class="name">event</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">event</span><span class="p">:</span> <span class="n"><a href="../event/pygame_event.html#PygameEvent">nextrpg.event.pygame_event.PygameEvent</a></span></span><span class="return-annotation">) -> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>:</span></span>
+
+                <label class="view-source-button" for="MapScene.event-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#MapScene.event"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MapScene.event-59"><a href="#MapScene.event-59"><span class="linenos">59</span></a>    <span class="nd">@override</span>
+</span><span id="MapScene.event-60"><a href="#MapScene.event-60"><span class="linenos">60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="MapScene.event-61"><a href="#MapScene.event-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="n">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_player</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">event</span><span class="p">))</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Handles events for the scene.</p>
+
+<p>The recommended implementation is via <code>@singledispatchmethod</code>.
+And implement events of interesting <code><a href="../event/pygame_event.html">nextrpg.event.pygame_event</a></code> types.</p>
+
+<div class="pdoc-code codehilite">
+<pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MyScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
+    <span class="nd">@singledispatchmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">GuiResize</span> <span class="o">|</span> <span class="n">Quit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="o">...</span>
+</code></pre>
+</div>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong><code><a href="#MapScene.event">event</a></code>:</strong>  The pygame event to process</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code>Scene</code></p>
+</blockquote>
+</div>
+
+
+                            </div>
+                            <div id="MapScene.step" class="classattr">
+                                        <input id="MapScene.step-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+                    <div class="decorator decorator-override">@override</div>
+
+        <span class="def">def</span>
+        <span class="name">step</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>:</span></span>
+
+                <label class="view-source-button" for="MapScene.step-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#MapScene.step"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MapScene.step-63"><a href="#MapScene.step-63"><span class="linenos">63</span></a>    <span class="nd">@override</span>
+</span><span id="MapScene.step-64"><a href="#MapScene.step-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="MapScene.step-65"><a href="#MapScene.step-65"><span class="linenos">65</span></a>        <span class="k">return</span> <span class="n">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_player</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Step forward to the current scene.</p>
 </div>
 
 

@@ -3,7 +3,7 @@ Utilities.
 """
 
 from collections.abc import Iterable
-from typing import Callable
+from typing import Any, Callable
 
 
 def partition[T](
@@ -13,13 +13,14 @@ def partition[T](
     Split an iterable into two parts based on a predicate function.
 
     Args:
-        `iterable`: The input iterable to be partitioned.
+        `iterable`: The input iterable to be partitioned
 
-        `predicate`: Function that takes an element and returns `True`/`False`.
+        `predicate`: Function that takes an element and returns `True`/`False`
+
     Returns:
-        `tuple[list[T], list[T]]`: A tuple containing two lists -
-            The first list contains elements for which predicate returns `True`.
-            The second contains elements for which predicate returns `False`.
+        `tuple[list[T], list[T]]`: A tuple containing two lists.
+            The first list contains elements for which predicate gives `True`.
+            The second list contains elements for which predicate gives `False`.
     """
     true = []
     false = []
@@ -29,3 +30,21 @@ def partition[T](
         else:
             false.append(x)
     return true, false
+
+
+def clone[T](t: T, /, **kwargs: Any) -> T:
+    """
+    Create a copy of an object with optional attribute overrides.
+
+    Args:
+        `t`: The object to clone.
+
+        `**kwargs`: Keyword arguments specifying attributes to override.
+
+    Returns:
+        `T`: A new instance of the same type as the input with overrides.
+    """
+
+    return type(t)(
+        **{k: v for k, v in vars(t).items() if k not in kwargs}, **kwargs
+    )

@@ -4,8 +4,8 @@ Sample scene.
 
 from pathlib import Path
 
-from character.rpg_maker_drawing import load_sprite_sheet
 from nextrpg.character.rpg_maker_drawing import (
+    RpgMakerCharacterDrawing,
     SpriteSheet,
     SpriteSheetSelection,
 )
@@ -21,11 +21,11 @@ def entry_scene() -> Scene:
     Returns:
         `Scene`: The sample scene.
     """
-    return MapScene(
+    return MapScene.load(
         Path("assets/interior.tmx"),
-        load_sprite_sheet(
+        RpgMakerCharacterDrawing.load(
             SpriteSheet(
-                Drawing(Path("assets/Characters_MV.png")),
+                Drawing.load(Path("assets/Characters_MV.png")),
                 SpriteSheetSelection(row=0, column=1),
             )
         ),

@@ -132,7 +132,7 @@ class Coordinate:
         and returns a new `Coordinate` with the scaled values rounded up to the
         nearest integer.
 
-        Round up so that sprites won't leave tiny, unrendered gaps after scaled.
+        Round up so that drawings won't leave tiny, black gaps after scaled.
 
         Args:
             `scale`: The scaling factor to multiply the left and
@@ -238,7 +238,7 @@ class Size:
 
         The new dimensions are rounded up to the nearest integer.
 
-        Round up so that sprites won't leave tiny, unrendered gaps after scaled.
+        Round up so that drawings won't leave tiny, black gaps after scaled.
 
         Args:
             `scale`: A scaling factor by which the width and height will be

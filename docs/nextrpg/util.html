@@ -31,10 +31,10 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
-                    <a class="function" href="#assert_not_none">assert_not_none</a>
+                    <a class="function" href="#partition">partition</a>
             </li>
             <li>
-                    <a class="function" href="#partition">partition</a>
+                    <a class="function" href="#clone">clone</a>
             </li>
     </ul>
 
@@ -64,108 +64,55 @@
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="k">def</span><span class="w"> </span><span class="nf">assert_not_none</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">x</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">    Assert that the provided argument is not `None` and returns it.</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">    Args:</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">        `x`: The value to be checked.</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">    Returns:</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">        The same value as provided in the argument, but never `None`. The result</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">        retains the type of the input value.</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="k">def</span><span class="w"> </span><span class="nf">partition</span><span class="p">[</span><span class="n">T</span><span class="p">](</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="o">/</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">    Split an iterable into two parts based on a predicate function.</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">    Args:</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">        `iterable`: The input iterable to be partitioned</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">        `predicate`: Function that takes an element and returns `True`/`False`</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">    Raises:</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">        `AssertionError`: If the provided argument is None.</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="k">assert</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="k">return</span> <span class="n">x</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="k">def</span><span class="w"> </span><span class="nf">partition</span><span class="p">[</span><span class="n">T</span><span class="p">](</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="o">/</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">    Split an iterable into two parts based on a predicate function.</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">    Args:</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">        `iterable`: The input iterable to be partitioned.</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">        `predicate`: Function that takes an element and returns `True`/`False`.</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">    Returns:</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">        `tuple[list[T], list[T]]`: A tuple containing two lists -</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">            The first list contains elements for which predicate returns `True`.</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">            The second contains elements for which predicate returns `False`.</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="n">true</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="n">false</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>        <span class="k">if</span> <span class="n">predicate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>            <span class="n">true</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>            <span class="n">false</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="k">return</span> <span class="n">true</span><span class="p">,</span> <span class="n">false</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">    Returns:</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">        `tuple[list[T], list[T]]`: A tuple containing two lists.</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">            The first list contains elements for which predicate gives `True`.</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">            The second list contains elements for which predicate gives `False`.</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">true</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">false</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>        <span class="k">if</span> <span class="n">predicate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>            <span class="n">true</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>            <span class="n">false</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="k">return</span> <span class="n">true</span><span class="p">,</span> <span class="n">false</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="k">def</span><span class="w"> </span><span class="nf">clone</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">t</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">    Create a copy of an object with optional attribute overrides.</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">    Args:</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">        `t`: The object to clone.</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">        `**kwargs`: Keyword arguments specifying attributes to override.</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">    Returns:</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">        `T`: A new instance of the same type as the input with overrides.</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">t</span><span class="p">)(</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">},</span> <span class="o">**</span><span class="n">kwargs</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
             </section>
-                <section id="assert_not_none">
-                            <input id="assert_not_none-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">assert_not_none</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">x</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">]</span>, </span><span class="param"><span class="o">/</span></span><span class="return-annotation">) -> <span class="n">T</span>:</span></span>
-
-                <label class="view-source-button" for="assert_not_none-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#assert_not_none"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="assert_not_none-10"><a href="#assert_not_none-10"><span class="linenos">10</span></a><span class="k">def</span><span class="w"> </span><span class="nf">assert_not_none</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">x</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="assert_not_none-11"><a href="#assert_not_none-11"><span class="linenos">11</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="assert_not_none-12"><a href="#assert_not_none-12"><span class="linenos">12</span></a><span class="sd">    Assert that the provided argument is not `None` and returns it.</span>
-</span><span id="assert_not_none-13"><a href="#assert_not_none-13"><span class="linenos">13</span></a>
-</span><span id="assert_not_none-14"><a href="#assert_not_none-14"><span class="linenos">14</span></a><span class="sd">    Args:</span>
-</span><span id="assert_not_none-15"><a href="#assert_not_none-15"><span class="linenos">15</span></a><span class="sd">        `x`: The value to be checked.</span>
-</span><span id="assert_not_none-16"><a href="#assert_not_none-16"><span class="linenos">16</span></a>
-</span><span id="assert_not_none-17"><a href="#assert_not_none-17"><span class="linenos">17</span></a><span class="sd">    Returns:</span>
-</span><span id="assert_not_none-18"><a href="#assert_not_none-18"><span class="linenos">18</span></a><span class="sd">        The same value as provided in the argument, but never `None`. The result</span>
-</span><span id="assert_not_none-19"><a href="#assert_not_none-19"><span class="linenos">19</span></a><span class="sd">        retains the type of the input value.</span>
-</span><span id="assert_not_none-20"><a href="#assert_not_none-20"><span class="linenos">20</span></a>
-</span><span id="assert_not_none-21"><a href="#assert_not_none-21"><span class="linenos">21</span></a><span class="sd">    Raises:</span>
-</span><span id="assert_not_none-22"><a href="#assert_not_none-22"><span class="linenos">22</span></a><span class="sd">        `AssertionError`: If the provided argument is None.</span>
-</span><span id="assert_not_none-23"><a href="#assert_not_none-23"><span class="linenos">23</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="assert_not_none-24"><a href="#assert_not_none-24"><span class="linenos">24</span></a>    <span class="k">assert</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-</span><span id="assert_not_none-25"><a href="#assert_not_none-25"><span class="linenos">25</span></a>    <span class="k">return</span> <span class="n">x</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Assert that the provided argument is not <code>None</code> and returns it.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code>x</code>:</strong>  The value to be checked.</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p>The same value as provided in the argument, but never <code>None</code>. The result
-  retains the type of the input value.</p>
-</blockquote>
-
-<h6 id="raises">Raises:</h6>
-
-<ul>
-<li><strong><code>AssertionError</code>:</strong>  If the provided argument is None.</li>
-</ul>
-</div>
-
-
-                </section>
                 <section id="partition">
                             <input id="partition-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
@@ -177,29 +124,30 @@
 
     </div>
     <a class="headerlink" href="#partition"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="partition-28"><a href="#partition-28"><span class="linenos">28</span></a><span class="k">def</span><span class="w"> </span><span class="nf">partition</span><span class="p">[</span><span class="n">T</span><span class="p">](</span>
-</span><span id="partition-29"><a href="#partition-29"><span class="linenos">29</span></a>    <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="o">/</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span>
-</span><span id="partition-30"><a href="#partition-30"><span class="linenos">30</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
-</span><span id="partition-31"><a href="#partition-31"><span class="linenos">31</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="partition-32"><a href="#partition-32"><span class="linenos">32</span></a><span class="sd">    Split an iterable into two parts based on a predicate function.</span>
-</span><span id="partition-33"><a href="#partition-33"><span class="linenos">33</span></a>
-</span><span id="partition-34"><a href="#partition-34"><span class="linenos">34</span></a><span class="sd">    Args:</span>
-</span><span id="partition-35"><a href="#partition-35"><span class="linenos">35</span></a><span class="sd">        `iterable`: The input iterable to be partitioned.</span>
-</span><span id="partition-36"><a href="#partition-36"><span class="linenos">36</span></a>
-</span><span id="partition-37"><a href="#partition-37"><span class="linenos">37</span></a><span class="sd">        `predicate`: Function that takes an element and returns `True`/`False`.</span>
-</span><span id="partition-38"><a href="#partition-38"><span class="linenos">38</span></a><span class="sd">    Returns:</span>
-</span><span id="partition-39"><a href="#partition-39"><span class="linenos">39</span></a><span class="sd">        `tuple[list[T], list[T]]`: A tuple containing two lists -</span>
-</span><span id="partition-40"><a href="#partition-40"><span class="linenos">40</span></a><span class="sd">            The first list contains elements for which predicate returns `True`.</span>
-</span><span id="partition-41"><a href="#partition-41"><span class="linenos">41</span></a><span class="sd">            The second contains elements for which predicate returns `False`.</span>
-</span><span id="partition-42"><a href="#partition-42"><span class="linenos">42</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="partition-43"><a href="#partition-43"><span class="linenos">43</span></a>    <span class="n">true</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="partition-44"><a href="#partition-44"><span class="linenos">44</span></a>    <span class="n">false</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="partition-45"><a href="#partition-45"><span class="linenos">45</span></a>    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
-</span><span id="partition-46"><a href="#partition-46"><span class="linenos">46</span></a>        <span class="k">if</span> <span class="n">predicate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-</span><span id="partition-47"><a href="#partition-47"><span class="linenos">47</span></a>            <span class="n">true</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="partition-48"><a href="#partition-48"><span class="linenos">48</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="partition-49"><a href="#partition-49"><span class="linenos">49</span></a>            <span class="n">false</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="partition-50"><a href="#partition-50"><span class="linenos">50</span></a>    <span class="k">return</span> <span class="n">true</span><span class="p">,</span> <span class="n">false</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="partition-10"><a href="#partition-10"><span class="linenos">10</span></a><span class="k">def</span><span class="w"> </span><span class="nf">partition</span><span class="p">[</span><span class="n">T</span><span class="p">](</span>
+</span><span id="partition-11"><a href="#partition-11"><span class="linenos">11</span></a>    <span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="o">/</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">T</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span>
+</span><span id="partition-12"><a href="#partition-12"><span class="linenos">12</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
+</span><span id="partition-13"><a href="#partition-13"><span class="linenos">13</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="partition-14"><a href="#partition-14"><span class="linenos">14</span></a><span class="sd">    Split an iterable into two parts based on a predicate function.</span>
+</span><span id="partition-15"><a href="#partition-15"><span class="linenos">15</span></a>
+</span><span id="partition-16"><a href="#partition-16"><span class="linenos">16</span></a><span class="sd">    Args:</span>
+</span><span id="partition-17"><a href="#partition-17"><span class="linenos">17</span></a><span class="sd">        `iterable`: The input iterable to be partitioned</span>
+</span><span id="partition-18"><a href="#partition-18"><span class="linenos">18</span></a>
+</span><span id="partition-19"><a href="#partition-19"><span class="linenos">19</span></a><span class="sd">        `predicate`: Function that takes an element and returns `True`/`False`</span>
+</span><span id="partition-20"><a href="#partition-20"><span class="linenos">20</span></a>
+</span><span id="partition-21"><a href="#partition-21"><span class="linenos">21</span></a><span class="sd">    Returns:</span>
+</span><span id="partition-22"><a href="#partition-22"><span class="linenos">22</span></a><span class="sd">        `tuple[list[T], list[T]]`: A tuple containing two lists.</span>
+</span><span id="partition-23"><a href="#partition-23"><span class="linenos">23</span></a><span class="sd">            The first list contains elements for which predicate gives `True`.</span>
+</span><span id="partition-24"><a href="#partition-24"><span class="linenos">24</span></a><span class="sd">            The second list contains elements for which predicate gives `False`.</span>
+</span><span id="partition-25"><a href="#partition-25"><span class="linenos">25</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="partition-26"><a href="#partition-26"><span class="linenos">26</span></a>    <span class="n">true</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="partition-27"><a href="#partition-27"><span class="linenos">27</span></a>    <span class="n">false</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="partition-28"><a href="#partition-28"><span class="linenos">28</span></a>    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+</span><span id="partition-29"><a href="#partition-29"><span class="linenos">29</span></a>        <span class="k">if</span> <span class="n">predicate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</span><span id="partition-30"><a href="#partition-30"><span class="linenos">30</span></a>            <span class="n">true</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="partition-31"><a href="#partition-31"><span class="linenos">31</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="partition-32"><a href="#partition-32"><span class="linenos">32</span></a>            <span class="n">false</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="partition-33"><a href="#partition-33"><span class="linenos">33</span></a>    <span class="k">return</span> <span class="n">true</span><span class="p">,</span> <span class="n">false</span>
 </span></pre></div>
 
 
@@ -208,16 +156,64 @@
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code>iterable</code>:</strong>  The input iterable to be partitioned.</li>
-<li><strong><code>predicate</code>:</strong>  Function that takes an element and returns <code>True</code>/<code>False</code>.</li>
+<li><strong><code>iterable</code>:</strong>  The input iterable to be partitioned</li>
+<li><strong><code>predicate</code>:</strong>  Function that takes an element and returns <code>True</code>/<code>False</code></li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>tuple[list[T], list[T]]</code>: A tuple containing two lists -
-      The first list contains elements for which predicate returns <code>True</code>.
-      The second contains elements for which predicate returns <code>False</code>.</p>
+  <p><code>tuple[list[T], list[T]]</code>: A tuple containing two lists.
+      The first list contains elements for which predicate gives <code>True</code>.
+      The second list contains elements for which predicate gives <code>False</code>.</p>
+</blockquote>
+</div>
+
+
+                </section>
+                <section id="clone">
+                            <input id="clone-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">clone</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">t</span><span class="p">:</span> <span class="n">T</span>, </span><span class="param"><span class="o">/</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="n">T</span>:</span></span>
+
+                <label class="view-source-button" for="clone-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#clone"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="clone-36"><a href="#clone-36"><span class="linenos">36</span></a><span class="k">def</span><span class="w"> </span><span class="nf">clone</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">t</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="clone-37"><a href="#clone-37"><span class="linenos">37</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="clone-38"><a href="#clone-38"><span class="linenos">38</span></a><span class="sd">    Create a copy of an object with optional attribute overrides.</span>
+</span><span id="clone-39"><a href="#clone-39"><span class="linenos">39</span></a>
+</span><span id="clone-40"><a href="#clone-40"><span class="linenos">40</span></a><span class="sd">    Args:</span>
+</span><span id="clone-41"><a href="#clone-41"><span class="linenos">41</span></a><span class="sd">        `t`: The object to clone.</span>
+</span><span id="clone-42"><a href="#clone-42"><span class="linenos">42</span></a>
+</span><span id="clone-43"><a href="#clone-43"><span class="linenos">43</span></a><span class="sd">        `**kwargs`: Keyword arguments specifying attributes to override.</span>
+</span><span id="clone-44"><a href="#clone-44"><span class="linenos">44</span></a>
+</span><span id="clone-45"><a href="#clone-45"><span class="linenos">45</span></a><span class="sd">    Returns:</span>
+</span><span id="clone-46"><a href="#clone-46"><span class="linenos">46</span></a><span class="sd">        `T`: A new instance of the same type as the input with overrides.</span>
+</span><span id="clone-47"><a href="#clone-47"><span class="linenos">47</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="clone-48"><a href="#clone-48"><span class="linenos">48</span></a>
+</span><span id="clone-49"><a href="#clone-49"><span class="linenos">49</span></a>    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">t</span><span class="p">)(</span>
+</span><span id="clone-50"><a href="#clone-50"><span class="linenos">50</span></a>        <span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">},</span> <span class="o">**</span><span class="n">kwargs</span>
+</span><span id="clone-51"><a href="#clone-51"><span class="linenos">51</span></a>    <span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Create a copy of an object with optional attribute overrides.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong><code>t</code>:</strong>  The object to clone.</li>
+<li><strong><code>**kwargs</code>:</strong>  Keyword arguments specifying attributes to override.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code>T</code>: A new instance of the same type as the input with overrides.</p>
 </blockquote>
 </div>
 

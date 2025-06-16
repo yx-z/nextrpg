@@ -1,5 +1,5 @@
 """
-Drawable sprites on screen.
+Drawable on screen.
 """
 
 from dataclasses import dataclass
@@ -7,15 +7,15 @@ from functools import cached_property
 from itertools import product
 from math import ceil
 from pathlib import Path
-from typing import Final
 
 from pygame import SRCALPHA, Surface, transform
 from pygame.image import load
 
-from nextrpg.common_types import Coordinate, Pixel, Rectangle, Size
+from nextrpg.common_types import Coordinate, Pixel, Rectangle, Rgba, Size
 from nextrpg.config import config
 
 
+@dataclass(frozen=True)
 class Drawing:
     """
     Represents a drawable element and provides methods for accessing its size
@@ -27,21 +27,20 @@ class Drawing:
     crop and scale the surface.
     """
 
-    def __init__(self, resource: Path | Surface) -> None:
+    _surface: Surface
+
+    @classmethod
+    def load(cls, resource: Path) -> "Drawing":
         """
-        Initializes the object with a resource that is either a file `Path`
-        to an image or a `pygame.Surface` object.
-        If the resource is a file path, it loads it as a `pygame.Surface`.
+        Loads a drawing from a file `Path`.
 
         Args:
-            `resource`: A `Path` to load a `pygame.Surface` or
-                a `pygame.Surface` object to be used directly.
+            `resource`: A `Path` to load.
+
+        Returns:
+            `Drawing`: A new `Drawing` instance loaded from the file.
         """
-        self._surface: Final[Surface] = (
-            load(resource).convert_alpha()
-            if isinstance(resource, Path)
-            else resource
-        )
+        return Drawing(load(resource).convert_alpha())
 
     @property
     def width(self) -> Pixel:
@@ -129,7 +128,7 @@ class Drawing:
             return None
         surface = Surface(self.size.tuple, SRCALPHA)
         surface.fill(debug.drawing_background_color.tuple)
-        surface.blit(self._surface, Coordinate(0, 0).tuple)
+        surface.blit(self._surface, (0, 0))
         return surface
 
 
@@ -210,7 +209,7 @@ class DrawOnScreen:
         return DrawOnScreen(self.top_left * scale, self.drawing * scale)
 
     @staticmethod
-    def from_rectangle(rectangle: Rectangle) -> "DrawOnScreen":
+    def from_rectangle(rectangle: Rectangle, color: Rgba) -> "DrawOnScreen":
         """
         Creates a new `DrawOnScreen` instance from a given rectangle.
 
@@ -224,6 +223,6 @@ class DrawOnScreen:
         Returns:
             `DrawOnScreen`: A transparent surface matching rectangle dimensions.
         """
-        return DrawOnScreen(
-            rectangle.top_left, Drawing(Surface(rectangle.size.tuple, SRCALPHA))
-        )
+        surface = Surface(rectangle.size.tuple, SRCALPHA)
+        surface.fill(color.tuple)
+        return DrawOnScreen(rectangle.top_left, Drawing(surface))

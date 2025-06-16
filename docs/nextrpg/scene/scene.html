@@ -34,10 +34,13 @@
                     <a class="class" href="#Scene">Scene</a>
                             <ul class="memberlist">
                         <li>
+                                <a class="variable" href="#Scene.draw_on_screen">draw_on_screen</a>
+                        </li>
+                        <li>
                                 <a class="function" href="#Scene.event">event</a>
                         </li>
                         <li>
-                                <a class="function" href="#Scene.draw_on_screen">draw_on_screen</a>
+                                <a class="function" href="#Scene.step">step</a>
                         </li>
                 </ul>
 
@@ -85,51 +88,58 @@
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">    implement these methods.</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">        Handles events for the scene.</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">        The recommended implementation is via `@singledispatchmethod`.</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">        And implement events of interesting `nextrpg.event.pygame_event` types.</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">        ```python</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">        class MyScene(Scene):</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">            @singledispatchmethod</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">            def event(self, event: PygameEvent) -&gt; None:</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">                pass</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">            @event.register</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">            def _on_key_press_down(self, event: KeyPressDown) -&gt; None:</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">                ...</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="nd">@property</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">        Generates the list of drawings to be rendered on screen.</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">            `time_delta`: Time has elapsed since the last frame in milliseconds.</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">        Returns:</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">           `list[DrawOnScreen]`: objects to be rendered</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">        Handles events for the scene.</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">            @event.register</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">            def _on_key_press_up(self, event: KeyPressUp) -&gt; None:</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">                ...</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">            @event.register</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">            def _on_key_press_up(self, event: GuiResize | Quit) -&gt; None:</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">                ...</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">        ```</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">        The recommended implementation is via `@singledispatchmethod`.</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">        And implement events of interesting `nextrpg.event.pygame_event` types.</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">        ```python</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">        class MyScene(Scene):</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">            @singledispatchmethod</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">            def event(self, event: PygameEvent) -&gt; Scene:</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">                pass</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">            `event`: The pygame event to process</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">        Returns:</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">            `None`</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">        Generates the list of drawings to be rendered on screen.</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">            `time_delta`: Time has elapsed since the last frame in milliseconds.</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">        Returns:</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">           `list[DrawOnScreen]`: objects to be rendered</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">            @event.register</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">            def _on_key_press_down(self, event: KeyPressDown) -&gt; Scene:</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">                ...</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">            @event.register</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">            def _on_key_press_up(self, event: KeyPressUp) -&gt; Scene:</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">                ...</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">            @event.register</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">            def _on_key_press_up(self, event: GuiResize | Quit) -&gt; Scene:</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">                ...</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">        ```</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">            `event`: The pygame event to process</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">        Returns:</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">            `Scene`</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">        Step forward to the current scene.</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -154,51 +164,58 @@
 </span><span id="Scene-19"><a href="#Scene-19"><span class="linenos">19</span></a><span class="sd">    implement these methods.</span>
 </span><span id="Scene-20"><a href="#Scene-20"><span class="linenos">20</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="Scene-21"><a href="#Scene-21"><span class="linenos">21</span></a>
-</span><span id="Scene-22"><a href="#Scene-22"><span class="linenos">22</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Scene-23"><a href="#Scene-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Scene-24"><a href="#Scene-24"><span class="linenos">24</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene-25"><a href="#Scene-25"><span class="linenos">25</span></a><span class="sd">        Handles events for the scene.</span>
-</span><span id="Scene-26"><a href="#Scene-26"><span class="linenos">26</span></a>
-</span><span id="Scene-27"><a href="#Scene-27"><span class="linenos">27</span></a><span class="sd">        The recommended implementation is via `@singledispatchmethod`.</span>
-</span><span id="Scene-28"><a href="#Scene-28"><span class="linenos">28</span></a><span class="sd">        And implement events of interesting `nextrpg.event.pygame_event` types.</span>
-</span><span id="Scene-29"><a href="#Scene-29"><span class="linenos">29</span></a>
-</span><span id="Scene-30"><a href="#Scene-30"><span class="linenos">30</span></a><span class="sd">        ```python</span>
-</span><span id="Scene-31"><a href="#Scene-31"><span class="linenos">31</span></a><span class="sd">        class MyScene(Scene):</span>
-</span><span id="Scene-32"><a href="#Scene-32"><span class="linenos">32</span></a><span class="sd">            @singledispatchmethod</span>
-</span><span id="Scene-33"><a href="#Scene-33"><span class="linenos">33</span></a><span class="sd">            def event(self, event: PygameEvent) -&gt; None:</span>
-</span><span id="Scene-34"><a href="#Scene-34"><span class="linenos">34</span></a><span class="sd">                pass</span>
-</span><span id="Scene-35"><a href="#Scene-35"><span class="linenos">35</span></a>
-</span><span id="Scene-36"><a href="#Scene-36"><span class="linenos">36</span></a><span class="sd">            @event.register</span>
-</span><span id="Scene-37"><a href="#Scene-37"><span class="linenos">37</span></a><span class="sd">            def _on_key_press_down(self, event: KeyPressDown) -&gt; None:</span>
-</span><span id="Scene-38"><a href="#Scene-38"><span class="linenos">38</span></a><span class="sd">                ...</span>
+</span><span id="Scene-22"><a href="#Scene-22"><span class="linenos">22</span></a>    <span class="nd">@property</span>
+</span><span id="Scene-23"><a href="#Scene-23"><span class="linenos">23</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Scene-24"><a href="#Scene-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
+</span><span id="Scene-25"><a href="#Scene-25"><span class="linenos">25</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene-26"><a href="#Scene-26"><span class="linenos">26</span></a><span class="sd">        Generates the list of drawings to be rendered on screen.</span>
+</span><span id="Scene-27"><a href="#Scene-27"><span class="linenos">27</span></a>
+</span><span id="Scene-28"><a href="#Scene-28"><span class="linenos">28</span></a><span class="sd">        Arguments:</span>
+</span><span id="Scene-29"><a href="#Scene-29"><span class="linenos">29</span></a><span class="sd">            `time_delta`: Time has elapsed since the last frame in milliseconds.</span>
+</span><span id="Scene-30"><a href="#Scene-30"><span class="linenos">30</span></a>
+</span><span id="Scene-31"><a href="#Scene-31"><span class="linenos">31</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene-32"><a href="#Scene-32"><span class="linenos">32</span></a><span class="sd">           `list[DrawOnScreen]`: objects to be rendered</span>
+</span><span id="Scene-33"><a href="#Scene-33"><span class="linenos">33</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene-34"><a href="#Scene-34"><span class="linenos">34</span></a>
+</span><span id="Scene-35"><a href="#Scene-35"><span class="linenos">35</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Scene-36"><a href="#Scene-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="Scene-37"><a href="#Scene-37"><span class="linenos">37</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene-38"><a href="#Scene-38"><span class="linenos">38</span></a><span class="sd">        Handles events for the scene.</span>
 </span><span id="Scene-39"><a href="#Scene-39"><span class="linenos">39</span></a>
-</span><span id="Scene-40"><a href="#Scene-40"><span class="linenos">40</span></a><span class="sd">            @event.register</span>
-</span><span id="Scene-41"><a href="#Scene-41"><span class="linenos">41</span></a><span class="sd">            def _on_key_press_up(self, event: KeyPressUp) -&gt; None:</span>
-</span><span id="Scene-42"><a href="#Scene-42"><span class="linenos">42</span></a><span class="sd">                ...</span>
-</span><span id="Scene-43"><a href="#Scene-43"><span class="linenos">43</span></a>
-</span><span id="Scene-44"><a href="#Scene-44"><span class="linenos">44</span></a><span class="sd">            @event.register</span>
-</span><span id="Scene-45"><a href="#Scene-45"><span class="linenos">45</span></a><span class="sd">            def _on_key_press_up(self, event: GuiResize | Quit) -&gt; None:</span>
-</span><span id="Scene-46"><a href="#Scene-46"><span class="linenos">46</span></a><span class="sd">                ...</span>
-</span><span id="Scene-47"><a href="#Scene-47"><span class="linenos">47</span></a><span class="sd">        ```</span>
+</span><span id="Scene-40"><a href="#Scene-40"><span class="linenos">40</span></a><span class="sd">        The recommended implementation is via `@singledispatchmethod`.</span>
+</span><span id="Scene-41"><a href="#Scene-41"><span class="linenos">41</span></a><span class="sd">        And implement events of interesting `nextrpg.event.pygame_event` types.</span>
+</span><span id="Scene-42"><a href="#Scene-42"><span class="linenos">42</span></a>
+</span><span id="Scene-43"><a href="#Scene-43"><span class="linenos">43</span></a><span class="sd">        ```python</span>
+</span><span id="Scene-44"><a href="#Scene-44"><span class="linenos">44</span></a><span class="sd">        class MyScene(Scene):</span>
+</span><span id="Scene-45"><a href="#Scene-45"><span class="linenos">45</span></a><span class="sd">            @singledispatchmethod</span>
+</span><span id="Scene-46"><a href="#Scene-46"><span class="linenos">46</span></a><span class="sd">            def event(self, event: PygameEvent) -&gt; Scene:</span>
+</span><span id="Scene-47"><a href="#Scene-47"><span class="linenos">47</span></a><span class="sd">                pass</span>
 </span><span id="Scene-48"><a href="#Scene-48"><span class="linenos">48</span></a>
-</span><span id="Scene-49"><a href="#Scene-49"><span class="linenos">49</span></a><span class="sd">        Arguments:</span>
-</span><span id="Scene-50"><a href="#Scene-50"><span class="linenos">50</span></a><span class="sd">            `event`: The pygame event to process</span>
-</span><span id="Scene-51"><a href="#Scene-51"><span class="linenos">51</span></a>
-</span><span id="Scene-52"><a href="#Scene-52"><span class="linenos">52</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene-53"><a href="#Scene-53"><span class="linenos">53</span></a><span class="sd">            `None`</span>
-</span><span id="Scene-54"><a href="#Scene-54"><span class="linenos">54</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Scene-55"><a href="#Scene-55"><span class="linenos">55</span></a>
-</span><span id="Scene-56"><a href="#Scene-56"><span class="linenos">56</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Scene-57"><a href="#Scene-57"><span class="linenos">57</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
-</span><span id="Scene-58"><a href="#Scene-58"><span class="linenos">58</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene-59"><a href="#Scene-59"><span class="linenos">59</span></a><span class="sd">        Generates the list of drawings to be rendered on screen.</span>
-</span><span id="Scene-60"><a href="#Scene-60"><span class="linenos">60</span></a>
-</span><span id="Scene-61"><a href="#Scene-61"><span class="linenos">61</span></a><span class="sd">        Arguments:</span>
-</span><span id="Scene-62"><a href="#Scene-62"><span class="linenos">62</span></a><span class="sd">            `time_delta`: Time has elapsed since the last frame in milliseconds.</span>
-</span><span id="Scene-63"><a href="#Scene-63"><span class="linenos">63</span></a>
-</span><span id="Scene-64"><a href="#Scene-64"><span class="linenos">64</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene-65"><a href="#Scene-65"><span class="linenos">65</span></a><span class="sd">           `list[DrawOnScreen]`: objects to be rendered</span>
-</span><span id="Scene-66"><a href="#Scene-66"><span class="linenos">66</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene-49"><a href="#Scene-49"><span class="linenos">49</span></a><span class="sd">            @event.register</span>
+</span><span id="Scene-50"><a href="#Scene-50"><span class="linenos">50</span></a><span class="sd">            def _on_key_press_down(self, event: KeyPressDown) -&gt; Scene:</span>
+</span><span id="Scene-51"><a href="#Scene-51"><span class="linenos">51</span></a><span class="sd">                ...</span>
+</span><span id="Scene-52"><a href="#Scene-52"><span class="linenos">52</span></a>
+</span><span id="Scene-53"><a href="#Scene-53"><span class="linenos">53</span></a><span class="sd">            @event.register</span>
+</span><span id="Scene-54"><a href="#Scene-54"><span class="linenos">54</span></a><span class="sd">            def _on_key_press_up(self, event: KeyPressUp) -&gt; Scene:</span>
+</span><span id="Scene-55"><a href="#Scene-55"><span class="linenos">55</span></a><span class="sd">                ...</span>
+</span><span id="Scene-56"><a href="#Scene-56"><span class="linenos">56</span></a>
+</span><span id="Scene-57"><a href="#Scene-57"><span class="linenos">57</span></a><span class="sd">            @event.register</span>
+</span><span id="Scene-58"><a href="#Scene-58"><span class="linenos">58</span></a><span class="sd">            def _on_key_press_up(self, event: GuiResize | Quit) -&gt; Scene:</span>
+</span><span id="Scene-59"><a href="#Scene-59"><span class="linenos">59</span></a><span class="sd">                ...</span>
+</span><span id="Scene-60"><a href="#Scene-60"><span class="linenos">60</span></a><span class="sd">        ```</span>
+</span><span id="Scene-61"><a href="#Scene-61"><span class="linenos">61</span></a>
+</span><span id="Scene-62"><a href="#Scene-62"><span class="linenos">62</span></a><span class="sd">        Arguments:</span>
+</span><span id="Scene-63"><a href="#Scene-63"><span class="linenos">63</span></a><span class="sd">            `event`: The pygame event to process</span>
+</span><span id="Scene-64"><a href="#Scene-64"><span class="linenos">64</span></a>
+</span><span id="Scene-65"><a href="#Scene-65"><span class="linenos">65</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene-66"><a href="#Scene-66"><span class="linenos">66</span></a><span class="sd">            `Scene`</span>
+</span><span id="Scene-67"><a href="#Scene-67"><span class="linenos">67</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene-68"><a href="#Scene-68"><span class="linenos">68</span></a>
+</span><span id="Scene-69"><a href="#Scene-69"><span class="linenos">69</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Scene-70"><a href="#Scene-70"><span class="linenos">70</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="Scene-71"><a href="#Scene-71"><span class="linenos">71</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene-72"><a href="#Scene-72"><span class="linenos">72</span></a><span class="sd">        Step forward to the current scene.</span>
+</span><span id="Scene-73"><a href="#Scene-73"><span class="linenos">73</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -210,117 +227,27 @@ implement these methods.</p>
 </div>
 
 
-                            <div id="Scene.event" class="classattr">
-                                        <input id="Scene.event-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-                    <div class="decorator decorator-abstractmethod">@abstractmethod</div>
-
-        <span class="def">def</span>
-        <span class="name">event</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">event</span><span class="p">:</span> <span class="n"><a href="../event/pygame_event.html#PygameEvent">nextrpg.event.pygame_event.PygameEvent</a></span></span><span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
-
-                <label class="view-source-button" for="Scene.event-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#Scene.event"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.event-22"><a href="#Scene.event-22"><span class="linenos">22</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Scene.event-23"><a href="#Scene.event-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Scene.event-24"><a href="#Scene.event-24"><span class="linenos">24</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene.event-25"><a href="#Scene.event-25"><span class="linenos">25</span></a><span class="sd">        Handles events for the scene.</span>
-</span><span id="Scene.event-26"><a href="#Scene.event-26"><span class="linenos">26</span></a>
-</span><span id="Scene.event-27"><a href="#Scene.event-27"><span class="linenos">27</span></a><span class="sd">        The recommended implementation is via `@singledispatchmethod`.</span>
-</span><span id="Scene.event-28"><a href="#Scene.event-28"><span class="linenos">28</span></a><span class="sd">        And implement events of interesting `nextrpg.event.pygame_event` types.</span>
-</span><span id="Scene.event-29"><a href="#Scene.event-29"><span class="linenos">29</span></a>
-</span><span id="Scene.event-30"><a href="#Scene.event-30"><span class="linenos">30</span></a><span class="sd">        ```python</span>
-</span><span id="Scene.event-31"><a href="#Scene.event-31"><span class="linenos">31</span></a><span class="sd">        class MyScene(Scene):</span>
-</span><span id="Scene.event-32"><a href="#Scene.event-32"><span class="linenos">32</span></a><span class="sd">            @singledispatchmethod</span>
-</span><span id="Scene.event-33"><a href="#Scene.event-33"><span class="linenos">33</span></a><span class="sd">            def event(self, event: PygameEvent) -&gt; None:</span>
-</span><span id="Scene.event-34"><a href="#Scene.event-34"><span class="linenos">34</span></a><span class="sd">                pass</span>
-</span><span id="Scene.event-35"><a href="#Scene.event-35"><span class="linenos">35</span></a>
-</span><span id="Scene.event-36"><a href="#Scene.event-36"><span class="linenos">36</span></a><span class="sd">            @event.register</span>
-</span><span id="Scene.event-37"><a href="#Scene.event-37"><span class="linenos">37</span></a><span class="sd">            def _on_key_press_down(self, event: KeyPressDown) -&gt; None:</span>
-</span><span id="Scene.event-38"><a href="#Scene.event-38"><span class="linenos">38</span></a><span class="sd">                ...</span>
-</span><span id="Scene.event-39"><a href="#Scene.event-39"><span class="linenos">39</span></a>
-</span><span id="Scene.event-40"><a href="#Scene.event-40"><span class="linenos">40</span></a><span class="sd">            @event.register</span>
-</span><span id="Scene.event-41"><a href="#Scene.event-41"><span class="linenos">41</span></a><span class="sd">            def _on_key_press_up(self, event: KeyPressUp) -&gt; None:</span>
-</span><span id="Scene.event-42"><a href="#Scene.event-42"><span class="linenos">42</span></a><span class="sd">                ...</span>
-</span><span id="Scene.event-43"><a href="#Scene.event-43"><span class="linenos">43</span></a>
-</span><span id="Scene.event-44"><a href="#Scene.event-44"><span class="linenos">44</span></a><span class="sd">            @event.register</span>
-</span><span id="Scene.event-45"><a href="#Scene.event-45"><span class="linenos">45</span></a><span class="sd">            def _on_key_press_up(self, event: GuiResize | Quit) -&gt; None:</span>
-</span><span id="Scene.event-46"><a href="#Scene.event-46"><span class="linenos">46</span></a><span class="sd">                ...</span>
-</span><span id="Scene.event-47"><a href="#Scene.event-47"><span class="linenos">47</span></a><span class="sd">        ```</span>
-</span><span id="Scene.event-48"><a href="#Scene.event-48"><span class="linenos">48</span></a>
-</span><span id="Scene.event-49"><a href="#Scene.event-49"><span class="linenos">49</span></a><span class="sd">        Arguments:</span>
-</span><span id="Scene.event-50"><a href="#Scene.event-50"><span class="linenos">50</span></a><span class="sd">            `event`: The pygame event to process</span>
-</span><span id="Scene.event-51"><a href="#Scene.event-51"><span class="linenos">51</span></a>
-</span><span id="Scene.event-52"><a href="#Scene.event-52"><span class="linenos">52</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene.event-53"><a href="#Scene.event-53"><span class="linenos">53</span></a><span class="sd">            `None`</span>
-</span><span id="Scene.event-54"><a href="#Scene.event-54"><span class="linenos">54</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Handles events for the scene.</p>
-
-<p>The recommended implementation is via <code>@singledispatchmethod</code>.
-And implement events of interesting <code><a href="../event/pygame_event.html">nextrpg.event.pygame_event</a></code> types.</p>
-
-<div class="pdoc-code codehilite">
-<pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MyScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
-    <span class="nd">@singledispatchmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">pass</span>
-
-    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">GuiResize</span> <span class="o">|</span> <span class="n">Quit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="o">...</span>
-</code></pre>
-</div>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code><a href="#Scene.event">event</a></code>:</strong>  The pygame event to process</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>None</code></p>
-</blockquote>
-</div>
-
-
-                            </div>
                             <div id="Scene.draw_on_screen" class="classattr">
                                         <input id="Scene.draw_on_screen-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-                    <div class="decorator decorator-abstractmethod">@abstractmethod</div>
-
-        <span class="def">def</span>
-        <span class="name">draw_on_screen</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="nb">list</span><span class="p">[</span><span class="n"><a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a></span><span class="p">]</span>:</span></span>
+<div class="attr variable">
+            <span class="name">draw_on_screen</span><span class="annotation">: list[<a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a>]</span>
 
                 <label class="view-source-button" for="Scene.draw_on_screen-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Scene.draw_on_screen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.draw_on_screen-56"><a href="#Scene.draw_on_screen-56"><span class="linenos">56</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Scene.draw_on_screen-57"><a href="#Scene.draw_on_screen-57"><span class="linenos">57</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
-</span><span id="Scene.draw_on_screen-58"><a href="#Scene.draw_on_screen-58"><span class="linenos">58</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene.draw_on_screen-59"><a href="#Scene.draw_on_screen-59"><span class="linenos">59</span></a><span class="sd">        Generates the list of drawings to be rendered on screen.</span>
-</span><span id="Scene.draw_on_screen-60"><a href="#Scene.draw_on_screen-60"><span class="linenos">60</span></a>
-</span><span id="Scene.draw_on_screen-61"><a href="#Scene.draw_on_screen-61"><span class="linenos">61</span></a><span class="sd">        Arguments:</span>
-</span><span id="Scene.draw_on_screen-62"><a href="#Scene.draw_on_screen-62"><span class="linenos">62</span></a><span class="sd">            `time_delta`: Time has elapsed since the last frame in milliseconds.</span>
-</span><span id="Scene.draw_on_screen-63"><a href="#Scene.draw_on_screen-63"><span class="linenos">63</span></a>
-</span><span id="Scene.draw_on_screen-64"><a href="#Scene.draw_on_screen-64"><span class="linenos">64</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene.draw_on_screen-65"><a href="#Scene.draw_on_screen-65"><span class="linenos">65</span></a><span class="sd">           `list[DrawOnScreen]`: objects to be rendered</span>
-</span><span id="Scene.draw_on_screen-66"><a href="#Scene.draw_on_screen-66"><span class="linenos">66</span></a><span class="sd">        &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.draw_on_screen-22"><a href="#Scene.draw_on_screen-22"><span class="linenos">22</span></a>    <span class="nd">@property</span>
+</span><span id="Scene.draw_on_screen-23"><a href="#Scene.draw_on_screen-23"><span class="linenos">23</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Scene.draw_on_screen-24"><a href="#Scene.draw_on_screen-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]:</span>
+</span><span id="Scene.draw_on_screen-25"><a href="#Scene.draw_on_screen-25"><span class="linenos">25</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene.draw_on_screen-26"><a href="#Scene.draw_on_screen-26"><span class="linenos">26</span></a><span class="sd">        Generates the list of drawings to be rendered on screen.</span>
+</span><span id="Scene.draw_on_screen-27"><a href="#Scene.draw_on_screen-27"><span class="linenos">27</span></a>
+</span><span id="Scene.draw_on_screen-28"><a href="#Scene.draw_on_screen-28"><span class="linenos">28</span></a><span class="sd">        Arguments:</span>
+</span><span id="Scene.draw_on_screen-29"><a href="#Scene.draw_on_screen-29"><span class="linenos">29</span></a><span class="sd">            `time_delta`: Time has elapsed since the last frame in milliseconds.</span>
+</span><span id="Scene.draw_on_screen-30"><a href="#Scene.draw_on_screen-30"><span class="linenos">30</span></a>
+</span><span id="Scene.draw_on_screen-31"><a href="#Scene.draw_on_screen-31"><span class="linenos">31</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene.draw_on_screen-32"><a href="#Scene.draw_on_screen-32"><span class="linenos">32</span></a><span class="sd">           `list[DrawOnScreen]`: objects to be rendered</span>
+</span><span id="Scene.draw_on_screen-33"><a href="#Scene.draw_on_screen-33"><span class="linenos">33</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -337,6 +264,119 @@ And implement events of interesting <code><a href="../event/pygame_event.html">n
 <blockquote>
   <p><code>list[DrawOnScreen]</code>: objects to be rendered</p>
 </blockquote>
+</div>
+
+
+                            </div>
+                            <div id="Scene.event" class="classattr">
+                                        <input id="Scene.event-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+                    <div class="decorator decorator-abstractmethod">@abstractmethod</div>
+
+        <span class="def">def</span>
+        <span class="name">event</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">event</span><span class="p">:</span> <span class="n"><a href="../event/pygame_event.html#PygameEvent">nextrpg.event.pygame_event.PygameEvent</a></span></span><span class="return-annotation">) -> <span class="n"><a href="#Scene">Scene</a></span>:</span></span>
+
+                <label class="view-source-button" for="Scene.event-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Scene.event"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.event-35"><a href="#Scene.event-35"><span class="linenos">35</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Scene.event-36"><a href="#Scene.event-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="Scene.event-37"><a href="#Scene.event-37"><span class="linenos">37</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene.event-38"><a href="#Scene.event-38"><span class="linenos">38</span></a><span class="sd">        Handles events for the scene.</span>
+</span><span id="Scene.event-39"><a href="#Scene.event-39"><span class="linenos">39</span></a>
+</span><span id="Scene.event-40"><a href="#Scene.event-40"><span class="linenos">40</span></a><span class="sd">        The recommended implementation is via `@singledispatchmethod`.</span>
+</span><span id="Scene.event-41"><a href="#Scene.event-41"><span class="linenos">41</span></a><span class="sd">        And implement events of interesting `nextrpg.event.pygame_event` types.</span>
+</span><span id="Scene.event-42"><a href="#Scene.event-42"><span class="linenos">42</span></a>
+</span><span id="Scene.event-43"><a href="#Scene.event-43"><span class="linenos">43</span></a><span class="sd">        ```python</span>
+</span><span id="Scene.event-44"><a href="#Scene.event-44"><span class="linenos">44</span></a><span class="sd">        class MyScene(Scene):</span>
+</span><span id="Scene.event-45"><a href="#Scene.event-45"><span class="linenos">45</span></a><span class="sd">            @singledispatchmethod</span>
+</span><span id="Scene.event-46"><a href="#Scene.event-46"><span class="linenos">46</span></a><span class="sd">            def event(self, event: PygameEvent) -&gt; Scene:</span>
+</span><span id="Scene.event-47"><a href="#Scene.event-47"><span class="linenos">47</span></a><span class="sd">                pass</span>
+</span><span id="Scene.event-48"><a href="#Scene.event-48"><span class="linenos">48</span></a>
+</span><span id="Scene.event-49"><a href="#Scene.event-49"><span class="linenos">49</span></a><span class="sd">            @event.register</span>
+</span><span id="Scene.event-50"><a href="#Scene.event-50"><span class="linenos">50</span></a><span class="sd">            def _on_key_press_down(self, event: KeyPressDown) -&gt; Scene:</span>
+</span><span id="Scene.event-51"><a href="#Scene.event-51"><span class="linenos">51</span></a><span class="sd">                ...</span>
+</span><span id="Scene.event-52"><a href="#Scene.event-52"><span class="linenos">52</span></a>
+</span><span id="Scene.event-53"><a href="#Scene.event-53"><span class="linenos">53</span></a><span class="sd">            @event.register</span>
+</span><span id="Scene.event-54"><a href="#Scene.event-54"><span class="linenos">54</span></a><span class="sd">            def _on_key_press_up(self, event: KeyPressUp) -&gt; Scene:</span>
+</span><span id="Scene.event-55"><a href="#Scene.event-55"><span class="linenos">55</span></a><span class="sd">                ...</span>
+</span><span id="Scene.event-56"><a href="#Scene.event-56"><span class="linenos">56</span></a>
+</span><span id="Scene.event-57"><a href="#Scene.event-57"><span class="linenos">57</span></a><span class="sd">            @event.register</span>
+</span><span id="Scene.event-58"><a href="#Scene.event-58"><span class="linenos">58</span></a><span class="sd">            def _on_key_press_up(self, event: GuiResize | Quit) -&gt; Scene:</span>
+</span><span id="Scene.event-59"><a href="#Scene.event-59"><span class="linenos">59</span></a><span class="sd">                ...</span>
+</span><span id="Scene.event-60"><a href="#Scene.event-60"><span class="linenos">60</span></a><span class="sd">        ```</span>
+</span><span id="Scene.event-61"><a href="#Scene.event-61"><span class="linenos">61</span></a>
+</span><span id="Scene.event-62"><a href="#Scene.event-62"><span class="linenos">62</span></a><span class="sd">        Arguments:</span>
+</span><span id="Scene.event-63"><a href="#Scene.event-63"><span class="linenos">63</span></a><span class="sd">            `event`: The pygame event to process</span>
+</span><span id="Scene.event-64"><a href="#Scene.event-64"><span class="linenos">64</span></a>
+</span><span id="Scene.event-65"><a href="#Scene.event-65"><span class="linenos">65</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene.event-66"><a href="#Scene.event-66"><span class="linenos">66</span></a><span class="sd">            `Scene`</span>
+</span><span id="Scene.event-67"><a href="#Scene.event-67"><span class="linenos">67</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Handles events for the scene.</p>
+
+<p>The recommended implementation is via <code>@singledispatchmethod</code>.
+And implement events of interesting <code><a href="../event/pygame_event.html">nextrpg.event.pygame_event</a></code> types.</p>
+
+<div class="pdoc-code codehilite">
+<pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MyScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
+    <span class="nd">@singledispatchmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">GuiResize</span> <span class="o">|</span> <span class="n">Quit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="o">...</span>
+</code></pre>
+</div>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong><code><a href="#Scene.event">event</a></code>:</strong>  The pygame event to process</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code><a href="#Scene">Scene</a></code></p>
+</blockquote>
+</div>
+
+
+                            </div>
+                            <div id="Scene.step" class="classattr">
+                                        <input id="Scene.step-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+                    <div class="decorator decorator-abstractmethod">@abstractmethod</div>
+
+        <span class="def">def</span>
+        <span class="name">step</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n"><a href="#Scene">Scene</a></span>:</span></span>
+
+                <label class="view-source-button" for="Scene.step-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Scene.step"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.step-69"><a href="#Scene.step-69"><span class="linenos">69</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Scene.step-70"><a href="#Scene.step-70"><span class="linenos">70</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
+</span><span id="Scene.step-71"><a href="#Scene.step-71"><span class="linenos">71</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene.step-72"><a href="#Scene.step-72"><span class="linenos">72</span></a><span class="sd">        Step forward to the current scene.</span>
+</span><span id="Scene.step-73"><a href="#Scene.step-73"><span class="linenos">73</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Step forward to the current scene.</p>
 </div>
 
 

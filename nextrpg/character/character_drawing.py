@@ -13,66 +13,46 @@ class CharacterDrawing(ABC):
     Interface for drawing characters on screen.
     """
 
+    @property
     @abstractmethod
-    def draw_move(self, direction: Direction) -> Drawing:
+    def direction(self) -> Direction:
+        """
+        Get the current direction of the character.
+
+        Returns:
+            `Direction`: The current direction of the character.
+        """
+
+    @property
+    @abstractmethod
+    def drawing(self) -> Drawing:
         """
         Draw the character's moving visual representation.
 
-        Arguments:
-            `direction`: Current facing direction of the character.
-
         Returns:
             `Drawing`: Contains the character's visual representation.
         """
 
     @abstractmethod
-    def draw_idle(self, direction: Direction) -> Drawing:
+    def turn(self, direction: Direction) -> "CharacterDrawing":
         """
-        Draw the character's idle visual representation.
-
-        Arguments:
-            `direction`: Current facing direction of the character.
+        Args:
+            `direction`: Turn the character facing to this direction.
 
         Returns:
-            `Drawing`: Contains the character's visual representation.
+            `CharacterDrawing`: The updated drawing.
         """
 
     @abstractmethod
-    def peek_move(
-        self, time_delta: Millisecond, direction: Direction
-    ) -> Drawing:
-        """
-        Peek at the character's moving visual representation.
-
-        Arguments:
-            `direction`: Current facing direction of the character.
-
-            `time_delta`: Elapsed time since the last  in milliseconds.
-        Returns:
-            `Drawing`: Contains the character's visual representation.
-        """
-
-    @abstractmethod
-    def move(
-        self, time_delta: Millisecond, direction: Direction
-    ) -> "CharacterDrawing":
-        """
-
-        Returns:
-            `CharacterDrawing`:
-        """
-
-    @abstractmethod
-    def idle(self, time_delta: Millisecond, direction) -> "CharacterDrawing":
+    def move(self, time_delta: Millisecond) -> "CharacterDrawing":
         """
         Returns:
             `CharacterDrawing`:
         """
 
     @abstractmethod
-    def stop(self) -> "CharacterDrawing":
+    def idle(self, time_delta: Millisecond) -> "CharacterDrawing":
         """
-
         Returns:
             `CharacterDrawing`:
         """

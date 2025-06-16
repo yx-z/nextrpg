@@ -31,37 +31,25 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
-                    <a class="variable" href="#FrameIndex">FrameIndex</a>
-            </li>
-            <li>
-                    <a class="class" href="#FrameExhaustedOption">FrameExhaustedOption</a>
+                    <a class="class" href="#CyclicFrames">CyclicFrames</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="variable" href="#FrameExhaustedOption.CYCLE">CYCLE</a>
+                                <a class="function" href="#CyclicFrames.__init__">CyclicFrames</a>
                         </li>
                         <li>
-                                <a class="variable" href="#FrameExhaustedOption.KEEP_LAST_FRAME">KEEP_LAST_FRAME</a>
+                                <a class="variable" href="#CyclicFrames.frames">frames</a>
                         </li>
                         <li>
-                                <a class="variable" href="#FrameExhaustedOption.DISAPPEAR">DISAPPEAR</a>
-                        </li>
-                </ul>
-
-            </li>
-            <li>
-                    <a class="class" href="#Frames">Frames</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#Frames.__init__">Frames</a>
+                                <a class="variable" href="#CyclicFrames.duration_per_frame">duration_per_frame</a>
                         </li>
                         <li>
-                                <a class="function" href="#Frames.reset">reset</a>
+                                <a class="variable" href="#CyclicFrames.current_frame">current_frame</a>
                         </li>
                         <li>
-                                <a class="function" href="#Frames.current_frame">current_frame</a>
+                                <a class="function" href="#CyclicFrames.step">step</a>
                         </li>
                         <li>
-                                <a class="function" href="#Frames.next_frame">next_frame</a>
+                                <a class="function" href="#CyclicFrames.reset">reset</a>
                         </li>
                 </ul>
 
@@ -89,540 +77,176 @@
 
                         <label class="view-source-button" for="mod-frames-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="sd">Static frames, when played sequentially, become animated.</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Final</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="nb">type</span> <span class="n">FrameIndex</span> <span class="o">=</span> <span class="nb">int</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="sd">&quot;&quot;&quot;The zero-based index to point to a frame in a list of frames.&quot;&quot;&quot;</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrameExhaustedOption</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="sd">    Options for handling scenarios where frames are all played once/exhausted.</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="sd">        `CYCLE`: Cycles back to the first frame when frames are exhausted.</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="sd">        `KEEP_LAST_FRAME`: Maintains the last frame once all frames are used.</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="sd">        `DISAPPEAR`: Makes the sprite disappear when no frames are left.</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="n">CYCLE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>    <span class="n">KEEP_LAST_FRAME</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>    <span class="n">DISAPPEAR</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>
-</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>
-</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Frames</span><span class="p">:</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="sd">    This class holds A collection of frames to be iterated,</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="sd">    and the behavior upon frame exhaustion.</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>        <span class="n">frames</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Drawing</span><span class="p">],</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>        <span class="n">frame_exhausted_option</span><span class="p">:</span> <span class="n">FrameExhaustedOption</span><span class="p">,</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>        <span class="n">frame_indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FrameIndex</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">        Initializes the object with frames, options for handling</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="sd">        frame exhaustion, and optionally sequence of specific frame indices.</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>
-</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="sd">        Args:</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="sd">            `frames`:</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="sd">                A list of Drawing objects representing the frames to work with.</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">            `frame_exhausted_option`:</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">                Defines the behavior to apply when frames have been exhausted.</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="sd">            `frame_indices`:</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="sd">                An optional list of `FrameIndex` specifying a sequence of frame</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="sd">                indices to consume. If not provided, the full range of frames</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">                will be played sequentially.</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">                For example, if `frame_indices == [2, 0, 1]`.</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="sd">                `frames[2]` will be played first, followed by `frames[0]` and</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">                `frames[1]`.</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Drawing</span><span class="p">]]</span> <span class="o">=</span> <span class="n">frames</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_exhausted_option</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="n">FrameExhaustedOption</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>            <span class="n">frame_exhausted_option</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="p">)</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">FrameIndex</span><span class="p">]]</span> <span class="o">=</span> <span class="n">frame_indices</span> <span class="ow">or</span> <span class="nb">list</span><span class="p">(</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>            <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">))</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>        <span class="p">)</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">        Resets the frame index to the beginning.</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">        Args:</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">            `None`</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">        Returns:</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">            `None`</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">current_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">        Returns the currently selected frame, if applicable.</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">        If the current frame index exists, the method retrieves the frame at the</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">        corresponding position in the sequence. None if no index is set.</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">        Returns:</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">            `Drawing | None`: The current frame if a valid index is set, or None</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="sd">                if no frame is selected.</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span><span class="p">]]</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>            <span class="k">else</span> <span class="kc">None</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="p">)</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">next_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">        Advances to the next frame in sequence and returns the current frame.</span>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">        This method triggers the frame exhaustion behavior</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="sd">        if there are no more frames.</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="sd">        It will either cycle the frames, keep the last frame, or disappear.</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="sd">        Returns:</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">            `Drawing | None`: The frame after updating the frame index. If the</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="sd">                frames are exhausted and the option is set to disappear,</span>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">                `None` is returned.</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="o">+=</span> <span class="mi">1</span>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices</span><span class="p">):</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>                <span class="n">FrameExhaustedOption</span><span class="o">.</span><span class="n">CYCLE</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>                <span class="n">FrameExhaustedOption</span><span class="o">.</span><span class="n">KEEP_LAST_FRAME</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>                <span class="n">FrameExhaustedOption</span><span class="o">.</span><span class="n">DISAPPEAR</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>            <span class="p">}[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_exhausted_option</span><span class="p">]</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_frame</span><span class="p">()</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">Static frames, when played sequentially, become animated.</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.common_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">clone</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CyclicFrames</span><span class="p">:</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">frames</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Drawing</span><span class="p">]</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">duration_per_frame</span><span class="p">:</span> <span class="n">Millisecond</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">_elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="nd">@property</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">current_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">]</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CyclicFrames&quot;</span><span class="p">:</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="n">total_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">+</span> <span class="n">time_delta</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>        <span class="n">frames_to_step</span> <span class="o">=</span> <span class="n">total_time</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration_per_frame</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="n">clone</span><span class="p">(</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>            <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>            <span class="n">_index</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="n">frames_to_step</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">),</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>            <span class="n">_elapsed</span><span class="o">=</span><span class="n">total_time</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration_per_frame</span><span class="p">,</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="p">)</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CyclicFrames&quot;</span><span class="p">:</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>        <span class="k">return</span> <span class="n">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">_elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </span></pre></div>
 
 
             </section>
-                <section id="FrameIndex">
-                    <div class="attr variable">
-            <span class="def">type</span> <span class="name">FrameIndex</span>        =
-<span class="default_value">int</span>
-
-        
-    </div>
-    <a class="headerlink" href="#FrameIndex"></a>
-    
-            <div class="docstring"><p>The zero-based index to point to a frame in a list of frames.</p>
-</div>
-
-
-                </section>
-                <section id="FrameExhaustedOption">
-                            <input id="FrameExhaustedOption-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                <section id="CyclicFrames">
+                            <input id="CyclicFrames-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-            
+                    <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
+
     <span class="def">class</span>
-    <span class="name">FrameExhaustedOption</span><wbr>(<span class="base">enum.Enum</span>):
+    <span class="name">CyclicFrames</span>:
 
-                <label class="view-source-button" for="FrameExhaustedOption-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="CyclicFrames-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#FrameExhaustedOption"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FrameExhaustedOption-15"><a href="#FrameExhaustedOption-15"><span class="linenos">15</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FrameExhaustedOption</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="FrameExhaustedOption-16"><a href="#FrameExhaustedOption-16"><span class="linenos">16</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="FrameExhaustedOption-17"><a href="#FrameExhaustedOption-17"><span class="linenos">17</span></a><span class="sd">    Options for handling scenarios where frames are all played once/exhausted.</span>
-</span><span id="FrameExhaustedOption-18"><a href="#FrameExhaustedOption-18"><span class="linenos">18</span></a>
-</span><span id="FrameExhaustedOption-19"><a href="#FrameExhaustedOption-19"><span class="linenos">19</span></a><span class="sd">    Attributes:</span>
-</span><span id="FrameExhaustedOption-20"><a href="#FrameExhaustedOption-20"><span class="linenos">20</span></a><span class="sd">        `CYCLE`: Cycles back to the first frame when frames are exhausted.</span>
-</span><span id="FrameExhaustedOption-21"><a href="#FrameExhaustedOption-21"><span class="linenos">21</span></a>
-</span><span id="FrameExhaustedOption-22"><a href="#FrameExhaustedOption-22"><span class="linenos">22</span></a><span class="sd">        `KEEP_LAST_FRAME`: Maintains the last frame once all frames are used.</span>
-</span><span id="FrameExhaustedOption-23"><a href="#FrameExhaustedOption-23"><span class="linenos">23</span></a>
-</span><span id="FrameExhaustedOption-24"><a href="#FrameExhaustedOption-24"><span class="linenos">24</span></a><span class="sd">        `DISAPPEAR`: Makes the sprite disappear when no frames are left.</span>
-</span><span id="FrameExhaustedOption-25"><a href="#FrameExhaustedOption-25"><span class="linenos">25</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="FrameExhaustedOption-26"><a href="#FrameExhaustedOption-26"><span class="linenos">26</span></a>
-</span><span id="FrameExhaustedOption-27"><a href="#FrameExhaustedOption-27"><span class="linenos">27</span></a>    <span class="n">CYCLE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="FrameExhaustedOption-28"><a href="#FrameExhaustedOption-28"><span class="linenos">28</span></a>    <span class="n">KEEP_LAST_FRAME</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="FrameExhaustedOption-29"><a href="#FrameExhaustedOption-29"><span class="linenos">29</span></a>    <span class="n">DISAPPEAR</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+    <a class="headerlink" href="#CyclicFrames"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CyclicFrames-13"><a href="#CyclicFrames-13"><span class="linenos">13</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="CyclicFrames-14"><a href="#CyclicFrames-14"><span class="linenos">14</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CyclicFrames</span><span class="p">:</span>
+</span><span id="CyclicFrames-15"><a href="#CyclicFrames-15"><span class="linenos">15</span></a>    <span class="n">frames</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Drawing</span><span class="p">]</span>
+</span><span id="CyclicFrames-16"><a href="#CyclicFrames-16"><span class="linenos">16</span></a>    <span class="n">duration_per_frame</span><span class="p">:</span> <span class="n">Millisecond</span>
+</span><span id="CyclicFrames-17"><a href="#CyclicFrames-17"><span class="linenos">17</span></a>    <span class="n">_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="CyclicFrames-18"><a href="#CyclicFrames-18"><span class="linenos">18</span></a>    <span class="n">_elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="CyclicFrames-19"><a href="#CyclicFrames-19"><span class="linenos">19</span></a>
+</span><span id="CyclicFrames-20"><a href="#CyclicFrames-20"><span class="linenos">20</span></a>    <span class="nd">@property</span>
+</span><span id="CyclicFrames-21"><a href="#CyclicFrames-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">current_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
+</span><span id="CyclicFrames-22"><a href="#CyclicFrames-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">]</span>
+</span><span id="CyclicFrames-23"><a href="#CyclicFrames-23"><span class="linenos">23</span></a>
+</span><span id="CyclicFrames-24"><a href="#CyclicFrames-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CyclicFrames&quot;</span><span class="p">:</span>
+</span><span id="CyclicFrames-25"><a href="#CyclicFrames-25"><span class="linenos">25</span></a>        <span class="n">total_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">+</span> <span class="n">time_delta</span>
+</span><span id="CyclicFrames-26"><a href="#CyclicFrames-26"><span class="linenos">26</span></a>        <span class="n">frames_to_step</span> <span class="o">=</span> <span class="n">total_time</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration_per_frame</span>
+</span><span id="CyclicFrames-27"><a href="#CyclicFrames-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="n">clone</span><span class="p">(</span>
+</span><span id="CyclicFrames-28"><a href="#CyclicFrames-28"><span class="linenos">28</span></a>            <span class="bp">self</span><span class="p">,</span>
+</span><span id="CyclicFrames-29"><a href="#CyclicFrames-29"><span class="linenos">29</span></a>            <span class="n">_index</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="n">frames_to_step</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">),</span>
+</span><span id="CyclicFrames-30"><a href="#CyclicFrames-30"><span class="linenos">30</span></a>            <span class="n">_elapsed</span><span class="o">=</span><span class="n">total_time</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration_per_frame</span><span class="p">,</span>
+</span><span id="CyclicFrames-31"><a href="#CyclicFrames-31"><span class="linenos">31</span></a>        <span class="p">)</span>
+</span><span id="CyclicFrames-32"><a href="#CyclicFrames-32"><span class="linenos">32</span></a>
+</span><span id="CyclicFrames-33"><a href="#CyclicFrames-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CyclicFrames&quot;</span><span class="p">:</span>
+</span><span id="CyclicFrames-34"><a href="#CyclicFrames-34"><span class="linenos">34</span></a>        <span class="k">return</span> <span class="n">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">_elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Options for handling scenarios where frames are all played once/exhausted.</p>
+    
 
-<h6 id="attributes">Attributes:</h6>
-
-<ul>
-<li><strong><code><a href="#FrameExhaustedOption.CYCLE">CYCLE</a></code>:</strong>  Cycles back to the first frame when frames are exhausted.</li>
-<li><strong><code><a href="#FrameExhaustedOption.KEEP_LAST_FRAME">KEEP_LAST_FRAME</a></code>:</strong>  Maintains the last frame once all frames are used.</li>
-<li><strong><code><a href="#FrameExhaustedOption.DISAPPEAR">DISAPPEAR</a></code>:</strong>  Makes the sprite disappear when no frames are left.</li>
-</ul>
-</div>
-
-
-                            <div id="FrameExhaustedOption.CYCLE" class="classattr">
-                                <div class="attr variable">
-            <span class="name">CYCLE</span>        =
-<span class="default_value">&lt;<a href="#FrameExhaustedOption.CYCLE">FrameExhaustedOption.CYCLE</a>: 1&gt;</span>
+                            <div id="CyclicFrames.__init__" class="classattr">
+                                <div class="attr function">
+            
+        <span class="name">CyclicFrames</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">frames</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n"><a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawing</a></span><span class="p">]</span>,</span><span class="param">	<span class="n">duration_per_frame</span><span class="p">:</span> <span class="n">Millisecond</span>,</span><span class="param">	<span class="n">_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>,</span><span class="param">	<span class="n">_elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span></span>)</span>
 
         
     </div>
-    <a class="headerlink" href="#FrameExhaustedOption.CYCLE"></a>
+    <a class="headerlink" href="#CyclicFrames.__init__"></a>
     
     
 
                             </div>
-                            <div id="FrameExhaustedOption.KEEP_LAST_FRAME" class="classattr">
+                            <div id="CyclicFrames.frames" class="classattr">
                                 <div class="attr variable">
-            <span class="name">KEEP_LAST_FRAME</span>        =
-<span class="default_value">&lt;<a href="#FrameExhaustedOption.KEEP_LAST_FRAME">FrameExhaustedOption.KEEP_LAST_FRAME</a>: 2&gt;</span>
+            <span class="name">frames</span><span class="annotation">: list[<a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawing</a>]</span>
 
         
     </div>
-    <a class="headerlink" href="#FrameExhaustedOption.KEEP_LAST_FRAME"></a>
+    <a class="headerlink" href="#CyclicFrames.frames"></a>
     
     
 
                             </div>
-                            <div id="FrameExhaustedOption.DISAPPEAR" class="classattr">
+                            <div id="CyclicFrames.duration_per_frame" class="classattr">
                                 <div class="attr variable">
-            <span class="name">DISAPPEAR</span>        =
-<span class="default_value">&lt;<a href="#FrameExhaustedOption.DISAPPEAR">FrameExhaustedOption.DISAPPEAR</a>: 3&gt;</span>
+            <span class="name">duration_per_frame</span><span class="annotation">: <a href="common_types.html#Millisecond">nextrpg.common_types.Millisecond</a></span>
 
         
     </div>
-    <a class="headerlink" href="#FrameExhaustedOption.DISAPPEAR"></a>
+    <a class="headerlink" href="#CyclicFrames.duration_per_frame"></a>
     
     
 
                             </div>
-                </section>
-                <section id="Frames">
-                            <input id="Frames-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr class">
-            
-    <span class="def">class</span>
-    <span class="name">Frames</span>:
+                            <div id="CyclicFrames.current_frame" class="classattr">
+                                        <input id="CyclicFrames.current_frame-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">current_frame</span><span class="annotation">: <a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawing</a></span>
 
-                <label class="view-source-button" for="Frames-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="CyclicFrames.current_frame-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Frames"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Frames-32"><a href="#Frames-32"><span class="linenos"> 32</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Frames</span><span class="p">:</span>
-</span><span id="Frames-33"><a href="#Frames-33"><span class="linenos"> 33</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Frames-34"><a href="#Frames-34"><span class="linenos"> 34</span></a><span class="sd">    This class holds A collection of frames to be iterated,</span>
-</span><span id="Frames-35"><a href="#Frames-35"><span class="linenos"> 35</span></a><span class="sd">    and the behavior upon frame exhaustion.</span>
-</span><span id="Frames-36"><a href="#Frames-36"><span class="linenos"> 36</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Frames-37"><a href="#Frames-37"><span class="linenos"> 37</span></a>
-</span><span id="Frames-38"><a href="#Frames-38"><span class="linenos"> 38</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-</span><span id="Frames-39"><a href="#Frames-39"><span class="linenos"> 39</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="Frames-40"><a href="#Frames-40"><span class="linenos"> 40</span></a>        <span class="n">frames</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Drawing</span><span class="p">],</span>
-</span><span id="Frames-41"><a href="#Frames-41"><span class="linenos"> 41</span></a>        <span class="n">frame_exhausted_option</span><span class="p">:</span> <span class="n">FrameExhaustedOption</span><span class="p">,</span>
-</span><span id="Frames-42"><a href="#Frames-42"><span class="linenos"> 42</span></a>        <span class="n">frame_indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FrameIndex</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="Frames-43"><a href="#Frames-43"><span class="linenos"> 43</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Frames-44"><a href="#Frames-44"><span class="linenos"> 44</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Frames-45"><a href="#Frames-45"><span class="linenos"> 45</span></a><span class="sd">        Initializes the object with frames, options for handling</span>
-</span><span id="Frames-46"><a href="#Frames-46"><span class="linenos"> 46</span></a><span class="sd">        frame exhaustion, and optionally sequence of specific frame indices.</span>
-</span><span id="Frames-47"><a href="#Frames-47"><span class="linenos"> 47</span></a>
-</span><span id="Frames-48"><a href="#Frames-48"><span class="linenos"> 48</span></a><span class="sd">        Args:</span>
-</span><span id="Frames-49"><a href="#Frames-49"><span class="linenos"> 49</span></a><span class="sd">            `frames`:</span>
-</span><span id="Frames-50"><a href="#Frames-50"><span class="linenos"> 50</span></a><span class="sd">                A list of Drawing objects representing the frames to work with.</span>
-</span><span id="Frames-51"><a href="#Frames-51"><span class="linenos"> 51</span></a>
-</span><span id="Frames-52"><a href="#Frames-52"><span class="linenos"> 52</span></a><span class="sd">            `frame_exhausted_option`:</span>
-</span><span id="Frames-53"><a href="#Frames-53"><span class="linenos"> 53</span></a><span class="sd">                Defines the behavior to apply when frames have been exhausted.</span>
-</span><span id="Frames-54"><a href="#Frames-54"><span class="linenos"> 54</span></a>
-</span><span id="Frames-55"><a href="#Frames-55"><span class="linenos"> 55</span></a><span class="sd">            `frame_indices`:</span>
-</span><span id="Frames-56"><a href="#Frames-56"><span class="linenos"> 56</span></a><span class="sd">                An optional list of `FrameIndex` specifying a sequence of frame</span>
-</span><span id="Frames-57"><a href="#Frames-57"><span class="linenos"> 57</span></a><span class="sd">                indices to consume. If not provided, the full range of frames</span>
-</span><span id="Frames-58"><a href="#Frames-58"><span class="linenos"> 58</span></a><span class="sd">                will be played sequentially.</span>
-</span><span id="Frames-59"><a href="#Frames-59"><span class="linenos"> 59</span></a>
-</span><span id="Frames-60"><a href="#Frames-60"><span class="linenos"> 60</span></a><span class="sd">                For example, if `frame_indices == [2, 0, 1]`.</span>
-</span><span id="Frames-61"><a href="#Frames-61"><span class="linenos"> 61</span></a><span class="sd">                `frames[2]` will be played first, followed by `frames[0]` and</span>
-</span><span id="Frames-62"><a href="#Frames-62"><span class="linenos"> 62</span></a><span class="sd">                `frames[1]`.</span>
-</span><span id="Frames-63"><a href="#Frames-63"><span class="linenos"> 63</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Frames-64"><a href="#Frames-64"><span class="linenos"> 64</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Drawing</span><span class="p">]]</span> <span class="o">=</span> <span class="n">frames</span>
-</span><span id="Frames-65"><a href="#Frames-65"><span class="linenos"> 65</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_exhausted_option</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="n">FrameExhaustedOption</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="Frames-66"><a href="#Frames-66"><span class="linenos"> 66</span></a>            <span class="n">frame_exhausted_option</span>
-</span><span id="Frames-67"><a href="#Frames-67"><span class="linenos"> 67</span></a>        <span class="p">)</span>
-</span><span id="Frames-68"><a href="#Frames-68"><span class="linenos"> 68</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">FrameIndex</span><span class="p">]]</span> <span class="o">=</span> <span class="n">frame_indices</span> <span class="ow">or</span> <span class="nb">list</span><span class="p">(</span>
-</span><span id="Frames-69"><a href="#Frames-69"><span class="linenos"> 69</span></a>            <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">))</span>
-</span><span id="Frames-70"><a href="#Frames-70"><span class="linenos"> 70</span></a>        <span class="p">)</span>
-</span><span id="Frames-71"><a href="#Frames-71"><span class="linenos"> 71</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="Frames-72"><a href="#Frames-72"><span class="linenos"> 72</span></a>
-</span><span id="Frames-73"><a href="#Frames-73"><span class="linenos"> 73</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Frames-74"><a href="#Frames-74"><span class="linenos"> 74</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Frames-75"><a href="#Frames-75"><span class="linenos"> 75</span></a><span class="sd">        Resets the frame index to the beginning.</span>
-</span><span id="Frames-76"><a href="#Frames-76"><span class="linenos"> 76</span></a>
-</span><span id="Frames-77"><a href="#Frames-77"><span class="linenos"> 77</span></a><span class="sd">        Args:</span>
-</span><span id="Frames-78"><a href="#Frames-78"><span class="linenos"> 78</span></a><span class="sd">            `None`</span>
-</span><span id="Frames-79"><a href="#Frames-79"><span class="linenos"> 79</span></a>
-</span><span id="Frames-80"><a href="#Frames-80"><span class="linenos"> 80</span></a><span class="sd">        Returns:</span>
-</span><span id="Frames-81"><a href="#Frames-81"><span class="linenos"> 81</span></a><span class="sd">            `None`</span>
-</span><span id="Frames-82"><a href="#Frames-82"><span class="linenos"> 82</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Frames-83"><a href="#Frames-83"><span class="linenos"> 83</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="Frames-84"><a href="#Frames-84"><span class="linenos"> 84</span></a>
-</span><span id="Frames-85"><a href="#Frames-85"><span class="linenos"> 85</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">current_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Frames-86"><a href="#Frames-86"><span class="linenos"> 86</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Frames-87"><a href="#Frames-87"><span class="linenos"> 87</span></a><span class="sd">        Returns the currently selected frame, if applicable.</span>
-</span><span id="Frames-88"><a href="#Frames-88"><span class="linenos"> 88</span></a>
-</span><span id="Frames-89"><a href="#Frames-89"><span class="linenos"> 89</span></a><span class="sd">        If the current frame index exists, the method retrieves the frame at the</span>
-</span><span id="Frames-90"><a href="#Frames-90"><span class="linenos"> 90</span></a><span class="sd">        corresponding position in the sequence. None if no index is set.</span>
-</span><span id="Frames-91"><a href="#Frames-91"><span class="linenos"> 91</span></a>
-</span><span id="Frames-92"><a href="#Frames-92"><span class="linenos"> 92</span></a><span class="sd">        Returns:</span>
-</span><span id="Frames-93"><a href="#Frames-93"><span class="linenos"> 93</span></a><span class="sd">            `Drawing | None`: The current frame if a valid index is set, or None</span>
-</span><span id="Frames-94"><a href="#Frames-94"><span class="linenos"> 94</span></a><span class="sd">                if no frame is selected.</span>
-</span><span id="Frames-95"><a href="#Frames-95"><span class="linenos"> 95</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Frames-96"><a href="#Frames-96"><span class="linenos"> 96</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="Frames-97"><a href="#Frames-97"><span class="linenos"> 97</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span><span class="p">]]</span>
-</span><span id="Frames-98"><a href="#Frames-98"><span class="linenos"> 98</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-</span><span id="Frames-99"><a href="#Frames-99"><span class="linenos"> 99</span></a>            <span class="k">else</span> <span class="kc">None</span>
-</span><span id="Frames-100"><a href="#Frames-100"><span class="linenos">100</span></a>        <span class="p">)</span>
-</span><span id="Frames-101"><a href="#Frames-101"><span class="linenos">101</span></a>
-</span><span id="Frames-102"><a href="#Frames-102"><span class="linenos">102</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">next_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Frames-103"><a href="#Frames-103"><span class="linenos">103</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Frames-104"><a href="#Frames-104"><span class="linenos">104</span></a><span class="sd">        Advances to the next frame in sequence and returns the current frame.</span>
-</span><span id="Frames-105"><a href="#Frames-105"><span class="linenos">105</span></a>
-</span><span id="Frames-106"><a href="#Frames-106"><span class="linenos">106</span></a><span class="sd">        This method triggers the frame exhaustion behavior</span>
-</span><span id="Frames-107"><a href="#Frames-107"><span class="linenos">107</span></a><span class="sd">        if there are no more frames.</span>
-</span><span id="Frames-108"><a href="#Frames-108"><span class="linenos">108</span></a><span class="sd">        It will either cycle the frames, keep the last frame, or disappear.</span>
-</span><span id="Frames-109"><a href="#Frames-109"><span class="linenos">109</span></a>
-</span><span id="Frames-110"><a href="#Frames-110"><span class="linenos">110</span></a><span class="sd">        Returns:</span>
-</span><span id="Frames-111"><a href="#Frames-111"><span class="linenos">111</span></a><span class="sd">            `Drawing | None`: The frame after updating the frame index. If the</span>
-</span><span id="Frames-112"><a href="#Frames-112"><span class="linenos">112</span></a><span class="sd">                frames are exhausted and the option is set to disappear,</span>
-</span><span id="Frames-113"><a href="#Frames-113"><span class="linenos">113</span></a><span class="sd">                `None` is returned.</span>
-</span><span id="Frames-114"><a href="#Frames-114"><span class="linenos">114</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Frames-115"><a href="#Frames-115"><span class="linenos">115</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Frames-116"><a href="#Frames-116"><span class="linenos">116</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="o">+=</span> <span class="mi">1</span>
-</span><span id="Frames-117"><a href="#Frames-117"><span class="linenos">117</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices</span><span class="p">):</span>
-</span><span id="Frames-118"><a href="#Frames-118"><span class="linenos">118</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="Frames-119"><a href="#Frames-119"><span class="linenos">119</span></a>                <span class="n">FrameExhaustedOption</span><span class="o">.</span><span class="n">CYCLE</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-</span><span id="Frames-120"><a href="#Frames-120"><span class="linenos">120</span></a>                <span class="n">FrameExhaustedOption</span><span class="o">.</span><span class="n">KEEP_LAST_FRAME</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-</span><span id="Frames-121"><a href="#Frames-121"><span class="linenos">121</span></a>                <span class="n">FrameExhaustedOption</span><span class="o">.</span><span class="n">DISAPPEAR</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="Frames-122"><a href="#Frames-122"><span class="linenos">122</span></a>            <span class="p">}[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_exhausted_option</span><span class="p">]</span>
-</span><span id="Frames-123"><a href="#Frames-123"><span class="linenos">123</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_frame</span><span class="p">()</span>
+    <a class="headerlink" href="#CyclicFrames.current_frame"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CyclicFrames.current_frame-20"><a href="#CyclicFrames.current_frame-20"><span class="linenos">20</span></a>    <span class="nd">@property</span>
+</span><span id="CyclicFrames.current_frame-21"><a href="#CyclicFrames.current_frame-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">current_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
+</span><span id="CyclicFrames.current_frame-22"><a href="#CyclicFrames.current_frame-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">]</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>This class holds A collection of frames to be iterated,
-and the behavior upon frame exhaustion.</p>
-</div>
-
-
-                            <div id="Frames.__init__" class="classattr">
-                                        <input id="Frames.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-            
-        <span class="name">Frames</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">frames</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n"><a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawing</a></span><span class="p">]</span>,</span><span class="param">	<span class="n">frame_exhausted_option</span><span class="p">:</span> <span class="n"><a href="#FrameExhaustedOption">FrameExhaustedOption</a></span>,</span><span class="param">	<span class="n">frame_indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FrameIndex</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
-
-                <label class="view-source-button" for="Frames.__init__-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#Frames.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Frames.__init__-38"><a href="#Frames.__init__-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-</span><span id="Frames.__init__-39"><a href="#Frames.__init__-39"><span class="linenos">39</span></a>        <span class="bp">self</span><span class="p">,</span>
-</span><span id="Frames.__init__-40"><a href="#Frames.__init__-40"><span class="linenos">40</span></a>        <span class="n">frames</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Drawing</span><span class="p">],</span>
-</span><span id="Frames.__init__-41"><a href="#Frames.__init__-41"><span class="linenos">41</span></a>        <span class="n">frame_exhausted_option</span><span class="p">:</span> <span class="n">FrameExhaustedOption</span><span class="p">,</span>
-</span><span id="Frames.__init__-42"><a href="#Frames.__init__-42"><span class="linenos">42</span></a>        <span class="n">frame_indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">FrameIndex</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="Frames.__init__-43"><a href="#Frames.__init__-43"><span class="linenos">43</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Frames.__init__-44"><a href="#Frames.__init__-44"><span class="linenos">44</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Frames.__init__-45"><a href="#Frames.__init__-45"><span class="linenos">45</span></a><span class="sd">        Initializes the object with frames, options for handling</span>
-</span><span id="Frames.__init__-46"><a href="#Frames.__init__-46"><span class="linenos">46</span></a><span class="sd">        frame exhaustion, and optionally sequence of specific frame indices.</span>
-</span><span id="Frames.__init__-47"><a href="#Frames.__init__-47"><span class="linenos">47</span></a>
-</span><span id="Frames.__init__-48"><a href="#Frames.__init__-48"><span class="linenos">48</span></a><span class="sd">        Args:</span>
-</span><span id="Frames.__init__-49"><a href="#Frames.__init__-49"><span class="linenos">49</span></a><span class="sd">            `frames`:</span>
-</span><span id="Frames.__init__-50"><a href="#Frames.__init__-50"><span class="linenos">50</span></a><span class="sd">                A list of Drawing objects representing the frames to work with.</span>
-</span><span id="Frames.__init__-51"><a href="#Frames.__init__-51"><span class="linenos">51</span></a>
-</span><span id="Frames.__init__-52"><a href="#Frames.__init__-52"><span class="linenos">52</span></a><span class="sd">            `frame_exhausted_option`:</span>
-</span><span id="Frames.__init__-53"><a href="#Frames.__init__-53"><span class="linenos">53</span></a><span class="sd">                Defines the behavior to apply when frames have been exhausted.</span>
-</span><span id="Frames.__init__-54"><a href="#Frames.__init__-54"><span class="linenos">54</span></a>
-</span><span id="Frames.__init__-55"><a href="#Frames.__init__-55"><span class="linenos">55</span></a><span class="sd">            `frame_indices`:</span>
-</span><span id="Frames.__init__-56"><a href="#Frames.__init__-56"><span class="linenos">56</span></a><span class="sd">                An optional list of `FrameIndex` specifying a sequence of frame</span>
-</span><span id="Frames.__init__-57"><a href="#Frames.__init__-57"><span class="linenos">57</span></a><span class="sd">                indices to consume. If not provided, the full range of frames</span>
-</span><span id="Frames.__init__-58"><a href="#Frames.__init__-58"><span class="linenos">58</span></a><span class="sd">                will be played sequentially.</span>
-</span><span id="Frames.__init__-59"><a href="#Frames.__init__-59"><span class="linenos">59</span></a>
-</span><span id="Frames.__init__-60"><a href="#Frames.__init__-60"><span class="linenos">60</span></a><span class="sd">                For example, if `frame_indices == [2, 0, 1]`.</span>
-</span><span id="Frames.__init__-61"><a href="#Frames.__init__-61"><span class="linenos">61</span></a><span class="sd">                `frames[2]` will be played first, followed by `frames[0]` and</span>
-</span><span id="Frames.__init__-62"><a href="#Frames.__init__-62"><span class="linenos">62</span></a><span class="sd">                `frames[1]`.</span>
-</span><span id="Frames.__init__-63"><a href="#Frames.__init__-63"><span class="linenos">63</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Frames.__init__-64"><a href="#Frames.__init__-64"><span class="linenos">64</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Drawing</span><span class="p">]]</span> <span class="o">=</span> <span class="n">frames</span>
-</span><span id="Frames.__init__-65"><a href="#Frames.__init__-65"><span class="linenos">65</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_exhausted_option</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="n">FrameExhaustedOption</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="Frames.__init__-66"><a href="#Frames.__init__-66"><span class="linenos">66</span></a>            <span class="n">frame_exhausted_option</span>
-</span><span id="Frames.__init__-67"><a href="#Frames.__init__-67"><span class="linenos">67</span></a>        <span class="p">)</span>
-</span><span id="Frames.__init__-68"><a href="#Frames.__init__-68"><span class="linenos">68</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">FrameIndex</span><span class="p">]]</span> <span class="o">=</span> <span class="n">frame_indices</span> <span class="ow">or</span> <span class="nb">list</span><span class="p">(</span>
-</span><span id="Frames.__init__-69"><a href="#Frames.__init__-69"><span class="linenos">69</span></a>            <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">))</span>
-</span><span id="Frames.__init__-70"><a href="#Frames.__init__-70"><span class="linenos">70</span></a>        <span class="p">)</span>
-</span><span id="Frames.__init__-71"><a href="#Frames.__init__-71"><span class="linenos">71</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">0</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Initializes the object with frames, options for handling
-frame exhaustion, and optionally sequence of specific frame indices.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code>frames</code>:</strong>  A list of Drawing objects representing the frames to work with.</li>
-<li><strong><code>frame_exhausted_option</code>:</strong>  Defines the behavior to apply when frames have been exhausted.</li>
-<li><p><strong><code>frame_indices</code>:</strong>  An optional list of <code><a href="#FrameIndex">FrameIndex</a></code> specifying a sequence of frame
-indices to consume. If not provided, the full range of frames
-will be played sequentially.</p>
-
-<p>For example, if <code>frame_indices == [2, 0, 1]</code>.
-<code>frames[2]</code> will be played first, followed by <code>frames[0]</code> and
-<code>frames[1]</code>.</p></li>
-</ul>
-</div>
-
+    
 
                             </div>
-                            <div id="Frames.reset" class="classattr">
-                                        <input id="Frames.reset-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="CyclicFrames.step" class="classattr">
+                                        <input id="CyclicFrames.step-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">reset</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
+        <span class="name">step</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n"><a href="#CyclicFrames">CyclicFrames</a></span>:</span></span>
 
-                <label class="view-source-button" for="Frames.reset-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="CyclicFrames.step-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Frames.reset"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Frames.reset-73"><a href="#Frames.reset-73"><span class="linenos">73</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Frames.reset-74"><a href="#Frames.reset-74"><span class="linenos">74</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Frames.reset-75"><a href="#Frames.reset-75"><span class="linenos">75</span></a><span class="sd">        Resets the frame index to the beginning.</span>
-</span><span id="Frames.reset-76"><a href="#Frames.reset-76"><span class="linenos">76</span></a>
-</span><span id="Frames.reset-77"><a href="#Frames.reset-77"><span class="linenos">77</span></a><span class="sd">        Args:</span>
-</span><span id="Frames.reset-78"><a href="#Frames.reset-78"><span class="linenos">78</span></a><span class="sd">            `None`</span>
-</span><span id="Frames.reset-79"><a href="#Frames.reset-79"><span class="linenos">79</span></a>
-</span><span id="Frames.reset-80"><a href="#Frames.reset-80"><span class="linenos">80</span></a><span class="sd">        Returns:</span>
-</span><span id="Frames.reset-81"><a href="#Frames.reset-81"><span class="linenos">81</span></a><span class="sd">            `None`</span>
-</span><span id="Frames.reset-82"><a href="#Frames.reset-82"><span class="linenos">82</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Frames.reset-83"><a href="#Frames.reset-83"><span class="linenos">83</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="o">=</span> <span class="mi">0</span>
+    <a class="headerlink" href="#CyclicFrames.step"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CyclicFrames.step-24"><a href="#CyclicFrames.step-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CyclicFrames&quot;</span><span class="p">:</span>
+</span><span id="CyclicFrames.step-25"><a href="#CyclicFrames.step-25"><span class="linenos">25</span></a>        <span class="n">total_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">+</span> <span class="n">time_delta</span>
+</span><span id="CyclicFrames.step-26"><a href="#CyclicFrames.step-26"><span class="linenos">26</span></a>        <span class="n">frames_to_step</span> <span class="o">=</span> <span class="n">total_time</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration_per_frame</span>
+</span><span id="CyclicFrames.step-27"><a href="#CyclicFrames.step-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="n">clone</span><span class="p">(</span>
+</span><span id="CyclicFrames.step-28"><a href="#CyclicFrames.step-28"><span class="linenos">28</span></a>            <span class="bp">self</span><span class="p">,</span>
+</span><span id="CyclicFrames.step-29"><a href="#CyclicFrames.step-29"><span class="linenos">29</span></a>            <span class="n">_index</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="n">frames_to_step</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frames</span><span class="p">),</span>
+</span><span id="CyclicFrames.step-30"><a href="#CyclicFrames.step-30"><span class="linenos">30</span></a>            <span class="n">_elapsed</span><span class="o">=</span><span class="n">total_time</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration_per_frame</span><span class="p">,</span>
+</span><span id="CyclicFrames.step-31"><a href="#CyclicFrames.step-31"><span class="linenos">31</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Resets the frame index to the beginning.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><code>None</code></li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>None</code></p>
-</blockquote>
-</div>
-
+    
 
                             </div>
-                            <div id="Frames.current_frame" class="classattr">
-                                        <input id="Frames.current_frame-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="CyclicFrames.reset" class="classattr">
+                                        <input id="CyclicFrames.reset-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">current_frame</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawing</a></span> <span class="o">|</span> <span class="kc">None</span>:</span></span>
+        <span class="name">reset</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="#CyclicFrames">CyclicFrames</a></span>:</span></span>
 
-                <label class="view-source-button" for="Frames.current_frame-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="CyclicFrames.reset-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Frames.current_frame"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Frames.current_frame-85"><a href="#Frames.current_frame-85"><span class="linenos"> 85</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">current_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Frames.current_frame-86"><a href="#Frames.current_frame-86"><span class="linenos"> 86</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Frames.current_frame-87"><a href="#Frames.current_frame-87"><span class="linenos"> 87</span></a><span class="sd">        Returns the currently selected frame, if applicable.</span>
-</span><span id="Frames.current_frame-88"><a href="#Frames.current_frame-88"><span class="linenos"> 88</span></a>
-</span><span id="Frames.current_frame-89"><a href="#Frames.current_frame-89"><span class="linenos"> 89</span></a><span class="sd">        If the current frame index exists, the method retrieves the frame at the</span>
-</span><span id="Frames.current_frame-90"><a href="#Frames.current_frame-90"><span class="linenos"> 90</span></a><span class="sd">        corresponding position in the sequence. None if no index is set.</span>
-</span><span id="Frames.current_frame-91"><a href="#Frames.current_frame-91"><span class="linenos"> 91</span></a>
-</span><span id="Frames.current_frame-92"><a href="#Frames.current_frame-92"><span class="linenos"> 92</span></a><span class="sd">        Returns:</span>
-</span><span id="Frames.current_frame-93"><a href="#Frames.current_frame-93"><span class="linenos"> 93</span></a><span class="sd">            `Drawing | None`: The current frame if a valid index is set, or None</span>
-</span><span id="Frames.current_frame-94"><a href="#Frames.current_frame-94"><span class="linenos"> 94</span></a><span class="sd">                if no frame is selected.</span>
-</span><span id="Frames.current_frame-95"><a href="#Frames.current_frame-95"><span class="linenos"> 95</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Frames.current_frame-96"><a href="#Frames.current_frame-96"><span class="linenos"> 96</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="Frames.current_frame-97"><a href="#Frames.current_frame-97"><span class="linenos"> 97</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span><span class="p">]]</span>
-</span><span id="Frames.current_frame-98"><a href="#Frames.current_frame-98"><span class="linenos"> 98</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-</span><span id="Frames.current_frame-99"><a href="#Frames.current_frame-99"><span class="linenos"> 99</span></a>            <span class="k">else</span> <span class="kc">None</span>
-</span><span id="Frames.current_frame-100"><a href="#Frames.current_frame-100"><span class="linenos">100</span></a>        <span class="p">)</span>
+    <a class="headerlink" href="#CyclicFrames.reset"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CyclicFrames.reset-33"><a href="#CyclicFrames.reset-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;CyclicFrames&quot;</span><span class="p">:</span>
+</span><span id="CyclicFrames.reset-34"><a href="#CyclicFrames.reset-34"><span class="linenos">34</span></a>        <span class="k">return</span> <span class="n">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">_elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Returns the currently selected frame, if applicable.</p>
-
-<p>If the current frame index exists, the method retrieves the frame at the
-corresponding position in the sequence. None if no index is set.</p>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>Drawing | None</code>: The current frame if a valid index is set, or None
-      if no frame is selected.</p>
-</blockquote>
-</div>
-
-
-                            </div>
-                            <div id="Frames.next_frame" class="classattr">
-                                        <input id="Frames.next_frame-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">next_frame</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n"><a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawing</a></span> <span class="o">|</span> <span class="kc">None</span>:</span></span>
-
-                <label class="view-source-button" for="Frames.next_frame-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#Frames.next_frame"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Frames.next_frame-102"><a href="#Frames.next_frame-102"><span class="linenos">102</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">next_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Frames.next_frame-103"><a href="#Frames.next_frame-103"><span class="linenos">103</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Frames.next_frame-104"><a href="#Frames.next_frame-104"><span class="linenos">104</span></a><span class="sd">        Advances to the next frame in sequence and returns the current frame.</span>
-</span><span id="Frames.next_frame-105"><a href="#Frames.next_frame-105"><span class="linenos">105</span></a>
-</span><span id="Frames.next_frame-106"><a href="#Frames.next_frame-106"><span class="linenos">106</span></a><span class="sd">        This method triggers the frame exhaustion behavior</span>
-</span><span id="Frames.next_frame-107"><a href="#Frames.next_frame-107"><span class="linenos">107</span></a><span class="sd">        if there are no more frames.</span>
-</span><span id="Frames.next_frame-108"><a href="#Frames.next_frame-108"><span class="linenos">108</span></a><span class="sd">        It will either cycle the frames, keep the last frame, or disappear.</span>
-</span><span id="Frames.next_frame-109"><a href="#Frames.next_frame-109"><span class="linenos">109</span></a>
-</span><span id="Frames.next_frame-110"><a href="#Frames.next_frame-110"><span class="linenos">110</span></a><span class="sd">        Returns:</span>
-</span><span id="Frames.next_frame-111"><a href="#Frames.next_frame-111"><span class="linenos">111</span></a><span class="sd">            `Drawing | None`: The frame after updating the frame index. If the</span>
-</span><span id="Frames.next_frame-112"><a href="#Frames.next_frame-112"><span class="linenos">112</span></a><span class="sd">                frames are exhausted and the option is set to disappear,</span>
-</span><span id="Frames.next_frame-113"><a href="#Frames.next_frame-113"><span class="linenos">113</span></a><span class="sd">                `None` is returned.</span>
-</span><span id="Frames.next_frame-114"><a href="#Frames.next_frame-114"><span class="linenos">114</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Frames.next_frame-115"><a href="#Frames.next_frame-115"><span class="linenos">115</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Frames.next_frame-116"><a href="#Frames.next_frame-116"><span class="linenos">116</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="o">+=</span> <span class="mi">1</span>
-</span><span id="Frames.next_frame-117"><a href="#Frames.next_frame-117"><span class="linenos">117</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices</span><span class="p">):</span>
-</span><span id="Frames.next_frame-118"><a href="#Frames.next_frame-118"><span class="linenos">118</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_frame_indices_index</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="Frames.next_frame-119"><a href="#Frames.next_frame-119"><span class="linenos">119</span></a>                <span class="n">FrameExhaustedOption</span><span class="o">.</span><span class="n">CYCLE</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-</span><span id="Frames.next_frame-120"><a href="#Frames.next_frame-120"><span class="linenos">120</span></a>                <span class="n">FrameExhaustedOption</span><span class="o">.</span><span class="n">KEEP_LAST_FRAME</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-</span><span id="Frames.next_frame-121"><a href="#Frames.next_frame-121"><span class="linenos">121</span></a>                <span class="n">FrameExhaustedOption</span><span class="o">.</span><span class="n">DISAPPEAR</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-</span><span id="Frames.next_frame-122"><a href="#Frames.next_frame-122"><span class="linenos">122</span></a>            <span class="p">}[</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame_exhausted_option</span><span class="p">]</span>
-</span><span id="Frames.next_frame-123"><a href="#Frames.next_frame-123"><span class="linenos">123</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_frame</span><span class="p">()</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Advances to the next frame in sequence and returns the current frame.</p>
-
-<p>This method triggers the frame exhaustion behavior
-if there are no more frames.
-It will either cycle the frames, keep the last frame, or disappear.</p>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>Drawing | None</code>: The frame after updating the frame index. If the
-      frames are exhausted and the option is set to disappear,
-      <code>None</code> is returned.</p>
-</blockquote>
-</div>
-
+    
 
                             </div>
                 </section>
