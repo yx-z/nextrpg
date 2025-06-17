@@ -122,8 +122,8 @@ class CharacterOnScreen:
     ) -> bool:
         rect = DrawOnScreen(coordinate, character_drawing).visible_rectangle
         hit_coord = {
-            Direction.LEFT: {rect.bottom_left},
-            Direction.RIGHT: {rect.bottom_right},
+            Direction.LEFT: {rect.bottom_left, rect.center_left},
+            Direction.RIGHT: {rect.bottom_right, rect.center_right},
             Direction.DOWN: {
                 rect.bottom_right,
                 rect.bottom_center,
