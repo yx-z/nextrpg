@@ -82,7 +82,7 @@ class Drawing:
         """
         return self._debug_surface or self._surface
 
-    def crop(self, left_top: Coordinate, size: Size) -> "Drawing":
+    def crop(self, size: Size, left_top: Coordinate) -> "Drawing":
         """
         Crops a rectangular portion of the drawing specified by the
         top-left corner and the size.
@@ -92,8 +92,9 @@ class Drawing:
         The original drawing remains unchanged.
 
         Args:
-            `left_top`: The top-left coordinate of the rectangle to be cropped.
             `size`: The width and height of the rectangle to be cropped.
+
+            `left_top`: The top-left coordinate of the rectangle to be cropped.
 
         Returns:
             `Drawing`: A new `Drawing` instance representing the cropped area.

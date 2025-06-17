@@ -17,7 +17,7 @@ def test_drawing(mocker: MockerFixture) -> None:
     assert drawing.width == 1
     assert drawing.height == 2
     assert drawing.size == Size(1, 2)
-    assert drawing.crop(Coordinate(0, 0), Size(1, 2)).size == Size(1, 2)
+    assert drawing.crop(Size(1, 2), Coordinate(0, 0)).size == Size(1, 2)
     assert (drawing * 10).size == Size(10, 20)
     assert isinstance(drawing.pygame, Surface)
 

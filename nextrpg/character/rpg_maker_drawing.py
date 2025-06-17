@@ -143,18 +143,21 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             `initial_direction`: Initial direction for the character.
                 If not specified, the default direction from `Config` is used.
         """
-        cfg = config().rpg_maker_character
         return RpgMakerCharacterDrawing(
-            cfg.animate_on_idle if animate_on_idle is None else animate_on_idle,
+            (
+                config().rpg_maker_character.animate_on_idle
+                if animate_on_idle is None
+                else animate_on_idle
+            ),
             _load_frames(
                 sprite_sheet,
                 (
-                    cfg.frame_duration
+                    config().rpg_maker_character.frame_duration
                     if frame_duration is None
                     else frame_duration
                 ),
             ),
-            direction or cfg.direction,
+            direction or config().rpg_maker_character.direction,
         )
 
     @cached_property
@@ -272,10 +275,14 @@ def _crop_into_frames_at_row(
     drawing: Drawing, frame_type: FrameType, row: int
 ) -> list[Drawing]:
     num_frames = len(frame_type)
-    width = drawing.width / num_frames
-    height = drawing.height / 4
     return [
-        drawing.crop(Coordinate(width * i, height * row), Size(width, height))
+        drawing.crop(
+            Size(
+                width := drawing.width / num_frames,
+                height := drawing.height / 4,
+            ),
+            Coordinate(width * i, height * row),
+        )
         for i in range(num_frames)
     ]
 
@@ -284,11 +291,11 @@ def _crop_by_selection(
     drawing: Drawing, selection: SpriteSheetSelection
 ) -> Drawing:
     return drawing.crop(
-        Coordinate(
-            (width := drawing.width / selection.max_columns) * selection.column,
-            (height := drawing.height / selection.max_rows) * selection.row,
+        Size(
+            width := drawing.width / selection.max_columns,
+            height := drawing.height / selection.max_rows,
         ),
-        Size(width, height),
+        Coordinate(width * selection.column, height * selection.row),
     )
 
 

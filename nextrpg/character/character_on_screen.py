@@ -52,15 +52,15 @@ class CharacterOnScreen:
 
         `coordinate`: The current position of the character on screen.
 
-        `collisions`: List of rectangles representing collision boundaries.
-
         `speed`: Movement speed of the character in pixels.
+
+        `collisions`: List of rectangles representing collision boundaries.
     """
 
     character_drawing: CharacterDrawing
     coordinate: Coordinate
-    collisions: list[Rectangle]
     speed: Pixel
+    collisions: list[Rectangle]
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
     @cached_property
@@ -74,16 +74,18 @@ class CharacterOnScreen:
         """
         return CharacterAndVisuals(
             DrawOnScreen(self.coordinate, self.character_drawing.drawing),
-            (
-                [
-                    DrawOnScreen.from_rectangle(
-                        c, debug.collision_rectangle_color
-                    )
-                    for c in self.collisions
-                ]
-                if (debug := config().debug)
-                else []
-            ),
+            self._debug_rectangles,
+        )
+
+    @cached_property
+    def _debug_rectangles(self) -> list[DrawOnScreen]:
+        return (
+            [
+                DrawOnScreen.from_rectangle(c, debug.collision_rectangle_color)
+                for c in self.collisions
+            ]
+            if (debug := config().debug)
+            else []
         )
 
     @singledispatchmethod
@@ -134,13 +136,13 @@ class CharacterOnScreen:
             `CharacterOnScreen`: The updated character state after the step.
         """
         moved_drawing = self.character_drawing.move(time_delta)
-        moved_coordinate = self._move(time_delta, moved_drawing.drawing)
+        moved_coord = self._move(time_delta, moved_drawing.drawing)
         return replace(
             self,
-            coordinate=moved_coordinate or self.coordinate,
+            coordinate=moved_coord or self.coordinate,
             character_drawing=(
                 moved_drawing
-                if moved_coordinate
+                if moved_coord
                 else self.character_drawing.idle(time_delta)
             ),
         )
@@ -148,19 +150,13 @@ class CharacterOnScreen:
     def _move(
         self, time_delta: Millisecond, character_drawing: Drawing
     ) -> Coordinate | None:
+        moved_coord = self.coordinate + DirectionalOffset(
+            self.character_drawing.direction, self.speed * time_delta
+        )
         return (
             moved_coord
             if self._movement_keys
-            and self._can_move(
-                (
-                    moved_coord := self.coordinate
-                    + DirectionalOffset(
-                        self.character_drawing.direction,
-                        self.speed * time_delta,
-                    )
-                ),
-                character_drawing,
-            )
+            and self._can_move(moved_coord, character_drawing)
             else None
         )
 
@@ -168,7 +164,7 @@ class CharacterOnScreen:
         self, coordinate: Coordinate, character_drawing: Drawing
     ) -> bool:
         rect = DrawOnScreen(coordinate, character_drawing).visible_rectangle
-        hit_coord = {
+        hit_coords = {
             Direction.LEFT: {rect.bottom_left, rect.center_left},
             Direction.RIGHT: {rect.bottom_right, rect.center_right},
             Direction.DOWN: {
@@ -199,34 +195,22 @@ class CharacterOnScreen:
             },
         }[self.character_drawing.direction]
         return all(
-            all(h not in collision for h in hit_coord)
+            all(hit_coord not in collision for hit_coord in hit_coords)
             for collision in self.collisions
         )
 
 
 def _key_to_dir(current_keys: frozenset[KeyboardKey]) -> Direction | None:
+    KEY_TO_DIR = {
+        frozenset({KeyboardKey.LEFT, KeyboardKey.UP}): Direction.UP_LEFT,
+        frozenset({KeyboardKey.LEFT, KeyboardKey.DOWN}): Direction.DOWN_LEFT,
+        frozenset({KeyboardKey.RIGHT, KeyboardKey.UP}): Direction.UP_RIGHT,
+        frozenset({KeyboardKey.RIGHT, KeyboardKey.DOWN}): Direction.DOWN_RIGHT,
+        frozenset({KeyboardKey.LEFT}): Direction.LEFT,
+        frozenset({KeyboardKey.RIGHT}): Direction.RIGHT,
+        frozenset({KeyboardKey.UP}): Direction.UP,
+        frozenset({KeyboardKey.DOWN}): Direction.DOWN,
+    }
     return next(
-        (
-            direction
-            for configured_keys, direction in {
-                frozenset(
-                    {KeyboardKey.LEFT, KeyboardKey.UP}
-                ): Direction.UP_LEFT,
-                frozenset(
-                    {KeyboardKey.LEFT, KeyboardKey.DOWN}
-                ): Direction.DOWN_LEFT,
-                frozenset(
-                    {KeyboardKey.RIGHT, KeyboardKey.UP}
-                ): Direction.UP_RIGHT,
-                frozenset(
-                    {KeyboardKey.RIGHT, KeyboardKey.DOWN}
-                ): Direction.DOWN_RIGHT,
-                frozenset({KeyboardKey.LEFT}): Direction.LEFT,
-                frozenset({KeyboardKey.RIGHT}): Direction.RIGHT,
-                frozenset({KeyboardKey.UP}): Direction.UP,
-                frozenset({KeyboardKey.DOWN}): Direction.DOWN,
-            }.items()
-            if configured_keys <= current_keys
-        ),
-        None,
+        (d for keys, d in KEY_TO_DIR.items() if keys <= current_keys), None
     )
