@@ -130,10 +130,10 @@ class CharacterOnScreen:
                 rect.bottom_left,
             },
             Direction.UP: {rect.center_right, rect.center, rect.center_left},
-            Direction.UP_LEFT: {rect.center_left},
-            Direction.UP_RIGHT: {rect.center_right},
-            Direction.DOWN_LEFT: {rect.bottom_left, rect.bottom_center},
-            Direction.DOWN_RIGHT: {rect.bottom_right, rect.bottom_center},
+            Direction.UP_LEFT: {rect.top_left},
+            Direction.UP_RIGHT: {rect.top_right},
+            Direction.DOWN_LEFT: {rect.bottom_left},
+            Direction.DOWN_RIGHT: {rect.bottom_right},
         }[self.character_drawing.direction]
         return all(
             all(h not in collision for h in hit_coord)

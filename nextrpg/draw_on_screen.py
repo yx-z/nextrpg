@@ -163,7 +163,7 @@ class DrawOnScreen:
 
     @cached_property
     def visible_rectangle(self) -> Rectangle:
-        visible_coords = [
+        visible = [
             Coordinate(x, y)
             for x, y in product(
                 range(ceil(self.drawing.width)),
@@ -171,10 +171,10 @@ class DrawOnScreen:
             )
             if self.drawing._surface.get_at((x, y)).a
         ]
-        min_x = min(visible_coords, key=lambda c: c.left).left
-        min_y = min(visible_coords, key=lambda c: c.top).top
-        max_x = max(visible_coords, key=lambda c: c.left).left
-        max_y = max(visible_coords, key=lambda c: c.top).top
+        min_x = min(visible, key=lambda c: c.left).left
+        min_y = min(visible, key=lambda c: c.top).top
+        max_x = max(visible, key=lambda c: c.left).left
+        max_y = max(visible, key=lambda c: c.top).top
         return Rectangle(
             self.top_left + Coordinate(min_x, min_y),
             Size(max_x - min_x, max_y - min_y),

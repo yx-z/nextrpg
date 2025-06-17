@@ -561,7 +561,7 @@
  <tile id="557"/>
  <tile id="558"/>
  <tile id="559"/>
- <tile id="560"/>
+ <tile id="560" type="chair"/>
  <tile id="561"/>
  <tile id="562"/>
  <tile id="563"/>
@@ -577,7 +577,7 @@
  <tile id="573"/>
  <tile id="574"/>
  <tile id="575"/>
- <tile id="576"/>
+ <tile id="576" type="chair"/>
  <tile id="577"/>
  <tile id="578"/>
  <tile id="579"/>
@@ -593,7 +593,7 @@
  <tile id="589"/>
  <tile id="590"/>
  <tile id="591"/>
- <tile id="592"/>
+ <tile id="592" type="chair"/>
  <tile id="593"/>
  <tile id="594"/>
  <tile id="595"/>
@@ -850,7 +850,7 @@
  <tile id="846"/>
  <tile id="847"/>
  <tile id="848"/>
- <tile id="849"/>
+ <tile id="849" type="fruit"/>
  <tile id="850"/>
  <tile id="851"/>
  <tile id="852"/>
@@ -866,7 +866,7 @@
  <tile id="862"/>
  <tile id="863"/>
  <tile id="864"/>
- <tile id="865"/>
+ <tile id="865" type="fruit"/>
  <tile id="866"/>
  <tile id="867"/>
  <tile id="868"/>
