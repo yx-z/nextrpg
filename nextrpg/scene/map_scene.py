@@ -83,8 +83,8 @@ class MapScene(Scene):
     ) -> bool:
         gid, draw = tup
         return (
-            draw.visible_rectangle.collides(character.visible_rectangle)
-            and max(
+            not draw.visible_rectangle.collides(character.visible_rectangle)
+            or max(
                 draw.visible_rectangle.bottom
                 for draw in self._gid_groups.get(gid, {gid: draw}).values()
             )
