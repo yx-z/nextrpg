@@ -43,8 +43,7 @@ def test_coordinate() -> None:
     assert Coordinate(10, 20) + Coordinate(1, 2) == Coordinate(11, 22)
     with raises(ValueError):
         coord = Coordinate(1, 2)
-        res = coord + DirectionalOffset("INVALID_DIRECTION", 1)  # type: ignore
-        assert not res
+        coord + DirectionalOffset("INVALID_DIRECTION", 1)  # type: ignore
 
 
 def test_size() -> None:

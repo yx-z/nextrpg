@@ -4,7 +4,7 @@ Sample scene.
 
 from pathlib import Path
 
-from nextrpg.character.rpg_maker_drawing import (
+from nextrpg.character.rpg_maker_character_drawing import (
     RpgMakerCharacterDrawing,
     SpriteSheet,
     SpriteSheetSelection,

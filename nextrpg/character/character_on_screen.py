@@ -77,17 +77,6 @@ class CharacterOnScreen:
             self._debug_rectangles,
         )
 
-    @cached_property
-    def _debug_rectangles(self) -> list[DrawOnScreen]:
-        return (
-            [
-                DrawOnScreen.from_rectangle(c, debug.collision_rectangle_color)
-                for c in self.collisions
-            ]
-            if (debug := config().debug)
-            else []
-        )
-
     @singledispatchmethod
     def event(self, _: PygameEvent) -> Self:
         """
@@ -197,6 +186,17 @@ class CharacterOnScreen:
         return all(
             all(hit_coord not in collision for hit_coord in hit_coords)
             for collision in self.collisions
+        )
+
+    @cached_property
+    def _debug_rectangles(self) -> list[DrawOnScreen]:
+        return (
+            [
+                DrawOnScreen.from_rectangle(c, debug.collision_rectangle_color)
+                for c in self.collisions
+            ]
+            if (debug := config().debug)
+            else []
         )
 
 
