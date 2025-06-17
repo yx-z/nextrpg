@@ -3,6 +3,7 @@ Scene is an interface of all game interactions like exploration, menu, etc..
 """
 
 from abc import ABC, abstractmethod
+from functools import cached_property
 
 from nextrpg.common_types import Millisecond
 from nextrpg.draw_on_screen import DrawOnScreen
@@ -18,7 +19,7 @@ class Scene(ABC):
     implement these methods.
     """
 
-    @property
+    @cached_property
     @abstractmethod
     def draw_on_screen(self) -> list[DrawOnScreen]:
         """

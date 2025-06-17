@@ -42,7 +42,7 @@ class Drawing:
         """
         return Drawing(load(resource).convert_alpha())
 
-    @property
+    @cached_property
     def width(self) -> Pixel:
         """
         Gets the width of the surface.
@@ -52,7 +52,7 @@ class Drawing:
         """
         return self._surface.get_width()
 
-    @property
+    @cached_property
     def height(self) -> Pixel:
         """
         Gets the height of the surface.
@@ -62,7 +62,7 @@ class Drawing:
         """
         return self._surface.get_height()
 
-    @property
+    @cached_property
     def size(self) -> Size:
         """
         Gets the size of an object as a combination of its width and height
@@ -72,7 +72,7 @@ class Drawing:
         """
         return Size(self.width, self.height)
 
-    @property
+    @cached_property
     def pygame(self) -> Surface:
         """
         Gets the current `pygame.Surface` for the object.
@@ -122,7 +122,7 @@ class Drawing:
             transform.scale(self._surface, (self.size * scale).tuple)
         )
 
-    @property
+    @cached_property
     def _debug_surface(self) -> Surface | None:
         if not (debug := config().debug):
             return None
@@ -150,7 +150,7 @@ class DrawOnScreen:
     top_left: Coordinate
     drawing: Drawing
 
-    @property
+    @cached_property
     def rectangle(self) -> Rectangle:
         """
         Gets the rectangular bounds of the drawing on screen.
@@ -180,7 +180,7 @@ class DrawOnScreen:
             Size(max_x - min_x, max_y - min_y),
         )
 
-    @property
+    @cached_property
     def pygame(self) -> tuple[Surface, tuple[Pixel, Pixel]]:
         """
         Gets the pygame surface and coordinate tuple for rendering.

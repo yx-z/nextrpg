@@ -1,7 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from functools import cached_property
 from itertools import groupby
 from pathlib import Path
-from typing import override
+from typing import NamedTuple, override
 
 from pytmx import (
     TiledMap,
@@ -12,7 +13,7 @@ from pytmx import (
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.common_types import Millisecond
+from nextrpg.common_types import Millisecond, Pixel
 from nextrpg.config import config
 from nextrpg.draw_on_screen import (
     Coordinate,
@@ -23,18 +24,17 @@ from nextrpg.draw_on_screen import (
 )
 from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.scene.scene import Scene
-from nextrpg.util import clone, partition
 
 type _Gid = int
+type _TiledCoordinate = Coordinate
 
 
 @dataclass(frozen=True)
 class MapScene(Scene):
     _background: list[DrawOnScreen]
-    _foreground: dict[_Gid, DrawOnScreen]
+    _foreground: list[dict[_Gid, DrawOnScreen]]
     _player: CharacterOnScreen
-    _tile_size: Size
-    _gid_groups: dict[_Gid, dict[_Gid, DrawOnScreen]]
+    _gid_groups: dict[_Gid, set[DrawOnScreen]]
 
     @classmethod
     def load(cls, tmx_file: Path, player: CharacterDrawing) -> "Scene":
@@ -50,51 +50,49 @@ class MapScene(Scene):
                 tmx, _layers(tmx, config().map.foreground), tile_size
             ),
             _player(player, tmx),
-            tile_size,
-            _gid_groups(tmx, foreground),
+            _gid_groups(tmx, {k: v for l in foreground for k, v in l.items()}),
         )
 
-    @property
+    @cached_property
     @override
     def draw_on_screen(self) -> list[DrawOnScreen]:
-        character, visuals = self._player.draw_on_screen
-        below_character, above_character = partition(
-            self._foreground.items(),
-            lambda d: self._draw_below_character(d, character),
-        )
         return (
             self._background
-            + [d for _, d in below_character]
-            + [character]
-            + visuals
-            + [d for _, d in above_character]
+            + self._foreground_and_character
+            + self._player.draw_on_screen.visuals
         )
 
     @override
     def event(self, event: PygameEvent) -> "Scene":
-        return clone(self, _player=self._player.event(event))
+        return replace(self, _player=self._player.event(event))
 
     @override
     def step(self, time_delta: Millisecond) -> "Scene":
-        return clone(self, _player=self._player.step(time_delta))
+        return replace(self, _player=self._player.step(time_delta))
 
-    def _draw_below_character(
-        self, tup: tuple[_Gid, DrawOnScreen], character: DrawOnScreen
-    ) -> bool:
-        gid, draw = tup
-        return (
-            not draw.visible_rectangle.collides(character.visible_rectangle)
-            or max(
-                draw.visible_rectangle.bottom
-                for draw in self._gid_groups.get(gid, {gid: draw}).values()
+    @cached_property
+    def _foreground_and_character(self) -> list[DrawOnScreen]:
+        sorted_draws = sorted(
+            list(
+                (layer_index, gid, draw)
+                for layer_index, gid_to_draws in enumerate(self._foreground)
+                for gid, draw in gid_to_draws.items()
             )
-            < character.visible_rectangle.bottom
+            + [(0, 0, self._player.draw_on_screen.character)],
+            key=lambda t: _DepthThenBottom(t[0], self._grouped_bottom(*t[1:])),
+        )
+        return [draw for _, _, draw in sorted_draws]
+
+    def _grouped_bottom(self, gid: _Gid, draw: DrawOnScreen) -> Pixel:
+        return max(
+            d.visible_rectangle.bottom
+            for d in (self._gid_groups.get(gid) or {draw})
         )
 
 
 def _draw(
-    layer: TiledTileLayer, tile_size
-) -> list[tuple[Coordinate, DrawOnScreen]]:
+    layer: TiledTileLayer, tile_size: Size
+) -> list[tuple[_TiledCoordinate, DrawOnScreen]]:
     return [
         (
             Coordinate(left, top),
@@ -109,17 +107,19 @@ def _draw(
 
 def _get_gid_and_draw(
     tmx: TiledMap, layers: list[TiledTileLayer], tile_size: Size
-) -> dict[_Gid, DrawOnScreen]:
-    return {
-        (
-            tmx.get_tile_properties_by_gid(
-                gid := layer.data[coord.top][coord.left]
-            )
-            or {}
-        ).get("id", gid): draw
+) -> list[dict[_Gid, DrawOnScreen]]:
+    return [
+        {
+            (
+                tmx.get_tile_properties_by_gid(
+                    gid := layer.data[tiled_coord.top][tiled_coord.left]
+                )
+                or {}
+            ).get("id", gid): draw
+            for tiled_coord, draw in _draw(layer, tile_size)
+        }
         for layer in layers
-        for coord, draw in _draw(layer, tile_size)
-    }
+    ]
 
 
 def _layers(
@@ -155,7 +155,7 @@ def _player(
 
 def _gid_groups(
     tmx: TiledMap, draw_on_screens: dict[_Gid, DrawOnScreen]
-) -> dict[_Gid, dict[_Gid, DrawOnScreen]]:
+) -> dict[_Gid, set[DrawOnScreen]]:
     gid_to_class = {
         tile["id"]: cls
         for tile in tmx.tile_properties.values()
@@ -167,4 +167,9 @@ def _gid_groups(
             sorted(gid_to_class.items(), key=lambda x: x[1]), key=lambda x: x[1]
         )
     )
-    return {gid: group for group in gid_groups for gid in group}
+    return {gid: set(group.values()) for group in gid_groups for gid in group}
+
+
+class _DepthThenBottom(NamedTuple):
+    depth: int
+    bottom: Pixel

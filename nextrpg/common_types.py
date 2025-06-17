@@ -4,6 +4,7 @@ Common types referenced across `nextrpg`.
 
 from dataclasses import dataclass
 from enum import Enum, auto
+from functools import cached_property
 from math import ceil, sqrt
 from typing import Union, overload
 
@@ -28,7 +29,7 @@ class Rgba:
     blue: int
     alpha: int
 
-    @property
+    @cached_property
     def tuple(self) -> tuple[int, int, int, int]:
         """
         Gets the color components as a tuple.
@@ -202,7 +203,7 @@ class Coordinate:
             case _:
                 raise ValueError(f"Invalid direction: {offset.direction}")
 
-    @property
+    @cached_property
     def tuple(self) -> tuple[Pixel, Pixel]:
         """
         Gets the coordinates as a tuple.
@@ -249,7 +250,7 @@ class Size:
         """
         return Size(ceil(self.width * scale), ceil(self.height * scale))
 
-    @property
+    @cached_property
     def tuple(self) -> tuple[Pixel, Pixel]:
         """
         Gets the dimensions as a tuple.
@@ -275,7 +276,7 @@ class Rectangle:
     top_left: Coordinate
     size: Size
 
-    @property
+    @cached_property
     def left(self) -> Pixel:
         """
         Gets the leftmost x-coordinate of the drawing on the screen.
@@ -285,7 +286,7 @@ class Rectangle:
         """
         return self.top_left.left
 
-    @property
+    @cached_property
     def right(self) -> Pixel:
         """
         Gets the rightmost x-coordinate of the drawing on the screen.
@@ -295,7 +296,7 @@ class Rectangle:
         """
         return self.left + self.size.width
 
-    @property
+    @cached_property
     def top(self) -> Pixel:
         """
         Gets the topmost y-coordinate of the drawing on the screen.
@@ -305,7 +306,7 @@ class Rectangle:
         """
         return self.top_left.top
 
-    @property
+    @cached_property
     def bottom(self) -> Pixel:
         """
         Gets the bottommost y-coordinate of the drawing on the screen.
@@ -315,7 +316,7 @@ class Rectangle:
         """
         return self.top + self.size.height
 
-    @property
+    @cached_property
     def top_right(self) -> Coordinate:
         """
         Gets the top-right coordinate of the drawing on the screen.
@@ -325,7 +326,7 @@ class Rectangle:
         """
         return Coordinate(self.right, self.top)
 
-    @property
+    @cached_property
     def bottom_left(self) -> Coordinate:
         """
         Gets the bottom-left coordinate of the drawing on the screen.
@@ -335,7 +336,7 @@ class Rectangle:
         """
         return Coordinate(self.left, self.bottom)
 
-    @property
+    @cached_property
     def bottom_right(self) -> Coordinate:
         """
         Gets the bottom-right coordinate of the drawing on the screen.
@@ -345,7 +346,7 @@ class Rectangle:
         """
         return Coordinate(self.right, self.bottom)
 
-    @property
+    @cached_property
     def top_center(self) -> Coordinate:
         """
         Gets the center point of the top edge of the drawing on the screen.
@@ -355,7 +356,7 @@ class Rectangle:
         """
         return Coordinate(self.left + self.size.width / 2, self.top)
 
-    @property
+    @cached_property
     def bottom_center(self) -> Coordinate:
         """
         Gets the center point of the bottom edge of the drawing on the screen.
@@ -365,7 +366,7 @@ class Rectangle:
         """
         return Coordinate(self.left + self.size.width / 2, self.bottom)
 
-    @property
+    @cached_property
     def center_left(self) -> Coordinate:
         """
         Gets the center point of the left edge of the drawing on the screen.
@@ -375,7 +376,7 @@ class Rectangle:
         """
         return Coordinate(self.left, self.top + self.size.height / 2)
 
-    @property
+    @cached_property
     def center_right(self) -> Coordinate:
         """
         Gets the center point of the right edge of the drawing on the screen.
@@ -385,7 +386,7 @@ class Rectangle:
         """
         return Coordinate(self.right, self.top + self.size.height / 2)
 
-    @property
+    @cached_property
     def center(self) -> Coordinate:
         """
         Gets the center point of the drawing on the screen.

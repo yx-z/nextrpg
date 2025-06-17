@@ -1212,7 +1212,7 @@
  <tile id="1208"/>
  <tile id="1209"/>
  <tile id="1210"/>
- <tile id="1211"/>
+ <tile id="1211" type="sofa"/>
  <tile id="1212"/>
  <tile id="1213"/>
  <tile id="1214"/>
@@ -1224,11 +1224,11 @@
  <tile id="1220"/>
  <tile id="1221"/>
  <tile id="1222"/>
- <tile id="1223"/>
- <tile id="1224"/>
- <tile id="1225"/>
- <tile id="1226"/>
- <tile id="1227"/>
+ <tile id="1223" type="sofa"/>
+ <tile id="1224" type="sofa"/>
+ <tile id="1225" type="sofa"/>
+ <tile id="1226" type="sofa"/>
+ <tile id="1227" type="sofa"/>
  <tile id="1228"/>
  <tile id="1229"/>
  <tile id="1230"/>
@@ -1240,10 +1240,10 @@
  <tile id="1236"/>
  <tile id="1237"/>
  <tile id="1238"/>
- <tile id="1239"/>
- <tile id="1240"/>
- <tile id="1241"/>
- <tile id="1242"/>
+ <tile id="1239" type="sofa"/>
+ <tile id="1240" type="sofa"/>
+ <tile id="1241" type="sofa"/>
+ <tile id="1242" type="sofa"/>
  <tile id="1243"/>
  <tile id="1244"/>
  <tile id="1245"/>

@@ -3,6 +3,7 @@ Character drawing interface.
 """
 
 from abc import ABC, abstractmethod
+from functools import cached_property
 
 from nextrpg.common_types import Direction, Millisecond
 from nextrpg.draw_on_screen import Drawing
@@ -13,7 +14,7 @@ class CharacterDrawing(ABC):
     Interface for drawing characters on screen.
     """
 
-    @property
+    @cached_property
     @abstractmethod
     def direction(self) -> Direction:
         """
@@ -23,7 +24,7 @@ class CharacterDrawing(ABC):
             `Direction`: The current direction of the character.
         """
 
-    @property
+    @cached_property
     @abstractmethod
     def drawing(self) -> Drawing:
         """

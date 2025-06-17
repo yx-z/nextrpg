@@ -13,8 +13,9 @@ in non-RPG Maker framework violates the license of RPG Maker,
 even if you own a copy of RPG Maker.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import IntEnum
+from functools import cached_property
 from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -22,7 +23,6 @@ from nextrpg.common_types import Direction, Millisecond
 from nextrpg.config import config
 from nextrpg.draw_on_screen import Coordinate, Drawing, Size
 from nextrpg.frames import CyclicFrames
-from nextrpg.util import clone
 
 
 class DefaultFrameType(IntEnum):
@@ -151,19 +151,19 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             direction or cfg.direction,
         )
 
-    @property
+    @cached_property
     @override
     def direction(self) -> Direction:
         return self._direction
 
-    @property
+    @cached_property
     @override
     def drawing(self) -> Drawing:
         return self._frames[_adjust(self._direction)].current_frame
 
     @override
     def turn(self, direction: Direction) -> "CharacterDrawing":
-        return clone(
+        return replace(
             self,
             _frames={
                 d: frames if d == _adjust(direction) else frames.reset()
@@ -174,7 +174,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
 
     @override
     def move(self, time_delta: Millisecond) -> "CharacterDrawing":
-        return clone(
+        return replace(
             self,
             _frames={
                 direction: (
@@ -191,7 +191,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         return (
             self.move(time_delta)
             if self._animate_on_idle
-            else clone(
+            else replace(
                 self,
                 _frames={
                     d: frames.reset() for d, frames in self._frames.items()

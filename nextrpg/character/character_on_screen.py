@@ -1,5 +1,5 @@
-from dataclasses import dataclass, field
-from functools import singledispatchmethod
+from dataclasses import dataclass, field, replace
+from functools import cached_property, singledispatchmethod
 from typing import NamedTuple, Self
 
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -19,7 +19,6 @@ from nextrpg.event.pygame_event import (
     KeyboardKey,
     PygameEvent,
 )
-from nextrpg.util import clone
 
 
 class CharacterAndVisuals(NamedTuple):
@@ -35,7 +34,7 @@ class CharacterOnScreen:
     speed: Pixel
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
-    @property
+    @cached_property
     def draw_on_screen(self) -> CharacterAndVisuals:
         return CharacterAndVisuals(
             DrawOnScreen(self.coordinate, self.character_drawing.drawing),
@@ -58,7 +57,7 @@ class CharacterOnScreen:
     @event.register
     def _on_key(self, e: KeyPressDown | KeyPressUp) -> Self:
         updated_keys = self._on_movement_key(e)
-        return clone(
+        return replace(
             self,
             character_drawing=(
                 self.character_drawing.turn(direction)
@@ -81,7 +80,7 @@ class CharacterOnScreen:
     def step(self, time_delta: Millisecond) -> "CharacterOnScreen":
         moved_drawing = self.character_drawing.move(time_delta)
         moved_coordinate = self._move(time_delta, moved_drawing.drawing)
-        return clone(
+        return replace(
             self,
             coordinate=moved_coordinate or self.coordinate,
             character_drawing=(
@@ -130,10 +129,26 @@ class CharacterOnScreen:
                 rect.bottom_left,
             },
             Direction.UP: {rect.center_right, rect.center, rect.center_left},
-            Direction.UP_LEFT: {rect.top_left},
-            Direction.UP_RIGHT: {rect.top_right},
-            Direction.DOWN_LEFT: {rect.bottom_left},
-            Direction.DOWN_RIGHT: {rect.bottom_right},
+            Direction.UP_LEFT: {
+                rect.top_left,
+                rect.center_left,
+                rect.top_center,
+            },
+            Direction.UP_RIGHT: {
+                rect.top_right,
+                rect.center_right,
+                rect.top_center,
+            },
+            Direction.DOWN_LEFT: {
+                rect.bottom_left,
+                rect.center_left,
+                rect.bottom_center,
+            },
+            Direction.DOWN_RIGHT: {
+                rect.bottom_right,
+                rect.center_right,
+                rect.bottom_center,
+            },
         }[self.character_drawing.direction]
         return all(
             all(h not in collision for h in hit_coord)

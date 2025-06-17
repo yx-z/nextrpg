@@ -151,7 +151,7 @@
 </span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>        <span class="k">return</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">load</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">())</span>
 </span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>
-</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>    <span class="nd">@property</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="sd">        Gets the width of the surface.</span>
@@ -161,7 +161,7 @@
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surface</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span>
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>    <span class="nd">@property</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">        Gets the height of the surface.</span>
@@ -171,7 +171,7 @@
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surface</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>    <span class="nd">@property</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">        Gets the size of an object as a combination of its width and height</span>
@@ -181,7 +181,7 @@
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="nd">@property</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Surface</span><span class="p">:</span>
 </span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">        Gets the current `pygame.Surface` for the object.</span>
@@ -231,7 +231,7 @@
 </span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>            <span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_surface</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
 </span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>        <span class="p">)</span>
 </span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>    <span class="nd">@property</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_debug_surface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Surface</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">debug</span> <span class="o">:=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">):</span>
 </span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>            <span class="k">return</span> <span class="kc">None</span>
@@ -259,7 +259,7 @@
 </span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
 </span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">Drawing</span>
 </span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>    <span class="nd">@property</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">        Gets the rectangular bounds of the drawing on screen.</span>
@@ -289,7 +289,7 @@
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>            <span class="n">Size</span><span class="p">(</span><span class="n">max_x</span> <span class="o">-</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span><span class="p">),</span>
 </span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>        <span class="p">)</span>
 </span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>
-</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>    <span class="nd">@property</span>
+</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Surface</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]]:</span>
 </span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="sd">        Gets the pygame surface and coordinate tuple for rendering.</span>
@@ -378,7 +378,7 @@
 </span><span id="Drawing-43"><a href="#Drawing-43"><span class="linenos"> 43</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Drawing-44"><a href="#Drawing-44"><span class="linenos"> 44</span></a>        <span class="k">return</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">load</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">())</span>
 </span><span id="Drawing-45"><a href="#Drawing-45"><span class="linenos"> 45</span></a>
-</span><span id="Drawing-46"><a href="#Drawing-46"><span class="linenos"> 46</span></a>    <span class="nd">@property</span>
+</span><span id="Drawing-46"><a href="#Drawing-46"><span class="linenos"> 46</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Drawing-47"><a href="#Drawing-47"><span class="linenos"> 47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
 </span><span id="Drawing-48"><a href="#Drawing-48"><span class="linenos"> 48</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Drawing-49"><a href="#Drawing-49"><span class="linenos"> 49</span></a><span class="sd">        Gets the width of the surface.</span>
@@ -388,7 +388,7 @@
 </span><span id="Drawing-53"><a href="#Drawing-53"><span class="linenos"> 53</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Drawing-54"><a href="#Drawing-54"><span class="linenos"> 54</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surface</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span>
 </span><span id="Drawing-55"><a href="#Drawing-55"><span class="linenos"> 55</span></a>
-</span><span id="Drawing-56"><a href="#Drawing-56"><span class="linenos"> 56</span></a>    <span class="nd">@property</span>
+</span><span id="Drawing-56"><a href="#Drawing-56"><span class="linenos"> 56</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Drawing-57"><a href="#Drawing-57"><span class="linenos"> 57</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
 </span><span id="Drawing-58"><a href="#Drawing-58"><span class="linenos"> 58</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Drawing-59"><a href="#Drawing-59"><span class="linenos"> 59</span></a><span class="sd">        Gets the height of the surface.</span>
@@ -398,7 +398,7 @@
 </span><span id="Drawing-63"><a href="#Drawing-63"><span class="linenos"> 63</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Drawing-64"><a href="#Drawing-64"><span class="linenos"> 64</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surface</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span>
 </span><span id="Drawing-65"><a href="#Drawing-65"><span class="linenos"> 65</span></a>
-</span><span id="Drawing-66"><a href="#Drawing-66"><span class="linenos"> 66</span></a>    <span class="nd">@property</span>
+</span><span id="Drawing-66"><a href="#Drawing-66"><span class="linenos"> 66</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Drawing-67"><a href="#Drawing-67"><span class="linenos"> 67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
 </span><span id="Drawing-68"><a href="#Drawing-68"><span class="linenos"> 68</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Drawing-69"><a href="#Drawing-69"><span class="linenos"> 69</span></a><span class="sd">        Gets the size of an object as a combination of its width and height</span>
@@ -408,7 +408,7 @@
 </span><span id="Drawing-73"><a href="#Drawing-73"><span class="linenos"> 73</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Drawing-74"><a href="#Drawing-74"><span class="linenos"> 74</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
 </span><span id="Drawing-75"><a href="#Drawing-75"><span class="linenos"> 75</span></a>
-</span><span id="Drawing-76"><a href="#Drawing-76"><span class="linenos"> 76</span></a>    <span class="nd">@property</span>
+</span><span id="Drawing-76"><a href="#Drawing-76"><span class="linenos"> 76</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Drawing-77"><a href="#Drawing-77"><span class="linenos"> 77</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Surface</span><span class="p">:</span>
 </span><span id="Drawing-78"><a href="#Drawing-78"><span class="linenos"> 78</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Drawing-79"><a href="#Drawing-79"><span class="linenos"> 79</span></a><span class="sd">        Gets the current `pygame.Surface` for the object.</span>
@@ -458,7 +458,7 @@
 </span><span id="Drawing-123"><a href="#Drawing-123"><span class="linenos">123</span></a>            <span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_surface</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
 </span><span id="Drawing-124"><a href="#Drawing-124"><span class="linenos">124</span></a>        <span class="p">)</span>
 </span><span id="Drawing-125"><a href="#Drawing-125"><span class="linenos">125</span></a>
-</span><span id="Drawing-126"><a href="#Drawing-126"><span class="linenos">126</span></a>    <span class="nd">@property</span>
+</span><span id="Drawing-126"><a href="#Drawing-126"><span class="linenos">126</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Drawing-127"><a href="#Drawing-127"><span class="linenos">127</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_debug_surface</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Surface</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Drawing-128"><a href="#Drawing-128"><span class="linenos">128</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">debug</span> <span class="o">:=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">):</span>
 </span><span id="Drawing-129"><a href="#Drawing-129"><span class="linenos">129</span></a>            <span class="k">return</span> <span class="kc">None</span>
@@ -544,7 +544,7 @@ crop and scale the surface.</p>
 
     </div>
     <a class="headerlink" href="#Drawing.width"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Drawing.width-46"><a href="#Drawing.width-46"><span class="linenos">46</span></a>    <span class="nd">@property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Drawing.width-46"><a href="#Drawing.width-46"><span class="linenos">46</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Drawing.width-47"><a href="#Drawing.width-47"><span class="linenos">47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
 </span><span id="Drawing.width-48"><a href="#Drawing.width-48"><span class="linenos">48</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Drawing.width-49"><a href="#Drawing.width-49"><span class="linenos">49</span></a><span class="sd">        Gets the width of the surface.</span>
@@ -576,7 +576,7 @@ crop and scale the surface.</p>
 
     </div>
     <a class="headerlink" href="#Drawing.height"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Drawing.height-56"><a href="#Drawing.height-56"><span class="linenos">56</span></a>    <span class="nd">@property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Drawing.height-56"><a href="#Drawing.height-56"><span class="linenos">56</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Drawing.height-57"><a href="#Drawing.height-57"><span class="linenos">57</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
 </span><span id="Drawing.height-58"><a href="#Drawing.height-58"><span class="linenos">58</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Drawing.height-59"><a href="#Drawing.height-59"><span class="linenos">59</span></a><span class="sd">        Gets the height of the surface.</span>
@@ -608,7 +608,7 @@ crop and scale the surface.</p>
 
     </div>
     <a class="headerlink" href="#Drawing.size"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Drawing.size-66"><a href="#Drawing.size-66"><span class="linenos">66</span></a>    <span class="nd">@property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Drawing.size-66"><a href="#Drawing.size-66"><span class="linenos">66</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Drawing.size-67"><a href="#Drawing.size-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
 </span><span id="Drawing.size-68"><a href="#Drawing.size-68"><span class="linenos">68</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Drawing.size-69"><a href="#Drawing.size-69"><span class="linenos">69</span></a><span class="sd">        Gets the size of an object as a combination of its width and height</span>
@@ -640,7 +640,7 @@ crop and scale the surface.</p>
 
     </div>
     <a class="headerlink" href="#Drawing.pygame"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Drawing.pygame-76"><a href="#Drawing.pygame-76"><span class="linenos">76</span></a>    <span class="nd">@property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Drawing.pygame-76"><a href="#Drawing.pygame-76"><span class="linenos">76</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Drawing.pygame-77"><a href="#Drawing.pygame-77"><span class="linenos">77</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Surface</span><span class="p">:</span>
 </span><span id="Drawing.pygame-78"><a href="#Drawing.pygame-78"><span class="linenos">78</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Drawing.pygame-79"><a href="#Drawing.pygame-79"><span class="linenos">79</span></a><span class="sd">        Gets the current `pygame.Surface` for the object.</span>
@@ -752,7 +752,7 @@ The original drawing remains unchanged.</p>
 </span><span id="DrawOnScreen-151"><a href="#DrawOnScreen-151"><span class="linenos">151</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
 </span><span id="DrawOnScreen-152"><a href="#DrawOnScreen-152"><span class="linenos">152</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">Drawing</span>
 </span><span id="DrawOnScreen-153"><a href="#DrawOnScreen-153"><span class="linenos">153</span></a>
-</span><span id="DrawOnScreen-154"><a href="#DrawOnScreen-154"><span class="linenos">154</span></a>    <span class="nd">@property</span>
+</span><span id="DrawOnScreen-154"><a href="#DrawOnScreen-154"><span class="linenos">154</span></a>    <span class="nd">@cached_property</span>
 </span><span id="DrawOnScreen-155"><a href="#DrawOnScreen-155"><span class="linenos">155</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
 </span><span id="DrawOnScreen-156"><a href="#DrawOnScreen-156"><span class="linenos">156</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="DrawOnScreen-157"><a href="#DrawOnScreen-157"><span class="linenos">157</span></a><span class="sd">        Gets the rectangular bounds of the drawing on screen.</span>
@@ -782,7 +782,7 @@ The original drawing remains unchanged.</p>
 </span><span id="DrawOnScreen-181"><a href="#DrawOnScreen-181"><span class="linenos">181</span></a>            <span class="n">Size</span><span class="p">(</span><span class="n">max_x</span> <span class="o">-</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span><span class="p">),</span>
 </span><span id="DrawOnScreen-182"><a href="#DrawOnScreen-182"><span class="linenos">182</span></a>        <span class="p">)</span>
 </span><span id="DrawOnScreen-183"><a href="#DrawOnScreen-183"><span class="linenos">183</span></a>
-</span><span id="DrawOnScreen-184"><a href="#DrawOnScreen-184"><span class="linenos">184</span></a>    <span class="nd">@property</span>
+</span><span id="DrawOnScreen-184"><a href="#DrawOnScreen-184"><span class="linenos">184</span></a>    <span class="nd">@cached_property</span>
 </span><span id="DrawOnScreen-185"><a href="#DrawOnScreen-185"><span class="linenos">185</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Surface</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]]:</span>
 </span><span id="DrawOnScreen-186"><a href="#DrawOnScreen-186"><span class="linenos">186</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="DrawOnScreen-187"><a href="#DrawOnScreen-187"><span class="linenos">187</span></a><span class="sd">        Gets the pygame surface and coordinate tuple for rendering.</span>
@@ -889,7 +889,7 @@ on the screen.</p>
 
     </div>
     <a class="headerlink" href="#DrawOnScreen.rectangle"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawOnScreen.rectangle-154"><a href="#DrawOnScreen.rectangle-154"><span class="linenos">154</span></a>    <span class="nd">@property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawOnScreen.rectangle-154"><a href="#DrawOnScreen.rectangle-154"><span class="linenos">154</span></a>    <span class="nd">@cached_property</span>
 </span><span id="DrawOnScreen.rectangle-155"><a href="#DrawOnScreen.rectangle-155"><span class="linenos">155</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
 </span><span id="DrawOnScreen.rectangle-156"><a href="#DrawOnScreen.rectangle-156"><span class="linenos">156</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="DrawOnScreen.rectangle-157"><a href="#DrawOnScreen.rectangle-157"><span class="linenos">157</span></a><span class="sd">        Gets the rectangular bounds of the drawing on screen.</span>
@@ -956,7 +956,7 @@ on the screen.</p>
 
     </div>
     <a class="headerlink" href="#DrawOnScreen.pygame"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawOnScreen.pygame-184"><a href="#DrawOnScreen.pygame-184"><span class="linenos">184</span></a>    <span class="nd">@property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawOnScreen.pygame-184"><a href="#DrawOnScreen.pygame-184"><span class="linenos">184</span></a>    <span class="nd">@cached_property</span>
 </span><span id="DrawOnScreen.pygame-185"><a href="#DrawOnScreen.pygame-185"><span class="linenos">185</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Surface</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]]:</span>
 </span><span id="DrawOnScreen.pygame-186"><a href="#DrawOnScreen.pygame-186"><span class="linenos">186</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="DrawOnScreen.pygame-187"><a href="#DrawOnScreen.pygame-187"><span class="linenos">187</span></a><span class="sd">        Gets the pygame surface and coordinate tuple for rendering.</span>

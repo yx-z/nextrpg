@@ -18,6 +18,7 @@ def test_drawing() -> None:
     try:
         debug = DebugConfig()
         set_config(Config(debug=debug))
+        drawing = Drawing(Surface((1, 2), SRCALPHA))
         assert isinstance((surface := drawing.pygame), Surface)
         assert surface.get_at((0, 0)) == Color(0, 0, 255, 64)
     finally:
