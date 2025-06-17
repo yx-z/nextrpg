@@ -163,12 +163,21 @@ class DrawOnScreen:
 
     @cached_property
     def visible_rectangle(self) -> Rectangle:
+        """
+        Calculate the actual visible bounds of the drawing,
+        ignoring transparent pixels.
+
+        Returns:
+            `Rectangle`: A rectangle defining only the visible (non-transparent)
+            portion of the drawing on screen.
+        """
         visible = [
             Coordinate(x, y)
             for x, y in product(
                 range(ceil(self.drawing.width)),
                 range(ceil(self.drawing.height)),
             )
+            # `drawing._surface` to ignore the debug background.
             if self.drawing._surface.get_at((x, y)).a
         ]
         min_x = min(visible, key=lambda c: c.left).left

@@ -16,11 +16,17 @@ class DebugConfig:
     """
     Configuration class for debugging purposes.
 
-    This config is used by `nextrpg.draw_on_screen.Drawing`.
+    This config is used by `nextrpg.draw_on_screen.Drawing`
+    for debug visualization and by collision detection systems to
+    highlight collision areas.
 
-    Args:
+    Attributes:
         `drawing_background_color`: The background color used for debug drawing.
             Default is semi-transparent blue (0, 0, 255, 64).
+
+        `collision_rectangle_color`: The color used to highlight collision areas
+            when debugging is enabled.
+            Default is semi-transparent red (255, 0, 0, 64).
     """
 
     drawing_background_color: Rgba = Rgba(0, 0, 255, 64)
@@ -32,7 +38,8 @@ class GuiConfig:
     """
     Configuration class for Graphical User Interface (GUI).
 
-    This config is used by `nextrpg.start_game.start_game`.
+    This config is used by `nextrpg.start_game.start_game` to initialize
+    the pygame window and by the rendering system to control display properties.
 
     Attributes:
         `title`: The title of the GUI window.
@@ -58,6 +65,19 @@ class GuiConfig:
 
 @dataclass(frozen=True)
 class TileMapCustomProperties:
+    """
+    Constants for custom property names used in tile map files.
+
+    This class defines string constants that are used to
+    access custom properties defined in TMX map files
+    created with Tiled Map Editor.
+
+    This config is used by `nextrpg.scene.map_scene.MapScene`.
+
+    Attributes:
+        `speed`: Property name for defining character movement speed.
+    """
+
     speed = "speed"
 
 
@@ -120,10 +140,12 @@ class RpgMakerCharacterDrawingConfig:
     Configuration class for RPG Maker character drawings.
 
     This config is used by
-    `nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing`.
+    `nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing`
+    to control how character sprites are animated and displayed. It defines the
+    animation timing, idle behavior, and default orientation.
 
     Note that `nextrpg` is only compatible with the RPG Maker character
-    sprite sheet, to be able to re-use existing resources.
+    sprite sheet format to be able to re-use existing resources.
 
     However, using RPG Maker's
     [Runtime Time Package (RTP)](https://www.rpgmakerweb.com/run-time-package)
@@ -146,7 +168,11 @@ class RpgMakerCharacterDrawingConfig:
 
 type KeyCode = int
 """
-Type alias for key codes.
+Type alias for keyboard key codes used in pygame.
+
+This type alias represents integer constants that identify specific keys
+on the keyboard (like K_LEFT, K_RIGHT, etc.) as defined by pygame.
+These codes are used in key mapping configurations and event handling.
 """
 
 
@@ -156,7 +182,8 @@ class KeyMappingConfig:
     Configuration class for keyboard key mappings.
 
     This class defines the mapping between game actions and keyboard keys.
-    Used by `nextrpg.event.pygame_event.KeyboardKey`.
+    Used by `nextrpg.event.pygame_event.KeyboardKey`,
+    and the input handling system to translate keyboard input into game actions.
 
     Attributes:
         `left`: Key code for moving left. The default is `K_LEFT`.
@@ -180,20 +207,33 @@ class KeyMappingConfig:
 @dataclass(frozen=True)
 class Config:
     """
-    Configuration class for all configs.
+    Main configuration class that aggregates all configuration components.
+
+    This is the main configuration object used throughout the application. It can be
+    accessed via the `config()` function and customized using `set_config()`.
 
     Attributes:
         `gui`: The configuration for the graphical user interface.
+            Used by `nextrpg.start_game.start_game` and rendering systems.
 
         `map`: The configuration for the tile map structure.
+            Used by `nextrpg.scene.map_scene.MapScene` for TMX interpretation.
 
         `character`: The configuration for character attributes.
+            Used by `nextrpg.character.character.Character`
+            to control movement properties.
 
-        `rpg_maker_character_sprite`: The configuration for
-            RPG Maker character sprites.
+        `rpg_maker_character`: The configuration for RPG Maker character sprites.
+            Used by
+            `nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing`.
 
-        `debug`: The configuration for debugging.
-            The default is `None` which means debug turned off.
+        `key_mapping`: The configuration for keyboard controls.
+            Used by `nextrpg.event.pygame_event` for input handling.
+
+        `debug`: The configuration for debugging features.
+            Used throughout the codebase when debug rendering is enabled.
+            The default is `None` which means debugging is disabled.
+            Used by `nextrpg.draw_on_screen.Drawing` for debug visualization
     """
 
     gui: GuiConfig = GuiConfig()

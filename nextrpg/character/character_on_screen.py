@@ -22,12 +22,37 @@ from nextrpg.event.pygame_event import (
 
 
 class CharacterAndVisuals(NamedTuple):
+    """
+    A named tuple containing a character and its associated visual elements.
+
+    Args:
+        `characte`r: The main character drawing on screen.
+
+        `visuals`: Additional visual elements associated with the character.
+    """
+
     character: DrawOnScreen
     visuals: list[DrawOnScreen]
 
 
 @dataclass(frozen=True)
 class CharacterOnScreen:
+    """
+    Represents a character that can be displayed and moved on screen.
+
+    Handles character movement, collision detection, and event processing for
+    character interactions with the game environment.
+
+    Args:
+        `character_drawing`: The visual representation of the character.
+
+        `coordinate`: The current position of the character on screen.
+
+        `collisions`: List of rectangles representing collision boundaries.
+
+        `speed`: Movement speed of the character in pixels.
+    """
+
     character_drawing: CharacterDrawing
     coordinate: Coordinate
     collisions: list[Rectangle]
@@ -36,6 +61,13 @@ class CharacterOnScreen:
 
     @cached_property
     def draw_on_screen(self) -> CharacterAndVisuals:
+        """
+        Creates drawable representations of the character and visuals.
+
+        Returns:
+            `CharacterAndVisuals`: A tuple containing the character's drawable
+            representation and any associated visual elements.
+        """
         return CharacterAndVisuals(
             DrawOnScreen(self.coordinate, self.character_drawing.drawing),
             (
@@ -52,6 +84,15 @@ class CharacterOnScreen:
 
     @singledispatchmethod
     def event(self, event: PygameEvent) -> Self:
+        """
+        Process a pygame event and update the character state accordingly.
+
+        Args:
+            `event`: The pygame event to process.
+
+        Returns:
+            `Self`: The updated character state after processing the event.
+        """
         return self
 
     @event.register
@@ -78,6 +119,19 @@ class CharacterOnScreen:
         )
 
     def step(self, time_delta: Millisecond) -> "CharacterOnScreen":
+        """
+        Update the character's state for a single game step/frame.
+
+        Calculates movement based on currently pressed keys, handles collision
+        detection, and updates the character's drawing state (moving or idle).
+
+        Args:
+            `time_delta`: The time that has passed since
+                the last update, used for calculating movement distance.
+
+        Returns:
+            `CharacterOnScreen`: The updated character state after the step.
+        """
         moved_drawing = self.character_drawing.move(time_delta)
         moved_coordinate = self._move(time_delta, moved_drawing.drawing)
         return replace(
@@ -93,13 +147,6 @@ class CharacterOnScreen:
     def _move(
         self, time_delta: Millisecond, character_drawing: Drawing
     ) -> Coordinate | None:
-        """
-        Get the moved coordinate if the character can move.
-
-        Returns:
-            `Coordinate | None`: Updated `Coordinate` if the character moves.
-                `None` otherwise.
-        """
         return (
             moved_coord
             if self._movement_keys

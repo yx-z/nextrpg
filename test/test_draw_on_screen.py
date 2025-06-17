@@ -1,11 +1,18 @@
+from pathlib import Path
+from unittest.mock import Mock
+
 from pygame import Color, SRCALPHA, Surface
+from pytest_mock import MockerFixture
 
 from nextrpg.common_types import Coordinate, Rectangle, Rgba, Size
 from nextrpg.config import Config, DebugConfig, config, set_config
 from nextrpg.draw_on_screen import DrawOnScreen, Drawing
 
 
-def test_drawing() -> None:
+def test_drawing(mocker: MockerFixture) -> None:
+    surface = Mock()
+    mocker.patch("nextrpg.draw_on_screen.load", surface)
+    assert Drawing.load(Path("abc"))
     drawing = Drawing(Surface((1, 2), SRCALPHA))
     assert drawing.width == 1
     assert drawing.height == 2
@@ -28,6 +35,9 @@ def test_drawing() -> None:
 def test_draw_on_screen() -> None:
     draw_on_screen = DrawOnScreen(Coordinate(10, 20), Drawing(Surface((1, 2))))
     assert draw_on_screen.rectangle == Rectangle(Coordinate(10, 20), Size(1, 2))
+    assert draw_on_screen.visible_rectangle == Rectangle(
+        Coordinate(10, 20), Size(0, 1)
+    )
     surface, coord = draw_on_screen.pygame
     assert isinstance(surface, Surface)
     assert coord == (10, 20)

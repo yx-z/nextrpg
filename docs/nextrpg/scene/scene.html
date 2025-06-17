@@ -133,14 +133,24 @@
 </span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">            `event`: The pygame event to process</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>
 </span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">        Returns:</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">            `Scene`</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">            `Scene`: The updated scene state after processing the event.</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>
 </span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="nd">@abstractmethod</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="sd">        Step forward to the current scene.</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="sd">        Update the scene state for a single game step/frame.</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="sd">        Progresses the scene state based on the elapsed time since the last update,</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="sd">        handling animations, movements, and other time-dependent changes.</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="sd">        Args:</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="sd">            `time_delta`: The time that has passed since the last update,</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a><span class="sd">                used for calculating time-based changes.</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a><span class="sd">        Returns:</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a><span class="sd">            `Scene`: The updated scene state after the time step.</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -209,14 +219,24 @@
 </span><span id="Scene-64"><a href="#Scene-64"><span class="linenos">64</span></a><span class="sd">            `event`: The pygame event to process</span>
 </span><span id="Scene-65"><a href="#Scene-65"><span class="linenos">65</span></a>
 </span><span id="Scene-66"><a href="#Scene-66"><span class="linenos">66</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene-67"><a href="#Scene-67"><span class="linenos">67</span></a><span class="sd">            `Scene`</span>
+</span><span id="Scene-67"><a href="#Scene-67"><span class="linenos">67</span></a><span class="sd">            `Scene`: The updated scene state after processing the event.</span>
 </span><span id="Scene-68"><a href="#Scene-68"><span class="linenos">68</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Scene-69"><a href="#Scene-69"><span class="linenos">69</span></a>
 </span><span id="Scene-70"><a href="#Scene-70"><span class="linenos">70</span></a>    <span class="nd">@abstractmethod</span>
 </span><span id="Scene-71"><a href="#Scene-71"><span class="linenos">71</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
 </span><span id="Scene-72"><a href="#Scene-72"><span class="linenos">72</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene-73"><a href="#Scene-73"><span class="linenos">73</span></a><span class="sd">        Step forward to the current scene.</span>
-</span><span id="Scene-74"><a href="#Scene-74"><span class="linenos">74</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene-73"><a href="#Scene-73"><span class="linenos">73</span></a><span class="sd">        Update the scene state for a single game step/frame.</span>
+</span><span id="Scene-74"><a href="#Scene-74"><span class="linenos">74</span></a>
+</span><span id="Scene-75"><a href="#Scene-75"><span class="linenos">75</span></a><span class="sd">        Progresses the scene state based on the elapsed time since the last update,</span>
+</span><span id="Scene-76"><a href="#Scene-76"><span class="linenos">76</span></a><span class="sd">        handling animations, movements, and other time-dependent changes.</span>
+</span><span id="Scene-77"><a href="#Scene-77"><span class="linenos">77</span></a>
+</span><span id="Scene-78"><a href="#Scene-78"><span class="linenos">78</span></a><span class="sd">        Args:</span>
+</span><span id="Scene-79"><a href="#Scene-79"><span class="linenos">79</span></a><span class="sd">            `time_delta`: The time that has passed since the last update,</span>
+</span><span id="Scene-80"><a href="#Scene-80"><span class="linenos">80</span></a><span class="sd">                used for calculating time-based changes.</span>
+</span><span id="Scene-81"><a href="#Scene-81"><span class="linenos">81</span></a>
+</span><span id="Scene-82"><a href="#Scene-82"><span class="linenos">82</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene-83"><a href="#Scene-83"><span class="linenos">83</span></a><span class="sd">            `Scene`: The updated scene state after the time step.</span>
+</span><span id="Scene-84"><a href="#Scene-84"><span class="linenos">84</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -312,7 +332,7 @@ implement these methods.</p>
 </span><span id="Scene.event-64"><a href="#Scene.event-64"><span class="linenos">64</span></a><span class="sd">            `event`: The pygame event to process</span>
 </span><span id="Scene.event-65"><a href="#Scene.event-65"><span class="linenos">65</span></a>
 </span><span id="Scene.event-66"><a href="#Scene.event-66"><span class="linenos">66</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene.event-67"><a href="#Scene.event-67"><span class="linenos">67</span></a><span class="sd">            `Scene`</span>
+</span><span id="Scene.event-67"><a href="#Scene.event-67"><span class="linenos">67</span></a><span class="sd">            `Scene`: The updated scene state after processing the event.</span>
 </span><span id="Scene.event-68"><a href="#Scene.event-68"><span class="linenos">68</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -351,7 +371,7 @@ And implement events of interesting <code><a href="../event/pygame_event.html">n
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code><a href="#Scene">Scene</a></code></p>
+  <p><code><a href="#Scene">Scene</a></code>: The updated scene state after processing the event.</p>
 </blockquote>
 </div>
 
@@ -372,12 +392,38 @@ And implement events of interesting <code><a href="../event/pygame_event.html">n
             <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.step-70"><a href="#Scene.step-70"><span class="linenos">70</span></a>    <span class="nd">@abstractmethod</span>
 </span><span id="Scene.step-71"><a href="#Scene.step-71"><span class="linenos">71</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Scene&quot;</span><span class="p">:</span>
 </span><span id="Scene.step-72"><a href="#Scene.step-72"><span class="linenos">72</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene.step-73"><a href="#Scene.step-73"><span class="linenos">73</span></a><span class="sd">        Step forward to the current scene.</span>
-</span><span id="Scene.step-74"><a href="#Scene.step-74"><span class="linenos">74</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene.step-73"><a href="#Scene.step-73"><span class="linenos">73</span></a><span class="sd">        Update the scene state for a single game step/frame.</span>
+</span><span id="Scene.step-74"><a href="#Scene.step-74"><span class="linenos">74</span></a>
+</span><span id="Scene.step-75"><a href="#Scene.step-75"><span class="linenos">75</span></a><span class="sd">        Progresses the scene state based on the elapsed time since the last update,</span>
+</span><span id="Scene.step-76"><a href="#Scene.step-76"><span class="linenos">76</span></a><span class="sd">        handling animations, movements, and other time-dependent changes.</span>
+</span><span id="Scene.step-77"><a href="#Scene.step-77"><span class="linenos">77</span></a>
+</span><span id="Scene.step-78"><a href="#Scene.step-78"><span class="linenos">78</span></a><span class="sd">        Args:</span>
+</span><span id="Scene.step-79"><a href="#Scene.step-79"><span class="linenos">79</span></a><span class="sd">            `time_delta`: The time that has passed since the last update,</span>
+</span><span id="Scene.step-80"><a href="#Scene.step-80"><span class="linenos">80</span></a><span class="sd">                used for calculating time-based changes.</span>
+</span><span id="Scene.step-81"><a href="#Scene.step-81"><span class="linenos">81</span></a>
+</span><span id="Scene.step-82"><a href="#Scene.step-82"><span class="linenos">82</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene.step-83"><a href="#Scene.step-83"><span class="linenos">83</span></a><span class="sd">            `Scene`: The updated scene state after the time step.</span>
+</span><span id="Scene.step-84"><a href="#Scene.step-84"><span class="linenos">84</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Step forward to the current scene.</p>
+            <div class="docstring"><p>Update the scene state for a single game step/frame.</p>
+
+<p>Progresses the scene state based on the elapsed time since the last update,
+handling animations, movements, and other time-dependent changes.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong><code>time_delta</code>:</strong>  The time that has passed since the last update,
+used for calculating time-based changes.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code><a href="#Scene">Scene</a></code>: The updated scene state after the time step.</p>
+</blockquote>
 </div>
 
 

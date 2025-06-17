@@ -63,11 +63,21 @@ class Scene(ABC):
             `event`: The pygame event to process
 
         Returns:
-            `Scene`
+            `Scene`: The updated scene state after processing the event.
         """
 
     @abstractmethod
     def step(self, time_delta: Millisecond) -> "Scene":
         """
-        Step forward to the current scene.
+        Update the scene state for a single game step/frame.
+
+        Progresses the scene state based on the elapsed time since the last update,
+        handling animations, movements, and other time-dependent changes.
+
+        Args:
+            `time_delta`: The time that has passed since the last update,
+                used for calculating time-based changes.
+
+        Returns:
+            `Scene`: The updated scene state after the time step.
         """

@@ -154,15 +154,47 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     @cached_property
     @override
     def direction(self) -> Direction:
+        """
+        Get the current facing direction of the character.
+
+        RPG Maker drawings are four directions. However, a character can still
+        move in eight directions by reusing the same direction frame.
+        e.g. `DOWN_LEFT` is shown as `DOWN` facing.
+
+        Returns:
+            `Direction`: The current direction the character is facing.
+        """
         return self._direction
 
     @cached_property
     @override
     def drawing(self) -> Drawing:
+        """
+        Get the current visual representation of the character.
+
+        Retrieves the current animation frame for the character's current direction,
+        adjusting diagonal directions to their closest cardinal direction.
+
+        Returns:
+            `Drawing`: The current frame of the character's sprite animation.
+        """
         return self._frames[_adjust(self._direction)].current_frame
 
     @override
     def turn(self, direction: Direction) -> "CharacterDrawing":
+        """
+        Change the character's facing direction.
+
+        Creates a new character drawing with the specified direction and resets
+        animation frames for all directions except the new one.
+
+        Args:
+            `direction`: The new direction for the character to face.
+
+        Returns:
+            `CharacterDrawing`: A new character drawing instance facing the
+            specified direction.
+        """
         return replace(
             self,
             _frames={
@@ -174,6 +206,20 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
 
     @override
     def move(self, time_delta: Millisecond) -> "CharacterDrawing":
+        """
+        Update the character's movement animation over the given time delta.
+
+        Advances the animation frames for the current direction while leaving
+        other direction frames unchanged.
+
+        Args:
+            `time_delta`: The amount of time that has
+                passed since the last update.
+
+        Returns:
+            `CharacterDrawing`: The updated drawing with a new animation state
+            for the current direction.
+        """
         return replace(
             self,
             _frames={
@@ -188,6 +234,20 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
 
     @override
     def idle(self, time_delta: Millisecond) -> "CharacterDrawing":
+        """
+        Update the character's idle animation state over the given time delta.
+
+        If animate_on_idle is enabled, continues cycling through animation frames even
+        when idle. Otherwise, resets all frames to their initial state.
+
+        Args:
+            `time_delta`: The amount of time that has passed
+                since the last update.
+
+        Returns:
+            `CharacterDrawing`: The updated drawing
+            with a new idle animation state.
+        """
         return (
             self.move(time_delta)
             if self._animate_on_idle

@@ -18,9 +18,32 @@ class CyclicFrames:
 
     @cached_property
     def current_frame(self) -> Drawing:
+        """
+        Get the currently active frame in the animation sequence.
+
+        Returns the drawing at the current animation index position.
+        The result is cached until the instance is replaced with a new one.
+
+        Returns:
+            `Drawing`: The current frame in the animation sequence.
+        """
         return self.frames[self._index]
 
     def step(self, time_delta: Millisecond) -> "CyclicFrames":
+        """
+        Advance animation frames based on elapsed time.
+
+        Calculates how many frames to advance based on the accumulated time and
+        creates a new CyclicFrames instance with updated index and elapsed time.
+
+        Args:
+            `time_delta`: The time that has passed since the last step.
+
+        Returns:
+            `CyclicFrames`: A new instance with an updated animation state.
+            The frame index is updated according to elapsed time and wraps around
+            when it reaches the end of the frame list.
+        """
         total_time = self._elapsed + time_delta
         frames_to_step = total_time // self.duration_per_frame
         return replace(
@@ -30,4 +53,14 @@ class CyclicFrames:
         )
 
     def reset(self) -> "CyclicFrames":
+        """
+        Reset the animation sequence to its initial state.
+
+        Creates a new CyclicFrames instance with the animation index and
+        elapsed time reset to zero, effectively restarting the animation.
+
+        Returns:
+            `CyclicFrames`: A new instance with the animation state reset to
+            the beginning of the sequence.
+        """
         return replace(self, _index=0, _elapsed=0)
