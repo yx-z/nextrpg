@@ -98,7 +98,7 @@ class CharacterOnScreen:
 
     @event.register
     def _on_key(self, e: KeyPressDown | KeyPressUp) -> Self:
-        updated_keys = self._on_movement_key(e)
+        updated_keys = self._updated_movement_key(e)
         return replace(
             self,
             character_drawing=(
@@ -110,7 +110,7 @@ class CharacterOnScreen:
             _movement_keys=updated_keys,
         )
 
-    def _on_movement_key(
+    def _updated_movement_key(
         self, e: KeyPressDown | KeyPressUp
     ) -> frozenset[KeyboardKey]:
         return (

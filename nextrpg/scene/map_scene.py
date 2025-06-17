@@ -30,6 +30,7 @@ from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.scene.scene import Scene
 
 type _Gid = int
+type _Layer = int
 type _TiledCoordinate = Coordinate
 
 
@@ -133,21 +134,45 @@ class MapScene(Scene):
     @cached_property
     def _foreground_and_character(self) -> list[DrawOnScreen]:
         sorted_draws = sorted(
-            list(
-                (layer_index, gid, draw)
-                for layer_index, gid_to_draws in enumerate(self._foreground)
-                for gid, draw in gid_to_draws.items()
-            )
-            + [(0, 0, self._player.draw_on_screen.character)],
-            key=lambda t: _DepthThenBottom(t[0], self._grouped_bottom(*t[1:])),
+            self._layer_gid_and_draw,
+            key=lambda t: _DepthAndBottom(
+                t[0], max(r.bottom for r in self._grouped_rectangles(*t[1:]))
+            ),
         )
         return [draw for _, _, draw in sorted_draws]
 
-    def _grouped_bottom(self, gid: _Gid, draw: DrawOnScreen) -> Pixel:
-        return max(
-            d.visible_rectangle.bottom
-            for d in (self._gid_groups.get(gid) or {draw})
+    @cached_property
+    def _layer_gid_and_draw(self) -> list[tuple[_Layer, _Gid, DrawOnScreen]]:
+        return list(
+            (layer_index, gid, draw)
+            for layer_index, gid_to_draws in enumerate(self._foreground)
+            for gid, draw in gid_to_draws.items()
+        ) + [(self._player_layer, 0, self._player.draw_on_screen.character)]
+
+    @cached_property
+    def _player_layer(self) -> int:
+        player = self._player.draw_on_screen.character.visible_rectangle
+        return next(
+            (
+                index
+                for index, layer in reversed(list(enumerate(self._foreground)))
+                if any(
+                    any(
+                        player.collides(rect) and rect.bottom < player.bottom
+                        for rect in self._grouped_rectangles(gid, draw)
+                    )
+                    for gid, draw in layer.items()
+                )
+            ),
+            0,
         )
+
+    def _grouped_rectangles(
+        self, gid: _Gid, draw: DrawOnScreen
+    ) -> list[Rectangle]:
+        return [
+            d.visible_rectangle for d in (self._gid_groups.get(gid) or {draw})
+        ]
 
 
 def _draw(
@@ -230,6 +255,6 @@ def _gid_groups(
     return {gid: set(group.values()) for group in gid_groups for gid in group}
 
 
-class _DepthThenBottom(NamedTuple):
+class _DepthAndBottom(NamedTuple):
     depth: int
     bottom: Pixel

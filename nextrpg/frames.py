@@ -8,6 +8,8 @@ from functools import cached_property
 from nextrpg.common_types import Millisecond
 from nextrpg.draw_on_screen import Drawing
 
+type _FrameIndex = int
+
 
 @dataclass(frozen=True)
 class CyclicFrames:
@@ -25,7 +27,7 @@ class CyclicFrames:
 
     frames: list[Drawing]
     duration_per_frame: Millisecond
-    _index: int = 0
+    _index: _FrameIndex = 0
     _elapsed: Millisecond = 0
 
     @cached_property
