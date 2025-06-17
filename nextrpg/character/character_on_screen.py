@@ -3,7 +3,7 @@ Handles character movement and collision detection.
 """
 
 from dataclasses import dataclass, field, replace
-from functools import cached_property, singledispatchmethod
+from functools import cached_property, lru_cache, singledispatchmethod
 from typing import NamedTuple, Self
 
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -131,28 +131,25 @@ class CharacterOnScreen:
             coordinate=moved_coord or self.coordinate,
             character_drawing=(
                 moved_drawing
-                if moved_coord
+                if self._movement_keys
                 else self.character_drawing.idle(time_delta)
             ),
         )
 
     def _move(
-        self, time_delta: Millisecond, character_drawing: Drawing
+        self, time_delta: Millisecond, drawing: Drawing
     ) -> Coordinate | None:
         moved_coord = self.coordinate + DirectionalOffset(
             self.character_drawing.direction, self.speed * time_delta
         )
         return (
             moved_coord
-            if self._movement_keys
-            and self._can_move(moved_coord, character_drawing)
+            if self._movement_keys and self._can_move(moved_coord, drawing)
             else None
         )
 
-    def _can_move(
-        self, coordinate: Coordinate, character_drawing: Drawing
-    ) -> bool:
-        rect = DrawOnScreen(coordinate, character_drawing).visible_rectangle
+    def _can_move(self, coordinate: Coordinate, drawing: Drawing) -> bool:
+        rect = DrawOnScreen(coordinate, drawing).visible_rectangle
         hit_coords = {
             Direction.LEFT: {rect.bottom_left, rect.center_left},
             Direction.RIGHT: {rect.bottom_right, rect.center_right},
@@ -200,17 +197,20 @@ class CharacterOnScreen:
         )
 
 
+_KEY_TO_DIR = {
+    frozenset({KeyboardKey.LEFT, KeyboardKey.UP}): Direction.UP_LEFT,
+    frozenset({KeyboardKey.LEFT, KeyboardKey.DOWN}): Direction.DOWN_LEFT,
+    frozenset({KeyboardKey.RIGHT, KeyboardKey.UP}): Direction.UP_RIGHT,
+    frozenset({KeyboardKey.RIGHT, KeyboardKey.DOWN}): Direction.DOWN_RIGHT,
+    frozenset({KeyboardKey.LEFT}): Direction.LEFT,
+    frozenset({KeyboardKey.RIGHT}): Direction.RIGHT,
+    frozenset({KeyboardKey.UP}): Direction.UP,
+    frozenset({KeyboardKey.DOWN}): Direction.DOWN,
+}
+
+
+@lru_cache
 def _key_to_dir(current_keys: frozenset[KeyboardKey]) -> Direction | None:
-    KEY_TO_DIR = {
-        frozenset({KeyboardKey.LEFT, KeyboardKey.UP}): Direction.UP_LEFT,
-        frozenset({KeyboardKey.LEFT, KeyboardKey.DOWN}): Direction.DOWN_LEFT,
-        frozenset({KeyboardKey.RIGHT, KeyboardKey.UP}): Direction.UP_RIGHT,
-        frozenset({KeyboardKey.RIGHT, KeyboardKey.DOWN}): Direction.DOWN_RIGHT,
-        frozenset({KeyboardKey.LEFT}): Direction.LEFT,
-        frozenset({KeyboardKey.RIGHT}): Direction.RIGHT,
-        frozenset({KeyboardKey.UP}): Direction.UP,
-        frozenset({KeyboardKey.DOWN}): Direction.DOWN,
-    }
     return next(
-        (d for keys, d in KEY_TO_DIR.items() if keys <= current_keys), None
+        (d for keys, d in _KEY_TO_DIR.items() if keys <= current_keys), None
     )

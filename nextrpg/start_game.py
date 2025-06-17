@@ -7,8 +7,8 @@ from typing import Callable
 
 import pygame
 from pygame import init
-from pygame.constants import RESIZABLE
 from pygame.display import flip, set_caption, set_mode
+from pygame.locals import RESIZABLE
 from pygame.time import Clock
 
 from nextrpg.config import config

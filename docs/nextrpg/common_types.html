@@ -640,56 +640,23 @@
 </span><span id="L-420"><a href="#L-420"><span class="linenos">420</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;=</span> <span class="n">rectangle</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
 </span><span id="L-421"><a href="#L-421"><span class="linenos">421</span></a>        <span class="p">)</span>
 </span><span id="L-422"><a href="#L-422"><span class="linenos">422</span></a>
-</span><span id="L-423"><a href="#L-423"><span class="linenos">423</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Rectangle&quot;</span><span class="p">:</span>
+</span><span id="L-423"><a href="#L-423"><span class="linenos">423</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-424"><a href="#L-424"><span class="linenos">424</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-425"><a href="#L-425"><span class="linenos">425</span></a><span class="sd">        Scales both the position and size of the rectangle by the scale factor.</span>
+</span><span id="L-425"><a href="#L-425"><span class="linenos">425</span></a><span class="sd">        Checks if a coordinate point lies within this rectangle.</span>
 </span><span id="L-426"><a href="#L-426"><span class="linenos">426</span></a>
-</span><span id="L-427"><a href="#L-427"><span class="linenos">427</span></a><span class="sd">        This method creates a new `Rectangle` instance with both the top-left</span>
-</span><span id="L-428"><a href="#L-428"><span class="linenos">428</span></a><span class="sd">        coordinate and size scaled by the provided factor.</span>
+</span><span id="L-427"><a href="#L-427"><span class="linenos">427</span></a><span class="sd">        The point is considered inside if it falls in the rectangle&#39;s bounds,</span>
+</span><span id="L-428"><a href="#L-428"><span class="linenos">428</span></a><span class="sd">        including points on the edges.</span>
 </span><span id="L-429"><a href="#L-429"><span class="linenos">429</span></a>
-</span><span id="L-430"><a href="#L-430"><span class="linenos">430</span></a><span class="sd">        Args:</span>
-</span><span id="L-431"><a href="#L-431"><span class="linenos">431</span></a><span class="sd">            `scale`: The scaling factor to apply to both position and size.</span>
+</span><span id="L-430"><a href="#L-430"><span class="linenos">430</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-431"><a href="#L-431"><span class="linenos">431</span></a><span class="sd">            `coordinate`: The coordinate point to check</span>
 </span><span id="L-432"><a href="#L-432"><span class="linenos">432</span></a>
 </span><span id="L-433"><a href="#L-433"><span class="linenos">433</span></a><span class="sd">        Returns:</span>
-</span><span id="L-434"><a href="#L-434"><span class="linenos">434</span></a><span class="sd">            `Rectangle`: A new `Rectangle` instance with scaled properties.</span>
+</span><span id="L-434"><a href="#L-434"><span class="linenos">434</span></a><span class="sd">            `bool`: Whether the coordinate lies within the rectangle.</span>
 </span><span id="L-435"><a href="#L-435"><span class="linenos">435</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-436"><a href="#L-436"><span class="linenos">436</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span>
-</span><span id="L-437"><a href="#L-437"><span class="linenos">437</span></a>
-</span><span id="L-438"><a href="#L-438"><span class="linenos">438</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">:</span> <span class="n">DirectionalOffset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Rectangle&quot;</span><span class="p">:</span>
-</span><span id="L-439"><a href="#L-439"><span class="linenos">439</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Shifts the rectangle in the specified direction by a given offset.</span>
-</span><span id="L-440"><a href="#L-440"><span class="linenos">440</span></a><span class="sd">        Supports both orthogonal and diagonal directions.</span>
-</span><span id="L-441"><a href="#L-441"><span class="linenos">441</span></a>
-</span><span id="L-442"><a href="#L-442"><span class="linenos">442</span></a><span class="sd">        For diagonal directions, the offset is divided proportionally.</span>
-</span><span id="L-443"><a href="#L-443"><span class="linenos">443</span></a>
-</span><span id="L-444"><a href="#L-444"><span class="linenos">444</span></a><span class="sd">        For example, an offset of `sqrt(2)` in `UP_LEFT` direction shifts</span>
-</span><span id="L-445"><a href="#L-445"><span class="linenos">445</span></a><span class="sd">        the coordinate `Pixel(1)` in both `UP` and `LEFT` directions.</span>
-</span><span id="L-446"><a href="#L-446"><span class="linenos">446</span></a>
-</span><span id="L-447"><a href="#L-447"><span class="linenos">447</span></a><span class="sd">        Args:</span>
-</span><span id="L-448"><a href="#L-448"><span class="linenos">448</span></a><span class="sd">            `vector`: A `PolarVector` object representing the</span>
-</span><span id="L-449"><a href="#L-449"><span class="linenos">449</span></a><span class="sd">                direction and offset.</span>
-</span><span id="L-450"><a href="#L-450"><span class="linenos">450</span></a>
-</span><span id="L-451"><a href="#L-451"><span class="linenos">451</span></a><span class="sd">        Returns:</span>
-</span><span id="L-452"><a href="#L-452"><span class="linenos">452</span></a><span class="sd">            `Rectangle`: A new rectangle shifted by the specified vector.</span>
-</span><span id="L-453"><a href="#L-453"><span class="linenos">453</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-454"><a href="#L-454"><span class="linenos">454</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">vector</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-</span><span id="L-455"><a href="#L-455"><span class="linenos">455</span></a>
-</span><span id="L-456"><a href="#L-456"><span class="linenos">456</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-457"><a href="#L-457"><span class="linenos">457</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-458"><a href="#L-458"><span class="linenos">458</span></a><span class="sd">        Checks if a coordinate point lies within this rectangle.</span>
-</span><span id="L-459"><a href="#L-459"><span class="linenos">459</span></a>
-</span><span id="L-460"><a href="#L-460"><span class="linenos">460</span></a><span class="sd">        The point is considered inside if it falls in the rectangle&#39;s bounds,</span>
-</span><span id="L-461"><a href="#L-461"><span class="linenos">461</span></a><span class="sd">        including points on the edges.</span>
-</span><span id="L-462"><a href="#L-462"><span class="linenos">462</span></a>
-</span><span id="L-463"><a href="#L-463"><span class="linenos">463</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-464"><a href="#L-464"><span class="linenos">464</span></a><span class="sd">            `coordinate`: The coordinate point to check</span>
-</span><span id="L-465"><a href="#L-465"><span class="linenos">465</span></a>
-</span><span id="L-466"><a href="#L-466"><span class="linenos">466</span></a><span class="sd">        Returns:</span>
-</span><span id="L-467"><a href="#L-467"><span class="linenos">467</span></a><span class="sd">            `bool`: Whether the coordinate lies within the rectangle.</span>
-</span><span id="L-468"><a href="#L-468"><span class="linenos">468</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-469"><a href="#L-469"><span class="linenos">469</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="L-470"><a href="#L-470"><span class="linenos">470</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
-</span><span id="L-471"><a href="#L-471"><span class="linenos">471</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;=</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
-</span><span id="L-472"><a href="#L-472"><span class="linenos">472</span></a>        <span class="p">)</span>
+</span><span id="L-436"><a href="#L-436"><span class="linenos">436</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="L-437"><a href="#L-437"><span class="linenos">437</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
+</span><span id="L-438"><a href="#L-438"><span class="linenos">438</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;=</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
+</span><span id="L-439"><a href="#L-439"><span class="linenos">439</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -1635,56 +1602,23 @@ in pixel measurements.</p>
 </span><span id="Rectangle-421"><a href="#Rectangle-421"><span class="linenos">421</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;=</span> <span class="n">rectangle</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
 </span><span id="Rectangle-422"><a href="#Rectangle-422"><span class="linenos">422</span></a>        <span class="p">)</span>
 </span><span id="Rectangle-423"><a href="#Rectangle-423"><span class="linenos">423</span></a>
-</span><span id="Rectangle-424"><a href="#Rectangle-424"><span class="linenos">424</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Rectangle&quot;</span><span class="p">:</span>
+</span><span id="Rectangle-424"><a href="#Rectangle-424"><span class="linenos">424</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="Rectangle-425"><a href="#Rectangle-425"><span class="linenos">425</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Rectangle-426"><a href="#Rectangle-426"><span class="linenos">426</span></a><span class="sd">        Scales both the position and size of the rectangle by the scale factor.</span>
+</span><span id="Rectangle-426"><a href="#Rectangle-426"><span class="linenos">426</span></a><span class="sd">        Checks if a coordinate point lies within this rectangle.</span>
 </span><span id="Rectangle-427"><a href="#Rectangle-427"><span class="linenos">427</span></a>
-</span><span id="Rectangle-428"><a href="#Rectangle-428"><span class="linenos">428</span></a><span class="sd">        This method creates a new `Rectangle` instance with both the top-left</span>
-</span><span id="Rectangle-429"><a href="#Rectangle-429"><span class="linenos">429</span></a><span class="sd">        coordinate and size scaled by the provided factor.</span>
+</span><span id="Rectangle-428"><a href="#Rectangle-428"><span class="linenos">428</span></a><span class="sd">        The point is considered inside if it falls in the rectangle&#39;s bounds,</span>
+</span><span id="Rectangle-429"><a href="#Rectangle-429"><span class="linenos">429</span></a><span class="sd">        including points on the edges.</span>
 </span><span id="Rectangle-430"><a href="#Rectangle-430"><span class="linenos">430</span></a>
-</span><span id="Rectangle-431"><a href="#Rectangle-431"><span class="linenos">431</span></a><span class="sd">        Args:</span>
-</span><span id="Rectangle-432"><a href="#Rectangle-432"><span class="linenos">432</span></a><span class="sd">            `scale`: The scaling factor to apply to both position and size.</span>
+</span><span id="Rectangle-431"><a href="#Rectangle-431"><span class="linenos">431</span></a><span class="sd">        Arguments:</span>
+</span><span id="Rectangle-432"><a href="#Rectangle-432"><span class="linenos">432</span></a><span class="sd">            `coordinate`: The coordinate point to check</span>
 </span><span id="Rectangle-433"><a href="#Rectangle-433"><span class="linenos">433</span></a>
 </span><span id="Rectangle-434"><a href="#Rectangle-434"><span class="linenos">434</span></a><span class="sd">        Returns:</span>
-</span><span id="Rectangle-435"><a href="#Rectangle-435"><span class="linenos">435</span></a><span class="sd">            `Rectangle`: A new `Rectangle` instance with scaled properties.</span>
+</span><span id="Rectangle-435"><a href="#Rectangle-435"><span class="linenos">435</span></a><span class="sd">            `bool`: Whether the coordinate lies within the rectangle.</span>
 </span><span id="Rectangle-436"><a href="#Rectangle-436"><span class="linenos">436</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Rectangle-437"><a href="#Rectangle-437"><span class="linenos">437</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span>
-</span><span id="Rectangle-438"><a href="#Rectangle-438"><span class="linenos">438</span></a>
-</span><span id="Rectangle-439"><a href="#Rectangle-439"><span class="linenos">439</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">:</span> <span class="n">DirectionalOffset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Rectangle&quot;</span><span class="p">:</span>
-</span><span id="Rectangle-440"><a href="#Rectangle-440"><span class="linenos">440</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Shifts the rectangle in the specified direction by a given offset.</span>
-</span><span id="Rectangle-441"><a href="#Rectangle-441"><span class="linenos">441</span></a><span class="sd">        Supports both orthogonal and diagonal directions.</span>
-</span><span id="Rectangle-442"><a href="#Rectangle-442"><span class="linenos">442</span></a>
-</span><span id="Rectangle-443"><a href="#Rectangle-443"><span class="linenos">443</span></a><span class="sd">        For diagonal directions, the offset is divided proportionally.</span>
-</span><span id="Rectangle-444"><a href="#Rectangle-444"><span class="linenos">444</span></a>
-</span><span id="Rectangle-445"><a href="#Rectangle-445"><span class="linenos">445</span></a><span class="sd">        For example, an offset of `sqrt(2)` in `UP_LEFT` direction shifts</span>
-</span><span id="Rectangle-446"><a href="#Rectangle-446"><span class="linenos">446</span></a><span class="sd">        the coordinate `Pixel(1)` in both `UP` and `LEFT` directions.</span>
-</span><span id="Rectangle-447"><a href="#Rectangle-447"><span class="linenos">447</span></a>
-</span><span id="Rectangle-448"><a href="#Rectangle-448"><span class="linenos">448</span></a><span class="sd">        Args:</span>
-</span><span id="Rectangle-449"><a href="#Rectangle-449"><span class="linenos">449</span></a><span class="sd">            `vector`: A `PolarVector` object representing the</span>
-</span><span id="Rectangle-450"><a href="#Rectangle-450"><span class="linenos">450</span></a><span class="sd">                direction and offset.</span>
-</span><span id="Rectangle-451"><a href="#Rectangle-451"><span class="linenos">451</span></a>
-</span><span id="Rectangle-452"><a href="#Rectangle-452"><span class="linenos">452</span></a><span class="sd">        Returns:</span>
-</span><span id="Rectangle-453"><a href="#Rectangle-453"><span class="linenos">453</span></a><span class="sd">            `Rectangle`: A new rectangle shifted by the specified vector.</span>
-</span><span id="Rectangle-454"><a href="#Rectangle-454"><span class="linenos">454</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Rectangle-455"><a href="#Rectangle-455"><span class="linenos">455</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">vector</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-</span><span id="Rectangle-456"><a href="#Rectangle-456"><span class="linenos">456</span></a>
-</span><span id="Rectangle-457"><a href="#Rectangle-457"><span class="linenos">457</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Rectangle-458"><a href="#Rectangle-458"><span class="linenos">458</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Rectangle-459"><a href="#Rectangle-459"><span class="linenos">459</span></a><span class="sd">        Checks if a coordinate point lies within this rectangle.</span>
-</span><span id="Rectangle-460"><a href="#Rectangle-460"><span class="linenos">460</span></a>
-</span><span id="Rectangle-461"><a href="#Rectangle-461"><span class="linenos">461</span></a><span class="sd">        The point is considered inside if it falls in the rectangle&#39;s bounds,</span>
-</span><span id="Rectangle-462"><a href="#Rectangle-462"><span class="linenos">462</span></a><span class="sd">        including points on the edges.</span>
-</span><span id="Rectangle-463"><a href="#Rectangle-463"><span class="linenos">463</span></a>
-</span><span id="Rectangle-464"><a href="#Rectangle-464"><span class="linenos">464</span></a><span class="sd">        Arguments:</span>
-</span><span id="Rectangle-465"><a href="#Rectangle-465"><span class="linenos">465</span></a><span class="sd">            `coordinate`: The coordinate point to check</span>
-</span><span id="Rectangle-466"><a href="#Rectangle-466"><span class="linenos">466</span></a>
-</span><span id="Rectangle-467"><a href="#Rectangle-467"><span class="linenos">467</span></a><span class="sd">        Returns:</span>
-</span><span id="Rectangle-468"><a href="#Rectangle-468"><span class="linenos">468</span></a><span class="sd">            `bool`: Whether the coordinate lies within the rectangle.</span>
-</span><span id="Rectangle-469"><a href="#Rectangle-469"><span class="linenos">469</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Rectangle-470"><a href="#Rectangle-470"><span class="linenos">470</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="Rectangle-471"><a href="#Rectangle-471"><span class="linenos">471</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
-</span><span id="Rectangle-472"><a href="#Rectangle-472"><span class="linenos">472</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;=</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
-</span><span id="Rectangle-473"><a href="#Rectangle-473"><span class="linenos">473</span></a>        <span class="p">)</span>
+</span><span id="Rectangle-437"><a href="#Rectangle-437"><span class="linenos">437</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="Rectangle-438"><a href="#Rectangle-438"><span class="linenos">438</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
+</span><span id="Rectangle-439"><a href="#Rectangle-439"><span class="linenos">439</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;=</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
+</span><span id="Rectangle-440"><a href="#Rectangle-440"><span class="linenos">440</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 

@@ -1,14 +1,6 @@
-from dataclasses import dataclass
-
-from pygame import Surface
-
 from nextrpg.draw_on_screen import Drawing
 from nextrpg.frames import CyclicFrames
-
-
-@dataclass(frozen=True)
-class MockSurface(Surface):
-    data: str
+from test.util import MockSurface
 
 
 def test_cyclic_frames() -> None:

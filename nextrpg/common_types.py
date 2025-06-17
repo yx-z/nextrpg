@@ -420,39 +420,6 @@ class Rectangle:
             and self.bottom_right.top >= rectangle.top_left.top
         )
 
-    def __mul__(self, scale: float) -> "Rectangle":
-        """
-        Scales both the position and size of the rectangle by the scale factor.
-
-        This method creates a new `Rectangle` instance with both the top-left
-        coordinate and size scaled by the provided factor.
-
-        Args:
-            `scale`: The scaling factor to apply to both position and size.
-
-        Returns:
-            `Rectangle`: A new `Rectangle` instance with scaled properties.
-        """
-        return Rectangle(self.top_left * scale, self.size * scale)
-
-    def __add__(self, vector: DirectionalOffset) -> "Rectangle":
-        """Shifts the rectangle in the specified direction by a given offset.
-        Supports both orthogonal and diagonal directions.
-
-        For diagonal directions, the offset is divided proportionally.
-
-        For example, an offset of `sqrt(2)` in `UP_LEFT` direction shifts
-        the coordinate `Pixel(1)` in both `UP` and `LEFT` directions.
-
-        Args:
-            `vector`: A `PolarVector` object representing the
-                direction and offset.
-
-        Returns:
-            `Rectangle`: A new rectangle shifted by the specified vector.
-        """
-        return Rectangle(self.top_left + vector, self.size)
-
     def __contains__(self, coordinate: Coordinate) -> bool:
         """
         Checks if a coordinate point lies within this rectangle.

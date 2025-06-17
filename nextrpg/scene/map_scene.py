@@ -29,9 +29,9 @@ from nextrpg.draw_on_screen import (
 from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.scene.scene import Scene
 
-type _Gid = int
-type _Layer = int
+type _LayerIndex = int
 type _TiledCoordinate = tuple[int, int]
+type _Gid = int | _TiledCoordinate
 
 
 @dataclass(frozen=True)
@@ -46,6 +46,7 @@ class MapScene(Scene):
     _background: list[DrawOnScreen]
     _foreground: list[dict[_Gid, DrawOnScreen]]
     _player: CharacterOnScreen
+    _above_character: list[DrawOnScreen]
     _gid_groups: dict[_Gid, set[DrawOnScreen]]
 
     @classmethod
@@ -66,15 +67,17 @@ class MapScene(Scene):
             `Scene`: A fully initialized map scene.
         """
         return MapScene(
-            _background(
+            _draw_layers(
                 tmx := load_pygame(str(tmx_file)),
                 tile_size := Size(tmx.tilewidth, tmx.tileheight),
+                config().map.background,
             ),
             foreground := [
                 _get_gid_and_draw(tmx, layer, tile_size)
                 for layer in _layers(tmx, config().map.foreground)
             ],
             _player(player, tmx),
+            _draw_layers(tmx, tile_size, config().map.above_character),
             _gid_groups(tmx, {k: v for l in foreground for k, v in l.items()}),
         )
 
@@ -95,6 +98,7 @@ class MapScene(Scene):
             self._background
             + self._foreground_and_character
             + self._player.draw_on_screen.visuals
+            + self._above_character
         )
 
     @override
@@ -131,16 +135,16 @@ class MapScene(Scene):
 
     @cached_property
     def _foreground_and_character(self) -> list[DrawOnScreen]:
-        sorted_by_layer_and_bottom = sorted(
+        sorted_by_layer_index_and_bottom = sorted(
             self._layer_gid_draws,
-            key=lambda t: _LayerAndBottom(
+            key=lambda t: _LayerIndexAndBottom(
                 t[0], _max_bottom(self._grouped_rectangles(*t[1:]))
             ),
         )
-        return [draw for _, _, draw in sorted_by_layer_and_bottom]
+        return [draw for _, _, draw in sorted_by_layer_index_and_bottom]
 
     @cached_property
-    def _layer_gid_draws(self) -> list[tuple[_Layer, _Gid, DrawOnScreen]]:
+    def _layer_gid_draws(self) -> list[tuple[_LayerIndex, _Gid, DrawOnScreen]]:
         tile_layers = list(
             (i, gid, draw)
             for i, gid_to_draws in enumerate(self._foreground)
@@ -150,7 +154,7 @@ class MapScene(Scene):
         return tile_layers + [player]
 
     @cached_property
-    def _player_layer(self) -> _Layer:
+    def _player_layer(self) -> _LayerIndex:
         reversed_layers = reversed(list(enumerate(self._foreground)))
         return next(
             (i for i, layer in reversed_layers if self._below_player(layer)), 0
@@ -197,7 +201,9 @@ def _get_gid_and_draw(
     tmx: TiledMap, layer: TiledTileLayer, tile_size: Size
 ) -> dict[_Gid, DrawOnScreen]:
     return {
-        tmx.tile_properties[layer.data[left][top]]["id"]: draw
+        tmx.tile_properties.get(layer.data[left][top], {}).get(
+            "id", (top, left)
+        ): draw
         for (top, left), draw in _draw(layer, tile_size)
     }
 
@@ -211,6 +217,8 @@ def _layers(
 def _player(
     character_drawing: CharacterDrawing, tmx: TiledMap
 ) -> CharacterOnScreen:
+    print(f"{tmx=}", end="\n\n\n")
+    print(f"{_layers(tmx, config().map.object)=}", end="\n\n\n")
     player = next(
         obj
         for layer in _layers(tmx, config().map.object)
@@ -252,14 +260,16 @@ def _gid_groups(
     }
 
 
-def _background(tmx: TiledMap, tile_size: Size) -> list[DrawOnScreen]:
+def _draw_layers(
+    tmx: TiledMap, tile_size: Size, name: str
+) -> list[DrawOnScreen]:
     return [
         draw_on_screen
-        for layer in _layers(tmx, config().map.background)
+        for layer in _layers(tmx, name)
         for _, draw_on_screen in _draw(layer, tile_size)
     ]
 
 
-class _LayerAndBottom(NamedTuple):
-    layer: _Layer
+class _LayerIndexAndBottom(NamedTuple):
+    layer: _LayerIndex
     bottom: Pixel

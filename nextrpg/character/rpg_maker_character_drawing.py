@@ -62,6 +62,7 @@ class XpFrameType(IntEnum):
 
 
 type FrameType = type[DefaultFrameType | XpFrameType]
+"""Choose between DefaultFrameType and XpFrameType."""
 
 
 @dataclass(frozen=True)

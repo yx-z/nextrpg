@@ -5,13 +5,13 @@ Typed events initiated from `pygame.Event`.
 from enum import Enum, auto
 from typing import Final
 
-from pygame.constants import (
+from pygame.event import Event
+from pygame.locals import (
     KEYDOWN,
     KEYUP,
     QUIT,
     VIDEORESIZE,
 )
-from pygame.event import Event
 
 from nextrpg.config import KeyCode, config
 from nextrpg.draw_on_screen import Size

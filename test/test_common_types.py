@@ -66,10 +66,6 @@ def test_rectangle() -> None:
     assert rect.center_left == Coordinate(10, 21)
     assert rect.center_right == Coordinate(11, 21)
     assert rect.center == Coordinate(10.5, 21)
-    assert rect * 2 == Rectangle(Coordinate(20, 40), Size(2, 4))
-    assert rect + DirectionalOffset(Direction.UP, 5) == Rectangle(
-        Coordinate(10, 15), Size(1, 2)
-    )
     rect2 = Rectangle(Coordinate(11, 20), Size(1, 2))
     assert rect.collides(rect2)
     assert Coordinate(10, 20) in rect

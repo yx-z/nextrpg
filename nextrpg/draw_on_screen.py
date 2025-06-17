@@ -181,6 +181,8 @@ class DrawOnScreen:
             # `drawing._surface` to ignore the debug background.
             if self.drawing._surface.get_at((x, y)).a
         ]
+        if not visible:
+            return Rectangle(Coordinate(0, 0), Size(0, 0))
         min_x = min(visible, key=lambda c: c.left).left
         min_y = min(visible, key=lambda c: c.top).top
         max_x = max(visible, key=lambda c: c.left).left

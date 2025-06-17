@@ -64,7 +64,7 @@ class GuiConfig:
 
 
 @dataclass(frozen=True)
-class TileMapCustomProperties:
+class TileMapProperties:
     """
     Constants for custom property names used in tile map files.
 
@@ -108,10 +108,11 @@ class TileMapConfig:
 
     background: str = "background"
     foreground: str = "foreground"
+    above_character: str = "above_character"
     collision: str = "collision"
     object: str = "object"
     player: str = "player"
-    properties: TileMapCustomProperties = TileMapCustomProperties()
+    properties: TileMapProperties = TileMapProperties()
 
 
 @dataclass(frozen=True)
