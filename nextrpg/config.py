@@ -111,7 +111,7 @@ class TileMapConfig:
     collision: str = "collision"
     object: str = "object"
     player: str = "player"
-    properties: TileMapCustomProperties = TileMapCustomProperties
+    properties: TileMapCustomProperties = TileMapCustomProperties()
 
 
 @dataclass(frozen=True)
@@ -209,8 +209,9 @@ class Config:
     """
     Main configuration class that aggregates all configuration components.
 
-    This is the main configuration object used throughout the application. It can be
-    accessed via the `config()` function and customized using `set_config()`.
+    This is the main configuration object used throughout the application.
+    It can be accessed via the `config()` function and
+    customized using `set_config()`.
 
     Attributes:
         `gui`: The configuration for the graphical user interface.
@@ -223,8 +224,8 @@ class Config:
             Used by `nextrpg.character.character.Character`
             to control movement properties.
 
-        `rpg_maker_character`: The configuration for RPG Maker character sprites.
-            Used by
+        `rpg_maker_character`: The configuration for RPG Maker
+            character drawings. Used by
             `nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing`.
 
         `key_mapping`: The configuration for keyboard controls.

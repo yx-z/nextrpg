@@ -11,6 +11,18 @@ from nextrpg.draw_on_screen import Drawing
 
 @dataclass(frozen=True)
 class CyclicFrames:
+    """
+    Static frames that can be played sequentially to create animations.
+
+    Args:
+        `frames`: List of drawings that make up the animation sequence.
+
+        `duration_per_frame`: Time to display each frame in milliseconds.
+
+    Returns:
+        `CyclicFrames`: An instance managing a frame-based animation sequence.
+    """
+
     frames: list[Drawing]
     duration_per_frame: Millisecond
     _index: int = 0
@@ -41,8 +53,8 @@ class CyclicFrames:
 
         Returns:
             `CyclicFrames`: A new instance with an updated animation state.
-            The frame index is updated according to elapsed time and wraps around
-            when it reaches the end of the frame list.
+            The frame index is updated according to elapsed time and
+            wraps around when it reaches the end of the frame list.
         """
         total_time = self._elapsed + time_delta
         frames_to_step = total_time // self.duration_per_frame

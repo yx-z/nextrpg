@@ -1,3 +1,7 @@
+"""
+Map scene implementation.
+"""
+
 from dataclasses import dataclass, replace
 from functools import cached_property
 from itertools import groupby
@@ -212,22 +216,6 @@ def _player(
 def _gid_groups(
     tmx: TiledMap, draw_on_screens: dict[_Gid, DrawOnScreen]
 ) -> dict[_Gid, set[DrawOnScreen]]:
-    """
-    Group drawable elements by their tile type in the Tiled map.
-
-    Creates a mapping from each tile GID to the set of all drawable elements that
-    share the same type property, allowing related elements to be treated as a group
-    for depth sorting purposes.
-
-    Args:
-        tmx: The Tiled map object containing tile properties.
-
-        draw_on_screens: A dictionary mapping tile GIDs to their drawable elements.
-
-    Returns:
-        `dict[_Gid, set[DrawOnScreen]]`: A dictionary mapping each tile GID to the
-        set of all drawable elements that share the same type.
-    """
     gid_to_class = {
         tile["id"]: cls
         for tile in tmx.tile_properties.values()
@@ -243,18 +231,5 @@ def _gid_groups(
 
 
 class _DepthThenBottom(NamedTuple):
-    """
-    A named tuple used for depth sorting of drawable elements.
-
-    Combines a layer depth value with a bottom coordinate to determine the rendering
-    order of elements, with lower depth values appearing behind higher ones and
-    elements with lower bottom coordinates appearing behind those with higher ones.
-
-    Args:
-        depth: The layer depth value (lower values are drawn first).
-
-        bottom: The bottom coordinate of the element or its group.
-    """
-
     depth: int
     bottom: Pixel

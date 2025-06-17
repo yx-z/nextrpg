@@ -155,7 +155,8 @@ class Coordinate:
         the coordinate `Pixel(1)` in both `UP` and `LEFT` directions.
 
         Args:
-            `offset`: A `DirectionalOffset` representing the direction and offset.
+            `offset`: A `DirectionalOffset` representing the direction
+                and offset.
 
         Returns:
             `Coordinate`: A new coordinate shifted by the specified offset in
@@ -444,7 +445,8 @@ class Rectangle:
         the coordinate `Pixel(1)` in both `UP` and `LEFT` directions.
 
         Args:
-            `vector`: A `PolarVector` object representing the direction and offset.
+            `vector`: A `PolarVector` object representing the
+                direction and offset.
 
         Returns:
             `Rectangle`: A new rectangle shifted by the specified vector.

@@ -1,3 +1,7 @@
+"""
+Handles character movement and collision detection.
+"""
+
 from dataclasses import dataclass, field, replace
 from functools import cached_property, singledispatchmethod
 from typing import NamedTuple, Self
@@ -83,12 +87,9 @@ class CharacterOnScreen:
         )
 
     @singledispatchmethod
-    def event(self, event: PygameEvent) -> Self:
+    def event(self, _: PygameEvent) -> Self:
         """
         Process a pygame event and update the character state accordingly.
-
-        Args:
-            `event`: The pygame event to process.
 
         Returns:
             `Self`: The updated character state after processing the event.

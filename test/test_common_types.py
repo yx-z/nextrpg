@@ -42,7 +42,8 @@ def test_coordinate() -> None:
     ) == approx(Coordinate(17.071067811865476, 27.071067811865476))
     assert Coordinate(10, 20) + Coordinate(1, 2) == Coordinate(11, 22)
     with raises(ValueError):
-        res = Coordinate(1, 2) + DirectionalOffset("INVALID_DIRECTION", 1)  # type: ignore
+        coord = Coordinate(1, 2)
+        res = coord + DirectionalOffset("INVALID_DIRECTION", 1)  # type: ignore
         assert not res
 
 

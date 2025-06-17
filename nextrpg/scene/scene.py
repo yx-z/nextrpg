@@ -71,8 +71,9 @@ class Scene(ABC):
         """
         Update the scene state for a single game step/frame.
 
-        Progresses the scene state based on the elapsed time since the last update,
-        handling animations, movements, and other time-dependent changes.
+        Progresses the scene state based on the elapsed time since the
+        last update, handling animations, movements,
+        and other time-dependent changes.
 
         Args:
             `time_delta`: The time that has passed since the last update,

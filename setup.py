@@ -1,3 +1,7 @@
+"""
+Setup script.
+"""
+
 from pathlib import Path
 
 from setuptools import find_packages, setup
@@ -10,7 +14,7 @@ setup(
     author="yx-z",
     author_email="yx-z@outlook.com",
     description="Build your next RPG (Role Playing Game).",
-    long_description=Path("README.md").read_text(),
+    long_description=Path("README.md").read_text("utf-8"),
     long_description_content_type="text/markdown",
     url="https://github.com/yx-z/nextrpg",
     classifiers=[

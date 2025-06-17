@@ -10,8 +10,8 @@ from nextrpg.draw_on_screen import DrawOnScreen, Drawing
 
 
 def test_drawing(mocker: MockerFixture) -> None:
-    surface = Mock()
-    mocker.patch("nextrpg.draw_on_screen.load", surface)
+    surf = Mock()
+    mocker.patch("nextrpg.draw_on_screen.load", surf)
     assert Drawing.load(Path("abc"))
     drawing = Drawing(Surface((1, 2), SRCALPHA))
     assert drawing.width == 1

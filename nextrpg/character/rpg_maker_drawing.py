@@ -35,7 +35,7 @@ class DefaultFrameType(IntEnum):
     _LEFT_FOOT = 2
 
     @classmethod
-    def frame_indices(cls) -> list[int]:
+    def _frame_indices(cls) -> list[int]:
         return [
             DefaultFrameType._IDLE,
             DefaultFrameType._RIGHT_FOOT,
@@ -55,7 +55,7 @@ class XpFrameType(IntEnum):
     _LEFT_FOOT = 3
 
     @classmethod
-    def frame_indices(cls) -> list[int]:
+    def _frame_indices(cls) -> list[int]:
         return list(cls)
 
 
@@ -111,6 +111,10 @@ class SpriteSheet:
 
 @dataclass(frozen=True)
 class RpgMakerCharacterDrawing(CharacterDrawing):
+    """
+    RPG Maker character drawing implementation.
+    """
+
     _animate_on_idle: bool
     _frames: dict[Direction, CyclicFrames]
     _direction: Direction
@@ -172,8 +176,9 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         """
         Get the current visual representation of the character.
 
-        Retrieves the current animation frame for the character's current direction,
-        adjusting diagonal directions to their closest cardinal direction.
+        Retrieves the current animation frame for the character's current
+        direction, adjusting diagonal directions to their closest cardinal
+        direction.
 
         Returns:
             `Drawing`: The current frame of the character's sprite animation.
@@ -237,8 +242,9 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         """
         Update the character's idle animation state over the given time delta.
 
-        If animate_on_idle is enabled, continues cycling through animation frames even
-        when idle. Otherwise, resets all frames to their initial state.
+        If animate_on_idle is enabled, continues cycling through animation
+        frames even when idle.
+        Otherwise, resets all frames to their initial state.
 
         Args:
             `time_delta`: The amount of time that has passed
@@ -292,7 +298,7 @@ def _load_frames_row(
 ) -> CyclicFrames:
     frames = _crop_into_frames_at_row(drawing, frame_type, row)
     return CyclicFrames(
-        [frames[i] for i in frame_type.frame_indices()], frame_duration
+        [frames[i] for i in frame_type._frame_indices()], frame_duration
     )
 
 

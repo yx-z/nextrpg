@@ -336,7 +336,7 @@ or pass the customized instance to <code><a href="start_game.html#start_game">ne
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>    <span class="n">collision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;collision&quot;</span>
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="nb">object</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;object&quot;</span>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="n">player</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;player&quot;</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="n">properties</span><span class="p">:</span> <span class="n">TileMapCustomProperties</span> <span class="o">=</span> <span class="n">TileMapCustomProperties</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="n">properties</span><span class="p">:</span> <span class="n">TileMapCustomProperties</span> <span class="o">=</span> <span class="n">TileMapCustomProperties</span><span class="p">()</span>
 </span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -434,73 +434,74 @@ or pass the customized instance to <code><a href="start_game.html#start_game">ne
 </span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">    Main configuration class that aggregates all configuration components.</span>
 </span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>
-</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a><span class="sd">    This is the main configuration object used throughout the application. It can be</span>
-</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a><span class="sd">    accessed via the `config()` function and customized using `set_config()`.</span>
-</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>
-</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a><span class="sd">        `gui`: The configuration for the graphical user interface.</span>
-</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="sd">            Used by `nextrpg.start_game.start_game` and rendering systems.</span>
-</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>
-</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">        `map`: The configuration for the tile map structure.</span>
-</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">            Used by `nextrpg.scene.map_scene.MapScene` for TMX interpretation.</span>
-</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>
-</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a><span class="sd">        `character`: The configuration for character attributes.</span>
-</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a><span class="sd">            Used by `nextrpg.character.character.Character`</span>
-</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a><span class="sd">            to control movement properties.</span>
-</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>
-</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="sd">        `rpg_maker_character`: The configuration for RPG Maker character sprites.</span>
-</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a><span class="sd">            Used by</span>
-</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="sd">            `nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing`.</span>
-</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>
-</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">        `key_mapping`: The configuration for keyboard controls.</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="sd">            Used by `nextrpg.event.pygame_event` for input handling.</span>
-</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>
-</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a><span class="sd">        `debug`: The configuration for debugging features.</span>
-</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a><span class="sd">            Used throughout the codebase when debug rendering is enabled.</span>
-</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a><span class="sd">            The default is `None` which means debugging is disabled.</span>
-</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a><span class="sd">            Used by `nextrpg.draw_on_screen.Drawing` for debug visualization</span>
-</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>
-</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>    <span class="n">gui</span><span class="p">:</span> <span class="n">GuiConfig</span> <span class="o">=</span> <span class="n">GuiConfig</span><span class="p">()</span>
-</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>    <span class="nb">map</span><span class="p">:</span> <span class="n">TileMapConfig</span> <span class="o">=</span> <span class="n">TileMapConfig</span><span class="p">()</span>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterConfig</span> <span class="o">=</span> <span class="n">CharacterConfig</span><span class="p">()</span>
-</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>    <span class="n">rpg_maker_character</span><span class="p">:</span> <span class="n">RpgMakerCharacterDrawingConfig</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>        <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">()</span>
-</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>    <span class="p">)</span>
-</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>    <span class="n">key_mapping</span><span class="p">:</span> <span class="n">KeyMappingConfig</span> <span class="o">=</span> <span class="n">KeyMappingConfig</span><span class="p">()</span>
-</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>    <span class="n">debug</span><span class="p">:</span> <span class="n">DebugConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a><span class="sd">    This is the main configuration object used throughout the application.</span>
+</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a><span class="sd">    It can be accessed via the `config()` function and</span>
+</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="sd">    customized using `set_config()`.</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a><span class="sd">    Attributes:</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="sd">        `gui`: The configuration for the graphical user interface.</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="sd">            Used by `nextrpg.start_game.start_game` and rendering systems.</span>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">        `map`: The configuration for the tile map structure.</span>
+</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a><span class="sd">            Used by `nextrpg.scene.map_scene.MapScene` for TMX interpretation.</span>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a><span class="sd">        `character`: The configuration for character attributes.</span>
+</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a><span class="sd">            Used by `nextrpg.character.character.Character`</span>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="sd">            to control movement properties.</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a><span class="sd">        `rpg_maker_character`: The configuration for RPG Maker</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="sd">            character drawings. Used by</span>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a><span class="sd">            `nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing`.</span>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="sd">        `key_mapping`: The configuration for keyboard controls.</span>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a><span class="sd">            Used by `nextrpg.event.pygame_event` for input handling.</span>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a><span class="sd">        `debug`: The configuration for debugging features.</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a><span class="sd">            Used throughout the codebase when debug rendering is enabled.</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a><span class="sd">            The default is `None` which means debugging is disabled.</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a><span class="sd">            Used by `nextrpg.draw_on_screen.Drawing` for debug visualization</span>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>    <span class="n">gui</span><span class="p">:</span> <span class="n">GuiConfig</span> <span class="o">=</span> <span class="n">GuiConfig</span><span class="p">()</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>    <span class="nb">map</span><span class="p">:</span> <span class="n">TileMapConfig</span> <span class="o">=</span> <span class="n">TileMapConfig</span><span class="p">()</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterConfig</span> <span class="o">=</span> <span class="n">CharacterConfig</span><span class="p">()</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>    <span class="n">rpg_maker_character</span><span class="p">:</span> <span class="n">RpgMakerCharacterDrawingConfig</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>        <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">()</span>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>    <span class="p">)</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>    <span class="n">key_mapping</span><span class="p">:</span> <span class="n">KeyMappingConfig</span> <span class="o">=</span> <span class="n">KeyMappingConfig</span><span class="p">()</span>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>    <span class="n">debug</span><span class="p">:</span> <span class="n">DebugConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>
-</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a><span class="n">_cfg</span><span class="p">:</span> <span class="n">Config</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a><span class="n">_cfg</span><span class="p">:</span> <span class="n">Config</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>
-</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a><span class="k">def</span><span class="w"> </span><span class="nf">set_config</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="n">Config</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="p">:</span>
-</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the global configuration instance.</span>
-</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>
-</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a><span class="sd">    Args:</span>
-</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a><span class="sd">        `cfg`: The `Config` instance to use as the current configuration.</span>
-</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>
-</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a><span class="sd">    Returns:</span>
-</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="sd">        `Config`: The current `Config` instance after being set.</span>
-</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>    <span class="k">global</span> <span class="n">_cfg</span>
-</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>    <span class="n">_cfg</span> <span class="o">=</span> <span class="n">cfg</span>
-</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>    <span class="k">return</span> <span class="n">_cfg</span>
-</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="k">def</span><span class="w"> </span><span class="nf">set_config</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="n">Config</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="p">:</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the global configuration instance.</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a><span class="sd">    Args:</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="sd">        `cfg`: The `Config` instance to use as the current configuration.</span>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="sd">    Returns:</span>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a><span class="sd">        `Config`: The current `Config` instance after being set.</span>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>    <span class="k">global</span> <span class="n">_cfg</span>
+</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>    <span class="n">_cfg</span> <span class="o">=</span> <span class="n">cfg</span>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>    <span class="k">return</span> <span class="n">_cfg</span>
 </span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>
-</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a><span class="k">def</span><span class="w"> </span><span class="nf">config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="p">:</span>
-</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the current configuration instance.</span>
-</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>
-</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a><span class="sd">    If no configuration has been set, returns the default `Config` instance.</span>
-</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>
-</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a><span class="sd">    Returns:</span>
-</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a><span class="sd">        `Config`: The current `Config` instance.</span>
-</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>
-</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>    <span class="k">global</span> <span class="n">_cfg</span>
-</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>    <span class="k">if</span> <span class="n">_cfg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>        <span class="n">_cfg</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
-</span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>    <span class="k">return</span> <span class="n">_cfg</span>
+</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a><span class="k">def</span><span class="w"> </span><span class="nf">config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="p">:</span>
+</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the current configuration instance.</span>
+</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>
+</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a><span class="sd">    If no configuration has been set, returns the default `Config` instance.</span>
+</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>
+</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a><span class="sd">    Returns:</span>
+</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a><span class="sd">        `Config`: The current `Config` instance.</span>
+</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a>
+</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a>    <span class="k">global</span> <span class="n">_cfg</span>
+</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>    <span class="k">if</span> <span class="n">_cfg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a>        <span class="n">_cfg</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
+</span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a>    <span class="k">return</span> <span class="n">_cfg</span>
 </span></pre></div>
 
 
@@ -833,7 +834,7 @@ created with Tiled Map Editor.</p>
 </span><span id="TileMapConfig-112"><a href="#TileMapConfig-112"><span class="linenos">112</span></a>    <span class="n">collision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;collision&quot;</span>
 </span><span id="TileMapConfig-113"><a href="#TileMapConfig-113"><span class="linenos">113</span></a>    <span class="nb">object</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;object&quot;</span>
 </span><span id="TileMapConfig-114"><a href="#TileMapConfig-114"><span class="linenos">114</span></a>    <span class="n">player</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;player&quot;</span>
-</span><span id="TileMapConfig-115"><a href="#TileMapConfig-115"><span class="linenos">115</span></a>    <span class="n">properties</span><span class="p">:</span> <span class="n">TileMapCustomProperties</span> <span class="o">=</span> <span class="n">TileMapCustomProperties</span>
+</span><span id="TileMapConfig-115"><a href="#TileMapConfig-115"><span class="linenos">115</span></a>    <span class="n">properties</span><span class="p">:</span> <span class="n">TileMapCustomProperties</span> <span class="o">=</span> <span class="n">TileMapCustomProperties</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -857,7 +858,7 @@ that is created from tmx files <a href="https://www.mapeditor.org/">Tiled</a>.</
                             <div id="TileMapConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">TileMapConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">background</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;background&#39;</span>,</span><span class="param">	<span class="n">foreground</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;foreground&#39;</span>,</span><span class="param">	<span class="n">collision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;collision&#39;</span>,</span><span class="param">	<span class="nb">object</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;object&#39;</span>,</span><span class="param">	<span class="n">player</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;player&#39;</span>,</span><span class="param">	properties: <a href="#TileMapCustomProperties">TileMapCustomProperties</a> = &lt;class &#x27;<a href="#TileMapCustomProperties">TileMapCustomProperties</a>&#x27;&gt;</span>)</span>
+        <span class="name">TileMapConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">background</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;background&#39;</span>,</span><span class="param">	<span class="n">foreground</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;foreground&#39;</span>,</span><span class="param">	<span class="n">collision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;collision&#39;</span>,</span><span class="param">	<span class="nb">object</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;object&#39;</span>,</span><span class="param">	<span class="n">player</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;player&#39;</span>,</span><span class="param">	<span class="n">properties</span><span class="p">:</span> <span class="n"><a href="#TileMapCustomProperties">TileMapCustomProperties</a></span> <span class="o">=</span> <span class="n">TileMapCustomProperties</span><span class="p">()</span></span>)</span>
 
         
     </div>
@@ -929,7 +930,7 @@ that is created from tmx files <a href="https://www.mapeditor.org/">Tiled</a>.</
                             <div id="TileMapConfig.properties" class="classattr">
                                 <div class="attr variable">
             <span class="name">properties</span><span class="annotation">: <a href="#TileMapCustomProperties">TileMapCustomProperties</a></span>        =
-<span class="default_value">&lt;class &#39;<a href="#TileMapCustomProperties">TileMapCustomProperties</a>&#39;&gt;</span>
+<span class="default_value">TileMapCustomProperties()</span>
 
         
     </div>
@@ -1311,48 +1312,50 @@ and the input handling system to translate keyboard input into game actions.</p>
 </span><span id="Config-210"><a href="#Config-210"><span class="linenos">210</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Config-211"><a href="#Config-211"><span class="linenos">211</span></a><span class="sd">    Main configuration class that aggregates all configuration components.</span>
 </span><span id="Config-212"><a href="#Config-212"><span class="linenos">212</span></a>
-</span><span id="Config-213"><a href="#Config-213"><span class="linenos">213</span></a><span class="sd">    This is the main configuration object used throughout the application. It can be</span>
-</span><span id="Config-214"><a href="#Config-214"><span class="linenos">214</span></a><span class="sd">    accessed via the `config()` function and customized using `set_config()`.</span>
-</span><span id="Config-215"><a href="#Config-215"><span class="linenos">215</span></a>
-</span><span id="Config-216"><a href="#Config-216"><span class="linenos">216</span></a><span class="sd">    Attributes:</span>
-</span><span id="Config-217"><a href="#Config-217"><span class="linenos">217</span></a><span class="sd">        `gui`: The configuration for the graphical user interface.</span>
-</span><span id="Config-218"><a href="#Config-218"><span class="linenos">218</span></a><span class="sd">            Used by `nextrpg.start_game.start_game` and rendering systems.</span>
-</span><span id="Config-219"><a href="#Config-219"><span class="linenos">219</span></a>
-</span><span id="Config-220"><a href="#Config-220"><span class="linenos">220</span></a><span class="sd">        `map`: The configuration for the tile map structure.</span>
-</span><span id="Config-221"><a href="#Config-221"><span class="linenos">221</span></a><span class="sd">            Used by `nextrpg.scene.map_scene.MapScene` for TMX interpretation.</span>
-</span><span id="Config-222"><a href="#Config-222"><span class="linenos">222</span></a>
-</span><span id="Config-223"><a href="#Config-223"><span class="linenos">223</span></a><span class="sd">        `character`: The configuration for character attributes.</span>
-</span><span id="Config-224"><a href="#Config-224"><span class="linenos">224</span></a><span class="sd">            Used by `nextrpg.character.character.Character`</span>
-</span><span id="Config-225"><a href="#Config-225"><span class="linenos">225</span></a><span class="sd">            to control movement properties.</span>
-</span><span id="Config-226"><a href="#Config-226"><span class="linenos">226</span></a>
-</span><span id="Config-227"><a href="#Config-227"><span class="linenos">227</span></a><span class="sd">        `rpg_maker_character`: The configuration for RPG Maker character sprites.</span>
-</span><span id="Config-228"><a href="#Config-228"><span class="linenos">228</span></a><span class="sd">            Used by</span>
-</span><span id="Config-229"><a href="#Config-229"><span class="linenos">229</span></a><span class="sd">            `nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing`.</span>
-</span><span id="Config-230"><a href="#Config-230"><span class="linenos">230</span></a>
-</span><span id="Config-231"><a href="#Config-231"><span class="linenos">231</span></a><span class="sd">        `key_mapping`: The configuration for keyboard controls.</span>
-</span><span id="Config-232"><a href="#Config-232"><span class="linenos">232</span></a><span class="sd">            Used by `nextrpg.event.pygame_event` for input handling.</span>
-</span><span id="Config-233"><a href="#Config-233"><span class="linenos">233</span></a>
-</span><span id="Config-234"><a href="#Config-234"><span class="linenos">234</span></a><span class="sd">        `debug`: The configuration for debugging features.</span>
-</span><span id="Config-235"><a href="#Config-235"><span class="linenos">235</span></a><span class="sd">            Used throughout the codebase when debug rendering is enabled.</span>
-</span><span id="Config-236"><a href="#Config-236"><span class="linenos">236</span></a><span class="sd">            The default is `None` which means debugging is disabled.</span>
-</span><span id="Config-237"><a href="#Config-237"><span class="linenos">237</span></a><span class="sd">            Used by `nextrpg.draw_on_screen.Drawing` for debug visualization</span>
-</span><span id="Config-238"><a href="#Config-238"><span class="linenos">238</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Config-239"><a href="#Config-239"><span class="linenos">239</span></a>
-</span><span id="Config-240"><a href="#Config-240"><span class="linenos">240</span></a>    <span class="n">gui</span><span class="p">:</span> <span class="n">GuiConfig</span> <span class="o">=</span> <span class="n">GuiConfig</span><span class="p">()</span>
-</span><span id="Config-241"><a href="#Config-241"><span class="linenos">241</span></a>    <span class="nb">map</span><span class="p">:</span> <span class="n">TileMapConfig</span> <span class="o">=</span> <span class="n">TileMapConfig</span><span class="p">()</span>
-</span><span id="Config-242"><a href="#Config-242"><span class="linenos">242</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterConfig</span> <span class="o">=</span> <span class="n">CharacterConfig</span><span class="p">()</span>
-</span><span id="Config-243"><a href="#Config-243"><span class="linenos">243</span></a>    <span class="n">rpg_maker_character</span><span class="p">:</span> <span class="n">RpgMakerCharacterDrawingConfig</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="Config-244"><a href="#Config-244"><span class="linenos">244</span></a>        <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">()</span>
-</span><span id="Config-245"><a href="#Config-245"><span class="linenos">245</span></a>    <span class="p">)</span>
-</span><span id="Config-246"><a href="#Config-246"><span class="linenos">246</span></a>    <span class="n">key_mapping</span><span class="p">:</span> <span class="n">KeyMappingConfig</span> <span class="o">=</span> <span class="n">KeyMappingConfig</span><span class="p">()</span>
-</span><span id="Config-247"><a href="#Config-247"><span class="linenos">247</span></a>    <span class="n">debug</span><span class="p">:</span> <span class="n">DebugConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Config-213"><a href="#Config-213"><span class="linenos">213</span></a><span class="sd">    This is the main configuration object used throughout the application.</span>
+</span><span id="Config-214"><a href="#Config-214"><span class="linenos">214</span></a><span class="sd">    It can be accessed via the `config()` function and</span>
+</span><span id="Config-215"><a href="#Config-215"><span class="linenos">215</span></a><span class="sd">    customized using `set_config()`.</span>
+</span><span id="Config-216"><a href="#Config-216"><span class="linenos">216</span></a>
+</span><span id="Config-217"><a href="#Config-217"><span class="linenos">217</span></a><span class="sd">    Attributes:</span>
+</span><span id="Config-218"><a href="#Config-218"><span class="linenos">218</span></a><span class="sd">        `gui`: The configuration for the graphical user interface.</span>
+</span><span id="Config-219"><a href="#Config-219"><span class="linenos">219</span></a><span class="sd">            Used by `nextrpg.start_game.start_game` and rendering systems.</span>
+</span><span id="Config-220"><a href="#Config-220"><span class="linenos">220</span></a>
+</span><span id="Config-221"><a href="#Config-221"><span class="linenos">221</span></a><span class="sd">        `map`: The configuration for the tile map structure.</span>
+</span><span id="Config-222"><a href="#Config-222"><span class="linenos">222</span></a><span class="sd">            Used by `nextrpg.scene.map_scene.MapScene` for TMX interpretation.</span>
+</span><span id="Config-223"><a href="#Config-223"><span class="linenos">223</span></a>
+</span><span id="Config-224"><a href="#Config-224"><span class="linenos">224</span></a><span class="sd">        `character`: The configuration for character attributes.</span>
+</span><span id="Config-225"><a href="#Config-225"><span class="linenos">225</span></a><span class="sd">            Used by `nextrpg.character.character.Character`</span>
+</span><span id="Config-226"><a href="#Config-226"><span class="linenos">226</span></a><span class="sd">            to control movement properties.</span>
+</span><span id="Config-227"><a href="#Config-227"><span class="linenos">227</span></a>
+</span><span id="Config-228"><a href="#Config-228"><span class="linenos">228</span></a><span class="sd">        `rpg_maker_character`: The configuration for RPG Maker</span>
+</span><span id="Config-229"><a href="#Config-229"><span class="linenos">229</span></a><span class="sd">            character drawings. Used by</span>
+</span><span id="Config-230"><a href="#Config-230"><span class="linenos">230</span></a><span class="sd">            `nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing`.</span>
+</span><span id="Config-231"><a href="#Config-231"><span class="linenos">231</span></a>
+</span><span id="Config-232"><a href="#Config-232"><span class="linenos">232</span></a><span class="sd">        `key_mapping`: The configuration for keyboard controls.</span>
+</span><span id="Config-233"><a href="#Config-233"><span class="linenos">233</span></a><span class="sd">            Used by `nextrpg.event.pygame_event` for input handling.</span>
+</span><span id="Config-234"><a href="#Config-234"><span class="linenos">234</span></a>
+</span><span id="Config-235"><a href="#Config-235"><span class="linenos">235</span></a><span class="sd">        `debug`: The configuration for debugging features.</span>
+</span><span id="Config-236"><a href="#Config-236"><span class="linenos">236</span></a><span class="sd">            Used throughout the codebase when debug rendering is enabled.</span>
+</span><span id="Config-237"><a href="#Config-237"><span class="linenos">237</span></a><span class="sd">            The default is `None` which means debugging is disabled.</span>
+</span><span id="Config-238"><a href="#Config-238"><span class="linenos">238</span></a><span class="sd">            Used by `nextrpg.draw_on_screen.Drawing` for debug visualization</span>
+</span><span id="Config-239"><a href="#Config-239"><span class="linenos">239</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Config-240"><a href="#Config-240"><span class="linenos">240</span></a>
+</span><span id="Config-241"><a href="#Config-241"><span class="linenos">241</span></a>    <span class="n">gui</span><span class="p">:</span> <span class="n">GuiConfig</span> <span class="o">=</span> <span class="n">GuiConfig</span><span class="p">()</span>
+</span><span id="Config-242"><a href="#Config-242"><span class="linenos">242</span></a>    <span class="nb">map</span><span class="p">:</span> <span class="n">TileMapConfig</span> <span class="o">=</span> <span class="n">TileMapConfig</span><span class="p">()</span>
+</span><span id="Config-243"><a href="#Config-243"><span class="linenos">243</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterConfig</span> <span class="o">=</span> <span class="n">CharacterConfig</span><span class="p">()</span>
+</span><span id="Config-244"><a href="#Config-244"><span class="linenos">244</span></a>    <span class="n">rpg_maker_character</span><span class="p">:</span> <span class="n">RpgMakerCharacterDrawingConfig</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="Config-245"><a href="#Config-245"><span class="linenos">245</span></a>        <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">()</span>
+</span><span id="Config-246"><a href="#Config-246"><span class="linenos">246</span></a>    <span class="p">)</span>
+</span><span id="Config-247"><a href="#Config-247"><span class="linenos">247</span></a>    <span class="n">key_mapping</span><span class="p">:</span> <span class="n">KeyMappingConfig</span> <span class="o">=</span> <span class="n">KeyMappingConfig</span><span class="p">()</span>
+</span><span id="Config-248"><a href="#Config-248"><span class="linenos">248</span></a>    <span class="n">debug</span><span class="p">:</span> <span class="n">DebugConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Main configuration class that aggregates all configuration components.</p>
 
-<p>This is the main configuration object used throughout the application. It can be
-accessed via the <code><a href="#config">config()</a></code> function and customized using <code><a href="#set_config">set_config()</a></code>.</p>
+<p>This is the main configuration object used throughout the application.
+It can be accessed via the <code><a href="#config">config()</a></code> function and
+customized using <code><a href="#set_config">set_config()</a></code>.</p>
 
 <h6 id="attributes">Attributes:</h6>
 
@@ -1364,8 +1367,8 @@ Used by <code><a href="scene/map_scene.html#MapScene">nextrpg.scene.map_scene.Ma
 <li><strong><code><a href="#Config.character">character</a></code>:</strong>  The configuration for character attributes.
 Used by <code>nextrpg.character.character.Character</code>
 to control movement properties.</li>
-<li><strong><code><a href="#Config.rpg_maker_character">rpg_maker_character</a></code>:</strong>  The configuration for RPG Maker character sprites.
-Used by
+<li><strong><code><a href="#Config.rpg_maker_character">rpg_maker_character</a></code>:</strong>  The configuration for RPG Maker
+character drawings. Used by
 <code><a href="character/rpg_maker_drawing.html#RpgMakerCharacterDrawing">nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing</a></code>.</li>
 <li><strong><code><a href="#Config.key_mapping">key_mapping</a></code>:</strong>  The configuration for keyboard controls.
 Used by <code><a href="event/pygame_event.html">nextrpg.event.pygame_event</a></code> for input handling.</li>
@@ -1380,7 +1383,7 @@ Used by <code><a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawi
                             <div id="Config.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">Config</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">gui</span><span class="p">:</span> <span class="n"><a href="#GuiConfig">GuiConfig</a></span> <span class="o">=</span> <span class="n">GuiConfig</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;NextRPG&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">800</span><span class="p">),</span> <span class="n">frames_per_second</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">resize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>,</span><span class="param">	map: <a href="#TileMapConfig">TileMapConfig</a> = TileMapConfig(background=&#x27;background&#x27;, foreground=&#x27;foreground&#x27;, collision=&#x27;collision&#x27;, object=&#x27;object&#x27;, player=&#x27;player&#x27;, properties=&lt;class &#x27;<a href="#TileMapCustomProperties">TileMapCustomProperties</a>&#x27;&gt;),</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="#CharacterConfig">CharacterConfig</a></span> <span class="o">=</span> <span class="n">CharacterConfig</span><span class="p">(</span><span class="n">speed</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">directions</span><span class="o">=</span><span class="p">{</span><span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">:</span> <span class="mi">6</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span> <span class="mi">4</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">:</span> <span class="mi">5</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">:</span> <span class="mi">7</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span> <span class="mi">8</span><span class="o">&gt;</span><span class="p">})</span>,</span><span class="param">	<span class="n">rpg_maker_character</span><span class="p">:</span> <span class="n"><a href="#RpgMakerCharacterDrawingConfig">RpgMakerCharacterDrawingConfig</a></span> <span class="o">=</span> <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">(</span><span class="n">animate_on_idle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">frame_duration</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">direction</span><span class="o">=&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">)</span>,</span><span class="param">	<span class="n">key_mapping</span><span class="p">:</span> <span class="n"><a href="#KeyMappingConfig">KeyMappingConfig</a></span> <span class="o">=</span> <span class="n">KeyMappingConfig</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1073741904</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1073741903</span><span class="p">,</span> <span class="n">up</span><span class="o">=</span><span class="mi">1073741906</span><span class="p">,</span> <span class="n">down</span><span class="o">=</span><span class="mi">1073741905</span><span class="p">,</span> <span class="n">confirm</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>,</span><span class="param">	<span class="n">debug</span><span class="p">:</span> <span class="n"><a href="#DebugConfig">DebugConfig</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
+        <span class="name">Config</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">gui</span><span class="p">:</span> <span class="n"><a href="#GuiConfig">GuiConfig</a></span> <span class="o">=</span> <span class="n">GuiConfig</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;NextRPG&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">800</span><span class="p">),</span> <span class="n">frames_per_second</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">resize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>,</span><span class="param">	<span class="nb">map</span><span class="p">:</span> <span class="n"><a href="#TileMapConfig">TileMapConfig</a></span> <span class="o">=</span> <span class="n">TileMapConfig</span><span class="p">(</span><span class="n">background</span><span class="o">=</span><span class="s1">&#39;background&#39;</span><span class="p">,</span> <span class="n">foreground</span><span class="o">=</span><span class="s1">&#39;foreground&#39;</span><span class="p">,</span> <span class="n">collision</span><span class="o">=</span><span class="s1">&#39;collision&#39;</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="n">player</span><span class="o">=</span><span class="s1">&#39;player&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">TileMapCustomProperties</span><span class="p">())</span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="#CharacterConfig">CharacterConfig</a></span> <span class="o">=</span> <span class="n">CharacterConfig</span><span class="p">(</span><span class="n">speed</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">directions</span><span class="o">=</span><span class="p">{</span><span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span> <span class="mi">4</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">:</span> <span class="mi">5</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span> <span class="mi">8</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">:</span> <span class="mi">6</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">:</span> <span class="mi">7</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">})</span>,</span><span class="param">	<span class="n">rpg_maker_character</span><span class="p">:</span> <span class="n"><a href="#RpgMakerCharacterDrawingConfig">RpgMakerCharacterDrawingConfig</a></span> <span class="o">=</span> <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">(</span><span class="n">animate_on_idle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">frame_duration</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">direction</span><span class="o">=&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">)</span>,</span><span class="param">	<span class="n">key_mapping</span><span class="p">:</span> <span class="n"><a href="#KeyMappingConfig">KeyMappingConfig</a></span> <span class="o">=</span> <span class="n">KeyMappingConfig</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1073741904</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1073741903</span><span class="p">,</span> <span class="n">up</span><span class="o">=</span><span class="mi">1073741906</span><span class="p">,</span> <span class="n">down</span><span class="o">=</span><span class="mi">1073741905</span><span class="p">,</span> <span class="n">confirm</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>,</span><span class="param">	<span class="n">debug</span><span class="p">:</span> <span class="n"><a href="#DebugConfig">DebugConfig</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
 
         
     </div>
@@ -1406,7 +1409,7 @@ Used by <code><a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawi
                                 <div class="attr variable">
             <span class="name">map</span><span class="annotation">: <a href="#TileMapConfig">TileMapConfig</a></span>        =
 <input id="Config.map-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-            <label class="view-value-button pdoc-button" for="Config.map-view-value"></label><span class="default_value">TileMapConfig(background=&#39;background&#39;, foreground=&#39;foreground&#39;, collision=&#39;collision&#39;, object=&#39;object&#39;, player=&#39;player&#39;, properties=&lt;class &#39;<a href="#TileMapCustomProperties">TileMapCustomProperties</a>&#39;&gt;)</span>
+            <label class="view-value-button pdoc-button" for="Config.map-view-value"></label><span class="default_value">TileMapConfig(background=&#39;background&#39;, foreground=&#39;foreground&#39;, collision=&#39;collision&#39;, object=&#39;object&#39;, player=&#39;player&#39;, properties=TileMapCustomProperties())</span>
 
         
     </div>
@@ -1419,7 +1422,7 @@ Used by <code><a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawi
                                 <div class="attr variable">
             <span class="name">character</span><span class="annotation">: <a href="#CharacterConfig">CharacterConfig</a></span>        =
 <input id="Config.character-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-            <label class="view-value-button pdoc-button" for="Config.character-view-value"></label><span class="default_value">CharacterConfig(speed=0.25, directions={&lt;Direction.DOWN: 1&gt;, &lt;Direction.UP_RIGHT: 6&gt;, &lt;Direction.LEFT: 2&gt;, &lt;Direction.UP: 4&gt;, &lt;Direction.UP_LEFT: 5&gt;, &lt;Direction.DOWN_LEFT: 7&gt;, &lt;Direction.RIGHT: 3&gt;, &lt;Direction.DOWN_RIGHT: 8&gt;})</span>
+            <label class="view-value-button pdoc-button" for="Config.character-view-value"></label><span class="default_value">CharacterConfig(speed=0.25, directions={&lt;Direction.UP: 4&gt;, &lt;Direction.DOWN: 1&gt;, &lt;Direction.UP_LEFT: 5&gt;, &lt;Direction.DOWN_RIGHT: 8&gt;, &lt;Direction.UP_RIGHT: 6&gt;, &lt;Direction.DOWN_LEFT: 7&gt;, &lt;Direction.RIGHT: 3&gt;, &lt;Direction.LEFT: 2&gt;})</span>
 
         
     </div>
@@ -1477,18 +1480,18 @@ Used by <code><a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawi
 
     </div>
     <a class="headerlink" href="#set_config"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="set_config-253"><a href="#set_config-253"><span class="linenos">253</span></a><span class="k">def</span><span class="w"> </span><span class="nf">set_config</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="n">Config</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="p">:</span>
-</span><span id="set_config-254"><a href="#set_config-254"><span class="linenos">254</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the global configuration instance.</span>
-</span><span id="set_config-255"><a href="#set_config-255"><span class="linenos">255</span></a>
-</span><span id="set_config-256"><a href="#set_config-256"><span class="linenos">256</span></a><span class="sd">    Args:</span>
-</span><span id="set_config-257"><a href="#set_config-257"><span class="linenos">257</span></a><span class="sd">        `cfg`: The `Config` instance to use as the current configuration.</span>
-</span><span id="set_config-258"><a href="#set_config-258"><span class="linenos">258</span></a>
-</span><span id="set_config-259"><a href="#set_config-259"><span class="linenos">259</span></a><span class="sd">    Returns:</span>
-</span><span id="set_config-260"><a href="#set_config-260"><span class="linenos">260</span></a><span class="sd">        `Config`: The current `Config` instance after being set.</span>
-</span><span id="set_config-261"><a href="#set_config-261"><span class="linenos">261</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="set_config-262"><a href="#set_config-262"><span class="linenos">262</span></a>    <span class="k">global</span> <span class="n">_cfg</span>
-</span><span id="set_config-263"><a href="#set_config-263"><span class="linenos">263</span></a>    <span class="n">_cfg</span> <span class="o">=</span> <span class="n">cfg</span>
-</span><span id="set_config-264"><a href="#set_config-264"><span class="linenos">264</span></a>    <span class="k">return</span> <span class="n">_cfg</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="set_config-254"><a href="#set_config-254"><span class="linenos">254</span></a><span class="k">def</span><span class="w"> </span><span class="nf">set_config</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="n">Config</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="p">:</span>
+</span><span id="set_config-255"><a href="#set_config-255"><span class="linenos">255</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the global configuration instance.</span>
+</span><span id="set_config-256"><a href="#set_config-256"><span class="linenos">256</span></a>
+</span><span id="set_config-257"><a href="#set_config-257"><span class="linenos">257</span></a><span class="sd">    Args:</span>
+</span><span id="set_config-258"><a href="#set_config-258"><span class="linenos">258</span></a><span class="sd">        `cfg`: The `Config` instance to use as the current configuration.</span>
+</span><span id="set_config-259"><a href="#set_config-259"><span class="linenos">259</span></a>
+</span><span id="set_config-260"><a href="#set_config-260"><span class="linenos">260</span></a><span class="sd">    Returns:</span>
+</span><span id="set_config-261"><a href="#set_config-261"><span class="linenos">261</span></a><span class="sd">        `Config`: The current `Config` instance after being set.</span>
+</span><span id="set_config-262"><a href="#set_config-262"><span class="linenos">262</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="set_config-263"><a href="#set_config-263"><span class="linenos">263</span></a>    <span class="k">global</span> <span class="n">_cfg</span>
+</span><span id="set_config-264"><a href="#set_config-264"><span class="linenos">264</span></a>    <span class="n">_cfg</span> <span class="o">=</span> <span class="n">cfg</span>
+</span><span id="set_config-265"><a href="#set_config-265"><span class="linenos">265</span></a>    <span class="k">return</span> <span class="n">_cfg</span>
 </span></pre></div>
 
 
@@ -1520,19 +1523,19 @@ Used by <code><a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawi
 
     </div>
     <a class="headerlink" href="#config"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="config-267"><a href="#config-267"><span class="linenos">267</span></a><span class="k">def</span><span class="w"> </span><span class="nf">config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="p">:</span>
-</span><span id="config-268"><a href="#config-268"><span class="linenos">268</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the current configuration instance.</span>
-</span><span id="config-269"><a href="#config-269"><span class="linenos">269</span></a>
-</span><span id="config-270"><a href="#config-270"><span class="linenos">270</span></a><span class="sd">    If no configuration has been set, returns the default `Config` instance.</span>
-</span><span id="config-271"><a href="#config-271"><span class="linenos">271</span></a>
-</span><span id="config-272"><a href="#config-272"><span class="linenos">272</span></a><span class="sd">    Returns:</span>
-</span><span id="config-273"><a href="#config-273"><span class="linenos">273</span></a><span class="sd">        `Config`: The current `Config` instance.</span>
-</span><span id="config-274"><a href="#config-274"><span class="linenos">274</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="config-275"><a href="#config-275"><span class="linenos">275</span></a>
-</span><span id="config-276"><a href="#config-276"><span class="linenos">276</span></a>    <span class="k">global</span> <span class="n">_cfg</span>
-</span><span id="config-277"><a href="#config-277"><span class="linenos">277</span></a>    <span class="k">if</span> <span class="n">_cfg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="config-278"><a href="#config-278"><span class="linenos">278</span></a>        <span class="n">_cfg</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
-</span><span id="config-279"><a href="#config-279"><span class="linenos">279</span></a>    <span class="k">return</span> <span class="n">_cfg</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="config-268"><a href="#config-268"><span class="linenos">268</span></a><span class="k">def</span><span class="w"> </span><span class="nf">config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="p">:</span>
+</span><span id="config-269"><a href="#config-269"><span class="linenos">269</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Gets the current configuration instance.</span>
+</span><span id="config-270"><a href="#config-270"><span class="linenos">270</span></a>
+</span><span id="config-271"><a href="#config-271"><span class="linenos">271</span></a><span class="sd">    If no configuration has been set, returns the default `Config` instance.</span>
+</span><span id="config-272"><a href="#config-272"><span class="linenos">272</span></a>
+</span><span id="config-273"><a href="#config-273"><span class="linenos">273</span></a><span class="sd">    Returns:</span>
+</span><span id="config-274"><a href="#config-274"><span class="linenos">274</span></a><span class="sd">        `Config`: The current `Config` instance.</span>
+</span><span id="config-275"><a href="#config-275"><span class="linenos">275</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="config-276"><a href="#config-276"><span class="linenos">276</span></a>
+</span><span id="config-277"><a href="#config-277"><span class="linenos">277</span></a>    <span class="k">global</span> <span class="n">_cfg</span>
+</span><span id="config-278"><a href="#config-278"><span class="linenos">278</span></a>    <span class="k">if</span> <span class="n">_cfg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="config-279"><a href="#config-279"><span class="linenos">279</span></a>        <span class="n">_cfg</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
+</span><span id="config-280"><a href="#config-280"><span class="linenos">280</span></a>    <span class="k">return</span> <span class="n">_cfg</span>
 </span></pre></div>
 
 
