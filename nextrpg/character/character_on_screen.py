@@ -30,7 +30,7 @@ class CharacterAndVisuals(NamedTuple):
     A named tuple containing a character and its associated visual elements.
 
     Args:
-        `characte`r: The main character drawing on screen.
+        `character`: The main character drawing on screen.
 
         `visuals`: Additional visual elements associated with the character.
     """
