@@ -144,21 +144,16 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             `initial_direction`: Initial direction for the character.
                 If not specified, the default direction from `Config` is used.
         """
+        cfg = config().rpg_maker_character
+        animate_on_idle = (
+            cfg.animate_on_idle if animate_on_idle is None else animate_on_idle
+        )
+        frames = _load_frames(
+            sprite_sheet,
+            (cfg.frame_duration if frame_duration is None else frame_duration),
+        )
         return RpgMakerCharacterDrawing(
-            (
-                config().rpg_maker_character.animate_on_idle
-                if animate_on_idle is None
-                else animate_on_idle
-            ),
-            _load_frames(
-                sprite_sheet,
-                (
-                    config().rpg_maker_character.frame_duration
-                    if frame_duration is None
-                    else frame_duration
-                ),
-            ),
-            direction or config().rpg_maker_character.direction,
+            animate_on_idle, frames, direction or cfg.direction
         )
 
     @cached_property
