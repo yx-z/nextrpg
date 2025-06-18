@@ -193,11 +193,11 @@ def _max_bottom(rectangles: list[Rectangle]) -> Pixel:
 
 def _draw(
     layer: TiledTileLayer, tile_size: Size
-) -> list[tuple[_TiledCoordinate, DrawOnScreen]]:
-    return [
-        (_TiledCoordinate(left, top), _tile(left, top, surface, tile_size))
+) -> dict[_TiledCoordinate, DrawOnScreen]:
+    return {
+        _TiledCoordinate(left, top): _tile(left, top, surface, tile_size)
         for left, top, surface in layer.tiles()
-    ]
+    }
 
 
 def _tile(
@@ -213,7 +213,8 @@ def _get_gid_and_draw(
     tmx: TiledMap, layer: TiledTileLayer, tile_size: Size
 ) -> dict[_Gid, DrawOnScreen]:
     return {
-        _gid(tmx, layer, coord): draw for coord, draw in _draw(layer, tile_size)
+        _gid(tmx, layer, coord): draw
+        for coord, draw in _draw(layer, tile_size).items()
     }
 
 
@@ -263,13 +264,13 @@ def _gid_groups(
         if (cls := tile.get("type"))
     }
     groups = (
-        {gid: draw_on_screens[gid] for gid, _ in gid_group}
+        {gid: draw_on_screens.get(gid) for gid, _ in gid_group}
         for _, gid_group in groupby(
             sorted(gid_to_class.items(), key=lambda x: x[1]), key=lambda x: x[1]
         )
     )
     return {
-        gid: set(gid_to_draw.values())
+        gid: set(filter(None, gid_to_draw.values()))
         for gid_to_draw in groups
         for gid in gid_to_draw
     }
@@ -281,7 +282,7 @@ def _draw_layers(
     return [
         draw
         for layer in _layers(tmx, name)
-        for _, draw in _draw(layer, tile_size)
+        for _, draw in _draw(layer, tile_size).items()
     ]
 
 

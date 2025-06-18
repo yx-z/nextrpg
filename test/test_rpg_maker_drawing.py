@@ -27,3 +27,10 @@ def test_rpg_maker_drawing():
     assert character.turn(Direction.UP_RIGHT).direction is Direction.UP_RIGHT
     assert character.move(2).drawing.size == Size(2, 2)
     assert character.idle(2).drawing.size == Size(2, 2)
+
+    character = RpgMakerCharacterDrawing.load(
+        SpriteSheet(Drawing(Surface((24, 16))), SpriteSheetSelection(0, 0)),
+        frame_duration=1,
+        animate_on_idle=False,
+    )
+    assert character.idle(2).drawing.size == Size(2, 2)

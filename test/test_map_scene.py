@@ -1,3 +1,4 @@
+from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterator
@@ -20,7 +21,9 @@ class MockTmx:
     y: int = 2
     layers: list["MockTmx"] = field(default_factory=list)
     properties: dict = field(default_factory=dict)
-    tile_properties: dict = field(default_factory=dict)
+    tile_properties: dict = field(
+        default_factory=lambda: defaultdict(lambda: defaultdict(int))
+    )
     data: MagicMock = MagicMock()
 
     def __iter__(self) -> Iterator["MockTmx"]:

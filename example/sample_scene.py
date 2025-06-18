@@ -24,15 +24,15 @@ def entry_scene() -> Scene:
     """
     return MapScene.load(
         # Tiled/tmx tile map .
-        Path("assets/interior.tmx"),
+        Path("assets/exterior.tmx"),
         RpgMakerCharacterDrawing.load(
             SpriteSheet(
                 # Player sprite sheet.
-                Drawing.load(Path("assets/Characters_MV.png")),
+                Drawing.load(Path("assets/fantasy/FCharacter1.png")),
                 # Select a character from the sprite sheet.
                 SpriteSheetSelection(row=0, column=1),
-                # Declare a 28-pixel margin to the top.
-                margin=Margin(top=28),
+                # Declare a 22-pixel margin to the top.
+                margin=Margin(top=22),
             )
         ),
     )
