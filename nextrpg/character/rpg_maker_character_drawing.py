@@ -19,7 +19,7 @@ from functools import cached_property
 from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.common_types import Direction, Millisecond
+from nextrpg.common_types import Direction, Millisecond, Pixel
 from nextrpg.config import config
 from nextrpg.draw_on_screen import Coordinate, Drawing, Size
 from nextrpg.frames import CyclicFrames
@@ -68,7 +68,7 @@ type FrameType = type[DefaultFrameType | XpFrameType]
 @dataclass(frozen=True)
 class SpriteSheetSelection:
     """
-    Configuration for selecting a portion of a sprite sheet.
+    Zero-indexed row/column for selecting a portion of a sprite sheet.
 
     Defines the position and boundaries for extracting a specific character
     sprite sheet from a larger sprite sheet containing multiple characters.
@@ -92,6 +92,18 @@ class SpriteSheetSelection:
 
 
 @dataclass(frozen=True)
+class Margin:
+    """
+    Margin of a single character frame to crop from the sprite sheet.
+    """
+
+    top: Pixel = 0
+    left: Pixel = 0
+    bottom: Pixel = 0
+    right: Pixel = 0
+
+
+@dataclass(frozen=True)
 class SpriteSheet:
     """
     Container for sprite sheet configuration.
@@ -110,6 +122,7 @@ class SpriteSheet:
     drawing: Drawing
     selection: SpriteSheetSelection | None = None
     style: FrameType = DefaultFrameType
+    margin: Margin = Margin()
 
 
 @dataclass(frozen=True)
@@ -267,17 +280,30 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         )
 
 
+def _crop_margin(drawing: Drawing, margin: Margin) -> Drawing:
+    return drawing.crop(
+        Size(
+            drawing.width - margin.left - margin.right,
+            drawing.height - margin.top - margin.bottom,
+        ),
+        Coordinate(margin.left, margin.top),
+    )
+
+
 def _crop_into_frames_at_row(
-    drawing: Drawing, frame_type: FrameType, row: int
+    drawing: Drawing, sprite_sheet: SpriteSheet, row: int
 ) -> list[Drawing]:
-    num_frames = len(frame_type)
+    num_frames = len(sprite_sheet.style)
     return [
-        drawing.crop(
-            Size(
-                width := drawing.width / num_frames,
-                height := drawing.height / 4,
+        _crop_margin(
+            drawing.crop(
+                Size(
+                    width := drawing.width / num_frames,
+                    height := drawing.height / 4,
+                ),
+                Coordinate(width * i, height * row),
             ),
-            Coordinate(width * i, height * row),
+            sprite_sheet.margin,
         )
         for i in range(num_frames)
     ]
@@ -297,13 +323,13 @@ def _crop_by_selection(
 
 def _load_frames_row(
     drawing: Drawing,
-    frame_type: FrameType,
+    sprite_sheet: SpriteSheet,
     row: int,
     frame_duration: Millisecond,
 ) -> CyclicFrames:
-    frames = _crop_into_frames_at_row(drawing, frame_type, row)
+    frames = _crop_into_frames_at_row(drawing, sprite_sheet, row)
     return CyclicFrames(
-        [frames[i] for i in frame_type._frame_indices()], frame_duration
+        [frames[i] for i in sprite_sheet.style._frame_indices()], frame_duration
     )
 
 
@@ -316,7 +342,7 @@ def _load_frames(
         else sprite_sheet.drawing
     )
     return {
-        d: _load_frames_row(drawing, sprite_sheet.style, row, frame_duration)
+        d: _load_frames_row(drawing, sprite_sheet, row, frame_duration)
         for d, row in {
             Direction.DOWN: 0,
             Direction.LEFT: 1,

@@ -97,8 +97,8 @@ class MapScene(Scene):
         return (
             self._background
             + self._foreground_and_character
-            + self._player.draw_on_screen.visuals
             + self._above_character
+            + self._player.draw_on_screen.visuals
         )
 
     @override
@@ -164,7 +164,7 @@ class MapScene(Scene):
         player = self._player.draw_on_screen.character.visible_rectangle
         return any(
             any(
-                player.collides(rect) and rect.bottom < player.bottom
+                player.collide(rect) and rect.bottom < player.bottom
                 for rect in self._grouped_rectangles(gid, draw)
             )
             for gid, draw in layer.items()

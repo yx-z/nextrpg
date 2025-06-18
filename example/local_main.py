@@ -8,5 +8,5 @@ from sample_scene import entry_scene
 
 if __name__ == "__main__":
     set_config(Config(debug=DebugConfig()))
-    set_config(Config())
+    # set_config(Config())
     start_game(entry_scene)

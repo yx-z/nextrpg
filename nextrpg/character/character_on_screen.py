@@ -16,7 +16,7 @@ from nextrpg.common_types import (
     Rectangle,
 )
 from nextrpg.config import config
-from nextrpg.draw_on_screen import DrawOnScreen, Drawing
+from nextrpg.draw_on_screen import DrawOnScreen
 from nextrpg.event.pygame_event import (
     KeyPressDown,
     KeyPressUp,
@@ -57,7 +57,7 @@ class CharacterOnScreen:
         `collisions`: List of rectangles representing collision boundaries.
     """
 
-    character_drawing: CharacterDrawing
+    character: CharacterDrawing
     coordinate: Coordinate
     speed: Pixel
     collisions: list[Rectangle]
@@ -73,7 +73,7 @@ class CharacterOnScreen:
             representation and any associated visual elements.
         """
         return CharacterAndVisuals(
-            DrawOnScreen(self.coordinate, self.character_drawing.drawing),
+            DrawOnScreen(self.coordinate, self.character.drawing),
             self._debug_rectangles,
         )
 
@@ -92,11 +92,11 @@ class CharacterOnScreen:
         updated_keys = self._updated_movement_key(e)
         return replace(
             self,
-            character_drawing=(
-                self.character_drawing.turn(direction)
+            character=(
+                self.character.turn(direction)
                 if (direction := _key_to_dir(updated_keys))
                 in config().character.directions
-                else self.character_drawing
+                else self.character
             ),
             _movement_keys=updated_keys,
         )
@@ -124,32 +124,33 @@ class CharacterOnScreen:
         Returns:
             `CharacterOnScreen`: The updated character state after the step.
         """
-        moved_drawing = self.character_drawing.move(time_delta)
-        moved_coord = self._move(time_delta, moved_drawing.drawing)
+        moved_coord = self._move(time_delta)
         return replace(
             self,
             coordinate=moved_coord or self.coordinate,
-            character_drawing=(
-                moved_drawing
+            character=(
+                self.character.move(time_delta)
                 if self._movement_keys
-                else self.character_drawing.idle(time_delta)
+                else self.character.idle(time_delta)
             ),
         )
 
-    def _move(
-        self, time_delta: Millisecond, drawing: Drawing
-    ) -> Coordinate | None:
+    def _move(self, time_delta: Millisecond) -> Coordinate | None:
         moved_coord = self.coordinate + DirectionalOffset(
-            self.character_drawing.direction, self.speed * time_delta
+            self.character.direction, self.speed * time_delta
         )
         return (
             moved_coord
-            if self._movement_keys and self._can_move(moved_coord, drawing)
+            if self._movement_keys and self._can_move(time_delta, moved_coord)
             else None
         )
 
-    def _can_move(self, coordinate: Coordinate, drawing: Drawing) -> bool:
-        rect = DrawOnScreen(coordinate, drawing).visible_rectangle
+    def _can_move(
+        self, time_delta: Millisecond, coordinate: Coordinate
+    ) -> bool:
+        rect = DrawOnScreen(
+            coordinate, self.character.move(time_delta).drawing
+        ).rectangle
         hit_coords = {
             Direction.LEFT: {rect.bottom_left, rect.center_left},
             Direction.RIGHT: {rect.bottom_right, rect.center_right},
@@ -162,12 +163,10 @@ class CharacterOnScreen:
             Direction.UP_LEFT: {
                 rect.top_left,
                 rect.center_left,
-                rect.top_center,
             },
             Direction.UP_RIGHT: {
                 rect.top_right,
                 rect.center_right,
-                rect.top_center,
             },
             Direction.DOWN_LEFT: {
                 rect.bottom_left,
@@ -179,7 +178,7 @@ class CharacterOnScreen:
                 rect.center_right,
                 rect.bottom_center,
             },
-        }[self.character_drawing.direction]
+        }[self.character.direction]
         return all(
             all(hit_coord not in collision for hit_coord in hit_coords)
             for collision in self.collisions

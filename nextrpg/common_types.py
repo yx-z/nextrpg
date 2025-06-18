@@ -399,7 +399,7 @@ class Rectangle:
             self.left + self.size.width / 2, self.top + self.size.height / 2
         )
 
-    def collides(self, rectangle: "Rectangle") -> bool:
+    def collide(self, rectangle: "Rectangle") -> bool:
         """
         Checks if this rectangle overlaps with another rectangle.
 
@@ -414,10 +414,10 @@ class Rectangle:
             `bool`: True if the rectangles overlap, False otherwise.
         """
         return (
-            self.top_left.left <= rectangle.top_right.left
-            and self.top_right.left >= rectangle.top_left.left
-            and self.top_left.top <= rectangle.bottom_right.top
-            and self.bottom_right.top >= rectangle.top_left.top
+            self.top_left.left < rectangle.top_right.left
+            and self.top_right.left > rectangle.top_left.left
+            and self.top_left.top < rectangle.bottom_right.top
+            and self.bottom_right.top > rectangle.top_left.top
         )
 
     def __contains__(self, coordinate: Coordinate) -> bool:
@@ -434,6 +434,6 @@ class Rectangle:
             `bool`: Whether the coordinate lies within the rectangle.
         """
         return (
-            self.left <= coordinate.left <= self.right
-            and self.top <= coordinate.top <= self.bottom
+            self.left < coordinate.left < self.right
+            and self.top < coordinate.top < self.bottom
         )

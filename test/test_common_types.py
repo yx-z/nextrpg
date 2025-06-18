@@ -51,21 +51,20 @@ def test_size() -> None:
 
 
 def test_rectangle() -> None:
-    rect = Rectangle(Coordinate(10, 20), Size(1, 2))
-    assert rect.size == Size(1, 2)
+    rect = Rectangle(Coordinate(10, 20), Size(2, 2))
+    assert rect.size == Size(2, 2)
     assert rect.left == 10
     assert rect.top == 20
-    assert rect.right == 11
+    assert rect.right == 12
     assert rect.bottom == 22
     assert rect.top_left == Coordinate(10, 20)
-    assert rect.top_right == Coordinate(11, 20)
+    assert rect.top_right == Coordinate(12, 20)
     assert rect.bottom_left == Coordinate(10, 22)
-    assert rect.bottom_right == Coordinate(11, 22)
-    assert rect.top_center == Coordinate(10.5, 20)
-    assert rect.bottom_center == Coordinate(10.5, 22)
+    assert rect.bottom_right == Coordinate(12, 22)
+    assert rect.top_center == Coordinate(11, 20)
+    assert rect.bottom_center == Coordinate(11, 22)
     assert rect.center_left == Coordinate(10, 21)
-    assert rect.center_right == Coordinate(11, 21)
-    assert rect.center == Coordinate(10.5, 21)
-    rect2 = Rectangle(Coordinate(11, 20), Size(1, 2))
-    assert rect.collides(rect2)
-    assert Coordinate(10, 20) in rect
+    assert rect.center_right == Coordinate(12, 21)
+    assert rect.center == Coordinate(11, 21)
+    assert rect.collide(Rectangle(Coordinate(9, 20), Size(10, 20)))
+    assert Coordinate(11, 21) in rect

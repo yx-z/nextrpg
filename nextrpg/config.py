@@ -22,15 +22,15 @@ class DebugConfig:
 
     Attributes:
         `drawing_background_color`: The background color used for debug drawing.
-            Default is semi-transparent blue (0, 0, 255, 64).
+            Default is semi-transparent blue (0, 0, 255, 32).
 
         `collision_rectangle_color`: The color used to highlight collision areas
             when debugging is enabled.
-            Default is semi-transparent red (255, 0, 0, 64).
+            Default is semi-transparent red (255, 0, 0, 96).
     """
 
-    drawing_background_color: Rgba = Rgba(0, 0, 255, 64)
-    collision_rectangle_color: Rgba = Rgba(255, 0, 0, 64)
+    drawing_background_color: Rgba = Rgba(0, 0, 255, 32)
+    collision_rectangle_color: Rgba = Rgba(255, 0, 0, 96)
 
 
 @dataclass(frozen=True)
