@@ -31,7 +31,13 @@ from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.scene.scene import Scene
 
 type _LayerIndex = int
-type _TiledCoordinate = tuple[int, int]
+
+
+class _TiledCoordinate(NamedTuple):
+    top: int
+    left: int
+
+
 type _Gid = int | _TiledCoordinate
 
 
@@ -67,19 +73,21 @@ class MapScene(Scene):
         Returns:
             `Scene`: A fully initialized map scene.
         """
+        tmx = load_pygame(str(tmx_file))
+        tile_size = Size(tmx.tilewidth, tmx.tileheight)
+        foreground = [
+            _get_gid_and_draw(tmx, layer, tile_size)
+            for layer in _layers(tmx, config().map.foreground)
+        ]
+        gids = {
+            gid: draw for layer in foreground for gid, draw in layer.items()
+        }
         return MapScene(
-            _draw_layers(
-                tmx := load_pygame(str(tmx_file)),
-                tile_size := Size(tmx.tilewidth, tmx.tileheight),
-                config().map.background,
-            ),
-            foreground := [
-                _get_gid_and_draw(tmx, layer, tile_size)
-                for layer in _layers(tmx, config().map.foreground)
-            ],
+            _draw_layers(tmx, tile_size, config().map.background),
+            foreground,
             _player(player, tmx),
             _draw_layers(tmx, tile_size, config().map.above_character),
-            _gid_groups(tmx, {k: v for l in foreground for k, v in l.items()}),
+            _gid_groups(tmx, gids),
         )
 
     @cached_property
@@ -147,8 +155,8 @@ class MapScene(Scene):
     @cached_property
     def _layer_gid_draws(self) -> list[tuple[_LayerIndex, _Gid, DrawOnScreen]]:
         foregrounds = list(
-            (i, gid, draw)
-            for i, gid_to_draws in enumerate(self._foreground)
+            (layer_index, gid, draw)
+            for layer_index, gid_to_draws in enumerate(self._foreground)
             for gid, draw in gid_to_draws.items()
         )
         player = (self._player_layer, 0, self._player.draw_on_screen.character)
@@ -187,13 +195,14 @@ def _draw(
     layer: TiledTileLayer, tile_size: Size
 ) -> list[tuple[_TiledCoordinate, DrawOnScreen]]:
     return [
-        ((coord := (left, top)), _tile(coord, surface, tile_size))
+        (_TiledCoordinate(left, top), _tile(left, top, surface, tile_size))
         for left, top, surface in layer.tiles()
     ]
 
 
-def _tile(coord: _TiledCoordinate, surface: Surface, tile_size) -> DrawOnScreen:
-    left, top = coord
+def _tile(
+    left: int, top: int, surface: Surface, tile_size: Size
+) -> DrawOnScreen:
     return DrawOnScreen(
         Coordinate(left * tile_size.width, top * tile_size.height),
         Drawing(surface),
@@ -204,11 +213,14 @@ def _get_gid_and_draw(
     tmx: TiledMap, layer: TiledTileLayer, tile_size: Size
 ) -> dict[_Gid, DrawOnScreen]:
     return {
-        tmx.tile_properties.get(layer.data[left][top], {}).get(
-            "id", (top, left)
-        ): draw
-        for (top, left), draw in _draw(layer, tile_size)
+        _gid(tmx, layer, coord): draw for coord, draw in _draw(layer, tile_size)
     }
+
+
+def _gid(tmx: TiledMap, layer: TiledTileLayer, coord: _TiledCoordinate) -> _Gid:
+    return tmx.tile_properties.get(layer.data[coord.left][coord.top], {}).get(
+        "id", coord
+    )
 
 
 def _layers(

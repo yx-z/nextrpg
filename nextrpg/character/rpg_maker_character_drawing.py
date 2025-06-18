@@ -158,15 +158,13 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
                 If not specified, the default direction from `Config` is used.
         """
         cfg = config().rpg_maker_character
-        animate_on_idle = (
-            cfg.animate_on_idle if animate_on_idle is None else animate_on_idle
-        )
-        frames = _load_frames(
-            sprite_sheet,
-            (cfg.frame_duration if frame_duration is None else frame_duration),
+        frame_duration = (
+            cfg.frame_duration if frame_duration is None else frame_duration
         )
         return RpgMakerCharacterDrawing(
-            animate_on_idle, frames, direction or cfg.direction
+            cfg.animate_on_idle if animate_on_idle is None else animate_on_idle,
+            _load_frames(sprite_sheet, frame_duration),
+            direction or cfg.direction,
         )
 
     @cached_property
@@ -268,15 +266,11 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             `CharacterDrawing`: The updated drawing
             with a new idle animation state.
         """
-        return (
-            self.move(time_delta)
-            if self._animate_on_idle
-            else replace(
-                self,
-                _frames={
-                    d: frames.reset() for d, frames in self._frames.items()
-                },
-            )
+        if self._animate_on_idle:
+            return self.move(time_delta)
+        return replace(
+            self,
+            _frames={d: frames.reset() for d, frames in self._frames.items()},
         )
 
 
@@ -294,17 +288,10 @@ def _crop_into_frames_at_row(
     drawing: Drawing, sprite_sheet: SpriteSheet, row: int
 ) -> list[Drawing]:
     num_frames = len(sprite_sheet.style)
+    width = drawing.width / num_frames
+    height = drawing.height / 4
     return [
-        _crop_margin(
-            drawing.crop(
-                Size(
-                    width := drawing.width / num_frames,
-                    height := drawing.height / 4,
-                ),
-                Coordinate(width * i, height * row),
-            ),
-            sprite_sheet.margin,
-        )
+        drawing.crop(Size(width, height), Coordinate(width * i, height * row))
         for i in range(num_frames)
     ]
 
@@ -312,11 +299,10 @@ def _crop_into_frames_at_row(
 def _crop_by_selection(
     drawing: Drawing, selection: SpriteSheetSelection
 ) -> Drawing:
+    width = drawing.width / selection.max_columns
+    height = drawing.height / selection.max_rows
     return drawing.crop(
-        Size(
-            width := drawing.width / selection.max_columns,
-            height := drawing.height / selection.max_rows,
-        ),
+        Size(width, height),
         Coordinate(width * selection.column, height * selection.row),
     )
 
@@ -327,10 +313,12 @@ def _load_frames_row(
     row: int,
     frame_duration: Millisecond,
 ) -> CyclicFrames:
-    frames = _crop_into_frames_at_row(drawing, sprite_sheet, row)
-    return CyclicFrames(
-        [frames[i] for i in sprite_sheet.style._frame_indices()], frame_duration
-    )
+    frames = [
+        _crop_margin(d, sprite_sheet.margin)
+        for d in _crop_into_frames_at_row(drawing, sprite_sheet, row)
+    ]
+    frame_indices = sprite_sheet.style._frame_indices()
+    return CyclicFrames([frames[i] for i in frame_indices], frame_duration)
 
 
 def _load_frames(
@@ -352,14 +340,17 @@ def _load_frames(
     }
 
 
+_EIGHT_TO_FOUR = {
+    Direction.RIGHT: Direction.RIGHT,
+    Direction.LEFT: Direction.LEFT,
+    Direction.UP: Direction.UP,
+    Direction.DOWN: Direction.DOWN,
+    Direction.DOWN_LEFT: Direction.DOWN,
+    Direction.DOWN_RIGHT: Direction.DOWN,
+    Direction.UP_LEFT: Direction.LEFT,
+    Direction.UP_RIGHT: Direction.RIGHT,
+}
+
+
 def _adjust(direction: Direction) -> Direction:
-    return {
-        Direction.RIGHT: Direction.RIGHT,
-        Direction.LEFT: Direction.LEFT,
-        Direction.UP: Direction.UP,
-        Direction.DOWN: Direction.DOWN,
-        Direction.DOWN_LEFT: Direction.DOWN,
-        Direction.DOWN_RIGHT: Direction.DOWN,
-        Direction.UP_LEFT: Direction.LEFT,
-        Direction.UP_RIGHT: Direction.RIGHT,
-    }[direction]
+    return _EIGHT_TO_FOUR[direction]

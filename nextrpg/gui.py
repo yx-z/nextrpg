@@ -27,12 +27,12 @@ class Gui:
         """
         window = window or config().gui.size
         self._scale: Final[float] = min(
-            window.width / (width := config().gui.size.width),
-            window.height / (height := config().gui.size.height),
+            window.width / config().gui.size.width,
+            window.height / config().gui.size.height,
         )
         self._center_shift: Final[Coordinate] = Coordinate(
-            (window.width - self._scale * width) / 2,
-            (window.height - self._scale * height) / 2,
+            (window.width - self._scale * config().gui.size.width) / 2,
+            (window.height - self._scale * config().gui.size.height) / 2,
         )
 
     def scale(self, draws: list[DrawOnScreen]) -> DrawOnScreen:

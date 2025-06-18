@@ -74,6 +74,7 @@ class Game:
         self._scene = self._scene.event(event)
         match event:
             case Quit():
+                pygame.quit()
                 return False
             case GuiResize() as gui:
                 self._gui = Gui(gui.size)
