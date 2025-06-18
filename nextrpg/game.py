@@ -62,25 +62,21 @@ class Game:
         """
         Start the game in async fashion in the context of pygbag/web.
         """
-        while True:
-            if not await self._step():
-                break
+        while self._step():
             await sleep(0)
 
-    async def _step(self) -> bool:
-        if any(not self._event(to_typed_event(e)) for e in pygame.event.get()):
-            return False
-        self._draw()
+    def _step(self) -> bool:
         self._clock.tick(config().gui.frames_per_second)
-        return True
+        self._draw()
+        return all(map(self._event, map(to_typed_event, pygame.event.get())))
 
     def _event(self, event: PygameEvent) -> bool:
         self._scene = self._scene.event(event)
         match event:
             case Quit():
                 return False
-            case GuiResize() as g:
-                self._gui = Gui(g.size)
+            case GuiResize() as gui:
+                self._gui = Gui(gui.size)
         return True
 
     def _draw(self) -> None:
