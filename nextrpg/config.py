@@ -6,7 +6,7 @@ or pass the customized instance to `nextrpg.start_game.start_game`.
 
 from dataclasses import dataclass, field
 
-from pygame import K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_UP
+from pygame.locals import K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_UP
 
 from nextrpg.common_types import Direction, Millisecond, Pixel, Rgba, Size
 
@@ -56,7 +56,7 @@ class GuiConfig:
         `background_color`: The background color of the GUI window.
     """
 
-    title: str = "NextRPG"
+    title: str = "nextrpg"
     size: Size = Size(1280, 800)
     frames_per_second: int = 60
     resize: bool = True

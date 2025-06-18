@@ -5,8 +5,9 @@ from pygame import Color, SRCALPHA, Surface
 from pytest_mock import MockerFixture
 
 from nextrpg.common_types import Coordinate, Rectangle, Rgba, Size
-from nextrpg.config import Config, DebugConfig, config, set_config
+from nextrpg.config import Config, DebugConfig
 from nextrpg.draw_on_screen import DrawOnScreen, Drawing
+from test.util import override_config
 
 
 def test_drawing(mocker: MockerFixture) -> None:
@@ -21,15 +22,12 @@ def test_drawing(mocker: MockerFixture) -> None:
     assert (drawing * 10).size == Size(10, 20)
     assert isinstance(drawing.pygame, Surface)
 
-    prev_config = config()
-    try:
-        debug = DebugConfig(drawing_background_color=Rgba(0, 0, 255, 32))
-        set_config(Config(debug=debug))
-        drawing = Drawing(Surface((1, 2), SRCALPHA))
-        assert isinstance((surface := drawing.pygame), Surface)
+    with override_config(
+        Config(debug=DebugConfig(drawing_background_color=Rgba(0, 0, 255, 32)))
+    ):
+        surface = Drawing(Surface((1, 2), SRCALPHA)).pygame
+        assert isinstance(surface, Surface)
         assert surface.get_at((0, 0)) == Color(0, 0, 255, 32)
-    finally:
-        set_config(prev_config)
 
 
 def test_draw_on_screen() -> None:

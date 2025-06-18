@@ -8,9 +8,8 @@ Web entry point.
 #   "pytmx",
 # ]
 # ///
-from asyncio import run
 
-from nextrpg.start_game import async_start_game
+from nextrpg.game import Game
 from sample_scene import entry_scene
 
-run(async_start_game(entry_scene))
+Game.load(entry_scene).start_web()

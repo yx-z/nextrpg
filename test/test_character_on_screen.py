@@ -20,6 +20,6 @@ def test_character_on_screen():
     )
     assert character.step(100).coordinate == Coordinate(10, 20)
     assert character.draw_on_screen.character.top_left == Coordinate(10, 20)
-    right = KeyPressDown(Event(KEYDOWN, {"key": K_RIGHT}))
+    right = KeyPressDown(Event(KEYDOWN, key=K_RIGHT))
     assert character.event(right).step(1).coordinate == Coordinate(11, 20)
     assert character.event(Quit(Event(QUIT)))

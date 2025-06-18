@@ -1,5 +1,7 @@
+from contextlib import contextmanager
 from dataclasses import dataclass, replace
 from functools import cached_property
+from typing import Generator
 
 from pygame import Surface
 
@@ -8,6 +10,7 @@ from nextrpg.common_types import (
     Direction,
     Millisecond,
 )
+from nextrpg.config import Config, config, set_config
 from nextrpg.draw_on_screen import Drawing
 
 
@@ -55,3 +58,12 @@ class MockCharacterDrawing(CharacterDrawing):
 
     def idle(self, time_delta: Millisecond) -> "CharacterDrawing":
         return self
+
+
+@contextmanager
+def override_config(cfg: Config) -> Generator[Config, None, None]:
+    previous_config = config()
+    try:
+        yield set_config(cfg)
+    finally:
+        set_config(previous_config)
