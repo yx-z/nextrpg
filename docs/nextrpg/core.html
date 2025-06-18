@@ -400,33 +400,39 @@
 </span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
 </span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
 </span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>
-</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Size&quot;</span><span class="p">:</span>
-</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
-</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">=}</span><span class="s2"> and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">=}</span><span class="s2"> cannot be negative.&quot;</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>            <span class="p">)</span>
 </span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
-</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>
-</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="sd">        Args:</span>
-</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a><span class="sd">            `scale`: A scaling factor by which the width and height will be</span>
-</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a><span class="sd">                multiplied.</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Size&quot;</span><span class="p">:</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
 </span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>
-</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a><span class="sd">        Returns:</span>
-</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
-</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scale</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scale</span><span class="p">))</span>
-</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>
-</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
-</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="sd">        Gets the dimensions as a tuple.</span>
-</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>
-</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="sd">        Returns:</span>
-</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the width and height</span>
-</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a><span class="sd">                values in that order.</span>
-</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a><span class="sd">        Args:</span>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a><span class="sd">            `scale`: A scaling factor by which the width and height will be</span>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="sd">                multiplied.</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a><span class="sd">        Returns:</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scale</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scale</span><span class="p">))</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a><span class="sd">        Gets the dimensions as a tuple.</span>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>
+</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a><span class="sd">        Returns:</span>
+</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the width and height</span>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a><span class="sd">                values in that order.</span>
+</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
 </span></pre></div>
 
 
@@ -1089,33 +1095,39 @@ the number of pixels from the top edge of the game window.</li>
 </span><span id="Size-235"><a href="#Size-235"><span class="linenos">235</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
 </span><span id="Size-236"><a href="#Size-236"><span class="linenos">236</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
 </span><span id="Size-237"><a href="#Size-237"><span class="linenos">237</span></a>
-</span><span id="Size-238"><a href="#Size-238"><span class="linenos">238</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Size&quot;</span><span class="p">:</span>
-</span><span id="Size-239"><a href="#Size-239"><span class="linenos">239</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Size-240"><a href="#Size-240"><span class="linenos">240</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
-</span><span id="Size-241"><a href="#Size-241"><span class="linenos">241</span></a>
-</span><span id="Size-242"><a href="#Size-242"><span class="linenos">242</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
+</span><span id="Size-238"><a href="#Size-238"><span class="linenos">238</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Size-239"><a href="#Size-239"><span class="linenos">239</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="Size-240"><a href="#Size-240"><span class="linenos">240</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="Size-241"><a href="#Size-241"><span class="linenos">241</span></a>                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">=}</span><span class="s2"> and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">=}</span><span class="s2"> cannot be negative.&quot;</span>
+</span><span id="Size-242"><a href="#Size-242"><span class="linenos">242</span></a>            <span class="p">)</span>
 </span><span id="Size-243"><a href="#Size-243"><span class="linenos">243</span></a>
-</span><span id="Size-244"><a href="#Size-244"><span class="linenos">244</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
-</span><span id="Size-245"><a href="#Size-245"><span class="linenos">245</span></a>
-</span><span id="Size-246"><a href="#Size-246"><span class="linenos">246</span></a><span class="sd">        Args:</span>
-</span><span id="Size-247"><a href="#Size-247"><span class="linenos">247</span></a><span class="sd">            `scale`: A scaling factor by which the width and height will be</span>
-</span><span id="Size-248"><a href="#Size-248"><span class="linenos">248</span></a><span class="sd">                multiplied.</span>
+</span><span id="Size-244"><a href="#Size-244"><span class="linenos">244</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Size&quot;</span><span class="p">:</span>
+</span><span id="Size-245"><a href="#Size-245"><span class="linenos">245</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Size-246"><a href="#Size-246"><span class="linenos">246</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
+</span><span id="Size-247"><a href="#Size-247"><span class="linenos">247</span></a>
+</span><span id="Size-248"><a href="#Size-248"><span class="linenos">248</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
 </span><span id="Size-249"><a href="#Size-249"><span class="linenos">249</span></a>
-</span><span id="Size-250"><a href="#Size-250"><span class="linenos">250</span></a><span class="sd">        Returns:</span>
-</span><span id="Size-251"><a href="#Size-251"><span class="linenos">251</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
-</span><span id="Size-252"><a href="#Size-252"><span class="linenos">252</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Size-253"><a href="#Size-253"><span class="linenos">253</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scale</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scale</span><span class="p">))</span>
-</span><span id="Size-254"><a href="#Size-254"><span class="linenos">254</span></a>
-</span><span id="Size-255"><a href="#Size-255"><span class="linenos">255</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Size-256"><a href="#Size-256"><span class="linenos">256</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
-</span><span id="Size-257"><a href="#Size-257"><span class="linenos">257</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Size-258"><a href="#Size-258"><span class="linenos">258</span></a><span class="sd">        Gets the dimensions as a tuple.</span>
-</span><span id="Size-259"><a href="#Size-259"><span class="linenos">259</span></a>
-</span><span id="Size-260"><a href="#Size-260"><span class="linenos">260</span></a><span class="sd">        Returns:</span>
-</span><span id="Size-261"><a href="#Size-261"><span class="linenos">261</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the width and height</span>
-</span><span id="Size-262"><a href="#Size-262"><span class="linenos">262</span></a><span class="sd">                values in that order.</span>
-</span><span id="Size-263"><a href="#Size-263"><span class="linenos">263</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Size-264"><a href="#Size-264"><span class="linenos">264</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+</span><span id="Size-250"><a href="#Size-250"><span class="linenos">250</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
+</span><span id="Size-251"><a href="#Size-251"><span class="linenos">251</span></a>
+</span><span id="Size-252"><a href="#Size-252"><span class="linenos">252</span></a><span class="sd">        Args:</span>
+</span><span id="Size-253"><a href="#Size-253"><span class="linenos">253</span></a><span class="sd">            `scale`: A scaling factor by which the width and height will be</span>
+</span><span id="Size-254"><a href="#Size-254"><span class="linenos">254</span></a><span class="sd">                multiplied.</span>
+</span><span id="Size-255"><a href="#Size-255"><span class="linenos">255</span></a>
+</span><span id="Size-256"><a href="#Size-256"><span class="linenos">256</span></a><span class="sd">        Returns:</span>
+</span><span id="Size-257"><a href="#Size-257"><span class="linenos">257</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
+</span><span id="Size-258"><a href="#Size-258"><span class="linenos">258</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Size-259"><a href="#Size-259"><span class="linenos">259</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scale</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scale</span><span class="p">))</span>
+</span><span id="Size-260"><a href="#Size-260"><span class="linenos">260</span></a>
+</span><span id="Size-261"><a href="#Size-261"><span class="linenos">261</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Size-262"><a href="#Size-262"><span class="linenos">262</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
+</span><span id="Size-263"><a href="#Size-263"><span class="linenos">263</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Size-264"><a href="#Size-264"><span class="linenos">264</span></a><span class="sd">        Gets the dimensions as a tuple.</span>
+</span><span id="Size-265"><a href="#Size-265"><span class="linenos">265</span></a>
+</span><span id="Size-266"><a href="#Size-266"><span class="linenos">266</span></a><span class="sd">        Returns:</span>
+</span><span id="Size-267"><a href="#Size-267"><span class="linenos">267</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the width and height</span>
+</span><span id="Size-268"><a href="#Size-268"><span class="linenos">268</span></a><span class="sd">                values in that order.</span>
+</span><span id="Size-269"><a href="#Size-269"><span class="linenos">269</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Size-270"><a href="#Size-270"><span class="linenos">270</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
 </span></pre></div>
 
 
@@ -1177,16 +1189,16 @@ in pixel measurements.</p>
 
     </div>
     <a class="headerlink" href="#Size.tuple"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Size.tuple-255"><a href="#Size.tuple-255"><span class="linenos">255</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Size.tuple-256"><a href="#Size.tuple-256"><span class="linenos">256</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
-</span><span id="Size.tuple-257"><a href="#Size.tuple-257"><span class="linenos">257</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Size.tuple-258"><a href="#Size.tuple-258"><span class="linenos">258</span></a><span class="sd">        Gets the dimensions as a tuple.</span>
-</span><span id="Size.tuple-259"><a href="#Size.tuple-259"><span class="linenos">259</span></a>
-</span><span id="Size.tuple-260"><a href="#Size.tuple-260"><span class="linenos">260</span></a><span class="sd">        Returns:</span>
-</span><span id="Size.tuple-261"><a href="#Size.tuple-261"><span class="linenos">261</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the width and height</span>
-</span><span id="Size.tuple-262"><a href="#Size.tuple-262"><span class="linenos">262</span></a><span class="sd">                values in that order.</span>
-</span><span id="Size.tuple-263"><a href="#Size.tuple-263"><span class="linenos">263</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Size.tuple-264"><a href="#Size.tuple-264"><span class="linenos">264</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Size.tuple-261"><a href="#Size.tuple-261"><span class="linenos">261</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Size.tuple-262"><a href="#Size.tuple-262"><span class="linenos">262</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
+</span><span id="Size.tuple-263"><a href="#Size.tuple-263"><span class="linenos">263</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Size.tuple-264"><a href="#Size.tuple-264"><span class="linenos">264</span></a><span class="sd">        Gets the dimensions as a tuple.</span>
+</span><span id="Size.tuple-265"><a href="#Size.tuple-265"><span class="linenos">265</span></a>
+</span><span id="Size.tuple-266"><a href="#Size.tuple-266"><span class="linenos">266</span></a><span class="sd">        Returns:</span>
+</span><span id="Size.tuple-267"><a href="#Size.tuple-267"><span class="linenos">267</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the width and height</span>
+</span><span id="Size.tuple-268"><a href="#Size.tuple-268"><span class="linenos">268</span></a><span class="sd">                values in that order.</span>
+</span><span id="Size.tuple-269"><a href="#Size.tuple-269"><span class="linenos">269</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Size.tuple-270"><a href="#Size.tuple-270"><span class="linenos">270</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
 </span></pre></div>
 
 

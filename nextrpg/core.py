@@ -234,6 +234,12 @@ class Size:
     width: Pixel
     height: Pixel
 
+    def __post_init__(self) -> None:
+        if self.width < 0 or self.height < 0:
+            raise ValueError(
+                f"{self.width=} and {self.height=} cannot be negative."
+            )
+
     def __mul__(self, scale: float) -> "Size":
         """
         Scales the dimensions by a scaling factor and returns a new `Size`.

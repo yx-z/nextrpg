@@ -129,7 +129,7 @@
   <object id="15" x="679.333" y="408" width="57.3333" height="47.3333"/>
   <object id="16" x="770" y="392" width="32" height="60"/>
   <object id="17" x="676" y="392.667" width="113.333" height="19.3333"/>
-  <object id="18" x="683.788" y="533.364" width="24.3636" height="27.9091"/>
+  <object id="18" x="683.788" y="544.364" width="24.3636" height="18.2424"/>
  </objectgroup>
  <objectgroup id="2" name="object">
   <object id="1" name="player" x="570.667" y="513.333">
