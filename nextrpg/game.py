@@ -68,7 +68,7 @@ class Game:
     def _step(self) -> bool:
         self._clock.tick(config().gui.frames_per_second)
         self._draw()
-        return all(map(self._event, map(to_typed_event, pygame.event.get())))
+        return all(self._event(to_typed_event(e)) for e in pygame.event.get())
 
     def _event(self, event: PygameEvent) -> bool:
         self._scene = self._scene.event(event)
