@@ -3,7 +3,6 @@ Start the game window and game loop.
 """
 
 from asyncio import run, sleep
-from dataclasses import dataclass
 from typing import Callable
 
 import pygame
@@ -23,24 +22,17 @@ from nextrpg.gui import Gui
 from nextrpg.scene.scene import Scene
 
 
-@dataclass
 class Game:
     """
     Game instance that manages the game loop and the game window.
     """
 
-    _screen: Surface
-    _scene: Scene
-    _clock: Clock
-    _gui: Gui
-
-    @classmethod
-    def load(
-        cls,
+    def __init__(
+        self,
         entry_scene: Callable[[], Scene],
-        clock: Clock = Clock(),
+        clock: Clock | None = None,
         gui: Gui | None = None,
-    ) -> "Game":
+    ) -> None:
         """
         Sets up a game window, loads the entry scene.
 
@@ -50,13 +42,15 @@ class Game:
                 because drawings can only be loaded after pygame initialization.
 
             `clock`: A ticking clock controlling the game loop.
-                Default `pygame.Clock`.
+                If `None`, default to `pygame.Clock`.
 
             `gui`: A `Gui` instance for scaling and centering drawings.
-        Returns:
-            `Game`: The game instance.
+                If `None`, default to `Gui` from `config()`.
         """
-        return Game(_init_screen(), entry_scene(), clock, gui or Gui())
+        self._screen = _init_screen()
+        self._scene = entry_scene()
+        self._clock = clock or Clock()
+        self._gui = gui or Gui()
 
     def start(self) -> None:
         """

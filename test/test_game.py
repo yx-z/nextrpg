@@ -38,7 +38,7 @@ def test_game(mocker: MockerFixture) -> None:
         "pygame.event.get", lambda: [Event(QUIT)]
     )
 
-    game = Game.load(get_scene_mock, clock)
+    game = Game(get_scene_mock, clock)
     set_caption.assert_called_once_with("Test")
     get_scene_mock.assert_called_once()
 

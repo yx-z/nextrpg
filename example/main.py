@@ -9,7 +9,9 @@ Web entry point.
 # ]
 # ///
 
+from asyncio import run
+
 from nextrpg.game import Game
 from sample_scene import entry_scene
 
-Game.load(entry_scene).start_async()
+run(Game(entry_scene).start_async())
