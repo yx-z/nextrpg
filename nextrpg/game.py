@@ -82,7 +82,7 @@ class Game:
     def _draw(self) -> None:
         self._scene = self._scene.step(self._clock.get_time())
         self._screen.fill(config().gui.background_color.tuple)
-        self._screen.blit(*self._gui.scale(self._scene.draw_on_screens))
+        self._screen.blit(*self._gui.scale(self._scene.draw_on_screens).pygame)
         flip()
 
 

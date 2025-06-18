@@ -8,8 +8,8 @@ from pygame import Surface
 from pygame.transform import smoothscale
 
 from nextrpg.config import config
-from nextrpg.core import Coordinate, Pixel, Size
-from nextrpg.draw_on_screen import DrawOnScreen
+from nextrpg.core import Coordinate, Size
+from nextrpg.draw_on_screen import DrawOnScreen, Drawing
 
 
 class Gui:
@@ -35,21 +35,19 @@ class Gui:
             (window.height - self._scale * height) / 2,
         )
 
-    def scale(
-        self, draws: list[DrawOnScreen]
-    ) -> tuple[Surface, tuple[Pixel, Pixel]]:
+    def scale(self, draws: list[DrawOnScreen]) -> DrawOnScreen:
         """
-        Sale and center the given drawings for the game window.
+        Scale and center all drawings to a single surface.
 
         Args:
             `draws`: A list of draws to be scaled and centered.
 
         Returns:
-            `tuple[Surface, tuple[Pixel, Pixel]]`: scaled and centered screen.
+            `DrawOnScreen`: The scaled drawing that stacks all drawings.
         """
         screen = Surface(config().gui.size.tuple)
         screen.blits(d.pygame for d in draws)
-        return (
-            smoothscale(screen, (config().gui.size * self._scale).tuple),
-            self._center_shift.tuple,
+        scaled_size = config().gui.size * self._scale
+        return DrawOnScreen(
+            self._center_shift, Drawing(smoothscale(screen, scaled_size.tuple))
         )

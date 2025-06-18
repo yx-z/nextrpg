@@ -75,8 +75,8 @@
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">smoothscale</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">,</span> <span class="n">Size</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span><span class="p">,</span> <span class="n">Size</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span><span class="p">,</span> <span class="n">Drawing</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Gui</span><span class="p">:</span>
@@ -102,24 +102,22 @@
 </span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>            <span class="p">(</span><span class="n">window</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">*</span> <span class="n">height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>        <span class="p">)</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">draws</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Surface</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]]:</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">        Sale and center the given drawings for the game window.</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">        Args:</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">            `draws`: A list of draws to be scaled and centered.</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">        Returns:</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">            `tuple[Surface, tuple[Pixel, Pixel]]`: scaled and centered screen.</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>            <span class="n">smoothscale</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">)</span><span class="o">.</span><span class="n">tuple</span><span class="p">),</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="p">)</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">draws</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">        Scale and center all drawings to a single surface.</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">        Args:</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">            `draws`: A list of draws to be scaled and centered.</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">        Returns:</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">            `DrawOnScreen`: The scaled drawing that stacks all drawings.</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="n">scaled_size</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">scaled_size</span><span class="o">.</span><span class="n">tuple</span><span class="p">))</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -158,24 +156,22 @@
 </span><span id="Gui-36"><a href="#Gui-36"><span class="linenos">36</span></a>            <span class="p">(</span><span class="n">window</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">*</span> <span class="n">height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
 </span><span id="Gui-37"><a href="#Gui-37"><span class="linenos">37</span></a>        <span class="p">)</span>
 </span><span id="Gui-38"><a href="#Gui-38"><span class="linenos">38</span></a>
-</span><span id="Gui-39"><a href="#Gui-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span>
-</span><span id="Gui-40"><a href="#Gui-40"><span class="linenos">40</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">draws</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]</span>
-</span><span id="Gui-41"><a href="#Gui-41"><span class="linenos">41</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Surface</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]]:</span>
-</span><span id="Gui-42"><a href="#Gui-42"><span class="linenos">42</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Gui-43"><a href="#Gui-43"><span class="linenos">43</span></a><span class="sd">        Sale and center the given drawings for the game window.</span>
-</span><span id="Gui-44"><a href="#Gui-44"><span class="linenos">44</span></a>
-</span><span id="Gui-45"><a href="#Gui-45"><span class="linenos">45</span></a><span class="sd">        Args:</span>
-</span><span id="Gui-46"><a href="#Gui-46"><span class="linenos">46</span></a><span class="sd">            `draws`: A list of draws to be scaled and centered.</span>
-</span><span id="Gui-47"><a href="#Gui-47"><span class="linenos">47</span></a>
-</span><span id="Gui-48"><a href="#Gui-48"><span class="linenos">48</span></a><span class="sd">        Returns:</span>
-</span><span id="Gui-49"><a href="#Gui-49"><span class="linenos">49</span></a><span class="sd">            `tuple[Surface, tuple[Pixel, Pixel]]`: scaled and centered screen.</span>
-</span><span id="Gui-50"><a href="#Gui-50"><span class="linenos">50</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Gui-51"><a href="#Gui-51"><span class="linenos">51</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
-</span><span id="Gui-52"><a href="#Gui-52"><span class="linenos">52</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
-</span><span id="Gui-53"><a href="#Gui-53"><span class="linenos">53</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="Gui-54"><a href="#Gui-54"><span class="linenos">54</span></a>            <span class="n">smoothscale</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">)</span><span class="o">.</span><span class="n">tuple</span><span class="p">),</span>
-</span><span id="Gui-55"><a href="#Gui-55"><span class="linenos">55</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span>
-</span><span id="Gui-56"><a href="#Gui-56"><span class="linenos">56</span></a>        <span class="p">)</span>
+</span><span id="Gui-39"><a href="#Gui-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">draws</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="Gui-40"><a href="#Gui-40"><span class="linenos">40</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-41"><a href="#Gui-41"><span class="linenos">41</span></a><span class="sd">        Scale and center all drawings to a single surface.</span>
+</span><span id="Gui-42"><a href="#Gui-42"><span class="linenos">42</span></a>
+</span><span id="Gui-43"><a href="#Gui-43"><span class="linenos">43</span></a><span class="sd">        Args:</span>
+</span><span id="Gui-44"><a href="#Gui-44"><span class="linenos">44</span></a><span class="sd">            `draws`: A list of draws to be scaled and centered.</span>
+</span><span id="Gui-45"><a href="#Gui-45"><span class="linenos">45</span></a>
+</span><span id="Gui-46"><a href="#Gui-46"><span class="linenos">46</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui-47"><a href="#Gui-47"><span class="linenos">47</span></a><span class="sd">            `DrawOnScreen`: The scaled drawing that stacks all drawings.</span>
+</span><span id="Gui-48"><a href="#Gui-48"><span class="linenos">48</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-49"><a href="#Gui-49"><span class="linenos">49</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+</span><span id="Gui-50"><a href="#Gui-50"><span class="linenos">50</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
+</span><span id="Gui-51"><a href="#Gui-51"><span class="linenos">51</span></a>        <span class="n">scaled_size</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
+</span><span id="Gui-52"><a href="#Gui-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span>
+</span><span id="Gui-53"><a href="#Gui-53"><span class="linenos">53</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">scaled_size</span><span class="o">.</span><span class="n">tuple</span><span class="p">))</span>
+</span><span id="Gui-54"><a href="#Gui-54"><span class="linenos">54</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -230,34 +226,32 @@ the GUI size from <code>config()<a href="">nextrpg.gui</a></code>.</li>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">scale</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">draws</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n"><a href="draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a></span><span class="p">]</span></span><span class="return-annotation">) -> <span class="nb">tuple</span><span class="p">[</span><span class="n">pygame</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]]</span>:</span></span>
+        <span class="name">scale</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">draws</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n"><a href="draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a></span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n"><a href="draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a></span>:</span></span>
 
                 <label class="view-source-button" for="Gui.scale-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Gui.scale"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Gui.scale-39"><a href="#Gui.scale-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span>
-</span><span id="Gui.scale-40"><a href="#Gui.scale-40"><span class="linenos">40</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">draws</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]</span>
-</span><span id="Gui.scale-41"><a href="#Gui.scale-41"><span class="linenos">41</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Surface</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]]:</span>
-</span><span id="Gui.scale-42"><a href="#Gui.scale-42"><span class="linenos">42</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Gui.scale-43"><a href="#Gui.scale-43"><span class="linenos">43</span></a><span class="sd">        Sale and center the given drawings for the game window.</span>
-</span><span id="Gui.scale-44"><a href="#Gui.scale-44"><span class="linenos">44</span></a>
-</span><span id="Gui.scale-45"><a href="#Gui.scale-45"><span class="linenos">45</span></a><span class="sd">        Args:</span>
-</span><span id="Gui.scale-46"><a href="#Gui.scale-46"><span class="linenos">46</span></a><span class="sd">            `draws`: A list of draws to be scaled and centered.</span>
-</span><span id="Gui.scale-47"><a href="#Gui.scale-47"><span class="linenos">47</span></a>
-</span><span id="Gui.scale-48"><a href="#Gui.scale-48"><span class="linenos">48</span></a><span class="sd">        Returns:</span>
-</span><span id="Gui.scale-49"><a href="#Gui.scale-49"><span class="linenos">49</span></a><span class="sd">            `tuple[Surface, tuple[Pixel, Pixel]]`: scaled and centered screen.</span>
-</span><span id="Gui.scale-50"><a href="#Gui.scale-50"><span class="linenos">50</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Gui.scale-51"><a href="#Gui.scale-51"><span class="linenos">51</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
-</span><span id="Gui.scale-52"><a href="#Gui.scale-52"><span class="linenos">52</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
-</span><span id="Gui.scale-53"><a href="#Gui.scale-53"><span class="linenos">53</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="Gui.scale-54"><a href="#Gui.scale-54"><span class="linenos">54</span></a>            <span class="n">smoothscale</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">)</span><span class="o">.</span><span class="n">tuple</span><span class="p">),</span>
-</span><span id="Gui.scale-55"><a href="#Gui.scale-55"><span class="linenos">55</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span>
-</span><span id="Gui.scale-56"><a href="#Gui.scale-56"><span class="linenos">56</span></a>        <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Gui.scale-39"><a href="#Gui.scale-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">draws</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="Gui.scale-40"><a href="#Gui.scale-40"><span class="linenos">40</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui.scale-41"><a href="#Gui.scale-41"><span class="linenos">41</span></a><span class="sd">        Scale and center all drawings to a single surface.</span>
+</span><span id="Gui.scale-42"><a href="#Gui.scale-42"><span class="linenos">42</span></a>
+</span><span id="Gui.scale-43"><a href="#Gui.scale-43"><span class="linenos">43</span></a><span class="sd">        Args:</span>
+</span><span id="Gui.scale-44"><a href="#Gui.scale-44"><span class="linenos">44</span></a><span class="sd">            `draws`: A list of draws to be scaled and centered.</span>
+</span><span id="Gui.scale-45"><a href="#Gui.scale-45"><span class="linenos">45</span></a>
+</span><span id="Gui.scale-46"><a href="#Gui.scale-46"><span class="linenos">46</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui.scale-47"><a href="#Gui.scale-47"><span class="linenos">47</span></a><span class="sd">            `DrawOnScreen`: The scaled drawing that stacks all drawings.</span>
+</span><span id="Gui.scale-48"><a href="#Gui.scale-48"><span class="linenos">48</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui.scale-49"><a href="#Gui.scale-49"><span class="linenos">49</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+</span><span id="Gui.scale-50"><a href="#Gui.scale-50"><span class="linenos">50</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
+</span><span id="Gui.scale-51"><a href="#Gui.scale-51"><span class="linenos">51</span></a>        <span class="n">scaled_size</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
+</span><span id="Gui.scale-52"><a href="#Gui.scale-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span>
+</span><span id="Gui.scale-53"><a href="#Gui.scale-53"><span class="linenos">53</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">scaled_size</span><span class="o">.</span><span class="n">tuple</span><span class="p">))</span>
+</span><span id="Gui.scale-54"><a href="#Gui.scale-54"><span class="linenos">54</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Sale and center the given drawings for the game window.</p>
+            <div class="docstring"><p>Scale and center all drawings to a single surface.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
@@ -268,7 +262,7 @@ the GUI size from <code>config()<a href="">nextrpg.gui</a></code>.</li>
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>tuple[Surface, tuple[Pixel, Pixel]]</code>: scaled and centered screen.</p>
+  <p><code>DrawOnScreen</code>: The scaled drawing that stacks all drawings.</p>
 </blockquote>
 </div>
 

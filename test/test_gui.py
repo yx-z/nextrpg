@@ -12,7 +12,7 @@ def test_gui(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.gui.Surface")
     mocker.patch("nextrpg.gui.smoothscale")
     gui = Gui(Size(10, 20))
-    _, center = gui.scale(
+    drawing = gui.scale(
         [DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface()))]
     )
-    assert center == (0.0, 5.0)
+    assert drawing.top_left == Coordinate(0.0, 5.0)
