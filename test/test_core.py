@@ -1,10 +1,9 @@
 from pytest import approx, raises
 
-from nextrpg.common_types import (
+from nextrpg.core import (
     Coordinate,
     Direction,
     DirectionalOffset,
-    Rectangle,
     Size,
 )
 
@@ -48,23 +47,3 @@ def test_coordinate() -> None:
 
 def test_size() -> None:
     assert Size(2, 3) * 2 == Size(4, 6)
-
-
-def test_rectangle() -> None:
-    rect = Rectangle(Coordinate(10, 20), Size(2, 2))
-    assert rect.size == Size(2, 2)
-    assert rect.left == 10
-    assert rect.top == 20
-    assert rect.right == 12
-    assert rect.bottom == 22
-    assert rect.top_left == Coordinate(10, 20)
-    assert rect.top_right == Coordinate(12, 20)
-    assert rect.bottom_left == Coordinate(10, 22)
-    assert rect.bottom_right == Coordinate(12, 22)
-    assert rect.top_center == Coordinate(11, 20)
-    assert rect.bottom_center == Coordinate(11, 22)
-    assert rect.center_left == Coordinate(10, 21)
-    assert rect.center_right == Coordinate(12, 21)
-    assert rect.center == Coordinate(11, 21)
-    assert rect.collide(Rectangle(Coordinate(9, 20), Size(10, 20)))
-    assert Coordinate(11, 21) in rect

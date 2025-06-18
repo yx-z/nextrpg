@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 
 from pygame.locals import K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_UP
 
-from nextrpg.common_types import Direction, Millisecond, Pixel, Rgba, Size
+from nextrpg.core import Direction, Millisecond, Pixel, Rgba, Size
 
 
 @dataclass(frozen=True)

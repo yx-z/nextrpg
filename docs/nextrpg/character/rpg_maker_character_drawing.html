@@ -190,8 +190,8 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.common_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Pixel</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Pixel</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">,</span> <span class="n">Size</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.frames</span><span class="w"> </span><span class="kn">import</span> <span class="n">CyclicFrames</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>
@@ -780,7 +780,7 @@ Default to four columns.</li>
                             </div>
                             <div id="Margin.top" class="classattr">
                                 <div class="attr variable">
-            <span class="name">top</span><span class="annotation">: <a href="../common_types.html#Pixel">nextrpg.common_types.Pixel</a></span>        =
+            <span class="name">top</span><span class="annotation">: <a href="../core.html#Pixel">nextrpg.core.Pixel</a></span>        =
 <span class="default_value">0</span>
 
         
@@ -792,7 +792,7 @@ Default to four columns.</li>
                             </div>
                             <div id="Margin.left" class="classattr">
                                 <div class="attr variable">
-            <span class="name">left</span><span class="annotation">: <a href="../common_types.html#Pixel">nextrpg.common_types.Pixel</a></span>        =
+            <span class="name">left</span><span class="annotation">: <a href="../core.html#Pixel">nextrpg.core.Pixel</a></span>        =
 <span class="default_value">0</span>
 
         
@@ -804,7 +804,7 @@ Default to four columns.</li>
                             </div>
                             <div id="Margin.bottom" class="classattr">
                                 <div class="attr variable">
-            <span class="name">bottom</span><span class="annotation">: <a href="../common_types.html#Pixel">nextrpg.common_types.Pixel</a></span>        =
+            <span class="name">bottom</span><span class="annotation">: <a href="../core.html#Pixel">nextrpg.core.Pixel</a></span>        =
 <span class="default_value">0</span>
 
         
@@ -816,7 +816,7 @@ Default to four columns.</li>
                             </div>
                             <div id="Margin.right" class="classattr">
                                 <div class="attr variable">
-            <span class="name">right</span><span class="annotation">: <a href="../common_types.html#Pixel">nextrpg.common_types.Pixel</a></span>        =
+            <span class="name">right</span><span class="annotation">: <a href="../core.html#Pixel">nextrpg.core.Pixel</a></span>        =
 <span class="default_value">0</span>
 
         
@@ -1112,7 +1112,7 @@ from a sprite sheet image.</p>
                             <div id="RpgMakerCharacterDrawing.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">RpgMakerCharacterDrawing</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">_animate_on_idle</span><span class="p">:</span> <span class="nb">bool</span>,</span><span class="param">	<span class="n">_frames</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n"><a href="../common_types.html#Direction">nextrpg.common_types.Direction</a></span><span class="p">,</span> <span class="n"><a href="../frames.html#CyclicFrames">nextrpg.frames.CyclicFrames</a></span><span class="p">]</span>,</span><span class="param">	<span class="n">_direction</span><span class="p">:</span> <span class="n"><a href="../common_types.html#Direction">nextrpg.common_types.Direction</a></span></span>)</span>
+        <span class="name">RpgMakerCharacterDrawing</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">_animate_on_idle</span><span class="p">:</span> <span class="nb">bool</span>,</span><span class="param">	<span class="n">_frames</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n"><a href="../core.html#Direction">nextrpg.core.Direction</a></span><span class="p">,</span> <span class="n"><a href="../frames.html#CyclicFrames">nextrpg.frames.CyclicFrames</a></span><span class="p">]</span>,</span><span class="param">	<span class="n">_direction</span><span class="p">:</span> <span class="n"><a href="../core.html#Direction">nextrpg.core.Direction</a></span></span>)</span>
 
         
     </div>
@@ -1127,7 +1127,7 @@ from a sprite sheet image.</p>
                     <div class="decorator decorator-classmethod">@classmethod</div>
 
         <span class="def">def</span>
-        <span class="name">load</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">sprite_sheet</span><span class="p">:</span> <span class="n"><a href="#SpriteSheet">SpriteSheet</a></span>,</span><span class="param">	<span class="n">animate_on_idle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">frame_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">direction</span><span class="p">:</span> <span class="n"><a href="../common_types.html#Direction">nextrpg.common_types.Direction</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span>:</span></span>
+        <span class="name">load</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">cls</span>,</span><span class="param">	<span class="n">sprite_sheet</span><span class="p">:</span> <span class="n"><a href="#SpriteSheet">SpriteSheet</a></span>,</span><span class="param">	<span class="n">animate_on_idle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">frame_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">direction</span><span class="p">:</span> <span class="n"><a href="../core.html#Direction">nextrpg.core.Direction</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span><span class="return-annotation">) -> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span>:</span></span>
 
                 <label class="view-source-button" for="RpgMakerCharacterDrawing.load-view-source"><span>View Source</span></label>
 
@@ -1188,7 +1188,7 @@ If not specified, the default direction from <code>Config</code> is used.</li>
                             <div id="RpgMakerCharacterDrawing.direction" class="classattr">
                                         <input id="RpgMakerCharacterDrawing.direction-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">direction</span><span class="annotation">: <a href="../common_types.html#Direction">nextrpg.common_types.Direction</a></span>
+            <span class="name">direction</span><span class="annotation">: <a href="../core.html#Direction">nextrpg.core.Direction</a></span>
 
                 <label class="view-source-button" for="RpgMakerCharacterDrawing.direction-view-source"><span>View Source</span></label>
 
@@ -1273,7 +1273,7 @@ direction.</p>
                     <div class="decorator decorator-override">@override</div>
 
         <span class="def">def</span>
-        <span class="name">turn</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">direction</span><span class="p">:</span> <span class="n"><a href="../common_types.html#Direction">nextrpg.common_types.Direction</a></span></span><span class="return-annotation">) -> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span>:</span></span>
+        <span class="name">turn</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">direction</span><span class="p">:</span> <span class="n"><a href="../core.html#Direction">nextrpg.core.Direction</a></span></span><span class="return-annotation">) -> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span>:</span></span>
 
                 <label class="view-source-button" for="RpgMakerCharacterDrawing.turn-view-source"><span>View Source</span></label>
 

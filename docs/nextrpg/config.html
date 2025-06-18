@@ -219,7 +219,7 @@
 
                         <div class="docstring"><p>Various configurations for <code><a href="../nextrpg.html">nextrpg</a></code>.
 You can either use the implicit, default configuration
-or pass the customized instance to <code><a href="start_game.html#start_game">nextrpg.start_game.start_game</a></code>.</p>
+or pass the customized instance to <code>nextrpg.start_game.start_game</code>.</p>
 </div>
 
                         <input id="mod-config-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -234,9 +234,9 @@ or pass the customized instance to <code><a href="start_game.html#start_game">ne
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame</span><span class="w"> </span><span class="kn">import</span> <span class="n">K_DOWN</span><span class="p">,</span> <span class="n">K_LEFT</span><span class="p">,</span> <span class="n">K_RIGHT</span><span class="p">,</span> <span class="n">K_SPACE</span><span class="p">,</span> <span class="n">K_UP</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.locals</span><span class="w"> </span><span class="kn">import</span> <span class="n">K_DOWN</span><span class="p">,</span> <span class="n">K_LEFT</span><span class="p">,</span> <span class="n">K_RIGHT</span><span class="p">,</span> <span class="n">K_SPACE</span><span class="p">,</span> <span class="n">K_UP</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.common_types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">,</span> <span class="n">Rgba</span><span class="p">,</span> <span class="n">Size</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">,</span> <span class="n">Rgba</span><span class="p">,</span> <span class="n">Size</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -284,7 +284,7 @@ or pass the customized instance to <code><a href="start_game.html#start_game">ne
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="sd">        `background_color`: The background color of the GUI window.</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;NextRPG&quot;</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nextrpg&quot;</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">1280</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>    <span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>    <span class="n">resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
@@ -566,7 +566,7 @@ Default is semi-transparent red (255, 0, 0, 96).</li>
                             <div id="DebugConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">DebugConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">drawing_background_color</span><span class="p">:</span> <span class="n"><a href="common_types.html#Rgba">nextrpg.common_types.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>,</span><span class="param">	<span class="n">collision_rectangle_color</span><span class="p">:</span> <span class="n"><a href="common_types.html#Rgba">nextrpg.common_types.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">96</span><span class="p">)</span></span>)</span>
+        <span class="name">DebugConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">drawing_background_color</span><span class="p">:</span> <span class="n"><a href="core.html#Rgba">nextrpg.core.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>,</span><span class="param">	<span class="n">collision_rectangle_color</span><span class="p">:</span> <span class="n"><a href="core.html#Rgba">nextrpg.core.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">96</span><span class="p">)</span></span>)</span>
 
         
     </div>
@@ -577,7 +577,7 @@ Default is semi-transparent red (255, 0, 0, 96).</li>
                             </div>
                             <div id="DebugConfig.drawing_background_color" class="classattr">
                                 <div class="attr variable">
-            <span class="name">drawing_background_color</span><span class="annotation">: <a href="common_types.html#Rgba">nextrpg.common_types.Rgba</a></span>        =
+            <span class="name">drawing_background_color</span><span class="annotation">: <a href="core.html#Rgba">nextrpg.core.Rgba</a></span>        =
 <span class="default_value">Rgba(red=0, green=0, blue=255, alpha=32)</span>
 
         
@@ -589,7 +589,7 @@ Default is semi-transparent red (255, 0, 0, 96).</li>
                             </div>
                             <div id="DebugConfig.collision_rectangle_color" class="classattr">
                                 <div class="attr variable">
-            <span class="name">collision_rectangle_color</span><span class="annotation">: <a href="common_types.html#Rgba">nextrpg.common_types.Rgba</a></span>        =
+            <span class="name">collision_rectangle_color</span><span class="annotation">: <a href="core.html#Rgba">nextrpg.core.Rgba</a></span>        =
 <span class="default_value">Rgba(red=255, green=0, blue=0, alpha=96)</span>
 
         
@@ -635,7 +635,7 @@ Default is semi-transparent red (255, 0, 0, 96).</li>
 </span><span id="GuiConfig-57"><a href="#GuiConfig-57"><span class="linenos">57</span></a><span class="sd">        `background_color`: The background color of the GUI window.</span>
 </span><span id="GuiConfig-58"><a href="#GuiConfig-58"><span class="linenos">58</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="GuiConfig-59"><a href="#GuiConfig-59"><span class="linenos">59</span></a>
-</span><span id="GuiConfig-60"><a href="#GuiConfig-60"><span class="linenos">60</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;NextRPG&quot;</span>
+</span><span id="GuiConfig-60"><a href="#GuiConfig-60"><span class="linenos">60</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nextrpg&quot;</span>
 </span><span id="GuiConfig-61"><a href="#GuiConfig-61"><span class="linenos">61</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">1280</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
 </span><span id="GuiConfig-62"><a href="#GuiConfig-62"><span class="linenos">62</span></a>    <span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
 </span><span id="GuiConfig-63"><a href="#GuiConfig-63"><span class="linenos">63</span></a>    <span class="n">resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
@@ -645,7 +645,7 @@ Default is semi-transparent red (255, 0, 0, 96).</li>
 
             <div class="docstring"><p>Configuration class for Graphical User Interface (GUI).</p>
 
-<p>This config is used by <code><a href="start_game.html#start_game">nextrpg.start_game.start_game</a></code> to initialize
+<p>This config is used by <code>nextrpg.start_game.start_game</code> to initialize
 the pygame window and by the rendering system to control display properties.</p>
 
 <h6 id="attributes">Attributes:</h6>
@@ -666,7 +666,7 @@ And upon resize, the drawings will all be scaled accordingly.</li>
                             <div id="GuiConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">GuiConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;NextRPG&#39;</span>,</span><span class="param">	<span class="n">size</span><span class="p">:</span> <span class="n"><a href="common_types.html#Size">nextrpg.common_types.Size</a></span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>,</span><span class="param">	<span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>,</span><span class="param">	<span class="n">resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">background_color</span><span class="p">:</span> <span class="n"><a href="common_types.html#Rgba">nextrpg.common_types.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></span>)</span>
+        <span class="name">GuiConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;nextrpg&#39;</span>,</span><span class="param">	<span class="n">size</span><span class="p">:</span> <span class="n"><a href="core.html#Size">nextrpg.core.Size</a></span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>,</span><span class="param">	<span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>,</span><span class="param">	<span class="n">resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">background_color</span><span class="p">:</span> <span class="n"><a href="core.html#Rgba">nextrpg.core.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></span>)</span>
 
         
     </div>
@@ -678,7 +678,7 @@ And upon resize, the drawings will all be scaled accordingly.</li>
                             <div id="GuiConfig.title" class="classattr">
                                 <div class="attr variable">
             <span class="name">title</span><span class="annotation">: str</span>        =
-<span class="default_value">&#39;NextRPG&#39;</span>
+<span class="default_value">&#39;nextrpg&#39;</span>
 
         
     </div>
@@ -689,7 +689,7 @@ And upon resize, the drawings will all be scaled accordingly.</li>
                             </div>
                             <div id="GuiConfig.size" class="classattr">
                                 <div class="attr variable">
-            <span class="name">size</span><span class="annotation">: <a href="common_types.html#Size">nextrpg.common_types.Size</a></span>        =
+            <span class="name">size</span><span class="annotation">: <a href="core.html#Size">nextrpg.core.Size</a></span>        =
 <span class="default_value">Size(width=1280, height=800)</span>
 
         
@@ -725,7 +725,7 @@ And upon resize, the drawings will all be scaled accordingly.</li>
                             </div>
                             <div id="GuiConfig.background_color" class="classattr">
                                 <div class="attr variable">
-            <span class="name">background_color</span><span class="annotation">: <a href="common_types.html#Rgba">nextrpg.common_types.Rgba</a></span>        =
+            <span class="name">background_color</span><span class="annotation">: <a href="core.html#Rgba">nextrpg.core.Rgba</a></span>        =
 <span class="default_value">Rgba(red=0, green=0, blue=0, alpha=0)</span>
 
         
@@ -1009,7 +1009,7 @@ Default to all directions (up, left, right, down, and diagonal).</li>
                             <div id="CharacterConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">CharacterConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">speed</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mf">0.25</span>,</span><span class="param">	<span class="n">directions</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n"><a href="common_types.html#Direction">nextrpg.common_types.Direction</a></span><span class="p">]</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">CharacterConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">speed</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mf">0.25</span>,</span><span class="param">	<span class="n">directions</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n"><a href="core.html#Direction">nextrpg.core.Direction</a></span><span class="p">]</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -1020,7 +1020,7 @@ Default to all directions (up, left, right, down, and diagonal).</li>
                             </div>
                             <div id="CharacterConfig.speed" class="classattr">
                                 <div class="attr variable">
-            <span class="name">speed</span><span class="annotation">: <a href="common_types.html#Pixel">nextrpg.common_types.Pixel</a></span>        =
+            <span class="name">speed</span><span class="annotation">: <a href="core.html#Pixel">nextrpg.core.Pixel</a></span>        =
 <span class="default_value">0.25</span>
 
         
@@ -1032,7 +1032,7 @@ Default to all directions (up, left, right, down, and diagonal).</li>
                             </div>
                             <div id="CharacterConfig.directions" class="classattr">
                                 <div class="attr variable">
-            <span class="name">directions</span><span class="annotation">: set[<a href="common_types.html#Direction">nextrpg.common_types.Direction</a>]</span>
+            <span class="name">directions</span><span class="annotation">: set[<a href="core.html#Direction">nextrpg.core.Direction</a>]</span>
 
         
     </div>
@@ -1116,7 +1116,7 @@ the character.</li>
                             <div id="RpgMakerCharacterDrawingConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">RpgMakerCharacterDrawingConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">animate_on_idle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>,</span><span class="param">	<span class="n">frame_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>,</span><span class="param">	<span class="n">direction</span><span class="p">:</span> <span class="n"><a href="common_types.html#Direction">nextrpg.common_types.Direction</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">RpgMakerCharacterDrawingConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">animate_on_idle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>,</span><span class="param">	<span class="n">frame_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>,</span><span class="param">	<span class="n">direction</span><span class="p">:</span> <span class="n"><a href="core.html#Direction">nextrpg.core.Direction</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -1139,7 +1139,7 @@ the character.</li>
                             </div>
                             <div id="RpgMakerCharacterDrawingConfig.frame_duration" class="classattr">
                                 <div class="attr variable">
-            <span class="name">frame_duration</span><span class="annotation">: <a href="common_types.html#Millisecond">nextrpg.common_types.Millisecond</a></span>        =
+            <span class="name">frame_duration</span><span class="annotation">: <a href="core.html#Millisecond">nextrpg.core.Millisecond</a></span>        =
 <span class="default_value">200</span>
 
         
@@ -1151,7 +1151,7 @@ the character.</li>
                             </div>
                             <div id="RpgMakerCharacterDrawingConfig.direction" class="classattr">
                                 <div class="attr variable">
-            <span class="name">direction</span><span class="annotation">: <a href="common_types.html#Direction">nextrpg.common_types.Direction</a></span>        =
+            <span class="name">direction</span><span class="annotation">: <a href="core.html#Direction">nextrpg.core.Direction</a></span>        =
 <span class="default_value">&lt;Direction.DOWN: 1&gt;</span>
 
         
@@ -1378,7 +1378,7 @@ customized using <code><a href="#set_config">set_config()</a></code>.</p>
 
 <ul>
 <li><strong><code><a href="#Config.gui">gui</a></code>:</strong>  The configuration for the graphical user interface.
-Used by <code><a href="start_game.html#start_game">nextrpg.start_game.start_game</a></code> and rendering systems.</li>
+Used by <code>nextrpg.start_game.start_game</code> and rendering systems.</li>
 <li><strong><code><a href="#Config.map">map</a></code>:</strong>  The configuration for the tile map structure.
 Used by <code><a href="scene/map_scene.html#MapScene">nextrpg.scene.map_scene.MapScene</a></code> for TMX interpretation.</li>
 <li><strong><code><a href="#Config.character">character</a></code>:</strong>  The configuration for character attributes.
@@ -1400,7 +1400,7 @@ Used by <code><a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawi
                             <div id="Config.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">Config</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">gui</span><span class="p">:</span> <span class="n"><a href="#GuiConfig">GuiConfig</a></span> <span class="o">=</span> <span class="n">GuiConfig</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;NextRPG&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">800</span><span class="p">),</span> <span class="n">frames_per_second</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">resize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>,</span><span class="param">	<span class="nb">map</span><span class="p">:</span> <span class="n"><a href="#TileMapConfig">TileMapConfig</a></span> <span class="o">=</span> <span class="n">TileMapConfig</span><span class="p">(</span><span class="n">background</span><span class="o">=</span><span class="s1">&#39;background&#39;</span><span class="p">,</span> <span class="n">foreground</span><span class="o">=</span><span class="s1">&#39;foreground&#39;</span><span class="p">,</span> <span class="n">above_character</span><span class="o">=</span><span class="s1">&#39;above_character&#39;</span><span class="p">,</span> <span class="n">collision</span><span class="o">=</span><span class="s1">&#39;collision&#39;</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="n">player</span><span class="o">=</span><span class="s1">&#39;player&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">TileMapProperties</span><span class="p">())</span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="#CharacterConfig">CharacterConfig</a></span> <span class="o">=</span> <span class="n">CharacterConfig</span><span class="p">(</span><span class="n">speed</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">directions</span><span class="o">=</span><span class="p">{</span><span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">:</span> <span class="mi">6</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span> <span class="mi">8</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">:</span> <span class="mi">7</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span> <span class="mi">4</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">:</span> <span class="mi">5</span><span class="o">&gt;</span><span class="p">})</span>,</span><span class="param">	<span class="n">rpg_maker_character</span><span class="p">:</span> <span class="n"><a href="#RpgMakerCharacterDrawingConfig">RpgMakerCharacterDrawingConfig</a></span> <span class="o">=</span> <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">(</span><span class="n">animate_on_idle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">frame_duration</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">direction</span><span class="o">=&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">)</span>,</span><span class="param">	<span class="n">key_mapping</span><span class="p">:</span> <span class="n"><a href="#KeyMappingConfig">KeyMappingConfig</a></span> <span class="o">=</span> <span class="n">KeyMappingConfig</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1073741904</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1073741903</span><span class="p">,</span> <span class="n">up</span><span class="o">=</span><span class="mi">1073741906</span><span class="p">,</span> <span class="n">down</span><span class="o">=</span><span class="mi">1073741905</span><span class="p">,</span> <span class="n">confirm</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>,</span><span class="param">	<span class="n">debug</span><span class="p">:</span> <span class="n"><a href="#DebugConfig">DebugConfig</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
+        <span class="name">Config</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">gui</span><span class="p">:</span> <span class="n"><a href="#GuiConfig">GuiConfig</a></span> <span class="o">=</span> <span class="n">GuiConfig</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;nextrpg&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">800</span><span class="p">),</span> <span class="n">frames_per_second</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">resize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">background_color</span><span class="o">=</span><span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>,</span><span class="param">	<span class="nb">map</span><span class="p">:</span> <span class="n"><a href="#TileMapConfig">TileMapConfig</a></span> <span class="o">=</span> <span class="n">TileMapConfig</span><span class="p">(</span><span class="n">background</span><span class="o">=</span><span class="s1">&#39;background&#39;</span><span class="p">,</span> <span class="n">foreground</span><span class="o">=</span><span class="s1">&#39;foreground&#39;</span><span class="p">,</span> <span class="n">above_character</span><span class="o">=</span><span class="s1">&#39;above_character&#39;</span><span class="p">,</span> <span class="n">collision</span><span class="o">=</span><span class="s1">&#39;collision&#39;</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="s1">&#39;object&#39;</span><span class="p">,</span> <span class="n">player</span><span class="o">=</span><span class="s1">&#39;player&#39;</span><span class="p">,</span> <span class="n">properties</span><span class="o">=</span><span class="n">TileMapProperties</span><span class="p">())</span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="#CharacterConfig">CharacterConfig</a></span> <span class="o">=</span> <span class="n">CharacterConfig</span><span class="p">(</span><span class="n">speed</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">directions</span><span class="o">=</span><span class="p">{</span><span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">:</span> <span class="mi">6</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span> <span class="mi">8</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">:</span> <span class="mi">5</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span> <span class="mi">4</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">:</span> <span class="mi">7</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">})</span>,</span><span class="param">	<span class="n">rpg_maker_character</span><span class="p">:</span> <span class="n"><a href="#RpgMakerCharacterDrawingConfig">RpgMakerCharacterDrawingConfig</a></span> <span class="o">=</span> <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">(</span><span class="n">animate_on_idle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">frame_duration</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">direction</span><span class="o">=&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">)</span>,</span><span class="param">	<span class="n">key_mapping</span><span class="p">:</span> <span class="n"><a href="#KeyMappingConfig">KeyMappingConfig</a></span> <span class="o">=</span> <span class="n">KeyMappingConfig</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1073741904</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1073741903</span><span class="p">,</span> <span class="n">up</span><span class="o">=</span><span class="mi">1073741906</span><span class="p">,</span> <span class="n">down</span><span class="o">=</span><span class="mi">1073741905</span><span class="p">,</span> <span class="n">confirm</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>,</span><span class="param">	<span class="n">debug</span><span class="p">:</span> <span class="n"><a href="#DebugConfig">DebugConfig</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
 
         
     </div>
@@ -1413,7 +1413,7 @@ Used by <code><a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawi
                                 <div class="attr variable">
             <span class="name">gui</span><span class="annotation">: <a href="#GuiConfig">GuiConfig</a></span>        =
 <input id="Config.gui-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-            <label class="view-value-button pdoc-button" for="Config.gui-view-value"></label><span class="default_value">GuiConfig(title=&#39;NextRPG&#39;, size=Size(width=1280, height=800), frames_per_second=60, resize=True, background_color=Rgba(red=0, green=0, blue=0, alpha=0))</span>
+            <label class="view-value-button pdoc-button" for="Config.gui-view-value"></label><span class="default_value">GuiConfig(title=&#39;nextrpg&#39;, size=Size(width=1280, height=800), frames_per_second=60, resize=True, background_color=Rgba(red=0, green=0, blue=0, alpha=0))</span>
 
         
     </div>
@@ -1439,7 +1439,7 @@ Used by <code><a href="draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawi
                                 <div class="attr variable">
             <span class="name">character</span><span class="annotation">: <a href="#CharacterConfig">CharacterConfig</a></span>        =
 <input id="Config.character-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-            <label class="view-value-button pdoc-button" for="Config.character-view-value"></label><span class="default_value">CharacterConfig(speed=0.25, directions={&lt;Direction.UP_RIGHT: 6&gt;, &lt;Direction.LEFT: 2&gt;, &lt;Direction.RIGHT: 3&gt;, &lt;Direction.DOWN_RIGHT: 8&gt;, &lt;Direction.DOWN: 1&gt;, &lt;Direction.DOWN_LEFT: 7&gt;, &lt;Direction.UP: 4&gt;, &lt;Direction.UP_LEFT: 5&gt;})</span>
+            <label class="view-value-button pdoc-button" for="Config.character-view-value"></label><span class="default_value">CharacterConfig(speed=0.25, directions={&lt;Direction.LEFT: 2&gt;, &lt;Direction.UP_RIGHT: 6&gt;, &lt;Direction.DOWN_RIGHT: 8&gt;, &lt;Direction.UP_LEFT: 5&gt;, &lt;Direction.DOWN: 1&gt;, &lt;Direction.UP: 4&gt;, &lt;Direction.DOWN_LEFT: 7&gt;, &lt;Direction.RIGHT: 3&gt;})</span>
 
         
     </div>

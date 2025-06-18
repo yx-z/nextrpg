@@ -19,8 +19,8 @@ from functools import cached_property
 from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.common_types import Direction, Millisecond, Pixel
 from nextrpg.config import config
+from nextrpg.core import Direction, Millisecond, Pixel
 from nextrpg.draw_on_screen import Coordinate, Drawing, Size
 from nextrpg.frames import CyclicFrames
 

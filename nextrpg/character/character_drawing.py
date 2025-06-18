@@ -5,7 +5,7 @@ Character drawing interface.
 from abc import ABC, abstractmethod
 from functools import cached_property
 
-from nextrpg.common_types import Direction, Millisecond
+from nextrpg.core import Direction, Millisecond
 from nextrpg.draw_on_screen import Drawing
 
 

@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterator
-from unittest.mock import MagicMock, Mock
+from unittest.mock import MagicMock
 
 from pygame import Event, QUIT
 from pytest_mock import MockerFixture
@@ -43,4 +43,4 @@ def test_map_scene(mocker: MockerFixture) -> None:
     )
     map = MapScene.load(Path("test"), MockCharacterDrawing())
     assert map.event(Quit(Event(QUIT)))
-    assert map.step(1).draw_on_screen
+    assert map.step(1).draw_on_screens

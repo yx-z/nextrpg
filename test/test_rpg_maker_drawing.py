@@ -7,7 +7,7 @@ from nextrpg.character.rpg_maker_character_drawing import (
     SpriteSheetSelection,
     XpFrameType,
 )
-from nextrpg.common_types import Direction, Size
+from nextrpg.core import Direction, Size
 from nextrpg.draw_on_screen import Drawing
 
 

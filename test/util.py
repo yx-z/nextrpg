@@ -6,11 +6,11 @@ from typing import Generator
 from pygame import Surface
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.common_types import (
+from nextrpg.config import Config, config, set_config
+from nextrpg.core import (
     Direction,
     Millisecond,
 )
-from nextrpg.config import Config, config, set_config
 from nextrpg.draw_on_screen import Drawing
 
 
@@ -24,15 +24,13 @@ class MockColor:
 
 @dataclass(frozen=True)
 class MockSurface(Surface):
-    data: str
-    width: int = 1
-    height: int = 1
+    data: str = ""
 
     def get_width(self) -> int:
-        return self.width
+        return 1
 
     def get_height(self) -> int:
-        return self.height
+        return 2
 
     def get_at(self, _: tuple[int, int]) -> MockColor:
         return MockColor(0, 0, 0, 0)

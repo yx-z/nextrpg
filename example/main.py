@@ -12,4 +12,4 @@ Web entry point.
 from nextrpg.game import Game
 from sample_scene import entry_scene
 
-Game.load(entry_scene).start_web()
+Game.load(entry_scene).start_async()

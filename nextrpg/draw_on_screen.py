@@ -8,11 +8,11 @@ from itertools import product
 from math import ceil
 from pathlib import Path
 
-from pygame import SRCALPHA, Surface, transform
+from pygame import SRCALPHA, Surface
 from pygame.image import load
 
-from nextrpg.common_types import Coordinate, Pixel, Rectangle, Rgba, Size
 from nextrpg.config import config
+from nextrpg.core import Coordinate, Pixel, Rgba, Size
 
 
 @dataclass(frozen=True)
@@ -105,24 +105,6 @@ class Drawing:
             )
         )
 
-    def __mul__(self, scale: float) -> "Drawing":
-        """
-        Scales the drawing surface by a given scale factor.
-
-        This method adjusts the size of the current drawing surface by applying
-        a scaling transformation with the specified factor.
-        A new `Drawing` instance is returned with the resized surface.
-
-        Args:
-            `scale`: The scaling factor to apply to the drawing surface.
-
-        Returns:
-            `Drawing`: A new Drawing instance with the scaled surface.
-        """
-        return Drawing(
-            transform.scale(self._surface, (self.size * scale).tuple)
-        )
-
     @cached_property
     def _debug_surface(self) -> Surface | None:
         if not (debug := config().debug):
@@ -131,6 +113,182 @@ class Drawing:
         surface.fill(debug.drawing_background_color.tuple)
         surface.blit(self._surface, (0, 0))
         return surface
+
+
+@dataclass(frozen=True)
+class Rectangle:
+    """
+    Represents an immutable rectangle defined by its top left corner and size.
+
+    Attributes:
+        `top_left`: The top-left corner of the rectangle.
+
+        `size`: The dimensions of the rectangle, including its width and height.
+    """
+
+    top_left: Coordinate
+    size: Size
+
+    @cached_property
+    def left(self) -> Pixel:
+        """
+        Gets the leftmost x-coordinate of the drawing on the screen.
+
+        Returns:
+            `Pixel`: The leftmost x-coordinate.
+        """
+        return self.top_left.left
+
+    @cached_property
+    def right(self) -> Pixel:
+        """
+        Gets the rightmost x-coordinate of the drawing on the screen.
+
+        Returns:
+            `Pixel`: The rightmost x-coordinate (left + width).
+        """
+        return self.left + self.size.width
+
+    @cached_property
+    def top(self) -> Pixel:
+        """
+        Gets the topmost y-coordinate of the drawing on the screen.
+
+        Returns:
+            `Pixel`: The topmost y-coordinate.
+        """
+        return self.top_left.top
+
+    @cached_property
+    def bottom(self) -> Pixel:
+        """
+        Gets the bottommost y-coordinate of the drawing on the screen.
+
+        Returns:
+            `Pixel`: The bottommost y-coordinate (top + height).
+        """
+        return self.top + self.size.height
+
+    @cached_property
+    def top_right(self) -> Coordinate:
+        """
+        Gets the top-right coordinate of the drawing on the screen.
+
+        Returns:
+            `Coordinate`: The top-right coordinate.
+        """
+        return Coordinate(self.right, self.top)
+
+    @cached_property
+    def bottom_left(self) -> Coordinate:
+        """
+        Gets the bottom-left coordinate of the drawing on the screen.
+
+        Returns:
+            `Coordinate`: The bottom-left coordinate.
+        """
+        return Coordinate(self.left, self.bottom)
+
+    @cached_property
+    def bottom_right(self) -> Coordinate:
+        """
+        Gets the bottom-right coordinate of the drawing on the screen.
+
+        Returns:
+            `Coordinate`: The bottom-right coordinate.
+        """
+        return Coordinate(self.right, self.bottom)
+
+    @cached_property
+    def top_center(self) -> Coordinate:
+        """
+        Gets the center point of the top edge of the drawing on the screen.
+
+        Returns:
+            `Coordinate`: The top-center coordinate.
+        """
+        return Coordinate(self.left + self.size.width / 2, self.top)
+
+    @cached_property
+    def bottom_center(self) -> Coordinate:
+        """
+        Gets the center point of the bottom edge of the drawing on the screen.
+
+        Returns:
+            `Coordinate`: The bottom-center coordinate.
+        """
+        return Coordinate(self.left + self.size.width / 2, self.bottom)
+
+    @cached_property
+    def center_left(self) -> Coordinate:
+        """
+        Gets the center point of the left edge of the drawing on the screen.
+
+        Returns:
+            `Coordinate`: The left-center coordinate.
+        """
+        return Coordinate(self.left, self.top + self.size.height / 2)
+
+    @cached_property
+    def center_right(self) -> Coordinate:
+        """
+        Gets the center point of the right edge of the drawing on the screen.
+
+        Returns:
+            `Coordinate`: The right-center coordinate.
+        """
+        return Coordinate(self.right, self.top + self.size.height / 2)
+
+    @cached_property
+    def center(self) -> Coordinate:
+        """
+        Gets the center point of the drawing on the screen.
+
+        Returns:
+            `Coordinate`: The center coordinate of the drawing.
+        """
+        return Coordinate(
+            self.left + self.size.width / 2, self.top + self.size.height / 2
+        )
+
+    def collide(self, rectangle: "Rectangle") -> bool:
+        """
+        Checks if this rectangle overlaps with another rectangle.
+
+        This method determines if there is any overlap between the
+        current rectangle and the provided rectangle by
+        comparing their edge coordinates.
+
+        Args:
+            `rectangle`: The rectangle to check for collision with.
+
+        Returns:
+            `bool`: True if the rectangles overlap, False otherwise.
+        """
+        return (
+            self.top_left.left < rectangle.top_right.left
+            and self.top_right.left > rectangle.top_left.left
+            and self.top_left.top < rectangle.bottom_right.top
+            and self.bottom_right.top > rectangle.top_left.top
+        )
+
+    def __contains__(self, coordinate: Coordinate) -> bool:
+        """
+        Checks if a coordinate point lies within this rectangle.
+
+        The point is considered inside if it falls in the rectangle's bounds,
+        including points on the edges.
+
+        Arguments:
+            `coordinate`: The coordinate point to check
+
+        Returns:
+            `bool`: Whether the coordinate lies within the rectangle.
+        """
+        return (
+            self.left < coordinate.left < self.right
+            and self.top < coordinate.top < self.bottom
+        )
 
 
 @dataclass(frozen=True)
@@ -204,22 +362,6 @@ class DrawOnScreen:
                 and top coordinates (x, y).
         """
         return self.drawing.pygame, self.top_left.tuple
-
-    def __mul__(self, scale: float) -> "DrawOnScreen":
-        """
-        Scales both the drawing and its position by the given scale factor.
-
-        This method creates a new DrawOnScreen instance with the drawing and
-        coordinate both scaled by the provided factor.
-
-        Args:
-            `scale`: The scaling factor to apply to both the
-                drawing and its position.
-
-        Returns:
-            `DrawOnScreen`: New `DrawOnScreen` instance with scaled properties.
-        """
-        return DrawOnScreen(self.top_left * scale, self.drawing * scale)
 
     @staticmethod
     def from_rectangle(rectangle: Rectangle, color: Rgba) -> "DrawOnScreen":

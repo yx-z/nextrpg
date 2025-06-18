@@ -49,9 +49,6 @@ def test_game(mocker: MockerFixture) -> None:
 
     game.start()
     clock.get_time.assert_called_once()
-    blits = set_mode.return_value.blits
-    # invoke generator
-    list(blits.call_args[0][0])
-    blits.assert_called_once()
+    set_mode.return_value.blit.assert_called_once()
     flip.assert_called_once()
     clock.tick.assert_called_once_with(60)

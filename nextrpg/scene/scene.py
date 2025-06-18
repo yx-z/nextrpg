@@ -5,7 +5,7 @@ Scene is an interface of all game interactions like exploration, menu, etc..
 from abc import ABC, abstractmethod
 from functools import cached_property
 
-from nextrpg.common_types import Millisecond
+from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import DrawOnScreen
 from nextrpg.event.pygame_event import PygameEvent
 
@@ -21,7 +21,7 @@ class Scene(ABC):
 
     @cached_property
     @abstractmethod
-    def draw_on_screen(self) -> list[DrawOnScreen]:
+    def draw_on_screens(self) -> list[DrawOnScreen]:
         """
         Generates the list of drawings to be rendered on screen.
 

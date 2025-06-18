@@ -5,7 +5,7 @@ Static frames, when played sequentially, become animated.
 from dataclasses import dataclass, replace
 from functools import cached_property
 
-from nextrpg.common_types import Millisecond
+from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import Drawing
 
 type _FrameIndex = int

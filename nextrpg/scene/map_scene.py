@@ -8,6 +8,7 @@ from itertools import groupby
 from pathlib import Path
 from typing import NamedTuple, override
 
+from pygame import Surface
 from pytmx import (
     TiledMap,
     TiledObjectGroup,
@@ -17,8 +18,8 @@ from pytmx import (
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.common_types import Millisecond, Pixel
 from nextrpg.config import config
+from nextrpg.core import Millisecond, Pixel
 from nextrpg.draw_on_screen import (
     Coordinate,
     DrawOnScreen,
@@ -83,7 +84,7 @@ class MapScene(Scene):
 
     @cached_property
     @override
-    def draw_on_screen(self) -> list[DrawOnScreen]:
+    def draw_on_screens(self) -> list[DrawOnScreen]:
         """
         Generate the complete list of drawable elements for the map scene.
 
@@ -145,13 +146,13 @@ class MapScene(Scene):
 
     @cached_property
     def _layer_gid_draws(self) -> list[tuple[_LayerIndex, _Gid, DrawOnScreen]]:
-        tile_layers = list(
+        foregrounds = list(
             (i, gid, draw)
             for i, gid_to_draws in enumerate(self._foreground)
             for gid, draw in gid_to_draws.items()
         )
         player = (self._player_layer, 0, self._player.draw_on_screen.character)
-        return tile_layers + [player]
+        return foregrounds + [player]
 
     @cached_property
     def _player_layer(self) -> _LayerIndex:
@@ -186,15 +187,17 @@ def _draw(
     layer: TiledTileLayer, tile_size: Size
 ) -> list[tuple[_TiledCoordinate, DrawOnScreen]]:
     return [
-        (
-            (left, top),
-            DrawOnScreen(
-                Coordinate(left * tile_size.width, top * tile_size.height),
-                Drawing(surface),
-            ),
-        )
+        ((coord := (left, top)), _tile(coord, surface, tile_size))
         for left, top, surface in layer.tiles()
     ]
+
+
+def _tile(coord: _TiledCoordinate, surface: Surface, tile_size) -> DrawOnScreen:
+    left, top = coord
+    return DrawOnScreen(
+        Coordinate(left * tile_size.width, top * tile_size.height),
+        Drawing(surface),
+    )
 
 
 def _get_gid_and_draw(
@@ -264,9 +267,9 @@ def _draw_layers(
     tmx: TiledMap, tile_size: Size, name: str
 ) -> list[DrawOnScreen]:
     return [
-        draw_on_screen
+        draw
         for layer in _layers(tmx, name)
-        for _, draw_on_screen in _draw(layer, tile_size)
+        for _, draw in _draw(layer, tile_size)
     ]
 
 

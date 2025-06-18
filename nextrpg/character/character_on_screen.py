@@ -7,16 +7,15 @@ from functools import cached_property, lru_cache, singledispatchmethod
 from typing import NamedTuple, Self
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.common_types import (
+from nextrpg.config import config
+from nextrpg.core import (
     Coordinate,
     Direction,
     DirectionalOffset,
     Millisecond,
     Pixel,
-    Rectangle,
 )
-from nextrpg.config import config
-from nextrpg.draw_on_screen import DrawOnScreen
+from nextrpg.draw_on_screen import DrawOnScreen, Rectangle
 from nextrpg.event.pygame_event import (
     KeyPressDown,
     KeyPressUp,

@@ -2,11 +2,11 @@ from pygame.event import Event
 from pygame.locals import KEYDOWN, K_RIGHT, QUIT
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.common_types import (
+from nextrpg.core import (
     Coordinate,
-    Rectangle,
     Size,
 )
+from nextrpg.draw_on_screen import Rectangle
 from nextrpg.event.pygame_event import KeyPressDown, Quit
 from test.util import MockCharacterDrawing
 
