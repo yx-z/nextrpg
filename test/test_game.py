@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, Mock
+from unittest.mock import AsyncMock, MagicMock, Mock
 
 import pygame
 from pygame import Event, KEYDOWN, K_LEFT, QUIT, VIDEORESIZE
@@ -34,17 +34,17 @@ def test_game(mocker: MockerFixture) -> None:
     get_scene_mock = Mock(side_effect=get_scene)
 
     clock = Mock()
-    clock.tick.side_effect = lambda _: mocker.patch(
-        "pygame.event.get", lambda: [Event(QUIT)]
-    )
-
     game = Game(get_scene_mock, clock)
     set_caption.assert_called_once_with("Test")
     get_scene_mock.assert_called_once()
 
     mocker.patch(
         "pygame.event.get",
-        lambda: [Event(KEYDOWN, key=K_LEFT), Event(VIDEORESIZE, w=200, h=300)],
+        lambda: [
+            Event(KEYDOWN, key=K_LEFT),
+            Event(VIDEORESIZE, w=200, h=300),
+            Event(QUIT),
+        ],
     )
 
     game.start()
@@ -52,3 +52,17 @@ def test_game(mocker: MockerFixture) -> None:
     set_mode.return_value.blit.assert_called_once()
     flip.assert_called_once()
     clock.tick.assert_called_once_with(60)
+
+    flag = True
+
+    def step() -> bool:
+        nonlocal flag
+        res = flag
+        flag = False
+        return res
+
+    game._step = step
+    sleep = AsyncMock()
+    mocker.patch("nextrpg.game.sleep", sleep)
+    game.start()
+    sleep.assert_called_once_with(0)
