@@ -86,7 +86,7 @@
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="n">Size</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">        Initialize a `Gui` instance.</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">        Initialize a `Gui` instance that scales and centers drawings.</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">        Args:</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">            `window`: Size of the window. If `None`, default to</span>
@@ -106,18 +106,22 @@
 </span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">        Scale and center all drawings to a single surface.</span>
 </span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">        Args:</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">            `draws`: A list of draws to be scaled and centered.</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">        Returns:</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">            `DrawOnScreen`: The scaled drawing that stacks all drawings.</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="n">scaled_size</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">scaled_size</span><span class="o">.</span><span class="n">tuple</span><span class="p">))</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>        <span class="p">)</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">        This shall be the final step before rendering to the screen.</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">        All other in-game visual transformation logic shall assume using</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">        the native/unscaled screen size from `config().gui.size`.</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">        Args:</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">            `draws`: A list of drawings to be scaled and centered.</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">        Returns:</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">            `DrawOnScreen`: The scaled drawing that stacks all drawings.</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="n">scaled_size</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">scaled_size</span><span class="o">.</span><span class="n">tuple</span><span class="p">))</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -140,7 +144,7 @@
 </span><span id="Gui-20"><a href="#Gui-20"><span class="linenos">20</span></a>
 </span><span id="Gui-21"><a href="#Gui-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="n">Size</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Gui-22"><a href="#Gui-22"><span class="linenos">22</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Gui-23"><a href="#Gui-23"><span class="linenos">23</span></a><span class="sd">        Initialize a `Gui` instance.</span>
+</span><span id="Gui-23"><a href="#Gui-23"><span class="linenos">23</span></a><span class="sd">        Initialize a `Gui` instance that scales and centers drawings.</span>
 </span><span id="Gui-24"><a href="#Gui-24"><span class="linenos">24</span></a>
 </span><span id="Gui-25"><a href="#Gui-25"><span class="linenos">25</span></a><span class="sd">        Args:</span>
 </span><span id="Gui-26"><a href="#Gui-26"><span class="linenos">26</span></a><span class="sd">            `window`: Size of the window. If `None`, default to</span>
@@ -160,18 +164,22 @@
 </span><span id="Gui-40"><a href="#Gui-40"><span class="linenos">40</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Gui-41"><a href="#Gui-41"><span class="linenos">41</span></a><span class="sd">        Scale and center all drawings to a single surface.</span>
 </span><span id="Gui-42"><a href="#Gui-42"><span class="linenos">42</span></a>
-</span><span id="Gui-43"><a href="#Gui-43"><span class="linenos">43</span></a><span class="sd">        Args:</span>
-</span><span id="Gui-44"><a href="#Gui-44"><span class="linenos">44</span></a><span class="sd">            `draws`: A list of draws to be scaled and centered.</span>
-</span><span id="Gui-45"><a href="#Gui-45"><span class="linenos">45</span></a>
-</span><span id="Gui-46"><a href="#Gui-46"><span class="linenos">46</span></a><span class="sd">        Returns:</span>
-</span><span id="Gui-47"><a href="#Gui-47"><span class="linenos">47</span></a><span class="sd">            `DrawOnScreen`: The scaled drawing that stacks all drawings.</span>
-</span><span id="Gui-48"><a href="#Gui-48"><span class="linenos">48</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Gui-49"><a href="#Gui-49"><span class="linenos">49</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
-</span><span id="Gui-50"><a href="#Gui-50"><span class="linenos">50</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
-</span><span id="Gui-51"><a href="#Gui-51"><span class="linenos">51</span></a>        <span class="n">scaled_size</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
-</span><span id="Gui-52"><a href="#Gui-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span>
-</span><span id="Gui-53"><a href="#Gui-53"><span class="linenos">53</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">scaled_size</span><span class="o">.</span><span class="n">tuple</span><span class="p">))</span>
-</span><span id="Gui-54"><a href="#Gui-54"><span class="linenos">54</span></a>        <span class="p">)</span>
+</span><span id="Gui-43"><a href="#Gui-43"><span class="linenos">43</span></a><span class="sd">        This shall be the final step before rendering to the screen.</span>
+</span><span id="Gui-44"><a href="#Gui-44"><span class="linenos">44</span></a><span class="sd">        All other in-game visual transformation logic shall assume using</span>
+</span><span id="Gui-45"><a href="#Gui-45"><span class="linenos">45</span></a><span class="sd">        the native/unscaled screen size from `config().gui.size`.</span>
+</span><span id="Gui-46"><a href="#Gui-46"><span class="linenos">46</span></a>
+</span><span id="Gui-47"><a href="#Gui-47"><span class="linenos">47</span></a><span class="sd">        Args:</span>
+</span><span id="Gui-48"><a href="#Gui-48"><span class="linenos">48</span></a><span class="sd">            `draws`: A list of drawings to be scaled and centered.</span>
+</span><span id="Gui-49"><a href="#Gui-49"><span class="linenos">49</span></a>
+</span><span id="Gui-50"><a href="#Gui-50"><span class="linenos">50</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui-51"><a href="#Gui-51"><span class="linenos">51</span></a><span class="sd">            `DrawOnScreen`: The scaled drawing that stacks all drawings.</span>
+</span><span id="Gui-52"><a href="#Gui-52"><span class="linenos">52</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-53"><a href="#Gui-53"><span class="linenos">53</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+</span><span id="Gui-54"><a href="#Gui-54"><span class="linenos">54</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
+</span><span id="Gui-55"><a href="#Gui-55"><span class="linenos">55</span></a>        <span class="n">scaled_size</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
+</span><span id="Gui-56"><a href="#Gui-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span>
+</span><span id="Gui-57"><a href="#Gui-57"><span class="linenos">57</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">scaled_size</span><span class="o">.</span><span class="n">tuple</span><span class="p">))</span>
+</span><span id="Gui-58"><a href="#Gui-58"><span class="linenos">58</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -191,7 +199,7 @@
     <a class="headerlink" href="#Gui.__init__"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Gui.__init__-21"><a href="#Gui.__init__-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="n">Size</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Gui.__init__-22"><a href="#Gui.__init__-22"><span class="linenos">22</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Gui.__init__-23"><a href="#Gui.__init__-23"><span class="linenos">23</span></a><span class="sd">        Initialize a `Gui` instance.</span>
+</span><span id="Gui.__init__-23"><a href="#Gui.__init__-23"><span class="linenos">23</span></a><span class="sd">        Initialize a `Gui` instance that scales and centers drawings.</span>
 </span><span id="Gui.__init__-24"><a href="#Gui.__init__-24"><span class="linenos">24</span></a>
 </span><span id="Gui.__init__-25"><a href="#Gui.__init__-25"><span class="linenos">25</span></a><span class="sd">        Args:</span>
 </span><span id="Gui.__init__-26"><a href="#Gui.__init__-26"><span class="linenos">26</span></a><span class="sd">            `window`: Size of the window. If `None`, default to</span>
@@ -209,7 +217,7 @@
 </span></pre></div>
 
 
-            <div class="docstring"><p>Initialize a <code><a href="#Gui">Gui</a></code> instance.</p>
+            <div class="docstring"><p>Initialize a <code><a href="#Gui">Gui</a></code> instance that scales and centers drawings.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
@@ -236,27 +244,35 @@ the GUI size from <code>config()<a href="">nextrpg.gui</a></code>.</li>
 </span><span id="Gui.scale-40"><a href="#Gui.scale-40"><span class="linenos">40</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Gui.scale-41"><a href="#Gui.scale-41"><span class="linenos">41</span></a><span class="sd">        Scale and center all drawings to a single surface.</span>
 </span><span id="Gui.scale-42"><a href="#Gui.scale-42"><span class="linenos">42</span></a>
-</span><span id="Gui.scale-43"><a href="#Gui.scale-43"><span class="linenos">43</span></a><span class="sd">        Args:</span>
-</span><span id="Gui.scale-44"><a href="#Gui.scale-44"><span class="linenos">44</span></a><span class="sd">            `draws`: A list of draws to be scaled and centered.</span>
-</span><span id="Gui.scale-45"><a href="#Gui.scale-45"><span class="linenos">45</span></a>
-</span><span id="Gui.scale-46"><a href="#Gui.scale-46"><span class="linenos">46</span></a><span class="sd">        Returns:</span>
-</span><span id="Gui.scale-47"><a href="#Gui.scale-47"><span class="linenos">47</span></a><span class="sd">            `DrawOnScreen`: The scaled drawing that stacks all drawings.</span>
-</span><span id="Gui.scale-48"><a href="#Gui.scale-48"><span class="linenos">48</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Gui.scale-49"><a href="#Gui.scale-49"><span class="linenos">49</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
-</span><span id="Gui.scale-50"><a href="#Gui.scale-50"><span class="linenos">50</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
-</span><span id="Gui.scale-51"><a href="#Gui.scale-51"><span class="linenos">51</span></a>        <span class="n">scaled_size</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
-</span><span id="Gui.scale-52"><a href="#Gui.scale-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span>
-</span><span id="Gui.scale-53"><a href="#Gui.scale-53"><span class="linenos">53</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">scaled_size</span><span class="o">.</span><span class="n">tuple</span><span class="p">))</span>
-</span><span id="Gui.scale-54"><a href="#Gui.scale-54"><span class="linenos">54</span></a>        <span class="p">)</span>
+</span><span id="Gui.scale-43"><a href="#Gui.scale-43"><span class="linenos">43</span></a><span class="sd">        This shall be the final step before rendering to the screen.</span>
+</span><span id="Gui.scale-44"><a href="#Gui.scale-44"><span class="linenos">44</span></a><span class="sd">        All other in-game visual transformation logic shall assume using</span>
+</span><span id="Gui.scale-45"><a href="#Gui.scale-45"><span class="linenos">45</span></a><span class="sd">        the native/unscaled screen size from `config().gui.size`.</span>
+</span><span id="Gui.scale-46"><a href="#Gui.scale-46"><span class="linenos">46</span></a>
+</span><span id="Gui.scale-47"><a href="#Gui.scale-47"><span class="linenos">47</span></a><span class="sd">        Args:</span>
+</span><span id="Gui.scale-48"><a href="#Gui.scale-48"><span class="linenos">48</span></a><span class="sd">            `draws`: A list of drawings to be scaled and centered.</span>
+</span><span id="Gui.scale-49"><a href="#Gui.scale-49"><span class="linenos">49</span></a>
+</span><span id="Gui.scale-50"><a href="#Gui.scale-50"><span class="linenos">50</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui.scale-51"><a href="#Gui.scale-51"><span class="linenos">51</span></a><span class="sd">            `DrawOnScreen`: The scaled drawing that stacks all drawings.</span>
+</span><span id="Gui.scale-52"><a href="#Gui.scale-52"><span class="linenos">52</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui.scale-53"><a href="#Gui.scale-53"><span class="linenos">53</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+</span><span id="Gui.scale-54"><a href="#Gui.scale-54"><span class="linenos">54</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
+</span><span id="Gui.scale-55"><a href="#Gui.scale-55"><span class="linenos">55</span></a>        <span class="n">scaled_size</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
+</span><span id="Gui.scale-56"><a href="#Gui.scale-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span>
+</span><span id="Gui.scale-57"><a href="#Gui.scale-57"><span class="linenos">57</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">smoothscale</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">scaled_size</span><span class="o">.</span><span class="n">tuple</span><span class="p">))</span>
+</span><span id="Gui.scale-58"><a href="#Gui.scale-58"><span class="linenos">58</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Scale and center all drawings to a single surface.</p>
 
+<p>This shall be the final step before rendering to the screen.
+All other in-game visual transformation logic shall assume using
+the native/unscaled screen size from <code>config().gui.size</code>.</p>
+
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code>draws</code>:</strong>  A list of draws to be scaled and centered.</li>
+<li><strong><code>draws</code>:</strong>  A list of drawings to be scaled and centered.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
