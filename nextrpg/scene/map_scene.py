@@ -105,9 +105,10 @@ class MapScene(Scene):
         """
         return (
             self._background
+            + self._player.draw_on_screen.below_character_visuals
             + self._foreground_and_character
             + self._above_character
-            + self._player.draw_on_screen.visuals
+            + self._player.draw_on_screen.above_character_visuals
         )
 
     @override

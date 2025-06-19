@@ -4,7 +4,7 @@ Handles character movement and collision detection.
 
 from dataclasses import dataclass, field, replace
 from functools import cached_property, lru_cache, singledispatchmethod
-from typing import NamedTuple, Self
+from typing import Self
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
@@ -24,18 +24,22 @@ from nextrpg.event.pygame_event import (
 )
 
 
-class CharacterAndVisuals(NamedTuple):
+@dataclass(frozen=True)
+class CharacterAndVisuals:
     """
-    A named tuple containing a character and its associated visual elements.
+    Character and its associated visual elements.
 
     Args:
         `character`: The main character drawing on screen.
 
-        `visuals`: Additional visual elements associated with the character.
+        `below_character_visuals`: Additional drawings below the character.
+
+        `above_character_visuals`: Additional drawings above the character.
     """
 
     character: DrawOnScreen
-    visuals: list[DrawOnScreen]
+    below_character_visuals: list[DrawOnScreen]
+    above_character_visuals: list[DrawOnScreen]
 
 
 @dataclass(frozen=True)
@@ -73,7 +77,8 @@ class CharacterOnScreen:
         """
         return CharacterAndVisuals(
             DrawOnScreen(self.coordinate, self.character.drawing),
-            self._debug_rectangles,
+            below_character_visuals=[],
+            above_character_visuals=self._debug_rectangles,
         )
 
     @singledispatchmethod

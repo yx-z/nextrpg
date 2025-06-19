@@ -47,3 +47,5 @@ def test_coordinate() -> None:
 
 def test_size() -> None:
     assert Size(2, 3) * 2 == Size(4, 6)
+    with raises(ValueError):
+        Size(-1, -1)

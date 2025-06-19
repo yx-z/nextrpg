@@ -2,7 +2,7 @@
 Start the game window and game loop.
 """
 
-from asyncio import run, sleep
+from asyncio import sleep
 from typing import Callable
 
 import pygame
@@ -31,7 +31,6 @@ class Game:
         self,
         entry_scene: Callable[[], Scene],
         clock: Clock | None = None,
-        gui: Gui | None = None,
     ) -> None:
         """
         Sets up a game window, loads the entry scene.
@@ -42,21 +41,19 @@ class Game:
                 because drawings can only be loaded after pygame initialization.
 
             `clock`: A ticking clock controlling the game loop.
-                If `None`, default to `pygame.Clock`.
-
-            `gui`: A `Gui` instance for scaling and centering drawings.
-                If `None`, default to `Gui` from `config()`.
+                If `None`, default to `pygame.Clock()`.
         """
         self._screen = _init_screen()
         self._scene = entry_scene()
         self._clock = clock or Clock()
-        self._gui = gui or Gui()
+        self._gui = Gui()
 
     def start(self) -> None:
         """
         Start the game in a local pygame window.
         """
-        run(self.start_async())
+        while self._step():
+            pass
 
     async def start_async(self) -> None:
         """

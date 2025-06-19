@@ -19,7 +19,7 @@ class Gui:
 
     def __init__(self, window: Size | None = None) -> None:
         """
-        Initialize a `Gui` instance.
+        Initialize a `Gui` instance that scales and centers drawings.
 
         Args:
             `window`: Size of the window. If `None`, default to
@@ -39,8 +39,12 @@ class Gui:
         """
         Scale and center all drawings to a single surface.
 
+        This shall be the final step before rendering to the screen.
+        All other in-game visual transformation logic shall assume using
+        the native/unscaled screen size from `config().gui.size`.
+
         Args:
-            `draws`: A list of draws to be scaled and centered.
+            `draws`: A list of drawings to be scaled and centered.
 
         Returns:
             `DrawOnScreen`: The scaled drawing that stacks all drawings.

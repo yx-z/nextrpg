@@ -38,7 +38,7 @@ class GuiConfig:
     """
     Configuration class for Graphical User Interface (GUI).
 
-    This config is used by `nextrpg.start_game.start_game` to initialize
+    This is used by `nextrpg.game.Game` and `nextrpg.gui.Gui` to initialize
     the pygame window and by the rendering system to control display properties.
 
     Attributes:
