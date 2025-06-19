@@ -233,8 +233,6 @@ def _layers(
 def _player(
     character_drawing: CharacterDrawing, tmx: TiledMap
 ) -> CharacterOnScreen:
-    print(f"{tmx=}", end="\n\n\n")
-    print(f"{_layers(tmx, config().map.object)=}", end="\n\n\n")
     player = next(
         obj
         for layer in _layers(tmx, config().map.object)
