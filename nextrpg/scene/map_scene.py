@@ -5,6 +5,7 @@ Map scene implementation.
 from dataclasses import dataclass, replace
 from functools import cached_property
 from itertools import groupby
+from math import ceil
 from pathlib import Path
 from typing import NamedTuple, override
 
@@ -103,13 +104,14 @@ class MapScene(Scene):
             `list[DrawOnScreen]`: The complete list of drawable elements in the
             correct rendering order.
         """
-        return (
+        draws = (
             self._background
             + self._player.draw_on_screen.below_character_visuals
             + self._foreground_and_character
             + self._above_character
             + self._player.draw_on_screen.above_character_visuals
         )
+        return [d + self._player_offset for d in draws]
 
     @override
     def event(self, event: PygameEvent) -> "Scene":
@@ -168,6 +170,19 @@ class MapScene(Scene):
         reversed_layers = reversed(list(enumerate(self._foreground)))
         return next(
             (i for i, layer in reversed_layers if self._below_player(layer)), 0
+        )
+
+    @cached_property
+    def _player_offset(self) -> Coordinate:
+        screen = Rectangle(Coordinate(0, 0), config().gui.size).center
+        player = self._player.draw_on_screen.character.visible_rectangle.center
+        return Coordinate(
+            (
+                0
+                if player.left <= screen.left
+                else ceil(screen.left - player.left)
+            ),
+            0 if player.top <= screen.top else ceil(screen.top - player.top),
         )
 
     def _below_player(self, layer: dict[_Gid, DrawOnScreen]) -> bool:

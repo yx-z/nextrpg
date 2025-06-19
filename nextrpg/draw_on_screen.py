@@ -381,3 +381,15 @@ class DrawOnScreen:
         surface = Surface(rectangle.size.tuple, SRCALPHA)
         surface.fill(color.tuple)
         return DrawOnScreen(rectangle.top_left, Drawing(surface))
+
+    def __add__(self, coord: Coordinate) -> "DrawOnScreen":
+        """
+        Shift the drawing by the specified coordinate.
+
+        Args:
+            `coord`: The coordinate to shift the drawing by.
+
+        Returns:
+            `DrawOnScreen`: A new `DrawOnScreen` shifted by the coordinate.
+        """
+        return DrawOnScreen(self.top_left + coord, self.drawing)
