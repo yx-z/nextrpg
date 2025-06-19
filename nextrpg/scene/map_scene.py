@@ -268,7 +268,7 @@ def _gid_groups(
         )
     )
     return {
-        gid: set(filter(None, gid_to_draw.values()))
+        gid: set(draw for draw in gid_to_draw.values() if draw)
         for gid_to_draw in groups
         for gid in gid_to_draw
     }
