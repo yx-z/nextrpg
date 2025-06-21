@@ -108,6 +108,9 @@
                         <li>
                                 <a class="function" href="#Rectangle.collide">collide</a>
                         </li>
+                        <li>
+                                <a class="function" href="#Rectangle.fill">fill</a>
+                        </li>
                 </ul>
 
             </li>
@@ -131,9 +134,6 @@
                         </li>
                         <li>
                                 <a class="variable" href="#DrawOnScreen.pygame">pygame</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#DrawOnScreen.from_rectangle">from_rectangle</a>
                         </li>
                 </ul>
 
@@ -460,109 +460,104 @@
 </span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
 </span><span id="L-298"><a href="#L-298"><span class="linenos">298</span></a>        <span class="p">)</span>
 </span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a>
-</span><span id="L-300"><a href="#L-300"><span class="linenos">300</span></a>
-</span><span id="L-301"><a href="#L-301"><span class="linenos">301</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-302"><a href="#L-302"><span class="linenos">302</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DrawOnScreen</span><span class="p">:</span>
-</span><span id="L-303"><a href="#L-303"><span class="linenos">303</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-304"><a href="#L-304"><span class="linenos">304</span></a><span class="sd">    Represents a drawable element positioned on the screen with its coordinates.</span>
-</span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a>
-</span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a><span class="sd">    This immutable class combines a drawing with its position and provides</span>
-</span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a><span class="sd">    properties to access various coordinates and dimensions of the drawing</span>
-</span><span id="L-308"><a href="#L-308"><span class="linenos">308</span></a><span class="sd">    on the screen.</span>
-</span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a>
-</span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a><span class="sd">        `top_left`: The top-left position of the drawing on the screen.</span>
-</span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>
-</span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a><span class="sd">        `drawing`: The drawable element to be displayed on the screen.</span>
-</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a>
-</span><span id="L-316"><a href="#L-316"><span class="linenos">316</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="L-317"><a href="#L-317"><span class="linenos">317</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">Drawing</span>
-</span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a>
-</span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
-</span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a><span class="sd">        Gets the rectangular bounds of the drawing on screen.</span>
+</span><span id="L-300"><a href="#L-300"><span class="linenos">300</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DrawOnScreen&quot;</span><span class="p">:</span>
+</span><span id="L-301"><a href="#L-301"><span class="linenos">301</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-302"><a href="#L-302"><span class="linenos">302</span></a><span class="sd">        Creates a colored `DrawOnScreen` with the provided color.</span>
+</span><span id="L-303"><a href="#L-303"><span class="linenos">303</span></a>
+</span><span id="L-304"><a href="#L-304"><span class="linenos">304</span></a><span class="sd">        Args:</span>
+</span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a><span class="sd">            `Color`: The color to fill the rectangle with.</span>
+</span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a>
+</span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a><span class="sd">        Returns:</span>
+</span><span id="L-308"><a href="#L-308"><span class="linenos">308</span></a><span class="sd">            `DrawOnScreen`: A transparent surface matching rectangle dimensions.</span>
+</span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a>        <span class="n">surface</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
+</span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a>        <span class="n">surface</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+</span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surface</span><span class="p">))</span>
+</span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a>
+</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a>
+</span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-316"><a href="#L-316"><span class="linenos">316</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DrawOnScreen</span><span class="p">:</span>
+</span><span id="L-317"><a href="#L-317"><span class="linenos">317</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a><span class="sd">    Represents a drawable element positioned on the screen with its coordinates.</span>
+</span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>
+</span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a><span class="sd">    This immutable class combines a drawing with its position and provides</span>
+</span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a><span class="sd">    properties to access various coordinates and dimensions of the drawing</span>
+</span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a><span class="sd">    on the screen.</span>
 </span><span id="L-323"><a href="#L-323"><span class="linenos">323</span></a>
-</span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a><span class="sd">        Returns:</span>
-</span><span id="L-325"><a href="#L-325"><span class="linenos">325</span></a><span class="sd">            `Rectangle`: A rectangle defining the drawing&#39;s position and size</span>
-</span><span id="L-326"><a href="#L-326"><span class="linenos">326</span></a><span class="sd">            on screen.</span>
-</span><span id="L-327"><a href="#L-327"><span class="linenos">327</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a><span class="sd">    Attributes:</span>
+</span><span id="L-325"><a href="#L-325"><span class="linenos">325</span></a><span class="sd">        `top_left`: The top-left position of the drawing on the screen.</span>
+</span><span id="L-326"><a href="#L-326"><span class="linenos">326</span></a>
+</span><span id="L-327"><a href="#L-327"><span class="linenos">327</span></a><span class="sd">        `drawing`: The drawable element to be displayed on the screen.</span>
+</span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a>
-</span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visible_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
-</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a><span class="sd">        Calculate the actual visible bounds of the drawing,</span>
-</span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a><span class="sd">        ignoring transparent pixels.</span>
-</span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a>
-</span><span id="L-336"><a href="#L-336"><span class="linenos">336</span></a><span class="sd">        Returns:</span>
-</span><span id="L-337"><a href="#L-337"><span class="linenos">337</span></a><span class="sd">            `Rectangle`: A rectangle defining only the visible (non-transparent)</span>
-</span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a><span class="sd">            portion of the drawing on screen.</span>
-</span><span id="L-339"><a href="#L-339"><span class="linenos">339</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a>        <span class="n">visible</span> <span class="o">=</span> <span class="p">[</span>
-</span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a>            <span class="n">Coordinate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-</span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a>            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span>
-</span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a>                <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">width</span><span class="p">)),</span>
-</span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a>                <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">height</span><span class="p">)),</span>
-</span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a>            <span class="p">)</span>
-</span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a>            <span class="c1"># `drawing._surface` to ignore the debug background.</span>
-</span><span id="L-347"><a href="#L-347"><span class="linenos">347</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">_surface</span><span class="o">.</span><span class="n">get_at</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">a</span>
-</span><span id="L-348"><a href="#L-348"><span class="linenos">348</span></a>        <span class="p">]</span>
-</span><span id="L-349"><a href="#L-349"><span class="linenos">349</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">visible</span><span class="p">:</span>
-</span><span id="L-350"><a href="#L-350"><span class="linenos">350</span></a>            <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Size</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-</span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a>
-</span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a>        <span class="n">min_x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">)</span><span class="o">.</span><span class="n">left</span>
-</span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a>        <span class="n">min_y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">top</span>
-</span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a>        <span class="n">max_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">)</span><span class="o">.</span><span class="n">left</span>
-</span><span id="L-355"><a href="#L-355"><span class="linenos">355</span></a>        <span class="n">max_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">top</span>
-</span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span>
-</span><span id="L-357"><a href="#L-357"><span class="linenos">357</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">Coordinate</span><span class="p">(</span><span class="n">min_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">),</span>
-</span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a>            <span class="n">Size</span><span class="p">(</span><span class="n">max_x</span> <span class="o">-</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span><span class="p">),</span>
-</span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a>        <span class="p">)</span>
-</span><span id="L-360"><a href="#L-360"><span class="linenos">360</span></a>
-</span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-362"><a href="#L-362"><span class="linenos">362</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Surface</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]]:</span>
-</span><span id="L-363"><a href="#L-363"><span class="linenos">363</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-364"><a href="#L-364"><span class="linenos">364</span></a><span class="sd">        Gets the pygame surface and coordinate tuple for rendering.</span>
+</span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">Drawing</span>
+</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>
+</span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
+</span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-336"><a href="#L-336"><span class="linenos">336</span></a><span class="sd">        Gets the rectangular bounds of the drawing on screen.</span>
+</span><span id="L-337"><a href="#L-337"><span class="linenos">337</span></a>
+</span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a><span class="sd">        Returns:</span>
+</span><span id="L-339"><a href="#L-339"><span class="linenos">339</span></a><span class="sd">            `Rectangle`: A rectangle defining the drawing&#39;s position and size</span>
+</span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a><span class="sd">            on screen.</span>
+</span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a>
+</span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visible_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
+</span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-347"><a href="#L-347"><span class="linenos">347</span></a><span class="sd">        Calculate the actual visible bounds of the drawing,</span>
+</span><span id="L-348"><a href="#L-348"><span class="linenos">348</span></a><span class="sd">        ignoring transparent pixels.</span>
+</span><span id="L-349"><a href="#L-349"><span class="linenos">349</span></a>
+</span><span id="L-350"><a href="#L-350"><span class="linenos">350</span></a><span class="sd">        Returns:</span>
+</span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a><span class="sd">            `Rectangle`: A rectangle defining only the visible (non-transparent)</span>
+</span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a><span class="sd">            portion of the drawing on screen.</span>
+</span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a>        <span class="n">visible</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="L-355"><a href="#L-355"><span class="linenos">355</span></a>            <span class="n">Coordinate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a>            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span>
+</span><span id="L-357"><a href="#L-357"><span class="linenos">357</span></a>                <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">width</span><span class="p">)),</span>
+</span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a>                <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">height</span><span class="p">)),</span>
+</span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a>            <span class="p">)</span>
+</span><span id="L-360"><a href="#L-360"><span class="linenos">360</span></a>            <span class="c1"># `drawing._surface` to ignore the debug background.</span>
+</span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">_surface</span><span class="o">.</span><span class="n">get_at</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">a</span>
+</span><span id="L-362"><a href="#L-362"><span class="linenos">362</span></a>        <span class="p">]</span>
+</span><span id="L-363"><a href="#L-363"><span class="linenos">363</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">visible</span><span class="p">:</span>
+</span><span id="L-364"><a href="#L-364"><span class="linenos">364</span></a>            <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Size</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 </span><span id="L-365"><a href="#L-365"><span class="linenos">365</span></a>
-</span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a><span class="sd">        Returns:</span>
-</span><span id="L-367"><a href="#L-367"><span class="linenos">367</span></a><span class="sd">            `tuple[pygame.Surface, tuple[float, float]]`:</span>
-</span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a><span class="sd">                A tuple containing the `pygame.Surface` and a tuple of the left</span>
-</span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a><span class="sd">                and top coordinates (x, y).</span>
-</span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">pygame</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">tuple</span>
-</span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a>
-</span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-374"><a href="#L-374"><span class="linenos">374</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_rectangle</span><span class="p">(</span><span class="n">rectangle</span><span class="p">:</span> <span class="n">Rectangle</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DrawOnScreen&quot;</span><span class="p">:</span>
-</span><span id="L-375"><a href="#L-375"><span class="linenos">375</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a><span class="sd">        Creates a new `DrawOnScreen` instance from a given rectangle.</span>
-</span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a>
-</span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a><span class="sd">        Creates a transparent surface with the dimensions of the provided</span>
-</span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a><span class="sd">        rectangle and positions it at the rectangle&#39;s top-left coordinate.</span>
-</span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a>
-</span><span id="L-381"><a href="#L-381"><span class="linenos">381</span></a><span class="sd">        Args:</span>
-</span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a><span class="sd">            `rectangle`: The rectangle that defines the size and position of the</span>
-</span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a><span class="sd">                new `DrawOnScreen` instance.</span>
-</span><span id="L-384"><a href="#L-384"><span class="linenos">384</span></a>
-</span><span id="L-385"><a href="#L-385"><span class="linenos">385</span></a><span class="sd">        Returns:</span>
-</span><span id="L-386"><a href="#L-386"><span class="linenos">386</span></a><span class="sd">            `DrawOnScreen`: A transparent surface matching rectangle dimensions.</span>
-</span><span id="L-387"><a href="#L-387"><span class="linenos">387</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-388"><a href="#L-388"><span class="linenos">388</span></a>        <span class="n">surface</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">rectangle</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
-</span><span id="L-389"><a href="#L-389"><span class="linenos">389</span></a>        <span class="n">surface</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
-</span><span id="L-390"><a href="#L-390"><span class="linenos">390</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="n">rectangle</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surface</span><span class="p">))</span>
-</span><span id="L-391"><a href="#L-391"><span class="linenos">391</span></a>
-</span><span id="L-392"><a href="#L-392"><span class="linenos">392</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DrawOnScreen&quot;</span><span class="p">:</span>
-</span><span id="L-393"><a href="#L-393"><span class="linenos">393</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-394"><a href="#L-394"><span class="linenos">394</span></a><span class="sd">        Shift the drawing by the specified coordinate.</span>
-</span><span id="L-395"><a href="#L-395"><span class="linenos">395</span></a>
-</span><span id="L-396"><a href="#L-396"><span class="linenos">396</span></a><span class="sd">        Args:</span>
-</span><span id="L-397"><a href="#L-397"><span class="linenos">397</span></a><span class="sd">            `coord`: The coordinate to shift the drawing by.</span>
-</span><span id="L-398"><a href="#L-398"><span class="linenos">398</span></a>
-</span><span id="L-399"><a href="#L-399"><span class="linenos">399</span></a><span class="sd">        Returns:</span>
-</span><span id="L-400"><a href="#L-400"><span class="linenos">400</span></a><span class="sd">            `DrawOnScreen`: A new `DrawOnScreen` shifted by the coordinate.</span>
-</span><span id="L-401"><a href="#L-401"><span class="linenos">401</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-402"><a href="#L-402"><span class="linenos">402</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">coord</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
+</span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a>        <span class="n">min_x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">)</span><span class="o">.</span><span class="n">left</span>
+</span><span id="L-367"><a href="#L-367"><span class="linenos">367</span></a>        <span class="n">min_y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">top</span>
+</span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a>        <span class="n">max_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">)</span><span class="o">.</span><span class="n">left</span>
+</span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a>        <span class="n">max_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">top</span>
+</span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span>
+</span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">Coordinate</span><span class="p">(</span><span class="n">min_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">),</span>
+</span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a>            <span class="n">Size</span><span class="p">(</span><span class="n">max_x</span> <span class="o">-</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span><span class="p">),</span>
+</span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a>        <span class="p">)</span>
+</span><span id="L-374"><a href="#L-374"><span class="linenos">374</span></a>
+</span><span id="L-375"><a href="#L-375"><span class="linenos">375</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Surface</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]]:</span>
+</span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a><span class="sd">        Gets the pygame surface and coordinate tuple for rendering.</span>
+</span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a>
+</span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a><span class="sd">        Returns:</span>
+</span><span id="L-381"><a href="#L-381"><span class="linenos">381</span></a><span class="sd">            `tuple[pygame.Surface, tuple[float, float]]`:</span>
+</span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a><span class="sd">                A tuple containing the `pygame.Surface` and a tuple of the left</span>
+</span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a><span class="sd">                and top coordinates (x, y).</span>
+</span><span id="L-384"><a href="#L-384"><span class="linenos">384</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-385"><a href="#L-385"><span class="linenos">385</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">pygame</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">tuple</span>
+</span><span id="L-386"><a href="#L-386"><span class="linenos">386</span></a>
+</span><span id="L-387"><a href="#L-387"><span class="linenos">387</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DrawOnScreen&quot;</span><span class="p">:</span>
+</span><span id="L-388"><a href="#L-388"><span class="linenos">388</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-389"><a href="#L-389"><span class="linenos">389</span></a><span class="sd">        Shift the drawing by the specified coordinate.</span>
+</span><span id="L-390"><a href="#L-390"><span class="linenos">390</span></a>
+</span><span id="L-391"><a href="#L-391"><span class="linenos">391</span></a><span class="sd">        Args:</span>
+</span><span id="L-392"><a href="#L-392"><span class="linenos">392</span></a><span class="sd">            `coord`: The coordinate to shift the drawing by.</span>
+</span><span id="L-393"><a href="#L-393"><span class="linenos">393</span></a>
+</span><span id="L-394"><a href="#L-394"><span class="linenos">394</span></a><span class="sd">        Returns:</span>
+</span><span id="L-395"><a href="#L-395"><span class="linenos">395</span></a><span class="sd">            `DrawOnScreen`: A new `DrawOnScreen` shifted by the coordinate.</span>
+</span><span id="L-396"><a href="#L-396"><span class="linenos">396</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-397"><a href="#L-397"><span class="linenos">397</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">coord</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -1087,6 +1082,20 @@ The original drawing remains unchanged.</p>
 </span><span id="Rectangle-297"><a href="#Rectangle-297"><span class="linenos">297</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
 </span><span id="Rectangle-298"><a href="#Rectangle-298"><span class="linenos">298</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
 </span><span id="Rectangle-299"><a href="#Rectangle-299"><span class="linenos">299</span></a>        <span class="p">)</span>
+</span><span id="Rectangle-300"><a href="#Rectangle-300"><span class="linenos">300</span></a>
+</span><span id="Rectangle-301"><a href="#Rectangle-301"><span class="linenos">301</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DrawOnScreen&quot;</span><span class="p">:</span>
+</span><span id="Rectangle-302"><a href="#Rectangle-302"><span class="linenos">302</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Rectangle-303"><a href="#Rectangle-303"><span class="linenos">303</span></a><span class="sd">        Creates a colored `DrawOnScreen` with the provided color.</span>
+</span><span id="Rectangle-304"><a href="#Rectangle-304"><span class="linenos">304</span></a>
+</span><span id="Rectangle-305"><a href="#Rectangle-305"><span class="linenos">305</span></a><span class="sd">        Args:</span>
+</span><span id="Rectangle-306"><a href="#Rectangle-306"><span class="linenos">306</span></a><span class="sd">            `Color`: The color to fill the rectangle with.</span>
+</span><span id="Rectangle-307"><a href="#Rectangle-307"><span class="linenos">307</span></a>
+</span><span id="Rectangle-308"><a href="#Rectangle-308"><span class="linenos">308</span></a><span class="sd">        Returns:</span>
+</span><span id="Rectangle-309"><a href="#Rectangle-309"><span class="linenos">309</span></a><span class="sd">            `DrawOnScreen`: A transparent surface matching rectangle dimensions.</span>
+</span><span id="Rectangle-310"><a href="#Rectangle-310"><span class="linenos">310</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Rectangle-311"><a href="#Rectangle-311"><span class="linenos">311</span></a>        <span class="n">surface</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
+</span><span id="Rectangle-312"><a href="#Rectangle-312"><span class="linenos">312</span></a>        <span class="n">surface</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+</span><span id="Rectangle-313"><a href="#Rectangle-313"><span class="linenos">313</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surface</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -1576,6 +1585,50 @@ comparing their edge coordinates.</p>
 
 
                             </div>
+                            <div id="Rectangle.fill" class="classattr">
+                                        <input id="Rectangle.fill-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">fill</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">color</span><span class="p">:</span> <span class="n"><a href="core.html#Rgba">nextrpg.core.Rgba</a></span></span><span class="return-annotation">) -> <span class="n"><a href="#DrawOnScreen">DrawOnScreen</a></span>:</span></span>
+
+                <label class="view-source-button" for="Rectangle.fill-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Rectangle.fill"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.fill-301"><a href="#Rectangle.fill-301"><span class="linenos">301</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DrawOnScreen&quot;</span><span class="p">:</span>
+</span><span id="Rectangle.fill-302"><a href="#Rectangle.fill-302"><span class="linenos">302</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Rectangle.fill-303"><a href="#Rectangle.fill-303"><span class="linenos">303</span></a><span class="sd">        Creates a colored `DrawOnScreen` with the provided color.</span>
+</span><span id="Rectangle.fill-304"><a href="#Rectangle.fill-304"><span class="linenos">304</span></a>
+</span><span id="Rectangle.fill-305"><a href="#Rectangle.fill-305"><span class="linenos">305</span></a><span class="sd">        Args:</span>
+</span><span id="Rectangle.fill-306"><a href="#Rectangle.fill-306"><span class="linenos">306</span></a><span class="sd">            `Color`: The color to fill the rectangle with.</span>
+</span><span id="Rectangle.fill-307"><a href="#Rectangle.fill-307"><span class="linenos">307</span></a>
+</span><span id="Rectangle.fill-308"><a href="#Rectangle.fill-308"><span class="linenos">308</span></a><span class="sd">        Returns:</span>
+</span><span id="Rectangle.fill-309"><a href="#Rectangle.fill-309"><span class="linenos">309</span></a><span class="sd">            `DrawOnScreen`: A transparent surface matching rectangle dimensions.</span>
+</span><span id="Rectangle.fill-310"><a href="#Rectangle.fill-310"><span class="linenos">310</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Rectangle.fill-311"><a href="#Rectangle.fill-311"><span class="linenos">311</span></a>        <span class="n">surface</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
+</span><span id="Rectangle.fill-312"><a href="#Rectangle.fill-312"><span class="linenos">312</span></a>        <span class="n">surface</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+</span><span id="Rectangle.fill-313"><a href="#Rectangle.fill-313"><span class="linenos">313</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surface</span><span class="p">))</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Creates a colored <code><a href="#DrawOnScreen">DrawOnScreen</a></code> with the provided color.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong><code>Color</code>:</strong>  The color to fill the rectangle with.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code><a href="#DrawOnScreen">DrawOnScreen</a></code>: A transparent surface matching rectangle dimensions.</p>
+</blockquote>
+</div>
+
+
+                            </div>
                 </section>
                 <section id="DrawOnScreen">
                             <input id="DrawOnScreen-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -1589,108 +1642,89 @@ comparing their edge coordinates.</p>
 
     </div>
     <a class="headerlink" href="#DrawOnScreen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawOnScreen-302"><a href="#DrawOnScreen-302"><span class="linenos">302</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="DrawOnScreen-303"><a href="#DrawOnScreen-303"><span class="linenos">303</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DrawOnScreen</span><span class="p">:</span>
-</span><span id="DrawOnScreen-304"><a href="#DrawOnScreen-304"><span class="linenos">304</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen-305"><a href="#DrawOnScreen-305"><span class="linenos">305</span></a><span class="sd">    Represents a drawable element positioned on the screen with its coordinates.</span>
-</span><span id="DrawOnScreen-306"><a href="#DrawOnScreen-306"><span class="linenos">306</span></a>
-</span><span id="DrawOnScreen-307"><a href="#DrawOnScreen-307"><span class="linenos">307</span></a><span class="sd">    This immutable class combines a drawing with its position and provides</span>
-</span><span id="DrawOnScreen-308"><a href="#DrawOnScreen-308"><span class="linenos">308</span></a><span class="sd">    properties to access various coordinates and dimensions of the drawing</span>
-</span><span id="DrawOnScreen-309"><a href="#DrawOnScreen-309"><span class="linenos">309</span></a><span class="sd">    on the screen.</span>
-</span><span id="DrawOnScreen-310"><a href="#DrawOnScreen-310"><span class="linenos">310</span></a>
-</span><span id="DrawOnScreen-311"><a href="#DrawOnScreen-311"><span class="linenos">311</span></a><span class="sd">    Attributes:</span>
-</span><span id="DrawOnScreen-312"><a href="#DrawOnScreen-312"><span class="linenos">312</span></a><span class="sd">        `top_left`: The top-left position of the drawing on the screen.</span>
-</span><span id="DrawOnScreen-313"><a href="#DrawOnScreen-313"><span class="linenos">313</span></a>
-</span><span id="DrawOnScreen-314"><a href="#DrawOnScreen-314"><span class="linenos">314</span></a><span class="sd">        `drawing`: The drawable element to be displayed on the screen.</span>
-</span><span id="DrawOnScreen-315"><a href="#DrawOnScreen-315"><span class="linenos">315</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen-316"><a href="#DrawOnScreen-316"><span class="linenos">316</span></a>
-</span><span id="DrawOnScreen-317"><a href="#DrawOnScreen-317"><span class="linenos">317</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="DrawOnScreen-318"><a href="#DrawOnScreen-318"><span class="linenos">318</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">Drawing</span>
-</span><span id="DrawOnScreen-319"><a href="#DrawOnScreen-319"><span class="linenos">319</span></a>
-</span><span id="DrawOnScreen-320"><a href="#DrawOnScreen-320"><span class="linenos">320</span></a>    <span class="nd">@cached_property</span>
-</span><span id="DrawOnScreen-321"><a href="#DrawOnScreen-321"><span class="linenos">321</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
-</span><span id="DrawOnScreen-322"><a href="#DrawOnScreen-322"><span class="linenos">322</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen-323"><a href="#DrawOnScreen-323"><span class="linenos">323</span></a><span class="sd">        Gets the rectangular bounds of the drawing on screen.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawOnScreen-316"><a href="#DrawOnScreen-316"><span class="linenos">316</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="DrawOnScreen-317"><a href="#DrawOnScreen-317"><span class="linenos">317</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DrawOnScreen</span><span class="p">:</span>
+</span><span id="DrawOnScreen-318"><a href="#DrawOnScreen-318"><span class="linenos">318</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen-319"><a href="#DrawOnScreen-319"><span class="linenos">319</span></a><span class="sd">    Represents a drawable element positioned on the screen with its coordinates.</span>
+</span><span id="DrawOnScreen-320"><a href="#DrawOnScreen-320"><span class="linenos">320</span></a>
+</span><span id="DrawOnScreen-321"><a href="#DrawOnScreen-321"><span class="linenos">321</span></a><span class="sd">    This immutable class combines a drawing with its position and provides</span>
+</span><span id="DrawOnScreen-322"><a href="#DrawOnScreen-322"><span class="linenos">322</span></a><span class="sd">    properties to access various coordinates and dimensions of the drawing</span>
+</span><span id="DrawOnScreen-323"><a href="#DrawOnScreen-323"><span class="linenos">323</span></a><span class="sd">    on the screen.</span>
 </span><span id="DrawOnScreen-324"><a href="#DrawOnScreen-324"><span class="linenos">324</span></a>
-</span><span id="DrawOnScreen-325"><a href="#DrawOnScreen-325"><span class="linenos">325</span></a><span class="sd">        Returns:</span>
-</span><span id="DrawOnScreen-326"><a href="#DrawOnScreen-326"><span class="linenos">326</span></a><span class="sd">            `Rectangle`: A rectangle defining the drawing&#39;s position and size</span>
-</span><span id="DrawOnScreen-327"><a href="#DrawOnScreen-327"><span class="linenos">327</span></a><span class="sd">            on screen.</span>
-</span><span id="DrawOnScreen-328"><a href="#DrawOnScreen-328"><span class="linenos">328</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen-329"><a href="#DrawOnScreen-329"><span class="linenos">329</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="DrawOnScreen-325"><a href="#DrawOnScreen-325"><span class="linenos">325</span></a><span class="sd">    Attributes:</span>
+</span><span id="DrawOnScreen-326"><a href="#DrawOnScreen-326"><span class="linenos">326</span></a><span class="sd">        `top_left`: The top-left position of the drawing on the screen.</span>
+</span><span id="DrawOnScreen-327"><a href="#DrawOnScreen-327"><span class="linenos">327</span></a>
+</span><span id="DrawOnScreen-328"><a href="#DrawOnScreen-328"><span class="linenos">328</span></a><span class="sd">        `drawing`: The drawable element to be displayed on the screen.</span>
+</span><span id="DrawOnScreen-329"><a href="#DrawOnScreen-329"><span class="linenos">329</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="DrawOnScreen-330"><a href="#DrawOnScreen-330"><span class="linenos">330</span></a>
-</span><span id="DrawOnScreen-331"><a href="#DrawOnScreen-331"><span class="linenos">331</span></a>    <span class="nd">@cached_property</span>
-</span><span id="DrawOnScreen-332"><a href="#DrawOnScreen-332"><span class="linenos">332</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visible_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
-</span><span id="DrawOnScreen-333"><a href="#DrawOnScreen-333"><span class="linenos">333</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen-334"><a href="#DrawOnScreen-334"><span class="linenos">334</span></a><span class="sd">        Calculate the actual visible bounds of the drawing,</span>
-</span><span id="DrawOnScreen-335"><a href="#DrawOnScreen-335"><span class="linenos">335</span></a><span class="sd">        ignoring transparent pixels.</span>
-</span><span id="DrawOnScreen-336"><a href="#DrawOnScreen-336"><span class="linenos">336</span></a>
-</span><span id="DrawOnScreen-337"><a href="#DrawOnScreen-337"><span class="linenos">337</span></a><span class="sd">        Returns:</span>
-</span><span id="DrawOnScreen-338"><a href="#DrawOnScreen-338"><span class="linenos">338</span></a><span class="sd">            `Rectangle`: A rectangle defining only the visible (non-transparent)</span>
-</span><span id="DrawOnScreen-339"><a href="#DrawOnScreen-339"><span class="linenos">339</span></a><span class="sd">            portion of the drawing on screen.</span>
-</span><span id="DrawOnScreen-340"><a href="#DrawOnScreen-340"><span class="linenos">340</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen-341"><a href="#DrawOnScreen-341"><span class="linenos">341</span></a>        <span class="n">visible</span> <span class="o">=</span> <span class="p">[</span>
-</span><span id="DrawOnScreen-342"><a href="#DrawOnScreen-342"><span class="linenos">342</span></a>            <span class="n">Coordinate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-</span><span id="DrawOnScreen-343"><a href="#DrawOnScreen-343"><span class="linenos">343</span></a>            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span>
-</span><span id="DrawOnScreen-344"><a href="#DrawOnScreen-344"><span class="linenos">344</span></a>                <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">width</span><span class="p">)),</span>
-</span><span id="DrawOnScreen-345"><a href="#DrawOnScreen-345"><span class="linenos">345</span></a>                <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">height</span><span class="p">)),</span>
-</span><span id="DrawOnScreen-346"><a href="#DrawOnScreen-346"><span class="linenos">346</span></a>            <span class="p">)</span>
-</span><span id="DrawOnScreen-347"><a href="#DrawOnScreen-347"><span class="linenos">347</span></a>            <span class="c1"># `drawing._surface` to ignore the debug background.</span>
-</span><span id="DrawOnScreen-348"><a href="#DrawOnScreen-348"><span class="linenos">348</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">_surface</span><span class="o">.</span><span class="n">get_at</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">a</span>
-</span><span id="DrawOnScreen-349"><a href="#DrawOnScreen-349"><span class="linenos">349</span></a>        <span class="p">]</span>
-</span><span id="DrawOnScreen-350"><a href="#DrawOnScreen-350"><span class="linenos">350</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">visible</span><span class="p">:</span>
-</span><span id="DrawOnScreen-351"><a href="#DrawOnScreen-351"><span class="linenos">351</span></a>            <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Size</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-</span><span id="DrawOnScreen-352"><a href="#DrawOnScreen-352"><span class="linenos">352</span></a>
-</span><span id="DrawOnScreen-353"><a href="#DrawOnScreen-353"><span class="linenos">353</span></a>        <span class="n">min_x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">)</span><span class="o">.</span><span class="n">left</span>
-</span><span id="DrawOnScreen-354"><a href="#DrawOnScreen-354"><span class="linenos">354</span></a>        <span class="n">min_y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">top</span>
-</span><span id="DrawOnScreen-355"><a href="#DrawOnScreen-355"><span class="linenos">355</span></a>        <span class="n">max_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">)</span><span class="o">.</span><span class="n">left</span>
-</span><span id="DrawOnScreen-356"><a href="#DrawOnScreen-356"><span class="linenos">356</span></a>        <span class="n">max_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">top</span>
-</span><span id="DrawOnScreen-357"><a href="#DrawOnScreen-357"><span class="linenos">357</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span>
-</span><span id="DrawOnScreen-358"><a href="#DrawOnScreen-358"><span class="linenos">358</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">Coordinate</span><span class="p">(</span><span class="n">min_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">),</span>
-</span><span id="DrawOnScreen-359"><a href="#DrawOnScreen-359"><span class="linenos">359</span></a>            <span class="n">Size</span><span class="p">(</span><span class="n">max_x</span> <span class="o">-</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span><span class="p">),</span>
-</span><span id="DrawOnScreen-360"><a href="#DrawOnScreen-360"><span class="linenos">360</span></a>        <span class="p">)</span>
-</span><span id="DrawOnScreen-361"><a href="#DrawOnScreen-361"><span class="linenos">361</span></a>
-</span><span id="DrawOnScreen-362"><a href="#DrawOnScreen-362"><span class="linenos">362</span></a>    <span class="nd">@cached_property</span>
-</span><span id="DrawOnScreen-363"><a href="#DrawOnScreen-363"><span class="linenos">363</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Surface</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]]:</span>
-</span><span id="DrawOnScreen-364"><a href="#DrawOnScreen-364"><span class="linenos">364</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen-365"><a href="#DrawOnScreen-365"><span class="linenos">365</span></a><span class="sd">        Gets the pygame surface and coordinate tuple for rendering.</span>
+</span><span id="DrawOnScreen-331"><a href="#DrawOnScreen-331"><span class="linenos">331</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="DrawOnScreen-332"><a href="#DrawOnScreen-332"><span class="linenos">332</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">Drawing</span>
+</span><span id="DrawOnScreen-333"><a href="#DrawOnScreen-333"><span class="linenos">333</span></a>
+</span><span id="DrawOnScreen-334"><a href="#DrawOnScreen-334"><span class="linenos">334</span></a>    <span class="nd">@cached_property</span>
+</span><span id="DrawOnScreen-335"><a href="#DrawOnScreen-335"><span class="linenos">335</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
+</span><span id="DrawOnScreen-336"><a href="#DrawOnScreen-336"><span class="linenos">336</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen-337"><a href="#DrawOnScreen-337"><span class="linenos">337</span></a><span class="sd">        Gets the rectangular bounds of the drawing on screen.</span>
+</span><span id="DrawOnScreen-338"><a href="#DrawOnScreen-338"><span class="linenos">338</span></a>
+</span><span id="DrawOnScreen-339"><a href="#DrawOnScreen-339"><span class="linenos">339</span></a><span class="sd">        Returns:</span>
+</span><span id="DrawOnScreen-340"><a href="#DrawOnScreen-340"><span class="linenos">340</span></a><span class="sd">            `Rectangle`: A rectangle defining the drawing&#39;s position and size</span>
+</span><span id="DrawOnScreen-341"><a href="#DrawOnScreen-341"><span class="linenos">341</span></a><span class="sd">            on screen.</span>
+</span><span id="DrawOnScreen-342"><a href="#DrawOnScreen-342"><span class="linenos">342</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen-343"><a href="#DrawOnScreen-343"><span class="linenos">343</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="DrawOnScreen-344"><a href="#DrawOnScreen-344"><span class="linenos">344</span></a>
+</span><span id="DrawOnScreen-345"><a href="#DrawOnScreen-345"><span class="linenos">345</span></a>    <span class="nd">@cached_property</span>
+</span><span id="DrawOnScreen-346"><a href="#DrawOnScreen-346"><span class="linenos">346</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visible_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
+</span><span id="DrawOnScreen-347"><a href="#DrawOnScreen-347"><span class="linenos">347</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen-348"><a href="#DrawOnScreen-348"><span class="linenos">348</span></a><span class="sd">        Calculate the actual visible bounds of the drawing,</span>
+</span><span id="DrawOnScreen-349"><a href="#DrawOnScreen-349"><span class="linenos">349</span></a><span class="sd">        ignoring transparent pixels.</span>
+</span><span id="DrawOnScreen-350"><a href="#DrawOnScreen-350"><span class="linenos">350</span></a>
+</span><span id="DrawOnScreen-351"><a href="#DrawOnScreen-351"><span class="linenos">351</span></a><span class="sd">        Returns:</span>
+</span><span id="DrawOnScreen-352"><a href="#DrawOnScreen-352"><span class="linenos">352</span></a><span class="sd">            `Rectangle`: A rectangle defining only the visible (non-transparent)</span>
+</span><span id="DrawOnScreen-353"><a href="#DrawOnScreen-353"><span class="linenos">353</span></a><span class="sd">            portion of the drawing on screen.</span>
+</span><span id="DrawOnScreen-354"><a href="#DrawOnScreen-354"><span class="linenos">354</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen-355"><a href="#DrawOnScreen-355"><span class="linenos">355</span></a>        <span class="n">visible</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="DrawOnScreen-356"><a href="#DrawOnScreen-356"><span class="linenos">356</span></a>            <span class="n">Coordinate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</span><span id="DrawOnScreen-357"><a href="#DrawOnScreen-357"><span class="linenos">357</span></a>            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span>
+</span><span id="DrawOnScreen-358"><a href="#DrawOnScreen-358"><span class="linenos">358</span></a>                <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">width</span><span class="p">)),</span>
+</span><span id="DrawOnScreen-359"><a href="#DrawOnScreen-359"><span class="linenos">359</span></a>                <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">height</span><span class="p">)),</span>
+</span><span id="DrawOnScreen-360"><a href="#DrawOnScreen-360"><span class="linenos">360</span></a>            <span class="p">)</span>
+</span><span id="DrawOnScreen-361"><a href="#DrawOnScreen-361"><span class="linenos">361</span></a>            <span class="c1"># `drawing._surface` to ignore the debug background.</span>
+</span><span id="DrawOnScreen-362"><a href="#DrawOnScreen-362"><span class="linenos">362</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">_surface</span><span class="o">.</span><span class="n">get_at</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">a</span>
+</span><span id="DrawOnScreen-363"><a href="#DrawOnScreen-363"><span class="linenos">363</span></a>        <span class="p">]</span>
+</span><span id="DrawOnScreen-364"><a href="#DrawOnScreen-364"><span class="linenos">364</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">visible</span><span class="p">:</span>
+</span><span id="DrawOnScreen-365"><a href="#DrawOnScreen-365"><span class="linenos">365</span></a>            <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Size</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
 </span><span id="DrawOnScreen-366"><a href="#DrawOnScreen-366"><span class="linenos">366</span></a>
-</span><span id="DrawOnScreen-367"><a href="#DrawOnScreen-367"><span class="linenos">367</span></a><span class="sd">        Returns:</span>
-</span><span id="DrawOnScreen-368"><a href="#DrawOnScreen-368"><span class="linenos">368</span></a><span class="sd">            `tuple[pygame.Surface, tuple[float, float]]`:</span>
-</span><span id="DrawOnScreen-369"><a href="#DrawOnScreen-369"><span class="linenos">369</span></a><span class="sd">                A tuple containing the `pygame.Surface` and a tuple of the left</span>
-</span><span id="DrawOnScreen-370"><a href="#DrawOnScreen-370"><span class="linenos">370</span></a><span class="sd">                and top coordinates (x, y).</span>
-</span><span id="DrawOnScreen-371"><a href="#DrawOnScreen-371"><span class="linenos">371</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen-372"><a href="#DrawOnScreen-372"><span class="linenos">372</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">pygame</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">tuple</span>
-</span><span id="DrawOnScreen-373"><a href="#DrawOnScreen-373"><span class="linenos">373</span></a>
-</span><span id="DrawOnScreen-374"><a href="#DrawOnScreen-374"><span class="linenos">374</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="DrawOnScreen-375"><a href="#DrawOnScreen-375"><span class="linenos">375</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_rectangle</span><span class="p">(</span><span class="n">rectangle</span><span class="p">:</span> <span class="n">Rectangle</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DrawOnScreen&quot;</span><span class="p">:</span>
-</span><span id="DrawOnScreen-376"><a href="#DrawOnScreen-376"><span class="linenos">376</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen-377"><a href="#DrawOnScreen-377"><span class="linenos">377</span></a><span class="sd">        Creates a new `DrawOnScreen` instance from a given rectangle.</span>
-</span><span id="DrawOnScreen-378"><a href="#DrawOnScreen-378"><span class="linenos">378</span></a>
-</span><span id="DrawOnScreen-379"><a href="#DrawOnScreen-379"><span class="linenos">379</span></a><span class="sd">        Creates a transparent surface with the dimensions of the provided</span>
-</span><span id="DrawOnScreen-380"><a href="#DrawOnScreen-380"><span class="linenos">380</span></a><span class="sd">        rectangle and positions it at the rectangle&#39;s top-left coordinate.</span>
-</span><span id="DrawOnScreen-381"><a href="#DrawOnScreen-381"><span class="linenos">381</span></a>
-</span><span id="DrawOnScreen-382"><a href="#DrawOnScreen-382"><span class="linenos">382</span></a><span class="sd">        Args:</span>
-</span><span id="DrawOnScreen-383"><a href="#DrawOnScreen-383"><span class="linenos">383</span></a><span class="sd">            `rectangle`: The rectangle that defines the size and position of the</span>
-</span><span id="DrawOnScreen-384"><a href="#DrawOnScreen-384"><span class="linenos">384</span></a><span class="sd">                new `DrawOnScreen` instance.</span>
-</span><span id="DrawOnScreen-385"><a href="#DrawOnScreen-385"><span class="linenos">385</span></a>
-</span><span id="DrawOnScreen-386"><a href="#DrawOnScreen-386"><span class="linenos">386</span></a><span class="sd">        Returns:</span>
-</span><span id="DrawOnScreen-387"><a href="#DrawOnScreen-387"><span class="linenos">387</span></a><span class="sd">            `DrawOnScreen`: A transparent surface matching rectangle dimensions.</span>
-</span><span id="DrawOnScreen-388"><a href="#DrawOnScreen-388"><span class="linenos">388</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen-389"><a href="#DrawOnScreen-389"><span class="linenos">389</span></a>        <span class="n">surface</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">rectangle</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
-</span><span id="DrawOnScreen-390"><a href="#DrawOnScreen-390"><span class="linenos">390</span></a>        <span class="n">surface</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
-</span><span id="DrawOnScreen-391"><a href="#DrawOnScreen-391"><span class="linenos">391</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="n">rectangle</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surface</span><span class="p">))</span>
-</span><span id="DrawOnScreen-392"><a href="#DrawOnScreen-392"><span class="linenos">392</span></a>
-</span><span id="DrawOnScreen-393"><a href="#DrawOnScreen-393"><span class="linenos">393</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DrawOnScreen&quot;</span><span class="p">:</span>
-</span><span id="DrawOnScreen-394"><a href="#DrawOnScreen-394"><span class="linenos">394</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen-395"><a href="#DrawOnScreen-395"><span class="linenos">395</span></a><span class="sd">        Shift the drawing by the specified coordinate.</span>
-</span><span id="DrawOnScreen-396"><a href="#DrawOnScreen-396"><span class="linenos">396</span></a>
-</span><span id="DrawOnScreen-397"><a href="#DrawOnScreen-397"><span class="linenos">397</span></a><span class="sd">        Args:</span>
-</span><span id="DrawOnScreen-398"><a href="#DrawOnScreen-398"><span class="linenos">398</span></a><span class="sd">            `coord`: The coordinate to shift the drawing by.</span>
-</span><span id="DrawOnScreen-399"><a href="#DrawOnScreen-399"><span class="linenos">399</span></a>
-</span><span id="DrawOnScreen-400"><a href="#DrawOnScreen-400"><span class="linenos">400</span></a><span class="sd">        Returns:</span>
-</span><span id="DrawOnScreen-401"><a href="#DrawOnScreen-401"><span class="linenos">401</span></a><span class="sd">            `DrawOnScreen`: A new `DrawOnScreen` shifted by the coordinate.</span>
-</span><span id="DrawOnScreen-402"><a href="#DrawOnScreen-402"><span class="linenos">402</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen-403"><a href="#DrawOnScreen-403"><span class="linenos">403</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">coord</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
+</span><span id="DrawOnScreen-367"><a href="#DrawOnScreen-367"><span class="linenos">367</span></a>        <span class="n">min_x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">)</span><span class="o">.</span><span class="n">left</span>
+</span><span id="DrawOnScreen-368"><a href="#DrawOnScreen-368"><span class="linenos">368</span></a>        <span class="n">min_y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">top</span>
+</span><span id="DrawOnScreen-369"><a href="#DrawOnScreen-369"><span class="linenos">369</span></a>        <span class="n">max_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">)</span><span class="o">.</span><span class="n">left</span>
+</span><span id="DrawOnScreen-370"><a href="#DrawOnScreen-370"><span class="linenos">370</span></a>        <span class="n">max_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">top</span>
+</span><span id="DrawOnScreen-371"><a href="#DrawOnScreen-371"><span class="linenos">371</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span>
+</span><span id="DrawOnScreen-372"><a href="#DrawOnScreen-372"><span class="linenos">372</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">Coordinate</span><span class="p">(</span><span class="n">min_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">),</span>
+</span><span id="DrawOnScreen-373"><a href="#DrawOnScreen-373"><span class="linenos">373</span></a>            <span class="n">Size</span><span class="p">(</span><span class="n">max_x</span> <span class="o">-</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span><span class="p">),</span>
+</span><span id="DrawOnScreen-374"><a href="#DrawOnScreen-374"><span class="linenos">374</span></a>        <span class="p">)</span>
+</span><span id="DrawOnScreen-375"><a href="#DrawOnScreen-375"><span class="linenos">375</span></a>
+</span><span id="DrawOnScreen-376"><a href="#DrawOnScreen-376"><span class="linenos">376</span></a>    <span class="nd">@cached_property</span>
+</span><span id="DrawOnScreen-377"><a href="#DrawOnScreen-377"><span class="linenos">377</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Surface</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]]:</span>
+</span><span id="DrawOnScreen-378"><a href="#DrawOnScreen-378"><span class="linenos">378</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen-379"><a href="#DrawOnScreen-379"><span class="linenos">379</span></a><span class="sd">        Gets the pygame surface and coordinate tuple for rendering.</span>
+</span><span id="DrawOnScreen-380"><a href="#DrawOnScreen-380"><span class="linenos">380</span></a>
+</span><span id="DrawOnScreen-381"><a href="#DrawOnScreen-381"><span class="linenos">381</span></a><span class="sd">        Returns:</span>
+</span><span id="DrawOnScreen-382"><a href="#DrawOnScreen-382"><span class="linenos">382</span></a><span class="sd">            `tuple[pygame.Surface, tuple[float, float]]`:</span>
+</span><span id="DrawOnScreen-383"><a href="#DrawOnScreen-383"><span class="linenos">383</span></a><span class="sd">                A tuple containing the `pygame.Surface` and a tuple of the left</span>
+</span><span id="DrawOnScreen-384"><a href="#DrawOnScreen-384"><span class="linenos">384</span></a><span class="sd">                and top coordinates (x, y).</span>
+</span><span id="DrawOnScreen-385"><a href="#DrawOnScreen-385"><span class="linenos">385</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen-386"><a href="#DrawOnScreen-386"><span class="linenos">386</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">pygame</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">tuple</span>
+</span><span id="DrawOnScreen-387"><a href="#DrawOnScreen-387"><span class="linenos">387</span></a>
+</span><span id="DrawOnScreen-388"><a href="#DrawOnScreen-388"><span class="linenos">388</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DrawOnScreen&quot;</span><span class="p">:</span>
+</span><span id="DrawOnScreen-389"><a href="#DrawOnScreen-389"><span class="linenos">389</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen-390"><a href="#DrawOnScreen-390"><span class="linenos">390</span></a><span class="sd">        Shift the drawing by the specified coordinate.</span>
+</span><span id="DrawOnScreen-391"><a href="#DrawOnScreen-391"><span class="linenos">391</span></a>
+</span><span id="DrawOnScreen-392"><a href="#DrawOnScreen-392"><span class="linenos">392</span></a><span class="sd">        Args:</span>
+</span><span id="DrawOnScreen-393"><a href="#DrawOnScreen-393"><span class="linenos">393</span></a><span class="sd">            `coord`: The coordinate to shift the drawing by.</span>
+</span><span id="DrawOnScreen-394"><a href="#DrawOnScreen-394"><span class="linenos">394</span></a>
+</span><span id="DrawOnScreen-395"><a href="#DrawOnScreen-395"><span class="linenos">395</span></a><span class="sd">        Returns:</span>
+</span><span id="DrawOnScreen-396"><a href="#DrawOnScreen-396"><span class="linenos">396</span></a><span class="sd">            `DrawOnScreen`: A new `DrawOnScreen` shifted by the coordinate.</span>
+</span><span id="DrawOnScreen-397"><a href="#DrawOnScreen-397"><span class="linenos">397</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen-398"><a href="#DrawOnScreen-398"><span class="linenos">398</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">coord</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -1752,16 +1786,16 @@ on the screen.</p>
 
     </div>
     <a class="headerlink" href="#DrawOnScreen.rectangle"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawOnScreen.rectangle-320"><a href="#DrawOnScreen.rectangle-320"><span class="linenos">320</span></a>    <span class="nd">@cached_property</span>
-</span><span id="DrawOnScreen.rectangle-321"><a href="#DrawOnScreen.rectangle-321"><span class="linenos">321</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
-</span><span id="DrawOnScreen.rectangle-322"><a href="#DrawOnScreen.rectangle-322"><span class="linenos">322</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen.rectangle-323"><a href="#DrawOnScreen.rectangle-323"><span class="linenos">323</span></a><span class="sd">        Gets the rectangular bounds of the drawing on screen.</span>
-</span><span id="DrawOnScreen.rectangle-324"><a href="#DrawOnScreen.rectangle-324"><span class="linenos">324</span></a>
-</span><span id="DrawOnScreen.rectangle-325"><a href="#DrawOnScreen.rectangle-325"><span class="linenos">325</span></a><span class="sd">        Returns:</span>
-</span><span id="DrawOnScreen.rectangle-326"><a href="#DrawOnScreen.rectangle-326"><span class="linenos">326</span></a><span class="sd">            `Rectangle`: A rectangle defining the drawing&#39;s position and size</span>
-</span><span id="DrawOnScreen.rectangle-327"><a href="#DrawOnScreen.rectangle-327"><span class="linenos">327</span></a><span class="sd">            on screen.</span>
-</span><span id="DrawOnScreen.rectangle-328"><a href="#DrawOnScreen.rectangle-328"><span class="linenos">328</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen.rectangle-329"><a href="#DrawOnScreen.rectangle-329"><span class="linenos">329</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawOnScreen.rectangle-334"><a href="#DrawOnScreen.rectangle-334"><span class="linenos">334</span></a>    <span class="nd">@cached_property</span>
+</span><span id="DrawOnScreen.rectangle-335"><a href="#DrawOnScreen.rectangle-335"><span class="linenos">335</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
+</span><span id="DrawOnScreen.rectangle-336"><a href="#DrawOnScreen.rectangle-336"><span class="linenos">336</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen.rectangle-337"><a href="#DrawOnScreen.rectangle-337"><span class="linenos">337</span></a><span class="sd">        Gets the rectangular bounds of the drawing on screen.</span>
+</span><span id="DrawOnScreen.rectangle-338"><a href="#DrawOnScreen.rectangle-338"><span class="linenos">338</span></a>
+</span><span id="DrawOnScreen.rectangle-339"><a href="#DrawOnScreen.rectangle-339"><span class="linenos">339</span></a><span class="sd">        Returns:</span>
+</span><span id="DrawOnScreen.rectangle-340"><a href="#DrawOnScreen.rectangle-340"><span class="linenos">340</span></a><span class="sd">            `Rectangle`: A rectangle defining the drawing&#39;s position and size</span>
+</span><span id="DrawOnScreen.rectangle-341"><a href="#DrawOnScreen.rectangle-341"><span class="linenos">341</span></a><span class="sd">            on screen.</span>
+</span><span id="DrawOnScreen.rectangle-342"><a href="#DrawOnScreen.rectangle-342"><span class="linenos">342</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen.rectangle-343"><a href="#DrawOnScreen.rectangle-343"><span class="linenos">343</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -1786,36 +1820,36 @@ on the screen.</p>
 
     </div>
     <a class="headerlink" href="#DrawOnScreen.visible_rectangle"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawOnScreen.visible_rectangle-331"><a href="#DrawOnScreen.visible_rectangle-331"><span class="linenos">331</span></a>    <span class="nd">@cached_property</span>
-</span><span id="DrawOnScreen.visible_rectangle-332"><a href="#DrawOnScreen.visible_rectangle-332"><span class="linenos">332</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visible_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
-</span><span id="DrawOnScreen.visible_rectangle-333"><a href="#DrawOnScreen.visible_rectangle-333"><span class="linenos">333</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen.visible_rectangle-334"><a href="#DrawOnScreen.visible_rectangle-334"><span class="linenos">334</span></a><span class="sd">        Calculate the actual visible bounds of the drawing,</span>
-</span><span id="DrawOnScreen.visible_rectangle-335"><a href="#DrawOnScreen.visible_rectangle-335"><span class="linenos">335</span></a><span class="sd">        ignoring transparent pixels.</span>
-</span><span id="DrawOnScreen.visible_rectangle-336"><a href="#DrawOnScreen.visible_rectangle-336"><span class="linenos">336</span></a>
-</span><span id="DrawOnScreen.visible_rectangle-337"><a href="#DrawOnScreen.visible_rectangle-337"><span class="linenos">337</span></a><span class="sd">        Returns:</span>
-</span><span id="DrawOnScreen.visible_rectangle-338"><a href="#DrawOnScreen.visible_rectangle-338"><span class="linenos">338</span></a><span class="sd">            `Rectangle`: A rectangle defining only the visible (non-transparent)</span>
-</span><span id="DrawOnScreen.visible_rectangle-339"><a href="#DrawOnScreen.visible_rectangle-339"><span class="linenos">339</span></a><span class="sd">            portion of the drawing on screen.</span>
-</span><span id="DrawOnScreen.visible_rectangle-340"><a href="#DrawOnScreen.visible_rectangle-340"><span class="linenos">340</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen.visible_rectangle-341"><a href="#DrawOnScreen.visible_rectangle-341"><span class="linenos">341</span></a>        <span class="n">visible</span> <span class="o">=</span> <span class="p">[</span>
-</span><span id="DrawOnScreen.visible_rectangle-342"><a href="#DrawOnScreen.visible_rectangle-342"><span class="linenos">342</span></a>            <span class="n">Coordinate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-</span><span id="DrawOnScreen.visible_rectangle-343"><a href="#DrawOnScreen.visible_rectangle-343"><span class="linenos">343</span></a>            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span>
-</span><span id="DrawOnScreen.visible_rectangle-344"><a href="#DrawOnScreen.visible_rectangle-344"><span class="linenos">344</span></a>                <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">width</span><span class="p">)),</span>
-</span><span id="DrawOnScreen.visible_rectangle-345"><a href="#DrawOnScreen.visible_rectangle-345"><span class="linenos">345</span></a>                <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">height</span><span class="p">)),</span>
-</span><span id="DrawOnScreen.visible_rectangle-346"><a href="#DrawOnScreen.visible_rectangle-346"><span class="linenos">346</span></a>            <span class="p">)</span>
-</span><span id="DrawOnScreen.visible_rectangle-347"><a href="#DrawOnScreen.visible_rectangle-347"><span class="linenos">347</span></a>            <span class="c1"># `drawing._surface` to ignore the debug background.</span>
-</span><span id="DrawOnScreen.visible_rectangle-348"><a href="#DrawOnScreen.visible_rectangle-348"><span class="linenos">348</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">_surface</span><span class="o">.</span><span class="n">get_at</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">a</span>
-</span><span id="DrawOnScreen.visible_rectangle-349"><a href="#DrawOnScreen.visible_rectangle-349"><span class="linenos">349</span></a>        <span class="p">]</span>
-</span><span id="DrawOnScreen.visible_rectangle-350"><a href="#DrawOnScreen.visible_rectangle-350"><span class="linenos">350</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">visible</span><span class="p">:</span>
-</span><span id="DrawOnScreen.visible_rectangle-351"><a href="#DrawOnScreen.visible_rectangle-351"><span class="linenos">351</span></a>            <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Size</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-</span><span id="DrawOnScreen.visible_rectangle-352"><a href="#DrawOnScreen.visible_rectangle-352"><span class="linenos">352</span></a>
-</span><span id="DrawOnScreen.visible_rectangle-353"><a href="#DrawOnScreen.visible_rectangle-353"><span class="linenos">353</span></a>        <span class="n">min_x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">)</span><span class="o">.</span><span class="n">left</span>
-</span><span id="DrawOnScreen.visible_rectangle-354"><a href="#DrawOnScreen.visible_rectangle-354"><span class="linenos">354</span></a>        <span class="n">min_y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">top</span>
-</span><span id="DrawOnScreen.visible_rectangle-355"><a href="#DrawOnScreen.visible_rectangle-355"><span class="linenos">355</span></a>        <span class="n">max_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">)</span><span class="o">.</span><span class="n">left</span>
-</span><span id="DrawOnScreen.visible_rectangle-356"><a href="#DrawOnScreen.visible_rectangle-356"><span class="linenos">356</span></a>        <span class="n">max_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">top</span>
-</span><span id="DrawOnScreen.visible_rectangle-357"><a href="#DrawOnScreen.visible_rectangle-357"><span class="linenos">357</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span>
-</span><span id="DrawOnScreen.visible_rectangle-358"><a href="#DrawOnScreen.visible_rectangle-358"><span class="linenos">358</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">Coordinate</span><span class="p">(</span><span class="n">min_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">),</span>
-</span><span id="DrawOnScreen.visible_rectangle-359"><a href="#DrawOnScreen.visible_rectangle-359"><span class="linenos">359</span></a>            <span class="n">Size</span><span class="p">(</span><span class="n">max_x</span> <span class="o">-</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span><span class="p">),</span>
-</span><span id="DrawOnScreen.visible_rectangle-360"><a href="#DrawOnScreen.visible_rectangle-360"><span class="linenos">360</span></a>        <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawOnScreen.visible_rectangle-345"><a href="#DrawOnScreen.visible_rectangle-345"><span class="linenos">345</span></a>    <span class="nd">@cached_property</span>
+</span><span id="DrawOnScreen.visible_rectangle-346"><a href="#DrawOnScreen.visible_rectangle-346"><span class="linenos">346</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visible_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
+</span><span id="DrawOnScreen.visible_rectangle-347"><a href="#DrawOnScreen.visible_rectangle-347"><span class="linenos">347</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen.visible_rectangle-348"><a href="#DrawOnScreen.visible_rectangle-348"><span class="linenos">348</span></a><span class="sd">        Calculate the actual visible bounds of the drawing,</span>
+</span><span id="DrawOnScreen.visible_rectangle-349"><a href="#DrawOnScreen.visible_rectangle-349"><span class="linenos">349</span></a><span class="sd">        ignoring transparent pixels.</span>
+</span><span id="DrawOnScreen.visible_rectangle-350"><a href="#DrawOnScreen.visible_rectangle-350"><span class="linenos">350</span></a>
+</span><span id="DrawOnScreen.visible_rectangle-351"><a href="#DrawOnScreen.visible_rectangle-351"><span class="linenos">351</span></a><span class="sd">        Returns:</span>
+</span><span id="DrawOnScreen.visible_rectangle-352"><a href="#DrawOnScreen.visible_rectangle-352"><span class="linenos">352</span></a><span class="sd">            `Rectangle`: A rectangle defining only the visible (non-transparent)</span>
+</span><span id="DrawOnScreen.visible_rectangle-353"><a href="#DrawOnScreen.visible_rectangle-353"><span class="linenos">353</span></a><span class="sd">            portion of the drawing on screen.</span>
+</span><span id="DrawOnScreen.visible_rectangle-354"><a href="#DrawOnScreen.visible_rectangle-354"><span class="linenos">354</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen.visible_rectangle-355"><a href="#DrawOnScreen.visible_rectangle-355"><span class="linenos">355</span></a>        <span class="n">visible</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="DrawOnScreen.visible_rectangle-356"><a href="#DrawOnScreen.visible_rectangle-356"><span class="linenos">356</span></a>            <span class="n">Coordinate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</span><span id="DrawOnScreen.visible_rectangle-357"><a href="#DrawOnScreen.visible_rectangle-357"><span class="linenos">357</span></a>            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span>
+</span><span id="DrawOnScreen.visible_rectangle-358"><a href="#DrawOnScreen.visible_rectangle-358"><span class="linenos">358</span></a>                <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">width</span><span class="p">)),</span>
+</span><span id="DrawOnScreen.visible_rectangle-359"><a href="#DrawOnScreen.visible_rectangle-359"><span class="linenos">359</span></a>                <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">height</span><span class="p">)),</span>
+</span><span id="DrawOnScreen.visible_rectangle-360"><a href="#DrawOnScreen.visible_rectangle-360"><span class="linenos">360</span></a>            <span class="p">)</span>
+</span><span id="DrawOnScreen.visible_rectangle-361"><a href="#DrawOnScreen.visible_rectangle-361"><span class="linenos">361</span></a>            <span class="c1"># `drawing._surface` to ignore the debug background.</span>
+</span><span id="DrawOnScreen.visible_rectangle-362"><a href="#DrawOnScreen.visible_rectangle-362"><span class="linenos">362</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">_surface</span><span class="o">.</span><span class="n">get_at</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span><span class="o">.</span><span class="n">a</span>
+</span><span id="DrawOnScreen.visible_rectangle-363"><a href="#DrawOnScreen.visible_rectangle-363"><span class="linenos">363</span></a>        <span class="p">]</span>
+</span><span id="DrawOnScreen.visible_rectangle-364"><a href="#DrawOnScreen.visible_rectangle-364"><span class="linenos">364</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">visible</span><span class="p">:</span>
+</span><span id="DrawOnScreen.visible_rectangle-365"><a href="#DrawOnScreen.visible_rectangle-365"><span class="linenos">365</span></a>            <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Size</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</span><span id="DrawOnScreen.visible_rectangle-366"><a href="#DrawOnScreen.visible_rectangle-366"><span class="linenos">366</span></a>
+</span><span id="DrawOnScreen.visible_rectangle-367"><a href="#DrawOnScreen.visible_rectangle-367"><span class="linenos">367</span></a>        <span class="n">min_x</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">)</span><span class="o">.</span><span class="n">left</span>
+</span><span id="DrawOnScreen.visible_rectangle-368"><a href="#DrawOnScreen.visible_rectangle-368"><span class="linenos">368</span></a>        <span class="n">min_y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">top</span>
+</span><span id="DrawOnScreen.visible_rectangle-369"><a href="#DrawOnScreen.visible_rectangle-369"><span class="linenos">369</span></a>        <span class="n">max_x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">)</span><span class="o">.</span><span class="n">left</span>
+</span><span id="DrawOnScreen.visible_rectangle-370"><a href="#DrawOnScreen.visible_rectangle-370"><span class="linenos">370</span></a>        <span class="n">max_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">visible</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">top</span><span class="p">)</span><span class="o">.</span><span class="n">top</span>
+</span><span id="DrawOnScreen.visible_rectangle-371"><a href="#DrawOnScreen.visible_rectangle-371"><span class="linenos">371</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span>
+</span><span id="DrawOnScreen.visible_rectangle-372"><a href="#DrawOnScreen.visible_rectangle-372"><span class="linenos">372</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">Coordinate</span><span class="p">(</span><span class="n">min_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">),</span>
+</span><span id="DrawOnScreen.visible_rectangle-373"><a href="#DrawOnScreen.visible_rectangle-373"><span class="linenos">373</span></a>            <span class="n">Size</span><span class="p">(</span><span class="n">max_x</span> <span class="o">-</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span><span class="p">),</span>
+</span><span id="DrawOnScreen.visible_rectangle-374"><a href="#DrawOnScreen.visible_rectangle-374"><span class="linenos">374</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -1841,17 +1875,17 @@ ignoring transparent pixels.</p>
 
     </div>
     <a class="headerlink" href="#DrawOnScreen.pygame"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawOnScreen.pygame-362"><a href="#DrawOnScreen.pygame-362"><span class="linenos">362</span></a>    <span class="nd">@cached_property</span>
-</span><span id="DrawOnScreen.pygame-363"><a href="#DrawOnScreen.pygame-363"><span class="linenos">363</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Surface</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]]:</span>
-</span><span id="DrawOnScreen.pygame-364"><a href="#DrawOnScreen.pygame-364"><span class="linenos">364</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen.pygame-365"><a href="#DrawOnScreen.pygame-365"><span class="linenos">365</span></a><span class="sd">        Gets the pygame surface and coordinate tuple for rendering.</span>
-</span><span id="DrawOnScreen.pygame-366"><a href="#DrawOnScreen.pygame-366"><span class="linenos">366</span></a>
-</span><span id="DrawOnScreen.pygame-367"><a href="#DrawOnScreen.pygame-367"><span class="linenos">367</span></a><span class="sd">        Returns:</span>
-</span><span id="DrawOnScreen.pygame-368"><a href="#DrawOnScreen.pygame-368"><span class="linenos">368</span></a><span class="sd">            `tuple[pygame.Surface, tuple[float, float]]`:</span>
-</span><span id="DrawOnScreen.pygame-369"><a href="#DrawOnScreen.pygame-369"><span class="linenos">369</span></a><span class="sd">                A tuple containing the `pygame.Surface` and a tuple of the left</span>
-</span><span id="DrawOnScreen.pygame-370"><a href="#DrawOnScreen.pygame-370"><span class="linenos">370</span></a><span class="sd">                and top coordinates (x, y).</span>
-</span><span id="DrawOnScreen.pygame-371"><a href="#DrawOnScreen.pygame-371"><span class="linenos">371</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen.pygame-372"><a href="#DrawOnScreen.pygame-372"><span class="linenos">372</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">pygame</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">tuple</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawOnScreen.pygame-376"><a href="#DrawOnScreen.pygame-376"><span class="linenos">376</span></a>    <span class="nd">@cached_property</span>
+</span><span id="DrawOnScreen.pygame-377"><a href="#DrawOnScreen.pygame-377"><span class="linenos">377</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Surface</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]]:</span>
+</span><span id="DrawOnScreen.pygame-378"><a href="#DrawOnScreen.pygame-378"><span class="linenos">378</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen.pygame-379"><a href="#DrawOnScreen.pygame-379"><span class="linenos">379</span></a><span class="sd">        Gets the pygame surface and coordinate tuple for rendering.</span>
+</span><span id="DrawOnScreen.pygame-380"><a href="#DrawOnScreen.pygame-380"><span class="linenos">380</span></a>
+</span><span id="DrawOnScreen.pygame-381"><a href="#DrawOnScreen.pygame-381"><span class="linenos">381</span></a><span class="sd">        Returns:</span>
+</span><span id="DrawOnScreen.pygame-382"><a href="#DrawOnScreen.pygame-382"><span class="linenos">382</span></a><span class="sd">            `tuple[pygame.Surface, tuple[float, float]]`:</span>
+</span><span id="DrawOnScreen.pygame-383"><a href="#DrawOnScreen.pygame-383"><span class="linenos">383</span></a><span class="sd">                A tuple containing the `pygame.Surface` and a tuple of the left</span>
+</span><span id="DrawOnScreen.pygame-384"><a href="#DrawOnScreen.pygame-384"><span class="linenos">384</span></a><span class="sd">                and top coordinates (x, y).</span>
+</span><span id="DrawOnScreen.pygame-385"><a href="#DrawOnScreen.pygame-385"><span class="linenos">385</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen.pygame-386"><a href="#DrawOnScreen.pygame-386"><span class="linenos">386</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">pygame</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">tuple</span>
 </span></pre></div>
 
 
@@ -1863,60 +1897,6 @@ ignoring transparent pixels.</p>
   <p><code>tuple[pygame.Surface, tuple[float, float]]</code>:
       A tuple containing the <code>pygame.Surface</code> and a tuple of the left
       and top coordinates (x, y).</p>
-</blockquote>
-</div>
-
-
-                            </div>
-                            <div id="DrawOnScreen.from_rectangle" class="classattr">
-                                        <input id="DrawOnScreen.from_rectangle-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-                    <div class="decorator decorator-staticmethod">@staticmethod</div>
-
-        <span class="def">def</span>
-        <span class="name">from_rectangle</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">rectangle</span><span class="p">:</span> <span class="n"><a href="#Rectangle">Rectangle</a></span>,</span><span class="param">	<span class="n">color</span><span class="p">:</span> <span class="n"><a href="core.html#Rgba">nextrpg.core.Rgba</a></span></span><span class="return-annotation">) -> <span class="n"><a href="#DrawOnScreen">DrawOnScreen</a></span>:</span></span>
-
-                <label class="view-source-button" for="DrawOnScreen.from_rectangle-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#DrawOnScreen.from_rectangle"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawOnScreen.from_rectangle-374"><a href="#DrawOnScreen.from_rectangle-374"><span class="linenos">374</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="DrawOnScreen.from_rectangle-375"><a href="#DrawOnScreen.from_rectangle-375"><span class="linenos">375</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_rectangle</span><span class="p">(</span><span class="n">rectangle</span><span class="p">:</span> <span class="n">Rectangle</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DrawOnScreen&quot;</span><span class="p">:</span>
-</span><span id="DrawOnScreen.from_rectangle-376"><a href="#DrawOnScreen.from_rectangle-376"><span class="linenos">376</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen.from_rectangle-377"><a href="#DrawOnScreen.from_rectangle-377"><span class="linenos">377</span></a><span class="sd">        Creates a new `DrawOnScreen` instance from a given rectangle.</span>
-</span><span id="DrawOnScreen.from_rectangle-378"><a href="#DrawOnScreen.from_rectangle-378"><span class="linenos">378</span></a>
-</span><span id="DrawOnScreen.from_rectangle-379"><a href="#DrawOnScreen.from_rectangle-379"><span class="linenos">379</span></a><span class="sd">        Creates a transparent surface with the dimensions of the provided</span>
-</span><span id="DrawOnScreen.from_rectangle-380"><a href="#DrawOnScreen.from_rectangle-380"><span class="linenos">380</span></a><span class="sd">        rectangle and positions it at the rectangle&#39;s top-left coordinate.</span>
-</span><span id="DrawOnScreen.from_rectangle-381"><a href="#DrawOnScreen.from_rectangle-381"><span class="linenos">381</span></a>
-</span><span id="DrawOnScreen.from_rectangle-382"><a href="#DrawOnScreen.from_rectangle-382"><span class="linenos">382</span></a><span class="sd">        Args:</span>
-</span><span id="DrawOnScreen.from_rectangle-383"><a href="#DrawOnScreen.from_rectangle-383"><span class="linenos">383</span></a><span class="sd">            `rectangle`: The rectangle that defines the size and position of the</span>
-</span><span id="DrawOnScreen.from_rectangle-384"><a href="#DrawOnScreen.from_rectangle-384"><span class="linenos">384</span></a><span class="sd">                new `DrawOnScreen` instance.</span>
-</span><span id="DrawOnScreen.from_rectangle-385"><a href="#DrawOnScreen.from_rectangle-385"><span class="linenos">385</span></a>
-</span><span id="DrawOnScreen.from_rectangle-386"><a href="#DrawOnScreen.from_rectangle-386"><span class="linenos">386</span></a><span class="sd">        Returns:</span>
-</span><span id="DrawOnScreen.from_rectangle-387"><a href="#DrawOnScreen.from_rectangle-387"><span class="linenos">387</span></a><span class="sd">            `DrawOnScreen`: A transparent surface matching rectangle dimensions.</span>
-</span><span id="DrawOnScreen.from_rectangle-388"><a href="#DrawOnScreen.from_rectangle-388"><span class="linenos">388</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="DrawOnScreen.from_rectangle-389"><a href="#DrawOnScreen.from_rectangle-389"><span class="linenos">389</span></a>        <span class="n">surface</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">rectangle</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
-</span><span id="DrawOnScreen.from_rectangle-390"><a href="#DrawOnScreen.from_rectangle-390"><span class="linenos">390</span></a>        <span class="n">surface</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
-</span><span id="DrawOnScreen.from_rectangle-391"><a href="#DrawOnScreen.from_rectangle-391"><span class="linenos">391</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="n">rectangle</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surface</span><span class="p">))</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Creates a new <code><a href="#DrawOnScreen">DrawOnScreen</a></code> instance from a given rectangle.</p>
-
-<p>Creates a transparent surface with the dimensions of the provided
-rectangle and positions it at the rectangle's top-left coordinate.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code><a href="#DrawOnScreen.rectangle">rectangle</a></code>:</strong>  The rectangle that defines the size and position of the
-new <code><a href="#DrawOnScreen">DrawOnScreen</a></code> instance.</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code><a href="#DrawOnScreen">DrawOnScreen</a></code>: A transparent surface matching rectangle dimensions.</p>
 </blockquote>
 </div>
 

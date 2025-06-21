@@ -191,10 +191,7 @@ class CharacterOnScreen:
     @cached_property
     def _debug_rectangles(self) -> list[DrawOnScreen]:
         return (
-            [
-                DrawOnScreen.from_rectangle(c, debug.collision_rectangle_color)
-                for c in self.collisions
-            ]
+            [c.fill(debug.collision_rectangle_color) for c in self.collisions]
             if (debug := config().debug)
             else []
         )

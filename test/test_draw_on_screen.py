@@ -59,10 +59,10 @@ def test_draw_on_screen() -> None:
     assert isinstance(surface, Surface)
     assert coord == (10, 20)
 
-    assert DrawOnScreen.from_rectangle(
-        Rectangle(Coordinate(0, 0), Size(1, 2)), Rgba(0, 0, 0, 0)
+    assert Rectangle(Coordinate(0, 0), Size(1, 2)).fill(
+        Rgba(0, 0, 0, 0)
     ).top_left == Coordinate(0, 0)
 
-    assert DrawOnScreen.from_rectangle(
-        Rectangle(Coordinate(0, 0), Size(0, 0)), Rgba(0, 0, 0, 0)
+    assert Rectangle(Coordinate(0, 0), Size(0, 0)).fill(
+        Rgba(0, 0, 0, 0)
     ).visible_rectangle.size == Size(0, 0)

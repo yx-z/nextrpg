@@ -297,6 +297,20 @@ class Rectangle:
             and self.top < coordinate.top < self.bottom
         )
 
+    def fill(self, color: Rgba) -> "DrawOnScreen":
+        """
+        Creates a colored `DrawOnScreen` with the provided color.
+
+        Args:
+            `Color`: The color to fill the rectangle with.
+
+        Returns:
+            `DrawOnScreen`: A transparent surface matching rectangle dimensions.
+        """
+        surface = Surface(self.size.tuple, SRCALPHA)
+        surface.fill(color.tuple)
+        return DrawOnScreen(self.top_left, Drawing(surface))
+
 
 @dataclass(frozen=True)
 class DrawOnScreen:
@@ -369,25 +383,6 @@ class DrawOnScreen:
                 and top coordinates (x, y).
         """
         return self.drawing.pygame, self.top_left.tuple
-
-    @staticmethod
-    def from_rectangle(rectangle: Rectangle, color: Rgba) -> "DrawOnScreen":
-        """
-        Creates a new `DrawOnScreen` instance from a given rectangle.
-
-        Creates a transparent surface with the dimensions of the provided
-        rectangle and positions it at the rectangle's top-left coordinate.
-
-        Args:
-            `rectangle`: The rectangle that defines the size and position of the
-                new `DrawOnScreen` instance.
-
-        Returns:
-            `DrawOnScreen`: A transparent surface matching rectangle dimensions.
-        """
-        surface = Surface(rectangle.size.tuple, SRCALPHA)
-        surface.fill(color.tuple)
-        return DrawOnScreen(rectangle.top_left, Drawing(surface))
 
     def __add__(self, coord: Coordinate) -> "DrawOnScreen":
         """
