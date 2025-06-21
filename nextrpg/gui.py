@@ -2,7 +2,8 @@
 Game window / Graphical User Interface (GUI).
 """
 
-from typing import Final
+from dataclasses import dataclass, field
+from functools import cached_property
 
 from pygame import Surface
 from pygame.transform import smoothscale
@@ -12,27 +13,30 @@ from nextrpg.core import Coordinate, Size
 from nextrpg.draw_on_screen import DrawOnScreen, Drawing
 
 
+@dataclass(frozen=True)
 class Gui:
     """
-    Handles scaling and centering of drawings for the game window.
+    Initialize a `Gui` instance that scales and centers drawings.
+
+    Args:
+        `window`: Size of the window. If `None`, default to
+            the GUI size from `config().gui`.
     """
 
-    def __init__(self, window: Size | None = None) -> None:
-        """
-        Initialize a `Gui` instance that scales and centers drawings.
+    window: Size = field(default_factory=lambda: config().gui.size)
 
-        Args:
-            `window`: Size of the window. If `None`, default to
-                the GUI size from `config().gui`.
-        """
-        window = window or config().gui.size
-        self._scale: Final[float] = min(
-            window.width / config().gui.size.width,
-            window.height / config().gui.size.height,
+    @cached_property
+    def _scale(self) -> float:
+        return min(
+            self.window.width / config().gui.size.width,
+            self.window.height / config().gui.size.height,
         )
-        self._center_shift: Final[Coordinate] = Coordinate(
-            (window.width - self._scale * config().gui.size.width) / 2,
-            (window.height - self._scale * config().gui.size.height) / 2,
+
+    @cached_property
+    def _center_shift(self) -> Coordinate:
+        return Coordinate(
+            (self.window.width - self._scale * config().gui.size.width) / 2,
+            (self.window.height - self._scale * config().gui.size.height) / 2,
         )
 
     def scale(self, draws: list[DrawOnScreen]) -> DrawOnScreen:

@@ -2,11 +2,12 @@
 Core types referenced across `nextrpg`.
 """
 
-from dataclasses import dataclass
+from collections.abc import Callable
+from dataclasses import KW_ONLY, dataclass
 from enum import Enum, auto
 from functools import cached_property
 from math import ceil, sqrt
-from typing import Union, overload
+from typing import Any, Union, overload
 
 
 @dataclass(frozen=True)
@@ -45,6 +46,29 @@ type Millisecond = int
 """
 Millisecond elapsed between game loops.
 """
+
+INTERNAL_ONLY: Any = KW_ONLY
+"""Used to mark fields as internal-only and not exposed to the library user."""
+
+
+def init_internal_field(
+    self: Any, name: str, factory: Callable[[], Any]
+) -> None:
+    """
+    Used to init `INTERNAL_ONLY` field in `dataclass` instance.
+
+    Args:
+        `self`: Object to set.
+        `name`: Name of the field.
+        `factory`: Factory function to create the value of the field.
+            This is a factory to avoid potential side effects when creating
+            the field.
+
+    Returns:
+        `None`.
+    """
+    if getattr(self, name) is INTERNAL_ONLY:
+        object.__setattr__(self, name, factory())
 
 
 class Direction(Enum):

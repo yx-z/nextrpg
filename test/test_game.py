@@ -1,4 +1,5 @@
 from asyncio import run
+from dataclasses import replace
 from unittest.mock import AsyncMock, MagicMock, Mock
 
 import pygame
@@ -54,19 +55,12 @@ def test_game(mocker: MockerFixture) -> None:
     flip.assert_called_once()
     clock.tick.assert_called_once_with(60)
 
-    continue_flag = True
-
-    def step() -> bool:
-        nonlocal continue_flag
-        copy = continue_flag
-        continue_flag = False
-        return copy
+    def step() -> None:
+        game._loop = replace(game._loop, is_running=False)
 
     game._step = step
+    game._loop = replace(game._loop, is_running=True)
     sleep = AsyncMock()
     mocker.patch("nextrpg.game.sleep", sleep)
     run(game.start_async())
     sleep.assert_called_once_with(0)
-
-    continue_flag = True
-    assert not game.start()

@@ -544,6 +544,18 @@
 </span><span id="L-381"><a href="#L-381"><span class="linenos">381</span></a>        <span class="n">surface</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">rectangle</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
 </span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a>        <span class="n">surface</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
 </span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="n">rectangle</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surface</span><span class="p">))</span>
+</span><span id="L-384"><a href="#L-384"><span class="linenos">384</span></a>
+</span><span id="L-385"><a href="#L-385"><span class="linenos">385</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DrawOnScreen&quot;</span><span class="p">:</span>
+</span><span id="L-386"><a href="#L-386"><span class="linenos">386</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-387"><a href="#L-387"><span class="linenos">387</span></a><span class="sd">        Shift the drawing by the specified coordinate.</span>
+</span><span id="L-388"><a href="#L-388"><span class="linenos">388</span></a>
+</span><span id="L-389"><a href="#L-389"><span class="linenos">389</span></a><span class="sd">        Args:</span>
+</span><span id="L-390"><a href="#L-390"><span class="linenos">390</span></a><span class="sd">            `coord`: The coordinate to shift the drawing by.</span>
+</span><span id="L-391"><a href="#L-391"><span class="linenos">391</span></a>
+</span><span id="L-392"><a href="#L-392"><span class="linenos">392</span></a><span class="sd">        Returns:</span>
+</span><span id="L-393"><a href="#L-393"><span class="linenos">393</span></a><span class="sd">            `DrawOnScreen`: A new `DrawOnScreen` shifted by the coordinate.</span>
+</span><span id="L-394"><a href="#L-394"><span class="linenos">394</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-395"><a href="#L-395"><span class="linenos">395</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">coord</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -1693,6 +1705,18 @@ comparing their edge coordinates.</p>
 </span><span id="DrawOnScreen-382"><a href="#DrawOnScreen-382"><span class="linenos">382</span></a>        <span class="n">surface</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="n">rectangle</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
 </span><span id="DrawOnScreen-383"><a href="#DrawOnScreen-383"><span class="linenos">383</span></a>        <span class="n">surface</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
 </span><span id="DrawOnScreen-384"><a href="#DrawOnScreen-384"><span class="linenos">384</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="n">rectangle</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surface</span><span class="p">))</span>
+</span><span id="DrawOnScreen-385"><a href="#DrawOnScreen-385"><span class="linenos">385</span></a>
+</span><span id="DrawOnScreen-386"><a href="#DrawOnScreen-386"><span class="linenos">386</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DrawOnScreen&quot;</span><span class="p">:</span>
+</span><span id="DrawOnScreen-387"><a href="#DrawOnScreen-387"><span class="linenos">387</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen-388"><a href="#DrawOnScreen-388"><span class="linenos">388</span></a><span class="sd">        Shift the drawing by the specified coordinate.</span>
+</span><span id="DrawOnScreen-389"><a href="#DrawOnScreen-389"><span class="linenos">389</span></a>
+</span><span id="DrawOnScreen-390"><a href="#DrawOnScreen-390"><span class="linenos">390</span></a><span class="sd">        Args:</span>
+</span><span id="DrawOnScreen-391"><a href="#DrawOnScreen-391"><span class="linenos">391</span></a><span class="sd">            `coord`: The coordinate to shift the drawing by.</span>
+</span><span id="DrawOnScreen-392"><a href="#DrawOnScreen-392"><span class="linenos">392</span></a>
+</span><span id="DrawOnScreen-393"><a href="#DrawOnScreen-393"><span class="linenos">393</span></a><span class="sd">        Returns:</span>
+</span><span id="DrawOnScreen-394"><a href="#DrawOnScreen-394"><span class="linenos">394</span></a><span class="sd">            `DrawOnScreen`: A new `DrawOnScreen` shifted by the coordinate.</span>
+</span><span id="DrawOnScreen-395"><a href="#DrawOnScreen-395"><span class="linenos">395</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="DrawOnScreen-396"><a href="#DrawOnScreen-396"><span class="linenos">396</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="n">coord</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
 </span></pre></div>
 
 
