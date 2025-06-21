@@ -97,18 +97,13 @@ class MapScene(Scene):
             tile_size,
             config().map.above_character,
         )
-        init_internal_field(
-            self,
-            "_foreground",
-            lambda: [
-                _get_gid_and_draw(tmx, layer, tile_size)
-                for layer in _layers(tmx, config().map.foreground)
-            ],
-        )
+        foreground = [
+            _get_gid_and_draw(tmx, layer, tile_size)
+            for layer in _layers(tmx, config().map.foreground)
+        ]
+        init_internal_field(self, "_foreground", lambda: foreground)
         gids = {
-            gid: draw
-            for layer in self._foreground
-            for gid, draw in layer.items()
+            gid: draw for layer in foreground for gid, draw in layer.items()
         }
         init_internal_field(self, "_gid_groups", _gid_groups, tmx, gids)
 
