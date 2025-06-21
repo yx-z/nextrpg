@@ -51,24 +51,34 @@ INTERNAL_ONLY: Any = object()
 """Used to mark fields as internal-only and not exposed to the library user."""
 
 
-def init_internal_field(
-    self: Any, name: str, factory: Callable[[], Any]
+def init_internal_field[**P](
+    self: Any,
+    name: str,
+    factory: Callable[P, Any],
+    *args: P.args,
+    **kwargs: P.kwargs,
 ) -> None:
     """
     Used to init `INTERNAL_ONLY` field in `dataclass` instance.
 
     Args:
         `self`: Object to set.
+
         `name`: Name of the field.
+
         `factory`: Factory function to create the value of the field.
             This is a factory to avoid potential side effects when creating
             the field.
+
+        `*args`: Positional arguments to pass to the factory function.
+
+        `**kwargs`: Keyword arguments to pass to the factory function.
 
     Returns:
         `None`.
     """
     if getattr(self, name) is INTERNAL_ONLY:
-        object.__setattr__(self, name, factory())
+        object.__setattr__(self, name, factory(*args, **kwargs))
 
 
 class Direction(Enum):

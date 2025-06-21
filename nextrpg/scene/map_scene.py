@@ -2,10 +2,9 @@
 Map scene implementation.
 """
 
-from dataclasses import dataclass, replace
+from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from itertools import groupby
-from math import ceil
 from pathlib import Path
 from typing import NamedTuple, override
 
@@ -20,7 +19,7 @@ from pytmx import (
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config import config
-from nextrpg.core import Millisecond, Pixel
+from nextrpg.core import INTERNAL_ONLY, Millisecond, Pixel, init_internal_field
 from nextrpg.draw_on_screen import (
     Coordinate,
     DrawOnScreen,
@@ -49,47 +48,69 @@ class MapScene(Scene):
 
     Handles rendering of map layers, character movement with collisions,
     and proper depth sorting of foreground elements relative to the player.
+
+    Args:
+        `tmx_file`: Path to the Tiled TMX file to load.
+
+        `character_drawing`: Character drawing representing the player.
     """
 
-    _background: list[DrawOnScreen]
-    _foreground: list[dict[_Gid, DrawOnScreen]]
-    _player: CharacterOnScreen
-    _above_character: list[DrawOnScreen]
-    _gid_groups: dict[_Gid, set[DrawOnScreen]]
+    tmx_file: Path
+    character_drawing: CharacterDrawing
+    _: KW_ONLY = INTERNAL_ONLY
+    _map_size: Size = INTERNAL_ONLY
+    _background: list[DrawOnScreen] = INTERNAL_ONLY
+    _foreground: list[dict[_Gid, DrawOnScreen]] = INTERNAL_ONLY
+    _player: CharacterOnScreen = INTERNAL_ONLY
+    _above_character: list[DrawOnScreen] = INTERNAL_ONLY
+    _gid_groups: dict[_Gid, set[DrawOnScreen]] = INTERNAL_ONLY
 
-    @classmethod
-    def load(cls, tmx_file: Path, player: CharacterDrawing) -> "Scene":
-        """
-        Load a map scene from a Tiled TMX file.
+    def __post_init__(self) -> None:
+        if self._map_size is not INTERNAL_ONLY:
+            return
 
-        Parses the TMX file to extract background layers, foreground elements,
-        collision boundaries, and player starting position to construct a
-        complete map scene.
-
-        Args:
-            `tmx_file`: Path to the Tiled TMX file to load.
-
-            `player`: Character drawing representing the player character.
-
-        Returns:
-            `Scene`: A fully initialized map scene.
-        """
-        tmx = load_pygame(str(tmx_file))
+        tmx = load_pygame(str(self.tmx_file))
         tile_size = Size(tmx.tilewidth, tmx.tileheight)
-        foreground = [
-            _get_gid_and_draw(tmx, layer, tile_size)
-            for layer in _layers(tmx, config().map.foreground)
-        ]
-        gids = {
-            gid: draw for layer in foreground for gid, draw in layer.items()
-        }
-        return MapScene(
-            _draw_layers(tmx, tile_size, config().map.background),
-            foreground,
-            _player(player, tmx),
-            _draw_layers(tmx, tile_size, config().map.above_character),
-            _gid_groups(tmx, gids),
+        init_internal_field(
+            self,
+            "_map_size",
+            lambda: Size(
+                tmx.width * tile_size.width, tmx.height * tile_size.height
+            ),
         )
+        init_internal_field(
+            self,
+            "_background",
+            _draw_layers,
+            tmx,
+            tile_size,
+            config().map.background,
+        )
+        init_internal_field(
+            self, "_player", _player, self.character_drawing, tmx
+        )
+        init_internal_field(
+            self,
+            "_above_character",
+            _draw_layers,
+            tmx,
+            tile_size,
+            config().map.above_character,
+        )
+        init_internal_field(
+            self,
+            "_foreground",
+            lambda: [
+                _get_gid_and_draw(tmx, layer, tile_size)
+                for layer in _layers(tmx, config().map.foreground)
+            ],
+        )
+        gids = {
+            gid: draw
+            for layer in self._foreground
+            for gid, draw in layer.items()
+        }
+        init_internal_field(self, "_gid_groups", _gid_groups, tmx, gids)
 
     @cached_property
     @override
@@ -174,16 +195,14 @@ class MapScene(Scene):
 
     @cached_property
     def _player_offset(self) -> Coordinate:
-        screen = Rectangle(Coordinate(0, 0), config().gui.size).center
-        player = self._player.draw_on_screen.character.visible_rectangle.center
-        return Coordinate(
-            (
-                0
-                if player.left <= screen.left
-                else ceil(screen.left - player.left)
-            ),
-            0 if player.top <= screen.top else ceil(screen.top - player.top),
+        player = self._player.draw_on_screen.character.rectangle.center
+        left_offset = _offset(
+            player.left, config().gui.size.width, self._map_size.width
         )
+        top_offset = _offset(
+            player.top, config().gui.size.height, self._map_size.height
+        )
+        return Coordinate(left_offset, top_offset)
 
     def _below_player(self, layer: dict[_Gid, DrawOnScreen]) -> bool:
         player = self._player.draw_on_screen.character.visible_rectangle
@@ -303,3 +322,11 @@ def _draw_layers(
 class _LayerIndexAndBottom(NamedTuple):
     layer: _LayerIndex
     bottom: Pixel
+
+
+def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
+    if player_axis < gui_axis / 2:
+        return 0
+    if player_axis > map_axis - gui_axis / 2:
+        return gui_axis - map_axis
+    return gui_axis / 2 - player_axis

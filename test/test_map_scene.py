@@ -17,6 +17,8 @@ class MockTmx:
     name: str
     tilewidth: int = 10
     tileheight: int = 11
+    width: int = 20
+    height: int = 30
     x: int = 1
     y: int = 2
     layers: list["MockTmx"] = field(default_factory=list)
@@ -44,6 +46,6 @@ def test_map_scene(mocker: MockerFixture) -> None:
             ],
         ),
     )
-    map = MapScene.load(Path("test"), MockCharacterDrawing())
+    map = MapScene(Path("test"), MockCharacterDrawing())
     assert map.event(Quit(Event(QUIT)))
     assert map.step(1).draw_on_screens

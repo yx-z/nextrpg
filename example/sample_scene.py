@@ -22,7 +22,7 @@ def entry_scene() -> Scene:
     Returns:
         `Scene`: The sample scene.
     """
-    return MapScene.load(
+    return MapScene(
         # Tiled/tmx tile map .
         Path("assets/exterior.tmx"),
         RpgMakerCharacterDrawing(

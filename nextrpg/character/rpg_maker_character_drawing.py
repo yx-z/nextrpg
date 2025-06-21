@@ -256,7 +256,9 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         init_internal_field(
             self,
             "_frames",
-            lambda: _load_frames(self.sprite_sheet, self.frame_duration),
+            _load_frames,
+            self.sprite_sheet,
+            self.frame_duration,
         )
 
 

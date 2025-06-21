@@ -302,7 +302,7 @@ class Rectangle:
         Creates a colored `DrawOnScreen` with the provided color.
 
         Args:
-            `Color`: The color to fill the rectangle with.
+            `Color`: The color to fill the rectangle.
 
         Returns:
             `DrawOnScreen`: A transparent surface matching rectangle dimensions.
