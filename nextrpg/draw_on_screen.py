@@ -12,7 +12,14 @@ from pygame import SRCALPHA, Surface
 from pygame.image import load
 
 from nextrpg.config import config
-from nextrpg.core import Coordinate, Pixel, Rgba, Size
+from nextrpg.core import (
+    Coordinate,
+    INTERNAL_ONLY,
+    Pixel,
+    Rgba,
+    Size,
+    init_internal_field,
+)
 
 
 @dataclass(frozen=True)
@@ -27,20 +34,8 @@ class Drawing:
     crop and scale the surface.
     """
 
-    _surface: Surface
-
-    @classmethod
-    def load(cls, resource: Path) -> "Drawing":
-        """
-        Loads a drawing from a file `Path`.
-
-        Args:
-            `resource`: A `Path` to load.
-
-        Returns:
-            `Drawing`: A new `Drawing` instance loaded from the file.
-        """
-        return Drawing(load(resource).convert_alpha())
+    resource: Path | Surface
+    _surface: Surface = INTERNAL_ONLY
 
     @cached_property
     def width(self) -> Pixel:
@@ -113,6 +108,17 @@ class Drawing:
         surface.fill(debug.drawing_background_color.tuple)
         surface.blit(self._surface, (0, 0))
         return surface
+
+    def __post_init__(self) -> None:
+        init_internal_field(
+            self,
+            "_surface",
+            lambda: (
+                load(self.resource).convert_alpha()
+                if isinstance(self.resource, Path)
+                else self.resource
+            ),
+        )
 
 
 @dataclass(frozen=True)

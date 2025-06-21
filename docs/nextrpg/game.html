@@ -138,50 +138,46 @@
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">    Game entry point.</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">entry_scene</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Scene</span><span class="p">],</span> <span class="n">clock</span><span class="p">:</span> <span class="n">Clock</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">        Sets up a game window, loads the entry scene.</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">        Args:</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">            `entry_scene`: A function that returns the entry scene.</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">                This has to be a function but not a direct `Scene` instance,</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">                because drawings can only be loaded after pygame initialization.</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry_scene</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Scene</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">        Sets up a game window, loads the entry scene.</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">        Args:</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">            `entry_scene`: A function that returns the entry scene.</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">                This has to be a function but not a direct `Scene` instance,</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">                because drawings can only be loaded after pygame initialization.</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="n">_GameLoop</span><span class="p">(</span><span class="n">entry_scene</span><span class="p">)</span>
 </span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">            `clock`: A ticking clock controlling the game loop.</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">                If `None`, default to `pygame.Clock()`.</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="n">_GameLoop</span><span class="p">(</span><span class="n">entry_scene</span><span class="p">,</span> <span class="n">_clock</span><span class="o">=</span><span class="n">clock</span> <span class="ow">or</span> <span class="n">Clock</span><span class="p">())</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">        Start the game in a local pygame window.</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">()</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">start_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">        Start the game in async fashion in the context of pygbag/web.</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">()</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>            <span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">to_typed_event</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_init_screen</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Surface</span><span class="p">:</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>    <span class="n">init</span><span class="p">()</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>    <span class="n">set_caption</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="k">return</span> <span class="n">set_mode</span><span class="p">(</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>        <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span> <span class="n">RESIZABLE</span> <span class="k">if</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">resize</span> <span class="k">else</span> <span class="mi">0</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="p">)</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">        Start the game in a local pygame window.</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">()</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">start_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">        Start the game in async fashion in the context of pygbag/web.</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">()</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>            <span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>        <span class="k">assert</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">to_typed_event</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_init_screen</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Surface</span><span class="p">:</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>    <span class="n">init</span><span class="p">()</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>    <span class="n">set_caption</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>    <span class="k">return</span> <span class="n">set_mode</span><span class="p">(</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>        <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span> <span class="n">RESIZABLE</span> <span class="k">if</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">resize</span> <span class="k">else</span> <span class="mi">0</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -202,42 +198,38 @@
 </span><span id="Game-69"><a href="#Game-69"><span class="linenos"> 69</span></a><span class="sd">    Game entry point.</span>
 </span><span id="Game-70"><a href="#Game-70"><span class="linenos"> 70</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="Game-71"><a href="#Game-71"><span class="linenos"> 71</span></a>
-</span><span id="Game-72"><a href="#Game-72"><span class="linenos"> 72</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-</span><span id="Game-73"><a href="#Game-73"><span class="linenos"> 73</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">entry_scene</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Scene</span><span class="p">],</span> <span class="n">clock</span><span class="p">:</span> <span class="n">Clock</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Game-74"><a href="#Game-74"><span class="linenos"> 74</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Game-75"><a href="#Game-75"><span class="linenos"> 75</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Game-76"><a href="#Game-76"><span class="linenos"> 76</span></a><span class="sd">        Sets up a game window, loads the entry scene.</span>
-</span><span id="Game-77"><a href="#Game-77"><span class="linenos"> 77</span></a>
-</span><span id="Game-78"><a href="#Game-78"><span class="linenos"> 78</span></a><span class="sd">        Args:</span>
-</span><span id="Game-79"><a href="#Game-79"><span class="linenos"> 79</span></a><span class="sd">            `entry_scene`: A function that returns the entry scene.</span>
-</span><span id="Game-80"><a href="#Game-80"><span class="linenos"> 80</span></a><span class="sd">                This has to be a function but not a direct `Scene` instance,</span>
-</span><span id="Game-81"><a href="#Game-81"><span class="linenos"> 81</span></a><span class="sd">                because drawings can only be loaded after pygame initialization.</span>
+</span><span id="Game-72"><a href="#Game-72"><span class="linenos"> 72</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry_scene</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Scene</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Game-73"><a href="#Game-73"><span class="linenos"> 73</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Game-74"><a href="#Game-74"><span class="linenos"> 74</span></a><span class="sd">        Sets up a game window, loads the entry scene.</span>
+</span><span id="Game-75"><a href="#Game-75"><span class="linenos"> 75</span></a>
+</span><span id="Game-76"><a href="#Game-76"><span class="linenos"> 76</span></a><span class="sd">        Args:</span>
+</span><span id="Game-77"><a href="#Game-77"><span class="linenos"> 77</span></a><span class="sd">            `entry_scene`: A function that returns the entry scene.</span>
+</span><span id="Game-78"><a href="#Game-78"><span class="linenos"> 78</span></a><span class="sd">                This has to be a function but not a direct `Scene` instance,</span>
+</span><span id="Game-79"><a href="#Game-79"><span class="linenos"> 79</span></a><span class="sd">                because drawings can only be loaded after pygame initialization.</span>
+</span><span id="Game-80"><a href="#Game-80"><span class="linenos"> 80</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Game-81"><a href="#Game-81"><span class="linenos"> 81</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="n">_GameLoop</span><span class="p">(</span><span class="n">entry_scene</span><span class="p">)</span>
 </span><span id="Game-82"><a href="#Game-82"><span class="linenos"> 82</span></a>
-</span><span id="Game-83"><a href="#Game-83"><span class="linenos"> 83</span></a><span class="sd">            `clock`: A ticking clock controlling the game loop.</span>
-</span><span id="Game-84"><a href="#Game-84"><span class="linenos"> 84</span></a><span class="sd">                If `None`, default to `pygame.Clock()`.</span>
-</span><span id="Game-85"><a href="#Game-85"><span class="linenos"> 85</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Game-86"><a href="#Game-86"><span class="linenos"> 86</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="n">_GameLoop</span><span class="p">(</span><span class="n">entry_scene</span><span class="p">,</span> <span class="n">_clock</span><span class="o">=</span><span class="n">clock</span> <span class="ow">or</span> <span class="n">Clock</span><span class="p">())</span>
-</span><span id="Game-87"><a href="#Game-87"><span class="linenos"> 87</span></a>
-</span><span id="Game-88"><a href="#Game-88"><span class="linenos"> 88</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Game-89"><a href="#Game-89"><span class="linenos"> 89</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Game-90"><a href="#Game-90"><span class="linenos"> 90</span></a><span class="sd">        Start the game in a local pygame window.</span>
-</span><span id="Game-91"><a href="#Game-91"><span class="linenos"> 91</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Game-92"><a href="#Game-92"><span class="linenos"> 92</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
-</span><span id="Game-93"><a href="#Game-93"><span class="linenos"> 93</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">()</span>
-</span><span id="Game-94"><a href="#Game-94"><span class="linenos"> 94</span></a>
-</span><span id="Game-95"><a href="#Game-95"><span class="linenos"> 95</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">start_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Game-96"><a href="#Game-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Game-97"><a href="#Game-97"><span class="linenos"> 97</span></a><span class="sd">        Start the game in async fashion in the context of pygbag/web.</span>
-</span><span id="Game-98"><a href="#Game-98"><span class="linenos"> 98</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Game-99"><a href="#Game-99"><span class="linenos"> 99</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
-</span><span id="Game-100"><a href="#Game-100"><span class="linenos">100</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">()</span>
-</span><span id="Game-101"><a href="#Game-101"><span class="linenos">101</span></a>            <span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</span><span id="Game-102"><a href="#Game-102"><span class="linenos">102</span></a>
-</span><span id="Game-103"><a href="#Game-103"><span class="linenos">103</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Game-104"><a href="#Game-104"><span class="linenos">104</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
-</span><span id="Game-105"><a href="#Game-105"><span class="linenos">105</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-</span><span id="Game-106"><a href="#Game-106"><span class="linenos">106</span></a>        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
-</span><span id="Game-107"><a href="#Game-107"><span class="linenos">107</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">to_typed_event</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+</span><span id="Game-83"><a href="#Game-83"><span class="linenos"> 83</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Game-84"><a href="#Game-84"><span class="linenos"> 84</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Game-85"><a href="#Game-85"><span class="linenos"> 85</span></a><span class="sd">        Start the game in a local pygame window.</span>
+</span><span id="Game-86"><a href="#Game-86"><span class="linenos"> 86</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Game-87"><a href="#Game-87"><span class="linenos"> 87</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
+</span><span id="Game-88"><a href="#Game-88"><span class="linenos"> 88</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">()</span>
+</span><span id="Game-89"><a href="#Game-89"><span class="linenos"> 89</span></a>
+</span><span id="Game-90"><a href="#Game-90"><span class="linenos"> 90</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">start_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Game-91"><a href="#Game-91"><span class="linenos"> 91</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Game-92"><a href="#Game-92"><span class="linenos"> 92</span></a><span class="sd">        Start the game in async fashion in the context of pygbag/web.</span>
+</span><span id="Game-93"><a href="#Game-93"><span class="linenos"> 93</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Game-94"><a href="#Game-94"><span class="linenos"> 94</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
+</span><span id="Game-95"><a href="#Game-95"><span class="linenos"> 95</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">()</span>
+</span><span id="Game-96"><a href="#Game-96"><span class="linenos"> 96</span></a>            <span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="Game-97"><a href="#Game-97"><span class="linenos"> 97</span></a>
+</span><span id="Game-98"><a href="#Game-98"><span class="linenos"> 98</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_step</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Game-99"><a href="#Game-99"><span class="linenos"> 99</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">tick</span><span class="p">()</span>
+</span><span id="Game-100"><a href="#Game-100"><span class="linenos">100</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</span><span id="Game-101"><a href="#Game-101"><span class="linenos">101</span></a>        <span class="k">assert</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
+</span><span id="Game-102"><a href="#Game-102"><span class="linenos">102</span></a>        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
+</span><span id="Game-103"><a href="#Game-103"><span class="linenos">103</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">to_typed_event</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -249,27 +241,22 @@
                                         <input id="Game.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
-        <span class="name">Game</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">entry_scene</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n"><a href="scene/scene.html#Scene">nextrpg.scene.scene.Scene</a></span><span class="p">]</span>,</span><span class="param">	<span class="n">clock</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
+        <span class="name">Game</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">entry_scene</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n"><a href="scene/scene.html#Scene">nextrpg.scene.scene.Scene</a></span><span class="p">]</span></span>)</span>
 
                 <label class="view-source-button" for="Game.__init__-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Game.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Game.__init__-72"><a href="#Game.__init__-72"><span class="linenos">72</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-</span><span id="Game.__init__-73"><a href="#Game.__init__-73"><span class="linenos">73</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">entry_scene</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Scene</span><span class="p">],</span> <span class="n">clock</span><span class="p">:</span> <span class="n">Clock</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Game.__init__-74"><a href="#Game.__init__-74"><span class="linenos">74</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Game.__init__-75"><a href="#Game.__init__-75"><span class="linenos">75</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Game.__init__-76"><a href="#Game.__init__-76"><span class="linenos">76</span></a><span class="sd">        Sets up a game window, loads the entry scene.</span>
-</span><span id="Game.__init__-77"><a href="#Game.__init__-77"><span class="linenos">77</span></a>
-</span><span id="Game.__init__-78"><a href="#Game.__init__-78"><span class="linenos">78</span></a><span class="sd">        Args:</span>
-</span><span id="Game.__init__-79"><a href="#Game.__init__-79"><span class="linenos">79</span></a><span class="sd">            `entry_scene`: A function that returns the entry scene.</span>
-</span><span id="Game.__init__-80"><a href="#Game.__init__-80"><span class="linenos">80</span></a><span class="sd">                This has to be a function but not a direct `Scene` instance,</span>
-</span><span id="Game.__init__-81"><a href="#Game.__init__-81"><span class="linenos">81</span></a><span class="sd">                because drawings can only be loaded after pygame initialization.</span>
-</span><span id="Game.__init__-82"><a href="#Game.__init__-82"><span class="linenos">82</span></a>
-</span><span id="Game.__init__-83"><a href="#Game.__init__-83"><span class="linenos">83</span></a><span class="sd">            `clock`: A ticking clock controlling the game loop.</span>
-</span><span id="Game.__init__-84"><a href="#Game.__init__-84"><span class="linenos">84</span></a><span class="sd">                If `None`, default to `pygame.Clock()`.</span>
-</span><span id="Game.__init__-85"><a href="#Game.__init__-85"><span class="linenos">85</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Game.__init__-86"><a href="#Game.__init__-86"><span class="linenos">86</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="n">_GameLoop</span><span class="p">(</span><span class="n">entry_scene</span><span class="p">,</span> <span class="n">_clock</span><span class="o">=</span><span class="n">clock</span> <span class="ow">or</span> <span class="n">Clock</span><span class="p">())</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Game.__init__-72"><a href="#Game.__init__-72"><span class="linenos">72</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry_scene</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Scene</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Game.__init__-73"><a href="#Game.__init__-73"><span class="linenos">73</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Game.__init__-74"><a href="#Game.__init__-74"><span class="linenos">74</span></a><span class="sd">        Sets up a game window, loads the entry scene.</span>
+</span><span id="Game.__init__-75"><a href="#Game.__init__-75"><span class="linenos">75</span></a>
+</span><span id="Game.__init__-76"><a href="#Game.__init__-76"><span class="linenos">76</span></a><span class="sd">        Args:</span>
+</span><span id="Game.__init__-77"><a href="#Game.__init__-77"><span class="linenos">77</span></a><span class="sd">            `entry_scene`: A function that returns the entry scene.</span>
+</span><span id="Game.__init__-78"><a href="#Game.__init__-78"><span class="linenos">78</span></a><span class="sd">                This has to be a function but not a direct `Scene` instance,</span>
+</span><span id="Game.__init__-79"><a href="#Game.__init__-79"><span class="linenos">79</span></a><span class="sd">                because drawings can only be loaded after pygame initialization.</span>
+</span><span id="Game.__init__-80"><a href="#Game.__init__-80"><span class="linenos">80</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Game.__init__-81"><a href="#Game.__init__-81"><span class="linenos">81</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span> <span class="o">=</span> <span class="n">_GameLoop</span><span class="p">(</span><span class="n">entry_scene</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -281,8 +268,6 @@
 <li><strong><code>entry_scene</code>:</strong>  A function that returns the entry scene.
 This has to be a function but not a direct <code>Scene</code> instance,
 because drawings can only be loaded after pygame initialization.</li>
-<li><strong><code>clock</code>:</strong>  A ticking clock controlling the game loop.
-If <code>None</code>, default to <code>pygame.Clock()</code>.</li>
 </ul>
 </div>
 
@@ -299,12 +284,12 @@ If <code>None</code>, default to <code>pygame.Clock()</code>.</li>
 
     </div>
     <a class="headerlink" href="#Game.start"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Game.start-88"><a href="#Game.start-88"><span class="linenos">88</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Game.start-89"><a href="#Game.start-89"><span class="linenos">89</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Game.start-90"><a href="#Game.start-90"><span class="linenos">90</span></a><span class="sd">        Start the game in a local pygame window.</span>
-</span><span id="Game.start-91"><a href="#Game.start-91"><span class="linenos">91</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Game.start-92"><a href="#Game.start-92"><span class="linenos">92</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
-</span><span id="Game.start-93"><a href="#Game.start-93"><span class="linenos">93</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Game.start-83"><a href="#Game.start-83"><span class="linenos">83</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Game.start-84"><a href="#Game.start-84"><span class="linenos">84</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Game.start-85"><a href="#Game.start-85"><span class="linenos">85</span></a><span class="sd">        Start the game in a local pygame window.</span>
+</span><span id="Game.start-86"><a href="#Game.start-86"><span class="linenos">86</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Game.start-87"><a href="#Game.start-87"><span class="linenos">87</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
+</span><span id="Game.start-88"><a href="#Game.start-88"><span class="linenos">88</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -324,13 +309,13 @@ If <code>None</code>, default to <code>pygame.Clock()</code>.</li>
 
     </div>
     <a class="headerlink" href="#Game.start_async"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Game.start_async-95"><a href="#Game.start_async-95"><span class="linenos"> 95</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">start_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Game.start_async-96"><a href="#Game.start_async-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Game.start_async-97"><a href="#Game.start_async-97"><span class="linenos"> 97</span></a><span class="sd">        Start the game in async fashion in the context of pygbag/web.</span>
-</span><span id="Game.start_async-98"><a href="#Game.start_async-98"><span class="linenos"> 98</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Game.start_async-99"><a href="#Game.start_async-99"><span class="linenos"> 99</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
-</span><span id="Game.start_async-100"><a href="#Game.start_async-100"><span class="linenos">100</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">()</span>
-</span><span id="Game.start_async-101"><a href="#Game.start_async-101"><span class="linenos">101</span></a>            <span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Game.start_async-90"><a href="#Game.start_async-90"><span class="linenos">90</span></a>    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">start_async</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Game.start_async-91"><a href="#Game.start_async-91"><span class="linenos">91</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Game.start_async-92"><a href="#Game.start_async-92"><span class="linenos">92</span></a><span class="sd">        Start the game in async fashion in the context of pygbag/web.</span>
+</span><span id="Game.start_async-93"><a href="#Game.start_async-93"><span class="linenos">93</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Game.start_async-94"><a href="#Game.start_async-94"><span class="linenos">94</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">is_running</span><span class="p">:</span>
+</span><span id="Game.start_async-95"><a href="#Game.start_async-95"><span class="linenos">95</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">()</span>
+</span><span id="Game.start_async-96"><a href="#Game.start_async-96"><span class="linenos">96</span></a>            <span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </span></pre></div>
 
 

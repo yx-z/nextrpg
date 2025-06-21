@@ -36,7 +36,8 @@ def test_game(mocker: MockerFixture) -> None:
     get_scene_mock = Mock(side_effect=get_scene)
 
     clock = Mock()
-    game = Game(get_scene_mock, clock)
+    game = Game(get_scene_mock)
+    game._loop = replace(game._loop, _clock=clock)
     set_caption.assert_called_once_with("Test")
     get_scene_mock.assert_called_once()
 

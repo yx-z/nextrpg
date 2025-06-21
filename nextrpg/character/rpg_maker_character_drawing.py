@@ -13,14 +13,20 @@ in non-RPG Maker framework violates the license of RPG Maker,
 even if you own a copy of RPG Maker.
 """
 
-from dataclasses import dataclass, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from enum import IntEnum
 from functools import cached_property
 from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
-from nextrpg.core import Direction, Millisecond, Pixel
+from nextrpg.core import (
+    Direction,
+    INTERNAL_ONLY,
+    Millisecond,
+    Pixel,
+    init_internal_field,
+)
 from nextrpg.draw_on_screen import Coordinate, Drawing, Size
 from nextrpg.frames import CyclicFrames
 
@@ -128,59 +134,32 @@ class SpriteSheet:
 @dataclass(frozen=True)
 class RpgMakerCharacterDrawing(CharacterDrawing):
     """
-    RPG Maker character drawing implementation.
+    RPG Maker style character drawing.
+
+    Arguments:
+        `sprite_sheet`: Configuration for the character's sprite sheet.
+
+        `animate_on_idle`: Whether to animate the character when not moving.
+
+        `frame_duration`: Duration for each animation frame in milliseconds.
+            If not specified, the default duration from `Config` is used.
+
+        `initial_direction`: Initial direction for the character.
+            If not specified, the default direction from `Config` is used.
     """
 
-    _animate_on_idle: bool
-    _frames: dict[Direction, CyclicFrames]
-    _direction: Direction
-
-    @classmethod
-    def load(
-        cls,
-        sprite_sheet: SpriteSheet,
-        animate_on_idle: bool | None = None,
-        frame_duration: Millisecond | None = None,
-        direction: Direction | None = None,
-    ) -> "CharacterDrawing":
-        """
-        Load RPG Maker style character drawing.
-
-        Arguments:
-            `sprite_sheet`: Configuration for the character's sprite sheet.
-
-            `animate_on_idle`: Whether to animate the character when not moving.
-
-            `frame_duration`: Duration for each animation frame in milliseconds.
-                If not specified, the default duration from `Config` is used.
-
-            `initial_direction`: Initial direction for the character.
-                If not specified, the default direction from `Config` is used.
-        """
-        cfg = config().rpg_maker_character
-        frame_duration = (
-            cfg.frame_duration if frame_duration is None else frame_duration
-        )
-        return RpgMakerCharacterDrawing(
-            cfg.animate_on_idle if animate_on_idle is None else animate_on_idle,
-            _load_frames(sprite_sheet, frame_duration),
-            direction or cfg.direction,
-        )
-
-    @cached_property
-    @override
-    def direction(self) -> Direction:
-        """
-        Get the current facing direction of the character.
-
-        RPG Maker drawings are four directions. However, a character can still
-        move in eight directions by reusing the same direction frame.
-        e.g. `DOWN_LEFT` is shown as `DOWN` facing.
-
-        Returns:
-            `Direction`: The current direction the character is facing.
-        """
-        return self._direction
+    sprite_sheet: SpriteSheet
+    animate_on_idle: bool = field(
+        default_factory=lambda: config().rpg_maker_character.animate_on_idle
+    )
+    direction: Direction = field(
+        default_factory=lambda: config().rpg_maker_character.direction
+    )
+    frame_duration: Millisecond = field(
+        default_factory=lambda: config().rpg_maker_character.frame_duration
+    )
+    _: KW_ONLY = INTERNAL_ONLY
+    _frames: dict[Direction, CyclicFrames] = INTERNAL_ONLY
 
     @cached_property
     @override
@@ -195,7 +174,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         Returns:
             `Drawing`: The current frame of the character's sprite animation.
         """
-        return self._frames[_adjust(self._direction)].current_frame
+        return self._frames[_adjust(self.direction)].current_frame
 
     @override
     def turn(self, direction: Direction) -> "CharacterDrawing":
@@ -214,11 +193,11 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         """
         return replace(
             self,
+            direction=direction,
             _frames={
                 d: frames if d == _adjust(direction) else frames.reset()
                 for d, frames in self._frames.items()
             },
-            _direction=direction,
         )
 
     @override
@@ -242,7 +221,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             _frames={
                 direction: (
                     frames.step(time_delta)
-                    if direction == _adjust(self._direction)
+                    if direction == _adjust(self.direction)
                     else frames
                 )
                 for direction, frames in self._frames.items()
@@ -266,11 +245,18 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             `CharacterDrawing`: The updated drawing
             with a new idle animation state.
         """
-        if self._animate_on_idle:
+        if self.animate_on_idle:
             return self.move(time_delta)
         return replace(
             self,
             _frames={d: frames.reset() for d, frames in self._frames.items()},
+        )
+
+    def __post_init__(self) -> None:
+        init_internal_field(
+            self,
+            "_frames",
+            lambda: _load_frames(self.sprite_sheet, self.frame_duration),
         )
 
 

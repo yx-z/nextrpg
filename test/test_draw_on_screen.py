@@ -13,7 +13,7 @@ from test.util import override_config
 def test_drawing(mocker: MockerFixture) -> None:
     surf = Mock()
     mocker.patch("nextrpg.draw_on_screen.load", surf)
-    assert Drawing.load(Path("abc"))
+    assert Drawing(Path("abc"))
     drawing = Drawing(Surface((1, 2), SRCALPHA))
     assert drawing.width == 1
     assert drawing.height == 2

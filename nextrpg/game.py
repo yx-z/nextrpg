@@ -68,9 +68,7 @@ class Game:
     Game entry point.
     """
 
-    def __init__(
-        self, entry_scene: Callable[[], Scene], clock: Clock | None = None
-    ) -> None:
+    def __init__(self, entry_scene: Callable[[], Scene]) -> None:
         """
         Sets up a game window, loads the entry scene.
 
@@ -78,11 +76,8 @@ class Game:
             `entry_scene`: A function that returns the entry scene.
                 This has to be a function but not a direct `Scene` instance,
                 because drawings can only be loaded after pygame initialization.
-
-            `clock`: A ticking clock controlling the game loop.
-                If `None`, default to `pygame.Clock()`.
         """
-        self._loop = _GameLoop(entry_scene, _clock=clock or Clock())
+        self._loop = _GameLoop(entry_scene)
 
     def start(self) -> None:
         """
@@ -102,6 +97,7 @@ class Game:
     def _step(self) -> None:
         self._loop.tick()
         self._loop = self._loop.draw()
+        assert callable(self._loop.event)
         for e in pygame.event.get():
             self._loop = self._loop.event(to_typed_event(e))
 

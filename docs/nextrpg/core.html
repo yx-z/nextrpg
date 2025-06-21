@@ -175,7 +175,7 @@
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">KW_ONLY</span><span class="p">,</span> <span class="n">dataclass</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">sqrt</span>
@@ -219,7 +219,7 @@
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="sd">Millisecond elapsed between game loops.</span>
 </span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>
-</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="n">INTERNAL_ONLY</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">KW_ONLY</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="n">INTERNAL_ONLY</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">&quot;&quot;&quot;Used to mark fields as internal-only and not exposed to the library user.&quot;&quot;&quot;</span>
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
@@ -633,7 +633,7 @@
                 <section id="INTERNAL_ONLY">
                     <div class="attr variable">
             <span class="name">INTERNAL_ONLY</span><span class="annotation">: Any</span>        =
-<span class="default_value">&lt;dataclasses._KW_ONLY_TYPE object&gt;</span>
+<span class="default_value">&lt;object object&gt;</span>
 
         
     </div>

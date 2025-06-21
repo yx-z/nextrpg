@@ -3,7 +3,7 @@ Core types referenced across `nextrpg`.
 """
 
 from collections.abc import Callable
-from dataclasses import KW_ONLY, dataclass
+from dataclasses import dataclass
 from enum import Enum, auto
 from functools import cached_property
 from math import ceil, sqrt
@@ -47,7 +47,7 @@ type Millisecond = int
 Millisecond elapsed between game loops.
 """
 
-INTERNAL_ONLY: Any = KW_ONLY
+INTERNAL_ONLY: Any = object()
 """Used to mark fields as internal-only and not exposed to the library user."""
 
 

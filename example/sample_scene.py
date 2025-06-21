@@ -25,10 +25,10 @@ def entry_scene() -> Scene:
     return MapScene.load(
         # Tiled/tmx tile map .
         Path("assets/exterior.tmx"),
-        RpgMakerCharacterDrawing.load(
+        RpgMakerCharacterDrawing(
             SpriteSheet(
                 # Player sprite sheet.
-                Drawing.load(Path("assets/fantasy/FCharacter1.png")),
+                Drawing(Path("assets/fantasy/FCharacter1.png")),
                 # Select a character from the sprite sheet.
                 SpriteSheetSelection(row=0, column=1),
                 # Declare margins to correctly detect collision/bounding box.
