@@ -2,7 +2,7 @@
 Drawable on screen.
 """
 
-from dataclasses import dataclass
+from dataclasses import KW_ONLY, dataclass
 from functools import cached_property
 from itertools import product
 from math import ceil
@@ -35,6 +35,7 @@ class Drawing:
     """
 
     resource: Path | Surface
+    _: KW_ONLY = INTERNAL_ONLY
     _surface: Surface = INTERNAL_ONLY
 
     @cached_property

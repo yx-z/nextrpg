@@ -3,7 +3,7 @@ Start the game window and game loop.
 """
 
 from asyncio import sleep
-from dataclasses import dataclass, replace
+from dataclasses import KW_ONLY, dataclass, replace
 from functools import singledispatchmethod
 from typing import Callable, Self
 
@@ -29,6 +29,7 @@ from nextrpg.scene.scene import Scene
 class _GameLoop:
     entry_scene: Callable[[], Scene]
     is_running: bool = True
+    _: KW_ONLY = INTERNAL_ONLY
     _clock: Clock = INTERNAL_ONLY
     _gui: Gui = INTERNAL_ONLY
     _screen: Surface = INTERNAL_ONLY
