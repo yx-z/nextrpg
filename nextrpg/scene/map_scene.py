@@ -21,10 +21,7 @@ from pytmx import (
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config import config
-from nextrpg.core import (
-    Millisecond,
-    Pixel,
-)
+from nextrpg.core import Millisecond, Pixel
 from nextrpg.draw_on_screen import (
     Coordinate,
     DrawOnScreen,
@@ -45,13 +42,14 @@ type _LayerIndex = int
 type _Gid = int
 
 
-class _TiledCoordinate(NamedTuple):
+@dataclass(frozen=True)
+class _TiledCoordinate:
     top: int
     left: int
 
 
-class _BottommostAndDraw(NamedTuple):
-    bottommost: Pixel
+class _BottomAndDraw(NamedTuple):
+    bottom: Pixel
     draw: DrawOnScreen
 
 
@@ -74,7 +72,7 @@ class MapScene(Scene):
     _: KW_ONLY = internal_field()
     _map_size: Size = internal_field()
     _background: list[DrawOnScreen] = internal_field()
-    _foreground: list[set[_BottommostAndDraw]] = internal_field()
+    _foreground: list[set[_BottomAndDraw]] = internal_field()
     _player: CharacterOnScreen = internal_field()
     _above_character: list[DrawOnScreen] = internal_field()
 
@@ -172,7 +170,7 @@ class MapScene(Scene):
             self,
             "_foreground",
             lambda: [
-                _bottommost_pixel_and_draw(tmx, layer, tile_size, gid_to_class)
+                _bottom_and_draw(tmx, layer, tile_size, gid_to_class)
                 for layer in _layers(tmx, config().map.foreground)
             ],
         )
@@ -191,7 +189,7 @@ class MapScene(Scene):
             character,
         )
         sort_by_layer_index_and_bottommost = sorted(
-            foregrounds + [player], key=_layer_index_and_bottommost
+            foregrounds + [player], key=lambda t: t[:2]
         )
         return [draw for _, _, draw in sort_by_layer_index_and_bottommost]
 
@@ -202,7 +200,7 @@ class MapScene(Scene):
             (i for i, layer in reversed_layers if self._above_player(layer)), 0
         )
 
-    def _above_player(self, layer: set[_BottommostAndDraw]) -> bool:
+    def _above_player(self, layer: set[_BottomAndDraw]) -> bool:
         player = self._player.character_and_visuals.character.visible_rectangle
         return any(
             player.collide(draw.visible_rectangle) and bottom < player.bottom
@@ -236,40 +234,37 @@ def _tile(
     )
 
 
-def _bottommost_pixel_and_draw(
+def _bottom_and_draw(
     tmx: TiledMap,
     layer: TiledTileLayer,
     tile_size: Size,
     gid_to_class: dict[_Gid, str],
-) -> set[_BottommostAndDraw]:
+) -> set[_BottomAndDraw]:
     coord_and_draws = _draw(layer, tile_size)
-    gid_to_bottom = {
-        gid: draw.visible_rectangle.bottom
+    gid_to_bottom = [
+        (gid, draw.visible_rectangle.bottom)
         for coord, draw in coord_and_draws
         if (gid := _gid(tmx, layer, coord))
-    }
+    ]
     return {
-        _BottommostAndDraw(
-            _bottommost(tmx, layer, coord, draw, gid_to_class, gid_to_bottom),
-            draw,
+        _BottomAndDraw(
+            _bottom(tmx, layer, coord, draw, gid_to_class, gid_to_bottom), draw
         )
         for coord, draw in coord_and_draws
     }
 
 
-def _bottommost(
+def _bottom(
     tmx: TiledMap,
     layer: TiledTileLayer,
     coord: _TiledCoordinate,
     draw: DrawOnScreen,
     gid_to_class: dict[_Gid, str],
-    gid_to_bottom: dict[_Gid, Pixel],
+    gid_to_bottom: list[tuple[_Gid, Pixel]],
 ) -> Pixel:
     if (gid := _gid(tmx, layer, coord)) and (cls := gid_to_class.get(gid)):
         return max(
-            bottom
-            for gid, bottom in gid_to_bottom.items()
-            if gid_to_class[gid] == cls
+            bottom for g, bottom in gid_to_bottom if gid_to_class[g] == cls
         )
     return draw.visible_rectangle.bottom
 
@@ -330,10 +325,3 @@ def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
     if player_axis > map_axis - gui_axis / 2:
         return gui_axis - map_axis
     return gui_axis / 2 - player_axis
-
-
-def _layer_index_and_bottommost(
-    t: tuple[_LayerIndex, Pixel, DrawOnScreen],
-) -> tuple[_LayerIndex, Pixel]:
-    layer_index, bottommost, _ = t
-    return layer_index, bottommost
