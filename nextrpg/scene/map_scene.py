@@ -20,11 +20,8 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config import config
 from nextrpg.core import (
-    INTERNAL,
     Millisecond,
     Pixel,
-    initialize_internal_field,
-    is_internal_field_initialized,
 )
 from nextrpg.draw_on_screen import (
     Coordinate,
@@ -35,6 +32,11 @@ from nextrpg.draw_on_screen import (
 )
 from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.gui import Gui
+from nextrpg.model import (
+    INTERNAL,
+    initialize_internal_field,
+    is_internal_field_initialized,
+)
 from nextrpg.scene.scene import Scene
 
 type _LayerIndex = int

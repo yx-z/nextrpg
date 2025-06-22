@@ -13,13 +13,13 @@ import pygame
 from pygame.time import Clock
 
 from nextrpg.config import config
-from nextrpg.core import INTERNAL, initialize_internal_field
 from nextrpg.event.pygame_event import (
     PygameEvent,
     Quit,
     to_typed_event,
 )
 from nextrpg.gui import Gui
+from nextrpg.model import INTERNAL, initialize_internal_field
 from nextrpg.scene.scene import Scene
 
 

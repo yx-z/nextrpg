@@ -16,12 +16,11 @@ from pygame.image import load
 from nextrpg.config import config
 from nextrpg.core import (
     Coordinate,
-    INTERNAL,
     Pixel,
     Rgba,
     Size,
-    initialize_internal_field,
 )
+from nextrpg.model import INTERNAL, initialize_internal_field
 
 
 @dataclass(frozen=True)

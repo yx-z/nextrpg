@@ -14,10 +14,7 @@ from pygame.transform import smoothscale
 from nextrpg.config import GuiMode, ResizeMode, config
 from nextrpg.core import (
     Coordinate,
-    INTERNAL,
     Size,
-    initialize_internal_field,
-    is_internal_field_initialized,
 )
 from nextrpg.draw_on_screen import DrawOnScreen, Drawing
 from nextrpg.event.pygame_event import (
@@ -25,6 +22,11 @@ from nextrpg.event.pygame_event import (
     KeyPressDown,
     KeyboardKey,
     PygameEvent,
+)
+from nextrpg.model import (
+    INTERNAL,
+    initialize_internal_field,
+    is_internal_field_initialized,
 )
 
 

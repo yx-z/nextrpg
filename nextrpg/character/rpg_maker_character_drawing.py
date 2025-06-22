@@ -24,13 +24,12 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
 from nextrpg.core import (
     Direction,
-    INTERNAL,
     Millisecond,
     Pixel,
-    initialize_internal_field,
 )
 from nextrpg.draw_on_screen import Coordinate, Drawing, Size
 from nextrpg.frames import CyclicFrames
+from nextrpg.model import INTERNAL, initialize_internal_field
 
 type _FrameIndices = list[int]
 
