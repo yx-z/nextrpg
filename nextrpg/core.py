@@ -165,6 +165,7 @@ class Coordinate:
             `Coordinate`: A new coordinate shifted by the specified offset in
             the given direction.
         """
+        raise NotImplementedError(f"Non-addable {offset=}")
 
     @cached_property
     def tuple(self) -> tuple[Pixel, Pixel]:

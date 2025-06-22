@@ -40,9 +40,12 @@ def test_coordinate() -> None:
         Direction.DOWN_RIGHT, 10
     ) == approx(Coordinate(17.071067811865476, 27.071067811865476))
     assert Coordinate(10, 20) + Coordinate(1, 2) == Coordinate(11, 22)
+
+    coord = Coordinate(1, 2)
     with raises(ValueError):
-        coord = Coordinate(1, 2)
         coord + DirectionalOffset("INVALID_DIRECTION", 1)  # type: ignore
+    with raises(NotImplementedError):
+        coord + "INVALID"  # type: ignore
 
 
 def test_size() -> None:
