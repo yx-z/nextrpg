@@ -19,7 +19,7 @@ from nextrpg.event.pygame_event import (
     to_typed_event,
 )
 from nextrpg.gui import Gui
-from nextrpg.model import INTERNAL, initialize_internal_field
+from nextrpg.model import initialize_internal_field, internal_field
 from nextrpg.scene.scene import Scene
 
 
@@ -59,10 +59,10 @@ class Game:
 class _GameLoop:
     entry_scene: Callable[[], Scene]
     is_running: bool = True
-    _: KW_ONLY = INTERNAL
-    _clock: Clock = INTERNAL
-    _gui: Gui = INTERNAL
-    _scene: Scene = INTERNAL
+    _: KW_ONLY = internal_field()
+    _clock: Clock = internal_field()
+    _gui: Gui = internal_field()
+    _scene: Scene = internal_field()
 
     @singledispatchmethod
     def event(self, e: PygameEvent) -> _GameLoop:

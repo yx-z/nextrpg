@@ -331,100 +331,101 @@
 </span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">            `Coordinate`: A new coordinate shifted by the specified offset in</span>
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a><span class="sd">            the given direction.</span>
 </span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">        Gets the coordinates as a tuple.</span>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">        Returns:</span>
-</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the left and top</span>
-</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a><span class="sd">                values in that order.</span>
-</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span>
-</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Non-addable </span><span class="si">{</span><span class="n">offset</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">        Gets the coordinates as a tuple.</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">        Returns:</span>
+</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the left and top</span>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a><span class="sd">                values in that order.</span>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>
-</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Size</span><span class="p">:</span>
-</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="sd">    Represents the dimensions of a two-dimensional space, such as an image,</span>
-</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a><span class="sd">    with defined width and height.</span>
-</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>
-</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="sd">    This class is immutable and designed to encapsulate the concept of size</span>
-</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a><span class="sd">    in pixel measurements.</span>
-</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>
-</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="sd">        `width`: The width of the size in pixels.</span>
-</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>
-</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">        `height`: The height of the size in pixels.</span>
-</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
-</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
-</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">=}</span><span class="s2"> and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">=}</span><span class="s2"> cannot be negative.&quot;</span>
-</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>            <span class="p">)</span>
-</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
-</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>
-</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
-</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>
-</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
-</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>
-</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a><span class="sd">        Args:</span>
-</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="sd">            `scale`: A scaling factor by which the width and height will be</span>
-</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a><span class="sd">                multiplied.</span>
-</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>
-</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="sd">        Returns:</span>
-</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
-</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scale</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scale</span><span class="p">))</span>
-</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>
-</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
-</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="sd">        Gets the dimensions as a tuple.</span>
-</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>
-</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a><span class="sd">        Returns:</span>
-</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the width and height</span>
-</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a><span class="sd">                values in that order.</span>
-</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
-</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Size</span><span class="p">:</span>
+</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a><span class="sd">    Represents the dimensions of a two-dimensional space, such as an image,</span>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="sd">    with defined width and height.</span>
+</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a>
+</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a><span class="sd">    This class is immutable and designed to encapsulate the concept of size</span>
+</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a><span class="sd">    in pixel measurements.</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="sd">    Attributes:</span>
+</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="sd">        `width`: The width of the size in pixels.</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>
+</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">        `height`: The height of the size in pixels.</span>
+</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">=}</span><span class="s2"> and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">=}</span><span class="s2"> cannot be negative.&quot;</span>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>            <span class="p">)</span>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
+</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
+</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>
+</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="sd">        Args:</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a><span class="sd">            `scale`: A scaling factor by which the width and height will be</span>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a><span class="sd">                multiplied.</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="sd">        Returns:</span>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scale</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scale</span><span class="p">))</span>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="sd">        Gets the dimensions as a tuple.</span>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="sd">        Returns:</span>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the width and height</span>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">                values in that order.</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
 </span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>
-</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a><span class="nd">@Coordinate</span><span class="o">.</span><span class="fm">__add__</span><span class="o">.</span><span class="n">register</span>
-</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_add_directional_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="n">DirectionalOffset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>    <span class="k">match</span> <span class="n">offset</span><span class="o">.</span><span class="n">direction</span><span class="p">:</span>
-</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span>
-</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">-</span> <span class="n">offset</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
-</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span>
-</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">offset</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
-</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">-</span> <span class="n">offset</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">)</span>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span>
-</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">offset</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">)</span>
-</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>
-</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>    <span class="n">diag</span> <span class="o">=</span> <span class="n">offset</span><span class="o">.</span><span class="n">offset</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>    <span class="k">match</span> <span class="n">offset</span><span class="o">.</span><span class="n">direction</span><span class="p">:</span>
-</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">:</span>
-</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">-</span> <span class="n">diag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">-</span> <span class="n">diag</span><span class="p">)</span>
-</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">:</span>
-</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">diag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">-</span> <span class="n">diag</span><span class="p">)</span>
-</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">:</span>
-</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">-</span> <span class="n">diag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">diag</span><span class="p">)</span>
-</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span>
-</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">diag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">diag</span><span class="p">)</span>
-</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid direction: </span><span class="si">{</span><span class="n">offset</span><span class="o">.</span><span class="n">direction</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a><span class="nd">@Coordinate</span><span class="o">.</span><span class="fm">__add__</span><span class="o">.</span><span class="n">register</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_add_directional_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="n">DirectionalOffset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>    <span class="k">match</span> <span class="n">offset</span><span class="o">.</span><span class="n">direction</span><span class="p">:</span>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">-</span> <span class="n">offset</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">offset</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">-</span> <span class="n">offset</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">)</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">offset</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="p">)</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>    <span class="n">diag</span> <span class="o">=</span> <span class="n">offset</span><span class="o">.</span><span class="n">offset</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>    <span class="k">match</span> <span class="n">offset</span><span class="o">.</span><span class="n">direction</span><span class="p">:</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">:</span>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">-</span> <span class="n">diag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">-</span> <span class="n">diag</span><span class="p">)</span>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">:</span>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">diag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">-</span> <span class="n">diag</span><span class="p">)</span>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">:</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">-</span> <span class="n">diag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">diag</span><span class="p">)</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>        <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>            <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">diag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">diag</span><span class="p">)</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid direction: </span><span class="si">{</span><span class="n">offset</span><span class="o">.</span><span class="n">direction</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>
-</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="nd">@Coordinate</span><span class="o">.</span><span class="fm">__add__</span><span class="o">.</span><span class="n">register</span>
-</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_add_coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a>    <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">offset</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">offset</span><span class="o">.</span><span class="n">top</span><span class="p">)</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a><span class="nd">@Coordinate</span><span class="o">.</span><span class="fm">__add__</span><span class="o">.</span><span class="n">register</span>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_add_coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>    <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">offset</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">offset</span><span class="o">.</span><span class="n">top</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -921,17 +922,18 @@ This value will be decomposed into x, y pixels upon diagnoal moves.</li>
 </span><span id="Coordinate-166"><a href="#Coordinate-166"><span class="linenos">166</span></a><span class="sd">            `Coordinate`: A new coordinate shifted by the specified offset in</span>
 </span><span id="Coordinate-167"><a href="#Coordinate-167"><span class="linenos">167</span></a><span class="sd">            the given direction.</span>
 </span><span id="Coordinate-168"><a href="#Coordinate-168"><span class="linenos">168</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Coordinate-169"><a href="#Coordinate-169"><span class="linenos">169</span></a>
-</span><span id="Coordinate-170"><a href="#Coordinate-170"><span class="linenos">170</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Coordinate-171"><a href="#Coordinate-171"><span class="linenos">171</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
-</span><span id="Coordinate-172"><a href="#Coordinate-172"><span class="linenos">172</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Coordinate-173"><a href="#Coordinate-173"><span class="linenos">173</span></a><span class="sd">        Gets the coordinates as a tuple.</span>
-</span><span id="Coordinate-174"><a href="#Coordinate-174"><span class="linenos">174</span></a>
-</span><span id="Coordinate-175"><a href="#Coordinate-175"><span class="linenos">175</span></a><span class="sd">        Returns:</span>
-</span><span id="Coordinate-176"><a href="#Coordinate-176"><span class="linenos">176</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the left and top</span>
-</span><span id="Coordinate-177"><a href="#Coordinate-177"><span class="linenos">177</span></a><span class="sd">                values in that order.</span>
-</span><span id="Coordinate-178"><a href="#Coordinate-178"><span class="linenos">178</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Coordinate-179"><a href="#Coordinate-179"><span class="linenos">179</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span>
+</span><span id="Coordinate-169"><a href="#Coordinate-169"><span class="linenos">169</span></a>        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Non-addable </span><span class="si">{</span><span class="n">offset</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="Coordinate-170"><a href="#Coordinate-170"><span class="linenos">170</span></a>
+</span><span id="Coordinate-171"><a href="#Coordinate-171"><span class="linenos">171</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Coordinate-172"><a href="#Coordinate-172"><span class="linenos">172</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
+</span><span id="Coordinate-173"><a href="#Coordinate-173"><span class="linenos">173</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Coordinate-174"><a href="#Coordinate-174"><span class="linenos">174</span></a><span class="sd">        Gets the coordinates as a tuple.</span>
+</span><span id="Coordinate-175"><a href="#Coordinate-175"><span class="linenos">175</span></a>
+</span><span id="Coordinate-176"><a href="#Coordinate-176"><span class="linenos">176</span></a><span class="sd">        Returns:</span>
+</span><span id="Coordinate-177"><a href="#Coordinate-177"><span class="linenos">177</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the left and top</span>
+</span><span id="Coordinate-178"><a href="#Coordinate-178"><span class="linenos">178</span></a><span class="sd">                values in that order.</span>
+</span><span id="Coordinate-179"><a href="#Coordinate-179"><span class="linenos">179</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Coordinate-180"><a href="#Coordinate-180"><span class="linenos">180</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span>
 </span></pre></div>
 
 
@@ -992,16 +994,16 @@ the number of pixels from the top edge of the game window.</li>
 
     </div>
     <a class="headerlink" href="#Coordinate.tuple"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Coordinate.tuple-170"><a href="#Coordinate.tuple-170"><span class="linenos">170</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Coordinate.tuple-171"><a href="#Coordinate.tuple-171"><span class="linenos">171</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
-</span><span id="Coordinate.tuple-172"><a href="#Coordinate.tuple-172"><span class="linenos">172</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Coordinate.tuple-173"><a href="#Coordinate.tuple-173"><span class="linenos">173</span></a><span class="sd">        Gets the coordinates as a tuple.</span>
-</span><span id="Coordinate.tuple-174"><a href="#Coordinate.tuple-174"><span class="linenos">174</span></a>
-</span><span id="Coordinate.tuple-175"><a href="#Coordinate.tuple-175"><span class="linenos">175</span></a><span class="sd">        Returns:</span>
-</span><span id="Coordinate.tuple-176"><a href="#Coordinate.tuple-176"><span class="linenos">176</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the left and top</span>
-</span><span id="Coordinate.tuple-177"><a href="#Coordinate.tuple-177"><span class="linenos">177</span></a><span class="sd">                values in that order.</span>
-</span><span id="Coordinate.tuple-178"><a href="#Coordinate.tuple-178"><span class="linenos">178</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Coordinate.tuple-179"><a href="#Coordinate.tuple-179"><span class="linenos">179</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Coordinate.tuple-171"><a href="#Coordinate.tuple-171"><span class="linenos">171</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Coordinate.tuple-172"><a href="#Coordinate.tuple-172"><span class="linenos">172</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
+</span><span id="Coordinate.tuple-173"><a href="#Coordinate.tuple-173"><span class="linenos">173</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Coordinate.tuple-174"><a href="#Coordinate.tuple-174"><span class="linenos">174</span></a><span class="sd">        Gets the coordinates as a tuple.</span>
+</span><span id="Coordinate.tuple-175"><a href="#Coordinate.tuple-175"><span class="linenos">175</span></a>
+</span><span id="Coordinate.tuple-176"><a href="#Coordinate.tuple-176"><span class="linenos">176</span></a><span class="sd">        Returns:</span>
+</span><span id="Coordinate.tuple-177"><a href="#Coordinate.tuple-177"><span class="linenos">177</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the left and top</span>
+</span><span id="Coordinate.tuple-178"><a href="#Coordinate.tuple-178"><span class="linenos">178</span></a><span class="sd">                values in that order.</span>
+</span><span id="Coordinate.tuple-179"><a href="#Coordinate.tuple-179"><span class="linenos">179</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Coordinate.tuple-180"><a href="#Coordinate.tuple-180"><span class="linenos">180</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span>
 </span></pre></div>
 
 
@@ -1030,57 +1032,57 @@ the number of pixels from the top edge of the game window.</li>
 
     </div>
     <a class="headerlink" href="#Size"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Size-182"><a href="#Size-182"><span class="linenos">182</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="Size-183"><a href="#Size-183"><span class="linenos">183</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Size</span><span class="p">:</span>
-</span><span id="Size-184"><a href="#Size-184"><span class="linenos">184</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Size-185"><a href="#Size-185"><span class="linenos">185</span></a><span class="sd">    Represents the dimensions of a two-dimensional space, such as an image,</span>
-</span><span id="Size-186"><a href="#Size-186"><span class="linenos">186</span></a><span class="sd">    with defined width and height.</span>
-</span><span id="Size-187"><a href="#Size-187"><span class="linenos">187</span></a>
-</span><span id="Size-188"><a href="#Size-188"><span class="linenos">188</span></a><span class="sd">    This class is immutable and designed to encapsulate the concept of size</span>
-</span><span id="Size-189"><a href="#Size-189"><span class="linenos">189</span></a><span class="sd">    in pixel measurements.</span>
-</span><span id="Size-190"><a href="#Size-190"><span class="linenos">190</span></a>
-</span><span id="Size-191"><a href="#Size-191"><span class="linenos">191</span></a><span class="sd">    Attributes:</span>
-</span><span id="Size-192"><a href="#Size-192"><span class="linenos">192</span></a><span class="sd">        `width`: The width of the size in pixels.</span>
-</span><span id="Size-193"><a href="#Size-193"><span class="linenos">193</span></a>
-</span><span id="Size-194"><a href="#Size-194"><span class="linenos">194</span></a><span class="sd">        `height`: The height of the size in pixels.</span>
-</span><span id="Size-195"><a href="#Size-195"><span class="linenos">195</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Size-196"><a href="#Size-196"><span class="linenos">196</span></a>
-</span><span id="Size-197"><a href="#Size-197"><span class="linenos">197</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
-</span><span id="Size-198"><a href="#Size-198"><span class="linenos">198</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
-</span><span id="Size-199"><a href="#Size-199"><span class="linenos">199</span></a>
-</span><span id="Size-200"><a href="#Size-200"><span class="linenos">200</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Size-201"><a href="#Size-201"><span class="linenos">201</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-</span><span id="Size-202"><a href="#Size-202"><span class="linenos">202</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="Size-203"><a href="#Size-203"><span class="linenos">203</span></a>                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">=}</span><span class="s2"> and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">=}</span><span class="s2"> cannot be negative.&quot;</span>
-</span><span id="Size-204"><a href="#Size-204"><span class="linenos">204</span></a>            <span class="p">)</span>
-</span><span id="Size-205"><a href="#Size-205"><span class="linenos">205</span></a>
-</span><span id="Size-206"><a href="#Size-206"><span class="linenos">206</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="Size-207"><a href="#Size-207"><span class="linenos">207</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Size-208"><a href="#Size-208"><span class="linenos">208</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
-</span><span id="Size-209"><a href="#Size-209"><span class="linenos">209</span></a>
-</span><span id="Size-210"><a href="#Size-210"><span class="linenos">210</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
-</span><span id="Size-211"><a href="#Size-211"><span class="linenos">211</span></a>
-</span><span id="Size-212"><a href="#Size-212"><span class="linenos">212</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
-</span><span id="Size-213"><a href="#Size-213"><span class="linenos">213</span></a>
-</span><span id="Size-214"><a href="#Size-214"><span class="linenos">214</span></a><span class="sd">        Args:</span>
-</span><span id="Size-215"><a href="#Size-215"><span class="linenos">215</span></a><span class="sd">            `scale`: A scaling factor by which the width and height will be</span>
-</span><span id="Size-216"><a href="#Size-216"><span class="linenos">216</span></a><span class="sd">                multiplied.</span>
-</span><span id="Size-217"><a href="#Size-217"><span class="linenos">217</span></a>
-</span><span id="Size-218"><a href="#Size-218"><span class="linenos">218</span></a><span class="sd">        Returns:</span>
-</span><span id="Size-219"><a href="#Size-219"><span class="linenos">219</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
-</span><span id="Size-220"><a href="#Size-220"><span class="linenos">220</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Size-221"><a href="#Size-221"><span class="linenos">221</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scale</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scale</span><span class="p">))</span>
-</span><span id="Size-222"><a href="#Size-222"><span class="linenos">222</span></a>
-</span><span id="Size-223"><a href="#Size-223"><span class="linenos">223</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Size-224"><a href="#Size-224"><span class="linenos">224</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
-</span><span id="Size-225"><a href="#Size-225"><span class="linenos">225</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Size-226"><a href="#Size-226"><span class="linenos">226</span></a><span class="sd">        Gets the dimensions as a tuple.</span>
-</span><span id="Size-227"><a href="#Size-227"><span class="linenos">227</span></a>
-</span><span id="Size-228"><a href="#Size-228"><span class="linenos">228</span></a><span class="sd">        Returns:</span>
-</span><span id="Size-229"><a href="#Size-229"><span class="linenos">229</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the width and height</span>
-</span><span id="Size-230"><a href="#Size-230"><span class="linenos">230</span></a><span class="sd">                values in that order.</span>
-</span><span id="Size-231"><a href="#Size-231"><span class="linenos">231</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Size-232"><a href="#Size-232"><span class="linenos">232</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Size-183"><a href="#Size-183"><span class="linenos">183</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="Size-184"><a href="#Size-184"><span class="linenos">184</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Size</span><span class="p">:</span>
+</span><span id="Size-185"><a href="#Size-185"><span class="linenos">185</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Size-186"><a href="#Size-186"><span class="linenos">186</span></a><span class="sd">    Represents the dimensions of a two-dimensional space, such as an image,</span>
+</span><span id="Size-187"><a href="#Size-187"><span class="linenos">187</span></a><span class="sd">    with defined width and height.</span>
+</span><span id="Size-188"><a href="#Size-188"><span class="linenos">188</span></a>
+</span><span id="Size-189"><a href="#Size-189"><span class="linenos">189</span></a><span class="sd">    This class is immutable and designed to encapsulate the concept of size</span>
+</span><span id="Size-190"><a href="#Size-190"><span class="linenos">190</span></a><span class="sd">    in pixel measurements.</span>
+</span><span id="Size-191"><a href="#Size-191"><span class="linenos">191</span></a>
+</span><span id="Size-192"><a href="#Size-192"><span class="linenos">192</span></a><span class="sd">    Attributes:</span>
+</span><span id="Size-193"><a href="#Size-193"><span class="linenos">193</span></a><span class="sd">        `width`: The width of the size in pixels.</span>
+</span><span id="Size-194"><a href="#Size-194"><span class="linenos">194</span></a>
+</span><span id="Size-195"><a href="#Size-195"><span class="linenos">195</span></a><span class="sd">        `height`: The height of the size in pixels.</span>
+</span><span id="Size-196"><a href="#Size-196"><span class="linenos">196</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Size-197"><a href="#Size-197"><span class="linenos">197</span></a>
+</span><span id="Size-198"><a href="#Size-198"><span class="linenos">198</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="Size-199"><a href="#Size-199"><span class="linenos">199</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="Size-200"><a href="#Size-200"><span class="linenos">200</span></a>
+</span><span id="Size-201"><a href="#Size-201"><span class="linenos">201</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Size-202"><a href="#Size-202"><span class="linenos">202</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="Size-203"><a href="#Size-203"><span class="linenos">203</span></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="Size-204"><a href="#Size-204"><span class="linenos">204</span></a>                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">=}</span><span class="s2"> and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">=}</span><span class="s2"> cannot be negative.&quot;</span>
+</span><span id="Size-205"><a href="#Size-205"><span class="linenos">205</span></a>            <span class="p">)</span>
+</span><span id="Size-206"><a href="#Size-206"><span class="linenos">206</span></a>
+</span><span id="Size-207"><a href="#Size-207"><span class="linenos">207</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="Size-208"><a href="#Size-208"><span class="linenos">208</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Size-209"><a href="#Size-209"><span class="linenos">209</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
+</span><span id="Size-210"><a href="#Size-210"><span class="linenos">210</span></a>
+</span><span id="Size-211"><a href="#Size-211"><span class="linenos">211</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
+</span><span id="Size-212"><a href="#Size-212"><span class="linenos">212</span></a>
+</span><span id="Size-213"><a href="#Size-213"><span class="linenos">213</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
+</span><span id="Size-214"><a href="#Size-214"><span class="linenos">214</span></a>
+</span><span id="Size-215"><a href="#Size-215"><span class="linenos">215</span></a><span class="sd">        Args:</span>
+</span><span id="Size-216"><a href="#Size-216"><span class="linenos">216</span></a><span class="sd">            `scale`: A scaling factor by which the width and height will be</span>
+</span><span id="Size-217"><a href="#Size-217"><span class="linenos">217</span></a><span class="sd">                multiplied.</span>
+</span><span id="Size-218"><a href="#Size-218"><span class="linenos">218</span></a>
+</span><span id="Size-219"><a href="#Size-219"><span class="linenos">219</span></a><span class="sd">        Returns:</span>
+</span><span id="Size-220"><a href="#Size-220"><span class="linenos">220</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
+</span><span id="Size-221"><a href="#Size-221"><span class="linenos">221</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Size-222"><a href="#Size-222"><span class="linenos">222</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scale</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scale</span><span class="p">))</span>
+</span><span id="Size-223"><a href="#Size-223"><span class="linenos">223</span></a>
+</span><span id="Size-224"><a href="#Size-224"><span class="linenos">224</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Size-225"><a href="#Size-225"><span class="linenos">225</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
+</span><span id="Size-226"><a href="#Size-226"><span class="linenos">226</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Size-227"><a href="#Size-227"><span class="linenos">227</span></a><span class="sd">        Gets the dimensions as a tuple.</span>
+</span><span id="Size-228"><a href="#Size-228"><span class="linenos">228</span></a>
+</span><span id="Size-229"><a href="#Size-229"><span class="linenos">229</span></a><span class="sd">        Returns:</span>
+</span><span id="Size-230"><a href="#Size-230"><span class="linenos">230</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the width and height</span>
+</span><span id="Size-231"><a href="#Size-231"><span class="linenos">231</span></a><span class="sd">                values in that order.</span>
+</span><span id="Size-232"><a href="#Size-232"><span class="linenos">232</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Size-233"><a href="#Size-233"><span class="linenos">233</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
 </span></pre></div>
 
 
@@ -1142,16 +1144,16 @@ in pixel measurements.</p>
 
     </div>
     <a class="headerlink" href="#Size.tuple"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Size.tuple-223"><a href="#Size.tuple-223"><span class="linenos">223</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Size.tuple-224"><a href="#Size.tuple-224"><span class="linenos">224</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
-</span><span id="Size.tuple-225"><a href="#Size.tuple-225"><span class="linenos">225</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Size.tuple-226"><a href="#Size.tuple-226"><span class="linenos">226</span></a><span class="sd">        Gets the dimensions as a tuple.</span>
-</span><span id="Size.tuple-227"><a href="#Size.tuple-227"><span class="linenos">227</span></a>
-</span><span id="Size.tuple-228"><a href="#Size.tuple-228"><span class="linenos">228</span></a><span class="sd">        Returns:</span>
-</span><span id="Size.tuple-229"><a href="#Size.tuple-229"><span class="linenos">229</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the width and height</span>
-</span><span id="Size.tuple-230"><a href="#Size.tuple-230"><span class="linenos">230</span></a><span class="sd">                values in that order.</span>
-</span><span id="Size.tuple-231"><a href="#Size.tuple-231"><span class="linenos">231</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Size.tuple-232"><a href="#Size.tuple-232"><span class="linenos">232</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Size.tuple-224"><a href="#Size.tuple-224"><span class="linenos">224</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Size.tuple-225"><a href="#Size.tuple-225"><span class="linenos">225</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Pixel</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">]:</span>
+</span><span id="Size.tuple-226"><a href="#Size.tuple-226"><span class="linenos">226</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Size.tuple-227"><a href="#Size.tuple-227"><span class="linenos">227</span></a><span class="sd">        Gets the dimensions as a tuple.</span>
+</span><span id="Size.tuple-228"><a href="#Size.tuple-228"><span class="linenos">228</span></a>
+</span><span id="Size.tuple-229"><a href="#Size.tuple-229"><span class="linenos">229</span></a><span class="sd">        Returns:</span>
+</span><span id="Size.tuple-230"><a href="#Size.tuple-230"><span class="linenos">230</span></a><span class="sd">            `tuple[Pixel, Pixel]`: A tuple containing the width and height</span>
+</span><span id="Size.tuple-231"><a href="#Size.tuple-231"><span class="linenos">231</span></a><span class="sd">                values in that order.</span>
+</span><span id="Size.tuple-232"><a href="#Size.tuple-232"><span class="linenos">232</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Size.tuple-233"><a href="#Size.tuple-233"><span class="linenos">233</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
 </span></pre></div>
 
 

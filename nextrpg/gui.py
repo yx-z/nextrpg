@@ -25,8 +25,8 @@ from nextrpg.event.pygame_event import (
     PygameEvent,
 )
 from nextrpg.model import (
-    INTERNAL,
     initialize_internal_field,
+    internal_field,
     is_internal_field_initialized,
 )
 
@@ -43,8 +43,8 @@ class Gui:
 
     window: Size = field(default_factory=lambda: config().gui.size)
     gui_mode: GuiMode = field(default_factory=lambda: config().gui.gui_mode)
-    _: KW_ONLY = INTERNAL
-    _screen: Surface = INTERNAL
+    _: KW_ONLY = internal_field()
+    _screen: Surface = internal_field()
 
     @staticmethod
     def current_size() -> Size:

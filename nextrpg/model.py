@@ -1,14 +1,24 @@
 from __future__ import annotations
 
+from dataclasses import field
 from typing import Any, Callable
 
-INTERNAL: Any = object()
-"""Used to mark fields as internal-only and not exposed to the library user."""
+_INTERNAL: Any = object()
 
 
-def is_internal_field_initialized(field: Any) -> bool:
+def internal_field() -> Any:
     """
-    Checks if a field is initialized to a value other than `INTERNAL`.
+    Used to mark fields as internal-only and not exposed to the library user.
+
+    Returns:
+        `Any`: A field marked as internal.
+    """
+    return field(repr=False, default=_INTERNAL, kw_only=True)
+
+
+def is_internal_field_initialized(f: Any) -> bool:
+    """
+    Checks if a field is initialized to a value other than `INTERNAL_FIELD`.
 
     Args:
         `field` : The field to check.
@@ -16,7 +26,7 @@ def is_internal_field_initialized(field: Any) -> bool:
     Returns:
         `bool`: `True` if the field is initialized, `False` otherwise.
     """
-    return field is not INTERNAL
+    return f is not _INTERNAL
 
 
 def initialize_internal_field[**P, R](
@@ -27,7 +37,7 @@ def initialize_internal_field[**P, R](
     **kwargs: P.kwargs,
 ) -> R | None:
     """
-    Used to init `INTERNAL` field in `dataclass` instance.
+    Used to init `INTERNAL_FIELD` in `dataclass` instance.
 
     Args:
         `self`: Object to set.

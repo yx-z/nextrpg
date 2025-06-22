@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="55" height="34" tilewidth="48" tileheight="48" infinite="0" nextlayerid="6" nextobjectid="26">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="55" height="34" tilewidth="48" tileheight="48" infinite="0" nextlayerid="8" nextobjectid="26">
  <tileset firstgid="1" source="trees.tsx"/>
  <tileset firstgid="257" source="ground.tsx"/>
  <tileset firstgid="923" source="house.tsx"/>
@@ -41,7 +41,7 @@
 257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257,257
 </data>
  </layer>
- <layer id="3" name="foreground" width="55" height="34">
+ <layer id="6" name="foreground" width="55" height="34">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -133,7 +133,6 @@
   <object id="19" x="2645" y="-120" width="180" height="1876"/>
   <object id="20" x="-52" y="-163" width="2792" height="152"/>
   <object id="22" x="-56" y="1644" width="2792" height="152"/>
-  <object id="23" x="-1614" y="-130" width="180" height="1876"/>
   <object id="25" x="-194" y="-226" width="180" height="1876"/>
  </objectgroup>
  <objectgroup id="2" name="object">

@@ -68,7 +68,7 @@ class CharacterOnScreen:
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
     @cached_property
-    def draw_on_screen(self) -> CharacterAndVisuals:
+    def character_and_visuals(self) -> CharacterAndVisuals:
         """
         Creates drawable representations of the character and visuals.
 

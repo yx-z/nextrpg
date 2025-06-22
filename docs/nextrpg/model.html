@@ -31,7 +31,7 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
-                    <a class="variable" href="#INTERNAL">INTERNAL</a>
+                    <a class="function" href="#internal_field">internal_field</a>
             </li>
             <li>
                     <a class="function" href="#is_internal_field_initialized">is_internal_field_initialized</a>
@@ -62,70 +62,99 @@
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="n">INTERNAL</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">&quot;&quot;&quot;Used to mark fields as internal-only and not exposed to the library user.&quot;&quot;&quot;</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">field</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="n">_INTERNAL</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="nb">object</span><span class="p">()</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="k">def</span><span class="w"> </span><span class="nf">is_internal_field_initialized</span><span class="p">(</span><span class="n">field</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="k">def</span><span class="w"> </span><span class="nf">internal_field</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">    Checks if a field is initialized to a value other than `INTERNAL`.</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">    Used to mark fields as internal-only and not exposed to the library user.</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">    Args:</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">        `field` : The field to check.</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">    Returns:</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">        `bool`: `True` if the field is initialized, `False` otherwise.</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="k">return</span> <span class="n">field</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">INTERNAL</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="k">def</span><span class="w"> </span><span class="nf">initialize_internal_field</span><span class="p">[</span><span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">](</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="bp">self</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">factory</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">],</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">    Used to init `INTERNAL` field in `dataclass` instance.</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">    Returns:</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">        `Any`: A field marked as internal.</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="k">return</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_INTERNAL</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="k">def</span><span class="w"> </span><span class="nf">is_internal_field_initialized</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">    Checks if a field is initialized to a value other than `INTERNAL_FIELD`.</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">    Args:</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">        `field` : The field to check.</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">    Returns:</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">        `bool`: `True` if the field is initialized, `False` otherwise.</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="k">return</span> <span class="n">f</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_INTERNAL</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
 </span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">    Args:</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">        `self`: Object to set.</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">        `name`: Name of the field.</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">        `factory`: Factory function to create the value of the field.</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">            This is a factory to avoid potential side effects when creating</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">            the field.</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">        `*args`: Positional arguments to pass to the factory function.</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">        `**kwargs`: Keyword arguments to pass to the factory function.</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="k">def</span><span class="w"> </span><span class="nf">initialize_internal_field</span><span class="p">[</span><span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">](</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="bp">self</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">factory</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">],</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">    Used to init `INTERNAL_FIELD` in `dataclass` instance.</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">    Args:</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">        `self`: Object to set.</span>
 </span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">    Returns:</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">        `R` | `None`: The initialized value of the field.</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="k">if</span> <span class="n">is_internal_field_initialized</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)):</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="k">return</span> <span class="kc">None</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="n">val</span> <span class="o">=</span> <span class="n">factory</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="k">return</span> <span class="n">val</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">        `name`: Name of the field.</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">        `factory`: Factory function to create the value of the field.</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">            This is a factory to avoid potential side effects when creating</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">            the field.</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">        `*args`: Positional arguments to pass to the factory function.</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">        `**kwargs`: Keyword arguments to pass to the factory function.</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">    Returns:</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">        `R` | `None`: The initialized value of the field.</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="k">if</span> <span class="n">is_internal_field_initialized</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)):</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="kc">None</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="n">val</span> <span class="o">=</span> <span class="n">factory</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="k">return</span> <span class="n">val</span>
 </span></pre></div>
 
 
             </section>
-                <section id="INTERNAL">
-                    <div class="attr variable">
-            <span class="name">INTERNAL</span><span class="annotation">: Any</span>        =
-<span class="default_value">&lt;object object&gt;</span>
+                <section id="internal_field">
+                            <input id="internal_field-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">internal_field</span><span class="signature pdoc-code condensed">(<span class="return-annotation">) -> <span class="n">Any</span>:</span></span>
 
-        
+                <label class="view-source-button" for="internal_field-view-source"><span>View Source</span></label>
+
     </div>
-    <a class="headerlink" href="#INTERNAL"></a>
-    
+    <a class="headerlink" href="#internal_field"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="internal_field-10"><a href="#internal_field-10"><span class="linenos">10</span></a><span class="k">def</span><span class="w"> </span><span class="nf">internal_field</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+</span><span id="internal_field-11"><a href="#internal_field-11"><span class="linenos">11</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="internal_field-12"><a href="#internal_field-12"><span class="linenos">12</span></a><span class="sd">    Used to mark fields as internal-only and not exposed to the library user.</span>
+</span><span id="internal_field-13"><a href="#internal_field-13"><span class="linenos">13</span></a>
+</span><span id="internal_field-14"><a href="#internal_field-14"><span class="linenos">14</span></a><span class="sd">    Returns:</span>
+</span><span id="internal_field-15"><a href="#internal_field-15"><span class="linenos">15</span></a><span class="sd">        `Any`: A field marked as internal.</span>
+</span><span id="internal_field-16"><a href="#internal_field-16"><span class="linenos">16</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="internal_field-17"><a href="#internal_field-17"><span class="linenos">17</span></a>    <span class="k">return</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_INTERNAL</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></pre></div>
+
+
             <div class="docstring"><p>Used to mark fields as internal-only and not exposed to the library user.</p>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code>Any</code>: A field marked as internal.</p>
+</blockquote>
 </div>
 
 
@@ -135,27 +164,27 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">is_internal_field_initialized</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">field</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="nb">bool</span>:</span></span>
+        <span class="name">is_internal_field_initialized</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">f</span><span class="p">:</span> <span class="n">Any</span></span><span class="return-annotation">) -> <span class="nb">bool</span>:</span></span>
 
                 <label class="view-source-button" for="is_internal_field_initialized-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#is_internal_field_initialized"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="is_internal_field_initialized-10"><a href="#is_internal_field_initialized-10"><span class="linenos">10</span></a><span class="k">def</span><span class="w"> </span><span class="nf">is_internal_field_initialized</span><span class="p">(</span><span class="n">field</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="is_internal_field_initialized-11"><a href="#is_internal_field_initialized-11"><span class="linenos">11</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="is_internal_field_initialized-12"><a href="#is_internal_field_initialized-12"><span class="linenos">12</span></a><span class="sd">    Checks if a field is initialized to a value other than `INTERNAL`.</span>
-</span><span id="is_internal_field_initialized-13"><a href="#is_internal_field_initialized-13"><span class="linenos">13</span></a>
-</span><span id="is_internal_field_initialized-14"><a href="#is_internal_field_initialized-14"><span class="linenos">14</span></a><span class="sd">    Args:</span>
-</span><span id="is_internal_field_initialized-15"><a href="#is_internal_field_initialized-15"><span class="linenos">15</span></a><span class="sd">        `field` : The field to check.</span>
-</span><span id="is_internal_field_initialized-16"><a href="#is_internal_field_initialized-16"><span class="linenos">16</span></a>
-</span><span id="is_internal_field_initialized-17"><a href="#is_internal_field_initialized-17"><span class="linenos">17</span></a><span class="sd">    Returns:</span>
-</span><span id="is_internal_field_initialized-18"><a href="#is_internal_field_initialized-18"><span class="linenos">18</span></a><span class="sd">        `bool`: `True` if the field is initialized, `False` otherwise.</span>
-</span><span id="is_internal_field_initialized-19"><a href="#is_internal_field_initialized-19"><span class="linenos">19</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="is_internal_field_initialized-20"><a href="#is_internal_field_initialized-20"><span class="linenos">20</span></a>    <span class="k">return</span> <span class="n">field</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">INTERNAL</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="is_internal_field_initialized-20"><a href="#is_internal_field_initialized-20"><span class="linenos">20</span></a><span class="k">def</span><span class="w"> </span><span class="nf">is_internal_field_initialized</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="is_internal_field_initialized-21"><a href="#is_internal_field_initialized-21"><span class="linenos">21</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="is_internal_field_initialized-22"><a href="#is_internal_field_initialized-22"><span class="linenos">22</span></a><span class="sd">    Checks if a field is initialized to a value other than `INTERNAL_FIELD`.</span>
+</span><span id="is_internal_field_initialized-23"><a href="#is_internal_field_initialized-23"><span class="linenos">23</span></a>
+</span><span id="is_internal_field_initialized-24"><a href="#is_internal_field_initialized-24"><span class="linenos">24</span></a><span class="sd">    Args:</span>
+</span><span id="is_internal_field_initialized-25"><a href="#is_internal_field_initialized-25"><span class="linenos">25</span></a><span class="sd">        `field` : The field to check.</span>
+</span><span id="is_internal_field_initialized-26"><a href="#is_internal_field_initialized-26"><span class="linenos">26</span></a>
+</span><span id="is_internal_field_initialized-27"><a href="#is_internal_field_initialized-27"><span class="linenos">27</span></a><span class="sd">    Returns:</span>
+</span><span id="is_internal_field_initialized-28"><a href="#is_internal_field_initialized-28"><span class="linenos">28</span></a><span class="sd">        `bool`: `True` if the field is initialized, `False` otherwise.</span>
+</span><span id="is_internal_field_initialized-29"><a href="#is_internal_field_initialized-29"><span class="linenos">29</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="is_internal_field_initialized-30"><a href="#is_internal_field_initialized-30"><span class="linenos">30</span></a>    <span class="k">return</span> <span class="n">f</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_INTERNAL</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Checks if a field is initialized to a value other than <code><a href="#INTERNAL">INTERNAL</a></code>.</p>
+            <div class="docstring"><p>Checks if a field is initialized to a value other than <code>INTERNAL_FIELD</code>.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
@@ -183,41 +212,41 @@
 
     </div>
     <a class="headerlink" href="#initialize_internal_field"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="initialize_internal_field-23"><a href="#initialize_internal_field-23"><span class="linenos">23</span></a><span class="k">def</span><span class="w"> </span><span class="nf">initialize_internal_field</span><span class="p">[</span><span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">](</span>
-</span><span id="initialize_internal_field-24"><a href="#initialize_internal_field-24"><span class="linenos">24</span></a>    <span class="bp">self</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-</span><span id="initialize_internal_field-25"><a href="#initialize_internal_field-25"><span class="linenos">25</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="initialize_internal_field-26"><a href="#initialize_internal_field-26"><span class="linenos">26</span></a>    <span class="n">factory</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">],</span>
-</span><span id="initialize_internal_field-27"><a href="#initialize_internal_field-27"><span class="linenos">27</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
-</span><span id="initialize_internal_field-28"><a href="#initialize_internal_field-28"><span class="linenos">28</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span>
-</span><span id="initialize_internal_field-29"><a href="#initialize_internal_field-29"><span class="linenos">29</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="initialize_internal_field-30"><a href="#initialize_internal_field-30"><span class="linenos">30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="initialize_internal_field-31"><a href="#initialize_internal_field-31"><span class="linenos">31</span></a><span class="sd">    Used to init `INTERNAL` field in `dataclass` instance.</span>
-</span><span id="initialize_internal_field-32"><a href="#initialize_internal_field-32"><span class="linenos">32</span></a>
-</span><span id="initialize_internal_field-33"><a href="#initialize_internal_field-33"><span class="linenos">33</span></a><span class="sd">    Args:</span>
-</span><span id="initialize_internal_field-34"><a href="#initialize_internal_field-34"><span class="linenos">34</span></a><span class="sd">        `self`: Object to set.</span>
-</span><span id="initialize_internal_field-35"><a href="#initialize_internal_field-35"><span class="linenos">35</span></a>
-</span><span id="initialize_internal_field-36"><a href="#initialize_internal_field-36"><span class="linenos">36</span></a><span class="sd">        `name`: Name of the field.</span>
-</span><span id="initialize_internal_field-37"><a href="#initialize_internal_field-37"><span class="linenos">37</span></a>
-</span><span id="initialize_internal_field-38"><a href="#initialize_internal_field-38"><span class="linenos">38</span></a><span class="sd">        `factory`: Factory function to create the value of the field.</span>
-</span><span id="initialize_internal_field-39"><a href="#initialize_internal_field-39"><span class="linenos">39</span></a><span class="sd">            This is a factory to avoid potential side effects when creating</span>
-</span><span id="initialize_internal_field-40"><a href="#initialize_internal_field-40"><span class="linenos">40</span></a><span class="sd">            the field.</span>
-</span><span id="initialize_internal_field-41"><a href="#initialize_internal_field-41"><span class="linenos">41</span></a>
-</span><span id="initialize_internal_field-42"><a href="#initialize_internal_field-42"><span class="linenos">42</span></a><span class="sd">        `*args`: Positional arguments to pass to the factory function.</span>
-</span><span id="initialize_internal_field-43"><a href="#initialize_internal_field-43"><span class="linenos">43</span></a>
-</span><span id="initialize_internal_field-44"><a href="#initialize_internal_field-44"><span class="linenos">44</span></a><span class="sd">        `**kwargs`: Keyword arguments to pass to the factory function.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="initialize_internal_field-33"><a href="#initialize_internal_field-33"><span class="linenos">33</span></a><span class="k">def</span><span class="w"> </span><span class="nf">initialize_internal_field</span><span class="p">[</span><span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">](</span>
+</span><span id="initialize_internal_field-34"><a href="#initialize_internal_field-34"><span class="linenos">34</span></a>    <span class="bp">self</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="initialize_internal_field-35"><a href="#initialize_internal_field-35"><span class="linenos">35</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+</span><span id="initialize_internal_field-36"><a href="#initialize_internal_field-36"><span class="linenos">36</span></a>    <span class="n">factory</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">],</span>
+</span><span id="initialize_internal_field-37"><a href="#initialize_internal_field-37"><span class="linenos">37</span></a>    <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
+</span><span id="initialize_internal_field-38"><a href="#initialize_internal_field-38"><span class="linenos">38</span></a>    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span>
+</span><span id="initialize_internal_field-39"><a href="#initialize_internal_field-39"><span class="linenos">39</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">R</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="initialize_internal_field-40"><a href="#initialize_internal_field-40"><span class="linenos">40</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="initialize_internal_field-41"><a href="#initialize_internal_field-41"><span class="linenos">41</span></a><span class="sd">    Used to init `INTERNAL_FIELD` in `dataclass` instance.</span>
+</span><span id="initialize_internal_field-42"><a href="#initialize_internal_field-42"><span class="linenos">42</span></a>
+</span><span id="initialize_internal_field-43"><a href="#initialize_internal_field-43"><span class="linenos">43</span></a><span class="sd">    Args:</span>
+</span><span id="initialize_internal_field-44"><a href="#initialize_internal_field-44"><span class="linenos">44</span></a><span class="sd">        `self`: Object to set.</span>
 </span><span id="initialize_internal_field-45"><a href="#initialize_internal_field-45"><span class="linenos">45</span></a>
-</span><span id="initialize_internal_field-46"><a href="#initialize_internal_field-46"><span class="linenos">46</span></a><span class="sd">    Returns:</span>
-</span><span id="initialize_internal_field-47"><a href="#initialize_internal_field-47"><span class="linenos">47</span></a><span class="sd">        `R` | `None`: The initialized value of the field.</span>
-</span><span id="initialize_internal_field-48"><a href="#initialize_internal_field-48"><span class="linenos">48</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="initialize_internal_field-49"><a href="#initialize_internal_field-49"><span class="linenos">49</span></a>    <span class="k">if</span> <span class="n">is_internal_field_initialized</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)):</span>
-</span><span id="initialize_internal_field-50"><a href="#initialize_internal_field-50"><span class="linenos">50</span></a>        <span class="k">return</span> <span class="kc">None</span>
-</span><span id="initialize_internal_field-51"><a href="#initialize_internal_field-51"><span class="linenos">51</span></a>    <span class="n">val</span> <span class="o">=</span> <span class="n">factory</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</span><span id="initialize_internal_field-52"><a href="#initialize_internal_field-52"><span class="linenos">52</span></a>    <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
-</span><span id="initialize_internal_field-53"><a href="#initialize_internal_field-53"><span class="linenos">53</span></a>    <span class="k">return</span> <span class="n">val</span>
+</span><span id="initialize_internal_field-46"><a href="#initialize_internal_field-46"><span class="linenos">46</span></a><span class="sd">        `name`: Name of the field.</span>
+</span><span id="initialize_internal_field-47"><a href="#initialize_internal_field-47"><span class="linenos">47</span></a>
+</span><span id="initialize_internal_field-48"><a href="#initialize_internal_field-48"><span class="linenos">48</span></a><span class="sd">        `factory`: Factory function to create the value of the field.</span>
+</span><span id="initialize_internal_field-49"><a href="#initialize_internal_field-49"><span class="linenos">49</span></a><span class="sd">            This is a factory to avoid potential side effects when creating</span>
+</span><span id="initialize_internal_field-50"><a href="#initialize_internal_field-50"><span class="linenos">50</span></a><span class="sd">            the field.</span>
+</span><span id="initialize_internal_field-51"><a href="#initialize_internal_field-51"><span class="linenos">51</span></a>
+</span><span id="initialize_internal_field-52"><a href="#initialize_internal_field-52"><span class="linenos">52</span></a><span class="sd">        `*args`: Positional arguments to pass to the factory function.</span>
+</span><span id="initialize_internal_field-53"><a href="#initialize_internal_field-53"><span class="linenos">53</span></a>
+</span><span id="initialize_internal_field-54"><a href="#initialize_internal_field-54"><span class="linenos">54</span></a><span class="sd">        `**kwargs`: Keyword arguments to pass to the factory function.</span>
+</span><span id="initialize_internal_field-55"><a href="#initialize_internal_field-55"><span class="linenos">55</span></a>
+</span><span id="initialize_internal_field-56"><a href="#initialize_internal_field-56"><span class="linenos">56</span></a><span class="sd">    Returns:</span>
+</span><span id="initialize_internal_field-57"><a href="#initialize_internal_field-57"><span class="linenos">57</span></a><span class="sd">        `R` | `None`: The initialized value of the field.</span>
+</span><span id="initialize_internal_field-58"><a href="#initialize_internal_field-58"><span class="linenos">58</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="initialize_internal_field-59"><a href="#initialize_internal_field-59"><span class="linenos">59</span></a>    <span class="k">if</span> <span class="n">is_internal_field_initialized</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)):</span>
+</span><span id="initialize_internal_field-60"><a href="#initialize_internal_field-60"><span class="linenos">60</span></a>        <span class="k">return</span> <span class="kc">None</span>
+</span><span id="initialize_internal_field-61"><a href="#initialize_internal_field-61"><span class="linenos">61</span></a>    <span class="n">val</span> <span class="o">=</span> <span class="n">factory</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="initialize_internal_field-62"><a href="#initialize_internal_field-62"><span class="linenos">62</span></a>    <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+</span><span id="initialize_internal_field-63"><a href="#initialize_internal_field-63"><span class="linenos">63</span></a>    <span class="k">return</span> <span class="n">val</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Used to init <code><a href="#INTERNAL">INTERNAL</a></code> field in <code>dataclass</code> instance.</p>
+            <div class="docstring"><p>Used to init <code>INTERNAL_FIELD</code> in <code>dataclass</code> instance.</p>
 
 <h6 id="arguments">Arguments:</h6>
 

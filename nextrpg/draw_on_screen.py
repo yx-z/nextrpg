@@ -20,7 +20,7 @@ from nextrpg.core import (
     Rgba,
     Size,
 )
-from nextrpg.model import INTERNAL, initialize_internal_field
+from nextrpg.model import initialize_internal_field, internal_field
 
 
 @dataclass(frozen=True)
@@ -36,8 +36,8 @@ class Drawing:
     """
 
     resource: Path | Surface
-    _: KW_ONLY = INTERNAL
-    _surface: Surface = INTERNAL
+    _: KW_ONLY = internal_field()
+    _surface: Surface = internal_field()
 
     @cached_property
     def width(self) -> Pixel:

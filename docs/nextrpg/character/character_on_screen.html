@@ -67,7 +67,7 @@
                                 <a class="variable" href="#CharacterOnScreen.collisions">collisions</a>
                         </li>
                         <li>
-                                <a class="variable" href="#CharacterOnScreen.draw_on_screen">draw_on_screen</a>
+                                <a class="variable" href="#CharacterOnScreen.character_and_visuals">character_and_visuals</a>
                         </li>
                         <li>
                                 <a class="function" href="#CharacterOnScreen.event">event</a>
@@ -171,7 +171,7 @@
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="n">_movement_keys</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">)</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterAndVisuals</span><span class="p">:</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterAndVisuals</span><span class="p">:</span>
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">        Creates drawable representations of the character and visuals.</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
@@ -452,7 +452,7 @@
 </span><span id="CharacterOnScreen-69"><a href="#CharacterOnScreen-69"><span class="linenos"> 69</span></a>    <span class="n">_movement_keys</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">)</span>
 </span><span id="CharacterOnScreen-70"><a href="#CharacterOnScreen-70"><span class="linenos"> 70</span></a>
 </span><span id="CharacterOnScreen-71"><a href="#CharacterOnScreen-71"><span class="linenos"> 71</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen-72"><a href="#CharacterOnScreen-72"><span class="linenos"> 72</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterAndVisuals</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-72"><a href="#CharacterOnScreen-72"><span class="linenos"> 72</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterAndVisuals</span><span class="p">:</span>
 </span><span id="CharacterOnScreen-73"><a href="#CharacterOnScreen-73"><span class="linenos"> 73</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen-74"><a href="#CharacterOnScreen-74"><span class="linenos"> 74</span></a><span class="sd">        Creates drawable representations of the character and visuals.</span>
 </span><span id="CharacterOnScreen-75"><a href="#CharacterOnScreen-75"><span class="linenos"> 75</span></a>
@@ -644,29 +644,29 @@ character interactions with the game environment.</p>
     
 
                             </div>
-                            <div id="CharacterOnScreen.draw_on_screen" class="classattr">
-                                        <input id="CharacterOnScreen.draw_on_screen-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="CharacterOnScreen.character_and_visuals" class="classattr">
+                                        <input id="CharacterOnScreen.character_and_visuals-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">draw_on_screen</span><span class="annotation">: <a href="#CharacterAndVisuals">CharacterAndVisuals</a></span>
+            <span class="name">character_and_visuals</span><span class="annotation">: <a href="#CharacterAndVisuals">CharacterAndVisuals</a></span>
 
-                <label class="view-source-button" for="CharacterOnScreen.draw_on_screen-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="CharacterOnScreen.character_and_visuals-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#CharacterOnScreen.draw_on_screen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.draw_on_screen-71"><a href="#CharacterOnScreen.draw_on_screen-71"><span class="linenos">71</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen.draw_on_screen-72"><a href="#CharacterOnScreen.draw_on_screen-72"><span class="linenos">72</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterAndVisuals</span><span class="p">:</span>
-</span><span id="CharacterOnScreen.draw_on_screen-73"><a href="#CharacterOnScreen.draw_on_screen-73"><span class="linenos">73</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.draw_on_screen-74"><a href="#CharacterOnScreen.draw_on_screen-74"><span class="linenos">74</span></a><span class="sd">        Creates drawable representations of the character and visuals.</span>
-</span><span id="CharacterOnScreen.draw_on_screen-75"><a href="#CharacterOnScreen.draw_on_screen-75"><span class="linenos">75</span></a>
-</span><span id="CharacterOnScreen.draw_on_screen-76"><a href="#CharacterOnScreen.draw_on_screen-76"><span class="linenos">76</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen.draw_on_screen-77"><a href="#CharacterOnScreen.draw_on_screen-77"><span class="linenos">77</span></a><span class="sd">            `CharacterAndVisuals`: A tuple containing the character&#39;s drawable</span>
-</span><span id="CharacterOnScreen.draw_on_screen-78"><a href="#CharacterOnScreen.draw_on_screen-78"><span class="linenos">78</span></a><span class="sd">            representation and any associated visual elements.</span>
-</span><span id="CharacterOnScreen.draw_on_screen-79"><a href="#CharacterOnScreen.draw_on_screen-79"><span class="linenos">79</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.draw_on_screen-80"><a href="#CharacterOnScreen.draw_on_screen-80"><span class="linenos">80</span></a>        <span class="k">return</span> <span class="n">CharacterAndVisuals</span><span class="p">(</span>
-</span><span id="CharacterOnScreen.draw_on_screen-81"><a href="#CharacterOnScreen.draw_on_screen-81"><span class="linenos">81</span></a>            <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">),</span>
-</span><span id="CharacterOnScreen.draw_on_screen-82"><a href="#CharacterOnScreen.draw_on_screen-82"><span class="linenos">82</span></a>            <span class="n">below_character_visuals</span><span class="o">=</span><span class="p">[],</span>
-</span><span id="CharacterOnScreen.draw_on_screen-83"><a href="#CharacterOnScreen.draw_on_screen-83"><span class="linenos">83</span></a>            <span class="n">above_character_visuals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_debug_rectangles</span><span class="p">,</span>
-</span><span id="CharacterOnScreen.draw_on_screen-84"><a href="#CharacterOnScreen.draw_on_screen-84"><span class="linenos">84</span></a>        <span class="p">)</span>
+    <a class="headerlink" href="#CharacterOnScreen.character_and_visuals"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.character_and_visuals-71"><a href="#CharacterOnScreen.character_and_visuals-71"><span class="linenos">71</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen.character_and_visuals-72"><a href="#CharacterOnScreen.character_and_visuals-72"><span class="linenos">72</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterAndVisuals</span><span class="p">:</span>
+</span><span id="CharacterOnScreen.character_and_visuals-73"><a href="#CharacterOnScreen.character_and_visuals-73"><span class="linenos">73</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.character_and_visuals-74"><a href="#CharacterOnScreen.character_and_visuals-74"><span class="linenos">74</span></a><span class="sd">        Creates drawable representations of the character and visuals.</span>
+</span><span id="CharacterOnScreen.character_and_visuals-75"><a href="#CharacterOnScreen.character_and_visuals-75"><span class="linenos">75</span></a>
+</span><span id="CharacterOnScreen.character_and_visuals-76"><a href="#CharacterOnScreen.character_and_visuals-76"><span class="linenos">76</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen.character_and_visuals-77"><a href="#CharacterOnScreen.character_and_visuals-77"><span class="linenos">77</span></a><span class="sd">            `CharacterAndVisuals`: A tuple containing the character&#39;s drawable</span>
+</span><span id="CharacterOnScreen.character_and_visuals-78"><a href="#CharacterOnScreen.character_and_visuals-78"><span class="linenos">78</span></a><span class="sd">            representation and any associated visual elements.</span>
+</span><span id="CharacterOnScreen.character_and_visuals-79"><a href="#CharacterOnScreen.character_and_visuals-79"><span class="linenos">79</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.character_and_visuals-80"><a href="#CharacterOnScreen.character_and_visuals-80"><span class="linenos">80</span></a>        <span class="k">return</span> <span class="n">CharacterAndVisuals</span><span class="p">(</span>
+</span><span id="CharacterOnScreen.character_and_visuals-81"><a href="#CharacterOnScreen.character_and_visuals-81"><span class="linenos">81</span></a>            <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">),</span>
+</span><span id="CharacterOnScreen.character_and_visuals-82"><a href="#CharacterOnScreen.character_and_visuals-82"><span class="linenos">82</span></a>            <span class="n">below_character_visuals</span><span class="o">=</span><span class="p">[],</span>
+</span><span id="CharacterOnScreen.character_and_visuals-83"><a href="#CharacterOnScreen.character_and_visuals-83"><span class="linenos">83</span></a>            <span class="n">above_character_visuals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_debug_rectangles</span><span class="p">,</span>
+</span><span id="CharacterOnScreen.character_and_visuals-84"><a href="#CharacterOnScreen.character_and_visuals-84"><span class="linenos">84</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 

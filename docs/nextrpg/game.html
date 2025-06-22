@@ -89,7 +89,7 @@
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">to_typed_event</span><span class="p">,</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="p">)</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.gui</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gui</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">INTERNAL</span><span class="p">,</span> <span class="n">initialize_internal_field</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">initialize_internal_field</span><span class="p">,</span> <span class="n">internal_field</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
@@ -129,10 +129,10 @@
 </span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_GameLoop</span><span class="p">:</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="n">entry_scene</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Scene</span><span class="p">]</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="n">is_running</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">INTERNAL</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="n">_clock</span><span class="p">:</span> <span class="n">Clock</span> <span class="o">=</span> <span class="n">INTERNAL</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="n">_gui</span><span class="p">:</span> <span class="n">Gui</span> <span class="o">=</span> <span class="n">INTERNAL</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="n">_scene</span><span class="p">:</span> <span class="n">Scene</span> <span class="o">=</span> <span class="n">INTERNAL</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">()</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="n">_clock</span><span class="p">:</span> <span class="n">Clock</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">()</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="n">_gui</span><span class="p">:</span> <span class="n">Gui</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">()</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="n">_scene</span><span class="p">:</span> <span class="n">Scene</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">()</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
 </span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="nd">@singledispatchmethod</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_GameLoop</span><span class="p">:</span>
