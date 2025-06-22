@@ -2,12 +2,14 @@
 Core types referenced across `nextrpg`.
 """
 
+from __future__ import annotations
+
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum, auto
-from functools import cached_property
+from functools import cached_property, singledispatchmethod
 from math import ceil, sqrt
-from typing import Any, Union, overload
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -90,11 +92,11 @@ def initialize_internal_field[**P, R](
     Returns:
         `R` | `None`: The initialized value of the field.
     """
-    if getattr(self, name) is INTERNAL:
-        val = factory(*args, **kwargs)
-        object.__setattr__(self, name, val)
-        return val
-    return None
+    if is_internal_field_initialized(getattr(self, name)):
+        return None
+    val = factory(*args, **kwargs)
+    object.__setattr__(self, name, val)
+    return val
 
 
 class Direction(Enum):
@@ -177,7 +179,7 @@ class Coordinate:
     left: Pixel
     top: Pixel
 
-    def __mul__(self, scale: float) -> "Coordinate":
+    def __mul__(self, scale: float) -> Coordinate:
         """
         Scales the current `Coordinate` values (left and top) by a given factor
         and returns a new `Coordinate` with the scaled values rounded up to the
@@ -194,11 +196,13 @@ class Coordinate:
         """
         return Coordinate(ceil(self.left * scale), ceil(self.top * scale))
 
-    @overload
-    def __add__(self, offset: DirectionalOffset) -> "Coordinate":
+    @singledispatchmethod
+    def __add__(self, offset: DirectionalOffset | Coordinate) -> Coordinate:
         """
         Shifts the coordinate in the specified direction by a given offset.
         Supports both orthogonal and diagonal directions.
+
+        Or add two coordinates together.
 
         For diagonal directions, the offset is divided proportionally.
         For example, an offset of `sqrt(2)` in `UP_LEFT` direction shifts
@@ -206,52 +210,12 @@ class Coordinate:
 
         Args:
             `offset`: A `DirectionalOffset` representing the direction
-                and offset.
+                and offset, or `Coordinate` to add to the current `Coordinate`.
 
         Returns:
             `Coordinate`: A new coordinate shifted by the specified offset in
             the given direction.
         """
-
-    @overload
-    def __add__(self, offset: "Coordinate") -> "Coordinate":
-        """
-        Add two coordinates together.
-
-        Args:
-            `offset`: A `Coordinate`.
-
-        Returns:
-            `Coordinate`: A new coordinate shifted by the specified offset.
-        """
-
-    def __add__(
-        self, offset: Union[DirectionalOffset, "Coordinate"]
-    ) -> "Coordinate":
-        if isinstance(offset, Coordinate):
-            return Coordinate(self.left + offset.left, self.top + offset.top)
-
-        match offset.direction:
-            case Direction.UP:
-                return Coordinate(self.left, self.top - offset.offset)
-            case Direction.DOWN:
-                return Coordinate(self.left, self.top + offset.offset)
-            case Direction.LEFT:
-                return Coordinate(self.left - offset.offset, self.top)
-            case Direction.RIGHT:
-                return Coordinate(self.left + offset.offset, self.top)
-
-        diag = offset.offset / sqrt(2)
-        match offset.direction:
-            case Direction.UP_LEFT:
-                return Coordinate(self.left - diag, self.top - diag)
-            case Direction.UP_RIGHT:
-                return Coordinate(self.left + diag, self.top - diag)
-            case Direction.DOWN_LEFT:
-                return Coordinate(self.left - diag, self.top + diag)
-            case Direction.DOWN_RIGHT:
-                return Coordinate(self.left + diag, self.top + diag)
-        raise ValueError(f"Invalid direction: {offset.direction}")
 
     @cached_property
     def tuple(self) -> tuple[Pixel, Pixel]:
@@ -289,7 +253,7 @@ class Size:
                 f"{self.width=} and {self.height=} cannot be negative."
             )
 
-    def __mul__(self, scale: float) -> "Size":
+    def __mul__(self, scale: float) -> Size:
         """
         Scales the dimensions by a scaling factor and returns a new `Size`.
 
@@ -316,3 +280,33 @@ class Size:
                 values in that order.
         """
         return self.width, self.height
+
+
+@Coordinate.__add__.register
+def _add_directional_offset(self, offset: DirectionalOffset) -> Coordinate:
+    match offset.direction:
+        case Direction.UP:
+            return Coordinate(self.left, self.top - offset.offset)
+        case Direction.DOWN:
+            return Coordinate(self.left, self.top + offset.offset)
+        case Direction.LEFT:
+            return Coordinate(self.left - offset.offset, self.top)
+        case Direction.RIGHT:
+            return Coordinate(self.left + offset.offset, self.top)
+
+    diag = offset.offset / sqrt(2)
+    match offset.direction:
+        case Direction.UP_LEFT:
+            return Coordinate(self.left - diag, self.top - diag)
+        case Direction.UP_RIGHT:
+            return Coordinate(self.left + diag, self.top - diag)
+        case Direction.DOWN_LEFT:
+            return Coordinate(self.left - diag, self.top + diag)
+        case Direction.DOWN_RIGHT:
+            return Coordinate(self.left + diag, self.top + diag)
+    raise ValueError(f"Invalid direction: {offset.direction}")
+
+
+@Coordinate.__add__.register
+def _add_coordinate(self, offset: Coordinate) -> Coordinate:
+    return Coordinate(self.left + offset.left, self.top + offset.top)

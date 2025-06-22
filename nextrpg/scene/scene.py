@@ -2,6 +2,8 @@
 Scene is an interface of all game interactions like exploration, menu, etc..
 """
 
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from functools import cached_property
 
@@ -33,7 +35,7 @@ class Scene(ABC):
         """
 
     @abstractmethod
-    def event(self, event: PygameEvent) -> "Scene":
+    def event(self, event: PygameEvent) -> Scene:
         """
         Handles events for the scene.
 
@@ -67,7 +69,7 @@ class Scene(ABC):
         """
 
     @abstractmethod
-    def step(self, time_delta: Millisecond) -> "Scene":
+    def step(self, time_delta: Millisecond) -> Scene:
         """
         Update the scene state for a single game step/frame.
 

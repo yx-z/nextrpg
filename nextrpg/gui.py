@@ -2,9 +2,10 @@
 Game window / Graphical User Interface (GUI).
 """
 
+from __future__ import annotations
+
 from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property, singledispatchmethod
-from typing import Self
 
 from pygame import FULLSCREEN, RESIZABLE, Surface
 from pygame.display import flip, get_window_size, init, set_caption, set_mode
@@ -46,6 +47,9 @@ class Gui:
     def current_size() -> Size:
         """
         Get the current size of the window.
+        This shall be consistent with the `window` property.
+        However, this provides global access to the window size without
+        retrieving a `Gui` instance.
 
         Returns:
             `Size`: The current size of the window.
@@ -53,7 +57,7 @@ class Gui:
         return Size(*get_window_size())
 
     @singledispatchmethod
-    def event(self, e: PygameEvent) -> "Gui":
+    def event(self, e: PygameEvent) -> Gui:
         """
         `Gui` will action on `KeyPressDown` and `GuiResize` events.
             `KeyPressDown` will toggle between windowed and fullscreen GUI mode,
@@ -68,33 +72,6 @@ class Gui:
             `Gui`: An updated `Gui` instance.
         """
         return self
-
-    @event.register
-    def _toggle_gui_mode(self, e: KeyPressDown) -> Self:
-        if (
-            e.key is not KeyboardKey.GUI_MODE_TOGGLE
-            or not config().gui.allow_gui_mode_toggle
-        ):
-            return self
-        updated_mode = self.gui_mode.opposite
-        return replace(
-            self,
-            gui_mode=updated_mode,
-            _screen=set_mode(self.window.tuple, _gui_flag(updated_mode)),
-        )
-
-    @event.register
-    def _resize(self, e: GuiResize) -> Self:
-        """
-        Resize the window to the given size.
-
-        Args:
-            `e`: The event containing the new window size.
-
-        Returns:
-            `Gui`: A new `Gui` instance with the updated window size.
-        """
-        return replace(self, window=e.size)
 
     def draw(self, draw_on_screens: list[DrawOnScreen]) -> None:
         """
@@ -157,3 +134,22 @@ def _gui_flag(gui_mode: GuiMode) -> int:
     if config().gui.allow_window_resize:
         flag |= RESIZABLE
     return flag
+
+
+@Gui.event.register
+def _toggle_gui_mode(self, e: KeyPressDown) -> Gui:
+    is_toggle_key = e.key is KeyboardKey.GUI_MODE_TOGGLE
+    allow_toggle = config().gui.allow_gui_mode_toggle
+    if is_toggle_key and allow_toggle:
+        updated_mode = self.gui_mode.opposite
+        return replace(
+            self,
+            gui_mode=updated_mode,
+            _screen=set_mode(self.window.tuple, _gui_flag(updated_mode)),
+        )
+    return self
+
+
+@Gui.event.register
+def _resize(self, e: GuiResize) -> Gui:
+    return replace(self, window=e.size)

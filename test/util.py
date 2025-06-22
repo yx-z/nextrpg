@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from contextlib import contextmanager
 from dataclasses import dataclass, replace
 from functools import cached_property
@@ -48,13 +50,13 @@ class MockCharacterDrawing(CharacterDrawing):
     def drawing(self) -> Drawing:
         return Drawing(MockSurface("a"))
 
-    def turn(self, direction: Direction) -> "CharacterDrawing":
+    def turn(self, direction: Direction) -> CharacterDrawing:
         return replace(self, _direction=direction)
 
-    def move(self, time_delta: Millisecond) -> "CharacterDrawing":
+    def move(self, time_delta: Millisecond) -> CharacterDrawing:
         return self
 
-    def idle(self, time_delta: Millisecond) -> "CharacterDrawing":
+    def idle(self, time_delta: Millisecond) -> CharacterDrawing:
         return self
 
 

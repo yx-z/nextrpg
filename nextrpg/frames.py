@@ -2,6 +2,8 @@
 Static frames, when played sequentially, become animated.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, replace
 from functools import cached_property
 
@@ -43,7 +45,7 @@ class CyclicFrames:
         """
         return self.frames[self._index]
 
-    def step(self, time_delta: Millisecond) -> "CyclicFrames":
+    def step(self, time_delta: Millisecond) -> CyclicFrames:
         """
         Advance animation frames based on elapsed time.
 
@@ -66,7 +68,7 @@ class CyclicFrames:
             _elapsed=total_time % self.duration_per_frame,
         )
 
-    def reset(self) -> "CyclicFrames":
+    def reset(self) -> CyclicFrames:
         """
         Reset the animation sequence to its initial state.
 

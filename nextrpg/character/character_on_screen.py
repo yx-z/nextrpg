@@ -2,9 +2,10 @@
 Handles character movement and collision detection.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field, replace
 from functools import cached_property, lru_cache, singledispatchmethod
-from typing import Self
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
@@ -82,7 +83,7 @@ class CharacterOnScreen:
         )
 
     @singledispatchmethod
-    def event(self, e: PygameEvent) -> "CharacterOnScreen":
+    def event(self, e: PygameEvent) -> CharacterOnScreen:
         """
         Process a pygame event and update the character state accordingly.
 
@@ -94,20 +95,6 @@ class CharacterOnScreen:
         """
         return self
 
-    @event.register
-    def _on_key(self, e: KeyPressDown | KeyPressUp) -> Self:
-        updated_keys = self._updated_movement_key(e)
-        return replace(
-            self,
-            character=(
-                self.character.turn(direction)
-                if (direction := _key_to_dir(updated_keys))
-                in config().character.directions
-                else self.character
-            ),
-            _movement_keys=updated_keys,
-        )
-
     def _updated_movement_key(
         self, e: KeyPressDown | KeyPressUp
     ) -> frozenset[KeyboardKey]:
@@ -117,7 +104,7 @@ class CharacterOnScreen:
             else (self._movement_keys - {e.key})
         )
 
-    def step(self, time_delta: Millisecond) -> "CharacterOnScreen":
+    def step(self, time_delta: Millisecond) -> CharacterOnScreen:
         """
         Update the character's state for a single game step/frame.
 
@@ -216,4 +203,19 @@ _KEY_TO_DIR = {
 def _key_to_dir(current_keys: frozenset[KeyboardKey]) -> Direction | None:
     return next(
         (d for keys, d in _KEY_TO_DIR.items() if keys <= current_keys), None
+    )
+
+
+@CharacterOnScreen.event.register
+def _on_key(self, e: KeyPressDown | KeyPressUp) -> CharacterOnScreen:
+    updated_keys = self._updated_movement_key(e)
+    return replace(
+        self,
+        character=(
+            self.character.turn(direction)
+            if (direction := _key_to_dir(updated_keys))
+            in config().character.directions
+            else self.character
+        ),
+        _movement_keys=updated_keys,
     )

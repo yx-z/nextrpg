@@ -2,6 +2,8 @@
 Character drawing interface.
 """
 
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from functools import cached_property
 
@@ -38,7 +40,7 @@ class CharacterDrawing(ABC):
         """
 
     @abstractmethod
-    def turn(self, direction: Direction) -> "CharacterDrawing":
+    def turn(self, direction: Direction) -> CharacterDrawing:
         """
         Turn the character to face a specified direction.
 
@@ -50,7 +52,7 @@ class CharacterDrawing(ABC):
         """
 
     @abstractmethod
-    def move(self, time_delta: Millisecond) -> "CharacterDrawing":
+    def move(self, time_delta: Millisecond) -> CharacterDrawing:
         """
         Update the character's position based on movement over
         the given time delta.
@@ -64,7 +66,7 @@ class CharacterDrawing(ABC):
         """
 
     @abstractmethod
-    def idle(self, time_delta: Millisecond) -> "CharacterDrawing":
+    def idle(self, time_delta: Millisecond) -> CharacterDrawing:
         """
         Update the character's idle animation state over the given time delta.
 

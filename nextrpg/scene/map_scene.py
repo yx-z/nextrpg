@@ -137,7 +137,7 @@ class MapScene(Scene):
         return [d + self._player_offset for d in draws]
 
     @override
-    def event(self, event: PygameEvent) -> "Scene":
+    def event(self, event: PygameEvent) -> Scene:
         """
         Process input events for the map scene.
 
@@ -153,7 +153,7 @@ class MapScene(Scene):
         return replace(self, _player=self._player.event(event))
 
     @override
-    def step(self, time_delta: Millisecond) -> "Scene":
+    def step(self, time_delta: Millisecond) -> Scene:
         """
         Update the map scene state for a single game step/frame.
 

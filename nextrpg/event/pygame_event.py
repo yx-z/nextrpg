@@ -2,6 +2,8 @@
 Typed events initiated from `pygame.Event`.
 """
 
+from __future__ import annotations
+
 from enum import Enum, auto
 from typing import Final
 
@@ -69,7 +71,7 @@ class KeyboardKey(Enum):
     GUI_MODE_TOGGLE = auto()
 
     @classmethod
-    def from_pygame(cls, key: KeyCode) -> "KeyboardKey | KeyCode":
+    def from_pygame(cls, key: KeyCode) -> KeyboardKey | KeyCode:
         """
         Maps pygame key constant to internal `KeyboardKey` representation.
 

@@ -2,6 +2,8 @@
 Drawable on screen.
 """
 
+from __future__ import annotations
+
 from dataclasses import KW_ONLY, dataclass
 from functools import cached_property
 from itertools import product
@@ -78,7 +80,7 @@ class Drawing:
         """
         return self._debug_surface or self._surface
 
-    def crop(self, size: Size, left_top: Coordinate) -> "Drawing":
+    def crop(self, size: Size, left_top: Coordinate) -> Drawing:
         """
         Crops a rectangular portion of the drawing specified by the
         top-left corner and the size.
@@ -258,7 +260,7 @@ class Rectangle:
             self.left + self.size.width / 2, self.top + self.size.height / 2
         )
 
-    def collide(self, rectangle: "Rectangle") -> bool:
+    def collide(self, rectangle: Rectangle) -> bool:
         """
         Checks if this rectangle overlaps with another rectangle.
 
@@ -297,7 +299,7 @@ class Rectangle:
             and self.top < coordinate.top < self.bottom
         )
 
-    def fill(self, color: Rgba) -> "DrawOnScreen":
+    def fill(self, color: Rgba) -> DrawOnScreen:
         """
         Creates a colored `DrawOnScreen` with the provided color.
 
@@ -384,7 +386,7 @@ class DrawOnScreen:
         """
         return self.drawing.pygame, self.top_left.tuple
 
-    def __add__(self, coord: Coordinate) -> "DrawOnScreen":
+    def __add__(self, coord: Coordinate) -> DrawOnScreen:
         """
         Shift the drawing by the specified coordinate.
 

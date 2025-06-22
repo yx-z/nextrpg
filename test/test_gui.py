@@ -25,7 +25,7 @@ def test_gui(mocker: MockerFixture) -> None:
     assert drawing.top_left == Coordinate(0.0, 5.0)
     assert Gui.current_size() == Size(20, 30)
 
-    gui = gui._resize(GuiResize(Event(VIDEORESIZE, w=200, h=300)))
+    gui = gui.event(GuiResize(Event(VIDEORESIZE, w=200, h=300)))
     assert gui.window == Size(200, 300)
 
     with override_config(Config(GuiConfig(resize_mode="INVALID"))):

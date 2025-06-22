@@ -4,6 +4,8 @@ You can either use the implicit, default configuration
 or pass the customized instance to `nextrpg.start_game.start_game`.
 """
 
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from functools import cached_property
@@ -63,7 +65,7 @@ class GuiMode(Enum):
     FULL_SCREEN = auto()
 
     @cached_property
-    def opposite(self) -> "GuiMode":
+    def opposite(self) -> GuiMode:
         """
         Get the opposite gui mode.
 

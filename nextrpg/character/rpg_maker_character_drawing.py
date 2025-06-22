@@ -13,6 +13,8 @@ in non-RPG Maker framework violates the license of RPG Maker,
 even if you own a copy of RPG Maker.
 """
 
+from __future__ import annotations
+
 from dataclasses import KW_ONLY, dataclass, field, replace
 from enum import IntEnum
 from functools import cached_property
@@ -177,7 +179,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         return self._frames[_adjust(self.direction)].current_frame
 
     @override
-    def turn(self, direction: Direction) -> "CharacterDrawing":
+    def turn(self, direction: Direction) -> CharacterDrawing:
         """
         Change the character's facing direction.
 
@@ -201,7 +203,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         )
 
     @override
-    def move(self, time_delta: Millisecond) -> "CharacterDrawing":
+    def move(self, time_delta: Millisecond) -> CharacterDrawing:
         """
         Update the character's movement animation over the given time delta.
 
@@ -229,7 +231,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         )
 
     @override
-    def idle(self, time_delta: Millisecond) -> "CharacterDrawing":
+    def idle(self, time_delta: Millisecond) -> CharacterDrawing:
         """
         Update the character's idle animation state over the given time delta.
 
