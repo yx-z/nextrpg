@@ -5,7 +5,8 @@ Game window / Graphical User Interface (GUI).
 from __future__ import annotations
 
 from dataclasses import KW_ONLY, dataclass, field, replace
-from functools import cached_property, singledispatchmethod
+from functools import cached_property, reduce, singledispatchmethod
+from operator import or_
 
 from pygame import FULLSCREEN, RESIZABLE, Surface
 from pygame.display import flip, get_window_size, init, set_caption, set_mode
@@ -129,13 +130,16 @@ class Gui:
         )
 
 
-def _gui_flag(gui_mode: GuiMode) -> int:
-    flag = 0
-    if gui_mode is GuiMode.FULL_SCREEN:
-        flag |= FULLSCREEN
-    if config().gui.allow_window_resize:
-        flag |= RESIZABLE
-    return flag
+type _GuiFlag = int
+
+
+def _gui_flag(gui_mode: GuiMode) -> _GuiFlag:
+    check_and_flags = [
+        (gui_mode is GuiMode.FULL_SCREEN, FULLSCREEN),
+        (config().gui.allow_window_resize, RESIZABLE),
+    ]
+    flags = [flag for check, flag in check_and_flags if check]
+    return reduce(or_, flags, 0)
 
 
 @Gui.event.register
