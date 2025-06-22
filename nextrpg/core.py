@@ -55,13 +55,13 @@ def is_internal_field_initialized(field: Any) -> bool:
     return field is not INTERNAL
 
 
-def initialize_internal_field[**P](
+def initialize_internal_field[**P, R](
     self: Any,
     name: str,
-    factory: Callable[P, Any],
+    factory: Callable[P, R],
     *args: P.args,
     **kwargs: P.kwargs,
-) -> None:
+) -> R | None:
     """
     Used to init `INTERNAL_ONLY` field in `dataclass` instance.
 
@@ -79,10 +79,13 @@ def initialize_internal_field[**P](
         `**kwargs`: Keyword arguments to pass to the factory function.
 
     Returns:
-        `None`.
+        `R` | `None`: The initialized value of the field.
     """
     if getattr(self, name) is INTERNAL:
-        object.__setattr__(self, name, factory(*args, **kwargs))
+        val = factory(*args, **kwargs)
+        object.__setattr__(self, name, val)
+        return val
+    return None
 
 
 class Direction(Enum):
