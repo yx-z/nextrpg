@@ -97,6 +97,15 @@ class Gui:
         return replace(self, window=e.size)
 
     def draw(self, draw_on_screens: list[DrawOnScreen]) -> None:
+        """
+        Draw the given drawings to the screen.
+
+        Args:
+            `draw_on_screens`: The drawings to draw to the screen.
+
+        Returns:
+            `None`.
+        """
         self._screen.fill(config().gui.background_color.tuple)
         match config().gui.resize_mode:
             case ResizeMode.SCALE:

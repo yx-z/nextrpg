@@ -52,6 +52,15 @@ INTERNAL: Any = object()
 
 
 def is_internal_field_initialized(field: Any) -> bool:
+    """
+    Checks if a field is initialized to a value other than `INTERNAL`.
+
+    Args:
+        `field` : The field to check.
+
+    Returns:
+        `bool`: `True` if the field is initialized, `False` otherwise.
+    """
     return field is not INTERNAL
 
 

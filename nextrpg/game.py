@@ -58,6 +58,7 @@ class Game:
         for e in pygame.event.get():
             self._loop = self._loop.event(to_typed_event(e))
 
+
 @dataclass(frozen=True)
 class _GameLoop:
     entry_scene: Callable[[], Scene]
@@ -92,4 +93,3 @@ class _GameLoop:
         initialize_internal_field(self, "_gui", Gui)
         initialize_internal_field(self, "_clock", Clock)
         initialize_internal_field(self, "_scene", self.entry_scene)
-

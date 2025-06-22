@@ -94,7 +94,9 @@ class KeyboardKey(Enum):
 class _KeyPressEvent(PygameEvent):
     def __init__(self, event: Event) -> None:
         super().__init__(event)
-        self.key: Final[KeyboardKey] = KeyboardKey.from_pygame(event.key)
+        self.key: Final[KeyboardKey | KeyCode] = KeyboardKey.from_pygame(
+            event.key
+        )
 
 
 class KeyPressDown(_KeyPressEvent):

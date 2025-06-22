@@ -64,6 +64,12 @@ class GuiMode(Enum):
 
     @cached_property
     def opposite(self) -> "GuiMode":
+        """
+        Get the opposite gui mode.
+
+        Returns:
+            `GuiMode`: The opposite gui mode.
+        """
         return {
             GuiMode.WINDOWED: GuiMode.FULL_SCREEN,
             GuiMode.FULL_SCREEN: GuiMode.WINDOWED,

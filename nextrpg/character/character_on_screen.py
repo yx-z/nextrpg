@@ -82,9 +82,12 @@ class CharacterOnScreen:
         )
 
     @singledispatchmethod
-    def event(self, _: PygameEvent) -> "CharacterOnScreen":
+    def event(self, e: PygameEvent) -> "CharacterOnScreen":
         """
         Process a pygame event and update the character state accordingly.
+
+        Arguments:
+            `e`: The event to process.
 
         Returns:
             `Self`: The updated character state after processing the event.
