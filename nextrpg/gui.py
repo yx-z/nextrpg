@@ -13,10 +13,7 @@ from pygame.display import flip, get_window_size, init, set_caption, set_mode
 from pygame.transform import smoothscale
 
 from nextrpg.config import GuiMode, ResizeMode, config
-from nextrpg.core import (
-    Coordinate,
-    Size,
-)
+from nextrpg.core import Coordinate, Size
 from nextrpg.draw_on_screen import DrawOnScreen, Drawing
 from nextrpg.event.pygame_event import (
     GuiResize,
@@ -90,7 +87,7 @@ class Gui:
         match config().gui.resize_mode:
             case ResizeMode.SCALE:
                 self._screen.blit(*self._scale(draw_on_screens).pygame)
-            case ResizeMode.KEEP_NATIVE:
+            case ResizeMode.KEEP_NATIVE_SIZE:
                 self._screen.blits(d.pygame for d in draw_on_screens)
         flip()
 
@@ -104,16 +101,17 @@ class Gui:
 
     @cached_property
     def _scaling(self) -> float:
-        return min(
-            self.window.width / config().gui.size.width,
-            self.window.height / config().gui.size.height,
-        )
+        current_width, current_height = self.window.tuple
+        native_width, native_height = config().gui.size.tuple
+        return min(current_width / native_width, current_height / native_height)
 
     @cached_property
     def _center_shift(self) -> Coordinate:
+        current_width, current_height = self.window.tuple
+        native_width, native_height = config().gui.size.tuple
         return Coordinate(
-            (self.window.width - self._scaling * config().gui.size.width) / 2,
-            (self.window.height - self._scaling * config().gui.size.height) / 2,
+            (current_width - self._scaling * native_width) / 2,
+            (current_height - self._scaling * native_height) / 2,
         )
 
     def __post_init__(self) -> None:

@@ -36,7 +36,9 @@ def test_gui(mocker: MockerFixture) -> None:
     gui.draw([])
     gui._screen.blit.assert_called()
 
-    with override_config(Config(GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE))):
+    with override_config(
+        Config(GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE_SIZE))
+    ):
         gui.draw([])
         gui._screen.blits.assert_called()
 

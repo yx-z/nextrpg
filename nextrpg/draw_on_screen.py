@@ -79,7 +79,7 @@ class Drawing:
         """
         return self._debug_surface or self._surface
 
-    def crop(self, size: Size, left_top: Coordinate) -> Drawing:
+    def crop(self, top_left: Coordinate, size: Size) -> Drawing:
         """
         Crops a rectangular portion of the drawing specified by the
         top-left corner and the size.
@@ -89,18 +89,16 @@ class Drawing:
         The original drawing remains unchanged.
 
         Args:
-            `size`: The width and height of the rectangle to be cropped.
+            `top_left`: The top-left coordinate of the rectangle to be cropped.
 
-            `left_top`: The top-left coordinate of the rectangle to be cropped.
+            `size`: The width and height of the rectangle to be cropped.
 
         Returns:
             `Drawing`: A new `Drawing` instance representing the cropped area.
         """
-        return Drawing(
-            self._surface.subsurface(
-                (left_top.left, left_top.top, size.width, size.height)
-            )
-        )
+        left, top = top_left.tuple
+        width, height = size.tuple
+        return Drawing(self._surface.subsurface((left, top, width, height)))
 
     @cached_property
     def _debug_surface(self) -> Surface | None:
@@ -255,9 +253,8 @@ class Rectangle:
         Returns:
             `Coordinate`: The center coordinate of the drawing.
         """
-        return Coordinate(
-            self.left + self.size.width / 2, self.top + self.size.height / 2
-        )
+        width, height = self.size.tuple
+        return Coordinate(self.left + width / 2, self.top + height / 2)
 
     def collide(self, rectangle: Rectangle) -> bool:
         """

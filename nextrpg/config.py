@@ -44,11 +44,11 @@ class ResizeMode(Enum):
     Attributes:
         `SCALE`: Scale the images to fit the GUI size.
 
-        `KEEP_NATIVE`: Keep the native image size.
+        `KEEP_NATIVE_SIZE`: Keep the native image size.
     """
 
     SCALE = auto()
-    KEEP_NATIVE = auto()
+    KEEP_NATIVE_SIZE = auto()
 
 
 class GuiMode(Enum):

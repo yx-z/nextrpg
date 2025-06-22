@@ -265,11 +265,11 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
 
 def _crop_margin(drawing: Drawing, margin: Margin) -> Drawing:
     return drawing.crop(
+        Coordinate(margin.left, margin.top),
         Size(
             drawing.width - margin.left - margin.right,
             drawing.height - margin.top - margin.bottom,
         ),
-        Coordinate(margin.left, margin.top),
     )
 
 
@@ -280,7 +280,7 @@ def _crop_into_frames_at_row(
     width = drawing.width / num_frames
     height = drawing.height / 4
     return [
-        drawing.crop(Size(width, height), Coordinate(width * i, height * row))
+        drawing.crop(Coordinate(width * i, height * row), Size(width, height))
         for i in range(num_frames)
     ]
 
@@ -291,8 +291,8 @@ def _crop_by_selection(
     width = drawing.width / selection.max_columns
     height = drawing.height / selection.max_rows
     return drawing.crop(
-        Size(width, height),
         Coordinate(width * selection.column, height * selection.row),
+        Size(width, height),
     )
 
 
