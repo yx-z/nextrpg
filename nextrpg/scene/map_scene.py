@@ -220,7 +220,7 @@ def _draw(
     layer: TiledTileLayer, tile_size: Size
 ) -> list[tuple[_TiledCoordinate, DrawOnScreen]]:
     return [
-        (_TiledCoordinate(left, top), _tile(left, top, surface, tile_size))
+        (_TiledCoordinate(top, left), _tile(left, top, surface, tile_size))
         for left, top, surface in layer.tiles()
     ]
 
@@ -272,7 +272,7 @@ def _bottom(
 def _gid(
     tmx: TiledMap, layer: TiledTileLayer, coord: _TiledCoordinate
 ) -> _Gid | None:
-    data_id = layer.data[coord.left][coord.top]
+    data_id = layer.data[coord.top][coord.left]
     return tmx.tile_properties.get(data_id, {}).get("id")
 
 
