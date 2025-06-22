@@ -27,7 +27,7 @@ def test_game(mocker: MockerFixture) -> None:
     game.start()
     scene.step.assert_called_once()
     clock.tick.assert_called_once_with(60)
-    gui.resize.assert_called_once()
+    gui.event.assert_called_once()
     gui.draw.assert_called_once()
 
     sleep = AsyncMock()

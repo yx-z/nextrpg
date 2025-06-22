@@ -13,7 +13,6 @@ from pygame.time import Clock
 from nextrpg.config import config
 from nextrpg.core import INTERNAL, initialize_internal_field
 from nextrpg.event.pygame_event import (
-    GuiResize,
     PygameEvent,
     Quit,
     to_typed_event,
@@ -37,12 +36,8 @@ class _GameLoop:
 
     @singledispatchmethod
     def event(self, e: PygameEvent) -> "_GameLoop":
-        return replace(self, _scene=self._scene.event(e))
-
-    @event.register
-    def _resize(self, e: GuiResize) -> Self:
         return replace(
-            self, _scene=self._scene.event(e), _gui=self._gui.resize(e)
+            self, _scene=self._scene.event(e), _gui=self._gui.event(e)
         )
 
     @event.register

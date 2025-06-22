@@ -3,7 +3,8 @@ Game window / Graphical User Interface (GUI).
 """
 
 from dataclasses import KW_ONLY, dataclass, field, replace
-from functools import cached_property
+from functools import cached_property, singledispatchmethod
+from typing import Self
 
 from pygame import FULLSCREEN, RESIZABLE, Surface
 from pygame.display import flip, get_window_size, init, set_caption, set_mode
@@ -18,7 +19,12 @@ from nextrpg.core import (
     is_internal_field_initialized,
 )
 from nextrpg.draw_on_screen import DrawOnScreen, Drawing
-from nextrpg.event.pygame_event import GuiResize
+from nextrpg.event.pygame_event import (
+    GuiResize,
+    KeyPressDown,
+    KeyboardKey,
+    PygameEvent,
+)
 
 
 @dataclass(frozen=True)
@@ -32,6 +38,7 @@ class Gui:
     """
 
     window: Size = field(default_factory=lambda: config().gui.size)
+    gui_mode: GuiMode = field(default_factory=lambda: config().gui.gui_mode)
     _: KW_ONLY = INTERNAL
     _screen: Surface = INTERNAL
 
@@ -45,17 +52,49 @@ class Gui:
         """
         return Size(*get_window_size())
 
-    def resize(self, event: GuiResize) -> "Gui":
+    @singledispatchmethod
+    def event(self, e: PygameEvent) -> "Gui":
+        """
+        `Gui` will action on `KeyPressDown` and `GuiResize` events.
+            `KeyPressDown` will toggle between windowed and fullscreen GUI mode,
+                upon `KeyboardKey.GUI_MODE_TOGGLE`.
+
+            `GuiResize` will scale the screen appropriately based on config.
+
+        Args:
+            `e`: The event to process.
+
+        Returns:
+            `Gui`: An updated `Gui` instance.
+        """
+        return self
+
+    @event.register
+    def _toggle_gui_mode(self, e: KeyPressDown) -> Self:
+        if (
+            e.key is not KeyboardKey.GUI_MODE_TOGGLE
+            or not config().gui.allow_gui_mode_toggle
+        ):
+            return self
+        updated_mode = self.gui_mode.opposite
+        return replace(
+            self,
+            gui_mode=updated_mode,
+            _screen=set_mode(self.window.tuple, _gui_flag(updated_mode)),
+        )
+
+    @event.register
+    def _resize(self, e: GuiResize) -> Self:
         """
         Resize the window to the given size.
 
         Args:
-            `event`: The event containing the new window size.
+            `e`: The event containing the new window size.
 
         Returns:
             `Gui`: A new `Gui` instance with the updated window size.
         """
-        return replace(self, window=event.size)
+        return replace(self, window=e.size)
 
     def draw(self, draw_on_screens: list[DrawOnScreen]) -> None:
         self._screen.fill(config().gui.background_color.tuple)
@@ -93,16 +132,18 @@ class Gui:
             return
         init()
         set_caption(config().gui.title)
-        initialize_internal_field(self, "_screen", _init_screen)
+        initialize_internal_field(
+            self,
+            "_screen",
+            set_mode,
+            config().gui.size.tuple,
+            _gui_flag(self.gui_mode),
+        )
 
 
-def _init_screen() -> Surface:
-    return set_mode(config().gui.size.tuple, _gui_flag())
-
-
-def _gui_flag() -> int:
+def _gui_flag(gui_mode: GuiMode) -> int:
     flag = 0
-    if config().gui.gui_mode is GuiMode.FULL_SCREEN:
+    if gui_mode is GuiMode.FULL_SCREEN:
         flag |= FULLSCREEN
     if config().gui.allow_window_resize:
         flag |= RESIZABLE

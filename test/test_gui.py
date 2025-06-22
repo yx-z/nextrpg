@@ -1,10 +1,10 @@
-from pygame import Event, VIDEORESIZE
+from pygame import Event, KEYDOWN, K_F1, K_LEFT, VIDEORESIZE
 from pytest_mock import MockerFixture
 
 from nextrpg.config import Config, GuiConfig, GuiMode, ResizeMode
 from nextrpg.core import Coordinate, Size
 from nextrpg.draw_on_screen import DrawOnScreen, Drawing
-from nextrpg.event.pygame_event import GuiResize
+from nextrpg.event.pygame_event import GuiResize, KeyPressDown, KeyPressUp
 from nextrpg.gui import Gui, _gui_flag
 from test.util import MockSurface, override_config
 
@@ -25,8 +25,13 @@ def test_gui(mocker: MockerFixture) -> None:
     assert drawing.top_left == Coordinate(0.0, 5.0)
     assert Gui.current_size() == Size(20, 30)
 
-    gui = gui.resize(GuiResize(Event(VIDEORESIZE, w=200, h=300)))
+    gui = gui._resize(GuiResize(Event(VIDEORESIZE, w=200, h=300)))
     assert gui.window == Size(200, 300)
+
+    with override_config(Config(GuiConfig(resize_mode="INVALID"))):
+        gui.draw([])
+        gui._screen.blit.assert_not_called()
+        gui._screen.blits.assert_not_called()
 
     gui.draw([])
     gui._screen.blit.assert_called()
@@ -35,9 +40,15 @@ def test_gui(mocker: MockerFixture) -> None:
         gui.draw([])
         gui._screen.blits.assert_called()
 
+    assert gui.event(KeyPressUp(Event(KEYDOWN, key=K_LEFT))) is gui
+    assert gui.event(KeyPressDown(Event(KEYDOWN, key=K_LEFT))) is gui
+    assert gui.gui_mode is GuiMode.WINDOWED
+    assert (
+        gui.event(KeyPressDown(Event(KEYDOWN, key=K_F1))).gui_mode
+        is GuiMode.FULL_SCREEN
+    )
 
-@override_config(
-    Config(GuiConfig(allow_window_resize=False, gui_mode=GuiMode.FULL_SCREEN))
-)
+
+@override_config(Config(GuiConfig(allow_window_resize=False)))
 def test_gui_flag() -> None:
-    assert _gui_flag() == -2147483648
+    assert _gui_flag(GuiMode.FULL_SCREEN) == -2147483648
