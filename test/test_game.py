@@ -1,46 +1,16 @@
 from asyncio import run
 from dataclasses import replace
-from unittest.mock import AsyncMock, MagicMock, Mock
+from unittest.mock import AsyncMock, Mock
 
-import pygame
-from pygame import Event, KEYDOWN, K_LEFT, QUIT, VIDEORESIZE
+from pygame.event import Event
+from pygame.locals import KEYDOWN, K_LEFT, QUIT, VIDEORESIZE
 from pytest_mock import MockerFixture
 
-from nextrpg.config import Config, GuiConfig
-from nextrpg.draw_on_screen import Size
 from nextrpg.game import Game
-from nextrpg.scene.scene import Scene
-from test.util import override_config
 
 
-@override_config(Config(GuiConfig("Test", Size(100, 100))))
 def test_game(mocker: MockerFixture) -> None:
-    init = Mock()
-    mocker.patch("nextrpg.game.init", init)
-    flip = Mock()
-    mocker.patch("nextrpg.game.flip", flip)
-    set_caption = Mock()
-    mocker.patch("nextrpg.game.set_caption", set_caption)
-    set_mode = Mock()
-    mocker.patch("nextrpg.game.set_mode", set_mode)
-
-    scene = MagicMock()
-    draw_on_screen = MagicMock()
-    scene.draw_on_screen.return_value = [draw_on_screen]
-
-    def get_scene() -> Scene:
-        init.assert_called_once()
-        set_mode.assert_called_once_with((100, 100), pygame.RESIZABLE)
-        return scene
-
-    get_scene_mock = Mock(side_effect=get_scene)
-
-    clock = Mock()
-    game = Game(get_scene_mock)
-    game._loop = replace(game._loop, _clock=clock)
-    set_caption.assert_called_once_with("Test")
-    get_scene_mock.assert_called_once()
-
+    mocker.patch("nextrpg.game.Gui")
     mocker.patch(
         "pygame.event.get",
         lambda: [
@@ -49,19 +19,19 @@ def test_game(mocker: MockerFixture) -> None:
             Event(QUIT),
         ],
     )
-
+    scene = Mock()
+    clock = Mock()
+    gui = Mock()
+    game = Game(lambda: scene)
+    game._loop = replace(game._loop, _scene=scene, _clock=clock, _gui=gui)
     game.start()
-    clock.get_time.assert_called_once()
-    set_mode.return_value.blit.assert_called_once()
-    flip.assert_called_once()
+    scene.step.assert_called_once()
     clock.tick.assert_called_once_with(60)
+    gui.resize.assert_called_once()
+    gui.draw.assert_called_once()
 
-    def step() -> None:
-        game._loop = replace(game._loop, is_running=False)
-
-    game._step = step
-    game._loop = replace(game._loop, is_running=True)
     sleep = AsyncMock()
+    game._loop = replace(game._loop, is_running=True)
     mocker.patch("nextrpg.game.sleep", sleep)
     run(game.start_async())
     sleep.assert_called_once_with(0)

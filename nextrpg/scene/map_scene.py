@@ -19,7 +19,13 @@ from pytmx import (
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config import config
-from nextrpg.core import INTERNAL_ONLY, Millisecond, Pixel, init_internal_field
+from nextrpg.core import (
+    INTERNAL,
+    Millisecond,
+    Pixel,
+    initialize_internal_field,
+    is_internal_field_initialized,
+)
 from nextrpg.draw_on_screen import (
     Coordinate,
     DrawOnScreen,
@@ -28,6 +34,7 @@ from nextrpg.draw_on_screen import (
     Size,
 )
 from nextrpg.event.pygame_event import PygameEvent
+from nextrpg.gui import Gui
 from nextrpg.scene.scene import Scene
 
 type _LayerIndex = int
@@ -57,28 +64,28 @@ class MapScene(Scene):
 
     tmx_file: Path
     character_drawing: CharacterDrawing
-    _: KW_ONLY = INTERNAL_ONLY
-    _map_size: Size = INTERNAL_ONLY
-    _background: list[DrawOnScreen] = INTERNAL_ONLY
-    _foreground: list[dict[_Gid, DrawOnScreen]] = INTERNAL_ONLY
-    _player: CharacterOnScreen = INTERNAL_ONLY
-    _above_character: list[DrawOnScreen] = INTERNAL_ONLY
-    _gid_groups: dict[_Gid, set[DrawOnScreen]] = INTERNAL_ONLY
+    _: KW_ONLY = INTERNAL
+    _map_size: Size = INTERNAL
+    _background: list[DrawOnScreen] = INTERNAL
+    _foreground: list[dict[_Gid, DrawOnScreen]] = INTERNAL
+    _player: CharacterOnScreen = INTERNAL
+    _above_character: list[DrawOnScreen] = INTERNAL
+    _gid_groups: dict[_Gid, set[DrawOnScreen]] = INTERNAL
 
     def __post_init__(self) -> None:
-        if self._map_size is not INTERNAL_ONLY:
+        if is_internal_field_initialized(self._map_size):
             return
 
         tmx = load_pygame(str(self.tmx_file))
         tile_size = Size(tmx.tilewidth, tmx.tileheight)
-        init_internal_field(
+        initialize_internal_field(
             self,
             "_map_size",
             lambda: Size(
                 tmx.width * tile_size.width, tmx.height * tile_size.height
             ),
         )
-        init_internal_field(
+        initialize_internal_field(
             self,
             "_background",
             _draw_layers,
@@ -86,10 +93,10 @@ class MapScene(Scene):
             tile_size,
             config().map.background,
         )
-        init_internal_field(
+        initialize_internal_field(
             self, "_player", _player, self.character_drawing, tmx
         )
-        init_internal_field(
+        initialize_internal_field(
             self,
             "_above_character",
             _draw_layers,
@@ -101,11 +108,11 @@ class MapScene(Scene):
             _get_gid_and_draw(tmx, layer, tile_size)
             for layer in _layers(tmx, config().map.foreground)
         ]
-        init_internal_field(self, "_foreground", lambda: foreground)
+        initialize_internal_field(self, "_foreground", lambda: foreground)
         gids = {
             gid: draw for layer in foreground for gid, draw in layer.items()
         }
-        init_internal_field(self, "_gid_groups", _gid_groups, tmx, gids)
+        initialize_internal_field(self, "_gid_groups", _gid_groups, tmx, gids)
 
     @cached_property
     @override
@@ -191,12 +198,9 @@ class MapScene(Scene):
     @cached_property
     def _player_offset(self) -> Coordinate:
         player = self._player.draw_on_screen.character.rectangle.center
-        left_offset = _offset(
-            player.left, config().gui.size.width, self._map_size.width
-        )
-        top_offset = _offset(
-            player.top, config().gui.size.height, self._map_size.height
-        )
+        gui_size = Gui.current_size()
+        left_offset = _offset(player.left, gui_size.width, self._map_size.width)
+        top_offset = _offset(player.top, gui_size.height, self._map_size.height)
         return Coordinate(left_offset, top_offset)
 
     def _below_player(self, layer: dict[_Gid, DrawOnScreen]) -> bool:

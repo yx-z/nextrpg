@@ -14,11 +14,11 @@ from pygame.image import load
 from nextrpg.config import config
 from nextrpg.core import (
     Coordinate,
-    INTERNAL_ONLY,
+    INTERNAL,
     Pixel,
     Rgba,
     Size,
-    init_internal_field,
+    initialize_internal_field,
 )
 
 
@@ -35,8 +35,8 @@ class Drawing:
     """
 
     resource: Path | Surface
-    _: KW_ONLY = INTERNAL_ONLY
-    _surface: Surface = INTERNAL_ONLY
+    _: KW_ONLY = INTERNAL
+    _surface: Surface = INTERNAL
 
     @cached_property
     def width(self) -> Pixel:
@@ -111,7 +111,7 @@ class Drawing:
         return surface
 
     def __post_init__(self) -> None:
-        init_internal_field(
+        initialize_internal_field(
             self,
             "_surface",
             lambda: (

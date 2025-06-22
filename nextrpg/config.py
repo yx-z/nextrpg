@@ -5,8 +5,9 @@ or pass the customized instance to `nextrpg.start_game.start_game`.
 """
 
 from dataclasses import dataclass, field
+from enum import Enum, auto
 
-from pygame.locals import K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_UP
+from pygame.locals import K_DOWN, K_F1, K_LEFT, K_RIGHT, K_SPACE, K_UP
 
 from nextrpg.core import Direction, Millisecond, Pixel, Rgba, Size
 
@@ -33,34 +34,73 @@ class DebugConfig:
     collision_rectangle_color: Rgba = Rgba(255, 0, 0, 96)
 
 
+class ResizeMode(Enum):
+    """
+    Resize mode enum.
+
+    Attributes:
+        `SCALE`: Scale the images to fit the GUI size.
+
+        `KEEP_NATIVE`: Keep the native image size.
+    """
+
+    SCALE = auto()
+    KEEP_NATIVE = auto()
+
+
+class GuiMode(Enum):
+    """
+    Gui mode enum.
+
+    Attributes:
+        `WINDOWED`: Windowed GUI.
+
+        `FULL_SCREEN`: Full screen GUI.
+    """
+
+    WINDOWED = auto()
+    FULL_SCREEN = auto()
+
+
 @dataclass(frozen=True)
 class GuiConfig:
     """
     Configuration class for Graphical User Interface (GUI).
 
-    This is used by `nextrpg.game.Game` and `nextrpg.gui.Gui` to initialize
+    This is used by `nextrpg.gui.Gui` to initialize
     the pygame window and by the rendering system to control display properties.
 
     Attributes:
         `title`: The title of the GUI window.
 
         `size`: The resolution or dimensions of the GUI window defined
-            by width and height.
+            by width and height. This also defines the aspect ratio of the game.
 
         `frames_per_second`: The target frame rate for the application's
             rendering performance.
 
-        `resize`: Indicates if the GUI window allows resizing by the user.
-            And upon resize, the drawings will all be scaled accordingly.
-
         `background_color`: The background color of the GUI window.
+
+        `gui_mode`: Whether to start the game in windowed or full screen mode.
+
+        `resize_mode`: Whether to scale the images to fit the GUI size,
+            or keep the native image size.
+
+        `allow_gui_mode_toggle`: Whether to allow the user to toggle between
+            windowed and full screen mode via `KeyBoardKey.GUI_MODE_TOGGLE`.
+
+        `allow_window_resize`: Whether to allow the user to resize the window
+            in windowed mode.
     """
 
     title: str = "nextrpg"
     size: Size = Size(1280, 800)
     frames_per_second: int = 60
-    resize: bool = True
     background_color: Rgba = Rgba(0, 0, 0, 0)
+    gui_mode: GuiMode = GuiMode.WINDOWED
+    resize_mode: ResizeMode = ResizeMode.SCALE
+    allow_gui_mode_toggle: bool = True
+    allow_window_resize: bool = True
 
 
 @dataclass(frozen=True)
@@ -196,6 +236,9 @@ class KeyMappingConfig:
         `down`: Key code for moving down. The default is `K_DOWN`.
 
         `confirm`: Key code for confirming actions. The default is `K_SPACE`.
+
+        `gui_mode_toggle`: Key code for toggling between
+            windowed and full screen mode. The default is `F1`.
     """
 
     left: KeyCode = K_LEFT
@@ -203,6 +246,7 @@ class KeyMappingConfig:
     up: KeyCode = K_UP
     down: KeyCode = K_DOWN
     confirm: KeyCode = K_SPACE
+    gui_mode_toggle: KeyCode = K_F1
 
 
 @dataclass(frozen=True)

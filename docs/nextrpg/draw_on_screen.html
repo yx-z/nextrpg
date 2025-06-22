@@ -177,11 +177,11 @@
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a>    <span class="n">Coordinate</span><span class="p">,</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>    <span class="n">INTERNAL_ONLY</span><span class="p">,</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>    <span class="n">INTERNAL</span><span class="p">,</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>    <span class="n">Pixel</span><span class="p">,</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>    <span class="n">Rgba</span><span class="p">,</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>    <span class="n">Size</span><span class="p">,</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>    <span class="n">init_internal_field</span><span class="p">,</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>    <span class="n">initialize_internal_field</span><span class="p">,</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="p">)</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>
@@ -198,8 +198,8 @@
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
 </span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">Surface</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">INTERNAL_ONLY</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>    <span class="n">_surface</span><span class="p">:</span> <span class="n">Surface</span> <span class="o">=</span> <span class="n">INTERNAL_ONLY</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">INTERNAL</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>    <span class="n">_surface</span><span class="p">:</span> <span class="n">Surface</span> <span class="o">=</span> <span class="n">INTERNAL</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>
 </span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
@@ -274,7 +274,7 @@
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="n">surface</span>
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="n">init_internal_field</span><span class="p">(</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="n">initialize_internal_field</span><span class="p">(</span>
 </span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>            <span class="s2">&quot;_surface&quot;</span><span class="p">,</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>            <span class="k">lambda</span><span class="p">:</span> <span class="p">(</span>
@@ -587,8 +587,8 @@
 </span><span id="Drawing-36"><a href="#Drawing-36"><span class="linenos"> 36</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="Drawing-37"><a href="#Drawing-37"><span class="linenos"> 37</span></a>
 </span><span id="Drawing-38"><a href="#Drawing-38"><span class="linenos"> 38</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">Surface</span>
-</span><span id="Drawing-39"><a href="#Drawing-39"><span class="linenos"> 39</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">INTERNAL_ONLY</span>
-</span><span id="Drawing-40"><a href="#Drawing-40"><span class="linenos"> 40</span></a>    <span class="n">_surface</span><span class="p">:</span> <span class="n">Surface</span> <span class="o">=</span> <span class="n">INTERNAL_ONLY</span>
+</span><span id="Drawing-39"><a href="#Drawing-39"><span class="linenos"> 39</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">INTERNAL</span>
+</span><span id="Drawing-40"><a href="#Drawing-40"><span class="linenos"> 40</span></a>    <span class="n">_surface</span><span class="p">:</span> <span class="n">Surface</span> <span class="o">=</span> <span class="n">INTERNAL</span>
 </span><span id="Drawing-41"><a href="#Drawing-41"><span class="linenos"> 41</span></a>
 </span><span id="Drawing-42"><a href="#Drawing-42"><span class="linenos"> 42</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Drawing-43"><a href="#Drawing-43"><span class="linenos"> 43</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
@@ -663,7 +663,7 @@
 </span><span id="Drawing-112"><a href="#Drawing-112"><span class="linenos">112</span></a>        <span class="k">return</span> <span class="n">surface</span>
 </span><span id="Drawing-113"><a href="#Drawing-113"><span class="linenos">113</span></a>
 </span><span id="Drawing-114"><a href="#Drawing-114"><span class="linenos">114</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Drawing-115"><a href="#Drawing-115"><span class="linenos">115</span></a>        <span class="n">init_internal_field</span><span class="p">(</span>
+</span><span id="Drawing-115"><a href="#Drawing-115"><span class="linenos">115</span></a>        <span class="n">initialize_internal_field</span><span class="p">(</span>
 </span><span id="Drawing-116"><a href="#Drawing-116"><span class="linenos">116</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="Drawing-117"><a href="#Drawing-117"><span class="linenos">117</span></a>            <span class="s2">&quot;_surface&quot;</span><span class="p">,</span>
 </span><span id="Drawing-118"><a href="#Drawing-118"><span class="linenos">118</span></a>            <span class="k">lambda</span><span class="p">:</span> <span class="p">(</span>

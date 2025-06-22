@@ -47,11 +47,15 @@ type Millisecond = int
 Millisecond elapsed between game loops.
 """
 
-INTERNAL_ONLY: Any = object()
+INTERNAL: Any = object()
 """Used to mark fields as internal-only and not exposed to the library user."""
 
 
-def init_internal_field[**P](
+def is_internal_field_initialized(field: Any) -> bool:
+    return field is not INTERNAL
+
+
+def initialize_internal_field[**P](
     self: Any,
     name: str,
     factory: Callable[P, Any],
@@ -77,7 +81,7 @@ def init_internal_field[**P](
     Returns:
         `None`.
     """
-    if getattr(self, name) is INTERNAL_ONLY:
+    if getattr(self, name) is INTERNAL:
         object.__setattr__(self, name, factory(*args, **kwargs))
 
 
@@ -235,8 +239,7 @@ class Coordinate:
                 return Coordinate(self.left - diag, self.top + diag)
             case Direction.DOWN_RIGHT:
                 return Coordinate(self.left + diag, self.top + diag)
-            case _:
-                raise ValueError(f"Invalid direction: {offset.direction}")
+        raise ValueError(f"Invalid direction: {offset.direction}")
 
     @cached_property
     def tuple(self) -> tuple[Pixel, Pixel]:

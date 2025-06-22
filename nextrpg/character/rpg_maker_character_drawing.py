@@ -22,10 +22,10 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
 from nextrpg.core import (
     Direction,
-    INTERNAL_ONLY,
+    INTERNAL,
     Millisecond,
     Pixel,
-    init_internal_field,
+    initialize_internal_field,
 )
 from nextrpg.draw_on_screen import Coordinate, Drawing, Size
 from nextrpg.frames import CyclicFrames
@@ -158,8 +158,8 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     frame_duration: Millisecond = field(
         default_factory=lambda: config().rpg_maker_character.frame_duration
     )
-    _: KW_ONLY = INTERNAL_ONLY
-    _frames: dict[Direction, CyclicFrames] = INTERNAL_ONLY
+    _: KW_ONLY = INTERNAL
+    _frames: dict[Direction, CyclicFrames] = INTERNAL
 
     @cached_property
     @override
@@ -253,7 +253,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         )
 
     def __post_init__(self) -> None:
-        init_internal_field(
+        initialize_internal_field(
             self,
             "_frames",
             _load_frames,

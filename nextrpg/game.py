@@ -8,13 +8,10 @@ from functools import singledispatchmethod
 from typing import Callable, Self
 
 import pygame
-from pygame import Surface, init
-from pygame.display import flip, set_caption, set_mode
-from pygame.locals import RESIZABLE
 from pygame.time import Clock
 
 from nextrpg.config import config
-from nextrpg.core import INTERNAL_ONLY, init_internal_field
+from nextrpg.core import INTERNAL, initialize_internal_field
 from nextrpg.event.pygame_event import (
     GuiResize,
     PygameEvent,
@@ -29,14 +26,14 @@ from nextrpg.scene.scene import Scene
 class _GameLoop:
     entry_scene: Callable[[], Scene]
     is_running: bool = True
-    _: KW_ONLY = INTERNAL_ONLY
-    _clock: Clock = INTERNAL_ONLY
-    _gui: Gui = INTERNAL_ONLY
-    _screen: Surface = INTERNAL_ONLY
-    _scene: Scene = INTERNAL_ONLY
+    _: KW_ONLY = INTERNAL
+    _clock: Clock = INTERNAL
+    _gui: Gui = INTERNAL
+    _scene: Scene = INTERNAL
 
-    def tick(self) -> None:
+    def tick(self) -> Self:
         self._clock.tick(config().gui.frames_per_second)
+        return self
 
     @singledispatchmethod
     def event(self, e: PygameEvent) -> "_GameLoop":
@@ -44,24 +41,25 @@ class _GameLoop:
 
     @event.register
     def _resize(self, e: GuiResize) -> Self:
-        return replace(self, _gui=Gui(e.size))
+        return replace(
+            self, _scene=self._scene.event(e), _gui=self._gui.resize(e)
+        )
 
     @event.register
-    def _quit(self, _: Quit) -> Self:
-        return replace(self, is_running=False)
+    def _quit(self, e: Quit) -> Self:
+        return replace(self, _scene=self._scene.event(e), is_running=False)
 
-    def draw(self) -> "_GameLoop":
-        scene = self._scene.step(self._clock.get_time())
-        self._screen.fill(config().gui.background_color.tuple)
-        self._screen.blit(*self._gui.scale(self._scene.draw_on_screens).pygame)
-        flip()
-        return replace(self, _scene=scene)
+    def step(self) -> "_GameLoop":
+        return replace(self, _scene=self._scene.step(self._clock.get_time()))
+
+    def draw(self) -> Self:
+        self._gui.draw(self._scene.draw_on_screens)
+        return self
 
     def __post_init__(self) -> None:
-        init_internal_field(self, "_gui", Gui)
-        init_internal_field(self, "_clock", Clock)
-        init_internal_field(self, "_screen", _init_screen)
-        init_internal_field(self, "_scene", self.entry_scene)
+        initialize_internal_field(self, "_gui", Gui)
+        initialize_internal_field(self, "_clock", Clock)
+        initialize_internal_field(self, "_scene", self.entry_scene)
 
 
 class Game:
@@ -96,16 +94,7 @@ class Game:
             await sleep(0)
 
     def _step(self) -> None:
-        self._loop.tick()
-        self._loop = self._loop.draw()
+        self._loop = self._loop.tick().step().draw()
         assert callable(self._loop.event)
         for e in pygame.event.get():
             self._loop = self._loop.event(to_typed_event(e))
-
-
-def _init_screen() -> Surface:
-    init()
-    set_caption(config().gui.title)
-    return set_mode(
-        config().gui.size.tuple, RESIZABLE if config().gui.resize else 0
-    )

@@ -66,9 +66,10 @@ class KeyboardKey(Enum):
     UP = auto()
     DOWN = auto()
     CONFIRM = auto()
+    GUI_MODE_TOGGLE = auto()
 
     @classmethod
-    def from_pygame(cls, key: KeyCode) -> "KeyboardKey":
+    def from_pygame(cls, key: KeyCode) -> "KeyboardKey | KeyCode":
         """
         Maps pygame key constant to internal `KeyboardKey` representation.
 
@@ -76,8 +77,9 @@ class KeyboardKey(Enum):
             `key`: The pygame key constant to convert
 
         Returns:
-            `KeyboardKey`: The corresponding internal key representation.
-                Returns `UNKNOWN` if the key is not supported.
+            `KeyboardKey` | `KeyCode`: The corresponding internal
+                key representation. If the key is not supported,
+                returns the raw key code.
         """
         return {
             config().key_mapping.left: cls.LEFT,
@@ -85,7 +87,8 @@ class KeyboardKey(Enum):
             config().key_mapping.up: cls.UP,
             config().key_mapping.down: cls.DOWN,
             config().key_mapping.confirm: cls.CONFIRM,
-        }.get(key, cls.UNKNOWN)
+            config().key_mapping.gui_mode_toggle: cls.GUI_MODE_TOGGLE,
+        }.get(key, key)
 
 
 class _KeyPressEvent(PygameEvent):
