@@ -21,42 +21,6 @@ from nextrpg.gui import Gui
 from nextrpg.scene.scene import Scene
 
 
-@dataclass(frozen=True)
-class _GameLoop:
-    entry_scene: Callable[[], Scene]
-    is_running: bool = True
-    _: KW_ONLY = INTERNAL
-    _clock: Clock = INTERNAL
-    _gui: Gui = INTERNAL
-    _scene: Scene = INTERNAL
-
-    def tick(self) -> Self:
-        self._clock.tick(config().gui.frames_per_second)
-        return self
-
-    @singledispatchmethod
-    def event(self, e: PygameEvent) -> "_GameLoop":
-        return replace(
-            self, _scene=self._scene.event(e), _gui=self._gui.event(e)
-        )
-
-    @event.register
-    def _quit(self, e: Quit) -> Self:
-        return replace(self, _scene=self._scene.event(e), is_running=False)
-
-    def step(self) -> "_GameLoop":
-        return replace(self, _scene=self._scene.step(self._clock.get_time()))
-
-    def draw(self) -> Self:
-        self._gui.draw(self._scene.draw_on_screens)
-        return self
-
-    def __post_init__(self) -> None:
-        initialize_internal_field(self, "_gui", Gui)
-        initialize_internal_field(self, "_clock", Clock)
-        initialize_internal_field(self, "_scene", self.entry_scene)
-
-
 class Game:
     """
     Game entry point.
@@ -93,3 +57,39 @@ class Game:
         assert callable(self._loop.event)
         for e in pygame.event.get():
             self._loop = self._loop.event(to_typed_event(e))
+
+@dataclass(frozen=True)
+class _GameLoop:
+    entry_scene: Callable[[], Scene]
+    is_running: bool = True
+    _: KW_ONLY = INTERNAL
+    _clock: Clock = INTERNAL
+    _gui: Gui = INTERNAL
+    _scene: Scene = INTERNAL
+
+    def tick(self) -> Self:
+        self._clock.tick(config().gui.frames_per_second)
+        return self
+
+    @singledispatchmethod
+    def event(self, e: PygameEvent) -> "_GameLoop":
+        return replace(
+            self, _scene=self._scene.event(e), _gui=self._gui.event(e)
+        )
+
+    @event.register
+    def _quit(self, e: Quit) -> Self:
+        return replace(self, _scene=self._scene.event(e), is_running=False)
+
+    def step(self) -> "_GameLoop":
+        return replace(self, _scene=self._scene.step(self._clock.get_time()))
+
+    def draw(self) -> Self:
+        self._gui.draw(self._scene.draw_on_screens)
+        return self
+
+    def __post_init__(self) -> None:
+        initialize_internal_field(self, "_gui", Gui)
+        initialize_internal_field(self, "_clock", Clock)
+        initialize_internal_field(self, "_scene", self.entry_scene)
+
