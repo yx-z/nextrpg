@@ -27,7 +27,7 @@ def initialize_internal_field[**P, R](
     **kwargs: P.kwargs,
 ) -> R | None:
     """
-    Used to init `INTERNAL_ONLY` field in `dataclass` instance.
+    Used to init `INTERNAL` field in `dataclass` instance.
 
     Args:
         `self`: Object to set.
