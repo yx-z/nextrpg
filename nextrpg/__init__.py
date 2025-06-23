@@ -2,4 +2,4 @@
 Build your next RPG (Role Playing Game).
 """
 
-__version__ = "0.1.5"
+__version__ = "0.1.7"
