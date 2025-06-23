@@ -39,8 +39,8 @@ class Gui:
     """
 
     window: Size = field(default_factory=lambda: config().gui.size)
-    gui_mode: GuiMode = field(default_factory=lambda: config().gui.gui_mode)
     _: KW_ONLY = internal_field()
+    _gui_mode: GuiMode = internal_field()
     _screen: Surface = internal_field()
 
     @staticmethod
@@ -119,12 +119,13 @@ class Gui:
             return
         init()
         set_caption(config().gui.title)
+        init_internal_field(self, "_gui_mode", lambda: config().gui.gui_mode)
         init_internal_field(
             self,
             "_screen",
             set_mode,
             config().gui.size.tuple,
-            _gui_flag(self.gui_mode),
+            _gui_flag(self._gui_mode),
         )
 
 
@@ -145,10 +146,10 @@ def _toggle_gui_mode(self, e: KeyPressDown) -> Gui:
     is_toggle_key = e.key is KeyboardKey.GUI_MODE_TOGGLE
     allow_toggle = config().gui.allow_gui_mode_toggle
     if is_toggle_key and allow_toggle:
-        updated_mode = self.gui_mode.opposite
+        updated_mode = self._gui_mode.opposite
         return replace(
             self,
-            gui_mode=updated_mode,
+            _gui_mode=updated_mode,
             _screen=set_mode(self.window.tuple, _gui_flag(updated_mode)),
         )
     return self

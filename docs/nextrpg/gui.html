@@ -40,9 +40,6 @@
                                 <a class="variable" href="#Gui.window">window</a>
                         </li>
                         <li>
-                                <a class="variable" href="#Gui.gui_mode">gui_mode</a>
-                        </li>
-                        <li>
                                 <a class="function" href="#Gui.current_size">current_size</a>
                         </li>
                         <li>
@@ -118,8 +115,8 @@
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>
 </span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>    <span class="n">window</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>    <span class="n">gui_mode</span><span class="p">:</span> <span class="n">GuiMode</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">gui_mode</span><span class="p">)</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">()</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">()</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>    <span class="n">_gui_mode</span><span class="p">:</span> <span class="n">GuiMode</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">()</span>
 </span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>    <span class="n">_screen</span><span class="p">:</span> <span class="n">Surface</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">()</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>
 </span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>    <span class="nd">@staticmethod</span>
@@ -198,44 +195,45 @@
 </span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>            <span class="k">return</span>
 </span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>        <span class="n">init</span><span class="p">()</span>
 </span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>        <span class="n">set_caption</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>        <span class="n">init_internal_field</span><span class="p">(</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>            <span class="bp">self</span><span class="p">,</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>            <span class="s2">&quot;_screen&quot;</span><span class="p">,</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>            <span class="n">set_mode</span><span class="p">,</span>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>            <span class="n">_gui_flag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gui_mode</span><span class="p">),</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>        <span class="p">)</span>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>        <span class="n">init_internal_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_gui_mode&quot;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">gui_mode</span><span class="p">)</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>        <span class="n">init_internal_field</span><span class="p">(</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>            <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>            <span class="s2">&quot;_screen&quot;</span><span class="p">,</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>            <span class="n">set_mode</span><span class="p">,</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>            <span class="n">_gui_flag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gui_mode</span><span class="p">),</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>        <span class="p">)</span>
 </span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="nb">type</span> <span class="n">_GuiFlag</span> <span class="o">=</span> <span class="nb">int</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="nb">type</span> <span class="n">_GuiFlag</span> <span class="o">=</span> <span class="nb">int</span>
 </span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_gui_flag</span><span class="p">(</span><span class="n">gui_mode</span><span class="p">:</span> <span class="n">GuiMode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_GuiFlag</span><span class="p">:</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="n">check_and_flags</span> <span class="o">=</span> <span class="p">[</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>        <span class="p">(</span><span class="n">gui_mode</span> <span class="ow">is</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">,</span> <span class="n">FULLSCREEN</span><span class="p">),</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>        <span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">allow_window_resize</span><span class="p">,</span> <span class="n">RESIZABLE</span><span class="p">),</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>    <span class="p">]</span>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>    <span class="n">flags</span> <span class="o">=</span> <span class="p">[</span><span class="n">flag</span> <span class="k">for</span> <span class="n">check</span><span class="p">,</span> <span class="n">flag</span> <span class="ow">in</span> <span class="n">check_and_flags</span> <span class="k">if</span> <span class="n">check</span><span class="p">]</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>    <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">or_</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_gui_flag</span><span class="p">(</span><span class="n">gui_mode</span><span class="p">:</span> <span class="n">GuiMode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_GuiFlag</span><span class="p">:</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>    <span class="n">check_and_flags</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>        <span class="p">(</span><span class="n">gui_mode</span> <span class="ow">is</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">,</span> <span class="n">FULLSCREEN</span><span class="p">),</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>        <span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">allow_window_resize</span><span class="p">,</span> <span class="n">RESIZABLE</span><span class="p">),</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>    <span class="p">]</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>    <span class="n">flags</span> <span class="o">=</span> <span class="p">[</span><span class="n">flag</span> <span class="k">for</span> <span class="n">check</span><span class="p">,</span> <span class="n">flag</span> <span class="ow">in</span> <span class="n">check_and_flags</span> <span class="k">if</span> <span class="n">check</span><span class="p">]</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>    <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">or_</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="nd">@Gui</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">register</span>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_toggle_gui_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gui</span><span class="p">:</span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>    <span class="n">is_toggle_key</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">GUI_MODE_TOGGLE</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>    <span class="n">allow_toggle</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">allow_gui_mode_toggle</span>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>    <span class="k">if</span> <span class="n">is_toggle_key</span> <span class="ow">and</span> <span class="n">allow_toggle</span><span class="p">:</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>        <span class="n">updated_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gui_mode</span><span class="o">.</span><span class="n">opposite</span>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>            <span class="bp">self</span><span class="p">,</span>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>            <span class="n">gui_mode</span><span class="o">=</span><span class="n">updated_mode</span><span class="p">,</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>            <span class="n">_screen</span><span class="o">=</span><span class="n">set_mode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span> <span class="n">_gui_flag</span><span class="p">(</span><span class="n">updated_mode</span><span class="p">)),</span>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>        <span class="p">)</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>    <span class="k">return</span> <span class="bp">self</span>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="nd">@Gui</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">register</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_toggle_gui_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gui</span><span class="p">:</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>    <span class="n">is_toggle_key</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">GUI_MODE_TOGGLE</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>    <span class="n">allow_toggle</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">allow_gui_mode_toggle</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>    <span class="k">if</span> <span class="n">is_toggle_key</span> <span class="ow">and</span> <span class="n">allow_toggle</span><span class="p">:</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>        <span class="n">updated_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gui_mode</span><span class="o">.</span><span class="n">opposite</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>            <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>            <span class="n">_gui_mode</span><span class="o">=</span><span class="n">updated_mode</span><span class="p">,</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>            <span class="n">_screen</span><span class="o">=</span><span class="n">set_mode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span> <span class="n">_gui_flag</span><span class="p">(</span><span class="n">updated_mode</span><span class="p">)),</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>        <span class="p">)</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>    <span class="k">return</span> <span class="bp">self</span>
 </span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="nd">@Gui</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">register</span>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_resize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">GuiResize</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gui</span><span class="p">:</span>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>    <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="nd">@Gui</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">register</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_resize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">GuiResize</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gui</span><span class="p">:</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>    <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -263,8 +261,8 @@
 </span><span id="Gui-40"><a href="#Gui-40"><span class="linenos"> 40</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="Gui-41"><a href="#Gui-41"><span class="linenos"> 41</span></a>
 </span><span id="Gui-42"><a href="#Gui-42"><span class="linenos"> 42</span></a>    <span class="n">window</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-</span><span id="Gui-43"><a href="#Gui-43"><span class="linenos"> 43</span></a>    <span class="n">gui_mode</span><span class="p">:</span> <span class="n">GuiMode</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">gui_mode</span><span class="p">)</span>
-</span><span id="Gui-44"><a href="#Gui-44"><span class="linenos"> 44</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">()</span>
+</span><span id="Gui-43"><a href="#Gui-43"><span class="linenos"> 43</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">()</span>
+</span><span id="Gui-44"><a href="#Gui-44"><span class="linenos"> 44</span></a>    <span class="n">_gui_mode</span><span class="p">:</span> <span class="n">GuiMode</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">()</span>
 </span><span id="Gui-45"><a href="#Gui-45"><span class="linenos"> 45</span></a>    <span class="n">_screen</span><span class="p">:</span> <span class="n">Surface</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">()</span>
 </span><span id="Gui-46"><a href="#Gui-46"><span class="linenos"> 46</span></a>
 </span><span id="Gui-47"><a href="#Gui-47"><span class="linenos"> 47</span></a>    <span class="nd">@staticmethod</span>
@@ -343,13 +341,14 @@
 </span><span id="Gui-120"><a href="#Gui-120"><span class="linenos">120</span></a>            <span class="k">return</span>
 </span><span id="Gui-121"><a href="#Gui-121"><span class="linenos">121</span></a>        <span class="n">init</span><span class="p">()</span>
 </span><span id="Gui-122"><a href="#Gui-122"><span class="linenos">122</span></a>        <span class="n">set_caption</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
-</span><span id="Gui-123"><a href="#Gui-123"><span class="linenos">123</span></a>        <span class="n">init_internal_field</span><span class="p">(</span>
-</span><span id="Gui-124"><a href="#Gui-124"><span class="linenos">124</span></a>            <span class="bp">self</span><span class="p">,</span>
-</span><span id="Gui-125"><a href="#Gui-125"><span class="linenos">125</span></a>            <span class="s2">&quot;_screen&quot;</span><span class="p">,</span>
-</span><span id="Gui-126"><a href="#Gui-126"><span class="linenos">126</span></a>            <span class="n">set_mode</span><span class="p">,</span>
-</span><span id="Gui-127"><a href="#Gui-127"><span class="linenos">127</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span>
-</span><span id="Gui-128"><a href="#Gui-128"><span class="linenos">128</span></a>            <span class="n">_gui_flag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gui_mode</span><span class="p">),</span>
-</span><span id="Gui-129"><a href="#Gui-129"><span class="linenos">129</span></a>        <span class="p">)</span>
+</span><span id="Gui-123"><a href="#Gui-123"><span class="linenos">123</span></a>        <span class="n">init_internal_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_gui_mode&quot;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">gui_mode</span><span class="p">)</span>
+</span><span id="Gui-124"><a href="#Gui-124"><span class="linenos">124</span></a>        <span class="n">init_internal_field</span><span class="p">(</span>
+</span><span id="Gui-125"><a href="#Gui-125"><span class="linenos">125</span></a>            <span class="bp">self</span><span class="p">,</span>
+</span><span id="Gui-126"><a href="#Gui-126"><span class="linenos">126</span></a>            <span class="s2">&quot;_screen&quot;</span><span class="p">,</span>
+</span><span id="Gui-127"><a href="#Gui-127"><span class="linenos">127</span></a>            <span class="n">set_mode</span><span class="p">,</span>
+</span><span id="Gui-128"><a href="#Gui-128"><span class="linenos">128</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span><span class="p">,</span>
+</span><span id="Gui-129"><a href="#Gui-129"><span class="linenos">129</span></a>            <span class="n">_gui_flag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gui_mode</span><span class="p">),</span>
+</span><span id="Gui-130"><a href="#Gui-130"><span class="linenos">130</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -367,7 +366,7 @@ the GUI size from <code>config()<a href="">nextrpg.gui</a></code>.</li>
                             <div id="Gui.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">Gui</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">window</span><span class="p">:</span> <span class="n"><a href="core.html#Size">nextrpg.core.Size</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">gui_mode</span><span class="p">:</span> <span class="n"><a href="config.html#GuiMode">nextrpg.config.GuiMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">_screen</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">Surface</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nb">object</span> <span class="nb">object</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">Gui</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">window</span><span class="p">:</span> <span class="n"><a href="core.html#Size">nextrpg.core.Size</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">_gui_mode</span><span class="p">:</span> <span class="n"><a href="config.html#GuiMode">nextrpg.config.GuiMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="nb">object</span> <span class="nb">object</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_screen</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">Surface</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nb">object</span> <span class="nb">object</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -383,17 +382,6 @@ the GUI size from <code>config()<a href="">nextrpg.gui</a></code>.</li>
         
     </div>
     <a class="headerlink" href="#Gui.window"></a>
-    
-    
-
-                            </div>
-                            <div id="Gui.gui_mode" class="classattr">
-                                <div class="attr variable">
-            <span class="name">gui_mode</span><span class="annotation">: <a href="config.html#GuiMode">nextrpg.config.GuiMode</a></span>
-
-        
-    </div>
-    <a class="headerlink" href="#Gui.gui_mode"></a>
     
     
 

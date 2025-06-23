@@ -2,7 +2,7 @@
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="20" nextobjectid="54">
  <tileset firstgid="1" source="base.tsx"/>
  <tileset firstgid="169" source="object.tsx"/>
- <layer id="1" name="background_floor_and_wall" width="30" height="20">
+ <layer id="1" name="floor" class="background" width="30" height="20">
   <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -26,7 +26,7 @@
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 </data>
  </layer>
- <layer id="13" name="background_rug" width="30" height="20">
+ <layer id="13" name="rug" class="background" width="30" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -50,7 +50,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="5" name="foreground_furnitures_roof" width="30" height="20">
+ <layer id="5" name="furnitures" class="foreground" width="30" height="20">
   <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -74,7 +74,7 @@
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 </data>
  </layer>
- <layer id="6" name="foreground_overlay_on_furnitures" width="30" height="20">
+ <layer id="6" name="more_furnitures" class="foreground" width="30" height="20">
   <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -98,7 +98,7 @@
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 </data>
  </layer>
- <layer id="19" name="above_character_roof" width="30" height="20">
+ <layer id="19" name="roof" class="above_character" width="30" height="20">
   <data encoding="csv">
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
@@ -122,24 +122,6 @@
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
 </data>
  </layer>
- <objectgroup id="8" name="collision">
-  <object id="2" x="240" y="238.667" width="913.333" height="97.3333"/>
-  <object id="3" x="626.667" y="299.333" width="140.667" height="62"/>
-  <object id="7" x="620.748" y="486.581" width="103.546" height="98.4987"/>
-  <object id="12" x="399.667" y="308" width="67" height="43.3333"/>
-  <object id="25" x="155.837" y="-10.9397" width="1115.32" height="318.923"/>
-  <object id="27" x="108.348" y="189.36" width="125.032" height="613.383"/>
-  <object id="28" x="173.394" y="727.294" width="443.049" height="147.683"/>
-  <object id="30" x="775.314" y="727.2" width="443.955" height="154.025"/>
-  <object id="31" x="1157.28" y="192.079" width="143.153" height="607.041"/>
-  <object id="33" x="524.25" y="775.126" width="310.769" height="153.119"/>
-  <object id="39" x="969" y="316" width="73.5" height="29.5"/>
-  <object id="42" x="485.5" y="379.333" width="59" height="81"/>
-  <object id="44" x="797.333" y="380.5" width="60.5" height="79.8334"/>
-  <object id="47" x="290" y="601" width="44" height="30.3333"/>
-  <object id="48" x="291.667" y="536.667" width="39.3333" height="25.3334"/>
-  <object id="49" x="341.667" y="455.75" width="37.6667" height="29.8333"/>
- </objectgroup>
  <objectgroup id="12" name="object">
   <object id="24" name="player" x="406.987" y="587.9">
    <point/>

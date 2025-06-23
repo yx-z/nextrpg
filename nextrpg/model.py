@@ -29,13 +29,13 @@ def is_internal_field_initialized(f: Any) -> bool:
     return f is not _INTERNAL
 
 
-def init_internal_field[**P, R](
+def init_internal_field[**P](
     self: Any,
     name: str,
-    factory: Callable[P, R],
+    factory: Callable[P, Any],
     *args: P.args,
     **kwargs: P.kwargs,
-) -> R | None:
+) -> None:
     """
     Used to init `INTERNAL_FIELD` in `dataclass` instance.
 
@@ -53,10 +53,7 @@ def init_internal_field[**P, R](
         `**kwargs`: Keyword arguments to pass to the factory function.
 
     Returns:
-        `R` | `None`: The initialized value of the field.
+        `None`.
     """
-    if is_internal_field_initialized(getattr(self, name)):
-        return None
-    val = factory(*args, **kwargs)
-    object.__setattr__(self, name, val)
-    return val
+    if not is_internal_field_initialized(getattr(self, name)):
+        object.__setattr__(self, name, factory(*args, **kwargs))

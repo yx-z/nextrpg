@@ -4,7 +4,7 @@ Handles character movement and collision detection.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field, replace
+from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property, lru_cache, singledispatchmethod
 
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -22,6 +22,7 @@ from nextrpg.event.pygame_event import (
     KeyboardKey,
     PygameEvent,
 )
+from nextrpg.model import init_internal_field, internal_field
 
 
 @dataclass(frozen=True)
@@ -64,7 +65,8 @@ class CharacterOnScreen:
     coordinate: Coordinate
     speed: Pixel
     collisions: list[Polygon]
-    _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
+    _: KW_ONLY = internal_field()
+    _movement_keys: frozenset[KeyboardKey] = internal_field()
 
     @cached_property
     def character_and_visuals(self) -> CharacterAndVisuals:
@@ -184,6 +186,9 @@ class CharacterOnScreen:
             if (debug := config().debug)
             else []
         )
+
+    def __post_init__(self) -> None:
+        init_internal_field(self, "_movement_keys", frozenset)
 
 
 _KEY_TO_DIR = {

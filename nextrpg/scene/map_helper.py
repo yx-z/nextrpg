@@ -8,7 +8,6 @@ from pygame import Surface
 from pytmx import (
     TiledMap,
     TiledObject,
-    TiledObjectGroup,
     TiledTileLayer,
     load_pygame,
 )
@@ -97,7 +96,7 @@ class MapHelper:
         """
         return [
             self._bottom_and_draw(layer)
-            for layer in self.get_layers(config().map.foreground)
+            for layer in self._tile_layers(config().map.foreground)
         ]
 
     @cached_property
@@ -133,32 +132,24 @@ class MapHelper:
         """
         return next(
             obj
-            for layer in self.get_layers(config().map.object)
-            for obj in layer
+            for i in self._tmx.visible_object_groups
+            for obj in self._tmx.layers[i]
             if obj.name == name
         )
 
     @lru_cache
-    def get_layers(
-        self, prefix: str
-    ) -> list[TiledTileLayer | TiledObjectGroup]:
-        """
-        Retrieve layers with the given prefix from the map.
-
-        Arguments:
-            `prefix`: The prefix of the layer name to retrieve.
-
-        Returns:
-            `list[TiledTileLayer | TiledObjectGroup]`: The matched layers.
-        """
+    def _tile_layers(self, class_name: str) -> list[TiledTileLayer]:
         return [
-            layer for layer in self._tmx.layers if layer.name.startswith(prefix)
+            layer
+            for i in self._tmx.visible_tile_layers
+            if (layer := self._tmx.layers[i])
+            and getattr(layer, "class", None) == class_name
         ]
 
     def _draw_layers(self, name: str) -> list[DrawOnScreen]:
         return [
             draw
-            for layer in self.get_layers(name)
+            for layer in self._tile_layers(name)
             for _, draw in self._draw(layer)
         ]
 

@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from asyncio import sleep
 from dataclasses import KW_ONLY, dataclass, replace
-from functools import reduce, singledispatchmethod
+from functools import cached_property, reduce, singledispatchmethod
 from typing import Callable
 
 import pygame
@@ -58,11 +58,15 @@ class Game:
 @dataclass(frozen=True)
 class _GameLoop:
     entry_scene: Callable[[], Scene]
-    is_running: bool = True
     _: KW_ONLY = internal_field()
+    _is_running: bool = internal_field()
     _clock: Clock = internal_field()
     _gui: Gui = internal_field()
     _scene: Scene = internal_field()
+
+    @cached_property
+    def is_running(self) -> bool:
+        return self._is_running
 
     @singledispatchmethod
     def event(self, e: PygameEvent) -> _GameLoop:
@@ -72,18 +76,17 @@ class _GameLoop:
 
     def step(self) -> _GameLoop:
         self._clock.tick(config().gui.frames_per_second)
+        stepped = replace(self, _scene=self._scene.step(self._clock.get_time()))
         self._gui.draw(self._scene.draw_on_screens)
         assert callable(self.event)
         return reduce(
             lambda loop, e: loop.event(to_typed_event(e)),
             pygame.event.get(),
-            self._step(),
+            stepped,
         )
 
-    def _step(self) -> _GameLoop:
-        return replace(self, _scene=self._scene.step(self._clock.get_time()))
-
     def __post_init__(self) -> None:
+        init_internal_field(self, "_is_running", lambda: True)
         init_internal_field(self, "_gui", Gui)
         init_internal_field(self, "_clock", Clock)
         init_internal_field(self, "_scene", self.entry_scene)
@@ -91,4 +94,4 @@ class _GameLoop:
 
 @_GameLoop.event.register
 def _quit(self, e: Quit) -> _GameLoop:
-    return replace(self, _scene=self._scene.event(e), is_running=False)
+    return replace(self, _scene=self._scene.event(e), _is_running=False)

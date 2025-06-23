@@ -44,9 +44,9 @@ def test_gui(mocker: MockerFixture) -> None:
 
     assert gui.event(KeyPressUp(Event(KEYDOWN, key=K_LEFT))) is gui
     assert gui.event(KeyPressDown(Event(KEYDOWN, key=K_LEFT))) is gui
-    assert gui.gui_mode is GuiMode.WINDOWED
+    assert gui._gui_mode is GuiMode.WINDOWED
     assert (
-        gui.event(KeyPressDown(Event(KEYDOWN, key=K_F1))).gui_mode
+        gui.event(KeyPressDown(Event(KEYDOWN, key=K_F1)))._gui_mode
         is GuiMode.FULL_SCREEN
     )
 

@@ -103,10 +103,6 @@ class MapScene(Scene):
         """
         return replace(self, _player=self._player.step(time_delta))
 
-    def __post_init__(self) -> None:
-        init_internal_field(self, "_map_helper", MapHelper, self.tmx_file)
-        init_internal_field(self, "_player", self._init_player)
-
     @cached_property
     def _foreground_and_character(self) -> list[DrawOnScreen]:
         foregrounds = [
@@ -120,10 +116,10 @@ class MapScene(Scene):
             character.visible_rectangle.bottom,
             character,
         )
-        sort_by_layer_index_and_bottommost = sorted(
+        sort_by_layer_index_and_bottom = sorted(
             foregrounds + [player], key=lambda t: t[:2]
         )
-        return [draw for _, _, draw in sort_by_layer_index_and_bottommost]
+        return [draw for _, _, draw in sort_by_layer_index_and_bottom]
 
     @cached_property
     def _player_layer(self) -> _LayerIndex:
@@ -153,13 +149,16 @@ class MapScene(Scene):
         speed = player.properties.get(
             config().map.properties.speed, config().character.speed
         )
-        collisions = []
         return CharacterOnScreen(
             self.character_drawing,
             Coordinate(player.x, player.y),
             speed,
-            collisions,
+            self._map_helper.collisions,
         )
+
+    def __post_init__(self) -> None:
+        init_internal_field(self, "_map_helper", MapHelper, self.tmx_file)
+        init_internal_field(self, "_player", self._init_player)
 
 
 def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:

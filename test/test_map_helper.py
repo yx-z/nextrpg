@@ -16,27 +16,28 @@ def test_map_helper(mocker: MockerFixture) -> None:
     mock_tmx.tilewidth = 2
     mock_tmx.tileheight = 3
     mock_background = MagicMock()
-    mock_background.name = "background"
+    setattr(mock_background, "class", "background")
     mock_background.tiles = lambda: [(1, 2, MockSurface())]
     mock_foreground = MagicMock()
-    mock_foreground.name = "foreground"
+    setattr(mock_foreground, "class", "foreground")
     mock_foreground.tiles = lambda: [
         (0, 0, MockSurface()),
         (1, 1, MockSurface()),
     ]
     mock_foreground.data = [[1, 0], [0, 0]]
     mock_above_character = MagicMock()
-    mock_above_character.name = "above_character"
+    setattr(mock_above_character, "class", "above_character")
     mock_above_character.tiles = lambda: [(5, 6, MockSurface())]
     mock_object = MagicMock()
-    mock_object.name = "object"
     mock_object.__iter__.return_value = iter([SimpleNamespace(name="obj")])
+    mock_tmx.visible_tile_layers = [0, 1, 2]
     mock_tmx.layers = [
         mock_background,
         mock_foreground,
         mock_above_character,
         mock_object,
     ]
+    mock_tmx.visible_object_groups = [3]
     mock_tmx.tile_properties = {
         1: {"id": 1, "type": "abc"},
         2: {"id": 2, "type": "abc"},
