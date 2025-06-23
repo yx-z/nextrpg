@@ -5,12 +5,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from pygame import Surface
-from pytmx import (
-    TiledMap,
-    TiledObject,
-    TiledTileLayer,
-    load_pygame,
-)
+from pytmx import TiledMap, TiledObject, TiledTileLayer, load_pygame
 
 from nextrpg.config import config
 from nextrpg.core import Pixel, Size
@@ -137,7 +132,6 @@ class MapHelper:
             if obj.name == name
         )
 
-    @lru_cache
     def _tile_layers(self, class_name: str) -> list[TiledTileLayer]:
         return [
             layer
