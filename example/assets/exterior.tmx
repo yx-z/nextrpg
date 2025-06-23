@@ -118,11 +118,6 @@
 </data>
  </layer>
  <objectgroup id="4" name="collision">
-  <object id="5" x="683.667" y="773.333" width="25.6667" height="30.6667"/>
-  <object id="6" x="1258.67" y="775.666" width="22.6667" height="30.6667"/>
-  <object id="7" x="1645.67" y="783.667" width="21.6667" height="21.6667"/>
-  <object id="8" x="1259.67" y="975.667" width="25" height="24.3334"/>
-  <object id="9" x="1597" y="978.333" width="19" height="19.3334"/>
   <object id="10" x="809" y="971.333" width="46" height="33.3334"/>
   <object id="11" x="859" y="949.667" width="46" height="74"/>
   <object id="12" x="880.333" y="968.667" width="46" height="33.3334"/>

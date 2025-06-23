@@ -107,13 +107,7 @@ class MapScene(Scene):
 
     def __post_init__(self) -> None:
         initialize_internal_field(self, "_map_helper", MapHelper, self.tmx_file)
-        initialize_internal_field(
-            self,
-            "_player",
-            _player,
-            self._map_helper,
-            self.character_drawing,
-        )
+        initialize_internal_field(self, "_player", self._init_player)
 
     @cached_property
     def _foreground_and_character(self) -> list[DrawOnScreen]:
@@ -156,23 +150,22 @@ class MapScene(Scene):
         top_offset = _offset(player.top, gui_height, map_height)
         return Coordinate(left_offset, top_offset)
 
-
-def _player(
-    map_helper: MapHelper, character_drawing: CharacterDrawing
-) -> CharacterOnScreen:
-    player = map_helper.get_object(config().map.player)
-    return CharacterOnScreen(
-        character_drawing,
-        Coordinate(player.x, player.y),
-        speed=player.properties.get(
+    def _init_player(self) -> CharacterOnScreen:
+        player = self._map_helper.get_object(config().map.player)
+        speed = player.properties.get(
             config().map.properties.speed, config().character.speed
-        ),
-        collisions=[
+        )
+        collisions = [
             Rectangle(Coordinate(rect.x, rect.y), Size(rect.width, rect.height))
-            for layer in map_helper.get_layers(config().map.collision)
+            for layer in self._map_helper.get_layers(config().map.collision)
             for rect in layer
-        ],
-    )
+        ]
+        return CharacterOnScreen(
+            self.character_drawing,
+            Coordinate(player.x, player.y),
+            speed,
+            collisions,
+        )
 
 
 def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
