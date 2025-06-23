@@ -165,7 +165,6 @@ class TileMapConfig:
     background: str = "background"
     foreground: str = "foreground"
     above_character: str = "above_character"
-    collision: str = "collision"
     object: str = "object"
     player: str = "player"
     properties: TileMapProperties = TileMapProperties()

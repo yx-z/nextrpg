@@ -2,8 +2,8 @@ from pygame import Event, KEYDOWN, K_F1, K_LEFT, VIDEORESIZE
 from pytest_mock import MockerFixture
 
 from nextrpg.config import Config, GuiConfig, GuiMode, ResizeMode
-from nextrpg.core import Coordinate, Size
-from nextrpg.draw_on_screen import DrawOnScreen, Drawing
+from nextrpg.core import Size
+from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
 from nextrpg.event.pygame_event import GuiResize, KeyPressDown, KeyPressUp
 from nextrpg.gui import Gui, _gui_flag
 from test.util import MockSurface, override_config

@@ -16,13 +16,11 @@ from nextrpg.core import Millisecond, Pixel
 from nextrpg.draw_on_screen import (
     Coordinate,
     DrawOnScreen,
-    Rectangle,
-    Size,
 )
 from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.gui import Gui
 from nextrpg.model import (
-    initialize_internal_field,
+    init_internal_field,
     internal_field,
 )
 from nextrpg.scene.map_helper import MapHelper, TileBottomAndDraw
@@ -106,8 +104,8 @@ class MapScene(Scene):
         return replace(self, _player=self._player.step(time_delta))
 
     def __post_init__(self) -> None:
-        initialize_internal_field(self, "_map_helper", MapHelper, self.tmx_file)
-        initialize_internal_field(self, "_player", self._init_player)
+        init_internal_field(self, "_map_helper", MapHelper, self.tmx_file)
+        init_internal_field(self, "_player", self._init_player)
 
     @cached_property
     def _foreground_and_character(self) -> list[DrawOnScreen]:
@@ -155,11 +153,7 @@ class MapScene(Scene):
         speed = player.properties.get(
             config().map.properties.speed, config().character.speed
         )
-        collisions = [
-            Rectangle(Coordinate(rect.x, rect.y), Size(rect.width, rect.height))
-            for layer in self._map_helper.get_layers(config().map.collision)
-            for rect in layer
-        ]
+        collisions = []
         return CharacterOnScreen(
             self.character_drawing,
             Coordinate(player.x, player.y),

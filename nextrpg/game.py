@@ -19,7 +19,7 @@ from nextrpg.event.pygame_event import (
     to_typed_event,
 )
 from nextrpg.gui import Gui
-from nextrpg.model import initialize_internal_field, internal_field
+from nextrpg.model import init_internal_field, internal_field
 from nextrpg.scene.scene import Scene
 
 
@@ -84,9 +84,9 @@ class _GameLoop:
         return replace(self, _scene=self._scene.step(self._clock.get_time()))
 
     def __post_init__(self) -> None:
-        initialize_internal_field(self, "_gui", Gui)
-        initialize_internal_field(self, "_clock", Clock)
-        initialize_internal_field(self, "_scene", self.entry_scene)
+        init_internal_field(self, "_gui", Gui)
+        init_internal_field(self, "_clock", Clock)
+        init_internal_field(self, "_scene", self.entry_scene)
 
 
 @_GameLoop.event.register

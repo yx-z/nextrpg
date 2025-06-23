@@ -1,5 +1,6 @@
-from dataclasses import dataclass, field
+from dataclasses import KW_ONLY, dataclass
 from functools import cached_property, lru_cache
+from itertools import product
 from pathlib import Path
 from typing import NamedTuple
 
@@ -13,14 +14,14 @@ from pytmx import (
 )
 
 from nextrpg.config import config
-from nextrpg.core import Coordinate, Pixel, Size
-from nextrpg.draw_on_screen import DrawOnScreen, Drawing
+from nextrpg.core import Pixel, Size
+from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing, Polygon
+from nextrpg.model import init_internal_field, internal_field
 
 type _Gid = int
 
 
-@dataclass(frozen=True)
-class _TiledCoordinate:
+class _TiledCoordinate(NamedTuple):
     top: int
     left: int
 
@@ -58,7 +59,8 @@ class MapHelper:
     """
 
     tmx_file: Path
-    tmx: TiledMap = field(init=False)
+    _: KW_ONLY = internal_field()
+    _tmx: TiledMap = internal_field()
 
     @cached_property
     def map_size(self) -> Size:
@@ -69,7 +71,9 @@ class MapHelper:
             `Size`: The map size.
         """
         tile_width, tile_height = self._tile_size.tuple
-        return Size(self.tmx.width * tile_width, self.tmx.height * tile_height)
+        return Size(
+            self._tmx.width * tile_width, self._tmx.height * tile_height
+        )
 
     @cached_property
     def background(self) -> list[DrawOnScreen]:
@@ -106,6 +110,16 @@ class MapHelper:
         """
         return self._draw_layers(config().map.above_character)
 
+    @cached_property
+    def collisions(self) -> list[Polygon]:
+        """
+        Retrieve collision polygons from the tiles.
+
+        Returns:
+            `list[Polygon]`: List of collision polygons.
+        """
+        return []
+
     @lru_cache
     def get_object(self, name: str) -> TiledObject:
         """
@@ -138,7 +152,7 @@ class MapHelper:
             `list[TiledTileLayer | TiledObjectGroup]`: The matched layers.
         """
         return [
-            layer for layer in self.tmx.layers if layer.name.startswith(prefix)
+            layer for layer in self._tmx.layers if layer.name.startswith(prefix)
         ]
 
     def _draw_layers(self, name: str) -> list[DrawOnScreen]:
@@ -150,21 +164,21 @@ class MapHelper:
 
     def _bottom_and_draw(self, layer: TiledTileLayer) -> set[TileBottomAndDraw]:
         coord_and_draws = self._draw(layer)
-        gid_to_bottom = [
-            (gid, draw.visible_rectangle.bottom)
+        gid_coord_and_bottom = [
+            (gid, coord, draw.visible_rectangle.bottom)
             for coord, draw in coord_and_draws
             if (gid := self._gid(layer, coord))
         ]
         return {
             TileBottomAndDraw(
-                self._bottom(layer, coord, draw, gid_to_bottom), draw
+                self._bottom(layer, coord, draw, gid_coord_and_bottom), draw
             )
             for coord, draw in coord_and_draws
         }
 
     @cached_property
     def _tile_size(self) -> Size:
-        return Size(self.tmx.tilewidth, self.tmx.tileheight)
+        return Size(self._tmx.tilewidth, self._tmx.tileheight)
 
     def _draw(
         self, layer: TiledTileLayer
@@ -185,22 +199,22 @@ class MapHelper:
         self, layer: TiledTileLayer, coord: _TiledCoordinate
     ) -> _Gid | None:
         data_id = layer.data[coord.top][coord.left]
-        return self.tmx.tile_properties.get(data_id, {}).get("id")
+        return self._tmx.tile_properties.get(data_id, {}).get("id")
 
     def _bottom(
         self,
         layer: TiledTileLayer,
         coord: _TiledCoordinate,
         draw: DrawOnScreen,
-        gid_to_bottom: list[tuple[_Gid, Pixel]],
+        gid_coord_and_bottom: list[tuple[_Gid, _TiledCoordinate, Pixel]],
     ) -> Pixel:
         if (gid := self._gid(layer, coord)) and (
             cls := self._gid_to_class.get(gid)
         ):
             return max(
                 bottom
-                for g, bottom in gid_to_bottom
-                if self._gid_to_class[g] == cls
+                for g, c, bottom in gid_coord_and_bottom
+                if self._gid_to_class[g] == cls and c in _neighbors(coord)
             )
         return draw.visible_rectangle.bottom
 
@@ -208,9 +222,17 @@ class MapHelper:
     def _gid_to_class(self) -> dict[_Gid, str]:
         return {
             tile["id"]: cls
-            for tile in self.tmx.tile_properties.values()
+            for tile in self._tmx.tile_properties.values()
             if (cls := tile.get("type"))
         }
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, "tmx", load_pygame(str(self.tmx_file)))
+        init_internal_field(self, "_tmx", load_pygame, str(self.tmx_file))
+
+
+def _neighbors(coord: _TiledCoordinate) -> set[_TiledCoordinate]:
+    deltas = {-1, 0, 1}
+    x, y = coord
+    return {
+        _TiledCoordinate(x + dx, y + dy) for dx, dy in product(deltas, deltas)
+    }

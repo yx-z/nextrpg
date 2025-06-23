@@ -29,7 +29,7 @@ def is_internal_field_initialized(f: Any) -> bool:
     return f is not _INTERNAL
 
 
-def initialize_internal_field[**P, R](
+def init_internal_field[**P, R](
     self: Any,
     name: str,
     factory: Callable[P, R],

@@ -5,9 +5,9 @@ Drawable on screen.
 from __future__ import annotations
 
 from dataclasses import KW_ONLY, dataclass
-from functools import cached_property
+from functools import cached_property, singledispatchmethod
 from itertools import product
-from math import ceil
+from math import ceil, sqrt
 from pathlib import Path
 
 from pygame import SRCALPHA, Surface
@@ -15,12 +15,13 @@ from pygame.image import load
 
 from nextrpg.config import config
 from nextrpg.core import (
-    Coordinate,
+    Direction,
+    DirectionalOffset,
     Pixel,
     Rgba,
     Size,
 )
-from nextrpg.model import initialize_internal_field, internal_field
+from nextrpg.model import init_internal_field, internal_field
 
 
 @dataclass(frozen=True)
@@ -110,7 +111,7 @@ class Drawing:
         return surface
 
     def __post_init__(self) -> None:
-        initialize_internal_field(
+        init_internal_field(
             self,
             "_surface",
             lambda: (
@@ -119,6 +120,189 @@ class Drawing:
                 else self.resource
             ),
         )
+
+
+@dataclass(frozen=True)
+class DrawOnScreen:
+    """
+    Represents a drawable element positioned on the screen with its coordinates.
+
+    This immutable class combines a drawing with its position and provides
+    properties to access various coordinates and dimensions of the drawing
+    on the screen.
+
+    Attributes:
+        `top_left`: The top-left position of the drawing on the screen.
+
+        `drawing`: The drawable element to be displayed on the screen.
+    """
+
+    top_left: Coordinate
+    drawing: Drawing
+
+    @cached_property
+    def rectangle(self) -> Rectangle:
+        """
+        Gets the rectangular bounds of the drawing on screen.
+
+        Returns:
+            `Rectangle`: A rectangle defining the drawing's position and size
+            on screen.
+        """
+        return Rectangle(self.top_left, self.drawing.size)
+
+    @cached_property
+    def visible_rectangle(self) -> Rectangle:
+        """
+        Calculate the actual visible bounds of the drawing,
+        ignoring transparent pixels.
+
+        Returns:
+            `Rectangle`: A rectangle defining only the visible (non-transparent)
+            portion of the drawing on screen.
+        """
+        visible = [
+            Coordinate(x, y)
+            for x, y in product(
+                range(ceil(self.drawing.width)),
+                range(ceil(self.drawing.height)),
+            )
+            # `drawing._surface` to ignore the debug background.
+            if self.drawing._surface.get_at((x, y)).a
+        ]
+        if not visible:
+            return Rectangle(Coordinate(0, 0), Size(0, 0))
+
+        min_x = min(c.left for c in visible)
+        min_y = min(c.top for c in visible)
+        max_x = max(c.left for c in visible)
+        max_y = max(c.top for c in visible)
+        return Rectangle(
+            self.top_left + Coordinate(min_x, min_y),
+            Size(max_x - min_x, max_y - min_y),
+        )
+
+    @cached_property
+    def pygame(self) -> tuple[Surface, tuple[Pixel, Pixel]]:
+        """
+        Gets the pygame surface and coordinate tuple for rendering.
+
+        Returns:
+            `tuple[pygame.Surface, tuple[float, float]]`:
+                A tuple containing the `pygame.Surface` and a tuple of the left
+                and top coordinates (x, y).
+        """
+        return self.drawing.pygame, self.top_left.tuple
+
+    def __add__(self, coord: Coordinate) -> DrawOnScreen:
+        """
+        Shift the drawing by the specified coordinate.
+
+        Args:
+            `coord`: The coordinate to shift the drawing by.
+
+        Returns:
+            `DrawOnScreen`: A new `DrawOnScreen` shifted by the coordinate.
+        """
+        return DrawOnScreen(self.top_left + coord, self.drawing)
+
+
+@dataclass(frozen=True)
+class Coordinate:
+    """
+    Represents a 2D coordinate with immutability and provides methods
+    for scaling and shifting coordinates.
+
+    Attributes:
+        `left`: The horizontal position of the coordinate, measured by
+            the number of pixels from the left edge of the game window.
+
+        `top`: The vertical position of the coordinate, measured by
+            the number of pixels from the top edge of the game window.
+    """
+
+    left: Pixel
+    top: Pixel
+
+    def __mul__(self, scale: float) -> Coordinate:
+        """
+        Scales the current `Coordinate` values (left and top) by a given factor
+        and returns a new `Coordinate` with the scaled values rounded up to the
+        nearest integer.
+
+        Round up so that drawings won't leave tiny, black gaps after scaled.
+
+        Args:
+            `scale`: The scaling factor to multiply the left and
+                top values of the `Coordinate`.
+
+        Returns:
+            `Coordinate`: A new `Coordinate` with the scaled and rounded values.
+        """
+        return Coordinate(ceil(self.left * scale), ceil(self.top * scale))
+
+    @singledispatchmethod
+    def __add__(self, offset: DirectionalOffset | Coordinate) -> Coordinate:
+        """
+        Shifts the coordinate in the specified direction by a given offset.
+        Supports both orthogonal and diagonal directions.
+
+        Or add two coordinates together.
+
+        For diagonal directions, the offset is divided proportionally.
+        For example, an offset of `sqrt(2)` in `UP_LEFT` direction shifts
+        the coordinate `Pixel(1)` in both `UP` and `LEFT` directions.
+
+        Args:
+            `offset`: A `DirectionalOffset` representing the direction
+                and offset, or `Coordinate` to add to the current `Coordinate`.
+
+        Returns:
+            `Coordinate`: A new coordinate shifted by the specified offset in
+            the given direction.
+        """
+        raise NotImplementedError(f"Non-addable {offset=}")
+
+    @cached_property
+    def tuple(self) -> tuple[Pixel, Pixel]:
+        """
+        Gets the coordinates as a tuple.
+
+        Returns:
+            `tuple[Pixel, Pixel]`: A tuple containing the left and top
+                values in that order.
+        """
+        return self.left, self.top
+
+
+@Coordinate.__add__.register
+def _add_directional_offset(self, offset: DirectionalOffset) -> Coordinate:
+    match offset.direction:
+        case Direction.UP:
+            return Coordinate(self.left, self.top - offset.offset)
+        case Direction.DOWN:
+            return Coordinate(self.left, self.top + offset.offset)
+        case Direction.LEFT:
+            return Coordinate(self.left - offset.offset, self.top)
+        case Direction.RIGHT:
+            return Coordinate(self.left + offset.offset, self.top)
+
+    diag = offset.offset / sqrt(2)
+    match offset.direction:
+        case Direction.UP_LEFT:
+            return Coordinate(self.left - diag, self.top - diag)
+        case Direction.UP_RIGHT:
+            return Coordinate(self.left + diag, self.top - diag)
+        case Direction.DOWN_LEFT:
+            return Coordinate(self.left - diag, self.top + diag)
+        case Direction.DOWN_RIGHT:
+            return Coordinate(self.left + diag, self.top + diag)
+    raise ValueError(f"Invalid direction: {offset.direction}")
+
+
+@Coordinate.__add__.register
+def _add_coordinate(self, offset: Coordinate) -> Coordinate:
+    return Coordinate(self.left + offset.left, self.top + offset.top)
 
 
 @dataclass(frozen=True)
@@ -311,85 +495,35 @@ class Rectangle:
 
 
 @dataclass(frozen=True)
-class DrawOnScreen:
+class Polygon:
     """
-    Represents a drawable element positioned on the screen with its coordinates.
-
-    This immutable class combines a drawing with its position and provides
-    properties to access various coordinates and dimensions of the drawing
-    on the screen.
+    Polygon is a collection of points that define a closed polygon.
 
     Attributes:
-        `top_left`: The top-left position of the drawing on the screen.
-
-        `drawing`: The drawable element to be displayed on the screen.
+        `points`: A list of `Coordinate` objects representing the points
+            bounding the polygon.
     """
 
-    top_left: Coordinate
-    drawing: Drawing
+    points: list[Coordinate]
+
+    def __post_init__(self) -> None:
+        if len(self.points) < 3:
+            raise ValueError(
+                f"Polygon must have at least 3 points. Got {self.points}"
+            )
 
     @cached_property
     def rectangle(self) -> Rectangle:
         """
-        Gets the rectangular bounds of the drawing on screen.
+        Get a rectangle bounding the polygon.
 
         Returns:
-            `Rectangle`: A rectangle defining the drawing's position and size
-            on screen.
+            `Rectangle`: A rectangle bounding the polygon.
         """
-        return Rectangle(self.top_left, self.drawing.size)
-
-    @cached_property
-    def visible_rectangle(self) -> Rectangle:
-        """
-        Calculate the actual visible bounds of the drawing,
-        ignoring transparent pixels.
-
-        Returns:
-            `Rectangle`: A rectangle defining only the visible (non-transparent)
-            portion of the drawing on screen.
-        """
-        visible = [
-            Coordinate(x, y)
-            for x, y in product(
-                range(ceil(self.drawing.width)),
-                range(ceil(self.drawing.height)),
-            )
-            # `drawing._surface` to ignore the debug background.
-            if self.drawing._surface.get_at((x, y)).a
-        ]
-        if not visible:
-            return Rectangle(Coordinate(0, 0), Size(0, 0))
-
-        min_x = min(visible, key=lambda c: c.left).left
-        min_y = min(visible, key=lambda c: c.top).top
-        max_x = max(visible, key=lambda c: c.left).left
-        max_y = max(visible, key=lambda c: c.top).top
+        min_x = min(c.left for c in self.points)
+        min_y = min(c.top for c in self.points)
+        max_x = max(c.left for c in self.points)
+        max_y = max(c.top for c in self.points)
         return Rectangle(
-            self.top_left + Coordinate(min_x, min_y),
-            Size(max_x - min_x, max_y - min_y),
+            Coordinate(min_x, min_y), Size(max_x - min_x, max_y - min_y)
         )
-
-    @cached_property
-    def pygame(self) -> tuple[Surface, tuple[Pixel, Pixel]]:
-        """
-        Gets the pygame surface and coordinate tuple for rendering.
-
-        Returns:
-            `tuple[pygame.Surface, tuple[float, float]]`:
-                A tuple containing the `pygame.Surface` and a tuple of the left
-                and top coordinates (x, y).
-        """
-        return self.drawing.pygame, self.top_left.tuple
-
-    def __add__(self, coord: Coordinate) -> DrawOnScreen:
-        """
-        Shift the drawing by the specified coordinate.
-
-        Args:
-            `coord`: The coordinate to shift the drawing by.
-
-        Returns:
-            `DrawOnScreen`: A new `DrawOnScreen` shifted by the coordinate.
-        """
-        return DrawOnScreen(self.top_left + coord, self.drawing)

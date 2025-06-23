@@ -5,8 +5,8 @@ from unittest.mock import MagicMock
 from pygame import Event, QUIT
 from pytest_mock import MockerFixture
 
-from nextrpg.core import Coordinate, Size
-from nextrpg.draw_on_screen import DrawOnScreen, Drawing
+from nextrpg.core import Size
+from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
 from nextrpg.event.pygame_event import Quit
 from nextrpg.scene.map_helper import TileBottomAndDraw
 from nextrpg.scene.map_scene import MapScene, _offset

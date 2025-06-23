@@ -29,7 +29,7 @@ from nextrpg.core import (
 )
 from nextrpg.draw_on_screen import Coordinate, Drawing, Size
 from nextrpg.frames import CyclicFrames
-from nextrpg.model import initialize_internal_field, internal_field
+from nextrpg.model import init_internal_field, internal_field
 
 type _FrameIndices = list[int]
 
@@ -254,7 +254,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         )
 
     def __post_init__(self) -> None:
-        initialize_internal_field(
+        init_internal_field(
             self,
             "_frames",
             _load_frames,

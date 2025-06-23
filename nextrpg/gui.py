@@ -13,8 +13,8 @@ from pygame.display import flip, get_window_size, init, set_caption, set_mode
 from pygame.transform import smoothscale
 
 from nextrpg.config import GuiMode, ResizeMode, config
-from nextrpg.core import Coordinate, Size
-from nextrpg.draw_on_screen import DrawOnScreen, Drawing
+from nextrpg.core import Size
+from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
 from nextrpg.event.pygame_event import (
     GuiResize,
     KeyPressDown,
@@ -22,7 +22,7 @@ from nextrpg.event.pygame_event import (
     PygameEvent,
 )
 from nextrpg.model import (
-    initialize_internal_field,
+    init_internal_field,
     internal_field,
     is_internal_field_initialized,
 )
@@ -119,7 +119,7 @@ class Gui:
             return
         init()
         set_caption(config().gui.title)
-        initialize_internal_field(
+        init_internal_field(
             self,
             "_screen",
             set_mode,

@@ -6,8 +6,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum, auto
-from functools import cached_property, singledispatchmethod
-from math import ceil, sqrt
+from functools import cached_property
+from math import ceil
 
 
 @dataclass(frozen=True)
@@ -112,74 +112,6 @@ class DirectionalOffset:
 
 
 @dataclass(frozen=True)
-class Coordinate:
-    """
-    Represents a 2D coordinate with immutability and provides methods
-    for scaling and shifting coordinates.
-
-    Attributes:
-        `left`: The horizontal position of the coordinate, measured by
-            the number of pixels from the left edge of the game window.
-
-        `top`: The vertical position of the coordinate, measured by
-            the number of pixels from the top edge of the game window.
-    """
-
-    left: Pixel
-    top: Pixel
-
-    def __mul__(self, scale: float) -> Coordinate:
-        """
-        Scales the current `Coordinate` values (left and top) by a given factor
-        and returns a new `Coordinate` with the scaled values rounded up to the
-        nearest integer.
-
-        Round up so that drawings won't leave tiny, black gaps after scaled.
-
-        Args:
-            `scale`: The scaling factor to multiply the left and
-                top values of the `Coordinate`.
-
-        Returns:
-            `Coordinate`: A new `Coordinate` with the scaled and rounded values.
-        """
-        return Coordinate(ceil(self.left * scale), ceil(self.top * scale))
-
-    @singledispatchmethod
-    def __add__(self, offset: DirectionalOffset | Coordinate) -> Coordinate:
-        """
-        Shifts the coordinate in the specified direction by a given offset.
-        Supports both orthogonal and diagonal directions.
-
-        Or add two coordinates together.
-
-        For diagonal directions, the offset is divided proportionally.
-        For example, an offset of `sqrt(2)` in `UP_LEFT` direction shifts
-        the coordinate `Pixel(1)` in both `UP` and `LEFT` directions.
-
-        Args:
-            `offset`: A `DirectionalOffset` representing the direction
-                and offset, or `Coordinate` to add to the current `Coordinate`.
-
-        Returns:
-            `Coordinate`: A new coordinate shifted by the specified offset in
-            the given direction.
-        """
-        raise NotImplementedError(f"Non-addable {offset=}")
-
-    @cached_property
-    def tuple(self) -> tuple[Pixel, Pixel]:
-        """
-        Gets the coordinates as a tuple.
-
-        Returns:
-            `tuple[Pixel, Pixel]`: A tuple containing the left and top
-                values in that order.
-        """
-        return self.left, self.top
-
-
-@dataclass(frozen=True)
 class Size:
     """
     Represents the dimensions of a two-dimensional space, such as an image,
@@ -230,33 +162,3 @@ class Size:
                 values in that order.
         """
         return self.width, self.height
-
-
-@Coordinate.__add__.register
-def _add_directional_offset(self, offset: DirectionalOffset) -> Coordinate:
-    match offset.direction:
-        case Direction.UP:
-            return Coordinate(self.left, self.top - offset.offset)
-        case Direction.DOWN:
-            return Coordinate(self.left, self.top + offset.offset)
-        case Direction.LEFT:
-            return Coordinate(self.left - offset.offset, self.top)
-        case Direction.RIGHT:
-            return Coordinate(self.left + offset.offset, self.top)
-
-    diag = offset.offset / sqrt(2)
-    match offset.direction:
-        case Direction.UP_LEFT:
-            return Coordinate(self.left - diag, self.top - diag)
-        case Direction.UP_RIGHT:
-            return Coordinate(self.left + diag, self.top - diag)
-        case Direction.DOWN_LEFT:
-            return Coordinate(self.left - diag, self.top + diag)
-        case Direction.DOWN_RIGHT:
-            return Coordinate(self.left + diag, self.top + diag)
-    raise ValueError(f"Invalid direction: {offset.direction}")
-
-
-@Coordinate.__add__.register
-def _add_coordinate(self, offset: Coordinate) -> Coordinate:
-    return Coordinate(self.left + offset.left, self.top + offset.top)
