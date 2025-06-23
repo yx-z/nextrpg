@@ -20,7 +20,11 @@ def test_map_helper(mocker: MockerFixture) -> None:
     mock_background.tiles = lambda: [(1, 2, MockSurface())]
     mock_foreground = MagicMock()
     mock_foreground.name = "foreground"
-    mock_foreground.tiles = lambda: [(3, 4, MockSurface())]
+    mock_foreground.tiles = lambda: [
+        (0, 0, MockSurface()),
+        (1, 1, MockSurface()),
+    ]
+    mock_foreground.data = [[1, 0], [0, 0]]
     mock_above_character = MagicMock()
     mock_above_character.name = "above_character"
     mock_above_character.tiles = lambda: [(5, 6, MockSurface())]
@@ -33,11 +37,11 @@ def test_map_helper(mocker: MockerFixture) -> None:
         mock_above_character,
         mock_object,
     ]
-    mock_tmx.tile_properties.values = lambda: [
-        {"id": 2, "type": "abc"},
-        {"id": 3, "type": "abc"},
-        {"id": 4, "type": "def"},
-    ]
+    mock_tmx.tile_properties = {
+        1: {"id": 1, "type": "abc"},
+        2: {"id": 2, "type": "abc"},
+        3: {"id": 3, "type": "def"},
+    }
     mocker.patch("nextrpg.scene.map_helper.load_pygame", return_value=mock_tmx)
     helper = MapHelper(Path())
     assert helper.map_size == Size(20, 60)
