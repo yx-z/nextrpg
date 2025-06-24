@@ -6,17 +6,17 @@ or pass the customized instance to `nextrpg.start_game.start_game`.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import field
 from enum import Enum, auto
 from functools import cached_property
 
 from pygame.locals import K_DOWN, K_F1, K_LEFT, K_RIGHT, K_SPACE, K_UP
 
 from nextrpg.core import Direction, Millisecond, Pixel, Rgba, Size
+from nextrpg.model import Model
 
 
-@dataclass(frozen=True)
-class DebugConfig:
+class DebugConfig(Model):
     """
     Configuration class for debugging purposes.
 
@@ -82,8 +82,7 @@ class GuiMode(Enum):
         }[self]
 
 
-@dataclass(frozen=True)
-class GuiConfig:
+class GuiConfig(Model):
     """
     Configuration class for Graphical User Interface (GUI).
 
@@ -123,8 +122,7 @@ class GuiConfig:
     allow_window_resize: bool = True
 
 
-@dataclass(frozen=True)
-class TileMapProperties:
+class TileMapProperties(Model):
     """
     Constants for custom property names used in tile map files.
 
@@ -141,8 +139,7 @@ class TileMapProperties:
     speed = "speed"
 
 
-@dataclass(frozen=True)
-class TileMapConfig:
+class TileMapConfig(Model):
     """
     Configuration class for managing tile map layers and properties,
     that is created from tmx files [Tiled](https://www.mapeditor.org/).
@@ -174,8 +171,7 @@ class TileMapConfig:
     properties: TileMapProperties = TileMapProperties()
 
 
-@dataclass(frozen=True)
-class CharacterConfig:
+class CharacterConfig(Model):
     """
     Configuration class for characters.
 
@@ -194,8 +190,7 @@ class CharacterConfig:
     directions: set[Direction] = field(default_factory=lambda: set(Direction))
 
 
-@dataclass(frozen=True)
-class RpgMakerCharacterDrawingConfig:
+class RpgMakerCharacterDrawingConfig(Model):
     """
     Configuration class for RPG Maker character drawings.
 
@@ -236,8 +231,7 @@ These codes are used in key mapping configurations and event handling.
 """
 
 
-@dataclass(frozen=True)
-class KeyMappingConfig:
+class KeyMappingConfig(Model):
     """
     Configuration class for keyboard key mappings.
 
@@ -268,8 +262,7 @@ class KeyMappingConfig:
     gui_mode_toggle: KeyCode = K_F1
 
 
-@dataclass(frozen=True)
-class Config:
+class Config(Model):
     """
     Main configuration class that aggregates all configuration components.
 

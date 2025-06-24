@@ -4,7 +4,7 @@ Map scene implementation.
 
 from __future__ import annotations
 
-from dataclasses import KW_ONLY, dataclass, replace
+from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from pathlib import Path
 from typing import override
@@ -20,15 +20,14 @@ from nextrpg.draw_on_screen import (
 from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.gui import Gui
 from nextrpg.model import (
-    init_internal_field,
+    Model,
     internal_field,
 )
 from nextrpg.scene.map_helper import MapHelper, TileBottomAndDraw, _LayerIndex
 from nextrpg.scene.scene import Scene
 
 
-@dataclass(frozen=True)
-class MapScene(Scene):
+class MapScene(Model, Scene):
     """
     A scene implementation that represents a game map loaded from Tiled TMX.
 
@@ -43,9 +42,13 @@ class MapScene(Scene):
 
     tmx_file: Path
     character_drawing: CharacterDrawing
-    _: KW_ONLY = internal_field()
-    _map_helper: MapHelper = internal_field()
-    _player: CharacterOnScreen = internal_field()
+    _: KW_ONLY = field()
+    _map_helper: MapHelper = internal_field(
+        lambda self: MapHelper(self.tmx_file)
+    )
+    _player: CharacterOnScreen = internal_field(
+        lambda self: self._init_player()
+    )
 
     @cached_property
     @override
@@ -140,10 +143,6 @@ class MapScene(Scene):
         left_offset = _offset(player.left, gui_width, map_width)
         top_offset = _offset(player.top, gui_height, map_height)
         return Coordinate(left_offset, top_offset)
-
-    def __post_init__(self) -> None:
-        init_internal_field(self, "_map_helper", MapHelper, self.tmx_file)
-        init_internal_field(self, "_player", self._init_player)
 
     def _init_player(self) -> CharacterOnScreen:
         player = self._map_helper.get_object(config().map.player)

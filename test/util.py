@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
-from dataclasses import dataclass, replace
+from dataclasses import replace
 from functools import cached_property
-from typing import Generator
+from typing import Any, Generator
 
 from pygame import Surface
 
@@ -14,18 +14,17 @@ from nextrpg.core import (
     Millisecond,
 )
 from nextrpg.draw_on_screen import Drawing
+from nextrpg.model import Model
 
 
-@dataclass(frozen=True)
-class MockColor:
+class MockColor(Model):
     r: int
     g: int
     b: int
     a: int
 
 
-@dataclass(frozen=True)
-class MockSurface(Surface):
+class MockSurface(Model, Surface):
     data: str = ""
 
     def get_width(self) -> int:
@@ -37,9 +36,11 @@ class MockSurface(Surface):
     def get_at(self, _: tuple[int, int]) -> MockColor:
         return MockColor(0, 0, 0, 0)
 
+    def blits(self, iterable: Any) -> None:
+        pass
 
-@dataclass(frozen=True)
-class MockCharacterDrawing(CharacterDrawing):
+
+class MockCharacterDrawing(Model, CharacterDrawing):
     _direction: Direction = Direction.DOWN
 
     @cached_property

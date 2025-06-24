@@ -15,21 +15,17 @@ even if you own a copy of RPG Maker.
 
 from __future__ import annotations
 
-from dataclasses import KW_ONLY, dataclass, field, replace
+from dataclasses import KW_ONLY, field, replace
 from enum import IntEnum
 from functools import cached_property
 from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
-from nextrpg.core import (
-    Direction,
-    Millisecond,
-    Pixel,
-)
+from nextrpg.core import Direction, Millisecond, Pixel
 from nextrpg.draw_on_screen import Coordinate, Drawing, Size
 from nextrpg.frames import CyclicFrames
-from nextrpg.model import init_internal_field, internal_field
+from nextrpg.model import Model, internal_field
 
 type _FrameIndices = list[int]
 
@@ -72,8 +68,7 @@ type FrameType = type[DefaultFrameType | XpFrameType]
 """Choose between DefaultFrameType and XpFrameType."""
 
 
-@dataclass(frozen=True)
-class SpriteSheetSelection:
+class SpriteSheetSelection(Model):
     """
     Zero-indexed row/column for selecting a portion of a sprite sheet.
 
@@ -98,8 +93,7 @@ class SpriteSheetSelection:
     max_columns: int = 4
 
 
-@dataclass(frozen=True)
-class Margin:
+class Margin(Model):
     """
     Margin of a single character frame to crop from the sprite sheet.
     """
@@ -110,8 +104,7 @@ class Margin:
     right: Pixel = 0
 
 
-@dataclass(frozen=True)
-class SpriteSheet:
+class SpriteSheet(Model):
     """
     Container for sprite sheet configuration.
 
@@ -132,8 +125,7 @@ class SpriteSheet:
     margin: Margin = Margin()
 
 
-@dataclass(frozen=True)
-class RpgMakerCharacterDrawing(CharacterDrawing):
+class RpgMakerCharacterDrawing(Model, CharacterDrawing):
     """
     RPG Maker style character drawing.
 
@@ -159,8 +151,10 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     frame_duration: Millisecond = field(
         default_factory=lambda: config().rpg_maker_character.frame_duration
     )
-    _: KW_ONLY = internal_field()
-    _frames: dict[Direction, CyclicFrames] = internal_field()
+    _: KW_ONLY = field()
+    _frames: dict[Direction, CyclicFrames] = internal_field(
+        lambda self: self._load_frames()
+    )
 
     @cached_property
     @override
@@ -253,80 +247,66 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             _frames={d: frames.reset() for d, frames in self._frames.items()},
         )
 
-    def __post_init__(self) -> None:
-        init_internal_field(
-            self,
-            "_frames",
-            _load_frames,
-            self.sprite_sheet,
-            self.frame_duration,
+    def _load_frames(self) -> dict[Direction, CyclicFrames]:
+        drawing = (
+            self._crop_by_selection(select)
+            if (select := self.sprite_sheet.selection)
+            else self.sprite_sheet.drawing
+        )
+        return {
+            direction: self._load_frames_row(drawing, row)
+            for direction, row in _DIR_TO_ROW.items()
+        }
+
+    def _crop_by_selection(self, selection: SpriteSheetSelection) -> Drawing:
+        drawing = self.sprite_sheet.drawing
+        width = drawing.width / selection.max_columns
+        height = drawing.height / selection.max_rows
+        return drawing.crop(
+            Coordinate(width * selection.column, height * selection.row),
+            Size(width, height),
+        )
+
+    def _load_frames_row(self, drawing: Drawing, row: int) -> CyclicFrames:
+        frames = [
+            self._crop_margin(d)
+            for d in self._crop_into_frames_at_row(drawing, row)
+        ]
+        frame_indices = self.sprite_sheet.style._frame_indices()
+        return CyclicFrames(
+            [frames[i] for i in frame_indices], self.frame_duration
+        )
+
+    def _crop_into_frames_at_row(
+        self, drawing: Drawing, row: int
+    ) -> list[Drawing]:
+        num_frames = len(self.sprite_sheet.style)
+        width = drawing.width / num_frames
+        height = drawing.height / 4
+        return [
+            drawing.crop(
+                Coordinate(width * i, height * row), Size(width, height)
+            )
+            for i in range(num_frames)
+        ]
+
+    def _crop_margin(self, drawing: Drawing) -> Drawing:
+        margin = self.sprite_sheet.margin
+        return drawing.crop(
+            Coordinate(margin.left, margin.top),
+            Size(
+                drawing.width - margin.left - margin.right,
+                drawing.height - margin.top - margin.bottom,
+            ),
         )
 
 
-def _crop_margin(drawing: Drawing, margin: Margin) -> Drawing:
-    return drawing.crop(
-        Coordinate(margin.left, margin.top),
-        Size(
-            drawing.width - margin.left - margin.right,
-            drawing.height - margin.top - margin.bottom,
-        ),
-    )
-
-
-def _crop_into_frames_at_row(
-    drawing: Drawing, sprite_sheet: SpriteSheet, row: int
-) -> list[Drawing]:
-    num_frames = len(sprite_sheet.style)
-    width = drawing.width / num_frames
-    height = drawing.height / 4
-    return [
-        drawing.crop(Coordinate(width * i, height * row), Size(width, height))
-        for i in range(num_frames)
-    ]
-
-
-def _crop_by_selection(
-    drawing: Drawing, selection: SpriteSheetSelection
-) -> Drawing:
-    width = drawing.width / selection.max_columns
-    height = drawing.height / selection.max_rows
-    return drawing.crop(
-        Coordinate(width * selection.column, height * selection.row),
-        Size(width, height),
-    )
-
-
-def _load_frames_row(
-    drawing: Drawing,
-    sprite_sheet: SpriteSheet,
-    row: int,
-    frame_duration: Millisecond,
-) -> CyclicFrames:
-    frames = [
-        _crop_margin(d, sprite_sheet.margin)
-        for d in _crop_into_frames_at_row(drawing, sprite_sheet, row)
-    ]
-    frame_indices = sprite_sheet.style._frame_indices()
-    return CyclicFrames([frames[i] for i in frame_indices], frame_duration)
-
-
-def _load_frames(
-    sprite_sheet: SpriteSheet, frame_duration: Millisecond
-) -> dict[Direction, CyclicFrames]:
-    drawing = (
-        _crop_by_selection(sprite_sheet.drawing, sprite_sheet.selection)
-        if sprite_sheet.selection
-        else sprite_sheet.drawing
-    )
-    return {
-        d: _load_frames_row(drawing, sprite_sheet, row, frame_duration)
-        for d, row in {
-            Direction.DOWN: 0,
-            Direction.LEFT: 1,
-            Direction.RIGHT: 2,
-            Direction.UP: 3,
-        }.items()
-    }
+_DIR_TO_ROW = {
+    Direction.DOWN: 0,
+    Direction.LEFT: 1,
+    Direction.RIGHT: 2,
+    Direction.UP: 3,
+}
 
 
 _EIGHT_TO_FOUR = {

@@ -4,18 +4,17 @@ Static frames, when played sequentially, become animated.
 
 from __future__ import annotations
 
-from dataclasses import KW_ONLY, dataclass, replace
+from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 
 from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import Drawing
-from nextrpg.model import init_internal_field, internal_field
+from nextrpg.model import Model, internal_field
 
 type _FrameIndex = int
 
 
-@dataclass(frozen=True)
-class CyclicFrames:
+class CyclicFrames(Model):
     """
     Static frames that can be played sequentially to create animations.
 
@@ -30,9 +29,9 @@ class CyclicFrames:
 
     frames: list[Drawing]
     duration_per_frame: Millisecond
-    _: KW_ONLY = internal_field()
-    _index: _FrameIndex = internal_field()
-    _elapsed: Millisecond = internal_field()
+    _: KW_ONLY = field()
+    _index: _FrameIndex = internal_field(lambda _: 0)
+    _elapsed: Millisecond = internal_field(lambda _: 0)
 
     @cached_property
     def current_frame(self) -> Drawing:
@@ -82,7 +81,3 @@ class CyclicFrames:
             the beginning of the sequence.
         """
         return replace(self, _index=0, _elapsed=0)
-
-    def __post_init__(self) -> None:
-        init_internal_field(self, "_index", lambda: 0)
-        init_internal_field(self, "_elapsed", lambda: 0)

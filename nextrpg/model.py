@@ -1,59 +1,61 @@
+"""
+Model definition meta.
+"""
+
 from __future__ import annotations
 
-from dataclasses import field
-from typing import Any, Callable
+from abc import ABCMeta
+from dataclasses import dataclass, field, fields
+from typing import Any, Callable, dataclass_transform
 
-_INTERNAL: Any = object()
+
+@dataclass(frozen=True)
+class _Init[S, R]:
+    init: Callable[[S], R]
 
 
-def internal_field() -> Any:
+def internal_field[S, R](init: Callable[[S], R]) -> Any:
     """
-    Used to mark fields as internal-only and not exposed to the library user.
-
-    Returns:
-        `Any`: A field marked as internal.
-    """
-    return field(repr=False, default=_INTERNAL, kw_only=True)
-
-
-def is_internal_field_initialized(f: Any) -> bool:
-    """
-    Checks if a field is initialized to a value other than `INTERNAL_FIELD`.
+    Used to mark a field in `Model` as internal.
 
     Args:
-        `field` : The field to check.
+        `init`: Function that takes `self` as argument and returns
+            the initial value.
 
     Returns:
-        `bool`: `True` if the field is initialized, `False` otherwise.
+        `Any`: Internal field with the given initialization function.
     """
-    return f is not _INTERNAL
+    return field(repr=False, default=_Init(init))
 
 
-def init_internal_field[**P](
-    self: Any,
-    name: str,
-    factory: Callable[P, Any],
-    *args: P.args,
-    **kwargs: P.kwargs,
-) -> None:
+@dataclass_transform(frozen_default=True)
+class _Meta[T](ABCMeta):
+    def __new__(cls, *args: Any, **kwargs: Any) -> type:
+        klass = super().__new__(cls, *args, **kwargs)
+        return dataclass(frozen=True)(klass)
+
+
+class Model(metaclass=_Meta):
     """
-    Used to init `INTERNAL_FIELD` in `dataclass` instance.
+    Base class to inherit from for models.
+    Inherted model classes are an immutable dataclass with `internal_fields`.
 
-    Args:
-        `self`: Object to set.
+    Example usage:
+    ```python
+    from dataclasses import field, KW_ONLY
+    from nextrpg.model import internal_field, Model
 
-        `name`: Name of the field.
-
-        `factory`: Factory function to create the value of the field.
-            This is a factory to avoid potential side effects when creating
-            the field.
-
-        `*args`: Positional arguments to pass to the factory function.
-
-        `**kwargs`: Keyword arguments to pass to the factory function.
-
-    Returns:
-        `None`.
+    class MyModel(Model):
+        user_input: str
+        public_data: str = "public"
+        _: KW_ONLY = field()
+        _internal_data: str = internal_field(
+            lambda self: f"internal {self.public_data}"
+        )
+    ```
     """
-    if not is_internal_field_initialized(getattr(self, name)):
-        object.__setattr__(self, name, factory(*args, **kwargs))
+
+    def __post_init__(self) -> None:
+        for f in fields(self):
+            if isinstance(init := getattr(self, f.name), _Init):
+                object.__setattr__(self, f.name, init.init(self))

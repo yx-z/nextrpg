@@ -4,14 +4,14 @@ Core types referenced across `nextrpg`.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 from enum import Enum, auto
-from functools import cache, cached_property, lru_cache
+from functools import cache, cached_property
 from math import ceil
 
+from nextrpg.model import Model
 
-@dataclass(frozen=True)
-class Rgba:
+
+class Rgba(Model):
     """
     Represents an RGBA color with red, green, blue and alpha components.
 
@@ -45,6 +45,7 @@ class Rgba:
     @staticmethod
     def black() -> Rgba:
         return Rgba(0, 0, 0, 255)
+
 
 type Millisecond = int
 """
@@ -93,8 +94,7 @@ Number of pixel on screen.
 """
 
 
-@dataclass(frozen=True)
-class DirectionalOffset:
+class DirectionalOffset(Model):
     """
     Represents a directional offset for movement calculations.
 
@@ -115,8 +115,7 @@ class DirectionalOffset:
     offset: Pixel
 
 
-@dataclass(frozen=True)
-class Size:
+class Size(Model):
     """
     Represents the dimensions of a two-dimensional space, such as an image,
     with defined width and height.

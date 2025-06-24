@@ -5,7 +5,7 @@ Start the game window and game loop.
 from __future__ import annotations
 
 from asyncio import sleep
-from dataclasses import KW_ONLY, dataclass, replace
+from dataclasses import KW_ONLY, field, replace
 from functools import cached_property, reduce, singledispatchmethod
 from typing import Callable
 
@@ -19,7 +19,7 @@ from nextrpg.event.pygame_event import (
     to_typed_event,
 )
 from nextrpg.gui import Gui
-from nextrpg.model import init_internal_field, internal_field
+from nextrpg.model import Model, internal_field
 from nextrpg.scene.scene import Scene
 
 
@@ -55,14 +55,13 @@ class Game:
             await sleep(0)
 
 
-@dataclass(frozen=True)
-class _GameLoop:
+class _GameLoop(Model):
     entry_scene: Callable[[], Scene]
-    _: KW_ONLY = internal_field()
-    _is_running: bool = internal_field()
-    _clock: Clock = internal_field()
-    _gui: Gui = internal_field()
-    _scene: Scene = internal_field()
+    _: KW_ONLY = field()
+    _is_running: bool = internal_field(lambda _: True)
+    _clock: Clock = internal_field(lambda _: Clock())
+    _gui: Gui = internal_field(lambda _: Gui())
+    _scene: Scene = internal_field(lambda self: self.entry_scene())
 
     @cached_property
     def is_running(self) -> bool:
@@ -84,12 +83,6 @@ class _GameLoop:
             pygame.event.get(),
             stepped,
         )
-
-    def __post_init__(self) -> None:
-        init_internal_field(self, "_is_running", lambda: True)
-        init_internal_field(self, "_gui", Gui)
-        init_internal_field(self, "_clock", Clock)
-        init_internal_field(self, "_scene", self.entry_scene)
 
 
 @_GameLoop.event.register

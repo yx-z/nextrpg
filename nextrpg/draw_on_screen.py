@@ -4,7 +4,7 @@ Drawable on screen.
 
 from __future__ import annotations
 
-from dataclasses import KW_ONLY, dataclass, field
+from dataclasses import KW_ONLY, field
 from functools import cached_property, singledispatchmethod
 from itertools import product
 from math import ceil, sqrt
@@ -18,11 +18,10 @@ from pygame.mask import from_surface
 
 from nextrpg.config import config
 from nextrpg.core import Direction, DirectionalOffset, Pixel, Rgba, Size
-from nextrpg.model import init_internal_field, internal_field
+from nextrpg.model import Model, internal_field
 
 
-@dataclass(frozen=True)
-class Coordinate:
+class Coordinate(Model):
     """
     Represents a 2D coordinate with immutability and provides methods
     for scaling and shifting coordinates.
@@ -122,8 +121,13 @@ def _add_coordinate(self, offset: Coordinate) -> Coordinate:
     return Coordinate(self.left + offset.left, self.top + offset.top)
 
 
-@dataclass(frozen=True)
-class Drawing:
+def _init_surface(self: Drawing) -> Surface:
+    if isinstance(self.resource, Surface):
+        return self.resource
+    return load(self.resource).convert_alpha()
+
+
+class Drawing(Model):
     """
     Represents a drawable element and provides methods for accessing its size
     and dimensions.
@@ -135,8 +139,8 @@ class Drawing:
     """
 
     resource: Path | Surface = field(repr=False)
-    _: KW_ONLY = internal_field()
-    _surface: Surface = internal_field()
+    _: KW_ONLY = field()
+    _surface: Surface = internal_field(_init_surface)
 
     def __repr__(self) -> str:
         """
@@ -217,20 +221,8 @@ class Drawing:
         surface.blit(self._surface, (0, 0))
         return surface
 
-    def __post_init__(self) -> None:
-        init_internal_field(
-            self,
-            "_surface",
-            lambda: (
-                load(self.resource).convert_alpha()
-                if isinstance(self.resource, Path)
-                else self.resource
-            ),
-        )
 
-
-@dataclass(frozen=True)
-class DrawOnScreen:
+class DrawOnScreen(Model):
     """
     Represents a drawable element positioned on the screen with its coordinates.
 
@@ -314,8 +306,7 @@ class DrawOnScreen:
         return DrawOnScreen(self.top_left + coord, self.drawing)
 
 
-@dataclass(frozen=True)
-class Polygon:
+class Polygon(Model):
     """
     Polygon is a collection of points that define a closed polygon.
 
@@ -408,7 +399,6 @@ class Polygon:
         return False
 
 
-@dataclass(frozen=True)
 class Rectangle(Polygon):
     """
     Represents an immutable rectangle defined by its top left corner and size.

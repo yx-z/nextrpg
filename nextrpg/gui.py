@@ -4,7 +4,7 @@ Game window / Graphical User Interface (GUI).
 
 from __future__ import annotations
 
-from dataclasses import KW_ONLY, dataclass, field, replace
+from dataclasses import KW_ONLY, field, replace
 from functools import cached_property, reduce, singledispatchmethod
 from operator import or_
 
@@ -21,15 +21,16 @@ from nextrpg.event.pygame_event import (
     KeyboardKey,
     PygameEvent,
 )
-from nextrpg.model import (
-    init_internal_field,
-    internal_field,
-    is_internal_field_initialized,
-)
+from nextrpg.model import Model, internal_field
 
 
-@dataclass(frozen=True)
-class Gui:
+def _init_screen(self: Gui) -> Surface:
+    init()
+    set_caption(config().gui.title)
+    return set_mode(config().gui.size.tuple, _gui_flag(self._gui_mode))
+
+
+class Gui(Model):
     """
     Initialize a `Gui` instance that scales and centers drawings.
 
@@ -39,9 +40,9 @@ class Gui:
     """
 
     window: Size = field(default_factory=lambda: config().gui.size)
-    _: KW_ONLY = internal_field()
-    _gui_mode: GuiMode = internal_field()
-    _screen: Surface = internal_field()
+    _: KW_ONLY = field()
+    _gui_mode: GuiMode = internal_field(lambda _: config().gui.gui_mode)
+    _screen: Surface = internal_field(_init_screen)
 
     @staticmethod
     def current_size() -> Size:
@@ -112,20 +113,6 @@ class Gui:
         return Coordinate(
             (current_width - self._scaling * native_width) / 2,
             (current_height - self._scaling * native_height) / 2,
-        )
-
-    def __post_init__(self) -> None:
-        if is_internal_field_initialized(self._screen):
-            return
-        init()
-        set_caption(config().gui.title)
-        init_internal_field(self, "_gui_mode", lambda: config().gui.gui_mode)
-        init_internal_field(
-            self,
-            "_screen",
-            set_mode,
-            config().gui.size.tuple,
-            _gui_flag(self._gui_mode),
         )
 
 
