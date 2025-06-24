@@ -23,10 +23,8 @@ from nextrpg.model import (
     init_internal_field,
     internal_field,
 )
-from nextrpg.scene.map_helper import MapHelper, TileBottomAndDraw
+from nextrpg.scene.map_helper import MapHelper, TileBottomAndDraw, _LayerIndex
 from nextrpg.scene.scene import Scene
-
-type _LayerIndex = int
 
 
 @dataclass(frozen=True)

@@ -114,4 +114,4 @@ def test_polygon() -> None:
     with raises(ValueError):
         Polygon([])
     polygon = Polygon([Coordinate(0, 0), Coordinate(1, 0), Coordinate(1, 1)])
-    assert polygon.rectangle == Rectangle(Coordinate(0, 0), Size(1, 1))
+    assert polygon.bounding_rectangle == Rectangle(Coordinate(0, 0), Size(1, 1))

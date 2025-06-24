@@ -1,18 +1,32 @@
-from dataclasses import KW_ONLY, dataclass
+from dataclasses import KW_ONLY, dataclass, fields
 from functools import cached_property, lru_cache
 from itertools import product
 from pathlib import Path
 from typing import NamedTuple
 
 from pygame import Surface
-from pytmx import TiledMap, TiledObject, TiledTileLayer, load_pygame
+from pytmx import (
+    TiledMap,
+    TiledObject,
+    TiledObjectGroup,
+    TiledTileLayer,
+    load_pygame,
+)
 
 from nextrpg.config import config
 from nextrpg.core import Pixel, Size
-from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing, Polygon
+from nextrpg.draw_on_screen import (
+    Coordinate,
+    DrawOnScreen,
+    Drawing,
+    Polygon,
+    Rectangle,
+)
 from nextrpg.model import init_internal_field, internal_field
 
 type _Gid = int
+
+type _LayerIndex = int
 
 
 class _TiledCoordinate(NamedTuple):
@@ -112,12 +126,55 @@ class MapHelper:
         Returns:
             `list[Polygon]`: List of collision polygons.
         """
-        return []
+        return [
+            polygon
+            for coord, obj in self._colliders
+            if (polygon := self._polygon(coord, obj))
+        ]
+
+    @cached_property
+    def _colliders(self) -> list[tuple[_TiledCoordinate, TiledObject]]:
+        return [
+            (_TiledCoordinate(x, y), c)
+            for layer in self._all_tile_layers
+            for x, y, gid in layer
+            if (c := self._collider(gid))
+        ]
+
+    def _collider(self, gid: _Gid) -> TiledObject | None:
+        colliders = self._tmx.tile_properties.get(gid, {}).get("colliders")
+        return colliders[0] if colliders else None
+
+    def _polygon(
+        self, coord: _TiledCoordinate, obj: TiledObject
+    ) -> Polygon | None:
+        return self._from_points(coord, obj) or self._from_rect(coord, obj)
+
+    def _from_points(
+        self, coord: _TiledCoordinate, obj: TiledObject
+    ) -> Polygon | None:
+        if not (points := getattr(obj, "points", None)):
+            return None
+        w, h = self._tile_size.tuple
+        cx, cy = coord
+        return Polygon([Coordinate(cx * w + x, cy * h + y) for x, y in points])
+
+    def _from_rect(
+        self, coord: _TiledCoordinate, obj: TiledObject
+    ) -> Rectangle | None:
+        if not all(hasattr(obj, attr.name) for attr in fields(_Rect)):
+            return None
+        w, h = self._tile_size.tuple
+        cx, cy = coord
+        return Rectangle(
+            Coordinate(cx * w + obj.x, cy * h + obj.y),
+            Size(obj.width, obj.height),
+        )
 
     @lru_cache
     def get_object(self, name: str) -> TiledObject:
         """
-        Get the object of the given name from object layers.
+        Get the first object of the given name from ALL object layers.
 
         Arguments:
             `name`: The unique name to retrieve the object by.
@@ -127,23 +184,26 @@ class MapHelper:
         """
         return next(
             obj
-            for i in self._tmx.visible_object_groups
-            for obj in self._tmx.layers[i]
+            for layer in map(self._layer, self._tmx.visible_object_groups)
+            for obj in layer
             if obj.name == name
         )
 
     def _tile_layers(self, class_name: str) -> list[TiledTileLayer]:
         return [
             layer
-            for i in self._tmx.visible_tile_layers
-            if (layer := self._tmx.layers[i])
-            and getattr(layer, "class", None) == class_name
+            for layer in self._all_tile_layers
+            if getattr(layer, "class", None) == class_name
         ]
 
-    def _draw_layers(self, name: str) -> list[DrawOnScreen]:
+    @cached_property
+    def _all_tile_layers(self) -> list[TiledTileLayer]:
+        return list(map(self._layer, self._tmx.visible_tile_layers))
+
+    def _draw_layers(self, class_name: str) -> list[DrawOnScreen]:
         return [
             draw
-            for layer in self._tile_layers(name)
+            for layer in self._tile_layers(class_name)
             for _, draw in self._draw(layer)
         ]
 
@@ -211,6 +271,9 @@ class MapHelper:
             if (cls := tile.get("type"))
         }
 
+    def _layer(self, index: _LayerIndex) -> TiledTileLayer | TiledObjectGroup:
+        return self._tmx.layers[index]
+
     def __post_init__(self) -> None:
         init_internal_field(self, "_tmx", load_pygame, str(self.tmx_file))
 
@@ -221,3 +284,11 @@ def _neighbors(coord: _TiledCoordinate) -> set[_TiledCoordinate]:
     return {
         _TiledCoordinate(x + dx, y + dy) for dx, dy in product(deltas, deltas)
     }
+
+
+@dataclass
+class _Rect:
+    x: Pixel
+    y: Pixel
+    width: Pixel
+    height: Pixel

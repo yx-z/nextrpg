@@ -12,7 +12,11 @@
  <tile id="37" type="camp"/>
  <tile id="38" type="camp"/>
  <tile id="39" type="camp"/>
- <tile id="48" type="lamp"/>
+ <tile id="48" type="lamp">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="13.625" y="10.5" width="20.875" height="21.625"/>
+  </objectgroup>
+ </tile>
  <tile id="64" type="lamp"/>
  <tile id="80" type="lamp"/>
  <tile id="96" type="lamp"/>

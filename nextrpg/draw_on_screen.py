@@ -4,14 +4,17 @@ Drawable on screen.
 
 from __future__ import annotations
 
-from dataclasses import KW_ONLY, dataclass
+from dataclasses import KW_ONLY, dataclass, field
 from functools import cached_property, singledispatchmethod
 from itertools import product
 from math import ceil, sqrt
 from pathlib import Path
+from typing import override
 
-from pygame import SRCALPHA, Surface
+from pygame import Mask, SRCALPHA, Surface
+from pygame.draw import polygon
 from pygame.image import load
+from pygame.mask import from_surface
 
 from nextrpg.config import config
 from nextrpg.core import (
@@ -241,6 +244,9 @@ class Coordinate:
         """
         return Coordinate(ceil(self.left * scale), ceil(self.top * scale))
 
+    def __sub__(self, other: Coordinate) -> Coordinate:
+        return Coordinate(self.left - other.left, self.top - other.top)
+
     @singledispatchmethod
     def __add__(self, offset: DirectionalOffset | Coordinate) -> Coordinate:
         """
@@ -306,7 +312,99 @@ def _add_coordinate(self, offset: Coordinate) -> Coordinate:
 
 
 @dataclass(frozen=True)
-class Rectangle:
+class Polygon:
+    """
+    Polygon is a collection of points that define a closed polygon.
+
+    Attributes:
+        `points`: A list of `Coordinate` objects representing the points
+            bounding the polygon.
+    """
+
+    points: list[Coordinate]
+
+    def __post_init__(self) -> None:
+        if len(self.points) < 3:
+            raise ValueError(
+                f"Polygon must have at least 3 points. Got {self.points}"
+            )
+
+    @cached_property
+    def bounding_rectangle(self) -> Rectangle:
+        """
+        Get a rectangle bounding the polygon.
+
+        Returns:
+            `Rectangle`: A rectangle bounding the polygon.
+        """
+        min_x = min(c.left for c in self.points)
+        min_y = min(c.top for c in self.points)
+        max_x = max(c.left for c in self.points)
+        max_y = max(c.top for c in self.points)
+        return Rectangle(
+            Coordinate(min_x, min_y), Size(max_x - min_x, max_y - min_y)
+        )
+
+    @cached_property
+    def _mask(self) -> Mask:
+        return from_surface(self.fill(Rgba.black()).drawing.pygame)
+
+    def fill(self, color: Rgba) -> DrawOnScreen:
+        """
+        Creates a colored `DrawOnScreen` with the provided color.
+
+        Args:
+            `Color`: The color to fill the rectangle.
+
+        Returns:
+            `DrawOnScreen`: A transparent surface matching rectangle dimensions.
+        """
+        rect = self.bounding_rectangle
+        surface = Surface(rect.size.tuple, SRCALPHA)
+        polygon(
+            surface,
+            color.tuple,
+            [(p - rect.top_left).tuple for p in self.points],
+        )
+        return DrawOnScreen(rect.top_left, Drawing(surface))
+
+    def collide(self, poly: Polygon) -> bool:
+        """
+        Checks if this rectangle overlaps with another polygon.
+
+        Args:
+            `poly`: The polygon to check for collision with.
+
+        Returns:
+            `bool`: True if two polygons overlap, False otherwise.
+        """
+        min_x, min_y = self.bounding_rectangle.top_left.tuple
+        poly_min_x, poly_min_y = poly.bounding_rectangle.top_left.tuple
+        offset = (poly_min_x - min_x, poly_min_y - min_y)
+        return bool(self._mask.overlap(poly._mask, offset))
+
+    def __contains__(self, coordinate: Coordinate) -> bool:
+        """
+        Checks if a coordinate point lies within this polygon.
+
+        The point is considered inside if it falls in the polygon's bounds,
+        including points on the edges.
+
+        Arguments:
+            `coordinate`: The coordinate point to check
+
+        Returns:
+            `bool`: Whether the coordinate lies within the rectangle.
+        """
+        x, y = (coordinate - self.bounding_rectangle.top_left).tuple
+        width, height = self.bounding_rectangle.size.tuple
+        if 0 <= x < width and 0 <= y < height:
+            return bool(self._mask.get_at((x, y)))
+        return False
+
+
+@dataclass(frozen=True)
+class Rectangle(Polygon):
     """
     Represents an immutable rectangle defined by its top left corner and size.
 
@@ -318,6 +416,7 @@ class Rectangle:
 
     top_left: Coordinate
     size: Size
+    points: list[Coordinate] = field(init=False, repr=False)
 
     @cached_property
     def left(self) -> Pixel:
@@ -440,90 +539,29 @@ class Rectangle:
         width, height = self.size.tuple
         return Coordinate(self.left + width / 2, self.top + height / 2)
 
-    def collide(self, rectangle: Rectangle) -> bool:
-        """
-        Checks if this rectangle overlaps with another rectangle.
+    def __post_init__(self) -> None:
+        points = [
+            self.top_left,
+            self.top_right,
+            self.bottom_right,
+            self.bottom_left,
+        ]
+        object.__setattr__(self, "points", points)
 
-        This method determines if there is any overlap between the
-        current rectangle and the provided rectangle by
-        comparing their edge coordinates.
+    @override
+    def collide(self, poly: Polygon) -> bool:
+        if isinstance(poly, Rectangle):
+            return (
+                self.top_left.left < poly.top_right.left
+                and self.top_right.left > poly.top_left.left
+                and self.top_left.top < poly.bottom_right.top
+                and self.bottom_right.top > poly.top_left.top
+            )
+        return super().collide(poly)
 
-        Args:
-            `rectangle`: The rectangle to check for collision with.
-
-        Returns:
-            `bool`: True if the rectangles overlap, False otherwise.
-        """
-        return (
-            self.top_left.left < rectangle.top_right.left
-            and self.top_right.left > rectangle.top_left.left
-            and self.top_left.top < rectangle.bottom_right.top
-            and self.bottom_right.top > rectangle.top_left.top
-        )
-
+    @override
     def __contains__(self, coordinate: Coordinate) -> bool:
-        """
-        Checks if a coordinate point lies within this rectangle.
-
-        The point is considered inside if it falls in the rectangle's bounds,
-        including points on the edges.
-
-        Arguments:
-            `coordinate`: The coordinate point to check
-
-        Returns:
-            `bool`: Whether the coordinate lies within the rectangle.
-        """
         return (
             self.left < coordinate.left < self.right
             and self.top < coordinate.top < self.bottom
-        )
-
-    def fill(self, color: Rgba) -> DrawOnScreen:
-        """
-        Creates a colored `DrawOnScreen` with the provided color.
-
-        Args:
-            `Color`: The color to fill the rectangle.
-
-        Returns:
-            `DrawOnScreen`: A transparent surface matching rectangle dimensions.
-        """
-        surface = Surface(self.size.tuple, SRCALPHA)
-        surface.fill(color.tuple)
-        return DrawOnScreen(self.top_left, Drawing(surface))
-
-
-@dataclass(frozen=True)
-class Polygon:
-    """
-    Polygon is a collection of points that define a closed polygon.
-
-    Attributes:
-        `points`: A list of `Coordinate` objects representing the points
-            bounding the polygon.
-    """
-
-    points: list[Coordinate]
-
-    def __post_init__(self) -> None:
-        if len(self.points) < 3:
-            raise ValueError(
-                f"Polygon must have at least 3 points. Got {self.points}"
-            )
-
-    @cached_property
-    def rectangle(self) -> Rectangle:
-        """
-        Get a rectangle bounding the polygon.
-
-        Returns:
-            `Rectangle`: A rectangle bounding the polygon.
-        """
-        min_x = min(c.left for c in self.points)
-        min_y = min(c.top for c in self.points)
-        max_x = max(c.left for c in self.points)
-        max_y = max(c.top for c in self.points)
-        return Rectangle(
-            Coordinate(min_x, min_y), Size(max_x - min_x, max_y - min_y)
         )

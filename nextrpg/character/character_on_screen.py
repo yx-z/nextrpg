@@ -80,7 +80,7 @@ class CharacterOnScreen:
         return CharacterAndVisuals(
             DrawOnScreen(self.coordinate, self.character.drawing),
             below_character_visuals=[],
-            above_character_visuals=self._debug_rectangles,
+            above_character_visuals=self._collision_visuals,
         )
 
     @singledispatchmethod
@@ -143,6 +143,9 @@ class CharacterOnScreen:
     def _can_move(
         self, time_delta: Millisecond, coordinate: Coordinate
     ) -> bool:
+        if (debug := config().debug) and debug.ignore_map_collisions:
+            return True
+
         rect = DrawOnScreen(
             coordinate, self.character.move(time_delta).drawing
         ).rectangle
@@ -180,12 +183,12 @@ class CharacterOnScreen:
         )
 
     @cached_property
-    def _debug_rectangles(self) -> list[DrawOnScreen]:
-        return (
-            [c.fill(debug.collision_rectangle_color) for c in self.collisions]
-            if (debug := config().debug)
-            else []
-        )
+    def _collision_visuals(self) -> list[DrawOnScreen]:
+        if not (debug := config().debug):
+            return []
+        return [
+            c.fill(debug.collision_rectangle_color) for c in self.collisions
+        ]
 
     def __post_init__(self) -> None:
         init_internal_field(self, "_movement_keys", frozenset)

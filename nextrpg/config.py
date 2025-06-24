@@ -31,10 +31,14 @@ class DebugConfig:
         `collision_rectangle_color`: The color used to highlight collision areas
             when debugging is enabled.
             Default is semi-transparent red (255, 0, 0, 96).
+
+        `ignore_map_collisions`: If `True`, the player can move freely on maps,
+            ignoring collision areas. Default is `False`.
     """
 
     drawing_background_color: Rgba = Rgba(0, 0, 255, 32)
     collision_rectangle_color: Rgba = Rgba(255, 0, 0, 96)
+    ignore_map_collisions: bool = False
 
 
 class ResizeMode(Enum):

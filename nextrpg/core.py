@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum, auto
-from functools import cached_property
+from functools import cache, cached_property, lru_cache
 from math import ceil
 
 
@@ -41,6 +41,10 @@ class Rgba:
         """
         return self.red, self.green, self.blue, self.alpha
 
+    @cache
+    @staticmethod
+    def black() -> Rgba:
+        return Rgba(0, 0, 0, 255)
 
 type Millisecond = int
 """
