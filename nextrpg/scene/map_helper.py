@@ -1,4 +1,4 @@
-from dataclasses import KW_ONLY, dataclass, fields
+from dataclasses import KW_ONLY, dataclass
 from functools import cached_property, lru_cache
 from itertools import product
 from pathlib import Path
@@ -24,15 +24,6 @@ from nextrpg.draw_on_screen import (
 )
 from nextrpg.model import init_internal_field, internal_field
 
-type _Gid = int
-
-type _LayerIndex = int
-
-
-class _TiledCoordinate(NamedTuple):
-    top: int
-    left: int
-
 
 class TileBottomAndDraw(NamedTuple):
     """
@@ -55,6 +46,20 @@ class TileBottomAndDraw(NamedTuple):
 
     bottom: Pixel
     draw: DrawOnScreen
+
+
+type _Gid = int
+type _LayerIndex = int
+
+
+class _TiledCoordinate(NamedTuple):
+    top: int
+    left: int
+
+
+class _Collider(NamedTuple):
+    coord: _TiledCoordinate
+    obj: TiledObject
 
 
 @dataclass(frozen=True)
@@ -132,10 +137,41 @@ class MapHelper:
             if (polygon := self._polygon(coord, obj))
         ]
 
-    @cached_property
-    def _colliders(self) -> list[tuple[_TiledCoordinate, TiledObject]]:
+    @lru_cache
+    def get_object(self, name: str) -> TiledObject:
+        """
+        Get the first object of the given name from ALL object layers.
+
+        Arguments:
+            `name`: The unique name to retrieve the object by.
+
+        Returns:
+            `TiledObject`: The tile object with the given name.
+        """
+        return self.get_objects(name)[0]
+
+    @lru_cache
+    def get_objects(self, name: str) -> list[TiledObject]:
+        """
+        Get ALL objects of the given name from ALL object layers.
+
+        Arguments:
+            `name`: The unique name to retrieve the object by.
+
+        Returns:
+            `list[TiledObject]`: The tile objects with the given name.
+        """
         return [
-            (_TiledCoordinate(x, y), c)
+            obj
+            for layer in map(self._layer, self._tmx.visible_object_groups)
+            for obj in layer
+            if obj.name == name
+        ]
+
+    @cached_property
+    def _colliders(self) -> list[_Collider]:
+        return [
+            _Collider(_TiledCoordinate(x, y), c)
             for layer in self._all_tile_layers
             for x, y, gid in layer
             if (c := self._collider(gid))
@@ -162,31 +198,13 @@ class MapHelper:
     def _from_rect(
         self, coord: _TiledCoordinate, obj: TiledObject
     ) -> Rectangle | None:
-        if not all(hasattr(obj, attr.name) for attr in fields(_Rect)):
+        if not all(hasattr(obj, attr) for attr in _RECT_ATTRS):
             return None
         w, h = self._tile_size.tuple
         cx, cy = coord
         return Rectangle(
             Coordinate(cx * w + obj.x, cy * h + obj.y),
             Size(obj.width, obj.height),
-        )
-
-    @lru_cache
-    def get_object(self, name: str) -> TiledObject:
-        """
-        Get the first object of the given name from ALL object layers.
-
-        Arguments:
-            `name`: The unique name to retrieve the object by.
-
-        Returns:
-            `TiledObject`: The tile object with the given name.
-        """
-        return next(
-            obj
-            for layer in map(self._layer, self._tmx.visible_object_groups)
-            for obj in layer
-            if obj.name == name
         )
 
     def _tile_layers(self, class_name: str) -> list[TiledTileLayer]:
@@ -286,9 +304,4 @@ def _neighbors(coord: _TiledCoordinate) -> set[_TiledCoordinate]:
     }
 
 
-@dataclass
-class _Rect:
-    x: Pixel
-    y: Pixel
-    width: Pixel
-    height: Pixel
+_RECT_ATTRS = {"x", "y", "width", "height"}

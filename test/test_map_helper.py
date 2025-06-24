@@ -10,16 +10,19 @@ from test.util import MockSurface
 
 
 def test_map_helper(mocker: MockerFixture) -> None:
-    mock_tmx = MagicMock()
-    mock_tmx.width = 10
-    mock_tmx.height = 20
-    mock_tmx.tilewidth = 2
-    mock_tmx.tileheight = 3
+    tmx = MagicMock()
+    tmx.width = 10
+    tmx.height = 20
+    tmx.tilewidth = 2
+    tmx.tileheight = 3
     mock_background = MagicMock()
     setattr(mock_background, "class", "background")
     mock_background.tiles = lambda: [(1, 2, MockSurface())]
     mock_foreground = MagicMock()
     setattr(mock_foreground, "class", "foreground")
+    mock_foreground.__iter__.return_value = iter(
+        [(1, 2, 4), (2, 3, 5), (3, 4, 6)]
+    )
     mock_foreground.tiles = lambda: [
         (0, 0, MockSurface()),
         (1, 1, MockSurface()),
@@ -30,23 +33,27 @@ def test_map_helper(mocker: MockerFixture) -> None:
     mock_above_character.tiles = lambda: [(5, 6, MockSurface())]
     mock_object = MagicMock()
     mock_object.__iter__.return_value = iter([SimpleNamespace(name="obj")])
-    mock_tmx.visible_tile_layers = [0, 1, 2]
-    mock_tmx.layers = [
+    tmx.visible_tile_layers = [0, 1, 2]
+    tmx.layers = [
         mock_background,
         mock_foreground,
         mock_above_character,
         mock_object,
     ]
-    mock_tmx.visible_object_groups = [3]
-    mock_tmx.tile_properties = {
+    tmx.visible_object_groups = [3]
+    tmx.tile_properties = {
         1: {"id": 1, "type": "abc"},
         2: {"id": 2, "type": "abc"},
         3: {"id": 3, "type": "def"},
+        4: {"colliders": [SimpleNamespace(points=[(1, 2), (3, 4), (5, 6)])]},
+        5: {"colliders": [SimpleNamespace()]},
+        6: {"colliders": [SimpleNamespace(x=1, y=2, width=3, height=4)]},
     }
-    mocker.patch("nextrpg.scene.map_helper.load_pygame", return_value=mock_tmx)
+    mocker.patch("nextrpg.scene.map_helper.load_pygame", return_value=tmx)
     helper = MapHelper(Path())
     assert helper.map_size == Size(20, 60)
     assert helper.background
     assert helper.above_character
     assert helper.foreground
     assert helper.get_object("obj")
+    assert helper.collisions

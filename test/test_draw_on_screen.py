@@ -27,6 +27,7 @@ def test_drawing(mocker: MockerFixture) -> None:
     assert drawing.size == Size(1, 2)
     assert drawing.crop(Coordinate(0, 0), Size(1, 2)).size == Size(1, 2)
     assert isinstance(drawing.pygame, Surface)
+    assert f"{drawing}" == "Drawing(Size(width=1, height=2))"
 
     with override_config(
         Config(debug=DebugConfig(drawing_background_color=Rgba(0, 0, 255, 32)))
@@ -108,6 +109,9 @@ def test_rectangle() -> None:
     assert rect.center == Coordinate(11, 21)
     assert rect.collide(Rectangle(Coordinate(9, 20), Size(10, 20)))
     assert Coordinate(11, 21) in rect
+    assert rect.collide(
+        Polygon([Coordinate(10, 20), Coordinate(11, 20), Coordinate(11, 21)])
+    )
 
 
 def test_polygon() -> None:
@@ -115,3 +119,12 @@ def test_polygon() -> None:
         Polygon([])
     polygon = Polygon([Coordinate(0, 0), Coordinate(1, 0), Coordinate(1, 1)])
     assert polygon.bounding_rectangle == Rectangle(Coordinate(0, 0), Size(1, 1))
+
+    assert polygon.collide(
+        Polygon([Coordinate(0, 0), Coordinate(1, 2), Coordinate(1, 1)])
+    )
+    assert not polygon.collide(
+        Polygon([Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20)])
+    )
+    assert Coordinate(0.5, 0.5) in polygon
+    assert Coordinate(10, 20) not in polygon

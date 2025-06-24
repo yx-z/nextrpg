@@ -17,14 +17,109 @@ from pygame.image import load
 from pygame.mask import from_surface
 
 from nextrpg.config import config
-from nextrpg.core import (
-    Direction,
-    DirectionalOffset,
-    Pixel,
-    Rgba,
-    Size,
-)
+from nextrpg.core import Direction, DirectionalOffset, Pixel, Rgba, Size
 from nextrpg.model import init_internal_field, internal_field
+
+
+@dataclass(frozen=True)
+class Coordinate:
+    """
+    Represents a 2D coordinate with immutability and provides methods
+    for scaling and shifting coordinates.
+
+    Attributes:
+        `left`: The horizontal position of the coordinate, measured by
+            the number of pixels from the left edge of the game window.
+
+        `top`: The vertical position of the coordinate, measured by
+            the number of pixels from the top edge of the game window.
+    """
+
+    left: Pixel
+    top: Pixel
+
+    def __mul__(self, scale: float) -> Coordinate:
+        """
+        Scales the current `Coordinate` values (left and top) by a given factor
+        and returns a new `Coordinate` with the scaled values rounded up to the
+        nearest integer.
+
+        Round up so that drawings won't leave tiny, black gaps after scaled.
+
+        Args:
+            `scale`: The scaling factor to multiply the left and
+                top values of the `Coordinate`.
+
+        Returns:
+            `Coordinate`: A new `Coordinate` with the scaled and rounded values.
+        """
+        return Coordinate(ceil(self.left * scale), ceil(self.top * scale))
+
+    def __sub__(self, other: Coordinate) -> Coordinate:
+        return Coordinate(self.left - other.left, self.top - other.top)
+
+    @singledispatchmethod
+    def __add__(self, offset: DirectionalOffset | Coordinate) -> Coordinate:
+        """
+        Shifts the coordinate in the specified direction by a given offset.
+        Supports both orthogonal and diagonal directions.
+
+        Or add two coordinates together.
+
+        For diagonal directions, the offset is divided proportionally.
+        For example, an offset of `sqrt(2)` in `UP_LEFT` direction shifts
+        the coordinate `Pixel(1)` in both `UP` and `LEFT` directions.
+
+        Args:
+            `offset`: A `DirectionalOffset` representing the direction
+                and offset, or `Coordinate` to add to the current `Coordinate`.
+
+        Returns:
+            `Coordinate`: A new coordinate shifted by the specified offset in
+            the given direction.
+        """
+        raise NotImplementedError(f"Non-addable {offset=}")
+
+    @cached_property
+    def tuple(self) -> tuple[Pixel, Pixel]:
+        """
+        Gets the coordinates as a tuple.
+
+        Returns:
+            `tuple[Pixel, Pixel]`: A tuple containing the left and top
+                values in that order.
+        """
+        return self.left, self.top
+
+
+@Coordinate.__add__.register
+def _add_directional_offset(self, offset: DirectionalOffset) -> Coordinate:
+    match offset.direction:
+        case Direction.UP:
+            return Coordinate(self.left, self.top - offset.offset)
+        case Direction.DOWN:
+            return Coordinate(self.left, self.top + offset.offset)
+        case Direction.LEFT:
+            return Coordinate(self.left - offset.offset, self.top)
+        case Direction.RIGHT:
+            return Coordinate(self.left + offset.offset, self.top)
+
+    diag = offset.offset / sqrt(2)
+    match offset.direction:
+        case Direction.UP_LEFT:
+            return Coordinate(self.left - diag, self.top - diag)
+        case Direction.UP_RIGHT:
+            return Coordinate(self.left + diag, self.top - diag)
+        case Direction.DOWN_LEFT:
+            return Coordinate(self.left - diag, self.top + diag)
+        case Direction.DOWN_RIGHT:
+            return Coordinate(self.left + diag, self.top + diag)
+    raise ValueError(f"Invalid direction: {offset.direction}")
+
+
+@Coordinate.__add__.register
+def _add_coordinate(self, offset: Coordinate) -> Coordinate:
+    return Coordinate(self.left + offset.left, self.top + offset.top)
 
 
 @dataclass(frozen=True)
@@ -39,9 +134,18 @@ class Drawing:
     crop and scale the surface.
     """
 
-    resource: Path | Surface
+    resource: Path | Surface = field(repr=False)
     _: KW_ONLY = internal_field()
     _surface: Surface = internal_field()
+
+    def __repr__(self) -> str:
+        """
+        A string representation of the `Drawing` object.
+
+        Returns:
+            `str`: A string representation of the `Drawing` object.
+        """
+        return f"Drawing({self.size})"
 
     @cached_property
     def width(self) -> Pixel:
@@ -211,107 +315,6 @@ class DrawOnScreen:
 
 
 @dataclass(frozen=True)
-class Coordinate:
-    """
-    Represents a 2D coordinate with immutability and provides methods
-    for scaling and shifting coordinates.
-
-    Attributes:
-        `left`: The horizontal position of the coordinate, measured by
-            the number of pixels from the left edge of the game window.
-
-        `top`: The vertical position of the coordinate, measured by
-            the number of pixels from the top edge of the game window.
-    """
-
-    left: Pixel
-    top: Pixel
-
-    def __mul__(self, scale: float) -> Coordinate:
-        """
-        Scales the current `Coordinate` values (left and top) by a given factor
-        and returns a new `Coordinate` with the scaled values rounded up to the
-        nearest integer.
-
-        Round up so that drawings won't leave tiny, black gaps after scaled.
-
-        Args:
-            `scale`: The scaling factor to multiply the left and
-                top values of the `Coordinate`.
-
-        Returns:
-            `Coordinate`: A new `Coordinate` with the scaled and rounded values.
-        """
-        return Coordinate(ceil(self.left * scale), ceil(self.top * scale))
-
-    def __sub__(self, other: Coordinate) -> Coordinate:
-        return Coordinate(self.left - other.left, self.top - other.top)
-
-    @singledispatchmethod
-    def __add__(self, offset: DirectionalOffset | Coordinate) -> Coordinate:
-        """
-        Shifts the coordinate in the specified direction by a given offset.
-        Supports both orthogonal and diagonal directions.
-
-        Or add two coordinates together.
-
-        For diagonal directions, the offset is divided proportionally.
-        For example, an offset of `sqrt(2)` in `UP_LEFT` direction shifts
-        the coordinate `Pixel(1)` in both `UP` and `LEFT` directions.
-
-        Args:
-            `offset`: A `DirectionalOffset` representing the direction
-                and offset, or `Coordinate` to add to the current `Coordinate`.
-
-        Returns:
-            `Coordinate`: A new coordinate shifted by the specified offset in
-            the given direction.
-        """
-        raise NotImplementedError(f"Non-addable {offset=}")
-
-    @cached_property
-    def tuple(self) -> tuple[Pixel, Pixel]:
-        """
-        Gets the coordinates as a tuple.
-
-        Returns:
-            `tuple[Pixel, Pixel]`: A tuple containing the left and top
-                values in that order.
-        """
-        return self.left, self.top
-
-
-@Coordinate.__add__.register
-def _add_directional_offset(self, offset: DirectionalOffset) -> Coordinate:
-    match offset.direction:
-        case Direction.UP:
-            return Coordinate(self.left, self.top - offset.offset)
-        case Direction.DOWN:
-            return Coordinate(self.left, self.top + offset.offset)
-        case Direction.LEFT:
-            return Coordinate(self.left - offset.offset, self.top)
-        case Direction.RIGHT:
-            return Coordinate(self.left + offset.offset, self.top)
-
-    diag = offset.offset / sqrt(2)
-    match offset.direction:
-        case Direction.UP_LEFT:
-            return Coordinate(self.left - diag, self.top - diag)
-        case Direction.UP_RIGHT:
-            return Coordinate(self.left + diag, self.top - diag)
-        case Direction.DOWN_LEFT:
-            return Coordinate(self.left - diag, self.top + diag)
-        case Direction.DOWN_RIGHT:
-            return Coordinate(self.left + diag, self.top + diag)
-    raise ValueError(f"Invalid direction: {offset.direction}")
-
-
-@Coordinate.__add__.register
-def _add_coordinate(self, offset: Coordinate) -> Coordinate:
-    return Coordinate(self.left + offset.left, self.top + offset.top)
-
-
-@dataclass(frozen=True)
 class Polygon:
     """
     Polygon is a collection of points that define a closed polygon.
@@ -378,10 +381,12 @@ class Polygon:
         Returns:
             `bool`: True if two polygons overlap, False otherwise.
         """
-        min_x, min_y = self.bounding_rectangle.top_left.tuple
-        poly_min_x, poly_min_y = poly.bounding_rectangle.top_left.tuple
-        offset = (poly_min_x - min_x, poly_min_y - min_y)
-        return bool(self._mask.overlap(poly._mask, offset))
+        if not self.bounding_rectangle.collide(poly.bounding_rectangle):
+            return False
+        offset = (
+            self.bounding_rectangle.top_left - poly.bounding_rectangle.top_left
+        )
+        return bool(self._mask.overlap(poly._mask, offset.tuple))
 
     def __contains__(self, coordinate: Coordinate) -> bool:
         """
@@ -397,7 +402,7 @@ class Polygon:
             `bool`: Whether the coordinate lies within the rectangle.
         """
         x, y = (coordinate - self.bounding_rectangle.top_left).tuple
-        width, height = self.bounding_rectangle.size.tuple
+        width, height = self._mask.get_size()
         if 0 <= x < width and 0 <= y < height:
             return bool(self._mask.get_at((x, y)))
         return False

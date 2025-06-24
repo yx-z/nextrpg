@@ -103,21 +103,20 @@ class MapScene(Scene):
 
     @cached_property
     def _foreground_and_character(self) -> list[DrawOnScreen]:
-        foregrounds = [
-            (i, bottom, draw)
-            for i, layer in enumerate(self._map_helper.foreground)
-            for bottom, draw in layer
-        ]
+        foregrounds = self._map_helper.foreground
         character = self._player.character_and_visuals.character
-        player = (
-            self._player_layer,
-            character.visible_rectangle.bottom,
-            character,
+        player = TileBottomAndDraw(
+            character.visible_rectangle.bottom, character
         )
-        sort_by_layer_index_and_bottom = sorted(
-            foregrounds + [player], key=lambda t: t[:2]
+        with_character = sorted(
+            foregrounds[self._player_layer] | {player}, key=lambda t: t.bottom
         )
-        return [draw for _, _, draw in sort_by_layer_index_and_bottom]
+        layers = (
+            foregrounds[: self._player_layer]
+            + [with_character]
+            + foregrounds[self._player_layer + 1 :]
+        )
+        return [draw for layer in layers for _, draw in layer]
 
     @cached_property
     def _player_layer(self) -> _LayerIndex:
@@ -142,6 +141,10 @@ class MapScene(Scene):
         top_offset = _offset(player.top, gui_height, map_height)
         return Coordinate(left_offset, top_offset)
 
+    def __post_init__(self) -> None:
+        init_internal_field(self, "_map_helper", MapHelper, self.tmx_file)
+        init_internal_field(self, "_player", self._init_player)
+
     def _init_player(self) -> CharacterOnScreen:
         player = self._map_helper.get_object(config().map.player)
         speed = player.properties.get(
@@ -153,10 +156,6 @@ class MapScene(Scene):
             speed,
             self._map_helper.collisions,
         )
-
-    def __post_init__(self) -> None:
-        init_internal_field(self, "_map_helper", MapHelper, self.tmx_file)
-        init_internal_field(self, "_player", self._init_player)
 
 
 def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:

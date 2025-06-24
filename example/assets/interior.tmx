@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="20" nextobjectid="54">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="20" nextobjectid="57">
  <tileset firstgid="1" source="base.tsx"/>
  <tileset firstgid="169" source="object.tsx"/>
  <layer id="1" name="floor" class="background" width="30" height="20">
@@ -125,6 +125,11 @@
  <objectgroup id="12" name="object">
   <object id="24" name="player" x="406.987" y="587.9">
    <point/>
+  </object>
+  <object id="55" type="move" x="608.5" y="745.5" width="182" height="37.5">
+   <properties>
+    <property name="file" type="file" value="exterior.tmx"/>
+   </properties>
   </object>
  </objectgroup>
 </map>
