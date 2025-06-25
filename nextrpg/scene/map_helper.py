@@ -274,21 +274,20 @@ class MapHelper(Model):
         draw: DrawOnScreen,
         coord_to_bottom: dict[_TileCoordinate, Pixel],
     ) -> Pixel:
-        if not (cls := self._class(layer, coord)):
-            return draw.visible_rectangle.bottom
-        component = self._component(layer, coord, cls, set())
-        return max(
-            bottom for c, bottom in coord_to_bottom.items() if c in component
-        )
+        if cls := self._class(layer, coord):
+            return max(
+                coord_to_bottom[c] for c in self._component(layer, coord, cls)
+            )
+        return draw.visible_rectangle.bottom
 
     def _component(
         self,
         layer: TiledTileLayer,
         coord: _TileCoordinate,
         cls: str,
-        visited: set[_TileCoordinate],
+        visited: set[_TileCoordinate] | None = None,
     ) -> set[_TileCoordinate]:
-        visited |= {coord}
+        visited = (visited or set()) | {coord}
         return visited | {
             c
             for neighbor in self._neighbors(layer, coord, cls) - visited
