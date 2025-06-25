@@ -1,6 +1,5 @@
 from dataclasses import KW_ONLY, field
 from functools import cached_property, lru_cache
-from itertools import product
 from pathlib import Path
 from typing import NamedTuple
 
@@ -52,13 +51,13 @@ type _Gid = int
 type _LayerIndex = int
 
 
-class _TiledCoordinate(NamedTuple):
+class _TileCoordinate(NamedTuple):
     top: int
     left: int
 
 
 class _Collider(NamedTuple):
-    coord: _TiledCoordinate
+    coord: _TileCoordinate
     obj: TiledObject
 
 
@@ -172,7 +171,7 @@ class MapHelper(Model):
     @cached_property
     def _colliders(self) -> list[_Collider]:
         return [
-            _Collider(_TiledCoordinate(x, y), c)
+            _Collider(_TileCoordinate(x, y), c)
             for layer in self._all_tile_layers
             for x, y, gid in layer
             if (c := self._collider(gid))
@@ -183,12 +182,12 @@ class MapHelper(Model):
         return colliders[0] if colliders else None
 
     def _polygon(
-        self, coord: _TiledCoordinate, obj: TiledObject
+        self, coord: _TileCoordinate, obj: TiledObject
     ) -> Polygon | None:
         return self._from_points(coord, obj) or self._from_rect(coord, obj)
 
     def _from_points(
-        self, coord: _TiledCoordinate, obj: TiledObject
+        self, coord: _TileCoordinate, obj: TiledObject
     ) -> Polygon | None:
         if not (points := getattr(obj, "points", None)):
             return None
@@ -197,7 +196,7 @@ class MapHelper(Model):
         return Polygon([Coordinate(cx * w + x, cy * h + y) for x, y in points])
 
     def _from_rect(
-        self, coord: _TiledCoordinate, obj: TiledObject
+        self, coord: _TileCoordinate, obj: TiledObject
     ) -> Rectangle | None:
         if not all(hasattr(obj, attr) for attr in _RECT_ATTRS):
             return None
@@ -223,21 +222,20 @@ class MapHelper(Model):
         return [
             draw
             for layer in self._tile_layers(class_name)
-            for _, draw in self._draw(layer)
+            for draw in self._draw(layer).values()
         ]
 
     def _bottom_and_draw(self, layer: TiledTileLayer) -> set[TileBottomAndDraw]:
         coord_and_draws = self._draw(layer)
-        gid_coord_and_bottom = [
-            (gid, coord, draw.visible_rectangle.bottom)
-            for coord, draw in coord_and_draws
-            if (gid := self._gid(layer, coord))
-        ]
+        coord_to_bottom = {
+            coord: draw.visible_rectangle.bottom
+            for coord, draw in coord_and_draws.items()
+        }
         return {
             TileBottomAndDraw(
-                self._bottom(layer, coord, draw, gid_coord_and_bottom), draw
+                self._bottom(layer, coord, draw, coord_to_bottom), draw
             )
-            for coord, draw in coord_and_draws
+            for coord, draw in coord_and_draws.items()
         }
 
     @cached_property
@@ -246,11 +244,11 @@ class MapHelper(Model):
 
     def _draw(
         self, layer: TiledTileLayer
-    ) -> list[tuple[_TiledCoordinate, DrawOnScreen]]:
-        return [
-            (_TiledCoordinate(top, left), self._tile(left, top, surface))
+    ) -> dict[_TileCoordinate, DrawOnScreen]:
+        return {
+            _TileCoordinate(top, left): self._tile(left, top, surface)
             for left, top, surface in layer.tiles()
-        ]
+        }
 
     def _tile(self, left: int, top: int, surface: Surface) -> DrawOnScreen:
         width, height = self._tile_size.tuple
@@ -259,31 +257,56 @@ class MapHelper(Model):
             Drawing(surface),
         )
 
-    def _gid(
-        self, layer: TiledTileLayer, coord: _TiledCoordinate
-    ) -> _Gid | None:
-        data_id = layer.data[coord.top][coord.left]
-        return self._tmx.tile_properties.get(data_id, {}).get("id")
+    def _class(
+        self, layer: TiledTileLayer, coord: _TileCoordinate
+    ) -> str | None:
+        x, y = coord
+        if 0 <= x < len(layer.data) and 0 <= y < len(layer.data[x]):
+            data_id = layer.data[x][y]
+            gid = self._tmx.tile_properties.get(data_id, {}).get("id")
+            return self._gid_to_cls.get(gid)
+        return None
 
     def _bottom(
         self,
         layer: TiledTileLayer,
-        coord: _TiledCoordinate,
+        coord: _TileCoordinate,
         draw: DrawOnScreen,
-        gid_coord_and_bottom: list[tuple[_Gid, _TiledCoordinate, Pixel]],
+        coord_to_bottom: dict[_TileCoordinate, Pixel],
     ) -> Pixel:
-        if (gid := self._gid(layer, coord)) and (
-            cls := self._gid_to_class.get(gid)
-        ):
-            return max(
-                bottom
-                for g, c, bottom in gid_coord_and_bottom
-                if self._gid_to_class[g] == cls and c in _neighbors(coord)
-            )
-        return draw.visible_rectangle.bottom
+        if not (cls := self._class(layer, coord)):
+            return draw.visible_rectangle.bottom
+        component = self._component(layer, coord, cls, set())
+        return max(
+            bottom for c, bottom in coord_to_bottom.items() if c in component
+        )
+
+    def _component(
+        self,
+        layer: TiledTileLayer,
+        coord: _TileCoordinate,
+        cls: str,
+        visited: set[_TileCoordinate],
+    ) -> set[_TileCoordinate]:
+        visited |= {coord}
+        return visited | {
+            c
+            for neighbor in self._neighbors(layer, coord, cls) - visited
+            for c in self._component(layer, neighbor, cls, visited)
+        }
+
+    def _neighbors(
+        self, layer: TiledTileLayer, coord: _TileCoordinate, cls: str
+    ) -> set[_TileCoordinate]:
+        x, y = coord
+        return {
+            c
+            for dx, dy in {(0, 1), (1, 0), (0, -1), (-1, 0)}
+            if self._class(layer, c := _TileCoordinate(x + dx, y + dy)) == cls
+        }
 
     @cached_property
-    def _gid_to_class(self) -> dict[_Gid, str]:
+    def _gid_to_cls(self) -> dict[_Gid, str]:
         return {
             tile["id"]: cls
             for tile in self._tmx.tile_properties.values()
@@ -292,14 +315,6 @@ class MapHelper(Model):
 
     def _layer(self, index: _LayerIndex) -> TiledTileLayer | TiledObjectGroup:
         return self._tmx.layers[index]
-
-
-def _neighbors(coord: _TiledCoordinate) -> set[_TiledCoordinate]:
-    deltas = {-1, 0, 1}
-    x, y = coord
-    return {
-        _TiledCoordinate(x + dx, y + dy) for dx, dy in product(deltas, deltas)
-    }
 
 
 _RECT_ATTRS = {"x", "y", "width", "height"}

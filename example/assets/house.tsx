@@ -17,6 +17,7 @@
    <object id="1" x="13.625" y="10.5" width="20.875" height="21.625"/>
   </objectgroup>
  </tile>
+ <tile id="57" type="grass"/>
  <tile id="64" type="lamp"/>
  <tile id="80" type="lamp"/>
  <tile id="96" type="lamp"/>
