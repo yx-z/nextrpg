@@ -393,7 +393,7 @@ class Polygon(ABC):
         return False
 
 
-class GenericPolygon(Polygon, Model):
+class GenericPolygon(Model, Polygon):
     """
     A collection of points that define a closed polygon.
 
@@ -411,7 +411,7 @@ class GenericPolygon(Polygon, Model):
             )
 
 
-class Rectangle(Polygon, Model):
+class Rectangle(Model, Polygon):
     """
     Represents an immutable rectangle defined by its top left corner and size.
 
