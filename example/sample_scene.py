@@ -24,7 +24,7 @@ def entry_scene() -> Scene:
     """
     return MapScene(
         # Tiled/tmx tile map .
-        Path("assets/exterior.tmx"),
+        Path("assets/interior.tmx"),
         RpgMakerCharacterDrawing(
             SpriteSheet(
                 # Player sprite sheet.

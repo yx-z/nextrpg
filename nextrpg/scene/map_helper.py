@@ -93,6 +93,9 @@ class MapHelper(Model):
         """
         The list of background drawings.
 
+        The background layers are ones marked with the class name
+        `config().map.background`.
+
         Returns:
             `list[DrawOnScreen]`: The list of background drawings.
         """
@@ -102,6 +105,10 @@ class MapHelper(Model):
     def foreground(self) -> list[set[TileBottomAndDraw]]:
         """
         The list of foreground drawings with bottom pixel info.
+
+        The foreground layers are ones marked with the class name
+        `config().map.foreground`.
+
         The list is in increasing order of layer index, meaning the layer
         shall obstruct previous tiles.
 
@@ -116,7 +123,8 @@ class MapHelper(Model):
     @cached_property
     def above_character(self) -> list[DrawOnScreen]:
         """
-        The list of above-character drawings.
+        Get the list of above-character drawings, which are all layers
+        with the class name `config().map.above_character`.
 
         Returns:
             `list[DrawOnScreen]`: The list of above-character drawings.
@@ -126,16 +134,24 @@ class MapHelper(Model):
     @cached_property
     def collisions(self) -> list[Polygon]:
         """
-        Retrieve collision polygons from the tiles.
+        Retrieve collision polygons from the tiles and objects.
+        1. From tiles: mark the tile collision polygon/rectangle in tileset.
+        2. From objects: mark the polygon/rectangle object class as
+            `config().map.collision`.
 
         Returns:
             `list[Polygon]`: List of collision polygons.
         """
-        return [
+        from_tiles = [
             polygon
             for coord, obj in self._colliders
             if (polygon := self._polygon(coord, obj))
         ]
+        from_objects = [
+            Polygon([Coordinate(x, y) for x, y in obj.as_points])
+            for obj in self.get_objects_by_class_name(config().map.collision)
+        ]
+        return from_tiles + from_objects
 
     @lru_cache
     def get_object(self, name: str) -> TiledObject:
@@ -148,24 +164,27 @@ class MapHelper(Model):
         Returns:
             `TiledObject`: The tile object with the given name.
         """
-        return self.get_objects(name)[0]
+        return self._tmx.get_object_by_name(name)
 
     @lru_cache
-    def get_objects(self, name: str) -> list[TiledObject]:
+    def get_objects_by_class_name(self, class_name: str) -> list[TiledObject]:
         """
-        Get ALL objects of the given name from ALL object layers.
+        Get ALL objects of the given Class name from ALL object layers.
 
         Arguments:
-            `name`: The unique name to retrieve the object by.
+            `class_name`: The class name to retrieve objects by.
 
         Returns:
             `list[TiledObject]`: The tile objects with the given name.
         """
+        return [obj for obj in self._all_objects if obj.type == class_name]
+
+    @cached_property
+    def _all_objects(self) -> list[TiledObject]:
         return [
             obj
             for layer in map(self._layer, self._tmx.visible_object_groups)
             for obj in layer
-            if obj.name == name
         ]
 
     @cached_property
@@ -263,8 +282,9 @@ class MapHelper(Model):
         x, y = coord
         if 0 <= x < len(layer.data) and 0 <= y < len(layer.data[x]):
             data_id = layer.data[x][y]
-            gid = self._tmx.tile_properties.get(data_id, {}).get("id")
-            return self._gid_to_cls.get(gid)
+            return self._gid_to_cls.get(
+                self._tmx.tile_properties.get(data_id, {}).get("id")
+            )
         return None
 
     def _bottom(

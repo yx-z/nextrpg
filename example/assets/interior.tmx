@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="20" nextobjectid="57">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="20" nextobjectid="59">
  <tileset firstgid="1" source="base.tsx"/>
  <tileset firstgid="169" source="object.tsx"/>
  <layer id="1" name="floor" class="background" width="30" height="20">
@@ -130,6 +130,10 @@
    <properties>
     <property name="file" type="file" value="exterior.tmx"/>
    </properties>
+  </object>
+  <object id="57" type="collision" x="288" y="604" width="50" height="29.3333"/>
+  <object id="58" type="collision" x="486.667" y="457.333">
+   <polygon points="0,0 57.3333,4 57.3333,-35.3333 -3.33333,-28"/>
   </object>
  </objectgroup>
 </map>

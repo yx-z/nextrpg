@@ -148,25 +148,22 @@ class TileMapConfig(Model):
 
     Attributes:
         `background`:
-            Prefix of layer name to be identified as background layer.
+            Class name of the layer to be identified as background layer.
 
         `foreground`:
-            Prefix of layer name to be identified as foreground layer.
+            Class name of the layer to be identified as foreground layer.
 
         `collision`:
-            Prefix of layer name to be identified as collision layer.
-
-        `object`:
-            Prefix of layer name to be identified as object layer.
+            Class name of the objects to be identified as collision objects.
 
         `player`:
-            Name for the player object within object layers.
+            Unique name for the player object within object layers.
     """
 
     background: str = "background"
     foreground: str = "foreground"
     above_character: str = "above_character"
-    object: str = "object"
+    collision: str = "collision"
     player: str = "player"
     properties: TileMapProperties = TileMapProperties()
 

@@ -56,7 +56,7 @@ class CharacterOnScreen(Model):
 
         `speed`: Movement speed of the character in pixels.
 
-        `collisions`: List of rectangles representing collision boundaries.
+        `collisions`: List of polygons representing collision boundaries.
     """
 
     character: CharacterDrawing

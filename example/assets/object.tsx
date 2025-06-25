@@ -193,10 +193,26 @@
  <tile id="189"/>
  <tile id="190"/>
  <tile id="191"/>
- <tile id="192"/>
- <tile id="193"/>
- <tile id="194"/>
- <tile id="195"/>
+ <tile id="192">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="39" y="0" width="9" height="18"/>
+  </objectgroup>
+ </tile>
+ <tile id="193">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="48" height="18"/>
+  </objectgroup>
+ </tile>
+ <tile id="194">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="48" height="18"/>
+  </objectgroup>
+ </tile>
+ <tile id="195">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="9" height="18"/>
+  </objectgroup>
+ </tile>
  <tile id="196"/>
  <tile id="197"/>
  <tile id="198"/>
