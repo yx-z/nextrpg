@@ -92,18 +92,20 @@ class CharacterOnScreen(Model):
             `e`: The event to process.
 
         Returns:
-            `Self`: The updated character state after processing the event.
+            `CharacterOnScreen`: The updated character state
+                after processing the event.
         """
         return self
 
     def _updated_movement_key(
         self, e: KeyPressDown | KeyPressUp
     ) -> frozenset[KeyboardKey]:
-        return (
-            self._movement_keys | {e.key}
-            if isinstance(e, KeyPressDown)
-            else (self._movement_keys - {e.key})
-        )
+        if not e.key in _MOVEMENT_KEYS:
+            return self._movement_keys
+        assert isinstance(e.key, KeyboardKey)
+        if isinstance(e, KeyPressDown):
+            return self._movement_keys | {e.key}
+        return self._movement_keys - {e.key}
 
     def step(self, time_delta: Millisecond) -> CharacterOnScreen:
         """
@@ -190,6 +192,13 @@ class CharacterOnScreen(Model):
             c.fill(debug.collision_rectangle_color) for c in self.collisions
         ]
 
+
+_MOVEMENT_KEYS = {
+    KeyboardKey.LEFT,
+    KeyboardKey.RIGHT,
+    KeyboardKey.UP,
+    KeyboardKey.DOWN,
+}
 
 _KEY_TO_DIR = {
     frozenset({KeyboardKey.LEFT, KeyboardKey.UP}): Direction.UP_LEFT,

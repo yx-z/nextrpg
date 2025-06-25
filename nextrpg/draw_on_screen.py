@@ -4,6 +4,7 @@ Drawable on screen.
 
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from dataclasses import KW_ONLY, field
 from functools import cached_property, singledispatchmethod
 from itertools import product
@@ -306,22 +307,21 @@ class DrawOnScreen(Model):
         return DrawOnScreen(self.top_left + coord, self.drawing)
 
 
-class Polygon(Model):
+class AbstractPolygon(ABC):
     """
-    Polygon is a collection of points that define a closed polygon.
-
-    Attributes:
-        `points`: A list of `Coordinate` objects representing the points
-            bounding the polygon.
+    Abstract base class for polygon, defining the common interface/behavior.
     """
 
-    points: list[Coordinate]
+    @cached_property
+    @abstractmethod
+    def points(self) -> list[Coordinate]:
+        """
+        Retrieves points in the polygon.
 
-    def __post_init__(self) -> None:
-        if len(self.points) < 3:
-            raise ValueError(
-                f"Polygon must have at least 3 points. Got {self.points}"
-            )
+        Returns:
+            `list[Coordinate]`: A list of `Coordinate` objects
+                representing the points.
+        """
 
     @cached_property
     def bounding_rectangle(self) -> Rectangle:
@@ -362,7 +362,7 @@ class Polygon(Model):
         )
         return DrawOnScreen(rect.top_left, Drawing(surface))
 
-    def collide(self, poly: Polygon) -> bool:
+    def collide(self, poly: AbstractPolygon) -> bool:
         """
         Checks if this rectangle overlaps with another polygon.
 
@@ -399,7 +399,25 @@ class Polygon(Model):
         return False
 
 
-class Rectangle(Polygon):
+class Polygon(AbstractPolygon, Model):
+    """
+    Polygon is a collection of points that define a closed polygon.
+
+    Attributes:
+        `points`: A list of `Coordinate` objects representing the points
+            bounding the polygon.
+    """
+
+    points: list[Coordinate]
+
+    def __post_init__(self) -> None:
+        if len(self.points) < 3:
+            raise ValueError(
+                f"Polygon must have at least 3 points. Got {self.points}"
+            )
+
+
+class Rectangle(AbstractPolygon, Model):
     """
     Represents an immutable rectangle defined by its top left corner and size.
 
@@ -411,7 +429,6 @@ class Rectangle(Polygon):
 
     top_left: Coordinate
     size: Size
-    points: list[Coordinate] = field(init=False, repr=False)
 
     @cached_property
     def left(self) -> Pixel:
@@ -534,17 +551,18 @@ class Rectangle(Polygon):
         width, height = self.size.tuple
         return Coordinate(self.left + width / 2, self.top + height / 2)
 
-    def __post_init__(self) -> None:
-        points = [
+    @override
+    @cached_property
+    def points(self) -> list[Coordinate]:
+        return [
             self.top_left,
             self.top_right,
             self.bottom_right,
             self.bottom_left,
         ]
-        object.__setattr__(self, "points", points)
 
     @override
-    def collide(self, poly: Polygon) -> bool:
+    def collide(self, poly: AbstractPolygon) -> bool:
         if isinstance(poly, Rectangle):
             return (
                 self.top_left.left < poly.top_right.left

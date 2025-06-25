@@ -148,7 +148,7 @@ class MapHelper(Model):
             if (polygon := self._polygon(coord, obj))
         ]
         from_objects = [
-            Polygon([Coordinate(x, y) for x, y in obj.as_points])
+            Polygon([Coordinate(*p) for p in obj.as_points])
             for obj in self.get_objects_by_class_name(config().map.collision)
         ]
         return from_tiles + from_objects
@@ -156,7 +156,7 @@ class MapHelper(Model):
     @lru_cache
     def get_object(self, name: str) -> TiledObject:
         """
-        Get the first object of the given name from ALL object layers.
+        Get the first object of the given name from all visible object layers.
 
         Arguments:
             `name`: The unique name to retrieve the object by.
@@ -164,12 +164,12 @@ class MapHelper(Model):
         Returns:
             `TiledObject`: The tile object with the given name.
         """
-        return self._tmx.get_object_by_name(name)
+        return next(obj for obj in self._all_objects if obj.name == name)
 
     @lru_cache
     def get_objects_by_class_name(self, class_name: str) -> list[TiledObject]:
         """
-        Get ALL objects of the given Class name from ALL object layers.
+        Get objects of the given class name from all visible object layers.
 
         Arguments:
             `class_name`: The class name to retrieve objects by.
@@ -208,7 +208,7 @@ class MapHelper(Model):
     def _from_points(
         self, coord: _TileCoordinate, obj: TiledObject
     ) -> Polygon | None:
-        if not (points := getattr(obj, "points", None)):
+        if len(points := obj.as_points) < 3:
             return None
         w, h = self._tile_size.tuple
         cx, cy = coord

@@ -132,8 +132,8 @@
    </properties>
   </object>
   <object id="57" type="collision" x="288" y="604" width="50" height="29.3333"/>
-  <object id="58" type="collision" x="486.667" y="457.333">
-   <polygon points="0,0 57.3333,4 57.3333,-35.3333 -3.33333,-28"/>
+  <object id="58" type="collision" x="487.167" y="457.553">
+   <polygon points="0,0 57.3333,2.77966 57.3333,-24.5536 -3.33333,-19.4576"/>
   </object>
  </objectgroup>
 </map>

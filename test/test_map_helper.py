@@ -32,7 +32,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
     setattr(mock_above_character, "class", "above_character")
     mock_above_character.tiles = lambda: [(5, 6, MockSurface())]
     mock_object = MagicMock()
-    obj=SimpleNamespace(
+    obj = SimpleNamespace(
         name="obj", type="collision", as_points=[(1, 2), (3, 4), (5, 6)]
     )
     mock_object.__iter__.return_value = iter([obj])
@@ -48,9 +48,9 @@ def test_map_helper(mocker: MockerFixture) -> None:
         1: {"id": 1, "type": "abc"},
         2: {"id": 2, "type": "abc"},
         3: {"id": 3, "type": "def"},
-        4: {"colliders": [SimpleNamespace(points=[(1, 2), (3, 4), (5, 6)])]},
-        5: {"colliders": [SimpleNamespace()]},
-        6: {"colliders": [SimpleNamespace(x=1, y=2, width=3, height=4)]},
+        4: {"colliders": [SimpleNamespace(as_points=[(1, 2), (3, 4), (5, 6)])]},
+        5: {"colliders": [SimpleNamespace(as_points=[])]},
+        6: {"colliders": [SimpleNamespace(as_points=[],x=1, y=2, width=3, height=4)]},
     }
     mocker.patch("nextrpg.scene.map_helper.load_pygame", return_value=tmx)
     helper = MapHelper(Path())

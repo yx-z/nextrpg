@@ -31,7 +31,7 @@ def internal_field[S, R](init: Callable[[S], R]) -> Any:
 @dataclass_transform(frozen_default=True)
 class _Meta[T](ABCMeta):
     def __new__(cls, *args: Any, **kwargs: Any) -> type:
-        klass = super().__new__(cls, *args, **kwargs)
+        klass: type = super().__new__(cls, *args, **kwargs)
         return dataclass(frozen=True)(klass)
 
 
