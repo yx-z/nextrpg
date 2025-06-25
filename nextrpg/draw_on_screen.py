@@ -4,7 +4,7 @@ Drawable on screen.
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
+from abc import ABC
 from dataclasses import KW_ONLY, field
 from functools import cached_property, singledispatchmethod
 from itertools import product
@@ -307,21 +307,15 @@ class DrawOnScreen(Model):
         return DrawOnScreen(self.top_left + coord, self.drawing)
 
 
-class AbstractPolygon(ABC):
+class Polygon(ABC):
     """
     Abstract base class for polygon, defining the common interface/behavior.
+
+    Attributes:
+        `points`: A list of `Coordinate` objects representing the points.
     """
 
-    @cached_property
-    @abstractmethod
-    def points(self) -> list[Coordinate]:
-        """
-        Retrieves points in the polygon.
-
-        Returns:
-            `list[Coordinate]`: A list of `Coordinate` objects
-                representing the points.
-        """
+    points: list[Coordinate]
 
     @cached_property
     def bounding_rectangle(self) -> Rectangle:
@@ -362,7 +356,7 @@ class AbstractPolygon(ABC):
         )
         return DrawOnScreen(rect.top_left, Drawing(surface))
 
-    def collide(self, poly: AbstractPolygon) -> bool:
+    def collide(self, poly: Polygon) -> bool:
         """
         Checks if this rectangle overlaps with another polygon.
 
@@ -399,9 +393,9 @@ class AbstractPolygon(ABC):
         return False
 
 
-class Polygon(AbstractPolygon, Model):
+class GenericPolygon(Polygon, Model):
     """
-    Polygon is a collection of points that define a closed polygon.
+    A collection of points that define a closed polygon.
 
     Attributes:
         `points`: A list of `Coordinate` objects representing the points
@@ -417,7 +411,7 @@ class Polygon(AbstractPolygon, Model):
             )
 
 
-class Rectangle(AbstractPolygon, Model):
+class Rectangle(Polygon, Model):
     """
     Represents an immutable rectangle defined by its top left corner and size.
 
@@ -562,7 +556,7 @@ class Rectangle(AbstractPolygon, Model):
         ]
 
     @override
-    def collide(self, poly: AbstractPolygon) -> bool:
+    def collide(self, poly: Polygon) -> bool:
         if isinstance(poly, Rectangle):
             return (
                 self.top_left.left < poly.top_right.left

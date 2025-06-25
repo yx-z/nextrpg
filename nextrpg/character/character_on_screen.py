@@ -10,11 +10,7 @@ from functools import cached_property, lru_cache, singledispatchmethod
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
 from nextrpg.core import Direction, DirectionalOffset, Millisecond, Pixel
-from nextrpg.draw_on_screen import (
-    AbstractPolygon,
-    Coordinate,
-    DrawOnScreen,
-)
+from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Polygon
 from nextrpg.event.pygame_event import (
     KeyPressDown,
     KeyPressUp,
@@ -61,7 +57,7 @@ class CharacterOnScreen(Model):
     character: CharacterDrawing
     coordinate: Coordinate
     speed: Pixel
-    collisions: list[AbstractPolygon]
+    collisions: list[Polygon]
     _: KW_ONLY = field()
     _movement_keys: frozenset[KeyboardKey] = internal_field(
         lambda _: frozenset()

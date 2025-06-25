@@ -11,7 +11,7 @@ from nextrpg.draw_on_screen import (
     Coordinate,
     DrawOnScreen,
     Drawing,
-    Polygon,
+    GenericPolygon,
     Rectangle,
 )
 from test.util import override_config
@@ -110,21 +110,27 @@ def test_rectangle() -> None:
     assert rect.collide(Rectangle(Coordinate(9, 20), Size(10, 20)))
     assert Coordinate(11, 21) in rect
     assert rect.collide(
-        Polygon([Coordinate(10, 20), Coordinate(11, 20), Coordinate(11, 21)])
+        GenericPolygon(
+            [Coordinate(10, 20), Coordinate(11, 20), Coordinate(11, 21)]
+        )
     )
 
 
 def test_polygon() -> None:
     with raises(ValueError):
-        Polygon([])
-    polygon = Polygon([Coordinate(0, 0), Coordinate(1, 0), Coordinate(1, 1)])
+        GenericPolygon([])
+    polygon = GenericPolygon(
+        [Coordinate(0, 0), Coordinate(1, 0), Coordinate(1, 1)]
+    )
     assert polygon.bounding_rectangle == Rectangle(Coordinate(0, 0), Size(1, 1))
 
     assert polygon.collide(
-        Polygon([Coordinate(0, 0), Coordinate(1, 2), Coordinate(1, 1)])
+        GenericPolygon([Coordinate(0, 0), Coordinate(1, 2), Coordinate(1, 1)])
     )
     assert not polygon.collide(
-        Polygon([Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20)])
+        GenericPolygon(
+            [Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20)]
+        )
     )
     assert Coordinate(0.5, 0.5) in polygon
     assert Coordinate(10, 20) not in polygon

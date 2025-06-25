@@ -28,7 +28,7 @@ def test_map_scene(mocker: MockerFixture) -> None:
     helper.get_object.return_value = SimpleNamespace(x=10, y=20, properties={})
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=helper)
     mocker.patch(
-        "nextrpg.scene.map_scene.Gui.current_size", return_value=Size(100, 200)
+        "nextrpg.scene.map_scene.gui_size", return_value=Size(100, 200)
     )
     map = MapScene(Path("test"), MockCharacterDrawing())
     assert map.event(Quit(Event(QUIT)))

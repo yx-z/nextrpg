@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="55" height="34" tilewidth="48" tileheight="48" infinite="0" nextlayerid="9" nextobjectid="37">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="55" height="34" tilewidth="48" tileheight="48" infinite="0" nextlayerid="9" nextobjectid="41">
  <editorsettings>
   <export target="exterior..tmj" format="json"/>
  </editorsettings>
@@ -124,5 +124,6 @@
   <object id="1" name="player" x="879.758" y="640.606">
    <point/>
   </object>
+  <object id="40" name="interior" x="735.333" y="432.667" width="34" height="38"/>
  </objectgroup>
 </map>

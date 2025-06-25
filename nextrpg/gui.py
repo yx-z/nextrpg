@@ -24,6 +24,20 @@ from nextrpg.event.pygame_event import (
 from nextrpg.model import Model, internal_field
 
 
+def gui_size() -> Size:
+    """
+    Get the current size of the window.
+    This shall be consistent with the `Gui.window` property.
+    However, this provides global access to the window size without
+    retrieving a `Gui` instance.
+
+    Returns:
+        `Size`: The current size of the window.
+    """
+    width, height = get_window_size()
+    return Size(width, height)
+
+
 def _init_screen(self: Gui) -> Surface:
     init()
     set_caption(config().gui.title)
@@ -43,19 +57,6 @@ class Gui(Model):
     _: KW_ONLY = field()
     _gui_mode: GuiMode = internal_field(lambda _: config().gui.gui_mode)
     _screen: Surface = internal_field(_init_screen)
-
-    @staticmethod
-    def current_size() -> Size:
-        """
-        Get the current size of the window.
-        This shall be consistent with the `window` property.
-        However, this provides global access to the window size without
-        retrieving a `Gui` instance.
-
-        Returns:
-            `Size`: The current size of the window.
-        """
-        return Size(*get_window_size())
 
     @singledispatchmethod
     def event(self, e: PygameEvent) -> Gui:

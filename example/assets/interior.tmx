@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="20" nextobjectid="59">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="21" nextobjectid="75">
  <tileset firstgid="1" source="base.tsx"/>
  <tileset firstgid="169" source="object.tsx"/>
  <layer id="1" name="floor" class="background" width="30" height="20">
@@ -126,14 +126,26 @@
   <object id="24" name="player" x="406.987" y="587.9">
    <point/>
   </object>
-  <object id="55" type="move" x="608.5" y="745.5" width="182" height="37.5">
+  <object id="55" name="exterior" type="move" x="608.5" y="745.5" width="182" height="37.5">
    <properties>
     <property name="file" type="file" value="exterior.tmx"/>
    </properties>
   </object>
-  <object id="57" type="collision" x="288" y="604" width="50" height="29.3333"/>
-  <object id="58" type="collision" x="487.167" y="457.553">
-   <polygon points="0,0 57.3333,2.77966 57.3333,-24.5536 -3.33333,-19.4576"/>
-  </object>
+ </objectgroup>
+ <objectgroup id="20" name="collision">
+  <object id="59" type="collision" x="205.667" y="203.667" width="1033" height="118"/>
+  <object id="60" type="collision" x="1157" y="79" width="130" height="724"/>
+  <object id="61" type="collision" x="771" y="724" width="459" height="207"/>
+  <object id="62" type="collision" x="548" y="773" width="363" height="101"/>
+  <object id="65" type="collision" x="174" y="724" width="446" height="174"/>
+  <object id="66" type="collision" x="-16" y="165" width="254" height="707"/>
+  <object id="67" type="collision" x="291" y="601" width="41.5" height="30.1667"/>
+  <object id="68" type="collision" x="292.5" y="544.5" width="38.5" height="23.5"/>
+  <object id="69" type="collision" x="347.5" y="456" width="28" height="30.5"/>
+  <object id="70" type="collision" x="399.5" y="287.5" width="68" height="57.5"/>
+  <object id="71" type="collision" x="488.5" y="382" width="54" height="81"/>
+  <object id="72" type="collision" x="802.5" y="380" width="52" height="80"/>
+  <object id="73" type="collision" x="627.5" y="315.5" width="139.5" height="42.5"/>
+  <object id="74" type="collision" x="972" y="314.5" width="68" height="25.5"/>
  </objectgroup>
 </map>

@@ -15,10 +15,10 @@ from pytmx import (
 from nextrpg.config import config
 from nextrpg.core import Pixel, Size
 from nextrpg.draw_on_screen import (
-    AbstractPolygon,
     Coordinate,
     DrawOnScreen,
     Drawing,
+    GenericPolygon,
     Polygon,
     Rectangle,
 )
@@ -133,7 +133,7 @@ class MapHelper(Model):
         return self._draw_layers(config().map.above_character)
 
     @cached_property
-    def collisions(self) -> list[AbstractPolygon]:
+    def collisions(self) -> list[Polygon]:
         """
         Retrieve collision polygons from the tiles and objects.
         1. From tiles: mark the tile collision polygon/rectangle in tileset.
@@ -141,13 +141,13 @@ class MapHelper(Model):
             `config().map.collision`.
 
         Returns:
-            `list[AbstractPolygon]`: List of collision polygons.
+            `list[Polygon]`: List of collision polygons.
         """
         from_tiles = [
             self._polygon(coord, obj) for coord, obj in self._colliders
         ]
-        from_objects: list[AbstractPolygon] = [
-            Polygon([Coordinate(x, y) for x, y in obj.as_points])
+        from_objects: list[Polygon] = [
+            GenericPolygon([Coordinate(x, y) for x, y in obj.as_points])
             for obj in self.get_objects_by_class_name(config().map.collision)
         ]
         return from_tiles + from_objects
@@ -199,15 +199,15 @@ class MapHelper(Model):
         colliders = self._tmx.tile_properties.get(gid, {}).get("colliders")
         return colliders[0] if colliders else None
 
-    def _polygon(
-        self, coord: _TileCoordinate, obj: TiledObject
-    ) -> AbstractPolygon:
+    def _polygon(self, coord: _TileCoordinate, obj: TiledObject) -> Polygon:
         return self._from_rect(coord, obj) or self._from_points(coord, obj)
 
-    def _from_points(self, coord: _TileCoordinate, obj: TiledObject) -> Polygon:
+    def _from_points(
+        self, coord: _TileCoordinate, obj: TiledObject
+    ) -> GenericPolygon:
         w, h = self._tile_size.tuple
         cx, cy = coord
-        return Polygon(
+        return GenericPolygon(
             [Coordinate(cx * w + x, cy * h + y) for x, y in obj.as_points]
         )
 

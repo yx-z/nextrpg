@@ -18,7 +18,7 @@ from nextrpg.draw_on_screen import (
     DrawOnScreen,
 )
 from nextrpg.event.pygame_event import PygameEvent
-from nextrpg.gui import Gui
+from nextrpg.gui import Gui, gui_size
 from nextrpg.model import (
     Model,
     internal_field,
@@ -138,7 +138,7 @@ class MapScene(Model, Scene):
     @cached_property
     def _player_offset(self) -> Coordinate:
         player = self._player.character_and_visuals.character.rectangle.center
-        gui_width, gui_height = Gui.current_size().tuple
+        gui_width, gui_height = gui_size().tuple
         map_width, map_height = self._map_helper.map_size.tuple
         left_offset = _offset(player.left, gui_width, map_width)
         top_offset = _offset(player.top, gui_height, map_height)
