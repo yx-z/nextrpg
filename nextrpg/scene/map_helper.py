@@ -15,6 +15,7 @@ from pytmx import (
 from nextrpg.config import config
 from nextrpg.core import Pixel, Size
 from nextrpg.draw_on_screen import (
+    AbstractPolygon,
     Coordinate,
     DrawOnScreen,
     Drawing,
@@ -132,7 +133,7 @@ class MapHelper(Model):
         return self._draw_layers(config().map.above_character)
 
     @cached_property
-    def collisions(self) -> list[Polygon]:
+    def collisions(self) -> list[AbstractPolygon]:
         """
         Retrieve collision polygons from the tiles and objects.
         1. From tiles: mark the tile collision polygon/rectangle in tileset.
@@ -140,15 +141,13 @@ class MapHelper(Model):
             `config().map.collision`.
 
         Returns:
-            `list[Polygon]`: List of collision polygons.
+            `list[AbstractPolygon]`: List of collision polygons.
         """
         from_tiles = [
-            polygon
-            for coord, obj in self._colliders
-            if (polygon := self._polygon(coord, obj))
+            self._polygon(coord, obj) for coord, obj in self._colliders
         ]
-        from_objects = [
-            Polygon([Coordinate(*p) for p in obj.as_points])
+        from_objects: list[AbstractPolygon] = [
+            Polygon([Coordinate(x, y) for x, y in obj.as_points])
             for obj in self.get_objects_by_class_name(config().map.collision)
         ]
         return from_tiles + from_objects
@@ -202,22 +201,25 @@ class MapHelper(Model):
 
     def _polygon(
         self, coord: _TileCoordinate, obj: TiledObject
-    ) -> Polygon | None:
-        return self._from_points(coord, obj) or self._from_rect(coord, obj)
+    ) -> AbstractPolygon:
+        return self._from_rect(coord, obj) or self._from_points(coord, obj)
 
-    def _from_points(
-        self, coord: _TileCoordinate, obj: TiledObject
-    ) -> Polygon | None:
-        if len(points := obj.as_points) < 3:
-            return None
+    def _from_points(self, coord: _TileCoordinate, obj: TiledObject) -> Polygon:
         w, h = self._tile_size.tuple
         cx, cy = coord
-        return Polygon([Coordinate(cx * w + x, cy * h + y) for x, y in points])
+        return Polygon(
+            [Coordinate(cx * w + x, cy * h + y) for x, y in obj.as_points]
+        )
 
     def _from_rect(
         self, coord: _TileCoordinate, obj: TiledObject
     ) -> Rectangle | None:
-        if not all(hasattr(obj, attr) for attr in _RECT_ATTRS):
+        if (
+            obj.x is None
+            or obj.y is None
+            or obj.width is None
+            or obj.height is None
+        ):
             return None
         w, h = self._tile_size.tuple
         cx, cy = coord
@@ -334,6 +336,3 @@ class MapHelper(Model):
 
     def _layer(self, index: _LayerIndex) -> TiledTileLayer | TiledObjectGroup:
         return self._tmx.layers[index]
-
-
-_RECT_ATTRS = {"x", "y", "width", "height"}

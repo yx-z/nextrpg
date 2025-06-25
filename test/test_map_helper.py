@@ -48,9 +48,16 @@ def test_map_helper(mocker: MockerFixture) -> None:
         1: {"id": 1, "type": "abc"},
         2: {"id": 2, "type": "abc"},
         3: {"id": 3, "type": "def"},
-        4: {"colliders": [SimpleNamespace(as_points=[(1, 2), (3, 4), (5, 6)])]},
-        5: {"colliders": [SimpleNamespace(as_points=[])]},
-        6: {"colliders": [SimpleNamespace(as_points=[],x=1, y=2, width=3, height=4)]},
+        4: {
+            "colliders": [
+                SimpleNamespace(as_points=[(1, 2), (3, 4), (5, 6)], x=None)
+            ]
+        },
+        5: {
+            "colliders": [
+                SimpleNamespace(as_points=[], x=1, y=2, width=3, height=4)
+            ]
+        },
     }
     mocker.patch("nextrpg.scene.map_helper.load_pygame", return_value=tmx)
     helper = MapHelper(Path())
