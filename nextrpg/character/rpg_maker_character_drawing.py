@@ -128,7 +128,15 @@ class SpriteSheet(Model):
 def _init_frames(
     self: RpgMakerCharacterDrawing,
 ) -> dict[Direction, CyclicFrames]:
-    return self._load_frames()
+    drawing = (
+        self._crop_by_selection(select)
+        if (select := self.sprite_sheet.selection)
+        else self.sprite_sheet.drawing
+    )
+    return {
+        direction: self._load_frames_row(drawing, row)
+        for direction, row in _DIR_TO_ROW.items()
+    }
 
 
 class RpgMakerCharacterDrawing(Model, CharacterDrawing):
@@ -249,17 +257,6 @@ class RpgMakerCharacterDrawing(Model, CharacterDrawing):
             self,
             _frames={d: frames.reset() for d, frames in self._frames.items()},
         )
-
-    def _load_frames(self) -> dict[Direction, CyclicFrames]:
-        drawing = (
-            self._crop_by_selection(select)
-            if (select := self.sprite_sheet.selection)
-            else self.sprite_sheet.drawing
-        )
-        return {
-            direction: self._load_frames_row(drawing, row)
-            for direction, row in _DIR_TO_ROW.items()
-        }
 
     def _crop_by_selection(self, selection: SpriteSheetSelection) -> Drawing:
         drawing = self.sprite_sheet.drawing

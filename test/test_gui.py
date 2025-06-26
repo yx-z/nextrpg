@@ -5,7 +5,7 @@ from nextrpg.config import Config, GuiConfig, GuiMode, ResizeMode
 from nextrpg.core import Size
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
 from nextrpg.event.pygame_event import GuiResize, KeyPressDown, KeyPressUp
-from nextrpg.gui import Gui, _gui_flag, gui_size
+from nextrpg.gui import Gui, _gui_flag
 from test.util import MockSurface, override_config
 
 
@@ -16,14 +16,12 @@ def test_gui(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.gui.set_mode")
     mocker.patch("nextrpg.gui.Surface", MockSurface)
     mocker.patch("nextrpg.gui.flip")
-    mocker.patch("nextrpg.gui.get_window_size", return_value=(20, 30))
     mocker.patch("nextrpg.gui.smoothscale", lambda surf, _: surf)
     gui = Gui(Size(10, 20))
     drawing = gui._scale(
         [DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface()))]
     )
     assert drawing.top_left == Coordinate(0.0, 5.0)
-    assert gui_size() == Size(20, 30)
 
     gui = gui.event(GuiResize(Event(VIDEORESIZE, w=200, h=300)))
     assert gui.window == Size(200, 300)

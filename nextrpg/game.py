@@ -55,17 +55,13 @@ class Game:
             await sleep(0)
 
 
-def _init_scene(self: _GameLoop) -> Scene:
-    return self.entry_scene()
-
-
 class _GameLoop(Model):
     entry_scene: Callable[[], Scene]
     _: KW_ONLY = field()
     _is_running: bool = internal_field(lambda _: True)
     _clock: Clock = internal_field(lambda _: Clock())
     _gui: Gui = internal_field(lambda _: Gui())
-    _scene: Scene = internal_field(_init_scene)
+    _scene: Scene = internal_field(lambda s: s.entry_scene())
 
     @cached_property
     def is_running(self) -> bool:

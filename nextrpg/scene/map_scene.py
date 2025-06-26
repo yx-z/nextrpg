@@ -19,7 +19,6 @@ from nextrpg.draw_on_screen import (
 )
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import PygameEvent
-from nextrpg.gui import gui_size
 from nextrpg.model import (
     Model,
     internal_field,
@@ -34,12 +33,19 @@ from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 
 
-def _init_map_helper(self: MapScene) -> MapHelper:
-    return MapHelper(self.tmx_file)
-
-
 def _init_player(self: MapScene) -> CharacterOnScreen:
-    return self._init_player()
+    player = self._map_helper.get_object(
+        self.player_coordinate_object or config().map.player
+    )
+    speed = player.properties.get(
+        config().map.properties.speed, config().character.speed
+    )
+    return CharacterOnScreen(
+        self.initial_player_drawing,
+        Coordinate(player.x, player.y),
+        speed,
+        self._map_helper.collisions,
+    )
 
 
 class MapScene(Model, Scene):
@@ -60,7 +66,7 @@ class MapScene(Model, Scene):
     player_coordinate_object: str | None = None
     moves: list[Move] = field(default_factory=list)
     _: KW_ONLY = field()
-    _map_helper: MapHelper = internal_field(_init_map_helper)
+    _map_helper: MapHelper = internal_field(lambda s: MapHelper(s.tmx_file))
     _player: CharacterOnScreen = internal_field(_init_player)
 
     @cached_property
@@ -151,25 +157,11 @@ class MapScene(Model, Scene):
     @cached_property
     def _player_offset(self) -> Coordinate:
         player = self._player.character_and_visuals.character.rectangle.center
-        gui_width, gui_height = gui_size().tuple
+        gui_width, gui_height = config().gui.size.tuple
         map_width, map_height = self._map_helper.map_size.tuple
         left_offset = _offset(player.left, gui_width, map_width)
         top_offset = _offset(player.top, gui_height, map_height)
         return Coordinate(left_offset, top_offset)
-
-    def _init_player(self) -> CharacterOnScreen:
-        player = self._map_helper.get_object(
-            self.player_coordinate_object or config().map.player
-        )
-        speed = player.properties.get(
-            config().map.properties.speed, config().character.speed
-        )
-        return CharacterOnScreen(
-            self.initial_player_drawing,
-            Coordinate(player.x, player.y),
-            speed,
-            self._map_helper.collisions,
-        )
 
     def _move_to_scene(self, player: CharacterOnScreen) -> Scene | None:
         rect = player.character_and_visuals.character.visible_rectangle

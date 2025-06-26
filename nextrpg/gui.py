@@ -9,7 +9,7 @@ from functools import cached_property, reduce, singledispatchmethod
 from operator import or_
 
 from pygame import FULLSCREEN, RESIZABLE, Surface
-from pygame.display import flip, get_window_size, init, set_caption, set_mode
+from pygame.display import flip, init, set_caption, set_mode
 from pygame.transform import smoothscale
 
 from nextrpg.config import GuiMode, ResizeMode, config
@@ -22,20 +22,6 @@ from nextrpg.event.pygame_event import (
     PygameEvent,
 )
 from nextrpg.model import Model, internal_field
-
-
-def gui_size() -> Size:
-    """
-    Get the current size of the window.
-    This shall be consistent with the `Gui.window` property.
-    However, this provides global access to the window size without
-    retrieving a `Gui` instance.
-
-    Returns:
-        `Size`: The current size of the window.
-    """
-    width, height = get_window_size()
-    return Size(width, height)
 
 
 def _init_screen(self: Gui) -> Surface:

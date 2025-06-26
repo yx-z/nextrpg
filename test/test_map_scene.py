@@ -5,7 +5,6 @@ from unittest.mock import MagicMock
 from pygame import Event, QUIT
 from pytest_mock import MockerFixture
 
-from nextrpg.core import Size
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
 from nextrpg.event.pygame_event import Quit
 from nextrpg.scene.map_helper import TileBottomAndDraw
@@ -27,9 +26,6 @@ def test_map_scene(mocker: MockerFixture) -> None:
     helper.map_size.tuple = (100, 200)
     helper.get_object.return_value = SimpleNamespace(x=10, y=20, properties={})
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=helper)
-    mocker.patch(
-        "nextrpg.scene.map_scene.gui_size", return_value=Size(100, 200)
-    )
     map = MapScene(Path("test"), MockCharacterDrawing())
     assert map.event(Quit(Event(QUIT)))
     assert map.step(1).draw_on_screens
