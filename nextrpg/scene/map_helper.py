@@ -1,4 +1,3 @@
-from dataclasses import KW_ONLY, field
 from functools import cached_property, lru_cache
 from pathlib import Path
 from typing import NamedTuple, OrderedDict
@@ -22,7 +21,7 @@ from nextrpg.draw_on_screen import (
     Polygon,
     Rectangle,
 )
-from nextrpg.model import Model, internal_field
+from nextrpg.model import Model
 
 
 class TileBottomAndDraw(NamedTuple):
@@ -86,8 +85,6 @@ class MapHelper(Model):
     """
 
     tmx_file: Path
-    _: KW_ONLY = field()
-    _tmx: TiledMap = internal_field(lambda self: load_pygame(self.tmx_file))
 
     @cached_property
     def map_size(self) -> Size:
@@ -349,6 +346,10 @@ class MapHelper(Model):
 
     def _layer(self, index: _LayerIndex) -> TiledTileLayer | TiledObjectGroup:
         return self._tmx.layers[index]
+
+    @cached_property
+    def _tmx(self) -> TiledMap:
+        return load_pygame(self.tmx_file)
 
     def __new__(cls, tmx_file: Path) -> "MapHelper":
         if tmx_file in _maps:

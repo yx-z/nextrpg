@@ -34,6 +34,14 @@ from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 
 
+def _init_map_helper(self: MapScene) -> MapHelper:
+    return MapHelper(self.tmx_file)
+
+
+def _init_player(self: MapScene) -> CharacterOnScreen:
+    return self._init_player()
+
+
 class MapScene(Model, Scene):
     """
     A scene implementation that represents a game map loaded from Tiled TMX.
@@ -48,16 +56,12 @@ class MapScene(Model, Scene):
     """
 
     tmx_file: Path
-    player_drawing: CharacterDrawing
+    initial_player_drawing: CharacterDrawing
     player_coordinate_object: str | None = None
     moves: list[Move] = field(default_factory=list)
     _: KW_ONLY = field()
-    _map_helper: MapHelper = internal_field(
-        lambda self: MapHelper(self.tmx_file)
-    )
-    _player: CharacterOnScreen = internal_field(
-        lambda self: self._init_player()
-    )
+    _map_helper: MapHelper = internal_field(_init_map_helper)
+    _player: CharacterOnScreen = internal_field(_init_player)
 
     @cached_property
     def draw_on_screens(self) -> list[DrawOnScreen]:
@@ -161,7 +165,7 @@ class MapScene(Model, Scene):
             config().map.properties.speed, config().character.speed
         )
         return CharacterOnScreen(
-            self.player_drawing,
+            self.initial_player_drawing,
             Coordinate(player.x, player.y),
             speed,
             self._map_helper.collisions,
@@ -173,7 +177,7 @@ class MapScene(Model, Scene):
             obj = self._map_helper.get_object(move.trigger_object)
             poly = poly_from_obj(obj)
             if rect.collide(poly):
-                next_scene = move.to_map(player.character, move.to_object)
+                next_scene = move.get_scene(player.character)
                 return TransitionScene(self, next_scene)
         return None
 

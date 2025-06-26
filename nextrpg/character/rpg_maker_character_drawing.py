@@ -125,6 +125,12 @@ class SpriteSheet(Model):
     margin: Margin = Margin()
 
 
+def _init_frames(
+    self: RpgMakerCharacterDrawing,
+) -> dict[Direction, CyclicFrames]:
+    return self._load_frames()
+
+
 class RpgMakerCharacterDrawing(Model, CharacterDrawing):
     """
     RPG Maker style character drawing.
@@ -152,9 +158,7 @@ class RpgMakerCharacterDrawing(Model, CharacterDrawing):
         default_factory=lambda: config().rpg_maker_character.frame_duration
     )
     _: KW_ONLY = field()
-    _frames: dict[Direction, CyclicFrames] = internal_field(
-        lambda self: self._load_frames()
-    )
+    _frames: dict[Direction, CyclicFrames] = internal_field(_init_frames)
 
     @cached_property
     def drawing(self) -> Drawing:

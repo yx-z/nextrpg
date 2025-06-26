@@ -33,7 +33,9 @@ def test_map_helper(mocker: MockerFixture) -> None:
     mock_above_character.tiles = lambda: [(5, 6, MockSurface())]
     mock_object = MagicMock()
     obj = SimpleNamespace(
-        name="obj", type="collision", as_points=[(1, 2), (3, 4), (5, 6)]
+        name="obj",
+        type="collision",
+        as_points=[(1, 2), (3, 4), (5, 6)],
     )
     mock_object.__iter__.return_value = iter([obj])
     tmx.visible_tile_layers = [0, 1, 2]
@@ -50,7 +52,9 @@ def test_map_helper(mocker: MockerFixture) -> None:
         3: {"id": 3, "type": "def"},
         4: {
             "colliders": [
-                SimpleNamespace(as_points=[(1, 2), (3, 4), (5, 6)], x=None)
+                SimpleNamespace(
+                    as_points=[(1, 2), (3, 4), (5, 6)], x=None, width=None
+                )
             ]
         },
         5: {
