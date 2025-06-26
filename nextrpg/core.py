@@ -5,7 +5,7 @@ Core types referenced across `nextrpg`.
 from __future__ import annotations
 
 from enum import Enum, auto
-from functools import cached_property
+from functools import cache, cached_property
 from math import ceil
 
 from nextrpg.model import Model
@@ -40,10 +40,6 @@ class Rgba(Model):
             blue and alpha values in that order.
         """
         return self.red, self.green, self.blue, self.alpha
-
-    @staticmethod
-    def black() -> Rgba:
-        return Rgba(0, 0, 0, 255)
 
 
 type Millisecond = int
@@ -137,6 +133,7 @@ class Size(Model):
                 f"{self.width=} and {self.height=} cannot be negative."
             )
 
+    @cache
     def __mul__(self, scale: float) -> Size:
         """
         Scales the dimensions by a scaling factor and returns a new `Size`.

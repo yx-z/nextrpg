@@ -5,7 +5,7 @@ Map scene implementation.
 from __future__ import annotations
 
 from dataclasses import KW_ONLY, field, replace
-from functools import cached_property
+from functools import cache, cached_property
 from pathlib import Path
 from typing import override
 
@@ -64,6 +64,7 @@ class MapScene(Model, Scene):
     _player: CharacterOnScreen = internal_field(_init_player)
 
     @cached_property
+    @override
     def draw_on_screens(self) -> list[DrawOnScreen]:
         """
         Generate the complete list of drawable elements for the map scene.
@@ -168,6 +169,7 @@ class MapScene(Model, Scene):
         return None
 
 
+@cache
 def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
     if player_axis < gui_axis / 2:
         return 0

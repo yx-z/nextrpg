@@ -1121,14 +1121,35 @@ If not specified, the default direction from <code>Config</code> is used.</li>
 
                             </div>
                             <div id="RpgMakerCharacterDrawing.direction" class="classattr">
-                                <div class="attr variable">
+                                        <input id="RpgMakerCharacterDrawing.direction-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
             <span class="name">direction</span><span class="annotation">: <a href="../core.html#Direction">nextrpg.core.Direction</a></span>
 
-        
+                <label class="view-source-button" for="RpgMakerCharacterDrawing.direction-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#RpgMakerCharacterDrawing.direction"></a>
-    
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="RpgMakerCharacterDrawing.direction-23"><a href="#RpgMakerCharacterDrawing.direction-23"><span class="linenos">23</span></a>    <span class="nd">@cached_property</span>
+</span><span id="RpgMakerCharacterDrawing.direction-24"><a href="#RpgMakerCharacterDrawing.direction-24"><span class="linenos">24</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="RpgMakerCharacterDrawing.direction-25"><a href="#RpgMakerCharacterDrawing.direction-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
+</span><span id="RpgMakerCharacterDrawing.direction-26"><a href="#RpgMakerCharacterDrawing.direction-26"><span class="linenos">26</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="RpgMakerCharacterDrawing.direction-27"><a href="#RpgMakerCharacterDrawing.direction-27"><span class="linenos">27</span></a><span class="sd">        Get the direction the character is facing.</span>
+</span><span id="RpgMakerCharacterDrawing.direction-28"><a href="#RpgMakerCharacterDrawing.direction-28"><span class="linenos">28</span></a>
+</span><span id="RpgMakerCharacterDrawing.direction-29"><a href="#RpgMakerCharacterDrawing.direction-29"><span class="linenos">29</span></a><span class="sd">        Returns:</span>
+</span><span id="RpgMakerCharacterDrawing.direction-30"><a href="#RpgMakerCharacterDrawing.direction-30"><span class="linenos">30</span></a><span class="sd">            `Direction`: The direction the character is facing.</span>
+</span><span id="RpgMakerCharacterDrawing.direction-31"><a href="#RpgMakerCharacterDrawing.direction-31"><span class="linenos">31</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Get the direction the character is facing.</p>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code>Direction</code>: The direction the character is facing.</p>
+</blockquote>
+</div>
+
 
                             </div>
                             <div id="RpgMakerCharacterDrawing.frame_duration" class="classattr">

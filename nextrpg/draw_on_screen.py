@@ -4,9 +4,9 @@ Drawable on screen.
 
 from __future__ import annotations
 
-from abc import ABC
+from abc import ABC, abstractmethod
 from dataclasses import KW_ONLY, field
-from functools import cached_property, singledispatchmethod
+from functools import cache, cached_property, singledispatchmethod
 from itertools import product
 from math import ceil, sqrt
 from pathlib import Path
@@ -38,6 +38,7 @@ class Coordinate(Model):
     left: Pixel
     top: Pixel
 
+    @cache
     def __mul__(self, scale: float) -> Coordinate:
         """
         Scales the current `Coordinate` values (left and top) by a given factor
@@ -55,10 +56,12 @@ class Coordinate(Model):
         """
         return Coordinate(ceil(self.left * scale), ceil(self.top * scale))
 
+    @cache
     def __sub__(self, other: Coordinate) -> Coordinate:
         return Coordinate(self.left - other.left, self.top - other.top)
 
     @singledispatchmethod
+    @cache
     def __add__(self, offset: DirectionalOffset | Coordinate) -> Coordinate:
         """
         Shifts the coordinate in the specified direction by a given offset.
@@ -92,6 +95,7 @@ class Coordinate(Model):
         return self.left, self.top
 
 
+@cache
 @Coordinate.__add__.register
 def _add_directional_offset(self, offset: DirectionalOffset) -> Coordinate:
     match offset.direction:
@@ -117,6 +121,7 @@ def _add_directional_offset(self, offset: DirectionalOffset) -> Coordinate:
     raise ValueError(f"Invalid direction: {offset.direction}")
 
 
+@cache
 @Coordinate.__add__.register
 def _add_coordinate(self, offset: Coordinate) -> Coordinate:
     return Coordinate(self.left + offset.left, self.top + offset.top)
@@ -143,6 +148,7 @@ class Drawing(Model):
         )
     )
 
+    @cache
     def __repr__(self) -> str:
         """
         A string representation of the `Drawing` object.
@@ -192,6 +198,7 @@ class Drawing(Model):
         """
         return self._debug_surface or self._surface
 
+    @cache
     def crop(self, top_left: Coordinate, size: Size) -> Drawing:
         """
         Crops a rectangular portion of the drawing specified by the
@@ -294,6 +301,7 @@ class DrawOnScreen(Model):
         """
         return self.drawing.pygame, self.top_left.tuple
 
+    @cache
     def __add__(self, coord: Coordinate) -> DrawOnScreen:
         """
         Shift the drawing by the specified coordinate.
@@ -310,12 +318,18 @@ class DrawOnScreen(Model):
 class Polygon(ABC):
     """
     Abstract base class for polygon, defining the common interface/behavior.
-
-    Attributes:
-        `points`: A tuple of `Coordinate` objects representing the points.
     """
 
-    points: tuple[Coordinate, ...]
+    @cached_property
+    @abstractmethod
+    def points(self) -> tuple[Coordinate, ...]:
+        """
+        Get the points of the polygon.
+
+        Returns:
+            `tuple[Coordinate, ...]`: A tuple of `Coordinate` objects
+                representing the points.
+        """
 
     @cached_property
     def bounding_rectangle(self) -> Rectangle:
@@ -335,8 +349,9 @@ class Polygon(ABC):
 
     @cached_property
     def _mask(self) -> Mask:
-        return from_surface(self.fill(Rgba.black()).drawing.pygame)
+        return from_surface(self.fill(Rgba(0, 0, 0, 255)).drawing.pygame)
 
+    @cache
     def fill(self, color: Rgba) -> DrawOnScreen:
         """
         Creates a colored `DrawOnScreen` with the provided color.
@@ -356,6 +371,7 @@ class Polygon(ABC):
         )
         return DrawOnScreen(rect.top_left, Drawing(surface))
 
+    @cache
     def collide(self, poly: Polygon) -> bool:
         """
         Checks if this rectangle overlaps with another polygon.
@@ -373,6 +389,7 @@ class Polygon(ABC):
         )
         return bool(self._mask.overlap(poly._mask, offset.tuple))
 
+    @cache
     def __contains__(self, coordinate: Coordinate) -> bool:
         """
         Checks if a coordinate point lies within this polygon.
@@ -562,6 +579,7 @@ class Rectangle(Model, Polygon):
         )
 
     @override
+    @cache
     def collide(self, poly: Polygon) -> bool:
         if isinstance(poly, Rectangle):
             return (
@@ -573,6 +591,7 @@ class Rectangle(Model, Polygon):
         return super().collide(poly)
 
     @override
+    @cache
     def __contains__(self, coordinate: Coordinate) -> bool:
         return (
             self.left < coordinate.left < self.right

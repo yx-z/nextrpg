@@ -5,6 +5,7 @@ Character drawing interface.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from functools import cached_property
 
 from nextrpg.core import Direction, Millisecond
 from nextrpg.draw_on_screen import Drawing
@@ -16,15 +17,27 @@ class CharacterDrawing(ABC):
 
     Provides abstract methods for rendering character animations and handling
     character movement visualization on the screen.
-
-
-    Attributes:
-        `direction`: The direction the character is facing.
-        `drawing`: The character's visual representation.
     """
 
-    direction: Direction
-    drawing: Drawing
+    @cached_property
+    @abstractmethod
+    def direction(self) -> Direction:
+        """
+        Get the direction the character is facing.
+
+        Returns:
+            `Direction`: The direction the character is facing.
+        """
+
+    @cached_property
+    @abstractmethod
+    def drawing(self) -> Drawing:
+        """
+        Get the character drawing.
+
+        Returns:
+            `Drawing`: The character drawing.
+        """
 
     @abstractmethod
     def turn(self, direction: Direction) -> CharacterDrawing:

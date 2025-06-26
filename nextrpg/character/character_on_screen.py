@@ -5,7 +5,7 @@ Handles character movement and collision detection.
 from __future__ import annotations
 
 from dataclasses import KW_ONLY, field, replace
-from functools import cached_property, lru_cache, singledispatchmethod
+from functools import cache, cached_property, lru_cache, singledispatchmethod
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
@@ -207,7 +207,7 @@ _KEY_TO_DIR = {
 }
 
 
-@lru_cache
+@cache
 def _key_to_dir(current_keys: frozenset[KeyboardKey]) -> Direction | None:
     return next(
         (d for keys, d in _KEY_TO_DIR.items() if keys <= current_keys), None

@@ -111,7 +111,7 @@ def test_rectangle() -> None:
     assert Coordinate(11, 21) in rect
     assert rect.collide(
         GenericPolygon(
-            [Coordinate(10, 20), Coordinate(11, 20), Coordinate(11, 21)]
+            (Coordinate(10, 20), Coordinate(11, 20), Coordinate(11, 21))
         )
     )
 

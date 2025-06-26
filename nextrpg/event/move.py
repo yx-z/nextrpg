@@ -26,7 +26,7 @@ class Move(Model):
         Move to another scene.
 
         Args:
-            `character`: The character to appear on the next scene.
+            `character`: The character to appear in the next scene.
 
         Returns:
             `Scene`: The next scene.

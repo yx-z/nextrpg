@@ -4,6 +4,8 @@ Scene is an interface of all game interactions like exploration, menu, etc..
 
 from __future__ import annotations
 
+from functools import cached_property
+
 from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import DrawOnScreen
 from nextrpg.event.pygame_event import PygameEvent
@@ -17,11 +19,18 @@ class Scene:
     handling events and drawing content on the screen. All game scenes must
     implement these methods.
 
-    Attributes:
-        `draw_on_screens`: The list of drawings to be rendered on screen.
     """
 
-    draw_on_screens: list[DrawOnScreen]
+    @cached_property
+    def draw_on_screens(self) -> list[DrawOnScreen]:
+        """
+        Get the list of drawables to be rendered on the screen.
+
+        Returns:
+            `list[DrawOnScreen]`: The list of drawables to be rendered
+                on the screen.
+        """
+        return []
 
     def event(self, event: PygameEvent) -> Scene:
         """
