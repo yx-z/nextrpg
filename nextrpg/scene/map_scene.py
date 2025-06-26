@@ -30,7 +30,7 @@ from nextrpg.scene.map_helper import (
     _LayerIndex,
     poly_from_obj,
 )
-from nextrpg.scene.scene import Scene, get_scene
+from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 
 
@@ -173,9 +173,7 @@ class MapScene(Model, Scene):
             obj = self._map_helper.get_object(move.trigger_object)
             poly = poly_from_obj(obj)
             if rect.collide(poly):
-                next_scene = get_scene(
-                    move.to_map, player.character, move.to_object
-                )
+                next_scene = move.to_map(player.character, move.to_object)
                 return TransitionScene(self, next_scene)
         return None
 

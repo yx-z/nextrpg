@@ -267,10 +267,10 @@ class ResourceConfig(Model):
     Configuration class for resource loading.
 
     Attributes:
-        `scene_cache_size`: The maximum number of scenes to cache in memory.
+        `map_cache_size`: The maximum number of TMX maps to cache in memory.
     """
 
-    scene_cache_size: int = 128
+    map_cache_size: int = 128
 
 
 class Config(Model):
