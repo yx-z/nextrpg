@@ -16,7 +16,6 @@ from nextrpg.core import Millisecond, Pixel
 from nextrpg.draw_on_screen import (
     Coordinate,
     DrawOnScreen,
-    Polygon,
 )
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import PygameEvent
@@ -29,7 +28,7 @@ from nextrpg.scene.map_helper import (
     MapHelper,
     TileBottomAndDraw,
     _LayerIndex,
-    polygon_from_object,
+    poly_from_obj,
 )
 from nextrpg.scene.scene import Scene, get_scene
 from nextrpg.scene.transition_scene import TransitionScene
@@ -112,15 +111,7 @@ class MapScene(Model, Scene):
             `Scene`: The updated scene after the time step.
         """
         player = self._player.step(time_delta)
-        character = player.character_and_visuals.character.visible_rectangle
-        return next(
-            (
-                scene
-                for poly, scene in self._move_to_scenes.items()
-                if character.collide(poly)
-            ),
-            replace(self, _player=player),
-        )
+        return self._move_to_scene(player) or replace(self, _player=player)
 
     @cached_property
     def _foreground_and_character(self) -> list[DrawOnScreen]:
@@ -176,16 +167,17 @@ class MapScene(Model, Scene):
             self._map_helper.collisions,
         )
 
-    @cached_property
-    def _move_to_scenes(self) -> dict[Polygon, Scene]:
-        return {
-            polygon_from_object(
-                self._map_helper.get_object(m.trigger_object)
-            ): TransitionScene(
-                self, get_scene(m.to_map, self.player_drawing, m.to_object)
-            )
-            for m in self.moves
-        }
+    def _move_to_scene(self, player: CharacterOnScreen) -> Scene | None:
+        rect = player.character_and_visuals.character.visible_rectangle
+        for move in self.moves:
+            obj = self._map_helper.get_object(move.trigger_object)
+            poly = poly_from_obj(obj)
+            if rect.collide(poly):
+                next_scene = get_scene(
+                    move.to_map, player.character, move.to_object
+                )
+                return TransitionScene(self, next_scene)
+        return None
 
 
 def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:

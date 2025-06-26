@@ -8,12 +8,7 @@ from enum import Enum, auto
 from typing import Final
 
 from pygame.event import Event
-from pygame.locals import (
-    KEYDOWN,
-    KEYUP,
-    QUIT,
-    VIDEORESIZE,
-)
+from pygame.locals import KEYDOWN, KEYUP, QUIT, VIDEORESIZE
 
 from nextrpg.config import KeyCode, config
 from nextrpg.draw_on_screen import Size

@@ -5,7 +5,7 @@ Core types referenced across `nextrpg`.
 from __future__ import annotations
 
 from enum import Enum, auto
-from functools import cache, cached_property
+from functools import cached_property
 from math import ceil
 
 from nextrpg.model import Model
@@ -41,7 +41,6 @@ class Rgba(Model):
         """
         return self.red, self.green, self.blue, self.alpha
 
-    @cache
     @staticmethod
     def black() -> Rgba:
         return Rgba(0, 0, 0, 255)

@@ -62,7 +62,7 @@ class _Collider(NamedTuple):
     obj: TiledObject
 
 
-def polygon_from_object(obj: TiledObject) -> Polygon:
+def poly_from_obj(obj: TiledObject) -> Polygon:
     """
     Create a polygon from a Tiled object on a map.
 
@@ -162,7 +162,7 @@ class MapHelper(Model):
             self._polygon(coord, obj) for coord, obj in self._colliders
         ]
         from_objects = [
-            polygon_from_object(obj)
+            poly_from_obj(obj)
             for obj in self.get_objects_by_class_name(config().map.collision)
         ]
         return from_tiles + from_objects

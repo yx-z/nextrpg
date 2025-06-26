@@ -547,6 +547,13 @@ class Rectangle(Model, Polygon):
 
     @cached_property
     def points(self) -> tuple[Coordinate, ...]:
+        """
+        Get the coordinates of the corners of the rectangle.
+
+        Returns:
+            `tuple[Coordinate, ...]`: The coordinates of the corners
+                of the rectangle.
+        """
         return (
             self.top_left,
             self.top_right,

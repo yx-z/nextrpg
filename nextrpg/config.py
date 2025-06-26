@@ -76,10 +76,13 @@ class GuiMode(Enum):
         Returns:
             `GuiMode`: The opposite gui mode.
         """
-        return {
-            GuiMode.WINDOWED: GuiMode.FULL_SCREEN,
-            GuiMode.FULL_SCREEN: GuiMode.WINDOWED,
-        }[self]
+        return _OPPOSITE_GUI_MODE[self]
+
+
+_OPPOSITE_GUI_MODE = {
+    GuiMode.WINDOWED: GuiMode.FULL_SCREEN,
+    GuiMode.FULL_SCREEN: GuiMode.WINDOWED,
+}
 
 
 class GuiConfig(Model):

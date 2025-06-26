@@ -20,7 +20,7 @@ from nextrpg.event.pygame_event import (
 )
 from nextrpg.gui import Gui
 from nextrpg.model import Model, internal_field
-from nextrpg.scene.scene import Scene
+from nextrpg.scene.scene import Scene, get_scene
 
 
 class Game:
@@ -61,7 +61,7 @@ class _GameLoop(Model):
     _is_running: bool = internal_field(lambda _: True)
     _clock: Clock = internal_field(lambda _: Clock())
     _gui: Gui = internal_field(lambda _: Gui())
-    _scene: Scene = internal_field(lambda self: self.entry_scene())
+    _scene: Scene = internal_field(lambda self: get_scene(self.entry_scene))
 
     @cached_property
     def is_running(self) -> bool:
