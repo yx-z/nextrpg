@@ -1,4 +1,4 @@
-from functools import cache, cached_property
+from functools import cached_property
 from pathlib import Path
 from typing import NamedTuple, OrderedDict
 
@@ -162,7 +162,6 @@ class MapHelper(Model):
         ]
         return from_tiles + from_objects
 
-    @cache
     def get_object(self, name: str) -> TiledObject:
         """
         Get the first object of the given name from all visible object layers.
@@ -175,7 +174,6 @@ class MapHelper(Model):
         """
         return next(obj for obj in self._all_objects if obj.name == name)
 
-    @cache
     def get_objects_by_class_name(self, class_name: str) -> list[TiledObject]:
         """
         Get objects of the given class name from all visible object layers.
@@ -205,7 +203,6 @@ class MapHelper(Model):
             if (c := self._collider(gid))
         ]
 
-    @cache
     def _collider(self, gid: _Gid) -> TiledObject | None:
         colliders = self._tmx.tile_properties.get(gid, {}).get("colliders")
         return colliders[0] if colliders else None
@@ -239,7 +236,6 @@ class MapHelper(Model):
             Size(obj.width, obj.height),
         )
 
-    @cache
     def _tile_layers(self, class_name: str) -> list[TiledTileLayer]:
         return [
             layer
@@ -251,7 +247,6 @@ class MapHelper(Model):
     def _all_tile_layers(self) -> list[TiledTileLayer]:
         return list(map(self._layer, self._tmx.visible_tile_layers))
 
-    @cache
     def _draw_layers(self, class_name: str) -> list[DrawOnScreen]:
         return [
             draw
@@ -347,7 +342,6 @@ class MapHelper(Model):
             if (cls := tile.get("type"))
         }
 
-    @cache
     def _layer(self, index: _LayerIndex) -> TiledTileLayer | TiledObjectGroup:
         return self._tmx.layers[index]
 

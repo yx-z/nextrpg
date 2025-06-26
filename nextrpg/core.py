@@ -5,7 +5,7 @@ Core types referenced across `nextrpg`.
 from __future__ import annotations
 
 from enum import Enum, auto
-from functools import cache, cached_property
+from functools import cached_property
 from math import ceil
 
 from nextrpg.model import Model
@@ -133,7 +133,6 @@ class Size(Model):
                 f"{self.width=} and {self.height=} cannot be negative."
             )
 
-    @cache
     def __mul__(self, scale: float) -> Size:
         """
         Scales the dimensions by a scaling factor and returns a new `Size`.
