@@ -62,6 +62,21 @@ class _Collider(NamedTuple):
     obj: TiledObject
 
 
+def polygon_from_object(obj: TiledObject) -> Polygon:
+    """
+    Create a polygon from a Tiled object on a map.
+
+    Args:
+        `obj`: The Tiled object to create a polygon from.
+
+    Returns:
+        `Polygon`: The polygon created from the Tiled object.
+    """
+    if obj.width is None or obj.height is None:
+        return GenericPolygon(tuple(Coordinate(x, y) for x, y in obj.as_points))
+    return Rectangle(Coordinate(obj.x, obj.y), Size(obj.width, obj.height))
+
+
 class MapHelper(Model):
     """
     Tiled tmx map helper class for loading the tiles.
@@ -146,8 +161,8 @@ class MapHelper(Model):
         from_tiles = [
             self._polygon(coord, obj) for coord, obj in self._colliders
         ]
-        from_objects: list[Polygon] = [
-            GenericPolygon([Coordinate(x, y) for x, y in obj.as_points])
+        from_objects = [
+            polygon_from_object(obj)
             for obj in self.get_objects_by_class_name(config().map.collision)
         ]
         return from_tiles + from_objects

@@ -312,10 +312,10 @@ class Polygon(ABC):
     Abstract base class for polygon, defining the common interface/behavior.
 
     Attributes:
-        `points`: A list of `Coordinate` objects representing the points.
+        `points`: A tuple of `Coordinate` objects representing the points.
     """
 
-    points: list[Coordinate]
+    points: tuple[Coordinate, ...]
 
     @cached_property
     def bounding_rectangle(self) -> Rectangle:
@@ -398,11 +398,11 @@ class GenericPolygon(Model, Polygon):
     A collection of points that define a closed polygon.
 
     Attributes:
-        `points`: A list of `Coordinate` objects representing the points
+        `points`: A tuple of `Coordinate` objects representing the points
             bounding the polygon.
     """
 
-    points: list[Coordinate]
+    points: tuple[Coordinate, ...]
 
     def __post_init__(self) -> None:
         if len(self.points) < 3:
@@ -545,15 +545,14 @@ class Rectangle(Model, Polygon):
         width, height = self.size.tuple
         return Coordinate(self.left + width / 2, self.top + height / 2)
 
-    @override
     @cached_property
-    def points(self) -> list[Coordinate]:
-        return [
+    def points(self) -> tuple[Coordinate, ...]:
+        return (
             self.top_left,
             self.top_right,
             self.bottom_right,
             self.bottom_left,
-        ]
+        )
 
     @override
     def collide(self, poly: Polygon) -> bool:

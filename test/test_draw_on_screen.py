@@ -118,18 +118,18 @@ def test_rectangle() -> None:
 
 def test_polygon() -> None:
     with raises(ValueError):
-        GenericPolygon([])
+        GenericPolygon(tuple())
     polygon = GenericPolygon(
-        [Coordinate(0, 0), Coordinate(1, 0), Coordinate(1, 1)]
+        (Coordinate(0, 0), Coordinate(1, 0), Coordinate(1, 1))
     )
     assert polygon.bounding_rectangle == Rectangle(Coordinate(0, 0), Size(1, 1))
 
     assert polygon.collide(
-        GenericPolygon([Coordinate(0, 0), Coordinate(1, 2), Coordinate(1, 1)])
+        GenericPolygon((Coordinate(0, 0), Coordinate(1, 2), Coordinate(1, 1)))
     )
     assert not polygon.collide(
         GenericPolygon(
-            [Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20)]
+            (Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20))
         )
     )
     assert Coordinate(0.5, 0.5) in polygon

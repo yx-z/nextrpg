@@ -4,16 +4,18 @@ Scene is an interface of all game interactions like exploration, menu, etc..
 
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
+from collections import OrderedDict
+from collections.abc import Callable
 
+from nextrpg.config import config
 from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import DrawOnScreen
 from nextrpg.event.pygame_event import PygameEvent
 
 
-class Scene(ABC):
+class Scene:
     """
-    Abstract base class representing a game scene.
+    Base class representing a game scene.
 
     This class defines the interface for game scenes, providing methods for
     handling events and drawing content on the screen. All game scenes must
@@ -25,7 +27,6 @@ class Scene(ABC):
 
     draw_on_screens: list[DrawOnScreen]
 
-    @abstractmethod
     def event(self, event: PygameEvent) -> Scene:
         """
         Handles events for the scene.
@@ -58,8 +59,8 @@ class Scene(ABC):
         Returns:
             `Scene`: The updated scene state after processing the event.
         """
+        return self
 
-    @abstractmethod
     def step(self, time_delta: Millisecond) -> Scene:
         """
         Update the scene state for a single game step/frame.
@@ -75,3 +76,20 @@ class Scene(ABC):
         Returns:
             `Scene`: The updated scene state after the time step.
         """
+        return self
+
+
+_scenes = OrderedDict[Callable[..., Scene], Scene]()
+
+
+def get_scene[**P](
+    fun: Callable[P, Scene], /, *args: P.args, **kwargs: P.kwargs
+) -> Scene:
+    if fun in _scenes:
+        _scenes.move_to_end(fun, last=False)
+        return _scenes[fun]
+    s = fun(*args, **kwargs)
+    while len(_scenes) >= config().resource.scene_cache_size:
+        _scenes.popitem(last=False)
+    _scenes[fun] = s
+    return s

@@ -259,6 +259,17 @@ class KeyMappingConfig(Model):
     gui_mode_toggle: KeyCode = K_F1
 
 
+class ResourceConfig(Model):
+    """
+    Configuration class for resource loading.
+
+    Attributes:
+        `scene_cache_size`: The maximum number of scenes to cache in memory.
+    """
+
+    scene_cache_size: int = 128
+
+
 class Config(Model):
     """
     Main configuration class that aggregates all configuration components.
@@ -298,6 +309,7 @@ class Config(Model):
         RpgMakerCharacterDrawingConfig()
     )
     key_mapping: KeyMappingConfig = KeyMappingConfig()
+    resource: ResourceConfig = ResourceConfig()
     debug: DebugConfig | None = None
 
 

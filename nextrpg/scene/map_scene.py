@@ -16,15 +16,23 @@ from nextrpg.core import Millisecond, Pixel
 from nextrpg.draw_on_screen import (
     Coordinate,
     DrawOnScreen,
+    Polygon,
 )
+from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import PygameEvent
-from nextrpg.gui import Gui, gui_size
+from nextrpg.gui import gui_size
 from nextrpg.model import (
     Model,
     internal_field,
 )
-from nextrpg.scene.map_helper import MapHelper, TileBottomAndDraw, _LayerIndex
-from nextrpg.scene.scene import Scene
+from nextrpg.scene.map_helper import (
+    MapHelper,
+    TileBottomAndDraw,
+    _LayerIndex,
+    polygon_from_object,
+)
+from nextrpg.scene.scene import Scene, get_scene
+from nextrpg.scene.transition_scene import TransitionScene
 
 
 class MapScene(Model, Scene):
@@ -37,11 +45,13 @@ class MapScene(Model, Scene):
     Args:
         `tmx_file`: Path to the Tiled TMX file to load.
 
-        `character_drawing`: Character drawing representing the player.
+        `player_drawing`: Character drawing representing the player.
     """
 
     tmx_file: Path
-    character_drawing: CharacterDrawing
+    player_drawing: CharacterDrawing
+    player_coordinate_object: str | None = None
+    moves: list[Move] = field(default_factory=list)
     _: KW_ONLY = field()
     _map_helper: MapHelper = internal_field(
         lambda self: MapHelper(self.tmx_file)
@@ -51,7 +61,6 @@ class MapScene(Model, Scene):
     )
 
     @cached_property
-    @override
     def draw_on_screens(self) -> list[DrawOnScreen]:
         """
         Generate the complete list of drawable elements for the map scene.
@@ -102,7 +111,16 @@ class MapScene(Model, Scene):
         Returns:
             `Scene`: The updated scene after the time step.
         """
-        return replace(self, _player=self._player.step(time_delta))
+        player = self._player.step(time_delta)
+        character = player.character_and_visuals.character.visible_rectangle
+        return next(
+            (
+                scene
+                for poly, scene in self._move_to_scenes.items()
+                if character.collide(poly)
+            ),
+            replace(self, _player=player),
+        )
 
     @cached_property
     def _foreground_and_character(self) -> list[DrawOnScreen]:
@@ -145,16 +163,29 @@ class MapScene(Model, Scene):
         return Coordinate(left_offset, top_offset)
 
     def _init_player(self) -> CharacterOnScreen:
-        player = self._map_helper.get_object(config().map.player)
+        player = self._map_helper.get_object(
+            self.player_coordinate_object or config().map.player
+        )
         speed = player.properties.get(
             config().map.properties.speed, config().character.speed
         )
         return CharacterOnScreen(
-            self.character_drawing,
+            self.player_drawing,
             Coordinate(player.x, player.y),
             speed,
             self._map_helper.collisions,
         )
+
+    @cached_property
+    def _move_to_scenes(self) -> dict[Polygon, Scene]:
+        return {
+            polygon_from_object(
+                self._map_helper.get_object(m.trigger_object)
+            ): TransitionScene(
+                self, get_scene(m.to_map, self.player_drawing, m.to_object)
+            )
+            for m in self.moves
+        }
 
 
 def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:

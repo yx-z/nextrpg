@@ -157,7 +157,6 @@ class RpgMakerCharacterDrawing(Model, CharacterDrawing):
     )
 
     @cached_property
-    @override
     def drawing(self) -> Drawing:
         """
         Get the current visual representation of the character.

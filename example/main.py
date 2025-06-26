@@ -11,7 +11,7 @@ Web entry point.
 
 from asyncio import run
 
+from interior_scene import interior_scene
 from nextrpg.game import Game
-from sample_scene import entry_scene
 
-run(Game(entry_scene).start_async())
+run(Game(interior_scene).start_async())
