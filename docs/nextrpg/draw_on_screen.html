@@ -523,10 +523,10 @@
 </span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a><span class="sd">    Abstract base class for polygon, defining the common interface/behavior.</span>
 </span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a>
 </span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a><span class="sd">        `points`: A list of `Coordinate` objects representing the points.</span>
+</span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a><span class="sd">        `points`: A tuple of `Coordinate` objects representing the points.</span>
 </span><span id="L-316"><a href="#L-316"><span class="linenos">316</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-317"><a href="#L-317"><span class="linenos">317</span></a>
-</span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a>    <span class="n">points</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">]</span>
+</span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a>    <span class="n">points</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 </span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>
 </span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bounding_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
@@ -609,11 +609,11 @@
 </span><span id="L-398"><a href="#L-398"><span class="linenos">398</span></a><span class="sd">    A collection of points that define a closed polygon.</span>
 </span><span id="L-399"><a href="#L-399"><span class="linenos">399</span></a>
 </span><span id="L-400"><a href="#L-400"><span class="linenos">400</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-401"><a href="#L-401"><span class="linenos">401</span></a><span class="sd">        `points`: A list of `Coordinate` objects representing the points</span>
+</span><span id="L-401"><a href="#L-401"><span class="linenos">401</span></a><span class="sd">        `points`: A tuple of `Coordinate` objects representing the points</span>
 </span><span id="L-402"><a href="#L-402"><span class="linenos">402</span></a><span class="sd">            bounding the polygon.</span>
 </span><span id="L-403"><a href="#L-403"><span class="linenos">403</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-404"><a href="#L-404"><span class="linenos">404</span></a>
-</span><span id="L-405"><a href="#L-405"><span class="linenos">405</span></a>    <span class="n">points</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">]</span>
+</span><span id="L-405"><a href="#L-405"><span class="linenos">405</span></a>    <span class="n">points</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 </span><span id="L-406"><a href="#L-406"><span class="linenos">406</span></a>
 </span><span id="L-407"><a href="#L-407"><span class="linenos">407</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-408"><a href="#L-408"><span class="linenos">408</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
@@ -756,33 +756,39 @@
 </span><span id="L-545"><a href="#L-545"><span class="linenos">545</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span>
 </span><span id="L-546"><a href="#L-546"><span class="linenos">546</span></a>        <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 </span><span id="L-547"><a href="#L-547"><span class="linenos">547</span></a>
-</span><span id="L-548"><a href="#L-548"><span class="linenos">548</span></a>    <span class="nd">@override</span>
-</span><span id="L-549"><a href="#L-549"><span class="linenos">549</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-550"><a href="#L-550"><span class="linenos">550</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">]:</span>
-</span><span id="L-551"><a href="#L-551"><span class="linenos">551</span></a>        <span class="k">return</span> <span class="p">[</span>
-</span><span id="L-552"><a href="#L-552"><span class="linenos">552</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span>
-</span><span id="L-553"><a href="#L-553"><span class="linenos">553</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="p">,</span>
-</span><span id="L-554"><a href="#L-554"><span class="linenos">554</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="p">,</span>
-</span><span id="L-555"><a href="#L-555"><span class="linenos">555</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_left</span><span class="p">,</span>
-</span><span id="L-556"><a href="#L-556"><span class="linenos">556</span></a>        <span class="p">]</span>
-</span><span id="L-557"><a href="#L-557"><span class="linenos">557</span></a>
-</span><span id="L-558"><a href="#L-558"><span class="linenos">558</span></a>    <span class="nd">@override</span>
-</span><span id="L-559"><a href="#L-559"><span class="linenos">559</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">collide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poly</span><span class="p">:</span> <span class="n">Polygon</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-560"><a href="#L-560"><span class="linenos">560</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">Rectangle</span><span class="p">):</span>
-</span><span id="L-561"><a href="#L-561"><span class="linenos">561</span></a>            <span class="k">return</span> <span class="p">(</span>
-</span><span id="L-562"><a href="#L-562"><span class="linenos">562</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span>
-</span><span id="L-563"><a href="#L-563"><span class="linenos">563</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
-</span><span id="L-564"><a href="#L-564"><span class="linenos">564</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span>
-</span><span id="L-565"><a href="#L-565"><span class="linenos">565</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
-</span><span id="L-566"><a href="#L-566"><span class="linenos">566</span></a>            <span class="p">)</span>
-</span><span id="L-567"><a href="#L-567"><span class="linenos">567</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
-</span><span id="L-568"><a href="#L-568"><span class="linenos">568</span></a>
-</span><span id="L-569"><a href="#L-569"><span class="linenos">569</span></a>    <span class="nd">@override</span>
-</span><span id="L-570"><a href="#L-570"><span class="linenos">570</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-571"><a href="#L-571"><span class="linenos">571</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="L-572"><a href="#L-572"><span class="linenos">572</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
-</span><span id="L-573"><a href="#L-573"><span class="linenos">573</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
-</span><span id="L-574"><a href="#L-574"><span class="linenos">574</span></a>        <span class="p">)</span>
+</span><span id="L-548"><a href="#L-548"><span class="linenos">548</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-549"><a href="#L-549"><span class="linenos">549</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-550"><a href="#L-550"><span class="linenos">550</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-551"><a href="#L-551"><span class="linenos">551</span></a><span class="sd">        Get the coordinates of the corners of the rectangle.</span>
+</span><span id="L-552"><a href="#L-552"><span class="linenos">552</span></a>
+</span><span id="L-553"><a href="#L-553"><span class="linenos">553</span></a><span class="sd">        Returns:</span>
+</span><span id="L-554"><a href="#L-554"><span class="linenos">554</span></a><span class="sd">            `tuple[Coordinate, ...]`: The coordinates of the corners</span>
+</span><span id="L-555"><a href="#L-555"><span class="linenos">555</span></a><span class="sd">                of the rectangle.</span>
+</span><span id="L-556"><a href="#L-556"><span class="linenos">556</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-557"><a href="#L-557"><span class="linenos">557</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="L-558"><a href="#L-558"><span class="linenos">558</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span>
+</span><span id="L-559"><a href="#L-559"><span class="linenos">559</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="p">,</span>
+</span><span id="L-560"><a href="#L-560"><span class="linenos">560</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="p">,</span>
+</span><span id="L-561"><a href="#L-561"><span class="linenos">561</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_left</span><span class="p">,</span>
+</span><span id="L-562"><a href="#L-562"><span class="linenos">562</span></a>        <span class="p">)</span>
+</span><span id="L-563"><a href="#L-563"><span class="linenos">563</span></a>
+</span><span id="L-564"><a href="#L-564"><span class="linenos">564</span></a>    <span class="nd">@override</span>
+</span><span id="L-565"><a href="#L-565"><span class="linenos">565</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">collide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poly</span><span class="p">:</span> <span class="n">Polygon</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-566"><a href="#L-566"><span class="linenos">566</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">Rectangle</span><span class="p">):</span>
+</span><span id="L-567"><a href="#L-567"><span class="linenos">567</span></a>            <span class="k">return</span> <span class="p">(</span>
+</span><span id="L-568"><a href="#L-568"><span class="linenos">568</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span>
+</span><span id="L-569"><a href="#L-569"><span class="linenos">569</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
+</span><span id="L-570"><a href="#L-570"><span class="linenos">570</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span>
+</span><span id="L-571"><a href="#L-571"><span class="linenos">571</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
+</span><span id="L-572"><a href="#L-572"><span class="linenos">572</span></a>            <span class="p">)</span>
+</span><span id="L-573"><a href="#L-573"><span class="linenos">573</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+</span><span id="L-574"><a href="#L-574"><span class="linenos">574</span></a>
+</span><span id="L-575"><a href="#L-575"><span class="linenos">575</span></a>    <span class="nd">@override</span>
+</span><span id="L-576"><a href="#L-576"><span class="linenos">576</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-577"><a href="#L-577"><span class="linenos">577</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="L-578"><a href="#L-578"><span class="linenos">578</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
+</span><span id="L-579"><a href="#L-579"><span class="linenos">579</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
+</span><span id="L-580"><a href="#L-580"><span class="linenos">580</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -1565,10 +1571,10 @@ ignoring transparent pixels.</p>
 </span><span id="Polygon-313"><a href="#Polygon-313"><span class="linenos">313</span></a><span class="sd">    Abstract base class for polygon, defining the common interface/behavior.</span>
 </span><span id="Polygon-314"><a href="#Polygon-314"><span class="linenos">314</span></a>
 </span><span id="Polygon-315"><a href="#Polygon-315"><span class="linenos">315</span></a><span class="sd">    Attributes:</span>
-</span><span id="Polygon-316"><a href="#Polygon-316"><span class="linenos">316</span></a><span class="sd">        `points`: A list of `Coordinate` objects representing the points.</span>
+</span><span id="Polygon-316"><a href="#Polygon-316"><span class="linenos">316</span></a><span class="sd">        `points`: A tuple of `Coordinate` objects representing the points.</span>
 </span><span id="Polygon-317"><a href="#Polygon-317"><span class="linenos">317</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="Polygon-318"><a href="#Polygon-318"><span class="linenos">318</span></a>
-</span><span id="Polygon-319"><a href="#Polygon-319"><span class="linenos">319</span></a>    <span class="n">points</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">]</span>
+</span><span id="Polygon-319"><a href="#Polygon-319"><span class="linenos">319</span></a>    <span class="n">points</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 </span><span id="Polygon-320"><a href="#Polygon-320"><span class="linenos">320</span></a>
 </span><span id="Polygon-321"><a href="#Polygon-321"><span class="linenos">321</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Polygon-322"><a href="#Polygon-322"><span class="linenos">322</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bounding_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
@@ -1652,14 +1658,14 @@ ignoring transparent pixels.</p>
 <h6 id="attributes">Attributes:</h6>
 
 <ul>
-<li><strong><code><a href="#Polygon.points">points</a></code>:</strong>  A list of <code><a href="#Coordinate">Coordinate</a></code> objects representing the points.</li>
+<li><strong><code><a href="#Polygon.points">points</a></code>:</strong>  A tuple of <code><a href="#Coordinate">Coordinate</a></code> objects representing the points.</li>
 </ul>
 </div>
 
 
                             <div id="Polygon.points" class="classattr">
                                 <div class="attr variable">
-            <span class="name">points</span><span class="annotation">: list[<a href="#Coordinate">Coordinate</a>]</span>
+            <span class="name">points</span><span class="annotation">: tuple[<a href="#Coordinate">Coordinate</a>, ...]</span>
 
         
     </div>
@@ -1819,11 +1825,11 @@ ignoring transparent pixels.</p>
 </span><span id="GenericPolygon-399"><a href="#GenericPolygon-399"><span class="linenos">399</span></a><span class="sd">    A collection of points that define a closed polygon.</span>
 </span><span id="GenericPolygon-400"><a href="#GenericPolygon-400"><span class="linenos">400</span></a>
 </span><span id="GenericPolygon-401"><a href="#GenericPolygon-401"><span class="linenos">401</span></a><span class="sd">    Attributes:</span>
-</span><span id="GenericPolygon-402"><a href="#GenericPolygon-402"><span class="linenos">402</span></a><span class="sd">        `points`: A list of `Coordinate` objects representing the points</span>
+</span><span id="GenericPolygon-402"><a href="#GenericPolygon-402"><span class="linenos">402</span></a><span class="sd">        `points`: A tuple of `Coordinate` objects representing the points</span>
 </span><span id="GenericPolygon-403"><a href="#GenericPolygon-403"><span class="linenos">403</span></a><span class="sd">            bounding the polygon.</span>
 </span><span id="GenericPolygon-404"><a href="#GenericPolygon-404"><span class="linenos">404</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="GenericPolygon-405"><a href="#GenericPolygon-405"><span class="linenos">405</span></a>
-</span><span id="GenericPolygon-406"><a href="#GenericPolygon-406"><span class="linenos">406</span></a>    <span class="n">points</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">]</span>
+</span><span id="GenericPolygon-406"><a href="#GenericPolygon-406"><span class="linenos">406</span></a>    <span class="n">points</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 </span><span id="GenericPolygon-407"><a href="#GenericPolygon-407"><span class="linenos">407</span></a>
 </span><span id="GenericPolygon-408"><a href="#GenericPolygon-408"><span class="linenos">408</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="GenericPolygon-409"><a href="#GenericPolygon-409"><span class="linenos">409</span></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
@@ -1838,7 +1844,7 @@ ignoring transparent pixels.</p>
 <h6 id="attributes">Attributes:</h6>
 
 <ul>
-<li><strong><code><a href="#GenericPolygon.points">points</a></code>:</strong>  A list of <code><a href="#Coordinate">Coordinate</a></code> objects representing the points
+<li><strong><code><a href="#GenericPolygon.points">points</a></code>:</strong>  A tuple of <code><a href="#Coordinate">Coordinate</a></code> objects representing the points
 bounding the polygon.</li>
 </ul>
 </div>
@@ -1847,7 +1853,7 @@ bounding the polygon.</li>
                             <div id="GenericPolygon.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">GenericPolygon</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">points</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n"><a href="#Coordinate">Coordinate</a></span><span class="p">]</span></span>)</span>
+        <span class="name">GenericPolygon</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">points</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="#Coordinate">Coordinate</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span></span>)</span>
 
         
     </div>
@@ -1858,7 +1864,7 @@ bounding the polygon.</li>
                             </div>
                             <div id="GenericPolygon.points" class="classattr">
                                 <div class="attr variable">
-            <span class="name">points</span><span class="annotation">: list[<a href="#Coordinate">Coordinate</a>]</span>
+            <span class="name">points</span><span class="annotation">: tuple[<a href="#Coordinate">Coordinate</a>, ...]</span>
 
         
     </div>
@@ -2024,33 +2030,39 @@ bounding the polygon.</li>
 </span><span id="Rectangle-546"><a href="#Rectangle-546"><span class="linenos">546</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">tuple</span>
 </span><span id="Rectangle-547"><a href="#Rectangle-547"><span class="linenos">547</span></a>        <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 </span><span id="Rectangle-548"><a href="#Rectangle-548"><span class="linenos">548</span></a>
-</span><span id="Rectangle-549"><a href="#Rectangle-549"><span class="linenos">549</span></a>    <span class="nd">@override</span>
-</span><span id="Rectangle-550"><a href="#Rectangle-550"><span class="linenos">550</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Rectangle-551"><a href="#Rectangle-551"><span class="linenos">551</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">]:</span>
-</span><span id="Rectangle-552"><a href="#Rectangle-552"><span class="linenos">552</span></a>        <span class="k">return</span> <span class="p">[</span>
-</span><span id="Rectangle-553"><a href="#Rectangle-553"><span class="linenos">553</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span>
-</span><span id="Rectangle-554"><a href="#Rectangle-554"><span class="linenos">554</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="p">,</span>
-</span><span id="Rectangle-555"><a href="#Rectangle-555"><span class="linenos">555</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="p">,</span>
-</span><span id="Rectangle-556"><a href="#Rectangle-556"><span class="linenos">556</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_left</span><span class="p">,</span>
-</span><span id="Rectangle-557"><a href="#Rectangle-557"><span class="linenos">557</span></a>        <span class="p">]</span>
-</span><span id="Rectangle-558"><a href="#Rectangle-558"><span class="linenos">558</span></a>
-</span><span id="Rectangle-559"><a href="#Rectangle-559"><span class="linenos">559</span></a>    <span class="nd">@override</span>
-</span><span id="Rectangle-560"><a href="#Rectangle-560"><span class="linenos">560</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">collide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poly</span><span class="p">:</span> <span class="n">Polygon</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Rectangle-561"><a href="#Rectangle-561"><span class="linenos">561</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">Rectangle</span><span class="p">):</span>
-</span><span id="Rectangle-562"><a href="#Rectangle-562"><span class="linenos">562</span></a>            <span class="k">return</span> <span class="p">(</span>
-</span><span id="Rectangle-563"><a href="#Rectangle-563"><span class="linenos">563</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span>
-</span><span id="Rectangle-564"><a href="#Rectangle-564"><span class="linenos">564</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
-</span><span id="Rectangle-565"><a href="#Rectangle-565"><span class="linenos">565</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span>
-</span><span id="Rectangle-566"><a href="#Rectangle-566"><span class="linenos">566</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
-</span><span id="Rectangle-567"><a href="#Rectangle-567"><span class="linenos">567</span></a>            <span class="p">)</span>
-</span><span id="Rectangle-568"><a href="#Rectangle-568"><span class="linenos">568</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
-</span><span id="Rectangle-569"><a href="#Rectangle-569"><span class="linenos">569</span></a>
-</span><span id="Rectangle-570"><a href="#Rectangle-570"><span class="linenos">570</span></a>    <span class="nd">@override</span>
-</span><span id="Rectangle-571"><a href="#Rectangle-571"><span class="linenos">571</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Rectangle-572"><a href="#Rectangle-572"><span class="linenos">572</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="Rectangle-573"><a href="#Rectangle-573"><span class="linenos">573</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
-</span><span id="Rectangle-574"><a href="#Rectangle-574"><span class="linenos">574</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
-</span><span id="Rectangle-575"><a href="#Rectangle-575"><span class="linenos">575</span></a>        <span class="p">)</span>
+</span><span id="Rectangle-549"><a href="#Rectangle-549"><span class="linenos">549</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Rectangle-550"><a href="#Rectangle-550"><span class="linenos">550</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="Rectangle-551"><a href="#Rectangle-551"><span class="linenos">551</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Rectangle-552"><a href="#Rectangle-552"><span class="linenos">552</span></a><span class="sd">        Get the coordinates of the corners of the rectangle.</span>
+</span><span id="Rectangle-553"><a href="#Rectangle-553"><span class="linenos">553</span></a>
+</span><span id="Rectangle-554"><a href="#Rectangle-554"><span class="linenos">554</span></a><span class="sd">        Returns:</span>
+</span><span id="Rectangle-555"><a href="#Rectangle-555"><span class="linenos">555</span></a><span class="sd">            `tuple[Coordinate, ...]`: The coordinates of the corners</span>
+</span><span id="Rectangle-556"><a href="#Rectangle-556"><span class="linenos">556</span></a><span class="sd">                of the rectangle.</span>
+</span><span id="Rectangle-557"><a href="#Rectangle-557"><span class="linenos">557</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Rectangle-558"><a href="#Rectangle-558"><span class="linenos">558</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="Rectangle-559"><a href="#Rectangle-559"><span class="linenos">559</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span>
+</span><span id="Rectangle-560"><a href="#Rectangle-560"><span class="linenos">560</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="p">,</span>
+</span><span id="Rectangle-561"><a href="#Rectangle-561"><span class="linenos">561</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="p">,</span>
+</span><span id="Rectangle-562"><a href="#Rectangle-562"><span class="linenos">562</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_left</span><span class="p">,</span>
+</span><span id="Rectangle-563"><a href="#Rectangle-563"><span class="linenos">563</span></a>        <span class="p">)</span>
+</span><span id="Rectangle-564"><a href="#Rectangle-564"><span class="linenos">564</span></a>
+</span><span id="Rectangle-565"><a href="#Rectangle-565"><span class="linenos">565</span></a>    <span class="nd">@override</span>
+</span><span id="Rectangle-566"><a href="#Rectangle-566"><span class="linenos">566</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">collide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poly</span><span class="p">:</span> <span class="n">Polygon</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Rectangle-567"><a href="#Rectangle-567"><span class="linenos">567</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">Rectangle</span><span class="p">):</span>
+</span><span id="Rectangle-568"><a href="#Rectangle-568"><span class="linenos">568</span></a>            <span class="k">return</span> <span class="p">(</span>
+</span><span id="Rectangle-569"><a href="#Rectangle-569"><span class="linenos">569</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span>
+</span><span id="Rectangle-570"><a href="#Rectangle-570"><span class="linenos">570</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
+</span><span id="Rectangle-571"><a href="#Rectangle-571"><span class="linenos">571</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span>
+</span><span id="Rectangle-572"><a href="#Rectangle-572"><span class="linenos">572</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
+</span><span id="Rectangle-573"><a href="#Rectangle-573"><span class="linenos">573</span></a>            <span class="p">)</span>
+</span><span id="Rectangle-574"><a href="#Rectangle-574"><span class="linenos">574</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+</span><span id="Rectangle-575"><a href="#Rectangle-575"><span class="linenos">575</span></a>
+</span><span id="Rectangle-576"><a href="#Rectangle-576"><span class="linenos">576</span></a>    <span class="nd">@override</span>
+</span><span id="Rectangle-577"><a href="#Rectangle-577"><span class="linenos">577</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Rectangle-578"><a href="#Rectangle-578"><span class="linenos">578</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="Rectangle-579"><a href="#Rectangle-579"><span class="linenos">579</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
+</span><span id="Rectangle-580"><a href="#Rectangle-580"><span class="linenos">580</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
+</span><span id="Rectangle-581"><a href="#Rectangle-581"><span class="linenos">581</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -2487,25 +2499,40 @@ bounding the polygon.</li>
                             <div id="Rectangle.points" class="classattr">
                                         <input id="Rectangle.points-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">points</span><span class="annotation">: list[<a href="#Coordinate">Coordinate</a>]</span>
+            <span class="name">points</span><span class="annotation">: tuple[<a href="#Coordinate">Coordinate</a>, ...]</span>
 
                 <label class="view-source-button" for="Rectangle.points-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Rectangle.points"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.points-549"><a href="#Rectangle.points-549"><span class="linenos">549</span></a>    <span class="nd">@override</span>
-</span><span id="Rectangle.points-550"><a href="#Rectangle.points-550"><span class="linenos">550</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Rectangle.points-551"><a href="#Rectangle.points-551"><span class="linenos">551</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">]:</span>
-</span><span id="Rectangle.points-552"><a href="#Rectangle.points-552"><span class="linenos">552</span></a>        <span class="k">return</span> <span class="p">[</span>
-</span><span id="Rectangle.points-553"><a href="#Rectangle.points-553"><span class="linenos">553</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span>
-</span><span id="Rectangle.points-554"><a href="#Rectangle.points-554"><span class="linenos">554</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="p">,</span>
-</span><span id="Rectangle.points-555"><a href="#Rectangle.points-555"><span class="linenos">555</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="p">,</span>
-</span><span id="Rectangle.points-556"><a href="#Rectangle.points-556"><span class="linenos">556</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_left</span><span class="p">,</span>
-</span><span id="Rectangle.points-557"><a href="#Rectangle.points-557"><span class="linenos">557</span></a>        <span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.points-549"><a href="#Rectangle.points-549"><span class="linenos">549</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Rectangle.points-550"><a href="#Rectangle.points-550"><span class="linenos">550</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="Rectangle.points-551"><a href="#Rectangle.points-551"><span class="linenos">551</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Rectangle.points-552"><a href="#Rectangle.points-552"><span class="linenos">552</span></a><span class="sd">        Get the coordinates of the corners of the rectangle.</span>
+</span><span id="Rectangle.points-553"><a href="#Rectangle.points-553"><span class="linenos">553</span></a>
+</span><span id="Rectangle.points-554"><a href="#Rectangle.points-554"><span class="linenos">554</span></a><span class="sd">        Returns:</span>
+</span><span id="Rectangle.points-555"><a href="#Rectangle.points-555"><span class="linenos">555</span></a><span class="sd">            `tuple[Coordinate, ...]`: The coordinates of the corners</span>
+</span><span id="Rectangle.points-556"><a href="#Rectangle.points-556"><span class="linenos">556</span></a><span class="sd">                of the rectangle.</span>
+</span><span id="Rectangle.points-557"><a href="#Rectangle.points-557"><span class="linenos">557</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Rectangle.points-558"><a href="#Rectangle.points-558"><span class="linenos">558</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="Rectangle.points-559"><a href="#Rectangle.points-559"><span class="linenos">559</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span>
+</span><span id="Rectangle.points-560"><a href="#Rectangle.points-560"><span class="linenos">560</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="p">,</span>
+</span><span id="Rectangle.points-561"><a href="#Rectangle.points-561"><span class="linenos">561</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="p">,</span>
+</span><span id="Rectangle.points-562"><a href="#Rectangle.points-562"><span class="linenos">562</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_left</span><span class="p">,</span>
+</span><span id="Rectangle.points-563"><a href="#Rectangle.points-563"><span class="linenos">563</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
-    
+            <div class="docstring"><p>Get the coordinates of the corners of the rectangle.</p>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code>tuple[Coordinate, ...]</code>: The coordinates of the corners
+      of the rectangle.</p>
+</blockquote>
+</div>
+
 
                             </div>
                             <div id="Rectangle.collide" class="classattr">
@@ -2520,16 +2547,16 @@ bounding the polygon.</li>
 
     </div>
     <a class="headerlink" href="#Rectangle.collide"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.collide-559"><a href="#Rectangle.collide-559"><span class="linenos">559</span></a>    <span class="nd">@override</span>
-</span><span id="Rectangle.collide-560"><a href="#Rectangle.collide-560"><span class="linenos">560</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">collide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poly</span><span class="p">:</span> <span class="n">Polygon</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Rectangle.collide-561"><a href="#Rectangle.collide-561"><span class="linenos">561</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">Rectangle</span><span class="p">):</span>
-</span><span id="Rectangle.collide-562"><a href="#Rectangle.collide-562"><span class="linenos">562</span></a>            <span class="k">return</span> <span class="p">(</span>
-</span><span id="Rectangle.collide-563"><a href="#Rectangle.collide-563"><span class="linenos">563</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span>
-</span><span id="Rectangle.collide-564"><a href="#Rectangle.collide-564"><span class="linenos">564</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
-</span><span id="Rectangle.collide-565"><a href="#Rectangle.collide-565"><span class="linenos">565</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span>
-</span><span id="Rectangle.collide-566"><a href="#Rectangle.collide-566"><span class="linenos">566</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
-</span><span id="Rectangle.collide-567"><a href="#Rectangle.collide-567"><span class="linenos">567</span></a>            <span class="p">)</span>
-</span><span id="Rectangle.collide-568"><a href="#Rectangle.collide-568"><span class="linenos">568</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.collide-565"><a href="#Rectangle.collide-565"><span class="linenos">565</span></a>    <span class="nd">@override</span>
+</span><span id="Rectangle.collide-566"><a href="#Rectangle.collide-566"><span class="linenos">566</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">collide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poly</span><span class="p">:</span> <span class="n">Polygon</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Rectangle.collide-567"><a href="#Rectangle.collide-567"><span class="linenos">567</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">Rectangle</span><span class="p">):</span>
+</span><span id="Rectangle.collide-568"><a href="#Rectangle.collide-568"><span class="linenos">568</span></a>            <span class="k">return</span> <span class="p">(</span>
+</span><span id="Rectangle.collide-569"><a href="#Rectangle.collide-569"><span class="linenos">569</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span>
+</span><span id="Rectangle.collide-570"><a href="#Rectangle.collide-570"><span class="linenos">570</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
+</span><span id="Rectangle.collide-571"><a href="#Rectangle.collide-571"><span class="linenos">571</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span>
+</span><span id="Rectangle.collide-572"><a href="#Rectangle.collide-572"><span class="linenos">572</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
+</span><span id="Rectangle.collide-573"><a href="#Rectangle.collide-573"><span class="linenos">573</span></a>            <span class="p">)</span>
+</span><span id="Rectangle.collide-574"><a href="#Rectangle.collide-574"><span class="linenos">574</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
 </span></pre></div>
 
 

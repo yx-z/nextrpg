@@ -35,6 +35,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
     obj = SimpleNamespace(
         name="obj",
         type="collision",
+        width=None,
         as_points=[(1, 2), (3, 4), (5, 6)],
     )
     mock_object.__iter__.return_value = iter([obj])
