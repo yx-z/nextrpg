@@ -13,16 +13,10 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config import config
 from nextrpg.core import Millisecond, Pixel
-from nextrpg.draw_on_screen import (
-    Coordinate,
-    DrawOnScreen,
-)
+from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import PygameEvent
-from nextrpg.model import (
-    Model,
-    internal_field,
-)
+from nextrpg.model import Model, internal_field
 from nextrpg.scene.map_helper import (
     MapHelper,
     TileBottomAndDraw,
@@ -164,12 +158,12 @@ class MapScene(Model, Scene):
         return Coordinate(left_offset, top_offset)
 
     def _move_to_scene(self, player: CharacterOnScreen) -> Scene | None:
-        rect = player.character_and_visuals.character.visible_rectangle
+        player_rect = player.character_and_visuals.character.visible_rectangle
         for move in self.moves:
-            obj = self._map_helper.get_object(move.trigger_object)
-            poly = poly_from_obj(obj)
-            if rect.collide(poly):
-                next_scene = move.get_scene(player.character)
+            move_object = self._map_helper.get_object(move.trigger_object)
+            move_area = poly_from_obj(move_object)
+            if player_rect.collide(move_area):
+                next_scene = move.to_scene(player.character)
                 return TransitionScene(self, next_scene)
         return None
 

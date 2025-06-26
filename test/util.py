@@ -28,13 +28,13 @@ class MockSurface(Model, Surface):
     data: str = ""
 
     def get_width(self) -> int:
-        return 1
+        return 2
 
     def get_height(self) -> int:
         return 2
 
     def get_at(self, _: tuple[int, int]) -> MockColor:
-        return MockColor(0, 0, 0, 0)
+        return MockColor(0, 0, 0, 1)
 
     def blits(self, iterable: Any) -> None:
         pass

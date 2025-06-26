@@ -4,11 +4,13 @@ from unittest.mock import MagicMock
 
 from pytest_mock import MockerFixture
 
+from nextrpg.config import Config, ResourceConfig
 from nextrpg.core import Size
 from nextrpg.scene.map_helper import MapHelper
-from test.util import MockSurface
+from test.util import MockSurface, override_config
 
 
+@override_config(Config(resource=ResourceConfig(map_cache_size=1)))
 def test_map_helper(mocker: MockerFixture) -> None:
     tmx = MagicMock()
     tmx.width = 10
@@ -65,10 +67,12 @@ def test_map_helper(mocker: MockerFixture) -> None:
         },
     }
     mocker.patch("nextrpg.scene.map_helper.load_pygame", return_value=tmx)
-    helper = MapHelper(Path())
+    helper = MapHelper(Path("abc"))
     assert helper.map_size == Size(20, 60)
     assert helper.background
     assert helper.above_character
     assert helper.foreground
     assert helper.get_object("obj")
     assert helper.collisions
+    assert MapHelper(Path("abc")) is helper
+    assert MapHelper(Path("def")) is not helper

@@ -7,6 +7,15 @@ from nextrpg.scene.scene import Scene
 
 
 class TransitionScene(Model, Scene):
+    """
+    Transition from one scene to another.
+
+    Attributes:
+        `from_scene`: The scene to transition from.
+
+        `to_scene`: The scene to transition to.
+    """
+
     from_scene: Scene
     to_scene: Scene
 

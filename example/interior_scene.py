@@ -48,7 +48,7 @@ def interior_scene(
         # Player coordinate on the map.
         player_coordinate_object,
         # Move to another map.
-        [Move("to_exterior", "from_interior", exterior_scene)],
+        [Move("from_interior", "to_exterior", exterior_scene)],
     )
 
 

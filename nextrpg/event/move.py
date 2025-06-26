@@ -6,9 +6,29 @@ from nextrpg.scene.scene import Scene
 
 
 class Move(Model):
-    trigger_object: str
-    to_object: str
-    to_map: Callable[[CharacterDrawing, str], Scene]
+    """
+    Move event from the current scene to another.
 
-    def get_scene(self, character: CharacterDrawing) -> Scene:
-        return self.to_map(character, self.to_object)
+    Attributes:
+        `to_object`: Name of the object to move to.
+
+        `trigger_object`: Name of the object to trigger the move.
+
+        `next_scene`: Callable to get the next scene.
+    """
+
+    to_object: str
+    trigger_object: str
+    next_scene: Callable[[CharacterDrawing, str], Scene]
+
+    def to_scene(self, character: CharacterDrawing) -> Scene:
+        """
+        Move to another scene.
+
+        Args:
+            `character`: The character to appear on the next scene.
+
+        Returns:
+            `Scene`: The next scene.
+        """
+        return self.next_scene(character, self.to_object)
