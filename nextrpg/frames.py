@@ -30,8 +30,8 @@ class CyclicFrames(Model):
     frames: list[Drawing]
     duration_per_frame: Millisecond
     _: KW_ONLY = field()
-    _index: _FrameIndex = internal_field(lambda _: 0)
-    _elapsed: Millisecond = internal_field(lambda _: 0)
+    _index: _FrameIndex = internal_field(0)
+    _elapsed: Millisecond = internal_field(0)
 
     @cached_property
     def current_frame(self) -> Drawing:

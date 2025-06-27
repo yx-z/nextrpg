@@ -140,10 +140,10 @@ class Drawing(Model):
     resource: Path | Surface = field(repr=False)
     _: KW_ONLY = field()
     _surface: Surface = internal_field(
-        lambda s: (
-            s.resource
-            if isinstance(s.resource, Surface)
-            else load(s.resource).convert_alpha()
+        lambda self: (
+            self.resource
+            if isinstance(self.resource, Surface)
+            else load(self.resource).convert_alpha()
         )
     )
 

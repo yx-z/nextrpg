@@ -11,6 +11,8 @@ def test_model():
         _internal_data: str = internal_field(
             lambda self: f"internal {self.public_data}"
         )
+        _data2: int = internal_field(lambda: 123)
+        _data3: int = internal_field(456)
 
     mm = MyModel("user_input")
     assert mm.public_data == "public"
@@ -20,6 +22,8 @@ def test_model():
     assert replaced.user_input == "abc"
     assert replaced.public_data == "public"
     assert replaced._internal_data == "def"
+    assert replaced._data2 == 123
+    assert replaced._data3 == 456
 
 
 def test_cached() -> None:

@@ -58,10 +58,10 @@ class Game:
 class _GameLoop(Model):
     entry_scene: Callable[[], Scene]
     _: KW_ONLY = field()
-    _is_running: bool = internal_field(lambda _: True)
-    _clock: Clock = internal_field(lambda _: Clock())
-    _gui: Gui = internal_field(lambda _: Gui())
-    _scene: Scene = internal_field(lambda s: s.entry_scene())
+    _is_running: bool = internal_field(True)
+    _clock: Clock = internal_field(Clock)
+    _gui: Gui = internal_field(Gui)
+    _scene: Scene = internal_field(lambda self: self.entry_scene())
 
     @cached_property
     def is_running(self) -> bool:

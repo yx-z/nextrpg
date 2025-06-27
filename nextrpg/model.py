@@ -13,16 +13,17 @@ from typing import Any, dataclass_transform
 
 @dataclass(frozen=True)
 class _Init[S, R]:
-    init: Callable[[S], R]
+    init: Callable[[S], R] | Callable[[], R] | R
 
 
-def internal_field[S, R](init: Callable[[S], R]) -> Any:
+def internal_field[S, R](init: Callable[[S], R] | Callable[[], R] | R) -> Any:
     """
     Used to mark a field in `Model` as internal.
 
-    Args:
-        `init`: Function that takes `self` as argument and returns
-            the initial value.
+    Arguments:
+        `init`: Function that takes `self` as an argument and returns
+            the initial value, or a callable that takes no arguments,
+            or a constant value.
 
     Returns:
         `Any`: Internal field with the given initialization function.
@@ -40,7 +41,7 @@ class _Meta[T](ABCMeta):
 class Model(metaclass=_Meta):
     """
     Base class to inherit from for models.
-    Inherted model classes are an immutable dataclass with `internal_fields`.
+    Inherited model classes are an immutable dataclass with `internal_fields`.
 
     Example usage:
     ```python
@@ -60,7 +61,13 @@ class Model(metaclass=_Meta):
     def __post_init__(self) -> None:
         for f in fields(self):
             if isinstance(init := getattr(self, f.name), _Init):
-                object.__setattr__(self, f.name, init.init(self))
+                if callable(init.init):
+                    try:
+                        object.__setattr__(self, f.name, init.init())
+                    except TypeError:
+                        object.__setattr__(self, f.name, init.init(self))
+                else:
+                    object.__setattr__(self, f.name, init.init)
 
 
 class cached[T, K, **P](Model):

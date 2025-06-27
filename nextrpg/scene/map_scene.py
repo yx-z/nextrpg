@@ -60,7 +60,9 @@ class MapScene(Model, Scene):
     player_coordinate_object: str | None = None
     moves: list[Move] = field(default_factory=list)
     _: KW_ONLY = field()
-    _map_helper: MapHelper = internal_field(lambda s: MapHelper(s.tmx_file))
+    _map_helper: MapHelper = internal_field(
+        lambda self: MapHelper(self.tmx_file)
+    )
     _player: CharacterOnScreen = internal_field(_init_player)
 
     @cached_property
