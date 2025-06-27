@@ -5,7 +5,7 @@ Drawable on screen.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import KW_ONLY, field
+from dataclasses import KW_ONLY, field, replace
 from functools import cached_property, singledispatchmethod
 from itertools import product
 from math import ceil, sqrt
@@ -18,8 +18,8 @@ from pygame.image import load
 from pygame.mask import from_surface
 
 from nextrpg.config import config
-from nextrpg.core import Direction, DirectionalOffset, Pixel, Rgba, Size
-from nextrpg.model import Model, cached, internal_field
+from nextrpg.core import Alpha, Direction, DirectionalOffset, Pixel, Rgba, Size
+from nextrpg.model import Model, internal_field
 
 
 class Coordinate(Model):
@@ -78,9 +78,9 @@ class Coordinate(Model):
             `Coordinate`: A new coordinate shifted by the specified offset in
             the given direction.
         """
-        raise NotImplementedError(f"Non-addable {offset=}")
+        return NotImplemented
 
-    @property
+    @cached_property
     def tuple(self) -> tuple[Pixel, Pixel]:
         """
         Gets the coordinates as a tuple.
@@ -122,10 +122,6 @@ def _add_coordinate(self, offset: Coordinate) -> Coordinate:
     return Coordinate(self.left + offset.left, self.top + offset.top)
 
 
-@cached(
-    lambda: config().resource.drawing_cache_size,
-    lambda resource: resource if isinstance(resource, Path) else None,
-)
 class Drawing(Model):
     """
     Represents a drawable element and provides methods for accessing its size
@@ -135,9 +131,17 @@ class Drawing(Model):
     `pygame.Surface` as input.
     It provides properties to access surface dimensions and size and methods to
     crop and scale the surface.
+
+    Arguments:
+        `resource`: A path to a file containing the drawing resource,
+            or a `pygame.Surface` object.
+
+        `alpha`: The alpha value to use for the drawing.
+            Default to 255.0 which means fully opaque.
     """
 
     resource: Path | Surface = field(repr=False)
+    alpha: Alpha = field(default=255)
     _: KW_ONLY = field()
     _surface: Surface = internal_field(
         lambda self: (
@@ -176,7 +180,7 @@ class Drawing(Model):
         """
         return self._surface.get_height()
 
-    @property
+    @cached_property
     def size(self) -> Size:
         """
         Gets the size of an object as a combination of its width and height
@@ -194,7 +198,20 @@ class Drawing(Model):
         Returns:
             `pygame.Surface`: The underlying `pygame.Surface`.
         """
+        self._surface.set_alpha(self.alpha)
         return self._debug_surface or self._surface
+
+    def set_alpha(self, alpha: Alpha) -> Drawing:
+        """
+        Set the alpha value of the drawing.
+
+        Arguments:
+            `alpha`: The alpha value to set.
+
+        Returns:
+            `Drawing`: A new `Drawing` instance with the updated alpha value.
+        """
+        return replace(self, alpha=alpha)
 
     def crop(self, top_left: Coordinate, size: Size) -> Drawing:
         """
@@ -244,7 +261,7 @@ class DrawOnScreen(Model):
     top_left: Coordinate
     drawing: Drawing
 
-    @property
+    @cached_property
     def rectangle(self) -> Rectangle:
         """
         Gets the rectangular bounds of the drawing on screen.
@@ -286,7 +303,7 @@ class DrawOnScreen(Model):
             Size(max_x - min_x, max_y - min_y),
         )
 
-    @property
+    @cached_property
     def pygame(self) -> tuple[Surface, tuple[Pixel, Pixel]]:
         """
         Gets the pygame surface and coordinate tuple for rendering.
@@ -468,7 +485,7 @@ class Rectangle(Model, Polygon):
         """
         return self.top + self.size.height
 
-    @property
+    @cached_property
     def top_right(self) -> Coordinate:
         """
         Gets the top-right coordinate of the drawing on the screen.
@@ -478,7 +495,7 @@ class Rectangle(Model, Polygon):
         """
         return Coordinate(self.right, self.top)
 
-    @property
+    @cached_property
     def bottom_left(self) -> Coordinate:
         """
         Gets the bottom-left coordinate of the drawing on the screen.
@@ -488,7 +505,7 @@ class Rectangle(Model, Polygon):
         """
         return Coordinate(self.left, self.bottom)
 
-    @property
+    @cached_property
     def bottom_right(self) -> Coordinate:
         """
         Gets the bottom-right coordinate of the drawing on the screen.
@@ -498,7 +515,7 @@ class Rectangle(Model, Polygon):
         """
         return Coordinate(self.right, self.bottom)
 
-    @property
+    @cached_property
     def top_center(self) -> Coordinate:
         """
         Gets the center point of the top edge of the drawing on the screen.
@@ -508,7 +525,7 @@ class Rectangle(Model, Polygon):
         """
         return Coordinate(self.left + self.size.width / 2, self.top)
 
-    @property
+    @cached_property
     def bottom_center(self) -> Coordinate:
         """
         Gets the center point of the bottom edge of the drawing on the screen.
@@ -518,7 +535,7 @@ class Rectangle(Model, Polygon):
         """
         return Coordinate(self.left + self.size.width / 2, self.bottom)
 
-    @property
+    @cached_property
     def center_left(self) -> Coordinate:
         """
         Gets the center point of the left edge of the drawing on the screen.
@@ -528,7 +545,7 @@ class Rectangle(Model, Polygon):
         """
         return Coordinate(self.left, self.top + self.size.height / 2)
 
-    @property
+    @cached_property
     def center_right(self) -> Coordinate:
         """
         Gets the center point of the right edge of the drawing on the screen.
@@ -538,7 +555,7 @@ class Rectangle(Model, Polygon):
         """
         return Coordinate(self.right, self.top + self.size.height / 2)
 
-    @property
+    @cached_property
     def center(self) -> Coordinate:
         """
         Gets the center point of the drawing on the screen.
@@ -549,7 +566,7 @@ class Rectangle(Model, Polygon):
         width, height = self.size.tuple
         return Coordinate(self.left + width / 2, self.top + height / 2)
 
-    @property
+    @cached_property
     def points(self) -> tuple[Coordinate, ...]:
         """
         Get the coordinates of the corners of the rectangle.
@@ -582,3 +599,13 @@ class Rectangle(Model, Polygon):
             self.left < coordinate.left < self.right
             and self.top < coordinate.top < self.bottom
         )
+
+
+def screen() -> Rectangle:
+    """
+    Get the rectangle of the current screen.
+
+    Returns:
+        `Rectangle`: The rectangle of the current screen.
+    """
+    return Rectangle(Coordinate(0, 0), config().gui.size)

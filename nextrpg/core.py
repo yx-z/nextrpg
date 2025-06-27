@@ -5,9 +5,16 @@ Core types referenced across `nextrpg`.
 from __future__ import annotations
 
 from enum import Enum, auto
+from functools import cached_property
 from math import ceil
 
 from nextrpg.model import Model
+
+type Alpha = int
+"""
+Alpha channel that defines the transparency between [0, 255] for images.
+0 is fully transparent, 255 is fully opaque.
+"""
 
 
 class Rgba(Model):
@@ -27,9 +34,9 @@ class Rgba(Model):
     red: int
     green: int
     blue: int
-    alpha: int
+    alpha: Alpha
 
-    @property
+    @cached_property
     def tuple(self) -> tuple[int, int, int, int]:
         """
         Gets the color components as a tuple.
@@ -41,7 +48,7 @@ class Rgba(Model):
         return self.red, self.green, self.blue, self.alpha
 
 
-type Millisecond = int
+type Millisecond = int | float
 """
 Millisecond elapsed between game loops.
 """
@@ -149,7 +156,7 @@ class Size(Model):
         """
         return Size(ceil(self.width * scale), ceil(self.height * scale))
 
-    @property
+    @cached_property
     def tuple(self) -> tuple[Pixel, Pixel]:
         """
         Gets the dimensions as a tuple.

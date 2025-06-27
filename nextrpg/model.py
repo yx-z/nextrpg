@@ -11,11 +11,6 @@ from dataclasses import Field, dataclass, field, fields
 from typing import Any, dataclass_transform
 
 
-@dataclass(frozen=True)
-class _Init:
-    init: Callable[[Any], Any] | Callable[[], Any] | Any
-
-
 def internal_field(init: Callable[[Any], Any] | Callable[[], Any] | Any) -> Any:
     """
     Used to mark a field in `Model` as internal.
@@ -124,3 +119,7 @@ class cached[T, K, **P](Model):
 
         cls.__new__ = __new__
         return cls
+
+
+class _Init(Model):
+    init: Callable[[Any], Any] | Callable[[], Any] | Any

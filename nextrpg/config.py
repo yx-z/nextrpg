@@ -270,7 +270,20 @@ class ResourceConfig(Model):
     """
 
     map_cache_size: int = 128
-    drawing_cache_size: int = 1024
+
+
+class TransitionConfig(Model):
+    """
+    Configuration class for transition scenes.
+
+    This config is used by `nextrpg.scene.transition_scene.TransitionScene`.
+
+    Arguments:
+        `transition_duration`: The total duration of the transition
+            in milliseconds.
+    """
+
+    transition_duration: Millisecond = 1000
 
 
 class Config(Model):
@@ -313,6 +326,7 @@ class Config(Model):
     )
     key_mapping: KeyMappingConfig = KeyMappingConfig()
     resource: ResourceConfig = ResourceConfig()
+    transition: TransitionConfig = TransitionConfig()
     debug: DebugConfig | None = None
 
 

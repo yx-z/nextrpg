@@ -17,6 +17,7 @@ from __future__ import annotations
 
 from dataclasses import KW_ONLY, field, replace
 from enum import IntEnum
+from functools import cached_property
 from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -167,7 +168,7 @@ class RpgMakerCharacterDrawing(Model, CharacterDrawing):
     _: KW_ONLY = field()
     _frames: dict[Direction, CyclicFrames] = internal_field(_init_frames)
 
-    @property
+    @cached_property
     def drawing(self) -> Drawing:
         """
         Get the current visual representation of the character.

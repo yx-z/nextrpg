@@ -87,8 +87,6 @@ def test_coordinate() -> None:
     coord = Coordinate(1, 2)
     with raises(ValueError):
         coord + DirectionalOffset("INVALID_DIRECTION", 1)  # type: ignore
-    with raises(NotImplementedError):
-        coord + "INVALID"  # type: ignore
 
 
 def test_rectangle() -> None:

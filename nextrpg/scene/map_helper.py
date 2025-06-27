@@ -272,7 +272,7 @@ class MapHelper(Model):
             for coord, draw in coord_and_draws.items()
         }
 
-    @property
+    @cached_property
     def _tile_size(self) -> Size:
         return Size(self._tmx.tilewidth, self._tmx.tileheight)
 
