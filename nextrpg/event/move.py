@@ -1,3 +1,7 @@
+"""
+Move event.
+"""
+
 from collections.abc import Callable
 
 from nextrpg.character.character_drawing import CharacterDrawing

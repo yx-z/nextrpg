@@ -143,9 +143,9 @@
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">docutils.nodes</span><span class="w"> </span><span class="kn">import</span> <span class="n">field</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">field</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.event</span><span class="w"> </span><span class="kn">import</span> <span class="n">Event</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.locals</span><span class="w"> </span><span class="kn">import</span> <span class="n">KEYDOWN</span><span class="p">,</span> <span class="n">KEYUP</span><span class="p">,</span> <span class="n">QUIT</span><span class="p">,</span> <span class="n">VIDEORESIZE</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a>
@@ -413,7 +413,7 @@
                             <div id="GuiResize.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">GuiResize</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span>, </span><span class="param"><span class="n">size</span><span class="p">:</span> <span class="n"><a href="../core.html#Size">nextrpg.core.Size</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">field</span><span class="p">:</span> <span class="o">&gt;</span></span>)</span>
+        <span class="name">GuiResize</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span></span>)</span>
 
         
     </div>
@@ -424,8 +424,7 @@
                             </div>
                             <div id="GuiResize.size" class="classattr">
                                 <div class="attr variable">
-            <span class="name">size</span><span class="annotation">: <a href="../core.html#Size">nextrpg.core.Size</a></span>        =
-<span class="default_value">&lt;field: &gt;</span>
+            <span class="name">size</span><span class="annotation">: <a href="../core.html#Size">nextrpg.core.Size</a></span>
 
         
     </div>
@@ -687,7 +686,7 @@
                             <div id="KeyPressDown.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">KeyPressDown</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span>,</span><span class="param">	<span class="n">key</span><span class="p">:</span> <span class="n"><a href="#KeyboardKey">KeyboardKey</a></span> <span class="o">|</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">field</span><span class="p">:</span> <span class="o">&gt;</span></span>)</span>
+        <span class="name">KeyPressDown</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span></span>)</span>
 
         
     </div>
@@ -744,7 +743,7 @@
                             <div id="KeyPressUp.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">KeyPressUp</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span>,</span><span class="param">	<span class="n">key</span><span class="p">:</span> <span class="n"><a href="#KeyboardKey">KeyboardKey</a></span> <span class="o">|</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">field</span><span class="p">:</span> <span class="o">&gt;</span></span>)</span>
+        <span class="name">KeyPressUp</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">event</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">Event</span></span>)</span>
 
         
     </div>

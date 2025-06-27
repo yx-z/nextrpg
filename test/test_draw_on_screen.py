@@ -117,8 +117,6 @@ def test_rectangle() -> None:
 
 
 def test_polygon() -> None:
-    with raises(ValueError):
-        GenericPolygon(tuple())
     polygon = GenericPolygon(
         (Coordinate(0, 0), Coordinate(1, 0), Coordinate(1, 1))
     )

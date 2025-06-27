@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from dataclasses import field
 from enum import Enum, auto
-from functools import cached_property
 
 from pygame.locals import K_DOWN, K_F1, K_LEFT, K_RIGHT, K_SPACE, K_UP
 
@@ -68,7 +67,7 @@ class GuiMode(Enum):
     WINDOWED = auto()
     FULL_SCREEN = auto()
 
-    @cached_property
+    @property
     def opposite(self) -> GuiMode:
         """
         Get the opposite gui mode.

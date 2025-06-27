@@ -5,7 +5,6 @@ Core types referenced across `nextrpg`.
 from __future__ import annotations
 
 from enum import Enum, auto
-from functools import cached_property
 from math import ceil
 
 from nextrpg.model import Model
@@ -30,7 +29,7 @@ class Rgba(Model):
     blue: int
     alpha: int
 
-    @cached_property
+    @property
     def tuple(self) -> tuple[int, int, int, int]:
         """
         Gets the color components as a tuple.
@@ -150,7 +149,7 @@ class Size(Model):
         """
         return Size(ceil(self.width * scale), ceil(self.height * scale))
 
-    @cached_property
+    @property
     def tuple(self) -> tuple[Pixel, Pixel]:
         """
         Gets the dimensions as a tuple.

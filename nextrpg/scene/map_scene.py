@@ -5,7 +5,6 @@ Map scene implementation.
 from __future__ import annotations
 
 from dataclasses import KW_ONLY, field, replace
-from functools import cached_property
 from pathlib import Path
 from typing import override
 
@@ -65,7 +64,7 @@ class MapScene(Model, Scene):
     )
     _player: CharacterOnScreen = internal_field(_init_player)
 
-    @cached_property
+    @property
     @override
     def draw_on_screens(self) -> list[DrawOnScreen]:
         """
@@ -120,7 +119,7 @@ class MapScene(Model, Scene):
         player = self._player.step(time_delta)
         return self._move_to_scene(player) or replace(self, _player=player)
 
-    @cached_property
+    @property
     def _foreground_and_character(self) -> list[DrawOnScreen]:
         foregrounds = self._map_helper.foreground
         character = self._player.character_and_visuals.character
@@ -137,7 +136,7 @@ class MapScene(Model, Scene):
         )
         return [draw for layer in layers for _, draw in layer]
 
-    @cached_property
+    @property
     def _player_layer(self) -> _LayerIndex:
         reversed_layers = reversed(list(enumerate(self._map_helper.foreground)))
         return next(
@@ -151,7 +150,7 @@ class MapScene(Model, Scene):
             for bottom, draw in layer
         )
 
-    @cached_property
+    @property
     def _player_offset(self) -> Coordinate:
         player = self._player.character_and_visuals.character.rectangle.center
         gui_width, gui_height = config().gui.size.tuple

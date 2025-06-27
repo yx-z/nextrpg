@@ -76,7 +76,7 @@
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">asyncio</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">KW_ONLY</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span><span class="p">,</span> <span class="n">reduce</span><span class="p">,</span> <span class="n">singledispatchmethod</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">reduce</span><span class="p">,</span> <span class="n">singledispatchmethod</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
@@ -102,7 +102,7 @@
 </span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">        Sets up a game window, loads the entry scene.</span>
 </span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">        Args:</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">        Arguments:</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">            `entry_scene`: A function that returns the entry scene.</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">                This has to be a function but not a direct `Scene` instance,</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">                because drawings can only be loaded after pygame initialization.</span>
@@ -133,7 +133,7 @@
 </span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="n">_gui</span><span class="p">:</span> <span class="n">Gui</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">(</span><span class="n">Gui</span><span class="p">)</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="n">_scene</span><span class="p">:</span> <span class="n">Scene</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_scene</span><span class="p">())</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="nd">@property</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_running</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>
@@ -182,7 +182,7 @@
 </span><span id="Game-33"><a href="#Game-33"><span class="linenos">33</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Game-34"><a href="#Game-34"><span class="linenos">34</span></a><span class="sd">        Sets up a game window, loads the entry scene.</span>
 </span><span id="Game-35"><a href="#Game-35"><span class="linenos">35</span></a>
-</span><span id="Game-36"><a href="#Game-36"><span class="linenos">36</span></a><span class="sd">        Args:</span>
+</span><span id="Game-36"><a href="#Game-36"><span class="linenos">36</span></a><span class="sd">        Arguments:</span>
 </span><span id="Game-37"><a href="#Game-37"><span class="linenos">37</span></a><span class="sd">            `entry_scene`: A function that returns the entry scene.</span>
 </span><span id="Game-38"><a href="#Game-38"><span class="linenos">38</span></a><span class="sd">                This has to be a function but not a direct `Scene` instance,</span>
 </span><span id="Game-39"><a href="#Game-39"><span class="linenos">39</span></a><span class="sd">                because drawings can only be loaded after pygame initialization.</span>
@@ -224,7 +224,7 @@
 </span><span id="Game.__init__-33"><a href="#Game.__init__-33"><span class="linenos">33</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Game.__init__-34"><a href="#Game.__init__-34"><span class="linenos">34</span></a><span class="sd">        Sets up a game window, loads the entry scene.</span>
 </span><span id="Game.__init__-35"><a href="#Game.__init__-35"><span class="linenos">35</span></a>
-</span><span id="Game.__init__-36"><a href="#Game.__init__-36"><span class="linenos">36</span></a><span class="sd">        Args:</span>
+</span><span id="Game.__init__-36"><a href="#Game.__init__-36"><span class="linenos">36</span></a><span class="sd">        Arguments:</span>
 </span><span id="Game.__init__-37"><a href="#Game.__init__-37"><span class="linenos">37</span></a><span class="sd">            `entry_scene`: A function that returns the entry scene.</span>
 </span><span id="Game.__init__-38"><a href="#Game.__init__-38"><span class="linenos">38</span></a><span class="sd">                This has to be a function but not a direct `Scene` instance,</span>
 </span><span id="Game.__init__-39"><a href="#Game.__init__-39"><span class="linenos">39</span></a><span class="sd">                because drawings can only be loaded after pygame initialization.</span>

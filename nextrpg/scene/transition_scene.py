@@ -1,4 +1,3 @@
-from functools import cached_property
 from typing import override
 
 from nextrpg.core import Millisecond
@@ -20,7 +19,7 @@ class TransitionScene(Model, Scene):
     from_scene: Scene
     to_scene: Scene
 
-    @cached_property
+    @property
     @override
     def draw_on_screens(self) -> list[DrawOnScreen]:
         return self.to_scene.draw_on_screens

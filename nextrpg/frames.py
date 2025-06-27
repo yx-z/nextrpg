@@ -5,7 +5,6 @@ Static frames, when played sequentially, become animated.
 from __future__ import annotations
 
 from dataclasses import KW_ONLY, field, replace
-from functools import cached_property
 
 from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import Drawing
@@ -33,7 +32,7 @@ class CyclicFrames(Model):
     _index: _FrameIndex = internal_field(0)
     _elapsed: Millisecond = internal_field(0)
 
-    @cached_property
+    @property
     def current_frame(self) -> Drawing:
         """
         Get the currently active frame in the animation sequence.

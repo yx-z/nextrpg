@@ -5,7 +5,7 @@ This module provides functionality for rendering RPG Maker-style character
 drawing with support for different sprite sheet formats and animation patterns.
 
 Note that `nextrpg` is only compatible with the
-RPG Maker character sprite sheet, to be able to re-use existing resources.
+RPG Maker character sprite sheet to be able to re-use existing resources.
 
 However, using RPG Maker's
 [Runtime Time Package (RTP)](https://www.rpgmakerweb.com/run-time-package)
@@ -17,7 +17,6 @@ from __future__ import annotations
 
 from dataclasses import KW_ONLY, field, replace
 from enum import IntEnum
-from functools import cached_property
 from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -168,7 +167,7 @@ class RpgMakerCharacterDrawing(Model, CharacterDrawing):
     _: KW_ONLY = field()
     _frames: dict[Direction, CyclicFrames] = internal_field(_init_frames)
 
-    @cached_property
+    @property
     def drawing(self) -> Drawing:
         """
         Get the current visual representation of the character.

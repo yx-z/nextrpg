@@ -1,3 +1,7 @@
+"""
+Map helper class for loading the TMX tiles.
+"""
+
 from functools import cached_property
 from pathlib import Path
 from typing import NamedTuple
@@ -268,7 +272,7 @@ class MapHelper(Model):
             for coord, draw in coord_and_draws.items()
         }
 
-    @cached_property
+    @property
     def _tile_size(self) -> Size:
         return Size(self._tmx.tilewidth, self._tmx.tileheight)
 
