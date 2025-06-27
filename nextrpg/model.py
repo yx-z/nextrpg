@@ -12,11 +12,11 @@ from typing import Any, dataclass_transform
 
 
 @dataclass(frozen=True)
-class _Init[S, R]:
-    init: Callable[[S], R] | Callable[[], R] | R
+class _Init:
+    init: Callable[[Any], Any] | Callable[[], Any] | Any
 
 
-def internal_field[S, R](init: Callable[[S], R] | Callable[[], R] | R) -> Any:
+def internal_field(init: Callable[[Any], Any] | Callable[[], Any] | Any) -> Any:
     """
     Used to mark a field in `Model` as internal.
 

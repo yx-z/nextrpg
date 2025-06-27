@@ -32,7 +32,7 @@ class Game:
         """
         Sets up a game window, loads the entry scene.
 
-        Args:
+        Arguments:
             `entry_scene`: A function that returns the entry scene.
                 This has to be a function but not a direct `Scene` instance,
                 because drawings can only be loaded after pygame initialization.

@@ -6,11 +6,10 @@ from pygame.event import Event
 from pygame.locals import KEYDOWN, K_LEFT, QUIT, VIDEORESIZE
 from pytest_mock import MockerFixture
 
-from nextrpg.game import Game
+from nextrpg.game import Game, _GameLoop
 
 
 def test_game(mocker: MockerFixture) -> None:
-    mocker.patch("nextrpg.game.Gui")
     mocker.patch(
         "pygame.event.get",
         lambda: [
@@ -22,6 +21,7 @@ def test_game(mocker: MockerFixture) -> None:
     scene = Mock()
     clock = Mock()
     gui = Mock()
+    _GameLoop.__post_init__ = lambda _: None
     game = Game(lambda: scene)
     game._loop = replace(game._loop, _scene=scene, _clock=clock, _gui=gui)
     game.start()
