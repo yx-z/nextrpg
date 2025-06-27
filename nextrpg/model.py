@@ -5,8 +5,10 @@ Model definition meta.
 from __future__ import annotations
 
 from abc import ABCMeta
+from collections import OrderedDict
+from collections.abc import Callable
 from dataclasses import dataclass, field, fields
-from typing import Any, Callable, dataclass_transform
+from typing import Any, dataclass_transform
 
 
 @dataclass(frozen=True)
@@ -59,3 +61,50 @@ class Model(metaclass=_Meta):
         for f in fields(self):
             if isinstance(init := getattr(self, f.name), _Init):
                 object.__setattr__(self, f.name, init.init(self))
+
+
+class cached[T, K, **P](Model):
+    """
+    Class decorator to cache instances of a class by a certain size
+    and a key function.
+
+    Arguments:
+        `T`: Type of the class to be cached.
+
+        `K`: Type of the cache key.
+
+        `P`: ParamSpec of the arguments to the class __new__ / constructor.
+
+        `size_fun`: Function that returns the maximum size of the cache.
+
+        `key_fun`: Function that takes the same arguments as the class, to
+            be used as the cache key. Defaults to a function that takes all
+            args and kwargs.
+    """
+
+    size_fun: Callable[[], int]
+    key_fun: Callable[P, K | None] = field(
+        default=lambda *args, **kwargs: (args, frozenset(kwargs.items()))
+    )
+
+    def __call__(self, cls: type[T]) -> type[T]:
+        cls._cache = OrderedDict[K, T]()
+
+        def __new__(klass: type[T], *args: P.args, **kwargs: P.kwargs) -> T:
+            key = self.key_fun(*args, **kwargs)
+            if key is None:
+                return super(klass, klass).__new__(klass)
+
+            if key in klass._cache:
+                klass._cache.move_to_end(key)
+                return klass._cache[key]
+
+            while len(klass._cache) >= self.size_fun():
+                klass._cache.popitem(last=False)
+
+            instance = super(klass, klass).__new__(klass)
+            klass._cache[key] = instance
+            return instance
+
+        cls.__new__ = __new__
+        return cls

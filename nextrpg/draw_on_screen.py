@@ -19,7 +19,7 @@ from pygame.mask import from_surface
 
 from nextrpg.config import config
 from nextrpg.core import Direction, DirectionalOffset, Pixel, Rgba, Size
-from nextrpg.model import Model, internal_field
+from nextrpg.model import Model, cached, internal_field
 
 
 class Coordinate(Model):
@@ -122,6 +122,10 @@ def _add_coordinate(self, offset: Coordinate) -> Coordinate:
     return Coordinate(self.left + offset.left, self.top + offset.top)
 
 
+@cached(
+    lambda: config().resource.drawing_cache_size,
+    lambda resource: resource if isinstance(resource, Path) else None,
+)
 class Drawing(Model):
     """
     Represents a drawable element and provides methods for accessing its size

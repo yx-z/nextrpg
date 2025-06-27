@@ -1,6 +1,6 @@
 from dataclasses import KW_ONLY, field, replace
 
-from nextrpg.model import Model, internal_field
+from nextrpg.model import Model, cached, internal_field
 
 
 def test_model():
@@ -20,3 +20,15 @@ def test_model():
     assert replaced.user_input == "abc"
     assert replaced.public_data == "public"
     assert replaced._internal_data == "def"
+
+
+def test_cached() -> None:
+    @cached(lambda: 1)
+    class MyCache(Model):
+        i: int
+
+    a = MyCache(1)
+    assert MyCache(1) is a
+    b = MyCache(2)
+    assert b is not a
+    assert MyCache(2) is b

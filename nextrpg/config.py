@@ -271,6 +271,7 @@ class ResourceConfig(Model):
     """
 
     map_cache_size: int = 128
+    drawing_cache_size: int = 1024
 
 
 class Config(Model):

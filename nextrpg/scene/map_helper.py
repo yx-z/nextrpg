@@ -1,6 +1,6 @@
 from functools import cached_property
 from pathlib import Path
-from typing import NamedTuple, OrderedDict
+from typing import NamedTuple
 
 from pygame import Surface
 from pytmx import (
@@ -21,7 +21,7 @@ from nextrpg.draw_on_screen import (
     Polygon,
     Rectangle,
 )
-from nextrpg.model import Model
+from nextrpg.model import Model, cached
 
 
 class TileBottomAndDraw(NamedTuple):
@@ -76,6 +76,7 @@ def poly_from_obj(obj: TiledObject) -> Polygon:
     return Rectangle(Coordinate(obj.x, obj.y), Size(obj.width, obj.height))
 
 
+@cached(lambda: config().resource.map_cache_size)
 class MapHelper(Model):
     """
     Tiled tmx map helper class for loading the tiles.
@@ -348,16 +349,3 @@ class MapHelper(Model):
     @cached_property
     def _tmx(self) -> TiledMap:
         return load_pygame(self.tmx_file)
-
-    def __new__(cls, tmx_file: Path) -> "MapHelper":
-        if tmx_file in _maps:
-            _maps.move_to_end(tmx_file)
-            return _maps[tmx_file]
-        while len(_maps) >= config().resource.map_cache_size:
-            _maps.popitem(last=False)
-        instance = super().__new__(cls)
-        _maps[tmx_file] = instance
-        return instance
-
-
-_maps = OrderedDict[Path, MapHelper]()
