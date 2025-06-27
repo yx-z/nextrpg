@@ -7,7 +7,7 @@ from __future__ import annotations
 from abc import ABCMeta
 from collections import OrderedDict
 from collections.abc import Callable
-from dataclasses import dataclass, field, fields
+from dataclasses import Field, dataclass, field, fields
 from typing import Any, dataclass_transform
 
 
@@ -60,14 +60,23 @@ class Model(metaclass=_Meta):
 
     def __post_init__(self) -> None:
         for f in fields(self):
-            if isinstance(init := getattr(self, f.name), _Init):
-                if callable(init.init):
-                    try:
-                        object.__setattr__(self, f.name, init.init())
-                    except TypeError:
-                        object.__setattr__(self, f.name, init.init(self))
-                else:
-                    object.__setattr__(self, f.name, init.init)
+            self._init_field(f)
+
+    def _init_field(self, f: Field) -> None:
+        if not isinstance(init := getattr(self, f.name), _Init):
+            return
+
+        if not callable(init.init):
+            self._set_attr(f, init.init)
+            return
+
+        try:
+            self._set_attr(f, init.init())
+        except TypeError:
+            self._set_attr(f, init.init(self))
+
+    def _set_attr(self, f: Field, value: Any) -> None:
+        object.__setattr__(self, f.name, value)
 
 
 class cached[T, K, **P](Model):
