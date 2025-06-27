@@ -4,9 +4,9 @@ Typed events initiated from `pygame.Event`.
 
 from __future__ import annotations
 
+from dataclasses import field
 from enum import Enum, auto
 
-from docutils.nodes import field
 from pygame.event import Event
 from pygame.locals import KEYDOWN, KEYUP, QUIT, VIDEORESIZE
 
