@@ -2,8 +2,6 @@
 Model definition meta.
 """
 
-from __future__ import annotations
-
 from abc import ABCMeta
 from collections import OrderedDict
 from collections.abc import Callable

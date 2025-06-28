@@ -2,8 +2,6 @@
 Static frames, when played sequentially, become animated.
 """
 
-from __future__ import annotations
-
 from dataclasses import KW_ONLY, field, replace
 
 from nextrpg.core import Millisecond

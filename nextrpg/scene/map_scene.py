@@ -2,8 +2,6 @@
 Map scene implementation.
 """
 
-from __future__ import annotations
-
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from pathlib import Path

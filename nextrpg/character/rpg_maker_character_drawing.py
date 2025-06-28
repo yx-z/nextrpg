@@ -13,8 +13,6 @@ in non-RPG Maker framework violates the license of RPG Maker,
 even if you own a copy of RPG Maker.
 """
 
-from __future__ import annotations
-
 from dataclasses import KW_ONLY, field, replace
 from enum import IntEnum
 from typing import NamedTuple, override

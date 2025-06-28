@@ -2,8 +2,6 @@
 Start the game window and game loop.
 """
 
-from __future__ import annotations
-
 from asyncio import sleep
 from dataclasses import KW_ONLY, field, replace
 from functools import reduce, singledispatchmethod
@@ -15,6 +13,7 @@ from pygame.time import Clock
 from nextrpg.config import config
 from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
 from nextrpg.gui import Gui
+from nextrpg.logger import debug_log
 from nextrpg.model import Model, internal_field
 from nextrpg.scene.scene import Scene
 
@@ -70,6 +69,7 @@ class _GameLoop(Model):
         )
 
     def step(self) -> _GameLoop:
+        debug_log(f"FPS: {self._clock.get_fps():.0f} ")
         self._clock.tick(config().gui.frames_per_second)
         self._gui.draw(self._scene.draw_on_screens)
         return reduce(

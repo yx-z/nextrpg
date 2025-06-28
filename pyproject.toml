@@ -3,7 +3,7 @@ name = "nextrpg"
 version = "0.1.7"
 description = "Build your next RPG (Role Playing Game)."
 authors = [{ name = "yx-z", email = "yx-z@outlook.com" }]
-requires-python = ">=3.12"
+requires-python = ">=3.14"
 readme = "README.md"
 
 dependencies = ["pygame-ce", "pytmx"]

@@ -4,14 +4,12 @@ You can either use the implicit, default configuration
 or pass the customized instance to `nextrpg.start_game.start_game`.
 """
 
-from __future__ import annotations
-
 from enum import Enum, auto
 from typing import NamedTuple
 
 from pygame.locals import K_DOWN, K_F1, K_LEFT, K_RIGHT, K_SPACE, K_UP
 
-from nextrpg.core import Direction, Millisecond, Pixel, Rgba, Size
+from nextrpg.core import Direction, Font, Millisecond, Pixel, Rgba, Size
 
 
 class DebugConfig(NamedTuple):
@@ -285,6 +283,11 @@ class TransitionConfig(NamedTuple):
     transition_duration: Millisecond = 500
 
 
+class TextConfig(NamedTuple):
+    font: Font = Font(None, 36, Rgba(255, 255, 255, 255))
+    margin: Pixel = 10
+
+
 class Config(NamedTuple):
     """
     Main configuration class that aggregates all configuration components.
@@ -326,6 +329,7 @@ class Config(NamedTuple):
     key_mapping: KeyMappingConfig = KeyMappingConfig()
     resource: ResourceConfig = ResourceConfig()
     transition: TransitionConfig = TransitionConfig()
+    text: TextConfig = TextConfig()
     debug: DebugConfig | None = None
 
 

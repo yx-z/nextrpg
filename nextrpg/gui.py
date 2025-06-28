@@ -2,12 +2,11 @@
 Game window / Graphical User Interface (GUI).
 """
 
-from __future__ import annotations
-
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property, reduce, singledispatchmethod
 from operator import or_
 
+from pygame import font
 from pygame.display import flip, init, set_caption, set_mode
 from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
@@ -22,11 +21,14 @@ from nextrpg.event.pygame_event import (
     KeyboardKey,
     PygameEvent,
 )
+from nextrpg.logger import get_debug_logs, reset_debug_logs
 from nextrpg.model import Model, internal_field
+from nextrpg.text import Text
 
 
 def _init_screen(self: Gui) -> Surface:
     init()
+    font.init()
     set_caption(config().gui.title)
     return set_mode(config().gui.size, _gui_flag(self._gui_mode))
 
@@ -78,7 +80,18 @@ class Gui(Model):
                 self._screen.blit(*self._scale(draw_on_screens).pygame)
             case ResizeMode.KEEP_NATIVE_SIZE:
                 self._screen.blits(d.pygame for d in draw_on_screens)
+        self._draw_debug_log()
         flip()
+
+    def _draw_debug_log(self) -> None:
+        if config().debug:
+            self._screen.blits(
+                d.pygame
+                for d in Text(
+                    get_debug_logs(), Coordinate(0, 0)
+                ).draw_on_screens
+            )
+        reset_debug_logs()
 
     def _scale(self, draws: list[DrawOnScreen]) -> DrawOnScreen:
         screen = Surface(config().gui.size)

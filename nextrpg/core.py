@@ -2,8 +2,6 @@
 Core types referenced across `nextrpg`.
 """
 
-from __future__ import annotations
-
 from collections import namedtuple
 from enum import Enum, auto
 from math import ceil
@@ -137,3 +135,9 @@ class Size(namedtuple("Size", "width height")):
             `Size`: A new `Size` object representing the scaled dimensions.
         """
         return Size(ceil(self.width * scaling), ceil(self.height * scaling))
+
+
+class Font(NamedTuple):
+    name: str | None
+    size: int
+    color: Rgba

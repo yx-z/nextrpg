@@ -2,8 +2,6 @@
 Handles character movement and collision detection.
 """
 
-from __future__ import annotations
-
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property, singledispatchmethod
 from typing import NamedTuple
