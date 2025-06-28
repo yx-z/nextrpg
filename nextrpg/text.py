@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from functools import cached_property
 
+from pygame import Surface
 from pygame.font import SysFont
 
 from nextrpg.config import TextConfig, config
@@ -15,11 +16,21 @@ class Text:
 
     @cached_property
     def draw_on_screens(self) -> list[DrawOnScreen]:
-        font = SysFont(self.config.font.name, self.config.font.size)
+        margin = self.config.margin
         return [
             DrawOnScreen(
-                self.top_left + Coordinate(0, i * self.config.margin),
-                Drawing(font.render(line, True, self.config.font.color)),
+                self.top_left
+                + Coordinate(margin, i * (margin + self.config.font.size)),
+                Drawing(self._render(line)),
             )
             for i, line in enumerate(self.lines)
         ]
+
+    def _render(self, line: str) -> Surface:
+        return self._font.render(
+            line, antialias=False, color=self.config.font.color
+        )
+
+    @cached_property
+    def _font(self) -> SysFont:
+        return SysFont(self.config.font.name, self.config.font.size)

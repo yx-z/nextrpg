@@ -92,6 +92,9 @@ class Coordinate(namedtuple("Coordinate", "left top")):
                 return Coordinate(self.left + diag, self.top + diag)
         return NotImplemented
 
+    def __repr__(self) -> str:
+        return f"({self.left:.1f}, {self.top:.1f})"
+
 
 class Drawing:
     """

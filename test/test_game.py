@@ -1,6 +1,6 @@
 from asyncio import run
 from dataclasses import replace
-from unittest.mock import AsyncMock, Mock
+from unittest.mock import AsyncMock, MagicMock, Mock
 
 from pygame.event import Event
 from pygame.locals import KEYDOWN, K_LEFT, QUIT, VIDEORESIZE
@@ -10,6 +10,7 @@ from nextrpg.game import Game, _GameLoop
 
 
 def test_game(mocker: MockerFixture) -> None:
+    mocker.patch("nextrpg.game.debug_log")
     mocker.patch(
         "pygame.event.get",
         lambda: [
@@ -19,7 +20,8 @@ def test_game(mocker: MockerFixture) -> None:
         ],
     )
     scene = Mock()
-    clock = Mock()
+    clock = MagicMock()
+    clock.get_fps = MagicMock(return_value=60)
     gui = Mock()
     _GameLoop.__post_init__ = lambda _: None
     game = Game(lambda: scene)

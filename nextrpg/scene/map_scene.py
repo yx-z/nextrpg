@@ -14,6 +14,7 @@ from nextrpg.core import Millisecond, Pixel
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import PygameEvent
+from nextrpg.logger import debug_log
 from nextrpg.model import Model, internal_field
 from nextrpg.scene.map_helper import (
     MapHelper,
@@ -116,6 +117,7 @@ class MapScene(Model, Scene):
             `Scene`: The updated scene after the time step.
         """
         player = self._player.step(time_delta)
+        debug_log(f"Player {player.coordinate}")
         return self._move_to_scene(player) or replace(self, _player=player)
 
     @cached_property
