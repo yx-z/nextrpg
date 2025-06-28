@@ -10,7 +10,7 @@ from math import ceil
 
 from nextrpg.model import Model
 
-type Alpha = int
+type Alpha = int | float
 """
 Alpha channel that defines the transparency between [0, 255] for images.
 0 is fully transparent, 255 is fully opaque.

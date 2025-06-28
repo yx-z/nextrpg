@@ -283,7 +283,7 @@ class TransitionConfig(Model):
             in milliseconds.
     """
 
-    transition_duration: Millisecond = 1000
+    transition_duration: Millisecond = 500
 
 
 class Config(Model):

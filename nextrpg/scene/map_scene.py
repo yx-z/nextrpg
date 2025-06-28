@@ -5,6 +5,7 @@ Map scene implementation.
 from __future__ import annotations
 
 from dataclasses import KW_ONLY, field, replace
+from functools import cached_property
 from pathlib import Path
 from typing import override
 
@@ -64,7 +65,7 @@ class MapScene(Model, Scene):
     )
     _player: CharacterOnScreen = internal_field(_init_player)
 
-    @property
+    @cached_property
     @override
     def draw_on_screens(self) -> list[DrawOnScreen]:
         """

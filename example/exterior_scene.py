@@ -23,7 +23,7 @@ def exterior_scene(
 
     return MapScene(
         # Tiled/tmx tile map .
-        Path("assets/exterior.tmx"),
+        Path("example/assets/exterior.tmx"),
         # Reuse the same character drawing from the previous map.
         player,
         # Player coordinate on the map.

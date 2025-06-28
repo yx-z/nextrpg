@@ -5,12 +5,12 @@ Drawable on screen.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import KW_ONLY, field, replace
-from functools import cached_property, singledispatchmethod
+from dataclasses import KW_ONLY, field
+from functools import cached_property
 from itertools import product
 from math import ceil, sqrt
 from pathlib import Path
-from typing import override
+from typing import assert_never, override
 
 from pygame import Mask, SRCALPHA, Surface
 from pygame.draw import polygon
@@ -19,7 +19,7 @@ from pygame.mask import from_surface
 
 from nextrpg.config import config
 from nextrpg.core import Alpha, Direction, DirectionalOffset, Pixel, Rgba, Size
-from nextrpg.model import Model, internal_field
+from nextrpg.model import Model
 
 
 class Coordinate(Model):
@@ -58,7 +58,6 @@ class Coordinate(Model):
     def __sub__(self, other: Coordinate) -> Coordinate:
         return Coordinate(self.left - other.left, self.top - other.top)
 
-    @singledispatchmethod
     def __add__(self, offset: DirectionalOffset | Coordinate) -> Coordinate:
         """
         Shifts the coordinate in the specified direction by a given offset.
@@ -78,7 +77,31 @@ class Coordinate(Model):
             `Coordinate`: A new coordinate shifted by the specified offset in
             the given direction.
         """
-        return NotImplemented
+        if isinstance(offset, Coordinate):
+            return Coordinate(self.left + offset.left, self.top + offset.top)
+
+        match offset.direction:
+            case Direction.UP:
+                return Coordinate(self.left, self.top - offset.offset)
+            case Direction.DOWN:
+                return Coordinate(self.left, self.top + offset.offset)
+            case Direction.LEFT:
+                return Coordinate(self.left - offset.offset, self.top)
+            case Direction.RIGHT:
+                return Coordinate(self.left + offset.offset, self.top)
+
+        diag = offset.offset / sqrt(2)
+        match offset.direction:
+            case Direction.UP_LEFT:
+                return Coordinate(self.left - diag, self.top - diag)
+            case Direction.UP_RIGHT:
+                return Coordinate(self.left + diag, self.top - diag)
+            case Direction.DOWN_LEFT:
+                return Coordinate(self.left - diag, self.top + diag)
+            case Direction.DOWN_RIGHT:
+                return Coordinate(self.left + diag, self.top + diag)
+            case _ as d:
+                assert_never(d)
 
     @cached_property
     def tuple(self) -> tuple[Pixel, Pixel]:
@@ -90,36 +113,6 @@ class Coordinate(Model):
                 values in that order.
         """
         return self.left, self.top
-
-
-@Coordinate.__add__.register
-def _add_directional_offset(self, offset: DirectionalOffset) -> Coordinate:
-    match offset.direction:
-        case Direction.UP:
-            return Coordinate(self.left, self.top - offset.offset)
-        case Direction.DOWN:
-            return Coordinate(self.left, self.top + offset.offset)
-        case Direction.LEFT:
-            return Coordinate(self.left - offset.offset, self.top)
-        case Direction.RIGHT:
-            return Coordinate(self.left + offset.offset, self.top)
-
-    diag = offset.offset / sqrt(2)
-    match offset.direction:
-        case Direction.UP_LEFT:
-            return Coordinate(self.left - diag, self.top - diag)
-        case Direction.UP_RIGHT:
-            return Coordinate(self.left + diag, self.top - diag)
-        case Direction.DOWN_LEFT:
-            return Coordinate(self.left - diag, self.top + diag)
-        case Direction.DOWN_RIGHT:
-            return Coordinate(self.left + diag, self.top + diag)
-    raise ValueError(f"Invalid direction: {offset.direction}")
-
-
-@Coordinate.__add__.register
-def _add_coordinate(self, offset: Coordinate) -> Coordinate:
-    return Coordinate(self.left + offset.left, self.top + offset.top)
 
 
 class Drawing(Model):
@@ -135,21 +128,10 @@ class Drawing(Model):
     Arguments:
         `resource`: A path to a file containing the drawing resource,
             or a `pygame.Surface` object.
-
-        `alpha`: The alpha value to use for the drawing.
-            Default to 255.0 which means fully opaque.
     """
 
     resource: Path | Surface = field(repr=False)
-    alpha: Alpha = field(default=255)
     _: KW_ONLY = field()
-    _surface: Surface = internal_field(
-        lambda self: (
-            self.resource
-            if isinstance(self.resource, Surface)
-            else load(self.resource).convert_alpha()
-        )
-    )
 
     def __repr__(self) -> str:
         """
@@ -198,20 +180,7 @@ class Drawing(Model):
         Returns:
             `pygame.Surface`: The underlying `pygame.Surface`.
         """
-        self._surface.set_alpha(self.alpha)
         return self._debug_surface or self._surface
-
-    def set_alpha(self, alpha: Alpha) -> Drawing:
-        """
-        Set the alpha value of the drawing.
-
-        Arguments:
-            `alpha`: The alpha value to set.
-
-        Returns:
-            `Drawing`: A new `Drawing` instance with the updated alpha value.
-        """
-        return replace(self, alpha=alpha)
 
     def crop(self, top_left: Coordinate, size: Size) -> Drawing:
         """
@@ -243,6 +212,40 @@ class Drawing(Model):
         surface.blit(self._surface, (0, 0))
         return surface
 
+    @cached_property
+    def _surface(self) -> Surface:
+        return (
+            self.resource
+            if isinstance(self.resource, Surface)
+            else load(self.resource).convert_alpha()
+        )
+
+
+class DrawingWithAlpha(Model):
+    drawing: Drawing
+    alpha: Alpha = 0
+
+    @cached_property
+    def pygame(self) -> Surface:
+        self.drawing.pygame.set_alpha(self.alpha)
+        return self.drawing.pygame
+
+    @cached_property
+    def width(self) -> Pixel:
+        return self.drawing.width
+
+    @cached_property
+    def height(self) -> Pixel:
+        return self.drawing.height
+
+    @cached_property
+    def size(self) -> Size:
+        return self.drawing.size
+
+    @cached_property
+    def _surface(self) -> Surface:
+        return self.drawing._surface
+
 
 class DrawOnScreen(Model):
     """
@@ -259,7 +262,7 @@ class DrawOnScreen(Model):
     """
 
     top_left: Coordinate
-    drawing: Drawing
+    drawing: Drawing | DrawingWithAlpha
 
     @cached_property
     def rectangle(self) -> Rectangle:

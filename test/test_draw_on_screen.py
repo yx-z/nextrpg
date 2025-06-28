@@ -2,7 +2,7 @@ from pathlib import Path
 from unittest.mock import Mock
 
 from pygame import Color, SRCALPHA, Surface
-from pytest import approx, raises
+from pytest import approx
 from pytest_mock import MockerFixture
 
 from nextrpg.config import Config, DebugConfig
@@ -83,10 +83,6 @@ def test_coordinate() -> None:
         Direction.DOWN_RIGHT, 10
     ) == approx(Coordinate(17.071067811865476, 27.071067811865476))
     assert Coordinate(10, 20) + Coordinate(1, 2) == Coordinate(11, 22)
-
-    coord = Coordinate(1, 2)
-    with raises(ValueError):
-        coord + DirectionalOffset("INVALID_DIRECTION", 1)  # type: ignore
 
 
 def test_rectangle() -> None:
