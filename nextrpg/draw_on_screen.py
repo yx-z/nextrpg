@@ -9,7 +9,7 @@ from functools import cached_property
 from itertools import product
 from math import ceil, sqrt
 from pathlib import Path
-from typing import Final, Protocol
+from typing import Final, Protocol, override
 
 from pygame import Mask, SRCALPHA, Surface
 from pygame.draw import polygon
@@ -36,9 +36,20 @@ class Coordinate(namedtuple("Coordinate", "left top")):
     left: Pixel
     top: Pixel
 
-    def __sub__(self, other: Coordinate) -> Coordinate:
-        return Coordinate(self.left - other.left, self.top - other.top)
+    @override
+    def __sub__(self, offset: Coordinate) -> Coordinate:
+        """
+        Subtracts a coordinate from this coordinate.
 
+        Arguments:
+            `offset`: Coordinate to subtract from the current coordinate.
+
+        Returns:
+            `Coordinate`: A new coordinate shifted by the specified offset.
+        """
+        return Coordinate(self.left - offset.left, self.top - offset.top)
+
+    @override
     def __add__(self, offset: DirectionalOffset | Coordinate) -> Coordinate:
         """
         Shifts the coordinate in the specified direction by a given offset.
@@ -250,7 +261,7 @@ class DrawOnScreen(namedtuple("DrawOnScreen", "top_left drawing")):
             Size(max_x - min_x, max_y - min_y),
         )
 
-    @cached_property
+    @property
     def pygame(self) -> tuple[Surface, tuple[Pixel, Pixel]]:
         """
         Gets the pygame surface and coordinate tuple for rendering.
@@ -262,6 +273,7 @@ class DrawOnScreen(namedtuple("DrawOnScreen", "top_left drawing")):
         """
         return self.drawing.pygame, self.top_left
 
+    @override
     def __add__(self, coord: Coordinate) -> DrawOnScreen:
         """
         Shift the drawing by the specified coordinate.
@@ -388,7 +400,7 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
     top_left: Coordinate
     size: Size
 
-    @cached_property
+    @property
     def left(self) -> Pixel:
         """
         Gets the leftmost x-coordinate of the drawing on the screen.
@@ -398,7 +410,7 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
         """
         return self.top_left.left
 
-    @cached_property
+    @property
     def right(self) -> Pixel:
         """
         Gets the rightmost x-coordinate of the drawing on the screen.
@@ -408,7 +420,7 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
         """
         return self.left + self.size.width
 
-    @cached_property
+    @property
     def top(self) -> Pixel:
         """
         Gets the topmost y-coordinate of the drawing on the screen.
@@ -428,7 +440,7 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
         """
         return self.top + self.size.height
 
-    @cached_property
+    @property
     def top_right(self) -> Coordinate:
         """
         Gets the top-right coordinate of the drawing on the screen.
@@ -438,7 +450,7 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
         """
         return Coordinate(self.right, self.top)
 
-    @cached_property
+    @property
     def bottom_left(self) -> Coordinate:
         """
         Gets the bottom-left coordinate of the drawing on the screen.
@@ -448,7 +460,7 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
         """
         return Coordinate(self.left, self.bottom)
 
-    @cached_property
+    @property
     def bottom_right(self) -> Coordinate:
         """
         Gets the bottom-right coordinate of the drawing on the screen.
@@ -458,7 +470,7 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
         """
         return Coordinate(self.right, self.bottom)
 
-    @cached_property
+    @property
     def top_center(self) -> Coordinate:
         """
         Gets the center point of the top edge of the drawing on the screen.
@@ -468,7 +480,7 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
         """
         return Coordinate(self.left + self.size.width / 2, self.top)
 
-    @cached_property
+    @property
     def bottom_center(self) -> Coordinate:
         """
         Gets the center point of the bottom edge of the drawing on the screen.
@@ -478,7 +490,7 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
         """
         return Coordinate(self.left + self.size.width / 2, self.bottom)
 
-    @cached_property
+    @property
     def center_left(self) -> Coordinate:
         """
         Gets the center point of the left edge of the drawing on the screen.
@@ -488,7 +500,7 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
         """
         return Coordinate(self.left, self.top + self.size.height / 2)
 
-    @cached_property
+    @property
     def center_right(self) -> Coordinate:
         """
         Gets the center point of the right edge of the drawing on the screen.
@@ -498,7 +510,7 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
         """
         return Coordinate(self.right, self.top + self.size.height / 2)
 
-    @cached_property
+    @property
     def center(self) -> Coordinate:
         """
         Gets the center point of the drawing on the screen.
@@ -509,7 +521,7 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
         width, height = self.size
         return Coordinate(self.left + width / 2, self.top + height / 2)
 
-    @cached_property
+    @property
     def points(self) -> tuple[Coordinate, ...]:
         """
         Get the coordinates of the corners of the rectangle.
@@ -533,20 +545,10 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
                 and self.top_left.top < poly.bottom_right.top
                 and self.bottom_right.top > poly.top_left.top
             )
-        return Polygon.collide(self, poly)
+        return super().collide(poly)
 
     def contain(self, coordinate: Coordinate) -> bool:
         return (
             self.left < coordinate.left < self.right
             and self.top < coordinate.top < self.bottom
         )
-
-
-def screen() -> Rectangle:
-    """
-    Get the rectangle of the current screen.
-
-    Returns:
-        `Rectangle`: The rectangle of the current screen.
-    """
-    return Rectangle(Coordinate(0, 0), config().gui.size)

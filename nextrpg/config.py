@@ -6,7 +6,6 @@ or pass the customized instance to `nextrpg.start_game.start_game`.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import NamedTuple
 
@@ -170,8 +169,7 @@ class TileMapConfig(NamedTuple):
     properties: TileMapProperties = TileMapProperties()
 
 
-@dataclass(frozen=True)
-class CharacterConfig:
+class CharacterConfig(NamedTuple):
     """
     Configuration class for characters.
 
@@ -187,7 +185,7 @@ class CharacterConfig:
     """
 
     speed: Pixel = 0.25
-    directions: set[Direction] = field(default_factory=lambda: set(Direction))
+    directions: frozenset[Direction] = frozenset(Direction)
 
 
 class RpgMakerCharacterDrawingConfig(NamedTuple):

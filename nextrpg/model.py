@@ -29,8 +29,7 @@ def internal_field(init: Callable[[Any], Any] | Callable[[], Any] | Any) -> Any:
 @dataclass_transform(frozen_default=True)
 class _Meta[T](ABCMeta):
     def __new__(cls, *args: Any, **kwargs: Any) -> type:
-        klass: type = super().__new__(cls, *args, **kwargs)
-        return dataclass(frozen=True)(klass)
+        return dataclass(frozen=True)(super().__new__(cls, *args, **kwargs))
 
 
 class Model(metaclass=_Meta):
@@ -54,7 +53,7 @@ class Model(metaclass=_Meta):
     """
 
     def __post_init__(self) -> None:
-        if initialized := getattr(self, _INTERNAL_FIELDS_INITIALIZED, None):
+        if getattr(self, _INTERNAL_FIELDS_INITIALIZED, None):
             return
 
         for f in fields(self):
@@ -62,34 +61,32 @@ class Model(metaclass=_Meta):
         object.__setattr__(self, _INTERNAL_FIELDS_INITIALIZED, True)
 
     def _init_field(self, f: Field) -> None:
-        if not isinstance(init := getattr(self, f.name), _Init):
+        if not isinstance(attr := getattr(self, f.name), _Init):
             return
 
-        if not callable(init.init):
-            self._set_attr(f, init.init)
+        if not callable(init := attr.init):
+            self._set_attr(f, init)
             return
 
         try:
-            self._set_attr(f, init.init())
+            self._set_attr(f, init())
         except TypeError:
-            self._set_attr(f, init.init(self))
+            self._set_attr(f, init(self))
 
     def _set_attr(self, f: Field, value: Any) -> None:
         object.__setattr__(self, f.name, value)
 
 
-class cached[T, K, **P](Model):
+def _key[**P](*args: P.args, **kwargs: P.kwargs) -> tuple:
+    return args, frozenset(kwargs.items())
+
+
+class cached[T, K, **P]:
     """
-    Class decorator to cache instances of a class by a certain size
-    and a key function.
+    Class decorator to `T` that caches instances of `T` by a certain size
+    and a key function that takes `**P` and returns `K`.
 
     Arguments:
-        `T`: Type of the class to be cached.
-
-        `K`: Type of the cache key.
-
-        `P`: ParamSpec of the arguments to the class __new__ / constructor.
-
         `size_fun`: Function that returns the maximum size of the cache.
 
         `key_fun`: Function that takes the same arguments as the class, to
@@ -97,28 +94,28 @@ class cached[T, K, **P](Model):
             args and kwargs.
     """
 
-    size_fun: Callable[[], int]
-    key_fun: Callable[P, K | None] = field(
-        default=lambda *args, **kwargs: (args, frozenset(kwargs.items()))
-    )
+    def __init__(
+        self, size_fun: Callable[[], int], key_fun: Callable[P, K | None] = _key
+    ) -> None:
+        self.size_fun = size_fun
+        self.key_fun = key_fun
 
     def __call__(self, cls: type[T]) -> type[T]:
-        cls._cache = OrderedDict[K, T]()
+        cls._instances = OrderedDict[K, T]()
 
         def __new__(klass: type[T], *args: P.args, **kwargs: P.kwargs) -> T:
-            key = self.key_fun(*args, **kwargs)
-            if key is None:
+            if (key := self.key_fun(*args, **kwargs)) is None:
                 return super(klass, klass).__new__(klass)
 
-            if key in klass._cache:
-                klass._cache.move_to_end(key)
-                return klass._cache[key]
+            if key in klass._instances:
+                klass._instances.move_to_end(key)
+                return klass._instances[key]
 
-            while len(klass._cache) >= self.size_fun():
-                klass._cache.popitem(last=False)
+            while len(klass._instances) >= self.size_fun():
+                klass._instances.popitem(last=False)
 
             instance = super(klass, klass).__new__(klass)
-            klass._cache[key] = instance
+            klass._instances[key] = instance
             return instance
 
         cls.__new__ = __new__

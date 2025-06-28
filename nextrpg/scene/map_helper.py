@@ -65,7 +65,7 @@ class _Collider(NamedTuple):
     obj: TiledObject
 
 
-def poly_from_obj(obj: TiledObject) -> Polygon:
+def get_polygon(obj: TiledObject) -> Polygon:
     """
     Create a polygon from a Tiled object on a map.
 
@@ -160,7 +160,7 @@ class MapHelper:
             self._polygon(coord, obj) for coord, obj in self._colliders
         ]
         from_objects = [
-            poly_from_obj(obj)
+            get_polygon(obj)
             for obj in self.get_objects_by_class_name(config().map.collision)
         ]
         return from_tiles + from_objects
@@ -200,15 +200,14 @@ class MapHelper:
     @cached_property
     def _colliders(self) -> list[_Collider]:
         return [
-            _Collider(_TileCoordinate(x, y), c)
+            _Collider(_TileCoordinate(x, y), collider)
             for layer in self._all_tile_layers
             for x, y, gid in layer
-            if (c := self._collider(gid))
+            for collider in self._collider(gid)
         ]
 
-    def _collider(self, gid: _Gid) -> TiledObject | None:
-        colliders = self._tmx.tile_properties.get(gid, {}).get("colliders")
-        return colliders[0] if colliders else None
+    def _collider(self, gid: _Gid) -> list[TiledObject]:
+        return self._tmx.tile_properties.get(gid, {}).get("colliders", [])
 
     def _polygon(self, coord: _TileCoordinate, obj: TiledObject) -> Polygon:
         return self._from_rect(coord, obj) or self._from_points(coord, obj)
@@ -305,11 +304,11 @@ class MapHelper:
         draw: DrawOnScreen,
         coord_to_bottom: dict[_TileCoordinate, Pixel],
     ) -> Pixel:
-        if cls := self._class(layer, coord):
-            return max(
-                coord_to_bottom[c] for c in self._component(layer, coord, cls)
-            )
-        return draw.visible_rectangle.bottom
+        return (
+            max(coord_to_bottom[c] for c in self._component(layer, coord, cls))
+            if (cls := self._class(layer, coord))
+            else draw.visible_rectangle.bottom
+        )
 
     def _component(
         self,

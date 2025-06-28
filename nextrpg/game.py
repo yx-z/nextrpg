@@ -13,11 +13,7 @@ import pygame
 from pygame.time import Clock
 
 from nextrpg.config import config
-from nextrpg.event.pygame_event import (
-    PygameEvent,
-    Quit,
-    to_typed_event,
-)
+from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
 from nextrpg.gui import Gui
 from nextrpg.model import Model, internal_field
 from nextrpg.scene.scene import Scene
@@ -75,13 +71,11 @@ class _GameLoop(Model):
 
     def step(self) -> _GameLoop:
         self._clock.tick(config().gui.frames_per_second)
-        stepped = replace(self, _scene=self._scene.step(self._clock.get_time()))
         self._gui.draw(self._scene.draw_on_screens)
-        assert callable(self.event)
         return reduce(
             lambda loop, e: loop.event(to_typed_event(e)),
             pygame.event.get(),
-            stepped,
+            replace(self, _scene=self._scene.step(self._clock.get_time())),
         )
 
 

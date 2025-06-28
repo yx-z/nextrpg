@@ -224,13 +224,19 @@ class RpgMakerCharacterDrawing(Model, CharacterDrawing):
         return replace(
             self,
             _frames={
-                direction: (
-                    frames.step(time_delta)
-                    if direction == _adjust(self.direction)
-                    else frames
-                )
+                direction: self._move_frame(time_delta, _adjust(direction))
                 for direction, frames in self._frames.items()
             },
+        )
+
+    def _move_frame(
+        self, time_delta: Millisecond, adjusted_direction: Direction
+    ) -> CyclicFrames:
+        frames = self._frames[adjusted_direction]
+        return (
+            frames.step(time_delta)
+            if adjusted_direction == self.direction
+            else frames
         )
 
     @override
@@ -271,9 +277,9 @@ class RpgMakerCharacterDrawing(Model, CharacterDrawing):
             self._crop_margin(d)
             for d in self._crop_into_frames_at_row(drawing, row)
         ]
-        frame_indices = self.sprite_sheet.style._frame_indices()
         return CyclicFrames(
-            [frames[i] for i in frame_indices], self.frame_duration
+            [frames[i] for i in self.sprite_sheet.style._frame_indices()],
+            self.frame_duration,
         )
 
     def _crop_into_frames_at_row(

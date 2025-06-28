@@ -37,7 +37,7 @@ def test_character_on_screen():
     )
 
     with override_config(Config(debug=DebugConfig(ignore_map_collisions=True))):
-        assert character._can_move(123, Coordinate(100, 100))
+        assert character._can_move(Coordinate(100, 100))
         assert CharacterOnScreen(
             MockCharacterDrawing(),
             Coordinate(10, 20),

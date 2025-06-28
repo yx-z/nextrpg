@@ -21,7 +21,7 @@ from nextrpg.scene.map_helper import (
     MapHelper,
     TileBottomAndDraw,
     _LayerIndex,
-    poly_from_obj,
+    get_polygon,
 )
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
@@ -164,10 +164,8 @@ class MapScene(Model, Scene):
         player_rect = player.character_and_visuals.character.rectangle
         for move in self.moves:
             move_object = self._map_helper.get_object(move.trigger_object)
-            move_area = poly_from_obj(move_object)
-            if player_rect.collide(move_area):
-                next_scene = move.to_scene(player.character)
-                return TransitionScene(self, next_scene)
+            if player_rect.collide(get_polygon(move_object)):
+                return TransitionScene(self, move.to_scene(player.character))
         return None
 
 

@@ -36,7 +36,7 @@ class Rgba(namedtuple("Rgba", "red green blue alpha")):
     alpha: Alpha
 
 
-type Millisecond = int
+type Millisecond = int | float
 """
 Millisecond elapsed between game loops.
 """

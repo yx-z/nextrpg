@@ -5,7 +5,7 @@ Handles character movement and collision detection.
 from __future__ import annotations
 
 from dataclasses import KW_ONLY, field, replace
-from functools import cache, cached_property, singledispatchmethod
+from functools import cached_property, singledispatchmethod
 from typing import NamedTuple
 
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -94,7 +94,7 @@ class CharacterOnScreen(Model):
     def _updated_movement_key(
         self, e: KeyPressDown | KeyPressUp
     ) -> frozenset[KeyboardKey]:
-        if not e.key in _MOVEMENT_KEYS:
+        if e.key not in _MOVEMENT_KEYS:
             return self._movement_keys
         assert isinstance(e.key, KeyboardKey)
         if isinstance(e, KeyPressDown):
@@ -115,36 +115,27 @@ class CharacterOnScreen(Model):
         Returns:
             `CharacterOnScreen`: The updated character state after the step.
         """
-        moved_coord = self._move(time_delta)
         return replace(
             self,
-            coordinate=moved_coord or self.coordinate,
             character=(
                 self.character.move(time_delta)
                 if self._movement_keys
                 else self.character.idle(time_delta)
             ),
+            coordinate=self._try_move(time_delta) or self.coordinate,
         )
 
-    def _move(self, time_delta: Millisecond) -> Coordinate | None:
-        moved_coord = self.coordinate + DirectionalOffset(
+    def _try_move(self, time_delta: Millisecond) -> Coordinate | None:
+        coord = self.coordinate + DirectionalOffset(
             self.character.direction, self.speed * time_delta
         )
-        return (
-            moved_coord
-            if self._movement_keys and self._can_move(time_delta, moved_coord)
-            else None
-        )
+        return coord if self._movement_keys and self._can_move(coord) else None
 
-    def _can_move(
-        self, time_delta: Millisecond, coordinate: Coordinate
-    ) -> bool:
+    def _can_move(self, coordinate: Coordinate) -> bool:
         if (debug := config().debug) and debug.ignore_map_collisions:
             return True
 
-        rect = DrawOnScreen(
-            coordinate, self.character.move(time_delta).drawing
-        ).rectangle
+        rect = DrawOnScreen(coordinate, self.character.drawing).rectangle
         hit_coords = {
             Direction.LEFT: {rect.bottom_left, rect.center_left},
             Direction.RIGHT: {rect.bottom_right, rect.center_right},
@@ -154,14 +145,8 @@ class CharacterOnScreen(Model):
                 rect.bottom_left,
             },
             Direction.UP: {rect.center_right, rect.center, rect.center_left},
-            Direction.UP_LEFT: {
-                rect.top_left,
-                rect.center_left,
-            },
-            Direction.UP_RIGHT: {
-                rect.top_right,
-                rect.center_right,
-            },
+            Direction.UP_LEFT: {rect.center_left},
+            Direction.UP_RIGHT: {rect.center_right},
             Direction.DOWN_LEFT: {
                 rect.bottom_left,
                 rect.center_left,
@@ -180,11 +165,11 @@ class CharacterOnScreen(Model):
 
     @cached_property
     def _collision_visuals(self) -> list[DrawOnScreen]:
-        if not (debug := config().debug):
-            return []
-        return [
-            c.fill(debug.collision_rectangle_color) for c in self.collisions
-        ]
+        return (
+            [c.fill(debug.collision_rectangle_color) for c in self.collisions]
+            if (debug := config().debug)
+            else []
+        )
 
 
 _MOVEMENT_KEYS = {
@@ -206,7 +191,6 @@ _KEY_TO_DIR = {
 }
 
 
-@cache
 def _key_to_dir(current_keys: frozenset[KeyboardKey]) -> Direction | None:
     return next(
         (d for keys, d in _KEY_TO_DIR.items() if keys <= current_keys), None

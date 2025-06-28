@@ -83,9 +83,9 @@ class Gui(Model):
     def _scale(self, draws: list[DrawOnScreen]) -> DrawOnScreen:
         screen = Surface(config().gui.size)
         screen.blits(d.pygame for d in draws)
-        scaled_size = config().gui.size.scale(self._scaling)
         return DrawOnScreen(
-            self._center_shift, Drawing(scale(screen, scaled_size))
+            self._center_shift,
+            Drawing(scale(screen, config().gui.size.scale(self._scaling))),
         )
 
     @cached_property
@@ -112,15 +112,15 @@ def _gui_flag(gui_mode: GuiMode) -> _GuiFlag:
         (gui_mode is GuiMode.FULL_SCREEN, FULLSCREEN),
         (config().gui.allow_window_resize, RESIZABLE),
     ]
-    flags = [flag for check, flag in check_and_flags if check]
-    return reduce(or_, flags, 0)
+    return reduce(or_, [flag for check, flag in check_and_flags if check], 0)
 
 
 @Gui.event.register
 def _toggle_gui_mode(self, e: KeyPressDown) -> Gui:
-    is_toggle_key = e.key is KeyboardKey.GUI_MODE_TOGGLE
-    allow_toggle = config().gui.allow_gui_mode_toggle
-    if is_toggle_key and allow_toggle:
+    if (
+        e.key is KeyboardKey.GUI_MODE_TOGGLE
+        and config().gui.allow_gui_mode_toggle
+    ):
         updated_mode = self._gui_mode.opposite
         return replace(
             self,

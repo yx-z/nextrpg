@@ -13,7 +13,6 @@ from nextrpg.draw_on_screen import (
     Drawing,
     GenericPolygon,
     Rectangle,
-    screen,
 )
 from test.util import override_config
 
@@ -129,7 +128,3 @@ def test_polygon() -> None:
     )
     assert polygon.contain(Coordinate(0.5, 0.5))
     assert not polygon.contain(Coordinate(10, 20))
-
-
-def test_screen() -> None:
-    assert screen() == Rectangle(Coordinate(0, 0), Size(1280, 800))
