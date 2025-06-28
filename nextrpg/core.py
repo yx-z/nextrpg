@@ -16,7 +16,7 @@ Alpha channel that defines the transparency between [0, 255] for images.
 """
 
 
-class Rgba(namedtuple("_Rgba", "red green blue alpha")):
+class Rgba(namedtuple("Rgba", "red green blue alpha")):
     """
     Represents an RGBA color with red, green, blue and alpha components.
 
@@ -36,7 +36,7 @@ class Rgba(namedtuple("_Rgba", "red green blue alpha")):
     alpha: Alpha
 
 
-type Millisecond = int | float
+type Millisecond = int
 """
 Millisecond elapsed between game loops.
 """
@@ -104,7 +104,7 @@ class DirectionalOffset(NamedTuple):
     offset: Pixel
 
 
-class Size(namedtuple("_Size", "width height")):
+class Size(namedtuple("Size", "width height")):
     """
     Represents the dimensions of a two-dimensional space, such as an image,
     with defined width and height.
@@ -121,13 +121,7 @@ class Size(namedtuple("_Size", "width height")):
     width: Pixel
     height: Pixel
 
-    def __post_init__(self) -> None:
-        if self.width < 0 or self.height < 0:
-            raise ValueError(
-                f"{self.width=} and {self.height=} cannot be negative."
-            )
-
-    def __mul__(self, scale: float) -> Size:
+    def scale(self, scaling: float) -> Size:
         """
         Scales the dimensions by a scaling factor and returns a new `Size`.
 
@@ -136,10 +130,10 @@ class Size(namedtuple("_Size", "width height")):
         Round up so that drawings won't leave tiny, black gaps after scaled.
 
         Args:
-            `scale`: A scaling factor by which the width and height will be
+            `scaling`: A scaling factor by which the width and height will be
                 multiplied.
 
         Returns:
             `Size`: A new `Size` object representing the scaled dimensions.
         """
-        return Size(ceil(self.width * scale), ceil(self.height * scale))
+        return Size(ceil(self.width * scaling), ceil(self.height * scaling))

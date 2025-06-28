@@ -83,7 +83,7 @@ class Gui(Model):
     def _scale(self, draws: list[DrawOnScreen]) -> DrawOnScreen:
         screen = Surface(config().gui.size)
         screen.blits(d.pygame for d in draws)
-        scaled_size = config().gui.size * self._scaling
+        scaled_size = config().gui.size.scale(self._scaling)
         return DrawOnScreen(
             self._center_shift, Drawing(scale(screen, scaled_size))
         )

@@ -194,7 +194,7 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">KW_ONLY</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntEnum</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">override</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
@@ -244,7 +244,7 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">&quot;&quot;&quot;Choose between DefaultFrameType and XpFrameType.&quot;&quot;&quot;</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpriteSheetSelection</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpriteSheetSelection</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">    Zero-indexed row/column for selecting a portion of a sprite sheet.</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>
@@ -269,7 +269,7 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="n">max_columns</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Margin</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Margin</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">    Margin of a single character frame to crop from the sprite sheet.</span>
 </span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -280,7 +280,7 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>    <span class="n">right</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpriteSheet</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpriteSheet</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="sd">    Container for sprite sheet configuration.</span>
 </span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
@@ -591,13 +591,13 @@ even if you own a copy of RPG Maker.</p>
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">SpriteSheetSelection</span><wbr>(<span class="base">abc.ABCMeta</span>, <span class="base">typing.Generic[T]</span>):
+    <span class="name">SpriteSheetSelection</span><wbr>(<span class="base">typing.NamedTuple</span>):
 
                 <label class="view-source-button" for="SpriteSheetSelection-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#SpriteSheetSelection"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SpriteSheetSelection-71"><a href="#SpriteSheetSelection-71"><span class="linenos">71</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpriteSheetSelection</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SpriteSheetSelection-71"><a href="#SpriteSheetSelection-71"><span class="linenos">71</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpriteSheetSelection</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
 </span><span id="SpriteSheetSelection-72"><a href="#SpriteSheetSelection-72"><span class="linenos">72</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="SpriteSheetSelection-73"><a href="#SpriteSheetSelection-73"><span class="linenos">73</span></a><span class="sd">    Zero-indexed row/column for selecting a portion of a sprite sheet.</span>
 </span><span id="SpriteSheetSelection-74"><a href="#SpriteSheetSelection-74"><span class="linenos">74</span></a>
@@ -650,7 +650,9 @@ Default to four columns.</li>
     </div>
     <a class="headerlink" href="#SpriteSheetSelection.__init__"></a>
     
-    
+            <div class="docstring"><p>Create new instance of SpriteSheetSelection(row, column, max_rows, max_columns)</p>
+</div>
+
 
                             </div>
                             <div id="SpriteSheetSelection.row" class="classattr">
@@ -661,7 +663,9 @@ Default to four columns.</li>
     </div>
     <a class="headerlink" href="#SpriteSheetSelection.row"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 0</p>
+</div>
+
 
                             </div>
                             <div id="SpriteSheetSelection.column" class="classattr">
@@ -672,31 +676,35 @@ Default to four columns.</li>
     </div>
     <a class="headerlink" href="#SpriteSheetSelection.column"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 1</p>
+</div>
+
 
                             </div>
                             <div id="SpriteSheetSelection.max_rows" class="classattr">
                                 <div class="attr variable">
-            <span class="name">max_rows</span><span class="annotation">: int</span>        =
-<span class="default_value">2</span>
+            <span class="name">max_rows</span><span class="annotation">: int</span>
 
         
     </div>
     <a class="headerlink" href="#SpriteSheetSelection.max_rows"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 2</p>
+</div>
+
 
                             </div>
                             <div id="SpriteSheetSelection.max_columns" class="classattr">
                                 <div class="attr variable">
-            <span class="name">max_columns</span><span class="annotation">: int</span>        =
-<span class="default_value">4</span>
+            <span class="name">max_columns</span><span class="annotation">: int</span>
 
         
     </div>
     <a class="headerlink" href="#SpriteSheetSelection.max_columns"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 3</p>
+</div>
+
 
                             </div>
                 </section>
@@ -705,13 +713,13 @@ Default to four columns.</li>
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">Margin</span><wbr>(<span class="base">abc.ABCMeta</span>, <span class="base">typing.Generic[T]</span>):
+    <span class="name">Margin</span><wbr>(<span class="base">typing.NamedTuple</span>):
 
                 <label class="view-source-button" for="Margin-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Margin"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Margin-96"><a href="#Margin-96"><span class="linenos"> 96</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Margin</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Margin-96"><a href="#Margin-96"><span class="linenos"> 96</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Margin</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
 </span><span id="Margin-97"><a href="#Margin-97"><span class="linenos"> 97</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Margin-98"><a href="#Margin-98"><span class="linenos"> 98</span></a><span class="sd">    Margin of a single character frame to crop from the sprite sheet.</span>
 </span><span id="Margin-99"><a href="#Margin-99"><span class="linenos"> 99</span></a><span class="sd">    &quot;&quot;&quot;</span>
@@ -730,61 +738,67 @@ Default to four columns.</li>
                             <div id="Margin.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">Margin</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">top</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">0</span>, </span><span class="param"><span class="n">left</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">0</span>, </span><span class="param"><span class="n">bottom</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">0</span>, </span><span class="param"><span class="n">right</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">0</span></span>)</span>
+        <span class="name">Margin</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">top</span><span class="p">:</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;Pixel&#39;</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span>,</span><span class="param">	<span class="n">left</span><span class="p">:</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;Pixel&#39;</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span>,</span><span class="param">	<span class="n">bottom</span><span class="p">:</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;Pixel&#39;</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span>,</span><span class="param">	<span class="n">right</span><span class="p">:</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;Pixel&#39;</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span></span>)</span>
 
         
     </div>
     <a class="headerlink" href="#Margin.__init__"></a>
     
-    
+            <div class="docstring"><p>Create new instance of Margin(top, left, bottom, right)</p>
+</div>
+
 
                             </div>
                             <div id="Margin.top" class="classattr">
                                 <div class="attr variable">
-            <span class="name">top</span><span class="annotation">: <a href="../core.html#Pixel">nextrpg.core.Pixel</a></span>        =
-<span class="default_value">0</span>
+            <span class="name">top</span><span class="annotation">: <a href="../core.html#Pixel">nextrpg.core.Pixel</a></span>
 
         
     </div>
     <a class="headerlink" href="#Margin.top"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 0</p>
+</div>
+
 
                             </div>
                             <div id="Margin.left" class="classattr">
                                 <div class="attr variable">
-            <span class="name">left</span><span class="annotation">: <a href="../core.html#Pixel">nextrpg.core.Pixel</a></span>        =
-<span class="default_value">0</span>
+            <span class="name">left</span><span class="annotation">: <a href="../core.html#Pixel">nextrpg.core.Pixel</a></span>
 
         
     </div>
     <a class="headerlink" href="#Margin.left"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 1</p>
+</div>
+
 
                             </div>
                             <div id="Margin.bottom" class="classattr">
                                 <div class="attr variable">
-            <span class="name">bottom</span><span class="annotation">: <a href="../core.html#Pixel">nextrpg.core.Pixel</a></span>        =
-<span class="default_value">0</span>
+            <span class="name">bottom</span><span class="annotation">: <a href="../core.html#Pixel">nextrpg.core.Pixel</a></span>
 
         
     </div>
     <a class="headerlink" href="#Margin.bottom"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 2</p>
+</div>
+
 
                             </div>
                             <div id="Margin.right" class="classattr">
                                 <div class="attr variable">
-            <span class="name">right</span><span class="annotation">: <a href="../core.html#Pixel">nextrpg.core.Pixel</a></span>        =
-<span class="default_value">0</span>
+            <span class="name">right</span><span class="annotation">: <a href="../core.html#Pixel">nextrpg.core.Pixel</a></span>
 
         
     </div>
     <a class="headerlink" href="#Margin.right"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 3</p>
+</div>
+
 
                             </div>
                 </section>
@@ -793,13 +807,13 @@ Default to four columns.</li>
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">SpriteSheet</span><wbr>(<span class="base">abc.ABCMeta</span>, <span class="base">typing.Generic[T]</span>):
+    <span class="name">SpriteSheet</span><wbr>(<span class="base">typing.NamedTuple</span>):
 
                 <label class="view-source-button" for="SpriteSheet-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#SpriteSheet"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SpriteSheet-107"><a href="#SpriteSheet-107"><span class="linenos">107</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpriteSheet</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SpriteSheet-107"><a href="#SpriteSheet-107"><span class="linenos">107</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpriteSheet</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
 </span><span id="SpriteSheet-108"><a href="#SpriteSheet-108"><span class="linenos">108</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="SpriteSheet-109"><a href="#SpriteSheet-109"><span class="linenos">109</span></a><span class="sd">    Container for sprite sheet configuration.</span>
 </span><span id="SpriteSheet-110"><a href="#SpriteSheet-110"><span class="linenos">110</span></a>
@@ -839,13 +853,15 @@ from a sprite sheet image.</p>
                             <div id="SpriteSheet.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">SpriteSheet</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">drawing</span><span class="p">:</span> <span class="n"><a href="../draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawing</a></span>,</span><span class="param">	<span class="n">selection</span><span class="p">:</span> <span class="n"><a href="#SpriteSheetSelection">SpriteSheetSelection</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">style</span><span class="p">:</span> <span class="n">FrameType</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">enum</span> <span class="s1">&#39;DefaultFrameType&#39;</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">margin</span><span class="p">:</span> <span class="n"><a href="#Margin">Margin</a></span> <span class="o">=</span> <span class="n">Margin</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></span>)</span>
+        <span class="name">SpriteSheet</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">drawing</span><span class="p">:</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;Drawing&#39;</span><span class="p">)</span>,</span><span class="param">	<span class="n">selection</span><span class="p">:</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;SpriteSheetSelection | None&#39;</span><span class="p">)</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">style</span><span class="p">:</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;FrameType&#39;</span><span class="p">)</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">enum</span> <span class="s1">&#39;DefaultFrameType&#39;</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">margin</span><span class="p">:</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s1">&#39;Margin&#39;</span><span class="p">)</span> <span class="o">=</span> <span class="n">Margin</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></span>)</span>
 
         
     </div>
     <a class="headerlink" href="#SpriteSheet.__init__"></a>
     
-    
+            <div class="docstring"><p>Create new instance of SpriteSheet(drawing, selection, style, margin)</p>
+</div>
+
 
                             </div>
                             <div id="SpriteSheet.drawing" class="classattr">
@@ -856,43 +872,48 @@ from a sprite sheet image.</p>
     </div>
     <a class="headerlink" href="#SpriteSheet.drawing"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 0</p>
+</div>
+
 
                             </div>
                             <div id="SpriteSheet.selection" class="classattr">
                                 <div class="attr variable">
-            <span class="name">selection</span><span class="annotation">: <a href="#SpriteSheetSelection">SpriteSheetSelection</a> | None</span>        =
-<span class="default_value">None</span>
+            <span class="name">selection</span><span class="annotation">: <a href="#SpriteSheetSelection">SpriteSheetSelection</a> | None</span>
 
         
     </div>
     <a class="headerlink" href="#SpriteSheet.selection"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 1</p>
+</div>
+
 
                             </div>
                             <div id="SpriteSheet.style" class="classattr">
                                 <div class="attr variable">
-            <span class="name">style</span><span class="annotation">: <a href="#FrameType">FrameType</a></span>        =
-<span class="default_value">&lt;enum &#39;DefaultFrameType&#39;&gt;</span>
+            <span class="name">style</span><span class="annotation">: <a href="#FrameType">FrameType</a></span>
 
         
     </div>
     <a class="headerlink" href="#SpriteSheet.style"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 2</p>
+</div>
+
 
                             </div>
                             <div id="SpriteSheet.margin" class="classattr">
                                 <div class="attr variable">
-            <span class="name">margin</span><span class="annotation">: <a href="#Margin">Margin</a></span>        =
-<span class="default_value">Margin(top=0, left=0, bottom=0, right=0)</span>
+            <span class="name">margin</span><span class="annotation">: <a href="#Margin">Margin</a></span>
 
         
     </div>
     <a class="headerlink" href="#SpriteSheet.margin"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 3</p>
+</div>
+
 
                             </div>
                 </section>

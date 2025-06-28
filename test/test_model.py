@@ -36,3 +36,9 @@ def test_cached() -> None:
     b = MyCache(2)
     assert b is not a
     assert MyCache(2) is b
+
+    @cached(lambda: 1, lambda _: None)
+    class MyModel2(Model):
+        s: str
+
+    assert MyModel2("a") is not MyModel2("a")

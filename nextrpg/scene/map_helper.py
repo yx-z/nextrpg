@@ -213,9 +213,7 @@ class MapHelper:
     def _polygon(self, coord: _TileCoordinate, obj: TiledObject) -> Polygon:
         return self._from_rect(coord, obj) or self._from_points(coord, obj)
 
-    def _from_points(
-        self, coord: _TileCoordinate, obj: TiledObject
-    ) -> GenericPolygon:
+    def _from_points(self, coord: _TileCoordinate, obj: TiledObject) -> Polygon:
         w, h = self._tile_size
         cx, cy = coord
         return GenericPolygon(

@@ -79,13 +79,13 @@
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Move</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Move</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">    Move event from the current scene to another.</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
@@ -121,13 +121,13 @@
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">Move</span><wbr>(<span class="base">abc.ABCMeta</span>, <span class="base">typing.Generic[T]</span>):
+    <span class="name">Move</span><wbr>(<span class="base">typing.NamedTuple</span>):
 
                 <label class="view-source-button" for="Move-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Move"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Move-13"><a href="#Move-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Move</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Move-13"><a href="#Move-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Move</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
 </span><span id="Move-14"><a href="#Move-14"><span class="linenos">14</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Move-15"><a href="#Move-15"><span class="linenos">15</span></a><span class="sd">    Move event from the current scene to another.</span>
 </span><span id="Move-16"><a href="#Move-16"><span class="linenos">16</span></a>
@@ -178,7 +178,9 @@
     </div>
     <a class="headerlink" href="#Move.__init__"></a>
     
-    
+            <div class="docstring"><p>Create new instance of Move(to_object, trigger_object, next_scene)</p>
+</div>
+
 
                             </div>
                             <div id="Move.to_object" class="classattr">
@@ -189,7 +191,9 @@
     </div>
     <a class="headerlink" href="#Move.to_object"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 0</p>
+</div>
+
 
                             </div>
                             <div id="Move.trigger_object" class="classattr">
@@ -200,7 +204,9 @@
     </div>
     <a class="headerlink" href="#Move.trigger_object"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 1</p>
+</div>
+
 
                             </div>
                             <div id="Move.next_scene" class="classattr">
@@ -211,7 +217,9 @@
     </div>
     <a class="headerlink" href="#Move.next_scene"></a>
     
-    
+            <div class="docstring"><p>Alias for field number 2</p>
+</div>
+
 
                             </div>
                             <div id="Move.to_scene" class="classattr">

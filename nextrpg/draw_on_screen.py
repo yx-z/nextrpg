@@ -9,7 +9,7 @@ from functools import cached_property
 from itertools import product
 from math import ceil, sqrt
 from pathlib import Path
-from typing import Final, assert_never
+from typing import Final, Protocol
 
 from pygame import Mask, SRCALPHA, Surface
 from pygame.draw import polygon
@@ -20,7 +20,7 @@ from nextrpg.config import config
 from nextrpg.core import Alpha, Direction, DirectionalOffset, Pixel, Rgba, Size
 
 
-class Coordinate(namedtuple("_Coordinate", "left top")):
+class Coordinate(namedtuple("Coordinate", "left top")):
     """
     Represents a 2D coordinate with immutability and provides methods
     for scaling and shifting coordinates.
@@ -35,23 +35,6 @@ class Coordinate(namedtuple("_Coordinate", "left top")):
 
     left: Pixel
     top: Pixel
-
-    def __mul__(self, scale: float) -> Coordinate:
-        """
-        Scales the current `Coordinate` values (left and top) by a given factor
-        and returns a new `Coordinate` with the scaled values rounded up to the
-        nearest integer.
-
-        Round up so that drawings won't leave tiny, black gaps after scaled.
-
-        Args:
-            `scale`: The scaling factor to multiply the left and
-                top values of the `Coordinate`.
-
-        Returns:
-            `Coordinate`: A new `Coordinate` with the scaled and rounded values.
-        """
-        return Coordinate(ceil(self.left * scale), ceil(self.top * scale))
 
     def __sub__(self, other: Coordinate) -> Coordinate:
         return Coordinate(self.left - other.left, self.top - other.top)
@@ -98,8 +81,7 @@ class Coordinate(namedtuple("_Coordinate", "left top")):
                 return Coordinate(self.left - diag, self.top + diag)
             case Direction.DOWN_RIGHT:
                 return Coordinate(self.left + diag, self.top + diag)
-            case _ as d:
-                assert_never(d)
+        return NotImplemented
 
 
 class Drawing:
@@ -124,7 +106,7 @@ class Drawing:
             else load(resource).convert_alpha()
         )
 
-    @cached_property
+    @property
     def width(self) -> Pixel:
         """
         Gets the width of the surface.
@@ -134,7 +116,7 @@ class Drawing:
         """
         return self._surface.get_width()
 
-    @cached_property
+    @property
     def height(self) -> Pixel:
         """
         Gets the height of the surface.
@@ -144,7 +126,7 @@ class Drawing:
         """
         return self._surface.get_height()
 
-    @cached_property
+    @property
     def size(self) -> Size:
         """
         Gets the size of an object as a combination of its width and height
@@ -154,7 +136,7 @@ class Drawing:
         """
         return Size(self.width, self.height)
 
-    @cached_property
+    @property
     def pygame(self) -> Surface:
         """
         Gets the current `pygame.Surface` for the object.
@@ -194,34 +176,22 @@ class Drawing:
         surface.blit(self._surface, (0, 0))
         return surface
 
+    def set_alpha(self, alpha: Alpha) -> Drawing:
+        """
+        Creates a new `Drawing` with the specified alpha value.
 
-class DrawingWithAlpha(namedtuple("_DrawingWithAlpha", "drawing alpha")):
-    drawing: Drawing
-    alpha: Alpha
+        Arguments:
+            `alpha`: The new alpha value.
 
-    @property
-    def pygame(self) -> Surface:
-        self.drawing.pygame.set_alpha(self.alpha)
-        return self.drawing.pygame
-
-    @property
-    def width(self) -> Pixel:
-        return self.drawing.width
-
-    @property
-    def height(self) -> Pixel:
-        return self.drawing.height
-
-    @property
-    def size(self) -> Size:
-        return self.drawing.size
-
-    @property
-    def _surface(self) -> Surface:
-        return self.drawing._surface
+        Returns:
+            `Drawing`: A new `Drawing` with the specified alpha value.
+        """
+        surface = self._surface.copy()
+        surface.set_alpha(alpha)
+        return Drawing(surface)
 
 
-class DrawOnScreen(namedtuple("_DrawOnScreen", "top_left drawing")):
+class DrawOnScreen(namedtuple("DrawOnScreen", "top_left drawing")):
     """
     Represents a drawable element positioned on the screen with its coordinates.
 
@@ -236,9 +206,9 @@ class DrawOnScreen(namedtuple("_DrawOnScreen", "top_left drawing")):
     """
 
     top_left: Coordinate
-    drawing: Drawing | DrawingWithAlpha
+    drawing: Drawing
 
-    @cached_property
+    @property
     def rectangle(self) -> Rectangle:
         """
         Gets the rectangular bounds of the drawing on screen.
@@ -305,7 +275,7 @@ class DrawOnScreen(namedtuple("_DrawOnScreen", "top_left drawing")):
         return DrawOnScreen(self.top_left + coord, self.drawing)
 
 
-class Polygon:
+class Polygon(Protocol):
     """
     Abstract base class for polygon, defining the common interface/behavior.
     """
@@ -319,7 +289,6 @@ class Polygon:
             `tuple[Coordinate, ...]`: A tuple of `Coordinate` objects
                 representing the points.
         """
-        return tuple()
 
     @cached_property
     def bounding_rectangle(self) -> Rectangle:
@@ -373,7 +342,7 @@ class Polygon:
         )
         return bool(self._mask.overlap(poly._mask, offset))
 
-    def contains(self, coordinate: Coordinate) -> bool:
+    def contain(self, coordinate: Coordinate) -> bool:
         """
         Checks if a coordinate point lies within this polygon.
 
@@ -406,7 +375,7 @@ class GenericPolygon(Polygon):
         self.points: Final[tuple[Coordinate, ...]] = points
 
 
-class Rectangle(namedtuple("_Rectangle", "top_left size")):
+class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
     """
     Represents an immutable rectangle defined by its top left corner and size.
 
@@ -566,7 +535,7 @@ class Rectangle(namedtuple("_Rectangle", "top_left size")):
             )
         return Polygon.collide(self, poly)
 
-    def contains(self, coordinate: Coordinate) -> bool:
+    def contain(self, coordinate: Coordinate) -> bool:
         return (
             self.left < coordinate.left < self.right
             and self.top < coordinate.top < self.bottom

@@ -174,7 +174,7 @@ class CharacterOnScreen(Model):
             },
         }[self.character.direction]
         return all(
-            all(not collision.contains(hit_coord) for hit_coord in hit_coords)
+            all(not collision.contain(hit_coord) for hit_coord in hit_coords)
             for collision in self.collisions
         )
 

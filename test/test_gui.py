@@ -16,7 +16,7 @@ def test_gui(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.gui.set_mode")
     mocker.patch("nextrpg.gui.Surface", MockSurface)
     mocker.patch("nextrpg.gui.flip")
-    mocker.patch("nextrpg.gui.smoothscale", lambda surf, _: surf)
+    mocker.patch("nextrpg.gui.scale", lambda surf, _: surf)
     gui = Gui(Size(10, 20))
     drawing = gui._scale(
         [DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface()))]

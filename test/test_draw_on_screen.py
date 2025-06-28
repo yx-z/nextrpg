@@ -2,7 +2,7 @@ from pathlib import Path
 from unittest.mock import Mock
 
 from pygame import Color, SRCALPHA, Surface
-from pytest import approx
+from pytest import approx, raises
 from pytest_mock import MockerFixture
 
 from nextrpg.config import Config, DebugConfig
@@ -13,6 +13,7 @@ from nextrpg.draw_on_screen import (
     Drawing,
     GenericPolygon,
     Rectangle,
+    screen,
 )
 from test.util import override_config
 
@@ -27,7 +28,8 @@ def test_drawing(mocker: MockerFixture) -> None:
     assert drawing.size == Size(1, 2)
     assert drawing.crop(Coordinate(0, 0), Size(1, 2)).size == Size(1, 2)
     assert isinstance(drawing.pygame, Surface)
-    assert f"{drawing}" == "Drawing(Size(width=1, height=2))"
+
+    assert drawing.set_alpha(0) is not drawing
 
     with override_config(
         Config(debug=DebugConfig(drawing_background_color=Rgba(0, 0, 255, 32)))
@@ -57,7 +59,6 @@ def test_draw_on_screen() -> None:
 
 
 def test_coordinate() -> None:
-    assert Coordinate(10, 20) * 2 == Coordinate(20, 40)
     assert Coordinate(10, 20) + DirectionalOffset(
         Direction.UP, 5
     ) == Coordinate(10, 15)
@@ -83,6 +84,8 @@ def test_coordinate() -> None:
         Direction.DOWN_RIGHT, 10
     ) == approx(Coordinate(17.071067811865476, 27.071067811865476))
     assert Coordinate(10, 20) + Coordinate(1, 2) == Coordinate(11, 22)
+    with raises(TypeError):
+        Coordinate(10, 20) + DirectionalOffset("INVALID", 123)
 
 
 def test_rectangle() -> None:
@@ -102,7 +105,7 @@ def test_rectangle() -> None:
     assert rect.center_right == Coordinate(12, 21)
     assert rect.center == Coordinate(11, 21)
     assert rect.collide(Rectangle(Coordinate(9, 20), Size(10, 20)))
-    assert Coordinate(11, 21) in rect
+    assert rect.contain(Coordinate(11, 21))
     assert rect.collide(
         GenericPolygon(
             (Coordinate(10, 20), Coordinate(11, 20), Coordinate(11, 21))
@@ -124,5 +127,9 @@ def test_polygon() -> None:
             (Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20))
         )
     )
-    assert Coordinate(0.5, 0.5) in polygon
-    assert Coordinate(10, 20) not in polygon
+    assert polygon.contain(Coordinate(0.5, 0.5))
+    assert not polygon.contain(Coordinate(10, 20))
+
+
+def test_screen() -> None:
+    assert screen() == Rectangle(Coordinate(0, 0), Size(1280, 800))

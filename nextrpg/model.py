@@ -54,8 +54,12 @@ class Model(metaclass=_Meta):
     """
 
     def __post_init__(self) -> None:
+        if initialized := getattr(self, _INTERNAL_FIELDS_INITIALIZED, None):
+            return
+
         for f in fields(self):
             self._init_field(f)
+        object.__setattr__(self, _INTERNAL_FIELDS_INITIALIZED, True)
 
     def _init_field(self, f: Field) -> None:
         if not isinstance(init := getattr(self, f.name), _Init):
@@ -123,3 +127,6 @@ class cached[T, K, **P](Model):
 
 class _Init(Model):
     init: Callable[[Any], Any] | Callable[[], Any] | Any
+
+
+_INTERNAL_FIELDS_INITIALIZED = "_INTERNAL_FIELDS_INITIALIZED"

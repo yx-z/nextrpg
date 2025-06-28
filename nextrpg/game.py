@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from asyncio import sleep
 from dataclasses import KW_ONLY, field, replace
-from functools import cached_property, reduce, singledispatchmethod
+from functools import reduce, singledispatchmethod
 from typing import Callable
 
 import pygame
@@ -63,7 +63,7 @@ class _GameLoop(Model):
     _gui: Gui = internal_field(Gui)
     _scene: Scene = internal_field(lambda self: self.entry_scene())
 
-    @cached_property
+    @property
     def is_running(self) -> bool:
         return self._is_running
 
