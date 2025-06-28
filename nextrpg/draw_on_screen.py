@@ -5,7 +5,7 @@ Drawable on screen.
 from __future__ import annotations
 
 from collections import namedtuple
-from functools import cached_property, lru_cache
+from functools import cached_property
 from itertools import product
 from math import ceil, sqrt
 from pathlib import Path
@@ -176,7 +176,6 @@ class Drawing:
         surface.blit(self._surface, (0, 0))
         return surface
 
-    @lru_cache
     def set_alpha(self, alpha: Alpha) -> Drawing:
         """
         Creates a new `Drawing` with the specified alpha value.
