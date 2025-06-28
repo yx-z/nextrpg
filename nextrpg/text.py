@@ -16,11 +16,11 @@ class Text:
 
     @cached_property
     def draw_on_screens(self) -> list[DrawOnScreen]:
-        margin = self.config.margin
+        m = self.config.margin
         return [
             DrawOnScreen(
                 self.top_left
-                + Coordinate(margin, i * (margin + self.config.font.size)),
+                + Coordinate(m, m + i * (m + self.config.font.size)),
                 Drawing(self._render(line)),
             )
             for i, line in enumerate(self.lines)
