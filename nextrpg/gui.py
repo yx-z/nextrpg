@@ -8,9 +8,10 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property, reduce, singledispatchmethod
 from operator import or_
 
-from pygame import FULLSCREEN, RESIZABLE, Surface
 from pygame.display import flip, init, set_caption, set_mode
-from pygame.transform import smoothscale
+from pygame.locals import FULLSCREEN, RESIZABLE
+from pygame.surface import Surface
+from pygame.transform import scale
 
 from nextrpg.config import GuiMode, ResizeMode, config
 from nextrpg.core import Size
@@ -27,7 +28,7 @@ from nextrpg.model import Model, internal_field
 def _init_screen(self: Gui) -> Surface:
     init()
     set_caption(config().gui.title)
-    return set_mode(config().gui.size.tuple, _gui_flag(self._gui_mode))
+    return set_mode(config().gui.size, _gui_flag(self._gui_mode))
 
 
 class Gui(Model):
@@ -71,7 +72,7 @@ class Gui(Model):
         Returns:
             `None`.
         """
-        self._screen.fill(config().gui.background_color.tuple)
+        self._screen.fill(config().gui.background_color)
         match config().gui.resize_mode:
             case ResizeMode.SCALE:
                 self._screen.blit(*self._scale(draw_on_screens).pygame)
@@ -80,23 +81,23 @@ class Gui(Model):
         flip()
 
     def _scale(self, draws: list[DrawOnScreen]) -> DrawOnScreen:
-        screen = Surface(config().gui.size.tuple)
+        screen = Surface(config().gui.size)
         screen.blits(d.pygame for d in draws)
         scaled_size = config().gui.size * self._scaling
         return DrawOnScreen(
-            self._center_shift, Drawing(smoothscale(screen, scaled_size.tuple))
+            self._center_shift, Drawing(scale(screen, scaled_size))
         )
 
     @cached_property
     def _scaling(self) -> float:
-        current_width, current_height = self.window.tuple
-        native_width, native_height = config().gui.size.tuple
+        current_width, current_height = self.window
+        native_width, native_height = config().gui.size
         return min(current_width / native_width, current_height / native_height)
 
     @cached_property
     def _center_shift(self) -> Coordinate:
-        current_width, current_height = self.window.tuple
-        native_width, native_height = config().gui.size.tuple
+        current_width, current_height = self.window
+        native_width, native_height = config().gui.size
         return Coordinate(
             (current_width - self._scaling * native_width) / 2,
             (current_height - self._scaling * native_height) / 2,
@@ -124,7 +125,7 @@ def _toggle_gui_mode(self, e: KeyPressDown) -> Gui:
         return replace(
             self,
             _gui_mode=updated_mode,
-            _screen=set_mode(self.window.tuple, _gui_flag(updated_mode)),
+            _screen=set_mode(self.window, _gui_flag(updated_mode)),
         )
     return self
 

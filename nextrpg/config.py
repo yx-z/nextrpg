@@ -6,16 +6,17 @@ or pass the customized instance to `nextrpg.start_game.start_game`.
 
 from __future__ import annotations
 
-from dataclasses import field
+from dataclasses import dataclass, field
 from enum import Enum, auto
+from functools import cached_property
+from typing import NamedTuple
 
 from pygame.locals import K_DOWN, K_F1, K_LEFT, K_RIGHT, K_SPACE, K_UP
 
 from nextrpg.core import Direction, Millisecond, Pixel, Rgba, Size
-from nextrpg.model import Model
 
 
-class DebugConfig(Model):
+class DebugConfig(NamedTuple):
     """
     Configuration class for debugging purposes.
 
@@ -67,7 +68,7 @@ class GuiMode(Enum):
     WINDOWED = auto()
     FULL_SCREEN = auto()
 
-    @property
+    @cached_property
     def opposite(self) -> GuiMode:
         """
         Get the opposite gui mode.
@@ -84,7 +85,7 @@ _OPPOSITE_GUI_MODE = {
 }
 
 
-class GuiConfig(Model):
+class GuiConfig(NamedTuple):
     """
     Configuration class for Graphical User Interface (GUI).
 
@@ -124,7 +125,7 @@ class GuiConfig(Model):
     allow_window_resize: bool = True
 
 
-class TileMapProperties(Model):
+class TileMapProperties(NamedTuple):
     """
     Constants for custom property names used in tile map files.
 
@@ -138,10 +139,10 @@ class TileMapProperties(Model):
         `speed`: Property name for defining character movement speed.
     """
 
-    speed = "speed"
+    speed: str = "speed"
 
 
-class TileMapConfig(Model):
+class TileMapConfig(NamedTuple):
     """
     Configuration class for managing tile map layers and properties,
     that is created from tmx files [Tiled](https://www.mapeditor.org/).
@@ -170,7 +171,8 @@ class TileMapConfig(Model):
     properties: TileMapProperties = TileMapProperties()
 
 
-class CharacterConfig(Model):
+@dataclass(frozen=True)
+class CharacterConfig:
     """
     Configuration class for characters.
 
@@ -189,7 +191,7 @@ class CharacterConfig(Model):
     directions: set[Direction] = field(default_factory=lambda: set(Direction))
 
 
-class RpgMakerCharacterDrawingConfig(Model):
+class RpgMakerCharacterDrawingConfig(NamedTuple):
     """
     Configuration class for RPG Maker character drawings.
 
@@ -230,7 +232,7 @@ These codes are used in key mapping configurations and event handling.
 """
 
 
-class KeyMappingConfig(Model):
+class KeyMappingConfig(NamedTuple):
     """
     Configuration class for keyboard key mappings.
 
@@ -261,7 +263,7 @@ class KeyMappingConfig(Model):
     gui_mode_toggle: KeyCode = K_F1
 
 
-class ResourceConfig(Model):
+class ResourceConfig(NamedTuple):
     """
     Configuration class for resource loading.
 
@@ -269,10 +271,10 @@ class ResourceConfig(Model):
         `map_cache_size`: The maximum number of TMX maps to cache in memory.
     """
 
-    map_cache_size: int = 128
+    map_cache_size: int = 8
 
 
-class TransitionConfig(Model):
+class TransitionConfig(NamedTuple):
     """
     Configuration class for transition scenes.
 
@@ -286,7 +288,7 @@ class TransitionConfig(Model):
     transition_duration: Millisecond = 500
 
 
-class Config(Model):
+class Config(NamedTuple):
     """
     Main configuration class that aggregates all configuration components.
 

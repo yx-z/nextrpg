@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from dataclasses import KW_ONLY, field, replace
 from functools import cache, cached_property, singledispatchmethod
+from typing import NamedTuple
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
@@ -20,7 +21,7 @@ from nextrpg.event.pygame_event import (
 from nextrpg.model import Model, internal_field
 
 
-class CharacterAndVisuals(Model):
+class CharacterAndVisuals(NamedTuple):
     """
     Character and its associated visual elements.
 
@@ -173,7 +174,7 @@ class CharacterOnScreen(Model):
             },
         }[self.character.direction]
         return all(
-            all(hit_coord not in collision for hit_coord in hit_coords)
+            all(not collision.contains(hit_coord) for hit_coord in hit_coords)
             for collision in self.collisions
         )
 

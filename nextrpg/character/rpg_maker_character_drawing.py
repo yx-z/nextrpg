@@ -18,7 +18,7 @@ from __future__ import annotations
 from dataclasses import KW_ONLY, field, replace
 from enum import IntEnum
 from functools import cached_property
-from typing import override
+from typing import NamedTuple, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
@@ -68,7 +68,7 @@ type FrameType = type[DefaultFrameType | XpFrameType]
 """Choose between DefaultFrameType and XpFrameType."""
 
 
-class SpriteSheetSelection(Model):
+class SpriteSheetSelection(NamedTuple):
     """
     Zero-indexed row/column for selecting a portion of a sprite sheet.
 
@@ -93,7 +93,7 @@ class SpriteSheetSelection(Model):
     max_columns: int = 4
 
 
-class Margin(Model):
+class Margin(NamedTuple):
     """
     Margin of a single character frame to crop from the sprite sheet.
     """
@@ -104,7 +104,7 @@ class Margin(Model):
     right: Pixel = 0
 
 
-class SpriteSheet(Model):
+class SpriteSheet(NamedTuple):
     """
     Container for sprite sheet configuration.
 

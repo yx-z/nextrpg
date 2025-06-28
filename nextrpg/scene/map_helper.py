@@ -4,7 +4,7 @@ Map helper class for loading the TMX tiles.
 
 from functools import cached_property
 from pathlib import Path
-from typing import NamedTuple
+from typing import Final, NamedTuple
 
 from pygame import Surface
 from pytmx import (
@@ -25,7 +25,7 @@ from nextrpg.draw_on_screen import (
     Polygon,
     Rectangle,
 )
-from nextrpg.model import Model, cached
+from nextrpg.model import cached
 
 
 class TileBottomAndDraw(NamedTuple):
@@ -81,15 +81,13 @@ def poly_from_obj(obj: TiledObject) -> Polygon:
 
 
 @cached(lambda: config().resource.map_cache_size)
-class MapHelper(Model):
+class MapHelper:
     """
     Tiled tmx map helper class for loading the tiles.
-
-    Attributes:
-        `tmx_file`: Tmx file path to load.
     """
 
-    tmx_file: Path
+    def __init__(self, tmx_file: Path) -> None:
+        self._tmx_file: Final[Path] = tmx_file
 
     @cached_property
     def map_size(self) -> Size:
@@ -99,7 +97,7 @@ class MapHelper(Model):
         Returns:
             `Size`: The map size.
         """
-        tile_width, tile_height = self._tile_size.tuple
+        tile_width, tile_height = self._tile_size
         return Size(
             self._tmx.width * tile_width, self._tmx.height * tile_height
         )
@@ -218,7 +216,7 @@ class MapHelper(Model):
     def _from_points(
         self, coord: _TileCoordinate, obj: TiledObject
     ) -> GenericPolygon:
-        w, h = self._tile_size.tuple
+        w, h = self._tile_size
         cx, cy = coord
         return GenericPolygon(
             tuple(Coordinate(cx * w + x, cy * h + y) for x, y in obj.as_points)
@@ -234,7 +232,7 @@ class MapHelper(Model):
             or obj.height is None
         ):
             return None
-        w, h = self._tile_size.tuple
+        w, h = self._tile_size
         cx, cy = coord
         return Rectangle(
             Coordinate(cx * w + obj.x, cy * h + obj.y),
@@ -285,7 +283,7 @@ class MapHelper(Model):
         }
 
     def _tile(self, left: int, top: int, surface: Surface) -> DrawOnScreen:
-        width, height = self._tile_size.tuple
+        width, height = self._tile_size
         return DrawOnScreen(
             Coordinate(left * width, top * height),
             Drawing(surface),
@@ -352,4 +350,4 @@ class MapHelper(Model):
 
     @cached_property
     def _tmx(self) -> TiledMap:
-        return load_pygame(self.tmx_file)
+        return load_pygame(self._tmx_file)

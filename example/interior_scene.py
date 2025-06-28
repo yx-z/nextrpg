@@ -44,7 +44,7 @@ def interior_scene(
         # Tiled/tmx tile map.
         Path("example/assets/interior.tmx"),
         # Create character drawing when this scene is an entry scene.
-        player or _create_character(),
+        player or _player(),
         # Player coordinate on the map.
         player_coordinate_object,
         # Move to another map.
@@ -52,14 +52,14 @@ def interior_scene(
     )
 
 
-def _create_character() -> CharacterDrawing:
+def _player() -> CharacterDrawing:
     return RpgMakerCharacterDrawing(
         SpriteSheet(
             # Player sprite sheet.
-            Drawing(Path("example/assets/fantasy/FCharacter1.png")),
+            Drawing(Path("example/assets/Characters_MV.png")),
             # Select a character from the sprite sheet.
             SpriteSheetSelection(row=0, column=1),
             # Declare margins to correctly detect collision/bounding box.
-            margin=Margin(top=22, left=8, right=8),
+            margin=Margin(top=25),
         )
     )

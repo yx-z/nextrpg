@@ -120,7 +120,7 @@ class MapScene(Model, Scene):
         player = self._player.step(time_delta)
         return self._move_to_scene(player) or replace(self, _player=player)
 
-    @property
+    @cached_property
     def _foreground_and_character(self) -> list[DrawOnScreen]:
         foregrounds = self._map_helper.foreground
         character = self._player.character_and_visuals.character
@@ -137,7 +137,7 @@ class MapScene(Model, Scene):
         )
         return [draw for layer in layers for _, draw in layer]
 
-    @property
+    @cached_property
     def _player_layer(self) -> _LayerIndex:
         reversed_layers = reversed(list(enumerate(self._map_helper.foreground)))
         return next(
@@ -151,17 +151,17 @@ class MapScene(Model, Scene):
             for bottom, draw in layer
         )
 
-    @property
+    @cached_property
     def _player_offset(self) -> Coordinate:
         player = self._player.character_and_visuals.character.rectangle.center
-        gui_width, gui_height = config().gui.size.tuple
-        map_width, map_height = self._map_helper.map_size.tuple
+        gui_width, gui_height = config().gui.size
+        map_width, map_height = self._map_helper.map_size
         left_offset = _offset(player.left, gui_width, map_width)
         top_offset = _offset(player.top, gui_height, map_height)
         return Coordinate(left_offset, top_offset)
 
     def _move_to_scene(self, player: CharacterOnScreen) -> Scene | None:
-        player_rect = player.character_and_visuals.character.visible_rectangle
+        player_rect = player.character_and_visuals.character.rectangle
         for move in self.moves:
             move_object = self._map_helper.get_object(move.trigger_object)
             move_area = poly_from_obj(move_object)

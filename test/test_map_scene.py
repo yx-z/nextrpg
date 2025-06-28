@@ -26,7 +26,7 @@ def test_map_scene(mocker: MockerFixture) -> None:
         }
     ]
     helper.above_character = []
-    helper.map_size.tuple = (100, 200)
+    helper.map_size = (100, 200)
     helper.get_object.return_value = SimpleNamespace(
         x=0, y=0, width=1, height=2, properties={}
     )
@@ -47,7 +47,7 @@ def test_move_to_scene(mocker: MockerFixture) -> None:
         }
     ]
     helper.above_character = []
-    helper.map_size.tuple = (100, 200)
+    helper.map_size = (100, 200)
     helper.get_object = lambda name: (
         SimpleNamespace(x=0, y=0, width=1, height=2, properties={})
         if name
