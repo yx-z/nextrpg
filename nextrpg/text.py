@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from functools import cached_property
 
 from pygame import Surface
-from pygame.font import SysFont
+from pygame.font import Font
 
 from nextrpg.config import TextConfig, config
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
@@ -32,5 +32,5 @@ class Text:
         )
 
     @cached_property
-    def _font(self) -> SysFont:
+    def _font(self) -> Font:
         return SysFont(self.config.font.name, self.config.font.size)
