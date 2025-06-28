@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from functools import cached_property
 
 from pygame import Surface
-from pygame.font import Font
+from pygame.font import Font, SysFont
 
 from nextrpg.config import TextConfig, config
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
