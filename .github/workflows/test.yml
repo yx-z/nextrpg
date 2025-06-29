@@ -18,10 +18,10 @@ jobs:
         with:
           python-version: '3.14.0-beta.3'
 
-      - name: Install SDL2_image dependency
+      - name: Install SDL2 dependency
         run: |
           sudo apt update
-          sudo apt install -y libsdl2-image-dev libsdl2-mixer-dev
+          sudo apt install -y libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
 
       - name: Install dependencies
         run: |
@@ -30,7 +30,7 @@ jobs:
           pip install pytest pytest-cov pytest-mock
 
       - name: Run tests
-        run: pytest --cov --cov-branch --cov-report=xml
+        run: pytest --cov --cov-branch --cov-report xml
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
