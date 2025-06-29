@@ -21,7 +21,7 @@ jobs:
       - name: Install SDL2_image dependency
         run: |
           sudo apt update
-          sudo apt install -y libsdl2-image-dev
+          sudo apt install -y libsdl2-image-dev libsdl2-mixer-dev
 
       - name: Install dependencies
         run: |
