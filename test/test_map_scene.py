@@ -31,7 +31,7 @@ def test_map_scene(mocker: MockerFixture) -> None:
         x=0, y=0, width=1, height=2, properties={}
     )
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=helper)
-    map = MapScene(Path("test"), MockCharacterDrawing())
+    map = MapScene(Path("test"), MockCharacterDrawing(), "")
     assert map.event(Quit(Event(QUIT)))
     assert map.step(1).draw_on_screens
 
@@ -57,6 +57,7 @@ def test_move_to_scene(mocker: MockerFixture) -> None:
     map = MapScene(
         Path("test"),
         MockCharacterDrawing(),
+        "",
         moves=[
             Move("to", "from", lambda _, __: Scene()),
             Move("", "", lambda _, __: Scene()),

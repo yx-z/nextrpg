@@ -26,14 +26,6 @@ from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 
 
-def _init_player(self: "MapScene") -> CharacterOnScreen:
-    return self._init_character(
-        self.initial_player_drawing,
-        self.player_coordinate_object or config().map.player,
-        is_player=True,
-    )
-
-
 class MapScene(Model, Scene):
     """
     A scene implementation that represents a game map loaded from Tiled TMX.
@@ -45,6 +37,12 @@ class MapScene(Model, Scene):
         `tmx_file`: Path to the Tiled TMX file to load.
 
         `player_drawing`: Character drawing representing the player.
+
+        `player_coordinate_object`: Name of the object to use as the player.
+            Default to `None` to use the `config().map.player`.
+
+        `moves`: List of move objects to trigger when the player enters a new
+            map.
     """
 
     tmx_file: Path
@@ -55,7 +53,13 @@ class MapScene(Model, Scene):
     _map_helper: MapHelper = internal_field(
         lambda self: MapHelper(self.tmx_file)
     )
-    _player: CharacterOnScreen = internal_field(_init_player)
+    _player: CharacterOnScreen = internal_field(
+        lambda self: self._init_character(
+            self.initial_player_drawing,
+            self.player_coordinate_object or config().map.player,
+            is_player=True,
+        )
+    )
 
     @cached_property
     @override
