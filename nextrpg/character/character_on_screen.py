@@ -57,6 +57,7 @@ class CharacterOnScreen(Model):
     coordinate: Coordinate
     speed: Pixel
     collisions: list[Polygon]
+    is_player: bool
     _: KW_ONLY = field()
     _movement_keys: frozenset[KeyboardKey] = internal_field(frozenset)
 
@@ -197,6 +198,9 @@ def _key_to_dir(current_keys: frozenset[KeyboardKey]) -> Direction | None:
 
 @CharacterOnScreen.event.register
 def _on_key(self, e: KeyPressDown | KeyPressUp) -> CharacterOnScreen:
+    if not self.is_player:
+        return self
+
     updated_keys = self._updated_movement_key(e)
     return replace(
         self,

@@ -133,9 +133,12 @@ class TileMapProperties(NamedTuple):
 
     Attributes:
         `speed`: Property name for defining character movement speed.
+
+        `direction`: Property name for defining character initial direction.
     """
 
     speed: str = "speed"
+    direction: str = "direction"
 
 
 class TileMapConfig(NamedTuple):
@@ -213,7 +216,7 @@ class RpgMakerCharacterDrawingConfig(NamedTuple):
     """
 
     animate_on_idle: bool = False
-    frame_duration: Millisecond = 200
+    frame_duration: Millisecond = 150
     direction: Direction = Direction.DOWN
 
 

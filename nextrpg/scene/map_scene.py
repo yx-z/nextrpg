@@ -26,18 +26,27 @@ from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 
 
-def _init_player(self: MapScene) -> CharacterOnScreen:
-    player = self._map_helper.get_object(
-        self.player_coordinate_object or config().map.player
-    )
-    speed = player.properties.get(
-        config().map.properties.speed, config().character.speed
+def _init_character(
+    self: MapScene,
+    character_drawing: CharacterDrawing,
+    object_name: str,
+    is_player: bool,
+) -> CharacterOnScreen:
+    character = self._map_helper.get_object(object_name)
+    properties = character.properties
+    property_names = config().map.properties
+    speed = properties.get(property_names.speed, config().character.speed)
+    drawing = (
+        character_drawing.turn(direction)
+        if (direction := properties.get(property_names.direction))
+        else character_drawing
     )
     return CharacterOnScreen(
-        self.initial_player_drawing,
-        Coordinate(player.x, player.y),
+        drawing,
+        Coordinate(character.x, character.y),
         speed,
         self._map_helper.collisions,
+        is_player,
     )
 
 
@@ -62,7 +71,14 @@ class MapScene(Model, Scene):
     _map_helper: MapHelper = internal_field(
         lambda self: MapHelper(self.tmx_file)
     )
-    _player: CharacterOnScreen = internal_field(_init_player)
+    _player: CharacterOnScreen = internal_field(
+        lambda self: _init_character(
+            self,
+            self.initial_player_drawing,
+            self.player_coordinate_object or config().map.player,
+            is_player=True,
+        )
+    )
 
     @cached_property
     @override
