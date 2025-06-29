@@ -368,18 +368,17 @@ class Config(NamedTuple):
 _cfg: Config | None = None
 
 
-def set_config(cfg: Config) -> Config:
+def set_config(cfg: Config):
     """Sets the global configuration instance.
 
     Args:
         `cfg`: The `Config` instance to use as the current configuration.
 
     Returns:
-        `Config`: The current `Config` instance after being set.
+        `None`
     """
     global _cfg
     _cfg = cfg
-    return _cfg
 
 
 def config() -> Config:
