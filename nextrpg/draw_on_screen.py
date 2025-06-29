@@ -3,11 +3,12 @@ Drawable on screen.
 """
 
 from collections import namedtuple
+from dataclasses import dataclass
 from functools import cached_property
 from itertools import product
 from math import ceil, sqrt
 from pathlib import Path
-from typing import Final, Protocol, override
+from typing import Protocol, override
 
 from pygame import Mask, SRCALPHA, Surface
 from pygame.draw import polygon
@@ -96,6 +97,7 @@ class Coordinate(namedtuple("Coordinate", "left top")):
         return f"({self.left:.1f}, {self.top:.1f})"
 
 
+@dataclass
 class Drawing:
     """
     Represents a drawable element and provides methods for accessing its size
@@ -111,12 +113,7 @@ class Drawing:
             or a `pygame.Surface` object.
     """
 
-    def __init__(self, resource: Path | Surface) -> None:
-        self._surface: Final[Surface] = (
-            resource
-            if isinstance(resource, Surface)
-            else load(resource).convert_alpha()
-        )
+    resource: Path | Surface
 
     @property
     def width(self) -> Pixel:
@@ -179,15 +176,6 @@ class Drawing:
         width, height = size
         return Drawing(self._surface.subsurface((left, top, width, height)))
 
-    @cached_property
-    def _debug_surface(self) -> Surface | None:
-        if not (debug := config().debug):
-            return None
-        surface = Surface(self.size, SRCALPHA)
-        surface.fill(debug.drawing_background_color)
-        surface.blit(self._surface, (0, 0))
-        return surface
-
     def set_alpha(self, alpha: Alpha) -> Drawing:
         """
         Creates a new `Drawing` with the specified alpha value.
@@ -201,6 +189,23 @@ class Drawing:
         surface = self._surface.copy()
         surface.set_alpha(alpha)
         return Drawing(surface)
+
+    @cached_property
+    def _debug_surface(self) -> Surface | None:
+        if not (debug := config().debug):
+            return None
+        surface = Surface(self.size, SRCALPHA)
+        surface.fill(debug.drawing_background_color)
+        surface.blit(self._surface, (0, 0))
+        return surface
+
+    @cached_property
+    def _surface(self) -> Surface:
+        return (
+            self.resource
+            if isinstance(self.resource, Surface)
+            else load(self.resource).convert_alpha()
+        )
 
 
 class DrawOnScreen(namedtuple("DrawOnScreen", "top_left drawing")):
@@ -375,6 +380,7 @@ class Polygon(Protocol):
         return False
 
 
+@dataclass
 class GenericPolygon(Polygon):
     """
     A collection of points that define a closed polygon.
@@ -384,8 +390,7 @@ class GenericPolygon(Polygon):
             bounding the polygon.
     """
 
-    def __init__(self, points: tuple[Coordinate, ...]) -> None:
-        self.points: Final[tuple[Coordinate, ...]] = points
+    points: tuple[Coordinate, ...]
 
 
 class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):

@@ -2,8 +2,9 @@
 Typed events initiated from `pygame.Event`.
 """
 
+from dataclasses import dataclass
 from enum import Enum, auto
-from typing import Final
+from functools import cached_property
 
 from pygame.event import Event
 from pygame.locals import KEYDOWN, KEYUP, QUIT, VIDEORESIZE
@@ -12,6 +13,7 @@ from nextrpg.config import KeyCode, config
 from nextrpg.draw_on_screen import Size
 
 
+@dataclass
 class PygameEvent:
     """
     Base class for all pygame events.
@@ -20,8 +22,7 @@ class PygameEvent:
         `event`: The pygame event object to wrap
     """
 
-    def __init__(self, event: Event) -> None:
-        self.event: Final[Event] = event
+    event: Event
 
 
 class Quit(PygameEvent):
@@ -38,9 +39,9 @@ class GuiResize(PygameEvent):
         `size`: The new size of the window.
     """
 
-    def __init__(self, event: Event) -> None:
-        super().__init__(event)
-        self.size: Final[Size] = Size(event.w, event.h)
+    @cached_property
+    def size(self) -> Size:
+        return Size(self.event.w, self.event.h)
 
 
 class KeyboardKey(Enum):
@@ -87,11 +88,9 @@ class KeyboardKey(Enum):
 
 
 class _KeyPressEvent(PygameEvent):
-    def __init__(self, event: Event) -> None:
-        super().__init__(event)
-        self.key: Final[KeyboardKey | KeyCode] = KeyboardKey.from_pygame(
-            event.key
-        )
+    @cached_property
+    def key(self) -> KeyboardKey | KeyCode:
+        return KeyboardKey.from_pygame(self.event.key)
 
 
 class KeyPressDown(_KeyPressEvent):

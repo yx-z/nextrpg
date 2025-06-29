@@ -19,11 +19,11 @@ def test_map_scene(mocker: MockerFixture) -> None:
     helper = MagicMock()
     helper.background = []
     helper.foreground = [
-        {
+        [
             TileBottomAndDraw(
                 10, DrawOnScreen(Coordinate(1, 2), Drawing(MockSurface()))
             )
-        }
+        ]
     ]
     helper.above_character = []
     helper.map_size = (100, 200)
@@ -40,11 +40,11 @@ def test_move_to_scene(mocker: MockerFixture) -> None:
     helper = MagicMock()
     helper.background = []
     helper.foreground = [
-        {
+        [
             TileBottomAndDraw(
                 10, DrawOnScreen(Coordinate(1, 2), Drawing(MockSurface()))
             )
-        }
+        ]
     ]
     helper.above_character = []
     helper.map_size = (100, 200)

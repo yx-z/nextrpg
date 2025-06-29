@@ -284,8 +284,23 @@ class TransitionConfig(NamedTuple):
 
 
 class TextConfig(NamedTuple):
-    font: Font = Font(None, 36, Rgba(255, 255, 255, 255))
+    """
+    Configuration class for text rendering.
+
+    Arguments:
+        `font`: The font to use for rendering text.
+
+        `color`: The color to use for rendering text.
+
+        `margin`: The margin to use for rendering text.
+
+        `antialias`: Whether to use antialiasing for rendering text.
+    """
+
+    font: Font = Font(36)
+    color: Rgba = Rgba(255, 255, 255, 255)
     margin: Pixel = 10
+    antialias: bool = True
 
 
 class Config(NamedTuple):
@@ -313,6 +328,12 @@ class Config(NamedTuple):
 
         `key_mapping`: The configuration for keyboard controls.
             Used by `nextrpg.event.pygame_event` for input handling.
+
+        `resource`: The configuration for resource loading.
+
+        `transition`: The configuration for transition scenes.
+
+        `text`: The configuration for text rendering.
 
         `debug`: The configuration for debugging features.
             Used throughout the codebase when debug rendering is enabled.

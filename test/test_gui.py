@@ -1,11 +1,12 @@
 from pygame import Event, KEYDOWN, K_F1, K_LEFT, VIDEORESIZE
 from pytest_mock import MockerFixture
 
-from nextrpg.config import Config, GuiConfig, GuiMode, ResizeMode
+from nextrpg.config import Config, DebugConfig, GuiConfig, GuiMode, ResizeMode
 from nextrpg.core import Size
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
 from nextrpg.event.pygame_event import GuiResize, KeyPressDown, KeyPressUp
 from nextrpg.gui import Gui, _gui_flag
+from nextrpg.logger import clear_debug_logs, debug_log
 from test.util import MockSurface, override_config
 
 
@@ -47,6 +48,12 @@ def test_gui(mocker: MockerFixture) -> None:
         gui.event(KeyPressDown(Event(KEYDOWN, key=K_F1)))._gui_mode
         is GuiMode.FULL_SCREEN
     )
+
+    debug_log("a")
+    with override_config(Config(debug=DebugConfig())):
+        gui._draw_debug_log()
+        gui._screen.blits.assert_called()
+    clear_debug_logs()
 
 
 @override_config(Config(GuiConfig(allow_window_resize=False)))

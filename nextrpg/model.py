@@ -75,10 +75,11 @@ class Model(metaclass=_Meta):
         object.__setattr__(self, f.name, value)
 
 
-def _key[**P](*args: P.args, **kwargs: P.kwargs) -> tuple:
+def _key(*args: Any, **kwargs: Any) -> tuple:
     return args, frozenset(kwargs.items())
 
 
+@dataclass
 class cached[T, K, **P]:
     """
     Class decorator to `T` that caches instances of `T` by a certain size
@@ -92,11 +93,8 @@ class cached[T, K, **P]:
             args and kwargs.
     """
 
-    def __init__(
-        self, size_fun: Callable[[], int], key_fun: Callable[P, K | None] = _key
-    ) -> None:
-        self.size_fun = size_fun
-        self.key_fun = key_fun
+    size_fun: Callable[[], int]
+    key_fun: Callable[P, K | None] = _key
 
     def __call__(self, cls: type[T]) -> type[T]:
         cls._instances = OrderedDict[K, T]()

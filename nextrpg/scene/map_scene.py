@@ -128,7 +128,7 @@ class MapScene(Model, Scene):
             character.visible_rectangle.bottom, character
         )
         with_character = sorted(
-            foregrounds[self._player_layer] | {player}, key=lambda t: t.bottom
+            foregrounds[self._player_layer] + [player], key=lambda t: t.bottom
         )
         layers = (
             foregrounds[: self._player_layer]
@@ -144,7 +144,7 @@ class MapScene(Model, Scene):
             (i for i, layer in reversed_layers if self._above_player(layer)), 0
         )
 
-    def _above_player(self, layer: set[TileBottomAndDraw]) -> bool:
+    def _above_player(self, layer: list[TileBottomAndDraw]) -> bool:
         player = self._player.character_and_visuals.character.visible_rectangle
         return any(
             player.collide(draw.visible_rectangle) and bottom < player.bottom

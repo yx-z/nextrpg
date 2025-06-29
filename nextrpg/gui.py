@@ -21,7 +21,7 @@ from nextrpg.event.pygame_event import (
     KeyboardKey,
     PygameEvent,
 )
-from nextrpg.logger import get_debug_logs, reset_debug_logs
+from nextrpg.logger import clear_debug_logs, get_debug_logs
 from nextrpg.model import Model, internal_field
 from nextrpg.text import Text
 
@@ -91,7 +91,7 @@ class Gui(Model):
                     get_debug_logs(), Coordinate(0, 0)
                 ).draw_on_screens
             )
-        reset_debug_logs()
+        clear_debug_logs()
 
     def _scale(self, draws: list[DrawOnScreen]) -> DrawOnScreen:
         screen = Surface(config().gui.size)

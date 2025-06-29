@@ -2,9 +2,10 @@
 Map helper class for loading the TMX tiles.
 """
 
+from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
-from typing import Final, NamedTuple
+from typing import NamedTuple
 
 from pygame import Surface
 from pytmx import (
@@ -81,13 +82,13 @@ def get_polygon(obj: TiledObject) -> Polygon:
 
 
 @cached(lambda: config().resource.map_cache_size)
+@dataclass
 class MapHelper:
     """
     Tiled tmx map helper class for loading the tiles.
     """
 
-    def __init__(self, tmx_file: Path) -> None:
-        self._tmx_file: Final[Path] = tmx_file
+    tmx_file: Path
 
     @cached_property
     def map_size(self) -> Size:
@@ -116,7 +117,7 @@ class MapHelper:
         return self._draw_layers(config().map.background)
 
     @cached_property
-    def foreground(self) -> list[set[TileBottomAndDraw]]:
+    def foreground(self) -> list[list[TileBottomAndDraw]]:
         """
         The list of foreground drawings with bottom pixel info.
 
@@ -127,7 +128,7 @@ class MapHelper:
         shall obstruct previous tiles.
 
         Returns:
-            `list[set[TileBottomAndDraw]]`: The list of foreground drawings.
+            `list[list[TileBottomAndDraw]]`: The list of foreground drawings.
         """
         return [
             self._bottom_and_draw(layer)
@@ -254,18 +255,20 @@ class MapHelper:
             for draw in self._draw(layer).values()
         ]
 
-    def _bottom_and_draw(self, layer: TiledTileLayer) -> set[TileBottomAndDraw]:
+    def _bottom_and_draw(
+        self, layer: TiledTileLayer
+    ) -> list[TileBottomAndDraw]:
         coord_and_draws = self._draw(layer)
         coord_to_bottom = {
             coord: draw.visible_rectangle.bottom
             for coord, draw in coord_and_draws.items()
         }
-        return {
+        return [
             TileBottomAndDraw(
                 self._bottom(layer, coord, draw, coord_to_bottom), draw
             )
             for coord, draw in coord_and_draws.items()
-        }
+        ]
 
     @cached_property
     def _tile_size(self) -> Size:
@@ -330,7 +333,7 @@ class MapHelper:
         x, y = coord
         return {
             c
-            for dx, dy in {(0, 1), (1, 0), (0, -1), (-1, 0)}
+            for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]
             if self._class(layer, c := _TileCoordinate(x + dx, y + dy)) == cls
         }
 
@@ -347,4 +350,4 @@ class MapHelper:
 
     @cached_property
     def _tmx(self) -> TiledMap:
-        return load_pygame(self._tmx_file)
+        return load_pygame(self.tmx_file)

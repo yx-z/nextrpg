@@ -3,9 +3,14 @@ Core types referenced across `nextrpg`.
 """
 
 from collections import namedtuple
+from dataclasses import dataclass
 from enum import Enum, auto
+from functools import cached_property
 from math import ceil
 from typing import NamedTuple
+
+import pygame
+from pygame.font import SysFont
 
 type Alpha = int
 """
@@ -137,7 +142,20 @@ class Size(namedtuple("Size", "width height")):
         return Size(ceil(self.width * scaling), ceil(self.height * scaling))
 
 
-class Font(NamedTuple):
-    name: str | None
+@dataclass
+class Font:
+    """
+    Font for text in game.
+
+    Arguments:
+        `size`: Font size in pixels.
+
+        `name`: Font name.
+    """
+
     size: int
-    color: Rgba
+    name: str | None = None
+
+    @cached_property
+    def pygame(self) -> pygame.Font:
+        return SysFont(self.name, self.size)
