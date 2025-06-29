@@ -18,13 +18,10 @@ jobs:
         with:
           python-version: '3.14.0-beta.3'
 
-      - name: Setup SDL2
-        uses: libsdl-org/setup-sdl@v1
-        with:
-          sdl: latest
-          sdl-image: latest
-          sdl-mixer: latest
-          sdl-ttf: latest
+      - name: Install SDL2_image dependency
+        run: |
+          sudo apt update
+          sudo apt install -y libsdl2-image-dev
 
       - name: Install dependencies
         run: |
