@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 from pygame.event import Event
 from pygame.locals import KEYDOWN, KEYUP, K_RIGHT, K_SPACE, QUIT
 
@@ -22,6 +24,8 @@ def test_character_on_screen():
         10, 20
     )
     right = KeyPressDown(Event(KEYDOWN, key=K_RIGHT))
+    npc = replace(character, is_player=False)
+    assert npc.event(right) is npc
     assert character.event(right).step(1).coordinate == Coordinate(11, 20)
     assert (
         character.event(right)
@@ -44,5 +48,5 @@ def test_character_on_screen():
             Coordinate(10, 20),
             speed=1,
             collisions=[Rectangle(Coordinate(12, 20), Size(1, 1))],
-            is_player=True
+            is_player=True,
         )._collision_visuals
