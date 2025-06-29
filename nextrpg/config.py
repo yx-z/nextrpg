@@ -371,7 +371,7 @@ _cfg: Config | None = None
 def set_config(cfg: Config):
     """Sets the global configuration instance.
 
-    Args:
+    Arguments:
         `cfg`: The `Config` instance to use as the current configuration.
 
     Returns:
