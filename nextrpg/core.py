@@ -85,6 +85,11 @@ Number of pixel on screen.
 `float` is allowed given Pygame supports passing `float` as `Rect`.
 """
 
+type PixelPerMillisecond = int | float
+"""
+Used as a unit for speed.
+"""
+
 
 class DirectionalOffset(NamedTuple):
     """

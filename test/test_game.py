@@ -6,10 +6,11 @@ from pygame.event import Event
 from pygame.locals import KEYDOWN, K_LEFT, QUIT, VIDEORESIZE
 from pytest_mock import MockerFixture
 
-from nextrpg.game import Game, _GameLoop
+from nextrpg.game import Game
 
 
 def test_game(mocker: MockerFixture) -> None:
+    mocker.patch("nextrpg.game.Gui.__post_init__")
     mocker.patch("nextrpg.game.debug_log")
     mocker.patch(
         "pygame.event.get",
@@ -23,7 +24,6 @@ def test_game(mocker: MockerFixture) -> None:
     clock = MagicMock()
     clock.get_fps = MagicMock(return_value=60)
     gui = Mock()
-    _GameLoop.__post_init__ = lambda _: None
     game = Game(lambda: scene)
     game._loop = replace(game._loop, _scene=scene, _clock=clock, _gui=gui)
     game.start()
@@ -33,7 +33,7 @@ def test_game(mocker: MockerFixture) -> None:
     gui.draw.assert_called_once()
 
     sleep = AsyncMock()
-    game._loop = replace(game._loop, _is_running=True)
+    game._loop = replace(game._loop, is_running=True)
     mocker.patch("nextrpg.game.sleep", sleep)
     run(game.start_async())
     sleep.assert_called_once_with(0)

@@ -9,7 +9,15 @@ from typing import NamedTuple
 
 from pygame.locals import K_DOWN, K_F1, K_LEFT, K_RIGHT, K_SPACE, K_UP
 
-from nextrpg.core import Direction, Font, Millisecond, Pixel, Rgba, Size
+from nextrpg.core import (
+    Direction,
+    Font,
+    Millisecond,
+    Pixel,
+    PixelPerMillisecond,
+    Rgba,
+    Size,
+)
 
 
 class DebugConfig(NamedTuple):
@@ -185,7 +193,7 @@ class CharacterConfig(NamedTuple):
             Default to all directions (up, left, right, down, and diagonal).
     """
 
-    speed: Pixel = 0.25
+    speed: PixelPerMillisecond = 0.25
     directions: frozenset[Direction] = frozenset(Direction)
 
 

@@ -3,7 +3,7 @@ Start the game window and game loop.
 """
 
 from asyncio import sleep
-from dataclasses import KW_ONLY, field, replace
+from dataclasses import field, replace
 from functools import reduce, singledispatchmethod
 from typing import Callable
 
@@ -52,15 +52,10 @@ class Game:
 
 class _GameLoop(Model):
     entry_scene: Callable[[], Scene]
-    _: KW_ONLY = field()
-    _is_running: bool = internal_field(True)
-    _clock: Clock = internal_field(Clock)
-    _gui: Gui = internal_field(Gui)
+    is_running: bool = True
+    _clock: Clock = field(default_factory=Clock)
+    _gui: Gui = field(default_factory=Gui)
     _scene: Scene = internal_field(lambda self: self.entry_scene())
-
-    @property
-    def is_running(self) -> bool:
-        return self._is_running
 
     @singledispatchmethod
     def event(self, e: PygameEvent) -> _GameLoop:
@@ -81,4 +76,4 @@ class _GameLoop(Model):
 
 @_GameLoop.event.register
 def _quit(self, e: Quit) -> _GameLoop:
-    return replace(self, _scene=self._scene.event(e), _is_running=False)
+    return replace(self, _scene=self._scene.event(e), is_running=False)

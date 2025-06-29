@@ -44,7 +44,7 @@ class Gui(Model):
 
     window: Size = field(default_factory=lambda: config().gui.size)
     _: KW_ONLY = field()
-    _gui_mode: GuiMode = internal_field(lambda: config().gui.gui_mode)
+    _gui_mode: GuiMode = field(default_factory=lambda: config().gui.gui_mode)
     _screen: Surface = internal_field(_init_screen)
 
     @singledispatchmethod

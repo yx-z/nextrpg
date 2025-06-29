@@ -1,4 +1,4 @@
-from dataclasses import KW_ONLY, field, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import override
 
@@ -9,7 +9,8 @@ from nextrpg.model import Model, internal_field
 from nextrpg.scene.scene import Scene
 
 
-class TransitionScene(Model, Scene):
+@dataclass
+class TransitionScene( Scene):
     """
     Transition from one scene to another.
 
@@ -24,8 +25,7 @@ class TransitionScene(Model, Scene):
     duration: Millisecond = field(
         default_factory=lambda: config().transition.transition_duration
     )
-    _: KW_ONLY = field()
-    _elapsed: Millisecond = internal_field(0)
+    _elapsed: Millisecond = 0
 
     @cached_property
     @override

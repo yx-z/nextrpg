@@ -5,7 +5,7 @@ from unittest.mock import MagicMock
 from pygame import Event, QUIT
 from pytest_mock import MockerFixture
 
-from nextrpg.character.character_on_screen import CharacterOnScreen
+from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import Quit
@@ -64,9 +64,7 @@ def test_move_to_scene(mocker: MockerFixture) -> None:
         ],
     )
     assert map._move_to_scene(
-        CharacterOnScreen(
-            MockCharacterDrawing(), Coordinate(10, 20), 0, [], is_player=True
-        )
+        PlayerOnScreen(MockCharacterDrawing(), Coordinate(10, 20), 0, [])
     )
 
 

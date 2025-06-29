@@ -21,19 +21,19 @@ def internal_field(init: Callable[[Any], Any] | Callable[[], Any] | Any) -> Any:
     Returns:
         `Any`: Internal field with the given initialization function.
     """
-    return field(repr=False, default=_Init(init))
+    return field(repr=False, default_factory=lambda: _Init(init))
 
 
-@dataclass_transform(frozen_default=True)
+@dataclass_transform()
 class _Meta[T](ABCMeta):
     def __new__(cls, *args: Any, **kwargs: Any) -> type:
-        return dataclass(frozen=True)(super().__new__(cls, *args, **kwargs))
+        return dataclass(super().__new__(cls, *args, **kwargs))
 
 
 class Model(metaclass=_Meta):
     """
     Base class to inherit from for models.
-    Inherited model classes are an immutable dataclass with `internal_fields`.
+    Inherited model classes are dataclass with `internal_fields`.
 
     Example usage:
     ```python
@@ -118,7 +118,8 @@ class cached[T, K, **P]:
         return cls
 
 
-class _Init(Model):
+@dataclass
+class _Init:
     init: Callable[[Any], Any] | Callable[[], Any] | Any
 
 

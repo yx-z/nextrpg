@@ -13,7 +13,7 @@ in non-RPG Maker framework violates the license of RPG Maker,
 even if you own a copy of RPG Maker.
 """
 
-from dataclasses import KW_ONLY, field, replace
+from dataclasses import field, replace
 from enum import IntEnum
 from typing import NamedTuple, override
 
@@ -162,7 +162,6 @@ class RpgMakerCharacterDrawing(Model, CharacterDrawing):
     frame_duration: Millisecond = field(
         default_factory=lambda: config().rpg_maker_character.frame_duration
     )
-    _: KW_ONLY = field()
     _frames: dict[Direction, CyclicFrames] = internal_field(_init_frames)
 
     @property

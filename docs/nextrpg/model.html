@@ -100,19 +100,19 @@
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="sd">    Returns:</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="sd">        `Any`: Internal field with the given initialization function.</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>    <span class="k">return</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_Init</span><span class="p">(</span><span class="n">init</span><span class="p">))</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>    <span class="k">return</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_Init</span><span class="p">(</span><span class="n">init</span><span class="p">))</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="nd">@dataclass_transform</span><span class="p">(</span><span class="n">frozen_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="nd">@dataclass_transform</span><span class="p">()</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_Meta</span><span class="p">[</span><span class="n">T</span><span class="p">](</span><span class="n">ABCMeta</span><span class="p">):</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>        <span class="k">return</span> <span class="n">dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>        <span class="k">return</span> <span class="n">dataclass</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>
 </span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>
 </span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">_Meta</span><span class="p">):</span>
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">    Base class to inherit from for models.</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">    Inherited model classes are an immutable dataclass with `internal_fields`.</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">    Inherited model classes are dataclass with `internal_fields`.</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="sd">    Example usage:</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="sd">    ```python</span>
@@ -197,11 +197,12 @@
 </span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>        <span class="k">return</span> <span class="bp">cls</span>
 </span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
 </span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_Init</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>    <span class="n">init</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">Any</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="nd">@dataclass</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_Init</span><span class="p">:</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>    <span class="n">init</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="n">Any</span>
 </span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="n">_INTERNAL_FIELDS_INITIALIZED</span> <span class="o">=</span> <span class="s2">&quot;_INTERNAL_FIELDS_INITIALIZED&quot;</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="n">_INTERNAL_FIELDS_INITIALIZED</span> <span class="o">=</span> <span class="s2">&quot;_INTERNAL_FIELDS_INITIALIZED&quot;</span>
 </span></pre></div>
 
 
@@ -229,7 +230,7 @@
 </span><span id="internal_field-22"><a href="#internal_field-22"><span class="linenos">22</span></a><span class="sd">    Returns:</span>
 </span><span id="internal_field-23"><a href="#internal_field-23"><span class="linenos">23</span></a><span class="sd">        `Any`: Internal field with the given initialization function.</span>
 </span><span id="internal_field-24"><a href="#internal_field-24"><span class="linenos">24</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="internal_field-25"><a href="#internal_field-25"><span class="linenos">25</span></a>    <span class="k">return</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_Init</span><span class="p">(</span><span class="n">init</span><span class="p">))</span>
+</span><span id="internal_field-25"><a href="#internal_field-25"><span class="linenos">25</span></a>    <span class="k">return</span> <span class="n">field</span><span class="p">(</span><span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_Init</span><span class="p">(</span><span class="n">init</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -266,7 +267,7 @@ or a constant value.</li>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Model-34"><a href="#Model-34"><span class="linenos">34</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">_Meta</span><span class="p">):</span>
 </span><span id="Model-35"><a href="#Model-35"><span class="linenos">35</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Model-36"><a href="#Model-36"><span class="linenos">36</span></a><span class="sd">    Base class to inherit from for models.</span>
-</span><span id="Model-37"><a href="#Model-37"><span class="linenos">37</span></a><span class="sd">    Inherited model classes are an immutable dataclass with `internal_fields`.</span>
+</span><span id="Model-37"><a href="#Model-37"><span class="linenos">37</span></a><span class="sd">    Inherited model classes are dataclass with `internal_fields`.</span>
 </span><span id="Model-38"><a href="#Model-38"><span class="linenos">38</span></a>
 </span><span id="Model-39"><a href="#Model-39"><span class="linenos">39</span></a><span class="sd">    Example usage:</span>
 </span><span id="Model-40"><a href="#Model-40"><span class="linenos">40</span></a><span class="sd">    ```python</span>
@@ -310,7 +311,7 @@ or a constant value.</li>
 
 
             <div class="docstring"><p>Base class to inherit from for models.
-Inherited model classes are an immutable dataclass with <code>internal_fields</code>.</p>
+Inherited model classes are dataclass with <code>internal_fields</code>.</p>
 
 <p>Example usage:</p>
 

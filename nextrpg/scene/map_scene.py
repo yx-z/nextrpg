@@ -9,6 +9,8 @@ from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
+from nextrpg.character.npc_on_screen import NpcOnScreen
+from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
 from nextrpg.core import Millisecond, Pixel
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
@@ -53,7 +55,7 @@ class MapScene(Model, Scene):
     _map_helper: MapHelper = internal_field(
         lambda self: MapHelper(self.tmx_file)
     )
-    _player: CharacterOnScreen = internal_field(
+    _player: PlayerOnScreen = internal_field(
         lambda self: self._init_character(
             self.initial_player_drawing,
             self.player_coordinate_object or config().map.player,
@@ -76,10 +78,9 @@ class MapScene(Model, Scene):
         """
         draws = (
             self._map_helper.background
-            + self._player.character_and_visuals.below_character_visuals
             + self._foreground_and_character
             + self._map_helper.above_character
-            + self._player.character_and_visuals.above_character_visuals
+            + self._collision_visuals
         )
         return [d + self._player_offset for d in draws]
 
@@ -120,7 +121,7 @@ class MapScene(Model, Scene):
     @cached_property
     def _foreground_and_character(self) -> list[DrawOnScreen]:
         foregrounds = self._map_helper.foreground
-        character = self._player.character_and_visuals.character
+        character = self._player.draw_on_screen
         player = TileBottomAndDraw(
             character.visible_rectangle.bottom, character
         )
@@ -142,7 +143,7 @@ class MapScene(Model, Scene):
         )
 
     def _above_player(self, layer: list[TileBottomAndDraw]) -> bool:
-        player = self._player.character_and_visuals.character.visible_rectangle
+        player = self._player.draw_on_screen.visible_rectangle
         return any(
             player.collide(draw.visible_rectangle) and bottom < player.bottom
             for bottom, draw in layer
@@ -150,7 +151,7 @@ class MapScene(Model, Scene):
 
     @cached_property
     def _player_offset(self) -> Coordinate:
-        player = self._player.character_and_visuals.character.rectangle.center
+        player = self._player.draw_on_screen.rectangle.center
         gui_width, gui_height = config().gui.size
         map_width, map_height = self._map_helper.map_size
         left_offset = _offset(player.left, gui_width, map_width)
@@ -158,7 +159,7 @@ class MapScene(Model, Scene):
         return Coordinate(left_offset, top_offset)
 
     def _move_to_scene(self, player: CharacterOnScreen) -> Scene | None:
-        player_rect = player.character_and_visuals.character.rectangle
+        player_rect = player.draw_on_screen.rectangle
         for move in self.moves:
             move_object = self._map_helper.get_object(move.trigger_object)
             if player_rect.collide(get_polygon(move_object)):
@@ -180,13 +181,22 @@ class MapScene(Model, Scene):
             if (direction := properties.get(property_names.direction))
             else character_drawing
         )
-        return CharacterOnScreen(
+        cls = PlayerOnScreen if is_player else NpcOnScreen
+        return cls(
             drawing,
             Coordinate(character.x, character.y),
             speed,
             self._map_helper.collisions,
-            is_player,
         )
+
+    @cached_property
+    def _collision_visuals(self) -> list[DrawOnScreen]:
+        if not (debug := config().debug):
+            return []
+        return [
+            c.fill(debug.collision_rectangle_color)
+            for c in self._map_helper.collisions
+        ]
 
 
 def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:

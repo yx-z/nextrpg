@@ -91,6 +91,9 @@
                     <a class="variable" href="#Pixel">Pixel</a>
             </li>
             <li>
+                    <a class="variable" href="#PixelPerMillisecond">PixelPerMillisecond</a>
+            </li>
+            <li>
                     <a class="class" href="#DirectionalOffset">DirectionalOffset</a>
                             <ul class="memberlist">
                         <li>
@@ -251,80 +254,85 @@
 </span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">`float` is allowed given Pygame supports passing `float` as `Rect`.</span>
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DirectionalOffset</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">    Represents a directional offset for movement calculations.</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="nb">type</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">Used as a unit for speed.</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="sd">    This class combines a direction (one of eight possible directions) with</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">    an offset value to define movement in 2D space. The vector can be used</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">    with coordinates to calculate new positions.</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">        `direction`: The direction of the vector, defined by `Direction` enum.</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">            Supports both orthogonal (`UP`, `DOWN`, `LEFT`, `RIGHT`)</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">            and diagonal (`UP_LEFT`, `UP_RIGHT`, `DOWN_LEFT`, `DOWN_RIGHT`).</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DirectionalOffset</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">    Represents a directional offset for movement calculations.</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">    This class combines a direction (one of eight possible directions) with</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">    an offset value to define movement in 2D space. The vector can be used</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">    with coordinates to calculate new positions.</span>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">        `offset`: The length of movement in pixels.</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">            This value will be decomposed into x, y pixels upon diagnoal moves.</span>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>    <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>    <span class="n">offset</span><span class="p">:</span> <span class="n">Pixel</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Size</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;Size&quot;</span><span class="p">,</span> <span class="s2">&quot;width height&quot;</span><span class="p">)):</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">    Represents the dimensions of a two-dimensional space, such as an image,</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">    with defined width and height.</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">    Attributes:</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">        `direction`: The direction of the vector, defined by `Direction` enum.</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">            Supports both orthogonal (`UP`, `DOWN`, `LEFT`, `RIGHT`)</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">            and diagonal (`UP_LEFT`, `UP_RIGHT`, `DOWN_LEFT`, `DOWN_RIGHT`).</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="sd">        `offset`: The length of movement in pixels.</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="sd">            This value will be decomposed into x, y pixels upon diagnoal moves.</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>    <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="n">offset</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>
 </span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">    This class is immutable and designed to encapsulate the concept of size</span>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">    in pixel measurements.</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="sd">        `width`: The width of the size in pixels.</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">        `height`: The height of the size in pixels.</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">        Args:</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">            `scaling`: A scaling factor by which the width and height will be</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">                multiplied.</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">        Returns:</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">))</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Size</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;Size&quot;</span><span class="p">,</span> <span class="s2">&quot;width height&quot;</span><span class="p">)):</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="sd">    Represents the dimensions of a two-dimensional space, such as an image,</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">    with defined width and height.</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">    This class is immutable and designed to encapsulate the concept of size</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">    in pixel measurements.</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">    Attributes:</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">        `width`: The width of the size in pixels.</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="sd">        `height`: The height of the size in pixels.</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">        Args:</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">            `scaling`: A scaling factor by which the width and height will be</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">                multiplied.</span>
 </span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="nd">@dataclass</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Font</span><span class="p">:</span>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="sd">    Font for text in game.</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">        Returns:</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">))</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
 </span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">        `size`: Font size in pixels.</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">        `name`: Font name.</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Font</span><span class="p">:</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>        <span class="k">return</span> <span class="n">SysFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="nd">@dataclass</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Font</span><span class="p">:</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">    Font for text in game.</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">    Arguments:</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">        `size`: Font size in pixels.</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">        `name`: Font name.</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Font</span><span class="p">:</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>        <span class="k">return</span> <span class="n">SysFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -645,6 +653,20 @@
 
 
                 </section>
+                <section id="PixelPerMillisecond">
+                    <div class="attr variable">
+            <span class="def">type</span> <span class="name">PixelPerMillisecond</span>        =
+<span class="default_value">int | float</span>
+
+        
+    </div>
+    <a class="headerlink" href="#PixelPerMillisecond"></a>
+    
+            <div class="docstring"><p>Used as a unit for speed.</p>
+</div>
+
+
+                </section>
                 <section id="DirectionalOffset">
                             <input id="DirectionalOffset-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
@@ -656,25 +678,25 @@
 
     </div>
     <a class="headerlink" href="#DirectionalOffset"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DirectionalOffset-90"><a href="#DirectionalOffset-90"><span class="linenos"> 90</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DirectionalOffset</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-</span><span id="DirectionalOffset-91"><a href="#DirectionalOffset-91"><span class="linenos"> 91</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="DirectionalOffset-92"><a href="#DirectionalOffset-92"><span class="linenos"> 92</span></a><span class="sd">    Represents a directional offset for movement calculations.</span>
-</span><span id="DirectionalOffset-93"><a href="#DirectionalOffset-93"><span class="linenos"> 93</span></a>
-</span><span id="DirectionalOffset-94"><a href="#DirectionalOffset-94"><span class="linenos"> 94</span></a><span class="sd">    This class combines a direction (one of eight possible directions) with</span>
-</span><span id="DirectionalOffset-95"><a href="#DirectionalOffset-95"><span class="linenos"> 95</span></a><span class="sd">    an offset value to define movement in 2D space. The vector can be used</span>
-</span><span id="DirectionalOffset-96"><a href="#DirectionalOffset-96"><span class="linenos"> 96</span></a><span class="sd">    with coordinates to calculate new positions.</span>
-</span><span id="DirectionalOffset-97"><a href="#DirectionalOffset-97"><span class="linenos"> 97</span></a>
-</span><span id="DirectionalOffset-98"><a href="#DirectionalOffset-98"><span class="linenos"> 98</span></a><span class="sd">    Attributes:</span>
-</span><span id="DirectionalOffset-99"><a href="#DirectionalOffset-99"><span class="linenos"> 99</span></a><span class="sd">        `direction`: The direction of the vector, defined by `Direction` enum.</span>
-</span><span id="DirectionalOffset-100"><a href="#DirectionalOffset-100"><span class="linenos">100</span></a><span class="sd">            Supports both orthogonal (`UP`, `DOWN`, `LEFT`, `RIGHT`)</span>
-</span><span id="DirectionalOffset-101"><a href="#DirectionalOffset-101"><span class="linenos">101</span></a><span class="sd">            and diagonal (`UP_LEFT`, `UP_RIGHT`, `DOWN_LEFT`, `DOWN_RIGHT`).</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DirectionalOffset-95"><a href="#DirectionalOffset-95"><span class="linenos"> 95</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DirectionalOffset</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+</span><span id="DirectionalOffset-96"><a href="#DirectionalOffset-96"><span class="linenos"> 96</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="DirectionalOffset-97"><a href="#DirectionalOffset-97"><span class="linenos"> 97</span></a><span class="sd">    Represents a directional offset for movement calculations.</span>
+</span><span id="DirectionalOffset-98"><a href="#DirectionalOffset-98"><span class="linenos"> 98</span></a>
+</span><span id="DirectionalOffset-99"><a href="#DirectionalOffset-99"><span class="linenos"> 99</span></a><span class="sd">    This class combines a direction (one of eight possible directions) with</span>
+</span><span id="DirectionalOffset-100"><a href="#DirectionalOffset-100"><span class="linenos">100</span></a><span class="sd">    an offset value to define movement in 2D space. The vector can be used</span>
+</span><span id="DirectionalOffset-101"><a href="#DirectionalOffset-101"><span class="linenos">101</span></a><span class="sd">    with coordinates to calculate new positions.</span>
 </span><span id="DirectionalOffset-102"><a href="#DirectionalOffset-102"><span class="linenos">102</span></a>
-</span><span id="DirectionalOffset-103"><a href="#DirectionalOffset-103"><span class="linenos">103</span></a><span class="sd">        `offset`: The length of movement in pixels.</span>
-</span><span id="DirectionalOffset-104"><a href="#DirectionalOffset-104"><span class="linenos">104</span></a><span class="sd">            This value will be decomposed into x, y pixels upon diagnoal moves.</span>
-</span><span id="DirectionalOffset-105"><a href="#DirectionalOffset-105"><span class="linenos">105</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="DirectionalOffset-106"><a href="#DirectionalOffset-106"><span class="linenos">106</span></a>
-</span><span id="DirectionalOffset-107"><a href="#DirectionalOffset-107"><span class="linenos">107</span></a>    <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span>
-</span><span id="DirectionalOffset-108"><a href="#DirectionalOffset-108"><span class="linenos">108</span></a>    <span class="n">offset</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="DirectionalOffset-103"><a href="#DirectionalOffset-103"><span class="linenos">103</span></a><span class="sd">    Attributes:</span>
+</span><span id="DirectionalOffset-104"><a href="#DirectionalOffset-104"><span class="linenos">104</span></a><span class="sd">        `direction`: The direction of the vector, defined by `Direction` enum.</span>
+</span><span id="DirectionalOffset-105"><a href="#DirectionalOffset-105"><span class="linenos">105</span></a><span class="sd">            Supports both orthogonal (`UP`, `DOWN`, `LEFT`, `RIGHT`)</span>
+</span><span id="DirectionalOffset-106"><a href="#DirectionalOffset-106"><span class="linenos">106</span></a><span class="sd">            and diagonal (`UP_LEFT`, `UP_RIGHT`, `DOWN_LEFT`, `DOWN_RIGHT`).</span>
+</span><span id="DirectionalOffset-107"><a href="#DirectionalOffset-107"><span class="linenos">107</span></a>
+</span><span id="DirectionalOffset-108"><a href="#DirectionalOffset-108"><span class="linenos">108</span></a><span class="sd">        `offset`: The length of movement in pixels.</span>
+</span><span id="DirectionalOffset-109"><a href="#DirectionalOffset-109"><span class="linenos">109</span></a><span class="sd">            This value will be decomposed into x, y pixels upon diagnoal moves.</span>
+</span><span id="DirectionalOffset-110"><a href="#DirectionalOffset-110"><span class="linenos">110</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="DirectionalOffset-111"><a href="#DirectionalOffset-111"><span class="linenos">111</span></a>
+</span><span id="DirectionalOffset-112"><a href="#DirectionalOffset-112"><span class="linenos">112</span></a>    <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span>
+</span><span id="DirectionalOffset-113"><a href="#DirectionalOffset-113"><span class="linenos">113</span></a>    <span class="n">offset</span><span class="p">:</span> <span class="n">Pixel</span>
 </span></pre></div>
 
 
@@ -748,39 +770,39 @@ This value will be decomposed into x, y pixels upon diagnoal moves.</li>
 
     </div>
     <a class="headerlink" href="#Size"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Size-111"><a href="#Size-111"><span class="linenos">111</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Size</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;Size&quot;</span><span class="p">,</span> <span class="s2">&quot;width height&quot;</span><span class="p">)):</span>
-</span><span id="Size-112"><a href="#Size-112"><span class="linenos">112</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Size-113"><a href="#Size-113"><span class="linenos">113</span></a><span class="sd">    Represents the dimensions of a two-dimensional space, such as an image,</span>
-</span><span id="Size-114"><a href="#Size-114"><span class="linenos">114</span></a><span class="sd">    with defined width and height.</span>
-</span><span id="Size-115"><a href="#Size-115"><span class="linenos">115</span></a>
-</span><span id="Size-116"><a href="#Size-116"><span class="linenos">116</span></a><span class="sd">    This class is immutable and designed to encapsulate the concept of size</span>
-</span><span id="Size-117"><a href="#Size-117"><span class="linenos">117</span></a><span class="sd">    in pixel measurements.</span>
-</span><span id="Size-118"><a href="#Size-118"><span class="linenos">118</span></a>
-</span><span id="Size-119"><a href="#Size-119"><span class="linenos">119</span></a><span class="sd">    Attributes:</span>
-</span><span id="Size-120"><a href="#Size-120"><span class="linenos">120</span></a><span class="sd">        `width`: The width of the size in pixels.</span>
-</span><span id="Size-121"><a href="#Size-121"><span class="linenos">121</span></a>
-</span><span id="Size-122"><a href="#Size-122"><span class="linenos">122</span></a><span class="sd">        `height`: The height of the size in pixels.</span>
-</span><span id="Size-123"><a href="#Size-123"><span class="linenos">123</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Size-124"><a href="#Size-124"><span class="linenos">124</span></a>
-</span><span id="Size-125"><a href="#Size-125"><span class="linenos">125</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
-</span><span id="Size-126"><a href="#Size-126"><span class="linenos">126</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
-</span><span id="Size-127"><a href="#Size-127"><span class="linenos">127</span></a>
-</span><span id="Size-128"><a href="#Size-128"><span class="linenos">128</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="Size-129"><a href="#Size-129"><span class="linenos">129</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Size-130"><a href="#Size-130"><span class="linenos">130</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
-</span><span id="Size-131"><a href="#Size-131"><span class="linenos">131</span></a>
-</span><span id="Size-132"><a href="#Size-132"><span class="linenos">132</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
-</span><span id="Size-133"><a href="#Size-133"><span class="linenos">133</span></a>
-</span><span id="Size-134"><a href="#Size-134"><span class="linenos">134</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
-</span><span id="Size-135"><a href="#Size-135"><span class="linenos">135</span></a>
-</span><span id="Size-136"><a href="#Size-136"><span class="linenos">136</span></a><span class="sd">        Args:</span>
-</span><span id="Size-137"><a href="#Size-137"><span class="linenos">137</span></a><span class="sd">            `scaling`: A scaling factor by which the width and height will be</span>
-</span><span id="Size-138"><a href="#Size-138"><span class="linenos">138</span></a><span class="sd">                multiplied.</span>
-</span><span id="Size-139"><a href="#Size-139"><span class="linenos">139</span></a>
-</span><span id="Size-140"><a href="#Size-140"><span class="linenos">140</span></a><span class="sd">        Returns:</span>
-</span><span id="Size-141"><a href="#Size-141"><span class="linenos">141</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
-</span><span id="Size-142"><a href="#Size-142"><span class="linenos">142</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Size-143"><a href="#Size-143"><span class="linenos">143</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">))</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Size-116"><a href="#Size-116"><span class="linenos">116</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Size</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;Size&quot;</span><span class="p">,</span> <span class="s2">&quot;width height&quot;</span><span class="p">)):</span>
+</span><span id="Size-117"><a href="#Size-117"><span class="linenos">117</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Size-118"><a href="#Size-118"><span class="linenos">118</span></a><span class="sd">    Represents the dimensions of a two-dimensional space, such as an image,</span>
+</span><span id="Size-119"><a href="#Size-119"><span class="linenos">119</span></a><span class="sd">    with defined width and height.</span>
+</span><span id="Size-120"><a href="#Size-120"><span class="linenos">120</span></a>
+</span><span id="Size-121"><a href="#Size-121"><span class="linenos">121</span></a><span class="sd">    This class is immutable and designed to encapsulate the concept of size</span>
+</span><span id="Size-122"><a href="#Size-122"><span class="linenos">122</span></a><span class="sd">    in pixel measurements.</span>
+</span><span id="Size-123"><a href="#Size-123"><span class="linenos">123</span></a>
+</span><span id="Size-124"><a href="#Size-124"><span class="linenos">124</span></a><span class="sd">    Attributes:</span>
+</span><span id="Size-125"><a href="#Size-125"><span class="linenos">125</span></a><span class="sd">        `width`: The width of the size in pixels.</span>
+</span><span id="Size-126"><a href="#Size-126"><span class="linenos">126</span></a>
+</span><span id="Size-127"><a href="#Size-127"><span class="linenos">127</span></a><span class="sd">        `height`: The height of the size in pixels.</span>
+</span><span id="Size-128"><a href="#Size-128"><span class="linenos">128</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Size-129"><a href="#Size-129"><span class="linenos">129</span></a>
+</span><span id="Size-130"><a href="#Size-130"><span class="linenos">130</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="Size-131"><a href="#Size-131"><span class="linenos">131</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="Size-132"><a href="#Size-132"><span class="linenos">132</span></a>
+</span><span id="Size-133"><a href="#Size-133"><span class="linenos">133</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="Size-134"><a href="#Size-134"><span class="linenos">134</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Size-135"><a href="#Size-135"><span class="linenos">135</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
+</span><span id="Size-136"><a href="#Size-136"><span class="linenos">136</span></a>
+</span><span id="Size-137"><a href="#Size-137"><span class="linenos">137</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
+</span><span id="Size-138"><a href="#Size-138"><span class="linenos">138</span></a>
+</span><span id="Size-139"><a href="#Size-139"><span class="linenos">139</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
+</span><span id="Size-140"><a href="#Size-140"><span class="linenos">140</span></a>
+</span><span id="Size-141"><a href="#Size-141"><span class="linenos">141</span></a><span class="sd">        Args:</span>
+</span><span id="Size-142"><a href="#Size-142"><span class="linenos">142</span></a><span class="sd">            `scaling`: A scaling factor by which the width and height will be</span>
+</span><span id="Size-143"><a href="#Size-143"><span class="linenos">143</span></a><span class="sd">                multiplied.</span>
+</span><span id="Size-144"><a href="#Size-144"><span class="linenos">144</span></a>
+</span><span id="Size-145"><a href="#Size-145"><span class="linenos">145</span></a><span class="sd">        Returns:</span>
+</span><span id="Size-146"><a href="#Size-146"><span class="linenos">146</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
+</span><span id="Size-147"><a href="#Size-147"><span class="linenos">147</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Size-148"><a href="#Size-148"><span class="linenos">148</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -850,22 +872,22 @@ in pixel measurements.</p>
 
     </div>
     <a class="headerlink" href="#Size.scale"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Size.scale-128"><a href="#Size.scale-128"><span class="linenos">128</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="Size.scale-129"><a href="#Size.scale-129"><span class="linenos">129</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Size.scale-130"><a href="#Size.scale-130"><span class="linenos">130</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
-</span><span id="Size.scale-131"><a href="#Size.scale-131"><span class="linenos">131</span></a>
-</span><span id="Size.scale-132"><a href="#Size.scale-132"><span class="linenos">132</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
-</span><span id="Size.scale-133"><a href="#Size.scale-133"><span class="linenos">133</span></a>
-</span><span id="Size.scale-134"><a href="#Size.scale-134"><span class="linenos">134</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
-</span><span id="Size.scale-135"><a href="#Size.scale-135"><span class="linenos">135</span></a>
-</span><span id="Size.scale-136"><a href="#Size.scale-136"><span class="linenos">136</span></a><span class="sd">        Args:</span>
-</span><span id="Size.scale-137"><a href="#Size.scale-137"><span class="linenos">137</span></a><span class="sd">            `scaling`: A scaling factor by which the width and height will be</span>
-</span><span id="Size.scale-138"><a href="#Size.scale-138"><span class="linenos">138</span></a><span class="sd">                multiplied.</span>
-</span><span id="Size.scale-139"><a href="#Size.scale-139"><span class="linenos">139</span></a>
-</span><span id="Size.scale-140"><a href="#Size.scale-140"><span class="linenos">140</span></a><span class="sd">        Returns:</span>
-</span><span id="Size.scale-141"><a href="#Size.scale-141"><span class="linenos">141</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
-</span><span id="Size.scale-142"><a href="#Size.scale-142"><span class="linenos">142</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Size.scale-143"><a href="#Size.scale-143"><span class="linenos">143</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">))</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Size.scale-133"><a href="#Size.scale-133"><span class="linenos">133</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="Size.scale-134"><a href="#Size.scale-134"><span class="linenos">134</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Size.scale-135"><a href="#Size.scale-135"><span class="linenos">135</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
+</span><span id="Size.scale-136"><a href="#Size.scale-136"><span class="linenos">136</span></a>
+</span><span id="Size.scale-137"><a href="#Size.scale-137"><span class="linenos">137</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer.</span>
+</span><span id="Size.scale-138"><a href="#Size.scale-138"><span class="linenos">138</span></a>
+</span><span id="Size.scale-139"><a href="#Size.scale-139"><span class="linenos">139</span></a><span class="sd">        Round up so that drawings won&#39;t leave tiny, black gaps after scaled.</span>
+</span><span id="Size.scale-140"><a href="#Size.scale-140"><span class="linenos">140</span></a>
+</span><span id="Size.scale-141"><a href="#Size.scale-141"><span class="linenos">141</span></a><span class="sd">        Args:</span>
+</span><span id="Size.scale-142"><a href="#Size.scale-142"><span class="linenos">142</span></a><span class="sd">            `scaling`: A scaling factor by which the width and height will be</span>
+</span><span id="Size.scale-143"><a href="#Size.scale-143"><span class="linenos">143</span></a><span class="sd">                multiplied.</span>
+</span><span id="Size.scale-144"><a href="#Size.scale-144"><span class="linenos">144</span></a>
+</span><span id="Size.scale-145"><a href="#Size.scale-145"><span class="linenos">145</span></a><span class="sd">        Returns:</span>
+</span><span id="Size.scale-146"><a href="#Size.scale-146"><span class="linenos">146</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
+</span><span id="Size.scale-147"><a href="#Size.scale-147"><span class="linenos">147</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Size.scale-148"><a href="#Size.scale-148"><span class="linenos">148</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -904,23 +926,23 @@ multiplied.</li>
 
     </div>
     <a class="headerlink" href="#Font"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Font-146"><a href="#Font-146"><span class="linenos">146</span></a><span class="nd">@dataclass</span>
-</span><span id="Font-147"><a href="#Font-147"><span class="linenos">147</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Font</span><span class="p">:</span>
-</span><span id="Font-148"><a href="#Font-148"><span class="linenos">148</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Font-149"><a href="#Font-149"><span class="linenos">149</span></a><span class="sd">    Font for text in game.</span>
-</span><span id="Font-150"><a href="#Font-150"><span class="linenos">150</span></a>
-</span><span id="Font-151"><a href="#Font-151"><span class="linenos">151</span></a><span class="sd">    Arguments:</span>
-</span><span id="Font-152"><a href="#Font-152"><span class="linenos">152</span></a><span class="sd">        `size`: Font size in pixels.</span>
-</span><span id="Font-153"><a href="#Font-153"><span class="linenos">153</span></a>
-</span><span id="Font-154"><a href="#Font-154"><span class="linenos">154</span></a><span class="sd">        `name`: Font name.</span>
-</span><span id="Font-155"><a href="#Font-155"><span class="linenos">155</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Font-156"><a href="#Font-156"><span class="linenos">156</span></a>
-</span><span id="Font-157"><a href="#Font-157"><span class="linenos">157</span></a>    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Font-158"><a href="#Font-158"><span class="linenos">158</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Font-159"><a href="#Font-159"><span class="linenos">159</span></a>
-</span><span id="Font-160"><a href="#Font-160"><span class="linenos">160</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Font-161"><a href="#Font-161"><span class="linenos">161</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Font</span><span class="p">:</span>
-</span><span id="Font-162"><a href="#Font-162"><span class="linenos">162</span></a>        <span class="k">return</span> <span class="n">SysFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Font-151"><a href="#Font-151"><span class="linenos">151</span></a><span class="nd">@dataclass</span>
+</span><span id="Font-152"><a href="#Font-152"><span class="linenos">152</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Font</span><span class="p">:</span>
+</span><span id="Font-153"><a href="#Font-153"><span class="linenos">153</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Font-154"><a href="#Font-154"><span class="linenos">154</span></a><span class="sd">    Font for text in game.</span>
+</span><span id="Font-155"><a href="#Font-155"><span class="linenos">155</span></a>
+</span><span id="Font-156"><a href="#Font-156"><span class="linenos">156</span></a><span class="sd">    Arguments:</span>
+</span><span id="Font-157"><a href="#Font-157"><span class="linenos">157</span></a><span class="sd">        `size`: Font size in pixels.</span>
+</span><span id="Font-158"><a href="#Font-158"><span class="linenos">158</span></a>
+</span><span id="Font-159"><a href="#Font-159"><span class="linenos">159</span></a><span class="sd">        `name`: Font name.</span>
+</span><span id="Font-160"><a href="#Font-160"><span class="linenos">160</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Font-161"><a href="#Font-161"><span class="linenos">161</span></a>
+</span><span id="Font-162"><a href="#Font-162"><span class="linenos">162</span></a>    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Font-163"><a href="#Font-163"><span class="linenos">163</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Font-164"><a href="#Font-164"><span class="linenos">164</span></a>
+</span><span id="Font-165"><a href="#Font-165"><span class="linenos">165</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Font-166"><a href="#Font-166"><span class="linenos">166</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Font</span><span class="p">:</span>
+</span><span id="Font-167"><a href="#Font-167"><span class="linenos">167</span></a>        <span class="k">return</span> <span class="n">SysFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -979,9 +1001,9 @@ multiplied.</li>
 
     </div>
     <a class="headerlink" href="#Font.pygame"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Font.pygame-160"><a href="#Font.pygame-160"><span class="linenos">160</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Font.pygame-161"><a href="#Font.pygame-161"><span class="linenos">161</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Font</span><span class="p">:</span>
-</span><span id="Font.pygame-162"><a href="#Font.pygame-162"><span class="linenos">162</span></a>        <span class="k">return</span> <span class="n">SysFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Font.pygame-165"><a href="#Font.pygame-165"><span class="linenos">165</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Font.pygame-166"><a href="#Font.pygame-166"><span class="linenos">166</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Font</span><span class="p">:</span>
+</span><span id="Font.pygame-167"><a href="#Font.pygame-167"><span class="linenos">167</span></a>        <span class="k">return</span> <span class="n">SysFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 </span></pre></div>
 
 
