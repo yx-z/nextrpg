@@ -135,6 +135,9 @@
    <point/>
   </object>
   <object id="76" name="alisa" x="931.333" y="581.333">
+   <properties>
+    <property name="direction" value="left"/>
+   </properties>
    <point/>
   </object>
  </objectgroup>

@@ -26,27 +26,11 @@ from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 
 
-def _init_character(
-    self: MapScene,
-    character_drawing: CharacterDrawing,
-    object_name: str,
-    is_player: bool,
-) -> CharacterOnScreen:
-    character = self._map_helper.get_object(object_name)
-    properties = character.properties
-    property_names = config().map.properties
-    speed = properties.get(property_names.speed, config().character.speed)
-    drawing = (
-        character_drawing.turn(direction)
-        if (direction := properties.get(property_names.direction))
-        else character_drawing
-    )
-    return CharacterOnScreen(
-        drawing,
-        Coordinate(character.x, character.y),
-        speed,
-        self._map_helper.collisions,
-        is_player,
+def _init_player(self: "MapScene") -> CharacterOnScreen:
+    return self._init_character(
+        self.initial_player_drawing,
+        self.player_coordinate_object or config().map.player,
+        is_player=True,
     )
 
 
@@ -71,14 +55,7 @@ class MapScene(Model, Scene):
     _map_helper: MapHelper = internal_field(
         lambda self: MapHelper(self.tmx_file)
     )
-    _player: CharacterOnScreen = internal_field(
-        lambda self: _init_character(
-            self,
-            self.initial_player_drawing,
-            self.player_coordinate_object or config().map.player,
-            is_player=True,
-        )
-    )
+    _player: CharacterOnScreen = internal_field(_init_player)
 
     @cached_property
     @override
@@ -183,6 +160,29 @@ class MapScene(Model, Scene):
             if player_rect.collide(get_polygon(move_object)):
                 return TransitionScene(self, move.to_scene(player.character))
         return None
+
+    def _init_character(
+        self,
+        character_drawing: CharacterDrawing,
+        object_name: str,
+        is_player: bool,
+    ) -> CharacterOnScreen:
+        character = self._map_helper.get_object(object_name)
+        properties = character.properties
+        property_names = config().map.properties
+        speed = properties.get(property_names.speed, config().character.speed)
+        drawing = (
+            character_drawing.turn(direction)
+            if (direction := properties.get(property_names.direction))
+            else character_drawing
+        )
+        return CharacterOnScreen(
+            drawing,
+            Coordinate(character.x, character.y),
+            speed,
+            self._map_helper.collisions,
+            is_player,
+        )
 
 
 def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:

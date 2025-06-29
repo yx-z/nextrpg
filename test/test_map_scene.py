@@ -63,7 +63,9 @@ def test_move_to_scene(mocker: MockerFixture) -> None:
         ],
     )
     assert map._move_to_scene(
-        CharacterOnScreen(MockCharacterDrawing(), Coordinate(10, 20), 0, [])
+        CharacterOnScreen(
+            MockCharacterDrawing(), Coordinate(10, 20), 0, [], is_player=True
+        )
     )
 
 

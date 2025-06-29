@@ -15,6 +15,7 @@ def test_character_on_screen():
         Coordinate(10, 20),
         speed=1,
         collisions=[Rectangle(Coordinate(12, 20), Size(1, 1))],
+        is_player=True,
     )
     assert character.step(100).coordinate == Coordinate(10, 20)
     assert character.character_and_visuals.character.top_left == Coordinate(
@@ -43,4 +44,5 @@ def test_character_on_screen():
             Coordinate(10, 20),
             speed=1,
             collisions=[Rectangle(Coordinate(12, 20), Size(1, 1))],
+            is_player=True
         )._collision_visuals
