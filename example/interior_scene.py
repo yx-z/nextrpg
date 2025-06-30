@@ -11,6 +11,7 @@ from nextrpg.character.rpg_maker_character_drawing import (
     SpriteSheet,
     SpriteSheetSelection,
 )
+from nextrpg.core import Direction
 from nextrpg.draw_on_screen import Drawing
 from nextrpg.event.move import Move
 from nextrpg.scene.map_scene import MapScene
@@ -19,7 +20,7 @@ from nextrpg.scene.scene import Scene
 
 def interior_scene(
     player: CharacterDrawing | None = None,
-    player_coordinate_object: str | None = None,
+    player_coordinate_object: str = "player",
 ) -> Scene:
     """
     Defines an interior scene.
@@ -31,8 +32,7 @@ def interior_scene(
             `nextrpg.Game(entry_scene)`.
 
         `player_coordinate_object`: Name of the object marking the initial
-            coordinate of the player. If `None`, the player is placed at the
-            object location with the name `config().map.player` in the map.
+            coordinate of the player.
 
     Returns:
         `Scene`: The interior scene.
@@ -44,16 +44,18 @@ def interior_scene(
         # Tiled/tmx tile map.
         Path("example/assets/interior.tmx"),
         # Create character drawing when this scene is an entry scene.
-        player or _player(),
+        player or _init_player(),
         # Player coordinate on the map.
         player_coordinate_object,
         # Move to another map.
         [Move("from_interior", "to_exterior", exterior_scene)],
+        # [],
     )
 
 
-def _player() -> CharacterDrawing:
+def _init_player() -> CharacterDrawing:
     return RpgMakerCharacterDrawing(
+        Direction.DOWN,
         SpriteSheet(
             # Player sprite sheet.
             Drawing(Path("example/assets/Characters_MV.png")),
@@ -61,5 +63,5 @@ def _player() -> CharacterDrawing:
             SpriteSheetSelection(row=0, column=1),
             # Declare margins to correctly detect collision/bounding box.
             margin=Margin(top=25),
-        )
+        ),
     )

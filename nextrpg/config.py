@@ -112,41 +112,17 @@ class GuiConfig(NamedTuple):
         `resize_mode`: Whether to scale the images to fit the GUI size,
             or keep the native image size.
 
-        `allow_gui_mode_toggle`: Whether to allow the user to toggle between
-            windowed and full screen mode via `KeyBoardKey.GUI_MODE_TOGGLE`.
-
         `allow_window_resize`: Whether to allow the user to resize the window
             in windowed mode.
     """
 
     title: str = "nextrpg"
-    size: Size = Size(1280, 800)
+    size: Size = Size(1280, 720)
     frames_per_second: int = 60
     background_color: Rgba = Rgba(0, 0, 0, 0)
     gui_mode: GuiMode = GuiMode.WINDOWED
     resize_mode: ResizeMode = ResizeMode.SCALE
-    allow_gui_mode_toggle: bool = True
     allow_window_resize: bool = True
-
-
-class TileMapProperties(NamedTuple):
-    """
-    Constants for custom property names used in tile map files.
-
-    This class defines string constants that are used to
-    access custom properties defined in TMX map files
-    created with Tiled Map Editor.
-
-    This config is used by `nextrpg.scene.map_scene.MapScene`.
-
-    Attributes:
-        `speed`: Property name for defining character movement speed.
-
-        `direction`: Property name for defining character initial direction.
-    """
-
-    speed: str = "speed"
-    direction: str = "direction"
 
 
 class TileMapConfig(NamedTuple):
@@ -165,17 +141,12 @@ class TileMapConfig(NamedTuple):
 
         `collision`:
             Class name of the objects to be identified as collision objects.
-
-        `player`:
-            Unique name for the player object within object layers.
     """
 
     background: str = "background"
     foreground: str = "foreground"
     above_character: str = "above_character"
     collision: str = "collision"
-    player: str = "player"
-    properties: TileMapProperties = TileMapProperties()
 
 
 class CharacterConfig(NamedTuple):
@@ -185,15 +156,18 @@ class CharacterConfig(NamedTuple):
     This config is used by `nextrpg.character.character.Character`.
 
     Attributes:
-        `speed`: The default speed of the character's movement
+        `move_speed`: The default speed of the character's movement
             in pixels on screen per physical millisecond.
             The number of pixels is consumed before screen scaling, if any.
 
-        `directions`: The set of directions that the character can move.
-            Default to all directions (up, left, right, down, and diagonal).
+        `idle_duration`: The duration of the NPC's idle duration.
+
+        `directions`: The set of directions that the player can move.
+            Default to all directions (up, left, right, down, and diagonals).
     """
 
-    speed: PixelPerMillisecond = 0.25
+    move_speed: PixelPerMillisecond = 0.25
+    idle_duration: Millisecond = 1000
     directions: frozenset[Direction] = frozenset(Direction)
 
 
@@ -215,17 +189,11 @@ class RpgMakerCharacterDrawingConfig(NamedTuple):
     even if you own a copy of RPG Maker.
 
     Attributes:
-        `animate_on_idle`: Whether to animate the character when not moving.
-
         `frame_duration`: The default duration for a single frame for
             the character.
-
-        `direction`: The default initial direction.
     """
 
-    animate_on_idle: bool = False
     frame_duration: Millisecond = 150
-    direction: Direction = Direction.DOWN
 
 
 type KeyCode = int
@@ -266,7 +234,7 @@ class KeyMappingConfig(NamedTuple):
     up: KeyCode = K_UP
     down: KeyCode = K_DOWN
     confirm: KeyCode = K_SPACE
-    gui_mode_toggle: KeyCode = K_F1
+    gui_mode_toggle: KeyCode | None = K_F1
 
 
 class ResourceConfig(NamedTuple):

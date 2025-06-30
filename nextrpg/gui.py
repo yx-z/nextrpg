@@ -2,7 +2,7 @@
 Game window / Graphical User Interface (GUI).
 """
 
-from dataclasses import KW_ONLY, field, replace
+from dataclasses import field, replace
 from functools import cached_property, reduce, singledispatchmethod
 from operator import or_
 
@@ -22,7 +22,7 @@ from nextrpg.event.pygame_event import (
     PygameEvent,
 )
 from nextrpg.logger import clear_debug_logs, get_debug_logs
-from nextrpg.model import Model, internal_field
+from nextrpg.model import instance_init, register_instance_init
 from nextrpg.text import Text
 
 
@@ -33,7 +33,8 @@ def _init_screen(self: Gui) -> Surface:
     return set_mode(config().gui.size, _gui_flag(self._gui_mode))
 
 
-class Gui(Model):
+@register_instance_init
+class Gui:
     """
     Initialize a `Gui` instance that scales and centers drawings.
 
@@ -43,9 +44,8 @@ class Gui(Model):
     """
 
     window: Size = field(default_factory=lambda: config().gui.size)
-    _: KW_ONLY = field()
     _gui_mode: GuiMode = field(default_factory=lambda: config().gui.gui_mode)
-    _screen: Surface = internal_field(_init_screen)
+    _screen: Surface = instance_init(_init_screen)
 
     @singledispatchmethod
     def event(self, e: PygameEvent) -> Gui:
@@ -82,6 +82,25 @@ class Gui(Model):
                 self._screen.blits(d.pygame for d in draw_on_screens)
         self._draw_debug_log()
         flip()
+
+    def set_gui_mode(self, gui_mode: GuiMode) -> Gui:
+        return replace(
+            self,
+            _gui_mode=gui_mode,
+            _screen=set_mode(self.window, _gui_flag(gui_mode)),
+        )
+
+    def resize(self, size: Size) -> Gui:
+        """
+        Return a new Gui with the given size.
+
+        Arguments:
+            `size`: The new size of the window.
+
+        Returns:
+            `Gui`: A new Gui with the given size.
+        """
+        return replace(self, window=size)
 
     def _draw_debug_log(self) -> None:
         if config().debug:
@@ -130,19 +149,13 @@ def _gui_flag(gui_mode: GuiMode) -> _GuiFlag:
 
 @Gui.event.register
 def _toggle_gui_mode(self, e: KeyPressDown) -> Gui:
-    if (
-        e.key is KeyboardKey.GUI_MODE_TOGGLE
-        and config().gui.allow_gui_mode_toggle
-    ):
-        updated_mode = self._gui_mode.opposite
-        return replace(
-            self,
-            _gui_mode=updated_mode,
-            _screen=set_mode(self.window, _gui_flag(updated_mode)),
-        )
-    return self
+    return (
+        self.set_gui_mode(self._gui_mode.opposite)
+        if e.key is KeyboardKey.GUI_MODE_TOGGLE
+        else self
+    )
 
 
 @Gui.event.register
 def _resize(self, e: GuiResize) -> Gui:
-    return replace(self, window=e.size)
+    return self.resize(e.size)

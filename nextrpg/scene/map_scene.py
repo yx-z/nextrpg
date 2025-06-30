@@ -2,14 +2,13 @@
 Map scene implementation.
 """
 
-from dataclasses import KW_ONLY, field, replace
+from dataclasses import field, replace
 from functools import cached_property
 from pathlib import Path
 from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.character.npc_on_screen import NpcOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
 from nextrpg.core import Millisecond, Pixel
@@ -17,7 +16,7 @@ from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.logger import debug_log
-from nextrpg.model import Model, internal_field
+from nextrpg.model import instance_init, register_instance_init
 from nextrpg.scene.map_helper import (
     MapHelper,
     TileBottomAndDraw,
@@ -28,7 +27,17 @@ from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 
 
-class MapScene(Model, Scene):
+def _init_player(self: MapScene) -> PlayerOnScreen:
+    player = self._map_helper.get_object(self.player_coordinate_object)
+    return PlayerOnScreen(
+        self.initial_player_drawing,
+        Coordinate(player.x, player.y),
+        self._map_helper.collisions,
+    )
+
+
+@register_instance_init
+class MapScene(Scene):
     """
     A scene implementation that represents a game map loaded from Tiled TMX.
 
@@ -49,19 +58,13 @@ class MapScene(Model, Scene):
 
     tmx_file: Path
     initial_player_drawing: CharacterDrawing
-    player_coordinate_object: str | None = None
+    player_coordinate_object: str
     moves: list[Move] = field(default_factory=list)
-    _: KW_ONLY = field()
-    _map_helper: MapHelper = internal_field(
+
+    _map_helper: MapHelper = instance_init(
         lambda self: MapHelper(self.tmx_file)
     )
-    _player: PlayerOnScreen = internal_field(
-        lambda self: self._init_character(
-            self.initial_player_drawing,
-            self.player_coordinate_object or config().map.player,
-            is_player=True,
-        )
-    )
+    _player: PlayerOnScreen = instance_init(_init_player)
 
     @cached_property
     @override
@@ -165,29 +168,6 @@ class MapScene(Model, Scene):
             if player_rect.collide(get_polygon(move_object)):
                 return TransitionScene(self, move.to_scene(player.character))
         return None
-
-    def _init_character(
-        self,
-        character_drawing: CharacterDrawing,
-        object_name: str,
-        is_player: bool,
-    ) -> CharacterOnScreen:
-        character = self._map_helper.get_object(object_name)
-        properties = character.properties
-        property_names = config().map.properties
-        speed = properties.get(property_names.speed, config().character.speed)
-        drawing = (
-            character_drawing.turn(direction)
-            if (direction := properties.get(property_names.direction))
-            else character_drawing
-        )
-        cls = PlayerOnScreen if is_player else NpcOnScreen
-        return cls(
-            drawing,
-            Coordinate(character.x, character.y),
-            speed,
-            self._map_helper.collisions,
-        )
 
     @cached_property
     def _collision_visuals(self) -> list[DrawOnScreen]:

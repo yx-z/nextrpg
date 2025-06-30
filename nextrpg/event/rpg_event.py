@@ -1,0 +1,2 @@
+class RpgEvent:
+    pass

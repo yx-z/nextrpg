@@ -1,22 +1,21 @@
 """
-Model definition meta.
+Model definition.
 """
 
 from abc import ABCMeta
 from collections import OrderedDict
 from collections.abc import Callable
-from dataclasses import Field, dataclass, field, fields
+from dataclasses import dataclass, field, fields
 from typing import Any, dataclass_transform
 
 
-def internal_field(init: Callable[[Any], Any] | Callable[[], Any] | Any) -> Any:
+def instance_init(init: Callable[[Any], Any]) -> Any:
     """
-    Used to mark a field in `Model` as internal.
+    Used to mark a field for instance initialization.
 
     Arguments:
         `init`: Function that takes `self` as an argument and returns
-            the initial value, or a callable that takes no arguments,
-            or a constant value.
+            the initial value.
 
     Returns:
         `Any`: Internal field with the given initialization function.
@@ -30,49 +29,29 @@ class _Meta[T](ABCMeta):
         return dataclass(super().__new__(cls, *args, **kwargs))
 
 
-class Model(metaclass=_Meta):
+@dataclass_transform()
+def register_instance_init[T](cls: type[T]) -> type[T]:
     """
-    Base class to inherit from for models.
-    Inherited model classes are dataclass with `internal_fields`.
+    Class decorator to allow the use of `instance_init` in dataclasses.
 
-    Example usage:
-    ```python
-    from dataclasses import field, KW_ONLY
-    from nextrpg.model import internal_field, Model
+    Args:
+        `cls`: The class to decorate.
 
-    class MyModel(Model):
-        user_input: str
-        public_data: str = "public"
-        _: KW_ONLY = field()
-        _internal_data: str = internal_field(
-            lambda self: f"internal {self.public_data}"
-        )
-    ```
+    Returns:
+        `type`: The decorated class.
     """
 
-    def __post_init__(self) -> None:
+    def post_init(self) -> None:
         if getattr(self, _INTERNAL_FIELDS_INITIALIZED, None):
             return
 
         for f in fields(self):
-            self._init_field(f)
+            if isinstance(attr := getattr(self, f.name), _Init):
+                object.__setattr__(self, f.name, attr.init(self))
         object.__setattr__(self, _INTERNAL_FIELDS_INITIALIZED, True)
 
-    def _init_field(self, f: Field) -> None:
-        if not isinstance(attr := getattr(self, f.name), _Init):
-            return
-
-        if not callable(init := attr.init):
-            self._set_attr(f, init)
-            return
-
-        try:
-            self._set_attr(f, init())
-        except TypeError:
-            self._set_attr(f, init(self))
-
-    def _set_attr(self, f: Field, value: Any) -> None:
-        object.__setattr__(self, f.name, value)
+    cls.__post_init__ = post_init
+    return dataclass(cls)
 
 
 def _key(*args: Any, **kwargs: Any) -> tuple:
@@ -120,7 +99,7 @@ class cached[T, K, **P]:
 
 @dataclass
 class _Init:
-    init: Callable[[Any], Any] | Callable[[], Any] | Any
+    init: Callable[[Any], Any]
 
 
 _INTERNAL_FIELDS_INITIALIZED = "_INTERNAL_FIELDS_INITIALIZED"

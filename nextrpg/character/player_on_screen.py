@@ -3,9 +3,13 @@ Handles character movement and collision detection.
 """
 
 from dataclasses import dataclass, field, replace
-from functools import singledispatchmethod
+from functools import cached_property, singledispatchmethod
+from typing import override
 
-from nextrpg.character.character_on_screen import CharacterOnScreen
+from nextrpg.character.character_on_screen import (
+    CharacterOnScreen,
+    MovingCharacterOnScreen,
+)
 from nextrpg.config import config
 from nextrpg.core import Direction, DirectionalOffset, Millisecond
 from nextrpg.draw_on_screen import Coordinate
@@ -18,9 +22,10 @@ from nextrpg.event.pygame_event import (
 
 
 @dataclass
-class PlayerOnScreen(CharacterOnScreen):
+class PlayerOnScreen(MovingCharacterOnScreen):
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
+    @override
     @singledispatchmethod
     def event(self, e: PygameEvent) -> CharacterOnScreen:
         """
@@ -45,35 +50,16 @@ class PlayerOnScreen(CharacterOnScreen):
             return self._movement_keys | {e.key}
         return self._movement_keys - {e.key}
 
-    def step(self, time_delta: Millisecond) -> CharacterOnScreen:
-        """
-        Update the character's state for a single game step/frame.
+    @cached_property
+    @override
+    def is_moving(self) -> bool:
+        return bool(self._movement_keys)
 
-        Calculates movement based on currently pressed keys, handles collision
-        detection, and updates the character's drawing state (moving or idle).
-
-        Args:
-            `time_delta`: The time that has passed since
-                the last update, used for calculating movement distance.
-
-        Returns:
-            `CharacterOnScreen`: The updated character state after the step.
-        """
-        return replace(
-            self,
-            character=(
-                self.character.move(time_delta)
-                if self._movement_keys
-                else self.character.idle(time_delta)
-            ),
-            coordinate=self._try_move(time_delta) or self.coordinate,
+    @override
+    def move(self, time_delta: Millisecond) -> Coordinate | None:
+        return self.coordinate + DirectionalOffset(
+            self.character.direction, self.move_speed * time_delta
         )
-
-    def _try_move(self, time_delta: Millisecond) -> Coordinate | None:
-        coord = self.coordinate + DirectionalOffset(
-            self.character.direction, self.speed * time_delta
-        )
-        return coord if self._movement_keys and self.can_move(coord) else None
 
 
 _MOVEMENT_KEYS = {

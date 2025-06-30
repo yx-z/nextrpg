@@ -22,7 +22,7 @@ from nextrpg.config import config
 from nextrpg.core import Direction, Millisecond, Pixel
 from nextrpg.draw_on_screen import Coordinate, Drawing, Size
 from nextrpg.frames import CyclicFrames
-from nextrpg.model import Model, internal_field
+from nextrpg.model import instance_init, register_instance_init
 
 type _FrameIndices = list[int]
 
@@ -136,7 +136,8 @@ def _init_frames(
     }
 
 
-class RpgMakerCharacterDrawing(Model, CharacterDrawing):
+@register_instance_init
+class RpgMakerCharacterDrawing(CharacterDrawing):
     """
     RPG Maker style character drawing.
 
@@ -153,16 +154,11 @@ class RpgMakerCharacterDrawing(Model, CharacterDrawing):
     """
 
     sprite_sheet: SpriteSheet
-    animate_on_idle: bool = field(
-        default_factory=lambda: config().rpg_maker_character.animate_on_idle
-    )
-    direction: Direction = field(
-        default_factory=lambda: config().rpg_maker_character.direction
-    )
+    animate_on_idle: bool = False
     frame_duration: Millisecond = field(
         default_factory=lambda: config().rpg_maker_character.frame_duration
     )
-    _frames: dict[Direction, CyclicFrames] = internal_field(_init_frames)
+    _frames: dict[Direction, CyclicFrames] = instance_init(_init_frames)
 
     @property
     def drawing(self) -> Drawing:

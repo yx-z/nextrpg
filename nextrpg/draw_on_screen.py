@@ -8,7 +8,7 @@ from functools import cached_property
 from itertools import product
 from math import ceil, sqrt
 from pathlib import Path
-from typing import Protocol, override
+from typing import override
 
 from pygame import Mask, SRCALPHA, Surface
 from pygame.draw import polygon
@@ -293,20 +293,13 @@ class DrawOnScreen(namedtuple("DrawOnScreen", "top_left drawing")):
         return DrawOnScreen(self.top_left + coord, self.drawing)
 
 
-class Polygon(Protocol):
+@dataclass
+class Polygon:
     """
-    Abstract base class for polygon, defining the common interface/behavior.
+    Polygon is a collection of points.
     """
 
-    @cached_property
-    def points(self) -> tuple[Coordinate, ...]:
-        """
-        Get the points of the polygon.
-
-        Returns:
-            `tuple[Coordinate, ...]`: A tuple of `Coordinate` objects
-                representing the points.
-        """
+    points: list[Coordinate]
 
     @cached_property
     def bounding_rectangle(self) -> Rectangle:
@@ -381,30 +374,21 @@ class Polygon(Protocol):
 
 
 @dataclass
-class GenericPolygon(Polygon):
+class Rectangle(Polygon):
     """
-    A collection of points that define a closed polygon.
-
-    Attributes:
-        `points`: A tuple of `Coordinate` objects representing the points
-            bounding the polygon.
+    A rectangle polygon defined by its top left corner and size.
     """
 
-    points: tuple[Coordinate, ...]
+    def __init__(self, top_left: Coordinate, size: Size) -> None:
+        """
+        Arguments:
+            `top_left`: The top-left corner of the rectangle.
 
-
-class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
-    """
-    Represents an immutable rectangle defined by its top left corner and size.
-
-    Attributes:
-        `top_left`: The top-left corner of the rectangle.
-
-        `size`: The dimensions of the rectangle, including its width and height.
-    """
-
-    top_left: Coordinate
-    size: Size
+            `size`: The dimensions of the rectangle, including its
+                width and height.
+        """
+        self.top_left = top_left
+        self.size = size
 
     @property
     def left(self) -> Pixel:
@@ -528,20 +512,20 @@ class Rectangle(Polygon, namedtuple("Rectangle", "top_left size")):
         return Coordinate(self.left + width / 2, self.top + height / 2)
 
     @property
-    def points(self) -> tuple[Coordinate, ...]:
+    def points(self) -> list[Coordinate]:
         """
         Get the coordinates of the corners of the rectangle.
 
         Returns:
-            `tuple[Coordinate, ...]`: The coordinates of the corners
+            `list[Coordinate, ...]`: The coordinates of the corners
                 of the rectangle.
         """
-        return (
+        return [
             self.top_left,
             self.top_right,
             self.bottom_right,
             self.bottom_left,
-        )
+        ]
 
     def collide(self, poly: Polygon) -> bool:
         if isinstance(poly, Rectangle):

@@ -1,20 +1,21 @@
-from dataclasses import KW_ONLY, field, replace
+from dataclasses import dataclass, field, replace
 
-from nextrpg.model import Model, cached, internal_field
+from nextrpg.model import cached, instance_init, register_instance_init
 
 
-def test_model():
-    class MyModel(Model):
+def test_instance_init():
+    @register_instance_init
+    class MyModel:
         user_input: str
         public_data: str = "public"
-        _: KW_ONLY = field()
-        _internal_data: str = internal_field(
+        _data2: int = field(default_factory=lambda: 123)
+        _data3: int = field(default=456)
+        _internal_data: str = instance_init(
             lambda self: f"internal {self.public_data}"
         )
-        _data2: int = internal_field(lambda: 123)
-        _data3: int = internal_field(456)
 
     mm = MyModel("user_input")
+    mm.__post_init__()
     assert mm.public_data == "public"
     assert mm._internal_data == "internal public"
     assert replace(mm, public_data="123")._internal_data == "internal public"
@@ -28,7 +29,8 @@ def test_model():
 
 def test_cached() -> None:
     @cached(lambda: 1)
-    class MyCache(Model):
+    @dataclass
+    class MyCache:
         i: int
 
     a = MyCache(1)
@@ -38,7 +40,8 @@ def test_cached() -> None:
     assert MyCache(2) is b
 
     @cached(lambda: 1, lambda _: None)
-    class MyModel2(Model):
+    @dataclass
+    class MyModel2:
         s: str
 
     assert MyModel2("a") is not MyModel2("a")

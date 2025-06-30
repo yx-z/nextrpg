@@ -1,16 +1,15 @@
-from dataclasses import KW_ONLY, dataclass, field, replace
+from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import override
 
 from nextrpg.config import config
 from nextrpg.core import Alpha, Millisecond
 from nextrpg.draw_on_screen import DrawOnScreen
-from nextrpg.model import Model, internal_field
 from nextrpg.scene.scene import Scene
 
 
 @dataclass
-class TransitionScene( Scene):
+class TransitionScene(Scene):
     """
     Transition from one scene to another.
 

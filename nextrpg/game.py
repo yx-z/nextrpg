@@ -14,25 +14,23 @@ from nextrpg.config import config
 from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
 from nextrpg.gui import Gui
 from nextrpg.logger import debug_log
-from nextrpg.model import Model, internal_field
+from nextrpg.model import instance_init, register_instance_init
 from nextrpg.scene.scene import Scene
 
 
+@register_instance_init
 class Game:
     """
-    Game entry point.
+    Sets up a game window, loads the entry scene.
+
+    Arguments:
+        `entry_scene`: A function that returns the entry scene.
+            This has to be a function but not a direct `Scene` instance,
+            because drawings can only be loaded after pygame initialization.
     """
 
-    def __init__(self, entry_scene: Callable[[], Scene]) -> None:
-        """
-        Sets up a game window, loads the entry scene.
-
-        Arguments:
-            `entry_scene`: A function that returns the entry scene.
-                This has to be a function but not a direct `Scene` instance,
-                because drawings can only be loaded after pygame initialization.
-        """
-        self._loop = _GameLoop(entry_scene)
+    entry_scene: Callable[[], Scene]
+    _loop: _GameLoop = instance_init(lambda self: _GameLoop(self.entry_scene))
 
     def start(self) -> None:
         """
@@ -50,12 +48,13 @@ class Game:
             await sleep(0)
 
 
-class _GameLoop(Model):
+@register_instance_init
+class _GameLoop:
     entry_scene: Callable[[], Scene]
     is_running: bool = True
     _clock: Clock = field(default_factory=Clock)
     _gui: Gui = field(default_factory=Gui)
-    _scene: Scene = internal_field(lambda self: self.entry_scene())
+    _scene: Scene = instance_init(lambda self: self.entry_scene())
 
     @singledispatchmethod
     def event(self, e: PygameEvent) -> _GameLoop:
