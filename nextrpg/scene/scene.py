@@ -16,7 +16,6 @@ class Scene:
     This class defines the interface for game scenes, providing methods for
     handling events and drawing content on the screen. All game scenes must
     implement these methods.
-
     """
 
     @cached_property
