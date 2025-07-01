@@ -276,10 +276,10 @@ class TextConfig(NamedTuple):
         `antialias`: Whether to use antialiasing for rendering text.
     """
 
-    font: Font = Font(32)
+    font: Font = Font(24, "Courier New")
     color: Rgba = Rgba(255, 255, 255, 255)
     margin: Pixel = 4
-    antialias: bool = True
+    antialias: bool = False
 
 
 class Config(NamedTuple):

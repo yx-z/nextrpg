@@ -81,8 +81,7 @@ class Gui:
         Returns:
             `None`.
         """
-        debug_log(f"GUI size {self.current_config.size}")
-        debug_log(f"GUI shift {self._center_shift}")
+        debug_log("GUI", t"size {self.current_config.size} shift {self._center_shift}")
         self._screen.fill(self.current_config.background_color)
         match self.current_config.resize_mode:
             case ResizeMode.SCALE:
@@ -97,7 +96,7 @@ class Gui:
             self._screen.blits(
                 d.pygame
                 for d in Text(
-                    get_debug_logs(), Coordinate(0, 0)
+                     get_debug_logs().formatted_log, Coordinate(0, 0)
                 ).draw_on_screens
             )
         clear_debug_logs()

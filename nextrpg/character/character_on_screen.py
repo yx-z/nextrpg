@@ -160,6 +160,6 @@ class MovingCharacterOnScreen(CharacterOnScreen):
 
         for collision, player_coord in product(self.collisions, hit_coords):
             if collision.contain(player_coord):
-                debug_log(f"Collision: {player_coord} and {collision.points}")
+                debug_log("Collision", t"{player_coord} and {collision.points}")
                 return False
         return True

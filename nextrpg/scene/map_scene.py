@@ -118,7 +118,7 @@ class MapScene(Scene):
             `Scene`: The updated scene after the time step.
         """
         player = self._player.step(time_delta)
-        debug_log(f"Player {player.coordinate}")
+        debug_log("Map", t"Player {player.coordinate}")
         return self._move_to_scene(player) or replace(self, _player=player)
 
     @cached_property
@@ -160,7 +160,7 @@ class MapScene(Scene):
         left_offset = _offset(player.left, gui_width, map_width)
         top_offset = _offset(player.top, gui_height, map_height)
         offset = Coordinate(left_offset, top_offset)
-        debug_log(f"Map offset {offset}")
+        debug_log("Map", t"offset {offset}")
         return offset
 
     def _move_to_scene(self, player: CharacterOnScreen) -> Scene | None:

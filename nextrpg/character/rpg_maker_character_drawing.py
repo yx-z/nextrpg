@@ -217,7 +217,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         return replace(
             self,
             _frames={
-                direction: self._move_frame(time_delta, _adjust(direction))
+                direction: self._move_frame(time_delta, direction)
                 for direction, frames in self._frames.items()
             },
         )
@@ -228,7 +228,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         frames = self._frames[adjusted_direction]
         return (
             frames.step(time_delta)
-            if adjusted_direction == self.direction
+            if adjusted_direction == _adjust(self.direction)
             else frames
         )
 

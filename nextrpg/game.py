@@ -63,7 +63,7 @@ class _GameLoop:
         )
 
     def step(self) -> _GameLoop:
-        debug_log(f"FPS: {self._clock.get_fps():.0f} ")
+        debug_log("Game", t"FPS: {self._clock.get_fps():.0f}")
         self._clock.tick(config().gui.frames_per_second)
         if config().gui is not self._gui.current_config:
             self._gui = replace(
