@@ -2,7 +2,6 @@
 Model definition.
 """
 
-from abc import ABCMeta
 from collections import OrderedDict
 from collections.abc import Callable
 from dataclasses import dataclass, field, fields
@@ -21,12 +20,6 @@ def instance_init(init: Callable[[Any], Any]) -> Any:
         `Any`: Internal field with the given initialization function.
     """
     return field(repr=False, default_factory=lambda: _Init(init))
-
-
-@dataclass_transform()
-class _Meta[T](ABCMeta):
-    def __new__(cls, *args: Any, **kwargs: Any) -> type:
-        return dataclass(super().__new__(cls, *args, **kwargs))
 
 
 @dataclass_transform()

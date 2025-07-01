@@ -1,5 +1,6 @@
 from asyncio import run
-from dataclasses import replace
+from dataclasses import dataclass, replace
+from typing import Any, Self
 from unittest.mock import AsyncMock, MagicMock, Mock
 
 from pygame.event import Event
@@ -23,13 +24,23 @@ def test_game(mocker: MockerFixture) -> None:
     scene = Mock()
     clock = MagicMock()
     clock.get_fps = MagicMock(return_value=60)
-    gui = Mock()
+
+    @dataclass
+    class MockGui:
+        current_config: Mock = Mock()
+        last_config: Mock = Mock()
+        initial_config: Mock = Mock()
+        draw: Mock = Mock()
+
+        def event(self, _ :Any) -> Self:
+            return self
+
+    gui = MockGui()
     game = Game(lambda: scene)
     game._loop = replace(game._loop, _scene=scene, _clock=clock, _gui=gui)
     game.start()
     scene.step.assert_called_once()
     clock.tick.assert_called_once_with(60)
-    gui.event.assert_called_once()
     gui.draw.assert_called_once()
 
     sleep = AsyncMock()

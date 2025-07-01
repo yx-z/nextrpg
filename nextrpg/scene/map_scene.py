@@ -10,7 +10,7 @@ from typing import override
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.config import config
+from nextrpg.config import config, initial_config
 from nextrpg.core import Millisecond, Pixel
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.move import Move
@@ -155,11 +155,13 @@ class MapScene(Scene):
     @cached_property
     def _player_offset(self) -> Coordinate:
         player = self._player.draw_on_screen.rectangle.center
-        gui_width, gui_height = config().gui.size
+        gui_width, gui_height = initial_config().gui.size
         map_width, map_height = self._map_helper.map_size
         left_offset = _offset(player.left, gui_width, map_width)
         top_offset = _offset(player.top, gui_height, map_height)
-        return Coordinate(left_offset, top_offset)
+        offset = Coordinate(left_offset, top_offset)
+        debug_log(f"Map offset {offset}")
+        return offset
 
     def _move_to_scene(self, player: CharacterOnScreen) -> Scene | None:
         player_rect = player.draw_on_screen.rectangle

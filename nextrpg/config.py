@@ -276,9 +276,9 @@ class TextConfig(NamedTuple):
         `antialias`: Whether to use antialiasing for rendering text.
     """
 
-    font: Font = Font(36)
+    font: Font = Font(32)
     color: Rgba = Rgba(255, 255, 255, 255)
-    margin: Pixel = 10
+    margin: Pixel = 4
     antialias: bool = True
 
 
@@ -333,6 +333,7 @@ class Config(NamedTuple):
     debug: DebugConfig | None = None
 
 
+_initial_config: Config | None = None
 _cfg: Config | None = None
 
 
@@ -345,7 +346,10 @@ def set_config(cfg: Config):
     Returns:
         `None`
     """
+    global _initial_config
     global _cfg
+    if not _initial_config:
+        _initial_config = cfg
     _cfg = cfg
 
 
@@ -359,6 +363,19 @@ def config() -> Config:
     """
 
     global _cfg
-    if _cfg is None:
-        _cfg = Config()
+    if not _cfg:
+        set_config(Config())
     return _cfg
+
+
+def initial_config() -> Config:
+    """
+    Get the initial configuration instance. This is useful for getting
+    the native/initial GUI resolution.
+
+    Returns:
+        `Config`: The initial `Config` before any GUI/configuration changes.
+    """
+    if not _initial_config:
+        set_config(Config())
+    return _initial_config
