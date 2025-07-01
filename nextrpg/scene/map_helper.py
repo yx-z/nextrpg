@@ -25,8 +25,10 @@ from nextrpg.draw_on_screen import (
     Polygon,
     Rectangle,
 )
+from nextrpg.logger import FROM_CONFIG, Logger
 from nextrpg.model import cached
 
+logger = Logger("MapHelper")
 
 class TileBottomAndDraw(NamedTuple):
     """
@@ -349,4 +351,5 @@ class MapHelper:
 
     @cached_property
     def _tmx(self) -> TiledMap:
+        logger.debug(t"Loading {self.tmx_file}", duration=FROM_CONFIG)
         return load_pygame(self.tmx_file)

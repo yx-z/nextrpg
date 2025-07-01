@@ -12,7 +12,6 @@ from nextrpg.game import Game
 
 def test_game(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.game.Gui.__post_init__")
-    mocker.patch("nextrpg.game.debug_log")
     mocker.patch(
         "pygame.event.get",
         lambda: [
@@ -32,7 +31,7 @@ def test_game(mocker: MockerFixture) -> None:
         initial_config: Mock = Mock()
         draw: Mock = Mock()
 
-        def event(self, _ :Any) -> Self:
+        def event(self, _: Any) -> Self:
             return self
 
     gui = MockGui()

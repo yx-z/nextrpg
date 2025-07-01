@@ -4,7 +4,7 @@ You can either use the implicit, default configuration
 or pass the customized instance to `nextrpg.start_game.start_game`.
 """
 
-from enum import Enum, auto
+from enum import Enum, IntEnum, auto
 from typing import NamedTuple
 
 from pygame.locals import K_DOWN, K_F1, K_LEFT, K_RIGHT, K_SPACE, K_UP
@@ -18,6 +18,13 @@ from nextrpg.core import (
     Rgba,
     Size,
 )
+
+
+class LogLevel(IntEnum):
+    DEBUG = auto()
+    INFO = auto()
+    WARNING = auto()
+    ERROR = auto()
 
 
 class DebugConfig(NamedTuple):
@@ -43,6 +50,8 @@ class DebugConfig(NamedTuple):
     drawing_background_color: Rgba = Rgba(0, 0, 255, 32)
     collision_rectangle_color: Rgba = Rgba(255, 0, 0, 96)
     ignore_map_collisions: bool = False
+    log_level: LogLevel = LogLevel.DEBUG
+    log_duration: Millisecond = 3000
 
 
 class ResizeMode(Enum):
@@ -276,10 +285,10 @@ class TextConfig(NamedTuple):
         `antialias`: Whether to use antialiasing for rendering text.
     """
 
-    font: Font = Font(24, "Courier New")
+    font: Font = Font(24)
     color: Rgba = Rgba(255, 255, 255, 255)
     margin: Pixel = 4
-    antialias: bool = False
+    antialias: bool = True
 
 
 class Config(NamedTuple):
@@ -333,10 +342,6 @@ class Config(NamedTuple):
     debug: DebugConfig | None = None
 
 
-_initial_config: Config | None = None
-_cfg: Config | None = None
-
-
 def set_config(cfg: Config):
     """Sets the global configuration instance.
 
@@ -361,7 +366,6 @@ def config() -> Config:
     Returns:
         `Config`: The current `Config` instance.
     """
-
     global _cfg
     if not _cfg:
         set_config(Config())
@@ -379,3 +383,7 @@ def initial_config() -> Config:
     if not _initial_config:
         set_config(Config())
     return _initial_config
+
+
+_initial_config: Config | None = None
+_cfg: Config | None = None

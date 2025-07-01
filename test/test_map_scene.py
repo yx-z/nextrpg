@@ -36,7 +36,7 @@ def test_map_scene(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=helper)
     map = MapScene(Path("test"), MockCharacterDrawing(), "")
     assert map.event(Quit(Event(QUIT)))
-    assert map.step(1).draw_on_screens
+    assert map.tick(1).draw_on_screens
     with override_config(Config(debug=DebugConfig())):
         assert map._collision_visuals
 

@@ -3,7 +3,7 @@ Core types referenced across `nextrpg`.
 """
 
 from collections import namedtuple
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import Enum, auto
 from functools import cached_property
 from math import ceil
@@ -146,6 +146,9 @@ class Size(namedtuple("Size", "width height")):
         """
         return Size(ceil(self.width * scaling), ceil(self.height * scaling))
 
+    def __repr__(self) -> str:
+        return f"({self.width}, {self.height})"
+
 
 @dataclass
 class Font:
@@ -164,3 +167,23 @@ class Font:
     @cached_property
     def pygame(self) -> pygame.Font:
         return SysFont(self.name, self.size)
+
+    def text_size(self, text: str) -> Size:
+        width, height = self.pygame.size(text)
+        return Size(width, height)
+
+
+@dataclass
+class Timer:
+    duration: Millisecond
+    elapsed: Millisecond = 0
+
+    def tick(self, time_delta: Millisecond) -> Timer:
+        return replace(self, elapsed=self.elapsed + time_delta)
+
+    def reset(self) -> Timer:
+        return replace(self, elapsed=0)
+
+    @cached_property
+    def expired(self) -> bool:
+        return self.elapsed > self.duration

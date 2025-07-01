@@ -17,7 +17,9 @@ from pygame.mask import from_surface
 
 from nextrpg.config import config
 from nextrpg.core import Alpha, Direction, DirectionalOffset, Pixel, Rgba, Size
+from nextrpg.logger import FROM_CONFIG, Logger
 
+logger = Logger("Draw")
 
 class Coordinate(namedtuple("Coordinate", "left top")):
     """
@@ -113,7 +115,7 @@ class Drawing:
             or a `pygame.Surface` object.
     """
 
-    resource: Path | Surface
+    resource: str | Path | Surface
 
     @property
     def width(self) -> Pixel:
@@ -201,14 +203,14 @@ class Drawing:
 
     @cached_property
     def _surface(self) -> Surface:
-        return (
-            self.resource
-            if isinstance(self.resource, Surface)
-            else load(self.resource).convert_alpha()
-        )
+        if isinstance(self.resource, Surface):
+            return self.resource
+        logger.debug(t"Loading {self.resource}", duration=FROM_CONFIG)
+        return load(self.resource).convert_alpha()
 
 
-class DrawOnScreen(namedtuple("DrawOnScreen", "top_left drawing")):
+@dataclass
+class DrawOnScreen:
     """
     Represents a drawable element positioned on the screen with its coordinates.
 

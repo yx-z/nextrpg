@@ -13,9 +13,11 @@ from pygame.time import Clock
 from nextrpg.config import config
 from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
 from nextrpg.gui import Gui
-from nextrpg.logger import debug_log
+from nextrpg.logger import Logger
 from nextrpg.model import instance_init, register_instance_init
 from nextrpg.scene.scene import Scene
+
+logger = Logger("GameLoop")
 
 
 @register_instance_init
@@ -37,14 +39,14 @@ class Game:
         Start the game in a local pygame window.
         """
         while self._loop.is_running:
-            self._loop = self._loop.step()
+            self._loop = self._loop.tick()
 
     async def start_async(self) -> None:
         """
         Start the game in async fashion in the context of pygbag/web.
         """
         while self._loop.is_running:
-            self._loop = self._loop.step()
+            self._loop = self._loop.tick()
             await sleep(0)
 
 
@@ -62,20 +64,23 @@ class _GameLoop:
             self, _scene=self._scene.event(e), _gui=self._gui.event(e)
         )
 
-    def step(self) -> _GameLoop:
-        debug_log("Game", t"FPS: {self._clock.get_fps():.0f}")
+    def tick(self) -> _GameLoop:
+        logger.debug(t"FPS: {self._clock.get_fps():.0f}")
         self._clock.tick(config().gui.frames_per_second)
+        time_delta = self._clock.get_time()
+
         if config().gui is not self._gui.current_config:
             self._gui = replace(
                 self._gui,
                 current_config=config().gui,
                 last_config=self._gui.current_config,
             )
-        self._gui.draw(self._scene.draw_on_screens)
+        self._gui.draw(self._scene.draw_on_screens, time_delta)
+
         return reduce(
             lambda loop, e: loop.event(to_typed_event(e)),
             pygame.event.get(),
-            replace(self, _scene=self._scene.step(self._clock.get_time())),
+            replace(self, _scene=self._scene.tick(time_delta)),
         )
 
 

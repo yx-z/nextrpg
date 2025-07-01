@@ -13,6 +13,6 @@ def test_transition_scene(mocker: MockerFixture) -> None:
         DrawOnScreen(Coordinate(1, 2), Drawing(MockSurface()))
     ]
     transition = TransitionScene(scene1, scene2)
-    assert transition.step(10000) is scene2
+    assert transition.tick(10000) is scene2
     mocker.patch("nextrpg.draw_on_screen.Drawing.set_alpha")
     assert transition.draw_on_screens

@@ -31,7 +31,7 @@ class TransitionScene(Scene):
     def draw_on_screens(self) -> list[DrawOnScreen]:
         return self.from_scene.draw_on_screens + self._to_scene_drawings
 
-    def step(self, time_delta: Millisecond) -> Scene:
+    def tick(self, time_delta: Millisecond) -> Scene:
         return (
             self.to_scene
             if (total_elapsed := self._elapsed + time_delta) > self.duration

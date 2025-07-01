@@ -8,5 +8,5 @@ from nextrpg.scene.scene import Scene
 def test_scene() -> None:
     scene = Scene()
     assert scene.event(PygameEvent(Event(QUIT))) is scene
-    assert scene.step(10) is scene
+    assert scene.tick(10) is scene
     assert not scene.draw_on_screens

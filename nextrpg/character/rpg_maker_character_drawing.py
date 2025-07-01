@@ -227,7 +227,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     ) -> CyclicFrames:
         frames = self._frames[adjusted_direction]
         return (
-            frames.step(time_delta)
+            frames.tick(time_delta)
             if adjusted_direction == _adjust(self.direction)
             else frames
         )

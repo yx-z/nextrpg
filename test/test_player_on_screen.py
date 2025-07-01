@@ -6,7 +6,6 @@ from nextrpg.config import Config, DebugConfig
 from nextrpg.core import Size
 from nextrpg.draw_on_screen import Coordinate, Rectangle
 from nextrpg.event.pygame_event import KeyPressDown, KeyPressUp, Quit
-from nextrpg.logger import get_debug_logs
 from test.util import MockCharacterDrawing, override_config
 
 
@@ -18,10 +17,10 @@ def test_player_on_screen():
         collisions=[Rectangle(Coordinate(12, 20), Size(10, 10))],
     )
     assert player.event(Quit(Event(QUIT))) is player
-    assert player.step(100).coordinate == Coordinate(10, 20)
+    assert player.tick(100).coordinate == Coordinate(10, 20)
     assert player.draw_on_screen.top_left == Coordinate(10, 20)
     right = KeyPressDown(Event(KEYDOWN, key=K_RIGHT))
-    assert player.event(right).step(1).coordinate == Coordinate(10, 20)
+    assert player.event(right).tick(1).coordinate == Coordinate(10, 20)
     assert (
         player.event(right)
         .event(KeyPressUp(Event(KEYUP, key=K_RIGHT)))
@@ -36,7 +35,7 @@ def test_player_on_screen():
 
     assert player._can_move(Coordinate(10, 20))
     with override_config(Config(debug=DebugConfig())):
-        player.event(right).step(10)
+        player.event(right).tick(10)
         assert get_debug_logs()
 
     with override_config(Config(debug=DebugConfig(ignore_map_collisions=True))):

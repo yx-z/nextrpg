@@ -13,7 +13,9 @@ from nextrpg.config import config
 from nextrpg.core import Direction, Millisecond, PixelPerMillisecond
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Polygon
 from nextrpg.event.pygame_event import PygameEvent
-from nextrpg.logger import debug_log
+from nextrpg.logger import FROM_CONFIG, Logger
+
+logger = Logger("CharacterOnScreen")
 
 
 @dataclass
@@ -60,7 +62,7 @@ class CharacterOnScreen(ABC):
         """
 
     @abstractmethod
-    def step(self, time_delta: Millisecond) -> CharacterOnScreen:
+    def tick(self, time_delta: Millisecond) -> CharacterOnScreen:
         """
 
         Args:
@@ -101,7 +103,7 @@ class MovingCharacterOnScreen(CharacterOnScreen):
         """
 
     @override
-    def step(self, time_delta: Millisecond) -> CharacterOnScreen:
+    def tick(self, time_delta: Millisecond) -> CharacterOnScreen:
         """
         Update the character's state for a single game step/frame.
 
@@ -160,6 +162,9 @@ class MovingCharacterOnScreen(CharacterOnScreen):
 
         for collision, player_coord in product(self.collisions, hit_coords):
             if collision.contain(player_coord):
-                debug_log("Collision", t"{player_coord} and {collision.points}")
+                logger.debug(
+                    t"Collission {player_coord} and {collision.points}",
+                    duration=FROM_CONFIG,
+                )
                 return False
         return True

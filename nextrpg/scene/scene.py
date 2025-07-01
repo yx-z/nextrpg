@@ -63,7 +63,7 @@ class Scene:
         """
         return self
 
-    def step(self, time_delta: Millisecond) -> Scene:
+    def tick(self, time_delta: Millisecond) -> Scene:
         """
         Update the scene state for a single game step/frame.
 

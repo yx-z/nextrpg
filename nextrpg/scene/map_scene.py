@@ -15,7 +15,7 @@ from nextrpg.core import Millisecond, Pixel
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import PygameEvent
-from nextrpg.logger import debug_log
+from nextrpg.logger import Logger
 from nextrpg.model import instance_init, register_instance_init
 from nextrpg.scene.map_helper import (
     MapHelper,
@@ -26,6 +26,7 @@ from nextrpg.scene.map_helper import (
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 
+logger = Logger("MapScene")
 
 def _init_player(self: MapScene) -> PlayerOnScreen:
     player = self._map_helper.get_object(self.player_coordinate_object)
@@ -104,7 +105,7 @@ class MapScene(Scene):
         return replace(self, _player=self._player.event(event))
 
     @override
-    def step(self, time_delta: Millisecond) -> Scene:
+    def tick(self, time_delta: Millisecond) -> Scene:
         """
         Update the map scene state for a single game step/frame.
 
@@ -117,8 +118,8 @@ class MapScene(Scene):
         Returns:
             `Scene`: The updated scene after the time step.
         """
-        player = self._player.step(time_delta)
-        debug_log("Map", t"Player {player.coordinate}")
+        player = self._player.tick(time_delta)
+        logger.debug(t"Player {player.coordinate}")
         return self._move_to_scene(player) or replace(self, _player=player)
 
     @cached_property
@@ -160,7 +161,7 @@ class MapScene(Scene):
         left_offset = _offset(player.left, gui_width, map_width)
         top_offset = _offset(player.top, gui_height, map_height)
         offset = Coordinate(left_offset, top_offset)
-        debug_log("Map", t"offset {offset}")
+        logger.info(t"Player offset {offset}")
         return offset
 
     def _move_to_scene(self, player: CharacterOnScreen) -> Scene | None:

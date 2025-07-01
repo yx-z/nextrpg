@@ -1,12 +1,11 @@
 from pygame import Event, KEYDOWN, K_F1, K_LEFT, VIDEORESIZE
 from pytest_mock import MockerFixture
 
-from nextrpg.config import Config, DebugConfig, GuiConfig, GuiMode, ResizeMode
+from nextrpg.config import Config, GuiConfig, GuiMode, ResizeMode
 from nextrpg.core import Size
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
 from nextrpg.event.pygame_event import GuiResize, KeyPressDown, KeyPressUp
 from nextrpg.gui import Gui, _resize
-from nextrpg.logger import clear_debug_logs, debug_log
 from test.util import MockSurface, override_config
 
 
@@ -30,11 +29,11 @@ def test_gui(mocker: MockerFixture) -> None:
     gui = gui.event(GuiResize(Event(VIDEORESIZE, w=200, h=300)))
     assert gui.current_config.size == Size(200, 300)
 
-    draw_debug = gui._draw_debug_log
-    gui._draw_debug_log = lambda: None
+    draw_debug = gui._draw_log
+    gui._draw_log = lambda: None
     gui.draw([])
     gui._screen.blits.assert_not_called()
-    gui._draw_debug_log = draw_debug
+    gui._draw_log = draw_debug
 
     gui2 = Gui(GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE_SIZE))
     gui2.draw([])
@@ -52,13 +51,6 @@ def test_gui(mocker: MockerFixture) -> None:
         ).current_config.gui_mode
         is GuiMode.FULL_SCREEN
     )
-
-    gui._draw_debug_log()
-    debug_log("a")
-    with override_config(Config(debug=DebugConfig())):
-        gui._draw_debug_log()
-        gui._screen.blits.assert_called()
-    clear_debug_logs()
 
     width, height = gui.current_config.size
     assert _resize(gui, GuiResize(Event(VIDEORESIZE, w=width, h=height))) is gui

@@ -12,7 +12,14 @@ from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import scale
 
-from nextrpg.config import GuiConfig, GuiMode, ResizeMode, config, set_config
+from nextrpg.config import (
+    GuiConfig,
+    GuiMode,
+    ResizeMode,
+    config,
+    set_config,
+)
+from nextrpg.core import Millisecond, Pixel
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
 from nextrpg.event.pygame_event import (
     GuiResize,
@@ -20,10 +27,12 @@ from nextrpg.event.pygame_event import (
     KeyboardKey,
     PygameEvent,
 )
-from nextrpg.logger import clear_debug_logs, debug_log, get_debug_logs
+from nextrpg.logger import ComponentAndMessage, Logger, pop_messages
 from nextrpg.text import Text
 
 type _GuiFlag = int
+
+logger = Logger("GUI")
 
 
 @dataclass
@@ -71,35 +80,35 @@ class Gui:
         """
         return self
 
-    def draw(self, draw_on_screens: list[DrawOnScreen]) -> None:
+    def draw(
+        self, draw_on_screens: list[DrawOnScreen], time_delta: Millisecond
+    ) -> None:
         """
         Draw the given drawings to the screen.
 
-        Args:
+        Arguments:
             `draw_on_screens`: The drawings to draw to the screen.
+
+            `time_delta`: The time that has passed since the last update.
 
         Returns:
             `None`.
         """
-        debug_log("GUI", t"size {self.current_config.size} shift {self._center_shift}")
+        logger.debug(
+            t"Size {self.current_config.size} Shift {self._center_shift}"
+        )
         self._screen.fill(self.current_config.background_color)
         match self.current_config.resize_mode:
             case ResizeMode.SCALE:
                 self._screen.blit(*self._scale(draw_on_screens).pygame)
             case ResizeMode.KEEP_NATIVE_SIZE:
                 self._screen.blits(d.pygame for d in draw_on_screens)
-        self._draw_debug_log()
+        self._draw_log(time_delta)
         flip()
 
-    def _draw_debug_log(self) -> None:
-        if config().debug:
-            self._screen.blits(
-                d.pygame
-                for d in Text(
-                     get_debug_logs().formatted_log, Coordinate(0, 0)
-                ).draw_on_screens
-            )
-        clear_debug_logs()
+    def _draw_log(self, time_delta: Millisecond) -> None:
+        if msgs := pop_messages(time_delta):
+            self._screen.blits(t.draw_on_screen.pygame for t in _log_text(msgs))
 
     def _scale(self, draws: list[DrawOnScreen]) -> DrawOnScreen:
         screen = Surface(self.initial_config.size)
@@ -161,3 +170,23 @@ def _resize(self, e: GuiResize) -> Gui:
     return replace(
         self, current_config=current_config, last_config=self.current_config
     )
+
+
+def _log_text(msgs: list[ComponentAndMessage]) -> list[Text]:
+    margin = config().text.margin
+    msg_margin = (
+        max(config().text.font.text_size(m.component).width for m in msgs)
+        + 2 * margin
+    )
+    return [
+        text
+        for i, (component, msg) in enumerate(msgs)
+        for text in (
+            Text(component, Coordinate(margin, _line_height(i))),
+            Text(msg, Coordinate(msg_margin, _line_height(i))),
+        )
+    ]
+
+
+def _line_height(line_index: int) -> Pixel:
+    return 2 * config().text.margin + line_index * config().text.font.size

@@ -2,15 +2,16 @@
 Static frames, when played sequentially, become animated.
 """
 
-from dataclasses import dataclass, replace
+from dataclasses import replace
 
-from nextrpg.core import Millisecond
+from nextrpg.core import Millisecond, Timer
 from nextrpg.draw_on_screen import Drawing
+from nextrpg.model import instance_init, register_instance_init
 
 type _FrameIndex = int
 
 
-@dataclass
+@register_instance_init
 class CyclicFrames:
     """
     Static frames that can be played sequentially to create animations.
@@ -27,7 +28,7 @@ class CyclicFrames:
     frames: list[Drawing]
     duration_per_frame: Millisecond
     _index: _FrameIndex = 0
-    _elapsed: Millisecond = 0
+    _timer: Timer = instance_init(lambda self: Timer(self.duration_per_frame))
 
     @property
     def current_frame(self) -> Drawing:
@@ -42,7 +43,7 @@ class CyclicFrames:
         """
         return self.frames[self._index]
 
-    def step(self, time_delta: Millisecond) -> CyclicFrames:
+    def tick(self, time_delta: Millisecond) -> CyclicFrames:
         """
         Advance animation frames based on elapsed time.
 
@@ -57,12 +58,12 @@ class CyclicFrames:
             The frame index is updated according to elapsed time and
             wraps around when it reaches the end of the frame list.
         """
-        total_time = self._elapsed + time_delta
-        frames_to_step = total_time // self.duration_per_frame
+        t = self._timer.tick(time_delta)
+        frames_to_step = t.elapsed // self.duration_per_frame
         return replace(
             self,
             _index=(self._index + frames_to_step) % len(self.frames),
-            _elapsed=total_time % self.duration_per_frame,
+            _timer=replace(t, elapsed=t.elapsed % self.duration_per_frame),
         )
 
     def reset(self) -> CyclicFrames:
@@ -76,4 +77,4 @@ class CyclicFrames:
             `CyclicFrames`: A new instance with the animation state reset to
             the beginning of the sequence.
         """
-        return replace(self, _index=0, _elapsed=0)
+        return replace(self, _index=0, _timer=self._timer.reset())
