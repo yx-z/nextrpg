@@ -10,11 +10,12 @@ from typing import override
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.config import GuiMode, ResizeMode, config, initial_config
+from nextrpg.config import ResizeMode, config, initial_config
 from nextrpg.core import Millisecond, Pixel, Size
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import PygameEvent
+from nextrpg.event.rpg_event import RpgEventSpec
 from nextrpg.logger import Logger
 from nextrpg.model import instance_init, register_instance_init
 from nextrpg.scene.map_helper import (
@@ -27,6 +28,7 @@ from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 
 logger = Logger("MapScene")
+
 
 def _init_player(self: MapScene) -> PlayerOnScreen:
     player = self._map_helper.get_object(self.player_coordinate_object)
@@ -61,7 +63,7 @@ class MapScene(Scene):
     initial_player_drawing: CharacterDrawing
     player_coordinate_object: str
     moves: list[Move] = field(default_factory=list)
-
+    rpg_events: list[RpgEventSpec] = field(default_factory=list)
     _map_helper: MapHelper = instance_init(
         lambda self: MapHelper(self.tmx_file)
     )
@@ -161,16 +163,22 @@ class MapScene(Scene):
         left_offset = _offset(player.left, gui_width, map_width)
         top_offset = _offset(player.top, gui_height, map_height)
         offset = Coordinate(left_offset, top_offset)
-        logger.info(t"Player offset {offset}")
+        logger.debug(t"Player offset {offset}")
         return offset
 
     def _move_to_scene(self, player: CharacterOnScreen) -> Scene | None:
-        player_rect = player.draw_on_screen.rectangle
-        for move in self.moves:
-            move_object = self._map_helper.get_object(move.trigger_object)
-            if player_rect.collide(get_polygon(move_object)):
-                return TransitionScene(self, move.to_scene(player.character))
-        return None
+        moved = (m for move in self.moves if (m := self._move(player, move)))
+        return next(moved, None)
+
+    def _move(self, player: CharacterOnScreen, move: Move) -> Scene | None:
+        move_poly = get_polygon(
+            self._map_helper.get_object(move.trigger_object)
+        )
+        return (
+            TransitionScene(self, move.to_scene(player.character))
+            if player.draw_on_screen.rectangle.collide(move_poly)
+            else None
+        )
 
     @cached_property
     def _collision_visuals(self) -> list[DrawOnScreen]:
@@ -188,6 +196,7 @@ def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
     if player_axis > map_axis - gui_axis / 2:
         return gui_axis - map_axis
     return gui_axis / 2 - player_axis
+
 
 def _gui_size() -> Size:
     match config().gui.resize_mode:

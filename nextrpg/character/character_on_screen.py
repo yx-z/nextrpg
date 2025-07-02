@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field, replace
 from functools import cached_property
 from itertools import product
-from typing import override
+from typing import NamedTuple, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
@@ -160,11 +160,26 @@ class MovingCharacterOnScreen(CharacterOnScreen):
             },
         }[self.character.direction]
 
-        for collision, player_coord in product(self.collisions, hit_coords):
-            if collision.contain(player_coord):
-                logger.debug(
-                    t"Collission {player_coord} and {collision.points}",
-                    duration=FROM_CONFIG,
-                )
-                return False
+        if collision_and_coord := self._collide(hit_coords):
+            collision, coord = collision_and_coord
+            logger.debug(
+                t"Collission {coord} and {collision.points}",
+                duration=FROM_CONFIG,
+            )
+            return False
         return True
+
+    def _collide(
+        self, hit_coords: set[Coordinate]
+    ) -> _CollisionAndCoord | None:
+        collided = (
+            _CollisionAndCoord(collision, coord)
+            for collision, coord in product(self.collisions, hit_coords)
+            if collision.contain(coord)
+        )
+        return next(collided, None)
+
+
+class _CollisionAndCoord(NamedTuple):
+    polygon: Polygon
+    coord: Coordinate

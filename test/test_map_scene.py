@@ -57,7 +57,7 @@ def test_move_to_scene(mocker: MockerFixture) -> None:
     helper.get_object = lambda name: (
         SimpleNamespace(x=0, y=0, width=1, height=2, properties={})
         if name
-        else SimpleNamespace(x=10, y=20, width=1, height=2, properties={})
+        else SimpleNamespace(x=10, y=20, width=10, height=20, properties={})
     )
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=helper)
     map = MapScene(
@@ -70,7 +70,7 @@ def test_move_to_scene(mocker: MockerFixture) -> None:
         ],
     )
     assert map._move_to_scene(
-        PlayerOnScreen(MockCharacterDrawing(), Coordinate(10, 20), 0, [])
+        PlayerOnScreen(MockCharacterDrawing(), Coordinate(11, 21), [])
     )
 
 

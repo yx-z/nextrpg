@@ -9,15 +9,16 @@ from nextrpg.character.character_on_screen import (
 from nextrpg.config import config
 from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import Polygon
+from nextrpg.event.rpg_event import RpgEvent
 
 
 @dataclass
-class StaticNpcOnScreen(CharacterOnScreen):
+class StaticNpcOnScreen(RpgEvent, CharacterOnScreen):
     pass
 
 
 @dataclass
-class MovingNpcOnScreen(MovingCharacterOnScreen):
+class MovingNpcOnScreen(RpgEvent, MovingCharacterOnScreen):
     _: KW_ONLY = field()
     path: Polygon = field()
     idle_duration: Millisecond = field(
