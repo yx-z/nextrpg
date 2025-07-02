@@ -211,7 +211,7 @@ class Timer:
 
     def reset(self) -> Timer:
         """
-        Get a resetted timer.
+        Get a reset timer.
 
         Returns:
             `Timer`: A new timer with elapsed time set to 0.

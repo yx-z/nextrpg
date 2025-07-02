@@ -69,18 +69,22 @@ class _GameLoop:
         self._clock.tick(config().gui.frames_per_second)
         time_delta = self._clock.get_time()
 
-        if config().gui is not self._gui.current_config:
-            self._gui = replace(
-                self._gui,
-                current_config=config().gui,
-                last_config=self._gui.current_config,
-            )
+        self._update_gui()
         self._gui.draw(self._scene.draw_on_screens, time_delta)
 
         return reduce(
             lambda loop, e: loop.event(to_typed_event(e)),
             pygame.event.get(),
             replace(self, _scene=self._scene.tick(time_delta)),
+        )
+
+    def _update_gui(self) -> None:
+        if config().gui is self._gui.current_config:
+            return
+        self._gui = replace(
+            self._gui,
+            current_config=config().gui,
+            last_config=self._gui.current_config,
         )
 
 

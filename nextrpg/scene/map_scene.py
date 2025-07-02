@@ -64,10 +64,8 @@ class MapScene(Scene):
     player_coordinate_object: str
     moves: list[Move] = field(default_factory=list)
     rpg_events: list[RpgEventSpec] = field(default_factory=list)
-    _map_helper: MapHelper = instance_init(
-        lambda self: MapHelper(self.tmx_file)
-    )
     _player: PlayerOnScreen = instance_init(_init_player)
+
 
     @cached_property
     @override
@@ -188,6 +186,10 @@ class MapScene(Scene):
             c.fill(debug.collision_rectangle_color)
             for c in self._map_helper.collisions
         ]
+
+    @cached_property
+    def _map_helper(self) -> MapHelper:
+        return MapHelper(self.tmx_file)
 
 
 def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
