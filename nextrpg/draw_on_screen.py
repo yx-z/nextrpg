@@ -62,7 +62,7 @@ class Coordinate(namedtuple("Coordinate", "left top")):
         For example, an offset of `sqrt(2)` in `UP_LEFT` direction shifts
         the coordinate `Pixel(1)` in both `UP` and `LEFT` directions.
 
-        Args:
+        Arguments:
             `offset`: A `DirectionalOffset` representing the direction
                 and offset, or `Coordinate` to add to the current `Coordinate`.
 
@@ -165,7 +165,7 @@ class Drawing:
         coordinates and dimensions and returns a new `Drawing` instance.
         The original drawing remains unchanged.
 
-        Args:
+        Arguments:
             `top_left`: The top-left coordinate of the rectangle to be cropped.
 
             `size`: The width and height of the rectangle to be cropped.
@@ -285,7 +285,7 @@ class DrawOnScreen:
         """
         Shift the drawing by the specified coordinate.
 
-        Args:
+        Arguments:
             `coord`: The coordinate to shift the drawing by.
 
         Returns:
@@ -326,7 +326,7 @@ class Polygon:
         """
         Creates a colored `DrawOnScreen` with the provided color.
 
-        Args:
+        Arguments:
             `Color`: The color to fill the rectangle.
 
         Returns:
@@ -341,7 +341,7 @@ class Polygon:
         """
         Checks if this rectangle overlaps with another polygon.
 
-        Args:
+        Arguments:
             `poly`: The polygon to check for collision with.
 
         Returns:

@@ -137,7 +137,7 @@ class Size(namedtuple("Size", "width height")):
 
         Round up so that drawings won't leave tiny, black gaps after scaled.
 
-        Args:
+        Arguments:
             `scaling`: A scaling factor by which the width and height will be
                 multiplied.
 
@@ -178,7 +178,7 @@ class Font:
         """
         Get the drawing size of a text string.
 
-        Args:
+        Arguments:
             `text`: The text string to measure.
 
         Returns:
@@ -201,7 +201,7 @@ class Timer:
         """
         Tick the timer in a game loop.
 
-        Args:
+        Arguments:
             `time_delta`: The time elapsed since the last tick.
 
         Returns:

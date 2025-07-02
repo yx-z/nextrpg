@@ -10,7 +10,7 @@ def exterior_scene(
     player: CharacterDrawing, player_coordinate_object: str
 ) -> Scene:
     """
-    Args:
+    Arguments:
         `player`: The character drawing to use for the player.
 
         `player_coordinate_object`: Name of the object to use as the player.

@@ -26,7 +26,7 @@ class CharacterOnScreen(ABC):
     Handles character movement, collision detection, and event processing for
     character interactions with the game environment.
 
-    Args:
+    Arguments:
         `character_drawing`: The visual representation of the character.
 
         `coordinate`: The current position of the character on screen.
@@ -54,7 +54,7 @@ class CharacterOnScreen(ABC):
     def event(self, e: PygameEvent) -> CharacterOnScreen:
         """
 
-        Args:
+        Arguments:
             e:
 
         Returns:
@@ -65,7 +65,7 @@ class CharacterOnScreen(ABC):
     def tick(self, time_delta: Millisecond) -> CharacterOnScreen:
         """
 
-        Args:
+        Arguments:
             time_delta:
 
         Returns:
@@ -95,7 +95,7 @@ class MovingCharacterOnScreen(CharacterOnScreen):
         """
         Move the character based on the current speed and time delta.
 
-        Args:
+        Arguments:
             `time_delta`: The time that has passed since the last update.
 
         Returns:
@@ -110,7 +110,7 @@ class MovingCharacterOnScreen(CharacterOnScreen):
         Calculates movement based on currently pressed keys, handles collision
         detection, and updates the character's drawing state (moving or idle).
 
-        Args:
+        Arguments:
             `time_delta`: The time that has passed since
                 the last update, used for calculating movement distance.
 

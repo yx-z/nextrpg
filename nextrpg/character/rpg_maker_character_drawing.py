@@ -185,7 +185,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         Creates a new character drawing with the specified direction and resets
         animation frames for all directions except the new one.
 
-        Args:
+        Arguments:
             `direction`: The new direction for the character to face.
 
         Returns:
@@ -209,7 +209,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         Advances the animation frames for the current direction while leaving
         other direction frames unchanged.
 
-        Args:
+        Arguments:
             `time_delta`: The amount of time that has
                 passed since the last update.
 
@@ -244,7 +244,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         frames even when idle.
         Otherwise, resets all frames to their initial state.
 
-        Args:
+        Arguments:
             `time_delta`: The amount of time that has passed
                 since the last update.
 

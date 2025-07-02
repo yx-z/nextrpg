@@ -45,7 +45,7 @@ class MapScene(Scene):
     Handles rendering of map layers, character movement with collisions,
     and proper depth sorting of foreground elements relative to the player.
 
-    Args:
+    Arguments:
         `tmx_file`: Path to the Tiled TMX file to load.
 
         `player_drawing`: Character drawing representing the player.
@@ -96,7 +96,7 @@ class MapScene(Scene):
         Delegates event handling to the player character and returns an
         updated scene with the new player state.
 
-        Args:
+        Arguments:
             `event`: The pygame event to process.
 
         Returns:
@@ -112,7 +112,7 @@ class MapScene(Scene):
         Updates the player character's position and animation state based on the
         elapsed time since the last frame.
 
-        Args:
+        Arguments:
             `time_delta`: The time that has passed since the last update.
 
         Returns:

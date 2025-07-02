@@ -27,7 +27,7 @@ def register_instance_init[T](cls: type[T]) -> type[T]:
     """
     Class decorator to allow the use of `instance_init` in dataclasses.
 
-    Args:
+    Arguments:
         `cls`: The class to decorate.
 
     Returns:

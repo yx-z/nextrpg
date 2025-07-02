@@ -30,7 +30,7 @@ class Move:
         """
         Move to another scene.
 
-        Args:
+        Arguments:
             `character`: The character to appear in the next scene.
 
         Returns:

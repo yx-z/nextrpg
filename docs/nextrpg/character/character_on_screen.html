@@ -126,7 +126,7 @@
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="sd">    Handles character movement, collision detection, and event processing for</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="sd">    character interactions with the game environment.</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="sd">    Args:</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="sd">    Arguments:</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="sd">        `character_drawing`: The visual representation of the character.</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>
 </span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="sd">        `coordinate`: The current position of the character on screen.</span>
@@ -154,7 +154,7 @@
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterOnScreen</span><span class="p">:</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">        Args:</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">        Arguments:</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">            e:</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="sd">        Returns:</span>
@@ -165,7 +165,7 @@
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterOnScreen</span><span class="p">:</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">        Args:</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">        Arguments:</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">            time_delta:</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">        Returns:</span>
@@ -195,7 +195,7 @@
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">        Move the character based on the current speed and time delta.</span>
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">        Args:</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">        Arguments:</span>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">            `time_delta`: The time that has passed since the last update.</span>
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">        Returns:</span>
@@ -210,7 +210,7 @@
 </span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">        Calculates movement based on currently pressed keys, handles collision</span>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="sd">        detection, and updates the character&#39;s drawing state (moving or idle).</span>
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        Args:</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        Arguments:</span>
 </span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a><span class="sd">            `time_delta`: The time that has passed since</span>
 </span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">                the last update, used for calculating movement distance.</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>
@@ -304,7 +304,7 @@
 </span><span id="CharacterOnScreen-27"><a href="#CharacterOnScreen-27"><span class="linenos">27</span></a><span class="sd">    Handles character movement, collision detection, and event processing for</span>
 </span><span id="CharacterOnScreen-28"><a href="#CharacterOnScreen-28"><span class="linenos">28</span></a><span class="sd">    character interactions with the game environment.</span>
 </span><span id="CharacterOnScreen-29"><a href="#CharacterOnScreen-29"><span class="linenos">29</span></a>
-</span><span id="CharacterOnScreen-30"><a href="#CharacterOnScreen-30"><span class="linenos">30</span></a><span class="sd">    Args:</span>
+</span><span id="CharacterOnScreen-30"><a href="#CharacterOnScreen-30"><span class="linenos">30</span></a><span class="sd">    Arguments:</span>
 </span><span id="CharacterOnScreen-31"><a href="#CharacterOnScreen-31"><span class="linenos">31</span></a><span class="sd">        `character_drawing`: The visual representation of the character.</span>
 </span><span id="CharacterOnScreen-32"><a href="#CharacterOnScreen-32"><span class="linenos">32</span></a>
 </span><span id="CharacterOnScreen-33"><a href="#CharacterOnScreen-33"><span class="linenos">33</span></a><span class="sd">        `coordinate`: The current position of the character on screen.</span>
@@ -332,7 +332,7 @@
 </span><span id="CharacterOnScreen-55"><a href="#CharacterOnScreen-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterOnScreen</span><span class="p">:</span>
 </span><span id="CharacterOnScreen-56"><a href="#CharacterOnScreen-56"><span class="linenos">56</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen-57"><a href="#CharacterOnScreen-57"><span class="linenos">57</span></a>
-</span><span id="CharacterOnScreen-58"><a href="#CharacterOnScreen-58"><span class="linenos">58</span></a><span class="sd">        Args:</span>
+</span><span id="CharacterOnScreen-58"><a href="#CharacterOnScreen-58"><span class="linenos">58</span></a><span class="sd">        Arguments:</span>
 </span><span id="CharacterOnScreen-59"><a href="#CharacterOnScreen-59"><span class="linenos">59</span></a><span class="sd">            e:</span>
 </span><span id="CharacterOnScreen-60"><a href="#CharacterOnScreen-60"><span class="linenos">60</span></a>
 </span><span id="CharacterOnScreen-61"><a href="#CharacterOnScreen-61"><span class="linenos">61</span></a><span class="sd">        Returns:</span>
@@ -343,7 +343,7 @@
 </span><span id="CharacterOnScreen-66"><a href="#CharacterOnScreen-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterOnScreen</span><span class="p">:</span>
 </span><span id="CharacterOnScreen-67"><a href="#CharacterOnScreen-67"><span class="linenos">67</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen-68"><a href="#CharacterOnScreen-68"><span class="linenos">68</span></a>
-</span><span id="CharacterOnScreen-69"><a href="#CharacterOnScreen-69"><span class="linenos">69</span></a><span class="sd">        Args:</span>
+</span><span id="CharacterOnScreen-69"><a href="#CharacterOnScreen-69"><span class="linenos">69</span></a><span class="sd">        Arguments:</span>
 </span><span id="CharacterOnScreen-70"><a href="#CharacterOnScreen-70"><span class="linenos">70</span></a><span class="sd">            time_delta:</span>
 </span><span id="CharacterOnScreen-71"><a href="#CharacterOnScreen-71"><span class="linenos">71</span></a>
 </span><span id="CharacterOnScreen-72"><a href="#CharacterOnScreen-72"><span class="linenos">72</span></a><span class="sd">        Returns:</span>
@@ -440,7 +440,7 @@ character interactions with the game environment.</p>
 </span><span id="CharacterOnScreen.event-55"><a href="#CharacterOnScreen.event-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterOnScreen</span><span class="p">:</span>
 </span><span id="CharacterOnScreen.event-56"><a href="#CharacterOnScreen.event-56"><span class="linenos">56</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen.event-57"><a href="#CharacterOnScreen.event-57"><span class="linenos">57</span></a>
-</span><span id="CharacterOnScreen.event-58"><a href="#CharacterOnScreen.event-58"><span class="linenos">58</span></a><span class="sd">        Args:</span>
+</span><span id="CharacterOnScreen.event-58"><a href="#CharacterOnScreen.event-58"><span class="linenos">58</span></a><span class="sd">        Arguments:</span>
 </span><span id="CharacterOnScreen.event-59"><a href="#CharacterOnScreen.event-59"><span class="linenos">59</span></a><span class="sd">            e:</span>
 </span><span id="CharacterOnScreen.event-60"><a href="#CharacterOnScreen.event-60"><span class="linenos">60</span></a>
 </span><span id="CharacterOnScreen.event-61"><a href="#CharacterOnScreen.event-61"><span class="linenos">61</span></a><span class="sd">        Returns:</span>
@@ -476,7 +476,7 @@ character interactions with the game environment.</p>
 </span><span id="CharacterOnScreen.tick-66"><a href="#CharacterOnScreen.tick-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterOnScreen</span><span class="p">:</span>
 </span><span id="CharacterOnScreen.tick-67"><a href="#CharacterOnScreen.tick-67"><span class="linenos">67</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen.tick-68"><a href="#CharacterOnScreen.tick-68"><span class="linenos">68</span></a>
-</span><span id="CharacterOnScreen.tick-69"><a href="#CharacterOnScreen.tick-69"><span class="linenos">69</span></a><span class="sd">        Args:</span>
+</span><span id="CharacterOnScreen.tick-69"><a href="#CharacterOnScreen.tick-69"><span class="linenos">69</span></a><span class="sd">        Arguments:</span>
 </span><span id="CharacterOnScreen.tick-70"><a href="#CharacterOnScreen.tick-70"><span class="linenos">70</span></a><span class="sd">            time_delta:</span>
 </span><span id="CharacterOnScreen.tick-71"><a href="#CharacterOnScreen.tick-71"><span class="linenos">71</span></a>
 </span><span id="CharacterOnScreen.tick-72"><a href="#CharacterOnScreen.tick-72"><span class="linenos">72</span></a><span class="sd">        Returns:</span>
@@ -531,7 +531,7 @@ character interactions with the game environment.</p>
 </span><span id="MovingCharacterOnScreen-96"><a href="#MovingCharacterOnScreen-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="MovingCharacterOnScreen-97"><a href="#MovingCharacterOnScreen-97"><span class="linenos"> 97</span></a><span class="sd">        Move the character based on the current speed and time delta.</span>
 </span><span id="MovingCharacterOnScreen-98"><a href="#MovingCharacterOnScreen-98"><span class="linenos"> 98</span></a>
-</span><span id="MovingCharacterOnScreen-99"><a href="#MovingCharacterOnScreen-99"><span class="linenos"> 99</span></a><span class="sd">        Args:</span>
+</span><span id="MovingCharacterOnScreen-99"><a href="#MovingCharacterOnScreen-99"><span class="linenos"> 99</span></a><span class="sd">        Arguments:</span>
 </span><span id="MovingCharacterOnScreen-100"><a href="#MovingCharacterOnScreen-100"><span class="linenos">100</span></a><span class="sd">            `time_delta`: The time that has passed since the last update.</span>
 </span><span id="MovingCharacterOnScreen-101"><a href="#MovingCharacterOnScreen-101"><span class="linenos">101</span></a>
 </span><span id="MovingCharacterOnScreen-102"><a href="#MovingCharacterOnScreen-102"><span class="linenos">102</span></a><span class="sd">        Returns:</span>
@@ -546,7 +546,7 @@ character interactions with the game environment.</p>
 </span><span id="MovingCharacterOnScreen-111"><a href="#MovingCharacterOnScreen-111"><span class="linenos">111</span></a><span class="sd">        Calculates movement based on currently pressed keys, handles collision</span>
 </span><span id="MovingCharacterOnScreen-112"><a href="#MovingCharacterOnScreen-112"><span class="linenos">112</span></a><span class="sd">        detection, and updates the character&#39;s drawing state (moving or idle).</span>
 </span><span id="MovingCharacterOnScreen-113"><a href="#MovingCharacterOnScreen-113"><span class="linenos">113</span></a>
-</span><span id="MovingCharacterOnScreen-114"><a href="#MovingCharacterOnScreen-114"><span class="linenos">114</span></a><span class="sd">        Args:</span>
+</span><span id="MovingCharacterOnScreen-114"><a href="#MovingCharacterOnScreen-114"><span class="linenos">114</span></a><span class="sd">        Arguments:</span>
 </span><span id="MovingCharacterOnScreen-115"><a href="#MovingCharacterOnScreen-115"><span class="linenos">115</span></a><span class="sd">            `time_delta`: The time that has passed since</span>
 </span><span id="MovingCharacterOnScreen-116"><a href="#MovingCharacterOnScreen-116"><span class="linenos">116</span></a><span class="sd">                the last update, used for calculating movement distance.</span>
 </span><span id="MovingCharacterOnScreen-117"><a href="#MovingCharacterOnScreen-117"><span class="linenos">117</span></a>
@@ -680,7 +680,7 @@ character interactions with the game environment.</p>
 </span><span id="MovingCharacterOnScreen.move-96"><a href="#MovingCharacterOnScreen.move-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="MovingCharacterOnScreen.move-97"><a href="#MovingCharacterOnScreen.move-97"><span class="linenos"> 97</span></a><span class="sd">        Move the character based on the current speed and time delta.</span>
 </span><span id="MovingCharacterOnScreen.move-98"><a href="#MovingCharacterOnScreen.move-98"><span class="linenos"> 98</span></a>
-</span><span id="MovingCharacterOnScreen.move-99"><a href="#MovingCharacterOnScreen.move-99"><span class="linenos"> 99</span></a><span class="sd">        Args:</span>
+</span><span id="MovingCharacterOnScreen.move-99"><a href="#MovingCharacterOnScreen.move-99"><span class="linenos"> 99</span></a><span class="sd">        Arguments:</span>
 </span><span id="MovingCharacterOnScreen.move-100"><a href="#MovingCharacterOnScreen.move-100"><span class="linenos">100</span></a><span class="sd">            `time_delta`: The time that has passed since the last update.</span>
 </span><span id="MovingCharacterOnScreen.move-101"><a href="#MovingCharacterOnScreen.move-101"><span class="linenos">101</span></a>
 </span><span id="MovingCharacterOnScreen.move-102"><a href="#MovingCharacterOnScreen.move-102"><span class="linenos">102</span></a><span class="sd">        Returns:</span>
@@ -726,7 +726,7 @@ character interactions with the game environment.</p>
 </span><span id="MovingCharacterOnScreen.tick-111"><a href="#MovingCharacterOnScreen.tick-111"><span class="linenos">111</span></a><span class="sd">        Calculates movement based on currently pressed keys, handles collision</span>
 </span><span id="MovingCharacterOnScreen.tick-112"><a href="#MovingCharacterOnScreen.tick-112"><span class="linenos">112</span></a><span class="sd">        detection, and updates the character&#39;s drawing state (moving or idle).</span>
 </span><span id="MovingCharacterOnScreen.tick-113"><a href="#MovingCharacterOnScreen.tick-113"><span class="linenos">113</span></a>
-</span><span id="MovingCharacterOnScreen.tick-114"><a href="#MovingCharacterOnScreen.tick-114"><span class="linenos">114</span></a><span class="sd">        Args:</span>
+</span><span id="MovingCharacterOnScreen.tick-114"><a href="#MovingCharacterOnScreen.tick-114"><span class="linenos">114</span></a><span class="sd">        Arguments:</span>
 </span><span id="MovingCharacterOnScreen.tick-115"><a href="#MovingCharacterOnScreen.tick-115"><span class="linenos">115</span></a><span class="sd">            `time_delta`: The time that has passed since</span>
 </span><span id="MovingCharacterOnScreen.tick-116"><a href="#MovingCharacterOnScreen.tick-116"><span class="linenos">116</span></a><span class="sd">                the last update, used for calculating movement distance.</span>
 </span><span id="MovingCharacterOnScreen.tick-117"><a href="#MovingCharacterOnScreen.tick-117"><span class="linenos">117</span></a>

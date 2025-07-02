@@ -71,7 +71,7 @@ class Scene:
         last update, handling animations, movements,
         and other time-dependent changes.
 
-        Args:
+        Arguments:
             `time_delta`: The time that has passed since the last update,
                 used for calculating time-based changes.
 

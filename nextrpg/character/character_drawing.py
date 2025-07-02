@@ -36,7 +36,7 @@ class CharacterDrawing(ABC):
         """
         Turn the character to face a specified direction.
 
-        Args:
+        Arguments:
             `direction`: Turn the character facing to this direction.
 
         Returns:
@@ -49,7 +49,7 @@ class CharacterDrawing(ABC):
         Update the character's position based on movement over
         the given time delta.
 
-        Args:
+        Arguments:
             `time_delta`: The amount of time that has passed since the
                 last update.
 
@@ -62,7 +62,7 @@ class CharacterDrawing(ABC):
         """
         Update the character's idle animation state over the given time delta.
 
-        Args:
+        Arguments:
             `time_delta`: The amount of time that has passed since the
                 last update.
 

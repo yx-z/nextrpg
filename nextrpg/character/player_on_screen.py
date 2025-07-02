@@ -90,12 +90,12 @@ def _key_to_dir(current_keys: frozenset[KeyboardKey]) -> Direction | None:
 @PlayerOnScreen.event.register
 def _on_key(self, e: KeyPressDown | KeyPressUp) -> CharacterOnScreen:
     updated_keys = self._updated_movement_key(e)
+    direction = _key_to_dir(updated_keys)
     return replace(
         self,
         character=(
             self.character.turn(direction)
-            if (direction := _key_to_dir(updated_keys))
-            in config().character.directions
+            if direction in config().character.directions
             else self.character
         ),
         _movement_keys=updated_keys,

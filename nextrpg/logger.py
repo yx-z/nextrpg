@@ -132,8 +132,8 @@ def pop_messages(time_delta: Millisecond) -> list[ComponentAndMessage]:
     """
     Pop all log messages and return them in a formatted fashion.
 
-    Arguments::
-        `time_delta`: Milliseconds since last game loop.
+    Arguments:
+        `time_delta`: Milliseconds since the last game loop.
 
     Returns:
         `list[ComponentAndMessage]`: List of log messages.

@@ -71,7 +71,7 @@ def get_polygon(obj: TiledObject) -> Polygon:
     """
     Create a polygon from a Tiled object on a map.
 
-    Args:
+    Arguments:
         `obj`: The Tiled object to create a polygon from.
 
     Returns:

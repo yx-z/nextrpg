@@ -16,7 +16,7 @@ class CyclicFrames:
     """
     Static frames that can be played sequentially to create animations.
 
-    Args:
+    Arguments:
         `frames`: List of drawings that make up the animation sequence.
 
         `duration_per_frame`: Time to display each frame in milliseconds.
@@ -50,7 +50,7 @@ class CyclicFrames:
         Calculates how many frames to advance based on the accumulated time and
         creates a new CyclicFrames instance with updated index and elapsed time.
 
-        Args:
+        Arguments:
             `time_delta`: The time that has passed since the last step.
 
         Returns:
