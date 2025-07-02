@@ -4,8 +4,8 @@ You can either use the implicit, default configuration
 or pass the customized instance to `nextrpg.start_game.start_game`.
 """
 
+from dataclasses import dataclass
 from enum import Enum, IntEnum, auto
-from typing import NamedTuple
 
 from pygame.locals import K_DOWN, K_F1, K_LEFT, K_RIGHT, K_SPACE, K_UP
 
@@ -27,7 +27,8 @@ class LogLevel(IntEnum):
     ERROR = auto()
 
 
-class DebugConfig(NamedTuple):
+@dataclass(frozen=True)
+class DebugConfig:
     """
     Configuration class for debugging purposes.
 
@@ -103,7 +104,8 @@ _OPPOSITE_GUI_MODE = {
 }
 
 
-class GuiConfig(NamedTuple):
+@dataclass(frozen=True)
+class GuiConfig:
     """
     Configuration class for Graphical User Interface (GUI).
 
@@ -139,7 +141,8 @@ class GuiConfig(NamedTuple):
     allow_window_resize: bool = True
 
 
-class TileMapConfig(NamedTuple):
+@dataclass(frozen=True)
+class TileMapConfig:
     """
     Configuration class for managing tile map layers and properties,
     that is created from tmx files [Tiled](https://www.mapeditor.org/).
@@ -163,7 +166,8 @@ class TileMapConfig(NamedTuple):
     collision: str = "collision"
 
 
-class CharacterConfig(NamedTuple):
+@dataclass(frozen=True)
+class CharacterConfig:
     """
     Configuration class for characters.
 
@@ -185,7 +189,8 @@ class CharacterConfig(NamedTuple):
     directions: frozenset[Direction] = frozenset(Direction)
 
 
-class RpgMakerCharacterDrawingConfig(NamedTuple):
+@dataclass(frozen=True)
+class RpgMakerCharacterDrawingConfig:
     """
     Configuration class for RPG Maker character drawings.
 
@@ -220,7 +225,8 @@ These codes are used in key mapping configurations and event handling.
 """
 
 
-class KeyMappingConfig(NamedTuple):
+@dataclass(frozen=True)
+class KeyMappingConfig:
     """
     Configuration class for keyboard key mappings.
 
@@ -251,7 +257,8 @@ class KeyMappingConfig(NamedTuple):
     gui_mode_toggle: KeyCode | None = K_F1
 
 
-class ResourceConfig(NamedTuple):
+@dataclass(frozen=True)
+class ResourceConfig:
     """
     Configuration class for resource loading.
 
@@ -262,7 +269,8 @@ class ResourceConfig(NamedTuple):
     map_cache_size: int = 8
 
 
-class TransitionConfig(NamedTuple):
+@dataclass(frozen=True)
+class TransitionConfig:
     """
     Configuration class for transition scenes.
 
@@ -276,7 +284,8 @@ class TransitionConfig(NamedTuple):
     transition_duration: Millisecond = 500
 
 
-class TextConfig(NamedTuple):
+@dataclass(frozen=True)
+class TextConfig:
     """
     Configuration class for text rendering.
 
@@ -296,7 +305,8 @@ class TextConfig(NamedTuple):
     antialias: bool = True
 
 
-class Config(NamedTuple):
+@dataclass(frozen=True)
+class Config:
     """
     Main configuration class that aggregates all configuration components.
 

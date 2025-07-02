@@ -98,7 +98,6 @@ class Coordinate(namedtuple("Coordinate", "left top")):
     def __repr__(self) -> str:
         return f"({self.left:.1f}, {self.top:.1f})"
 
-
 @dataclass
 class Drawing:
     """

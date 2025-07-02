@@ -150,7 +150,8 @@ def pop_messages(time_delta: Millisecond) -> list[ComponentAndMessage]:
     return msgs
 
 
-class _Key(NamedTuple):
+@dataclass(frozen=True)
+class _Key:
     component: str
     template: tuple[str, ...]
 

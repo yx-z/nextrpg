@@ -13,9 +13,9 @@ in non-RPG Maker framework violates the license of RPG Maker,
 even if you own a copy of RPG Maker.
 """
 
-from dataclasses import field, replace
+from dataclasses import dataclass, field, replace
 from enum import IntEnum
-from typing import NamedTuple, override
+from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
@@ -65,7 +65,8 @@ type FrameType = type[DefaultFrameType | XpFrameType]
 """Choose between DefaultFrameType and XpFrameType."""
 
 
-class SpriteSheetSelection(NamedTuple):
+@dataclass(frozen=True)
+class SpriteSheetSelection:
     """
     Zero-indexed row/column for selecting a portion of a sprite sheet.
 
@@ -90,7 +91,8 @@ class SpriteSheetSelection(NamedTuple):
     max_columns: int = 4
 
 
-class Margin(NamedTuple):
+@dataclass(frozen=True)
+class Margin:
     """
     Margin of a single character frame to crop from the sprite sheet.
     """
@@ -101,7 +103,8 @@ class Margin(NamedTuple):
     right: Pixel = 0
 
 
-class SpriteSheet(NamedTuple):
+@dataclass(frozen=True)
+class SpriteSheet:
     """
     Container for sprite sheet configuration.
 

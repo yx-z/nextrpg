@@ -3,13 +3,14 @@ Move event.
 """
 
 from collections.abc import Callable
-from typing import NamedTuple
+from dataclasses import dataclass
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.scene.scene import Scene
 
 
-class Move(NamedTuple):
+@dataclass
+class Move:
     """
     Move event from the current scene to another.
 

@@ -72,7 +72,7 @@ class Gui:
 
             `GuiResize` will scale the screen appropriately based on config.
 
-        Args:
+        Arguments:
             `e`: The event to process.
 
         Returns:
@@ -152,10 +152,10 @@ class Gui:
 def _toggle_gui_mode(self, e: KeyPressDown) -> Gui:
     if e.key is not KeyboardKey.GUI_MODE_TOGGLE:
         return self
-    current_config = self.current_config._replace(
+    current_config = replace(self.current_config,
         gui_mode=self.current_config.gui_mode.opposite
     )
-    set_config(config()._replace(gui=current_config))
+    set_config(replace(config(), gui=current_config))
     return replace(
         self, current_config=current_config, last_config=self.current_config
     )
@@ -165,8 +165,8 @@ def _toggle_gui_mode(self, e: KeyPressDown) -> Gui:
 def _resize(self, e: GuiResize) -> Gui:
     if e.size == self.current_config.size:
         return self
-    current_config = self.current_config._replace(size=e.size)
-    set_config(config()._replace(gui=current_config))
+    current_config = replace(self.current_config, size=e.size)
+    set_config(replace(config(), gui=current_config))
     return replace(
         self, current_config=current_config, last_config=self.current_config
     )

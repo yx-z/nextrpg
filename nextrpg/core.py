@@ -7,7 +7,6 @@ from dataclasses import dataclass, replace
 from enum import Enum, auto
 from functools import cached_property
 from math import ceil
-from typing import NamedTuple
 
 import pygame
 from pygame.font import SysFont
@@ -91,7 +90,8 @@ Used as a unit for speed.
 """
 
 
-class DirectionalOffset(NamedTuple):
+@dataclass
+class DirectionalOffset:
     """
     Represents a directional offset for movement calculations.
 
@@ -150,7 +150,7 @@ class Size(namedtuple("Size", "width height")):
         return f"({self.width}, {self.height})"
 
 
-@dataclass
+@dataclass(frozen=True)
 class Font:
     """
     Font for text in game.
@@ -158,7 +158,7 @@ class Font:
     Arguments:
         `size`: Font size in pixels.
 
-        `name`: Font name.
+        `name`: Font name. If `None`, uses the default system font.
     """
 
     size: int
@@ -166,24 +166,64 @@ class Font:
 
     @cached_property
     def pygame(self) -> pygame.Font:
+        """
+        Get the pygame font object.
+
+        Returns:
+            `pygame.Font`: Pygame font object.
+        """
         return SysFont(self.name, self.size)
 
     def text_size(self, text: str) -> Size:
+        """
+        Get the drawing size of a text string.
+
+        Args:
+            `text`: The text string to measure.
+
+        Returns:
+            `Size`: The size of the text string.
+        """
         width, height = self.pygame.size(text)
         return Size(width, height)
 
 
 @dataclass
 class Timer:
+    """
+    A timer with duration and elapsed time.
+    """
+
     duration: Millisecond
     elapsed: Millisecond = 0
 
     def tick(self, time_delta: Millisecond) -> Timer:
+        """
+        Tick the timer in a game loop.
+
+        Args:
+            `time_delta`: The time elapsed since the last tick.
+
+        Returns:
+            `Timer`: A new timer with elapsed time updated.
+        """
         return replace(self, elapsed=self.elapsed + time_delta)
 
     def reset(self) -> Timer:
+        """
+        Get a resetted timer.
+
+        Returns:
+            `Timer`: A new timer with elapsed time set to 0.
+        """
         return replace(self, elapsed=0)
 
     @cached_property
     def expired(self) -> bool:
+        """
+        Get whether the timer has expired.
+
+        Returns:
+            `bool`: Whether the timer has expired.
+        """
         return self.elapsed > self.duration

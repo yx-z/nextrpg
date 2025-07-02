@@ -15,6 +15,6 @@ def test_size() -> None:
 
 def test_font() -> None:
     font = Font(12)
-    font.pygame = Mock()
+    object.__setattr__(font, "pygame", Mock())
     font.pygame.size = Mock(return_value=(10, 20))
     assert font.text_size("123") == Size(10, 20)
