@@ -58,7 +58,7 @@ def _init_player() -> CharacterDrawing:
         Direction.DOWN,
         SpriteSheet(
             # Player sprite sheet.
-            Drawing(Path("example/assets/Characters_MV.png")),
+            Drawing("example/assets/Characters_MV.png"),
             # Select a character from the sprite sheet.
             SpriteSheetSelection(row=0, column=1),
             # Declare margins to correctly detect collision/bounding box.

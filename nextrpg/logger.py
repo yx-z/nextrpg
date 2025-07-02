@@ -9,14 +9,24 @@ from nextrpg.core import Millisecond, Timer
 
 
 class DurationFromConfig:
-    pass
+    """
+    Sentinel class to indicate that the log duration is taken from config.
+    """
 
 
 FROM_CONFIG = DurationFromConfig()
+"""Sentinel object to indicate that the log duration is taken from config."""
 
 
 @dataclass
 class Logger:
+    """
+    On-screen logger.
+
+    Arguments:
+        `component`: Unique name of the component that the logger is for.
+    """
+
     component: str
 
     def debug(
@@ -25,6 +35,19 @@ class Logger:
         *,
         duration: Millisecond | DurationFromConfig | None = None,
     ) -> None:
+        """
+        Debug log message.
+
+        Arguments:
+            `message`: The message to log.
+
+            `duration`: The duration of the log message. If `None`, the message
+                will be flushed in next game loop. If `FROM_CONFIG`, the
+                duration is taken from `config().debug.log_duration`.
+
+        Returns:
+            `None`
+        """
         _add(self.component, LogLevel.DEBUG, message, duration)
 
     def info(
@@ -33,6 +56,17 @@ class Logger:
         *,
         duration: Millisecond | DurationFromConfig | None = None,
     ) -> None:
+        """
+        Info log message.
+
+        Arguments:
+            `message`: The message to log.
+
+            `duration`: The duration of the log message.
+
+        Returns:
+            `None`
+        """
         _add(self.component, LogLevel.INFO, message, duration)
 
     def warning(
@@ -41,6 +75,17 @@ class Logger:
         *,
         duration: Millisecond | DurationFromConfig | None = None,
     ) -> None:
+        """
+        Warning log message.
+
+        Arguments:
+            `message`: The message to log.
+
+            `duration`: The duration of the log message.
+
+        Returns:
+            `None`
+        """
         _add(self.component, LogLevel.WARNING, message, duration)
 
     def error(
@@ -49,6 +94,17 @@ class Logger:
         *,
         duration: Millisecond | DurationFromConfig | None = None,
     ) -> None:
+        """
+        Error log message.
+
+        Arguments:
+            `message`: The message to log.
+
+            `duration`: The duration of the log message.
+
+        Returns:
+            `None`
+        """
         _add(self.component, LogLevel.ERROR, message, duration)
 
     def __new__(cls, component: str) -> Logger:
@@ -64,11 +120,24 @@ class Logger:
 
 
 class ComponentAndMessage(NamedTuple):
+    """
+    Log component and message pair.
+    """
+
     component: str
     message: str
 
 
 def pop_messages(time_delta: Millisecond) -> list[ComponentAndMessage]:
+    """
+    Pop all log messages and return them in a formatted fashion.
+
+    Arguments::
+        `time_delta`: Milliseconds since last game loop.
+
+    Returns:
+        `list[ComponentAndMessage]`: List of log messages.
+    """
     if not (debug := config().debug):
         _pop(time_delta)
         return []

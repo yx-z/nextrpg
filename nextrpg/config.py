@@ -45,6 +45,11 @@ class DebugConfig(NamedTuple):
 
         `ignore_map_collisions`: If `True`, the player can move freely on maps,
             ignoring collision areas. Default is `False`.
+
+        `log_level`: The minimum level of log messages to display.
+
+        `log_duration`: The default duration of the log message display
+            in milliseconds.
     """
 
     drawing_background_color: Rgba = Rgba(0, 0, 255, 32)

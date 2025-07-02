@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import KW_ONLY, dataclass, field
 from functools import cached_property
 from typing import override
 
@@ -18,6 +18,7 @@ class StaticNpcOnScreen(CharacterOnScreen):
 
 @dataclass
 class MovingNpcOnScreen(MovingCharacterOnScreen):
+    _: KW_ONLY = field()
     path: Polygon = field()
     idle_duration: Millisecond = field(
         default_factory=lambda: config().character.idle_duration

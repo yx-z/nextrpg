@@ -6,6 +6,7 @@ from nextrpg.config import Config, DebugConfig
 from nextrpg.core import Size
 from nextrpg.draw_on_screen import Coordinate, Rectangle
 from nextrpg.event.pygame_event import KeyPressDown, KeyPressUp, Quit
+from nextrpg.logger import pop_messages
 from test.util import MockCharacterDrawing, override_config
 
 
@@ -36,7 +37,7 @@ def test_player_on_screen():
     assert player._can_move(Coordinate(10, 20))
     with override_config(Config(debug=DebugConfig())):
         player.event(right).tick(10)
-        assert get_debug_logs()
+        assert pop_messages(0)
 
     with override_config(Config(debug=DebugConfig(ignore_map_collisions=True))):
         assert player._can_move(Coordinate(10, 20))

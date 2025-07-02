@@ -3,16 +3,17 @@ from types import SimpleNamespace
 from unittest.mock import MagicMock
 
 from pygame import Event, QUIT
+from pytest import raises
 from pytest_mock import MockerFixture
 
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.config import Config, DebugConfig
+from nextrpg.config import Config, DebugConfig, GuiConfig, ResizeMode
 from nextrpg.core import Size
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing, Rectangle
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import Quit
 from nextrpg.scene.map_helper import TileBottomAndDraw
-from nextrpg.scene.map_scene import MapScene, _offset
+from nextrpg.scene.map_scene import MapScene, _gui_size, _offset
 from nextrpg.scene.scene import Scene
 from test.util import MockCharacterDrawing, MockSurface, override_config
 
@@ -78,3 +79,15 @@ def test_offset() -> None:
     assert _offset(12, 3, 2) == 1
     assert _offset(12, 10, 100) == -7
     assert _offset(0, 10, 10) == 0
+
+
+def test_gui_size() -> None:
+    with override_config(
+        Config(GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE_SIZE))
+    ):
+        assert _gui_size() == Size(1280, 720)
+
+    with raises(ValueError), override_config(
+        Config(GuiConfig(resize_mode="INVALID"))
+    ):
+        _gui_size()

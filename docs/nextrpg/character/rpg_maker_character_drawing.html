@@ -121,9 +121,6 @@
                                 <a class="variable" href="#RpgMakerCharacterDrawing.animate_on_idle">animate_on_idle</a>
                         </li>
                         <li>
-                                <a class="variable" href="#RpgMakerCharacterDrawing.direction">direction</a>
-                        </li>
-                        <li>
                                 <a class="variable" href="#RpgMakerCharacterDrawing.frame_duration">frame_duration</a>
                         </li>
                         <li>
@@ -199,7 +196,7 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Pixel</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">,</span> <span class="n">Size</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.frames</span><span class="w"> </span><span class="kn">import</span> <span class="n">CyclicFrames</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">internal_field</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">instance_init</span><span class="p">,</span> <span class="n">register_instance_init</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="nb">type</span> <span class="n">_FrameIndices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
@@ -313,29 +310,29 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>    <span class="p">}</span>
 </span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>
 </span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RpgMakerCharacterDrawing</span><span class="p">(</span><span class="n">Model</span><span class="p">,</span> <span class="n">CharacterDrawing</span><span class="p">):</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">    RPG Maker style character drawing.</span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">        `sprite_sheet`: Configuration for the character&#39;s sprite sheet.</span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">        `animate_on_idle`: Whether to animate the character when not moving.</span>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="sd">        `frame_duration`: Duration for each animation frame in milliseconds.</span>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">            If not specified, the default duration from `Config` is used.</span>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">        `initial_direction`: Initial direction for the character.</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">            If not specified, the default direction from `Config` is used.</span>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>    <span class="n">sprite_sheet</span><span class="p">:</span> <span class="n">SpriteSheet</span>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>    <span class="n">animate_on_idle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>    <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="nd">@register_instance_init</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RpgMakerCharacterDrawing</span><span class="p">(</span><span class="n">CharacterDrawing</span><span class="p">):</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">    RPG Maker style character drawing.</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">    Arguments:</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">        `sprite_sheet`: Configuration for the character&#39;s sprite sheet.</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="sd">        `animate_on_idle`: Whether to animate the character when not moving.</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">        `frame_duration`: Duration for each animation frame in milliseconds.</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="sd">            If not specified, the default duration from `Config` is used.</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">        `initial_direction`: Initial direction for the character.</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">            If not specified, the default direction from `Config` is used.</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>    <span class="n">sprite_sheet</span><span class="p">:</span> <span class="n">SpriteSheet</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>    <span class="n">animate_on_idle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 </span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="n">frame_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">rpg_maker_character</span><span class="o">.</span><span class="n">frame_duration</span>
 </span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>    <span class="p">)</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>    <span class="n">_frames</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Direction</span><span class="p">,</span> <span class="n">CyclicFrames</span><span class="p">]</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">(</span><span class="n">_init_frames</span><span class="p">)</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>    <span class="n">_frames</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Direction</span><span class="p">,</span> <span class="n">CyclicFrames</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="n">_init_frames</span><span class="p">)</span>
 </span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>
 </span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>    <span class="nd">@property</span>
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
@@ -394,7 +391,7 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
 </span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>            <span class="n">_frames</span><span class="o">=</span><span class="p">{</span>
-</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>                <span class="n">direction</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_move_frame</span><span class="p">(</span><span class="n">time_delta</span><span class="p">,</span> <span class="n">_adjust</span><span class="p">(</span><span class="n">direction</span><span class="p">))</span>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>                <span class="n">direction</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_move_frame</span><span class="p">(</span><span class="n">time_delta</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
 </span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>                <span class="k">for</span> <span class="n">direction</span><span class="p">,</span> <span class="n">frames</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
 </span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>            <span class="p">},</span>
 </span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>        <span class="p">)</span>
@@ -404,8 +401,8 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CyclicFrames</span><span class="p">:</span>
 </span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>        <span class="n">frames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">[</span><span class="n">adjusted_direction</span><span class="p">]</span>
 </span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>            <span class="n">frames</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>            <span class="k">if</span> <span class="n">adjusted_direction</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>            <span class="n">frames</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>            <span class="k">if</span> <span class="n">adjusted_direction</span> <span class="o">==</span> <span class="n">_adjust</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
 </span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>            <span class="k">else</span> <span class="n">frames</span>
 </span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>        <span class="p">)</span>
 </span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>
@@ -919,37 +916,38 @@ from a sprite sheet image.</p>
                 <section id="RpgMakerCharacterDrawing">
                             <input id="RpgMakerCharacterDrawing-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-            
+                    <div class="decorator decorator-register_instance_init">@register_instance_init</div>
+
     <span class="def">class</span>
-    <span class="name">RpgMakerCharacterDrawing</span><wbr>(<span class="base">abc.ABCMeta</span>, <span class="base">typing.Generic[T]</span>):
+    <span class="name">RpgMakerCharacterDrawing</span><wbr>(<span class="base"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span>):
 
                 <label class="view-source-button" for="RpgMakerCharacterDrawing-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#RpgMakerCharacterDrawing"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="RpgMakerCharacterDrawing-140"><a href="#RpgMakerCharacterDrawing-140"><span class="linenos">140</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RpgMakerCharacterDrawing</span><span class="p">(</span><span class="n">Model</span><span class="p">,</span> <span class="n">CharacterDrawing</span><span class="p">):</span>
-</span><span id="RpgMakerCharacterDrawing-141"><a href="#RpgMakerCharacterDrawing-141"><span class="linenos">141</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="RpgMakerCharacterDrawing-142"><a href="#RpgMakerCharacterDrawing-142"><span class="linenos">142</span></a><span class="sd">    RPG Maker style character drawing.</span>
-</span><span id="RpgMakerCharacterDrawing-143"><a href="#RpgMakerCharacterDrawing-143"><span class="linenos">143</span></a>
-</span><span id="RpgMakerCharacterDrawing-144"><a href="#RpgMakerCharacterDrawing-144"><span class="linenos">144</span></a><span class="sd">    Arguments:</span>
-</span><span id="RpgMakerCharacterDrawing-145"><a href="#RpgMakerCharacterDrawing-145"><span class="linenos">145</span></a><span class="sd">        `sprite_sheet`: Configuration for the character&#39;s sprite sheet.</span>
-</span><span id="RpgMakerCharacterDrawing-146"><a href="#RpgMakerCharacterDrawing-146"><span class="linenos">146</span></a>
-</span><span id="RpgMakerCharacterDrawing-147"><a href="#RpgMakerCharacterDrawing-147"><span class="linenos">147</span></a><span class="sd">        `animate_on_idle`: Whether to animate the character when not moving.</span>
-</span><span id="RpgMakerCharacterDrawing-148"><a href="#RpgMakerCharacterDrawing-148"><span class="linenos">148</span></a>
-</span><span id="RpgMakerCharacterDrawing-149"><a href="#RpgMakerCharacterDrawing-149"><span class="linenos">149</span></a><span class="sd">        `frame_duration`: Duration for each animation frame in milliseconds.</span>
-</span><span id="RpgMakerCharacterDrawing-150"><a href="#RpgMakerCharacterDrawing-150"><span class="linenos">150</span></a><span class="sd">            If not specified, the default duration from `Config` is used.</span>
-</span><span id="RpgMakerCharacterDrawing-151"><a href="#RpgMakerCharacterDrawing-151"><span class="linenos">151</span></a>
-</span><span id="RpgMakerCharacterDrawing-152"><a href="#RpgMakerCharacterDrawing-152"><span class="linenos">152</span></a><span class="sd">        `initial_direction`: Initial direction for the character.</span>
-</span><span id="RpgMakerCharacterDrawing-153"><a href="#RpgMakerCharacterDrawing-153"><span class="linenos">153</span></a><span class="sd">            If not specified, the default direction from `Config` is used.</span>
-</span><span id="RpgMakerCharacterDrawing-154"><a href="#RpgMakerCharacterDrawing-154"><span class="linenos">154</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="RpgMakerCharacterDrawing-155"><a href="#RpgMakerCharacterDrawing-155"><span class="linenos">155</span></a>
-</span><span id="RpgMakerCharacterDrawing-156"><a href="#RpgMakerCharacterDrawing-156"><span class="linenos">156</span></a>    <span class="n">sprite_sheet</span><span class="p">:</span> <span class="n">SpriteSheet</span>
-</span><span id="RpgMakerCharacterDrawing-157"><a href="#RpgMakerCharacterDrawing-157"><span class="linenos">157</span></a>    <span class="n">animate_on_idle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="RpgMakerCharacterDrawing-158"><a href="#RpgMakerCharacterDrawing-158"><span class="linenos">158</span></a>    <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span> <span class="o">=</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="RpgMakerCharacterDrawing-140"><a href="#RpgMakerCharacterDrawing-140"><span class="linenos">140</span></a><span class="nd">@register_instance_init</span>
+</span><span id="RpgMakerCharacterDrawing-141"><a href="#RpgMakerCharacterDrawing-141"><span class="linenos">141</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RpgMakerCharacterDrawing</span><span class="p">(</span><span class="n">CharacterDrawing</span><span class="p">):</span>
+</span><span id="RpgMakerCharacterDrawing-142"><a href="#RpgMakerCharacterDrawing-142"><span class="linenos">142</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="RpgMakerCharacterDrawing-143"><a href="#RpgMakerCharacterDrawing-143"><span class="linenos">143</span></a><span class="sd">    RPG Maker style character drawing.</span>
+</span><span id="RpgMakerCharacterDrawing-144"><a href="#RpgMakerCharacterDrawing-144"><span class="linenos">144</span></a>
+</span><span id="RpgMakerCharacterDrawing-145"><a href="#RpgMakerCharacterDrawing-145"><span class="linenos">145</span></a><span class="sd">    Arguments:</span>
+</span><span id="RpgMakerCharacterDrawing-146"><a href="#RpgMakerCharacterDrawing-146"><span class="linenos">146</span></a><span class="sd">        `sprite_sheet`: Configuration for the character&#39;s sprite sheet.</span>
+</span><span id="RpgMakerCharacterDrawing-147"><a href="#RpgMakerCharacterDrawing-147"><span class="linenos">147</span></a>
+</span><span id="RpgMakerCharacterDrawing-148"><a href="#RpgMakerCharacterDrawing-148"><span class="linenos">148</span></a><span class="sd">        `animate_on_idle`: Whether to animate the character when not moving.</span>
+</span><span id="RpgMakerCharacterDrawing-149"><a href="#RpgMakerCharacterDrawing-149"><span class="linenos">149</span></a>
+</span><span id="RpgMakerCharacterDrawing-150"><a href="#RpgMakerCharacterDrawing-150"><span class="linenos">150</span></a><span class="sd">        `frame_duration`: Duration for each animation frame in milliseconds.</span>
+</span><span id="RpgMakerCharacterDrawing-151"><a href="#RpgMakerCharacterDrawing-151"><span class="linenos">151</span></a><span class="sd">            If not specified, the default duration from `Config` is used.</span>
+</span><span id="RpgMakerCharacterDrawing-152"><a href="#RpgMakerCharacterDrawing-152"><span class="linenos">152</span></a>
+</span><span id="RpgMakerCharacterDrawing-153"><a href="#RpgMakerCharacterDrawing-153"><span class="linenos">153</span></a><span class="sd">        `initial_direction`: Initial direction for the character.</span>
+</span><span id="RpgMakerCharacterDrawing-154"><a href="#RpgMakerCharacterDrawing-154"><span class="linenos">154</span></a><span class="sd">            If not specified, the default direction from `Config` is used.</span>
+</span><span id="RpgMakerCharacterDrawing-155"><a href="#RpgMakerCharacterDrawing-155"><span class="linenos">155</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="RpgMakerCharacterDrawing-156"><a href="#RpgMakerCharacterDrawing-156"><span class="linenos">156</span></a>
+</span><span id="RpgMakerCharacterDrawing-157"><a href="#RpgMakerCharacterDrawing-157"><span class="linenos">157</span></a>    <span class="n">sprite_sheet</span><span class="p">:</span> <span class="n">SpriteSheet</span>
+</span><span id="RpgMakerCharacterDrawing-158"><a href="#RpgMakerCharacterDrawing-158"><span class="linenos">158</span></a>    <span class="n">animate_on_idle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 </span><span id="RpgMakerCharacterDrawing-159"><a href="#RpgMakerCharacterDrawing-159"><span class="linenos">159</span></a>    <span class="n">frame_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
 </span><span id="RpgMakerCharacterDrawing-160"><a href="#RpgMakerCharacterDrawing-160"><span class="linenos">160</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">rpg_maker_character</span><span class="o">.</span><span class="n">frame_duration</span>
 </span><span id="RpgMakerCharacterDrawing-161"><a href="#RpgMakerCharacterDrawing-161"><span class="linenos">161</span></a>    <span class="p">)</span>
-</span><span id="RpgMakerCharacterDrawing-162"><a href="#RpgMakerCharacterDrawing-162"><span class="linenos">162</span></a>    <span class="n">_frames</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Direction</span><span class="p">,</span> <span class="n">CyclicFrames</span><span class="p">]</span> <span class="o">=</span> <span class="n">internal_field</span><span class="p">(</span><span class="n">_init_frames</span><span class="p">)</span>
+</span><span id="RpgMakerCharacterDrawing-162"><a href="#RpgMakerCharacterDrawing-162"><span class="linenos">162</span></a>    <span class="n">_frames</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Direction</span><span class="p">,</span> <span class="n">CyclicFrames</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="n">_init_frames</span><span class="p">)</span>
 </span><span id="RpgMakerCharacterDrawing-163"><a href="#RpgMakerCharacterDrawing-163"><span class="linenos">163</span></a>
 </span><span id="RpgMakerCharacterDrawing-164"><a href="#RpgMakerCharacterDrawing-164"><span class="linenos">164</span></a>    <span class="nd">@property</span>
 </span><span id="RpgMakerCharacterDrawing-165"><a href="#RpgMakerCharacterDrawing-165"><span class="linenos">165</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
@@ -1008,7 +1006,7 @@ from a sprite sheet image.</p>
 </span><span id="RpgMakerCharacterDrawing-218"><a href="#RpgMakerCharacterDrawing-218"><span class="linenos">218</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
 </span><span id="RpgMakerCharacterDrawing-219"><a href="#RpgMakerCharacterDrawing-219"><span class="linenos">219</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="RpgMakerCharacterDrawing-220"><a href="#RpgMakerCharacterDrawing-220"><span class="linenos">220</span></a>            <span class="n">_frames</span><span class="o">=</span><span class="p">{</span>
-</span><span id="RpgMakerCharacterDrawing-221"><a href="#RpgMakerCharacterDrawing-221"><span class="linenos">221</span></a>                <span class="n">direction</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_move_frame</span><span class="p">(</span><span class="n">time_delta</span><span class="p">,</span> <span class="n">_adjust</span><span class="p">(</span><span class="n">direction</span><span class="p">))</span>
+</span><span id="RpgMakerCharacterDrawing-221"><a href="#RpgMakerCharacterDrawing-221"><span class="linenos">221</span></a>                <span class="n">direction</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_move_frame</span><span class="p">(</span><span class="n">time_delta</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
 </span><span id="RpgMakerCharacterDrawing-222"><a href="#RpgMakerCharacterDrawing-222"><span class="linenos">222</span></a>                <span class="k">for</span> <span class="n">direction</span><span class="p">,</span> <span class="n">frames</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
 </span><span id="RpgMakerCharacterDrawing-223"><a href="#RpgMakerCharacterDrawing-223"><span class="linenos">223</span></a>            <span class="p">},</span>
 </span><span id="RpgMakerCharacterDrawing-224"><a href="#RpgMakerCharacterDrawing-224"><span class="linenos">224</span></a>        <span class="p">)</span>
@@ -1018,8 +1016,8 @@ from a sprite sheet image.</p>
 </span><span id="RpgMakerCharacterDrawing-228"><a href="#RpgMakerCharacterDrawing-228"><span class="linenos">228</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CyclicFrames</span><span class="p">:</span>
 </span><span id="RpgMakerCharacterDrawing-229"><a href="#RpgMakerCharacterDrawing-229"><span class="linenos">229</span></a>        <span class="n">frames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">[</span><span class="n">adjusted_direction</span><span class="p">]</span>
 </span><span id="RpgMakerCharacterDrawing-230"><a href="#RpgMakerCharacterDrawing-230"><span class="linenos">230</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="RpgMakerCharacterDrawing-231"><a href="#RpgMakerCharacterDrawing-231"><span class="linenos">231</span></a>            <span class="n">frames</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="RpgMakerCharacterDrawing-232"><a href="#RpgMakerCharacterDrawing-232"><span class="linenos">232</span></a>            <span class="k">if</span> <span class="n">adjusted_direction</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
+</span><span id="RpgMakerCharacterDrawing-231"><a href="#RpgMakerCharacterDrawing-231"><span class="linenos">231</span></a>            <span class="n">frames</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="RpgMakerCharacterDrawing-232"><a href="#RpgMakerCharacterDrawing-232"><span class="linenos">232</span></a>            <span class="k">if</span> <span class="n">adjusted_direction</span> <span class="o">==</span> <span class="n">_adjust</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
 </span><span id="RpgMakerCharacterDrawing-233"><a href="#RpgMakerCharacterDrawing-233"><span class="linenos">233</span></a>            <span class="k">else</span> <span class="n">frames</span>
 </span><span id="RpgMakerCharacterDrawing-234"><a href="#RpgMakerCharacterDrawing-234"><span class="linenos">234</span></a>        <span class="p">)</span>
 </span><span id="RpgMakerCharacterDrawing-235"><a href="#RpgMakerCharacterDrawing-235"><span class="linenos">235</span></a>
@@ -1109,7 +1107,7 @@ If not specified, the default direction from <code>Config</code> is used.</li>
                             <div id="RpgMakerCharacterDrawing.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">RpgMakerCharacterDrawing</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">sprite_sheet</span><span class="p">:</span> <span class="n"><a href="#SpriteSheet">SpriteSheet</a></span>,</span><span class="param">	<span class="n">animate_on_idle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>,</span><span class="param">	<span class="n">direction</span><span class="p">:</span> <span class="n"><a href="../core.html#Direction">nextrpg.core.Direction</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">frame_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_frames</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n"><a href="../core.html#Direction">nextrpg.core.Direction</a></span><span class="p">,</span> <span class="n"><a href="../frames.html#CyclicFrames">nextrpg.frames.CyclicFrames</a></span><span class="p">]</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">RpgMakerCharacterDrawing</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">direction</span><span class="p">:</span> <span class="n"><a href="../core.html#Direction">nextrpg.core.Direction</a></span>,</span><span class="param">	<span class="n">sprite_sheet</span><span class="p">:</span> <span class="n"><a href="#SpriteSheet">SpriteSheet</a></span>,</span><span class="param">	<span class="n">animate_on_idle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>,</span><span class="param">	<span class="n">frame_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_frames</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n"><a href="../core.html#Direction">nextrpg.core.Direction</a></span><span class="p">,</span> <span class="n"><a href="../frames.html#CyclicFrames">nextrpg.frames.CyclicFrames</a></span><span class="p">]</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -1139,26 +1137,6 @@ If not specified, the default direction from <code>Config</code> is used.</li>
     <a class="headerlink" href="#RpgMakerCharacterDrawing.animate_on_idle"></a>
     
     
-
-                            </div>
-                            <div id="RpgMakerCharacterDrawing.direction" class="classattr">
-                                <div class="attr variable">
-            <span class="name">direction</span><span class="annotation">: <a href="../core.html#Direction">nextrpg.core.Direction</a></span>        =
-<span class="default_value">&lt;Direction.DOWN: 1&gt;</span>
-
-        
-    </div>
-    <a class="headerlink" href="#RpgMakerCharacterDrawing.direction"></a>
-    
-            <div class="docstring"><p>Get the direction the character is facing.</p>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>Direction</code>: The direction the character is facing.</p>
-</blockquote>
-</div>
-
 
                             </div>
                             <div id="RpgMakerCharacterDrawing.frame_duration" class="classattr">
@@ -1302,7 +1280,7 @@ animation frames for all directions except the new one.</p>
 </span><span id="RpgMakerCharacterDrawing.move-218"><a href="#RpgMakerCharacterDrawing.move-218"><span class="linenos">218</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
 </span><span id="RpgMakerCharacterDrawing.move-219"><a href="#RpgMakerCharacterDrawing.move-219"><span class="linenos">219</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="RpgMakerCharacterDrawing.move-220"><a href="#RpgMakerCharacterDrawing.move-220"><span class="linenos">220</span></a>            <span class="n">_frames</span><span class="o">=</span><span class="p">{</span>
-</span><span id="RpgMakerCharacterDrawing.move-221"><a href="#RpgMakerCharacterDrawing.move-221"><span class="linenos">221</span></a>                <span class="n">direction</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_move_frame</span><span class="p">(</span><span class="n">time_delta</span><span class="p">,</span> <span class="n">_adjust</span><span class="p">(</span><span class="n">direction</span><span class="p">))</span>
+</span><span id="RpgMakerCharacterDrawing.move-221"><a href="#RpgMakerCharacterDrawing.move-221"><span class="linenos">221</span></a>                <span class="n">direction</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_move_frame</span><span class="p">(</span><span class="n">time_delta</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
 </span><span id="RpgMakerCharacterDrawing.move-222"><a href="#RpgMakerCharacterDrawing.move-222"><span class="linenos">222</span></a>                <span class="k">for</span> <span class="n">direction</span><span class="p">,</span> <span class="n">frames</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
 </span><span id="RpgMakerCharacterDrawing.move-223"><a href="#RpgMakerCharacterDrawing.move-223"><span class="linenos">223</span></a>            <span class="p">},</span>
 </span><span id="RpgMakerCharacterDrawing.move-224"><a href="#RpgMakerCharacterDrawing.move-224"><span class="linenos">224</span></a>        <span class="p">)</span>
@@ -1391,6 +1369,15 @@ since the last update.</li>
 </div>
 
 
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></dt>
+                                <dd id="RpgMakerCharacterDrawing.direction" class="variable"><a href="character_drawing.html#CharacterDrawing.direction">direction</a></dd>
+
+            </div>
+                                </dl>
                             </div>
                 </section>
     </main>

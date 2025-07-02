@@ -1,5 +1,4 @@
 from pathlib import Path
-from unittest.mock import Mock
 
 from pygame import Color, SRCALPHA, Surface
 from pytest import approx, raises
@@ -14,13 +13,15 @@ from nextrpg.draw_on_screen import (
     Polygon,
     Rectangle,
 )
-from test.util import override_config
+from test.util import MockSurface, override_config
 
 
 def test_drawing(mocker: MockerFixture) -> None:
-    surf = Mock()
-    mocker.patch("nextrpg.draw_on_screen.load", surf)
-    assert Drawing(Path("abc"))
+    surf = MockSurface()
+    assert Drawing(surf)._surface
+
+    mocker.patch("nextrpg.draw_on_screen.load")
+    assert Drawing(Path("abc"))._surface
     drawing = Drawing(Surface((1, 2), SRCALPHA))
     assert drawing.width == 1
     assert drawing.height == 2

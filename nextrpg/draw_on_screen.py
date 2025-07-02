@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from itertools import product
 from math import ceil, sqrt
-from pathlib import Path
+from os import PathLike
 from typing import override
 
 from pygame import Mask, SRCALPHA, Surface
@@ -115,7 +115,7 @@ class Drawing:
             or a `pygame.Surface` object.
     """
 
-    resource: str | Path | Surface
+    resource: PathLike | Surface
 
     @property
     def width(self) -> Pixel:

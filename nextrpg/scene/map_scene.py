@@ -10,8 +10,8 @@ from typing import override
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.config import config, initial_config
-from nextrpg.core import Millisecond, Pixel
+from nextrpg.config import GuiMode, ResizeMode, config, initial_config
+from nextrpg.core import Millisecond, Pixel, Size
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import PygameEvent
@@ -156,8 +156,8 @@ class MapScene(Scene):
     @cached_property
     def _player_offset(self) -> Coordinate:
         player = self._player.draw_on_screen.rectangle.center
-        gui_width, gui_height = initial_config().gui.size
         map_width, map_height = self._map_helper.map_size
+        gui_width, gui_height = _gui_size()
         left_offset = _offset(player.left, gui_width, map_width)
         top_offset = _offset(player.top, gui_height, map_height)
         offset = Coordinate(left_offset, top_offset)
@@ -188,3 +188,11 @@ def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
     if player_axis > map_axis - gui_axis / 2:
         return gui_axis - map_axis
     return gui_axis / 2 - player_axis
+
+def _gui_size() -> Size:
+    match config().gui.resize_mode:
+        case ResizeMode.SCALE:
+            return initial_config().gui.size
+        case ResizeMode.KEEP_NATIVE_SIZE:
+            return config().gui.size
+    raise ValueError(f"Invalid resize mode {config().gui.resize_mode}")
