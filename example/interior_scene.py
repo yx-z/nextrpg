@@ -5,6 +5,7 @@ Sample scene.
 from pathlib import Path
 
 from nextrpg.character.character_drawing import CharacterDrawing
+from nextrpg.character.npc_spec import MovingNpcSpec, StaticNpcSpec
 from nextrpg.character.rpg_maker_character_drawing import (
     Margin,
     RpgMakerCharacterDrawing,
@@ -43,25 +44,42 @@ def interior_scene(
     return MapScene(
         # Tiled/tmx tile map.
         Path("example/assets/interior.tmx"),
-        # Create character drawing when this scene is an entry scene.
-        player or _init_player(),
+        # Use default player drawing when this scene is an entry scene.
+        player or init_player(),
         # Player coordinate on the map.
         player_coordinate_object,
         # Move to another map.
         [Move("from_interior", "to_exterior", exterior_scene)],
-        [],
+        [StaticNpcSpec("david", david())],
+        [MovingNpcSpec("alisa", alisa())],
     )
 
 
-def _init_player() -> CharacterDrawing:
+def sprite_sheet() -> SpriteSheet:
+    return SpriteSheet(
+        # Player sprite sheet.
+        Drawing("example/assets/Characters_MV.png"),
+        # Declare margins to correctly detect collision/bounding box.
+        margin=Margin(top=25),
+    )
+
+
+def init_player() -> CharacterDrawing:
     return RpgMakerCharacterDrawing(
         Direction.DOWN,
-        SpriteSheet(
-            # Player sprite sheet.
-            Drawing("example/assets/Characters_MV.png"),
-            # Select a character from the sprite sheet.
-            SpriteSheetSelection(row=0, column=1),
-            # Declare margins to correctly detect collision/bounding box.
-            margin=Margin(top=25),
-        ),
+        sprite_sheet(),
+        # Select a character from the sprite sheet.
+        SpriteSheetSelection(row=0, column=0),
+    )
+
+
+def alisa() -> CharacterDrawing:
+    return RpgMakerCharacterDrawing(
+        Direction.DOWN, sprite_sheet(), SpriteSheetSelection(0, 1)
+    )
+
+
+def david() -> CharacterDrawing:
+    return RpgMakerCharacterDrawing(
+        Direction.DOWN, sprite_sheet(), SpriteSheetSelection(0, 2)
     )

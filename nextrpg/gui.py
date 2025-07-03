@@ -50,8 +50,7 @@ class Gui:
         if not self._screen:
             init()
             font.init()
-        if self.last_config.title != self.current_config.title:
-            set_caption(self.current_config.title)
+        set_caption(self.current_config.title)
         if (
             self._screen is None
             or self.last_config.size != self.current_config.size

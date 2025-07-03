@@ -12,7 +12,7 @@ from nextrpg.core import Size
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing, Rectangle
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import Quit
-from nextrpg.scene.map_helper import TileBottomAndDraw
+from nextrpg.scene.map_helper import TileBottomAndDrawOnScreen
 from nextrpg.scene.map_scene import MapScene, _gui_size, _offset
 from nextrpg.scene.scene import Scene
 from test.util import MockCharacterDrawing, MockSurface, override_config
@@ -23,7 +23,7 @@ def test_map_scene(mocker: MockerFixture) -> None:
     helper.background = []
     helper.foreground = [
         [
-            TileBottomAndDraw(
+            TileBottomAndDrawOnScreen(
                 10, DrawOnScreen(Coordinate(1, 2), Drawing(MockSurface()))
             )
         ]
@@ -47,7 +47,7 @@ def test_move_to_scene(mocker: MockerFixture) -> None:
     helper.background = []
     helper.foreground = [
         [
-            TileBottomAndDraw(
+            TileBottomAndDrawOnScreen(
                 10, DrawOnScreen(Coordinate(1, 2), Drawing(MockSurface()))
             )
         ]

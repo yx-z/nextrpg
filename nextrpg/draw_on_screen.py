@@ -18,6 +18,7 @@ from pygame.mask import from_surface
 from nextrpg.config import config
 from nextrpg.core import Alpha, Direction, DirectionalOffset, Pixel, Rgba, Size
 from nextrpg.logger import FROM_CONFIG, Logger
+from nextrpg.model import cached
 
 logger = Logger("Draw")
 
@@ -98,6 +99,8 @@ class Coordinate(namedtuple("Coordinate", "left top")):
     def __repr__(self) -> str:
         return f"({self.left:.1f}, {self.top:.1f})"
 
+@cached(lambda: config().resource.drawing_cache_size,
+        lambda resource: None if isinstance(resource, Surface) else resource)
 @dataclass
 class Drawing:
     """

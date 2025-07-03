@@ -30,7 +30,7 @@ from nextrpg.model import cached
 
 logger = Logger("MapHelper")
 
-class TileBottomAndDraw(NamedTuple):
+class TileBottomAndDrawOnScreen(NamedTuple):
     """
     Represents a foreground tile of the bottommost pixel from its tile class,
     and a `DrawOnScreen` of the tile itself.
@@ -52,9 +52,9 @@ class TileBottomAndDraw(NamedTuple):
     bottom: Pixel
     draw: DrawOnScreen
 
+type _LayerIndex = int
 
 type _Gid = int
-type _LayerIndex = int
 
 
 class _TileCoordinate(NamedTuple):
@@ -118,7 +118,7 @@ class MapHelper:
         return self._draw_layers(config().map.background)
 
     @cached_property
-    def foreground(self) -> list[list[TileBottomAndDraw]]:
+    def foreground(self) -> list[list[TileBottomAndDrawOnScreen]]:
         """
         The list of foreground drawings with bottom pixel info.
 
@@ -129,7 +129,7 @@ class MapHelper:
         shall obstruct previous tiles.
 
         Returns:
-            `list[list[TileBottomAndDraw]]`: The list of foreground drawings.
+            `list[list[TileBottomAndDrawOnScreen]]`: The list of foreground drawings.
         """
         return [
             self._bottom_and_draw(layer)
@@ -258,14 +258,14 @@ class MapHelper:
 
     def _bottom_and_draw(
         self, layer: TiledTileLayer
-    ) -> list[TileBottomAndDraw]:
+    ) -> list[TileBottomAndDrawOnScreen]:
         coord_and_draws = self._draw(layer)
         coord_to_bottom = {
             coord: draw.visible_rectangle.bottom
             for coord, draw in coord_and_draws.items()
         }
         return [
-            TileBottomAndDraw(
+            TileBottomAndDrawOnScreen(
                 self._bottom(layer, coord, draw, coord_to_bottom), draw
             )
             for coord, draw in coord_and_draws.items()

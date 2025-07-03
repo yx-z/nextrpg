@@ -19,7 +19,8 @@ def test_rpg_maker_drawing():
 
     character = RpgMakerCharacterDrawing(
         Direction.DOWN,
-        SpriteSheet(Drawing(Surface((24, 16))), SpriteSheetSelection(0, 0)),
+        SpriteSheet(Drawing(Surface((24, 16)))),
+        SpriteSheetSelection(0, 0),
         frame_duration=1,
         animate_on_idle=True,
     )
@@ -31,7 +32,7 @@ def test_rpg_maker_drawing():
 
     character = RpgMakerCharacterDrawing(
         Direction.DOWN,
-        SpriteSheet(Drawing(Surface((24, 16))), SpriteSheetSelection(0, 0)),
+        SpriteSheet(Drawing(Surface((24, 16)))), SpriteSheetSelection(0, 0),
         frame_duration=1,
         animate_on_idle=False,
     )

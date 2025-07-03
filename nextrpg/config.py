@@ -180,12 +180,15 @@ class CharacterConfig:
 
         `idle_duration`: The duration of the NPC's idle duration.
 
+        `move_duration`: The duration of the NPC's move duration.
+
         `directions`: The set of directions that the player can move.
             Default to all directions (up, left, right, down, and diagonals).
     """
 
     move_speed: PixelPerMillisecond = 0.25
     idle_duration: Millisecond = 1000
+    move_duration: Millisecond = 2000
     directions: frozenset[Direction] = frozenset(Direction)
 
 
@@ -267,6 +270,7 @@ class ResourceConfig:
     """
 
     map_cache_size: int = 8
+    drawing_cache_size: int = 8
 
 
 @dataclass(frozen=True)

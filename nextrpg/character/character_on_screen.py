@@ -64,12 +64,13 @@ class CharacterOnScreen(ABC):
     @abstractmethod
     def tick(self, time_delta: Millisecond) -> CharacterOnScreen:
         """
+        Update the character's state for a single game loop.
 
         Arguments:
-            time_delta:
+            `time_delta`: The elapsed time since the last update.
 
         Returns:
-
+            `CharacterOnScreen`: The updated character state after the step.
         """
 
 

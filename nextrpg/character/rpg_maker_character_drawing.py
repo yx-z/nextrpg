@@ -120,7 +120,6 @@ class SpriteSheet:
     """
 
     drawing: Drawing
-    selection: SpriteSheetSelection | None = None
     style: FrameType = DefaultFrameType
     margin: Margin = Margin()
 
@@ -129,8 +128,8 @@ def _init_frames(
     self: RpgMakerCharacterDrawing,
 ) -> dict[Direction, CyclicFrames]:
     drawing = (
-        self._crop_by_selection(select)
-        if (select := self.sprite_sheet.selection)
+        self._crop_by_selection(self.sprite_sheet_selection)
+        if self.sprite_sheet_selection
         else self.sprite_sheet.drawing
     )
     return {
@@ -157,6 +156,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     """
 
     sprite_sheet: SpriteSheet
+    sprite_sheet_selection: SpriteSheetSelection | None = None
     animate_on_idle: bool = False
     frame_duration: Millisecond = field(
         default_factory=lambda: config().rpg_maker_character.frame_duration
