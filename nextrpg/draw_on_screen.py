@@ -274,7 +274,7 @@ class DrawOnScreen:
         )
 
     @property
-    def pygame(self) -> tuple[Surface, tuple[Pixel, Pixel]]:
+    def pygame(self) -> tuple[Surface, Coordinate]:
         """
         Gets the pygame surface and coordinate tuple for rendering.
 
@@ -301,10 +301,10 @@ class DrawOnScreen:
 @dataclass
 class Polygon:
     """
-    Polygon is a collection of points.
+    Polygon is a sequence of points.
     """
 
-    points: list[Coordinate]
+    points: tuple[Coordinate, ...]
 
     @cached_property
     def bounding_rectangle(self) -> Rectangle:
@@ -341,7 +341,7 @@ class Polygon:
         polygon(surface, color, [(p - rect.top_left) for p in self.points])
         return DrawOnScreen(rect.top_left, Drawing(surface))
 
-    def collide(self, poly: Polygon) -> bool:
+    def collide(self, poly: Self) -> bool:
         """
         Checks if this rectangle overlaps with another polygon.
 
@@ -378,7 +378,6 @@ class Polygon:
         return False
 
 
-@dataclass
 class Rectangle(Polygon):
     """
     A rectangle polygon defined by its top left corner and size.
@@ -517,20 +516,20 @@ class Rectangle(Polygon):
         return Coordinate(self.left + width / 2, self.top + height / 2)
 
     @property
-    def points(self) -> list[Coordinate]:
+    def points(self) -> tuple[Coordinate, ...]:
         """
         Get the coordinates of the corners of the rectangle.
 
         Returns:
-            `list[Coordinate, ...]`: The coordinates of the corners
+            `tuple[Coordinate, ...]`: The coordinates of the corners
                 of the rectangle.
         """
-        return [
+        return (
             self.top_left,
             self.top_right,
             self.bottom_right,
             self.bottom_left,
-        ]
+        )
 
     def collide(self, poly: Polygon) -> bool:
         if isinstance(poly, Rectangle):

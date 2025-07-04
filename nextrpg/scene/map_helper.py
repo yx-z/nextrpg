@@ -85,7 +85,7 @@ def get_polygon(obj: TiledObject) -> Polygon:
         `Polygon`: The polygon created from the Tiled object.
     """
     if obj.width is None or obj.height is None:
-        return Polygon([Coordinate(x, y) for x, y in obj.as_points])
+        return Polygon(tuple(Coordinate(x, y) for x, y in obj.as_points))
     return Rectangle(Coordinate(obj.x, obj.y), Size(obj.width, obj.height))
 
 
@@ -258,7 +258,7 @@ class MapHelper:
         w, h = self._tile_size
         cx, cy = coord
         return Polygon(
-            [Coordinate(cx * w + x, cy * h + y) for x, y in obj.as_points]
+            tuple(Coordinate(cx * w + x, cy * h + y) for x, y in obj.as_points)
         )
 
     def _from_rect(
