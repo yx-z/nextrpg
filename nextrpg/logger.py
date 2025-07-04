@@ -118,9 +118,8 @@ class Logger:
                 f"Use another name for better log separation."
             )
 
-        instance = super().__new__(cls)
-        _instances[component] = instance
-        return instance
+        _instances.add(component)
+        return super().__new__(cls)
 
 
 class ComponentAndMessage(NamedTuple):
@@ -209,6 +208,6 @@ def _format(x: Interpolation | str) -> str:
     return format(x.value, x.format_spec) if isinstance(x, Interpolation) else x
 
 
-_instances: dict[str, Logger] = {}
+_instances: set[str] = set()
 _entries: list[_LogEntry] = []
 _timed_entries: dict[_Key, _TimedLogEntry] = {}

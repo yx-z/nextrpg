@@ -5,6 +5,7 @@ Character drawing interface.
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from functools import cached_property
+from typing import Self
 
 from nextrpg.core import Direction, Millisecond
 from nextrpg.draw_on_screen import Drawing
@@ -17,6 +18,9 @@ class CharacterDrawing(ABC):
 
     Provides abstract methods for rendering character animations and handling
     character movement visualization on the screen.
+
+    Arguments:
+        `direction`: Initial character direction.
     """
 
     direction: Direction
@@ -32,7 +36,7 @@ class CharacterDrawing(ABC):
         """
 
     @abstractmethod
-    def turn(self, direction: Direction) -> CharacterDrawing:
+    def turn(self, direction: Direction) -> Self:
         """
         Turn the character to face a specified direction.
 
@@ -44,7 +48,7 @@ class CharacterDrawing(ABC):
         """
 
     @abstractmethod
-    def move(self, time_delta: Millisecond) -> CharacterDrawing:
+    def move(self, time_delta: Millisecond) -> Self:
         """
         Update the character's position based on movement over
         the given time delta.
@@ -58,7 +62,7 @@ class CharacterDrawing(ABC):
         """
 
     @abstractmethod
-    def idle(self, time_delta: Millisecond) -> CharacterDrawing:
+    def idle(self, time_delta: Millisecond) -> Self:
         """
         Update the character's idle animation state over the given time delta.
 

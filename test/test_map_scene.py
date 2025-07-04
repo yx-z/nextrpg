@@ -12,8 +12,9 @@ from nextrpg.core import Size
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing, Rectangle
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import Quit
+from nextrpg.gui import gui_size
 from nextrpg.scene.map_helper import TileBottomAndDrawOnScreen
-from nextrpg.scene.map_scene import MapScene, _gui_size, _offset
+from nextrpg.scene.map_scene import MapScene, _offset
 from nextrpg.scene.scene import Scene
 from test.util import MockCharacterDrawing, MockSurface, override_config
 
@@ -92,9 +93,9 @@ def test_gui_size() -> None:
     with override_config(
         Config(GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE_SIZE))
     ):
-        assert _gui_size() == Size(1280, 720)
+        assert gui_size() == Size(1280, 720)
 
     with raises(ValueError), override_config(
         Config(GuiConfig(resize_mode="INVALID"))
     ):
-        _gui_size()
+        gui_size()

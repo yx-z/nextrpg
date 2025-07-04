@@ -1,14 +1,13 @@
 """
-Sample scene.
+Sample interior scene.
 """
 
-from collections.abc import Generator
 from pathlib import Path
 from typing import Any
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.character.npc_spec import MovingNpcSpec, StaticNpcSpec
+from nextrpg.character.npcs import MovingNpcSpec, NpcSpec
+from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.rpg_maker_character_drawing import (
     Margin,
     RpgMakerCharacterDrawing,
@@ -55,25 +54,48 @@ def interior_scene(
         # Move to another map.
         moves=[Move("from_interior", "to_exterior", exterior_scene)],
         # NPC/events.
-        static_npc_specs=[StaticNpcSpec("david", david(), greet)],
-        moving_npc_specs=[MovingNpcSpec("alisa", alisa(), greet)],
+        npcs=[
+            NpcSpec("david", david(), greet),
+            MovingNpcSpec("alisa", alisa(), greet),
+        ],
     )
 
 
-def greet(player: CharacterOnScreen, **kwargs: Any) -> Generator:
-    yield say(player, "Hello World!")
+def greet(player: PlayerOnScreen, *args: Any) -> None:
+    """
+    Greet event specification.
+
+    Arguments:
+        `player`: Player.
+
+    Returns:
+        `None`
+    """
+    say(player, "Hello World!")
 
 
 def sprite_sheet() -> SpriteSheet:
+    """
+    Load the character sprite sheet.
+
+    Returns:
+        `SpriteSheet`: The sprite sheet.
+    """
     return SpriteSheet(
         # Player sprite sheet.
         Drawing("example/assets/Characters_MV.png"),
         # Declare margins to correctly detect collision/bounding box.
-        margin=Margin(top=25),
+        Margin(top=25),
     )
 
 
 def init_player() -> CharacterDrawing:
+    """
+    Initialize the player drawing.
+
+    Returns:
+        `CharacterDrawing`: The player character drawing.
+    """
     return RpgMakerCharacterDrawing(
         direction=Direction.DOWN,
         sprite_sheet=sprite_sheet(),
@@ -83,14 +105,26 @@ def init_player() -> CharacterDrawing:
 
 
 def alisa() -> CharacterDrawing:
+    """
+    Initialize the NPC Alisa's drawing.
+
+    Returns:
+        `CharacterDrawing`: The NPC Alisa's character drawing.
+    """
     return RpgMakerCharacterDrawing(
-        direction=Direction.DOWN,
+        direction=Direction.RIGHT,
         sprite_sheet=sprite_sheet(),
         sprite_sheet_selection=SpriteSheetSelection(0, 1),
     )
 
 
 def david() -> CharacterDrawing:
+    """
+    Initialize the NPC David's drawing.
+
+    Returns:
+        `CharacterDrawing`: The NPC David's character drawing.
+    """
     return RpgMakerCharacterDrawing(
         direction=Direction.DOWN,
         sprite_sheet=sprite_sheet(),

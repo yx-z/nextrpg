@@ -8,7 +8,7 @@ from functools import cached_property
 from itertools import product
 from math import ceil, sqrt
 from os import PathLike
-from typing import override
+from typing import Self, override
 
 from pygame import Mask, SRCALPHA, Surface
 from pygame.draw import polygon
@@ -40,7 +40,7 @@ class Coordinate(namedtuple("Coordinate", "left top")):
     top: Pixel
 
     @override
-    def __sub__(self, offset: Coordinate) -> Coordinate:
+    def __sub__(self, offset: Self) -> Self:
         """
         Subtracts a coordinate from this coordinate.
 
@@ -52,8 +52,7 @@ class Coordinate(namedtuple("Coordinate", "left top")):
         """
         return Coordinate(self.left - offset.left, self.top - offset.top)
 
-    @override
-    def __add__(self, offset: DirectionalOffset | Coordinate) -> Coordinate:
+    def shift(self, offset: DirectionalOffset | Self) -> Self:
         """
         Shifts the coordinate in the specified direction by a given offset.
         Supports both orthogonal and diagonal directions.
@@ -95,7 +94,6 @@ class Coordinate(namedtuple("Coordinate", "left top")):
                 return Coordinate(self.left - diag, self.top + diag)
             case Direction.DOWN_RIGHT:
                 return Coordinate(self.left + diag, self.top + diag)
-        return NotImplemented
 
     def __repr__(self) -> str:
         return f"({self.left:.1f}, {self.top:.1f})"
@@ -163,7 +161,7 @@ class Drawing:
         """
         return self._debug_surface or self._surface
 
-    def crop(self, top_left: Coordinate, size: Size) -> Drawing:
+    def crop(self, top_left: Coordinate, size: Size) -> Self:
         """
         Crops a rectangular portion of the drawing specified by the
         top-left corner and the size.
@@ -184,7 +182,7 @@ class Drawing:
         width, height = size
         return Drawing(self._surface.subsurface((left, top, width, height)))
 
-    def set_alpha(self, alpha: Alpha) -> Drawing:
+    def set_alpha(self, alpha: Alpha) -> Self:
         """
         Creates a new `Drawing` with the specified alpha value.
 
@@ -211,7 +209,7 @@ class Drawing:
     def _surface(self) -> Surface:
         if isinstance(self.resource, Surface):
             return self.resource
-        logger.debug("Loading {self.resource}", duration=FROM_CONFIG)
+        logger.debug(t"Loading {self.resource}", duration=FROM_CONFIG)
         return load(self.resource).convert_alpha()
 
 
@@ -271,7 +269,7 @@ class DrawOnScreen:
         max_x = max(c.left for c in visible)
         max_y = max(c.top for c in visible)
         return Rectangle(
-            self.top_left + Coordinate(min_x, min_y),
+            self.top_left.shift(Coordinate(min_x, min_y)),
             Size(max_x - min_x, max_y - min_y),
         )
 
@@ -287,8 +285,7 @@ class DrawOnScreen:
         """
         return self.drawing.pygame, self.top_left
 
-    @override
-    def __add__(self, coord: Coordinate) -> DrawOnScreen:
+    def shift(self, coord: Coordinate) -> Self:
         """
         Shift the drawing by the specified coordinate.
 
@@ -298,7 +295,7 @@ class DrawOnScreen:
         Returns:
             `DrawOnScreen`: A new `DrawOnScreen` shifted by the coordinate.
         """
-        return DrawOnScreen(self.top_left + coord, self.drawing)
+        return DrawOnScreen(self.top_left.shift(coord), self.drawing)
 
 
 @dataclass

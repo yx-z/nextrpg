@@ -17,9 +17,10 @@ from nextrpg.config import (
     GuiMode,
     ResizeMode,
     config,
+    initial_config,
     set_config,
 )
-from nextrpg.core import Millisecond, Pixel
+from nextrpg.core import Millisecond, Pixel, Size
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
 from nextrpg.event.pygame_event import (
     GuiResize,
@@ -33,6 +34,26 @@ from nextrpg.text import Text
 type _GuiFlag = int
 
 logger = Logger("GUI")
+
+
+def gui_size() -> Size:
+    """
+    Get the logical size of the GUI window.
+    Upon ResizeMode.SCALE, the logical GUI window size shall be the initial
+    GUI size given all the scaling logic of game content is handled already
+    at `Gui` class internally.
+
+    So any in-game logic of GUI size shall assume the initial GUI size.
+
+    Returns:
+        `Size`: The size of the GUI window.
+    """
+    match config().gui.resize_mode:
+        case ResizeMode.SCALE:
+            return initial_config().gui.size
+        case ResizeMode.KEEP_NATIVE_SIZE:
+            return config().gui.size
+    raise ValueError(f"Invalid resize mode {config().gui.resize_mode}")
 
 
 @dataclass
@@ -94,7 +115,7 @@ class Gui:
             `None`.
         """
         logger.debug(
-            "Size {self.current_config.size} Shift {self._center_shift}"
+            t"Size {self.current_config.size} Shift {self._center_shift}"
         )
         self._screen.fill(self.current_config.background_color)
         match self.current_config.resize_mode:

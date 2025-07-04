@@ -1,3 +1,7 @@
+"""
+Sample exterior scene.
+"""
+
 from pathlib import Path
 
 from nextrpg.character.character_drawing import CharacterDrawing

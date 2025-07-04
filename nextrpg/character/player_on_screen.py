@@ -4,7 +4,7 @@ Handles character movement and collision detection.
 
 from dataclasses import dataclass, field, replace
 from functools import cached_property, singledispatchmethod
-from typing import override
+from typing import Self, override
 
 from nextrpg.character.character_on_screen import (
     CharacterOnScreen,
@@ -24,6 +24,7 @@ from nextrpg.event.pygame_event import (
 @dataclass(kw_only=True)
 class PlayerOnScreen(MovingCharacterOnScreen):
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
+    _last: Self | None = None
 
     @singledispatchmethod
     def event(self, e: PygameEvent) -> CharacterOnScreen:
@@ -56,9 +57,25 @@ class PlayerOnScreen(MovingCharacterOnScreen):
 
     @override
     def move(self, time_delta: Millisecond) -> Coordinate | None:
-        return self.coordinate + DirectionalOffset(
-            self.character.direction, self.move_speed * time_delta
+        return self.coordinate.shift(
+            DirectionalOffset(
+                self.character.direction, self.move_speed * time_delta
+            )
         )
+
+    @override
+    def tick(self, time_delta: Millisecond) -> Self:
+        return replace(super().tick(time_delta), _last=self)
+
+    @cached_property
+    def untick(self) -> Self:
+        """
+        Get the last tick of the player, with no moving.
+
+        Returns:
+            `PlayerOnScreen`: The player state before the last tick.
+        """
+        return replace(self._last, _movement_keys=frozenset())
 
 
 _MOVEMENT_KEYS = {

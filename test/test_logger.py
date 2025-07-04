@@ -9,10 +9,10 @@ from test.util import override_config
 def test_logger():
     logger = Logger("TestLogger")
     i = 1
-    logger.info("Info {i}")
-    logger.warning("Warning {i}", duration=FROM_CONFIG)
-    logger.error("Error {i}", duration=123)
-    logger.error("Error {i}", duration=123)
+    logger.info(t"Info {i}")
+    logger.warning(t"Warning {i}", duration=FROM_CONFIG)
+    logger.error(t"Error {i}", duration=123)
+    logger.error(t"Error {i}", duration=123)
 
     with raises(ValueError):
         Logger("TestLogger")

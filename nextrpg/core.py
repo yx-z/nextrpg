@@ -7,6 +7,7 @@ from dataclasses import dataclass, replace
 from enum import Enum, auto
 from functools import cached_property
 from math import ceil
+from typing import Self
 
 import pygame
 from pygame.font import SysFont
@@ -129,7 +130,7 @@ class Size(namedtuple("Size", "width height")):
     width: Pixel
     height: Pixel
 
-    def scale(self, scaling: float) -> Size:
+    def scale(self, scaling: float) -> Self:
         """
         Scales the dimensions by a scaling factor and returns a new `Size`.
 
@@ -197,7 +198,7 @@ class Timer:
     duration: Millisecond
     elapsed: Millisecond = 0
 
-    def tick(self, time_delta: Millisecond) -> Timer:
+    def tick(self, time_delta: Millisecond) -> Self:
         """
         Tick the timer in a game loop.
 
@@ -209,7 +210,7 @@ class Timer:
         """
         return replace(self, elapsed=self.elapsed + time_delta)
 
-    def reset(self) -> Timer:
+    def reset(self) -> Self:
         """
         Get a reset timer.
 

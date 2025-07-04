@@ -59,6 +59,16 @@ type LayerIndex = int
 
 
 class LayerTileBottomAndDrawOnScreen(NamedTuple):
+    """
+    Similar to `TileBottomAndDrawOnScreen`, but with a foreground layer.
+
+    Arguments:
+        `layer`: The foreground layer index.
+
+        `bottom`: The bottommost pixel for the tile group that this tile is in.
+
+        `draw_on_screen`: The `DrawOnScreen` of the tile itself.
+    """
     layer: LayerIndex
     bottom: Pixel
     draw_on_screen: DrawOnScreen
@@ -191,6 +201,16 @@ class MapHelper:
     def layer_bottom_and_draw(
         self, character: CharacterOnScreen
     ) -> LayerTileBottomAndDrawOnScreen:
+        """
+        Retrieve the character foreground layer, bottom pixel, and the draw.
+
+        Arguments:
+            `character`: The character to retrieve the foreground layer for.
+
+        Returns:
+            `LayerTileBottomAndDrawOnScreen`: The foreground layer,
+                bottom pixel, and the draw.
+        """
         return LayerTileBottomAndDrawOnScreen(
             self._character_layer(character),
             character.draw_on_screen.visible_rectangle.bottom,
@@ -244,12 +264,7 @@ class MapHelper:
     def _from_rect(
         self, coord: _TileCoordinate, obj: TiledObject
     ) -> Rectangle | None:
-        if (
-            obj.x is None
-            or obj.y is None
-            or obj.width is None
-            or obj.height is None
-        ):
+        if _is_not_rect(obj):
             return None
         w, h = self._tile_size
         cx, cy = coord
@@ -372,7 +387,7 @@ class MapHelper:
 
     @cached_property
     def _tmx(self) -> TiledMap:
-        logger.debug("Loading {self.tmx_file}", duration=FROM_CONFIG)
+        logger.debug(t"Loading {self.tmx_file}", duration=FROM_CONFIG)
         return load_pygame(self.tmx_file)
 
 
@@ -386,6 +401,8 @@ def _above_character(
         for bottom, draw in layer
     )
 
+def _is_not_rect(obj: TiledObject) -> bool:
+    return obj.x is None or obj.y is None or obj.width is None or obj.height is None
 
 type _Gid = int
 

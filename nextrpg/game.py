@@ -67,7 +67,7 @@ class _GameLoop:
         )
 
     def tick(self) -> _GameLoop:
-        logger.debug("FPS: {self._clock.get_fps():.0f}")
+        logger.debug(t"FPS: {self._clock.get_fps():.0f}")
         self._clock.tick(config().gui.frames_per_second)
         time_delta = self._clock.get_time()
 

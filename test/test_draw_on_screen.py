@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from pygame import Color, SRCALPHA, Surface
-from pytest import approx, raises
+from pytest import approx
 from pytest_mock import MockerFixture
 
 from nextrpg.config import Config, DebugConfig
@@ -59,33 +59,31 @@ def test_draw_on_screen() -> None:
 
 
 def test_coordinate() -> None:
-    assert Coordinate(10, 20) + DirectionalOffset(
-        Direction.UP, 5
+    assert Coordinate(10, 20).shift(
+        DirectionalOffset(Direction.UP, 5)
     ) == Coordinate(10, 15)
-    assert Coordinate(10, 20) + DirectionalOffset(
-        Direction.DOWN, 5
+    assert Coordinate(10, 20).shift(
+        DirectionalOffset(Direction.DOWN, 5)
     ) == Coordinate(10, 25)
-    assert Coordinate(10, 20) + DirectionalOffset(
-        Direction.LEFT, 5
+    assert Coordinate(10, 20).shift(
+        DirectionalOffset(Direction.LEFT, 5)
     ) == Coordinate(5, 20)
-    assert Coordinate(10, 20) + DirectionalOffset(
-        Direction.RIGHT, 5
+    assert Coordinate(10, 20).shift(
+        DirectionalOffset(Direction.RIGHT, 5)
     ) == Coordinate(15, 20)
-    assert Coordinate(10, 20) + DirectionalOffset(
-        Direction.UP_LEFT, 10
+    assert Coordinate(10, 20).shift(
+        DirectionalOffset(Direction.UP_LEFT, 10)
     ) == approx(Coordinate(2.9289321881345254, 12.928932188134524))
-    assert Coordinate(10, 20) + DirectionalOffset(
-        Direction.UP_RIGHT, 10
+    assert Coordinate(10, 20).shift(
+        DirectionalOffset(Direction.UP_RIGHT, 10)
     ) == approx(Coordinate(17.071067811865476, 12.928932188134524))
-    assert Coordinate(10, 20) + DirectionalOffset(
-        Direction.DOWN_LEFT, 10
+    assert Coordinate(10, 20).shift(
+        DirectionalOffset(Direction.DOWN_LEFT, 10)
     ) == approx(Coordinate(2.9289321881345254, 27.071067811865476))
-    assert Coordinate(10, 20) + DirectionalOffset(
-        Direction.DOWN_RIGHT, 10
+    assert Coordinate(10, 20).shift(
+        DirectionalOffset(Direction.DOWN_RIGHT, 10)
     ) == approx(Coordinate(17.071067811865476, 27.071067811865476))
-    assert Coordinate(10, 20) + Coordinate(1, 2) == Coordinate(11, 22)
-    with raises(TypeError):
-        Coordinate(10, 20) + DirectionalOffset("INVALID", 123)
+    assert Coordinate(10, 20).shift(Coordinate(1, 2)) == Coordinate(11, 22)
 
 
 def test_rectangle() -> None:
