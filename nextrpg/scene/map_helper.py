@@ -16,6 +16,7 @@ from pytmx import (
     load_pygame,
 )
 
+from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config import config
 from nextrpg.core import Pixel, Size
 from nextrpg.draw_on_screen import (
@@ -29,6 +30,7 @@ from nextrpg.logger import FROM_CONFIG, Logger
 from nextrpg.model import cached
 
 logger = Logger("MapHelper")
+
 
 class TileBottomAndDrawOnScreen(NamedTuple):
     """
@@ -52,19 +54,14 @@ class TileBottomAndDrawOnScreen(NamedTuple):
     bottom: Pixel
     draw: DrawOnScreen
 
-type _LayerIndex = int
 
-type _Gid = int
-
-
-class _TileCoordinate(NamedTuple):
-    top: int
-    left: int
+type LayerIndex = int
 
 
-class _Collider(NamedTuple):
-    coord: _TileCoordinate
-    obj: TiledObject
+class LayerTileBottomAndDrawOnScreen(NamedTuple):
+    layer: LayerIndex
+    bottom: Pixel
+    draw_on_screen: DrawOnScreen
 
 
 def get_polygon(obj: TiledObject) -> Polygon:
@@ -191,6 +188,29 @@ class MapHelper:
         """
         return [obj for obj in self._all_objects if obj.type == class_name]
 
+    def layer_bottom_and_draw(
+        self, character: CharacterOnScreen
+    ) -> LayerTileBottomAndDrawOnScreen:
+        return LayerTileBottomAndDrawOnScreen(
+            self._character_layer(character),
+            character.draw_on_screen.visible_rectangle.bottom,
+            character.draw_on_screen,
+        )
+
+    def _character_layer(self, character: CharacterOnScreen) -> LayerIndex:
+        above = (
+            i
+            for i, layer in self._reversed_foregrounds
+            if _above_character(layer, character)
+        )
+        return next(above, 0)
+
+    @cached_property
+    def _reversed_foregrounds(
+        self,
+    ) -> list[tuple[LayerIndex, list[TileBottomAndDrawOnScreen]]]:
+        return list(reversed(list(enumerate(self.foreground))))
+
     @cached_property
     def _all_objects(self) -> list[TiledObject]:
         return [
@@ -264,12 +284,13 @@ class MapHelper:
             coord: draw.visible_rectangle.bottom
             for coord, draw in coord_and_draws.items()
         }
-        return [
+        bottom_and_draw = [
             TileBottomAndDrawOnScreen(
                 self._bottom(layer, coord, draw, coord_to_bottom), draw
             )
             for coord, draw in coord_and_draws.items()
         ]
+        return sorted(bottom_and_draw, key=lambda t: t.bottom)
 
     @cached_property
     def _tile_size(self) -> Size:
@@ -346,10 +367,34 @@ class MapHelper:
             if (cls := tile.get("type"))
         }
 
-    def _layer(self, index: _LayerIndex) -> TiledTileLayer | TiledObjectGroup:
+    def _layer(self, index: LayerIndex) -> TiledTileLayer | TiledObjectGroup:
         return self._tmx.layers[index]
 
     @cached_property
     def _tmx(self) -> TiledMap:
-        logger.debug(t"Loading {self.tmx_file}", duration=FROM_CONFIG)
+        logger.debug("Loading {self.tmx_file}", duration=FROM_CONFIG)
         return load_pygame(self.tmx_file)
+
+
+def _above_character(
+    layer: list[TileBottomAndDrawOnScreen],
+    character: CharacterOnScreen,
+) -> bool:
+    rect = character.draw_on_screen.visible_rectangle
+    return any(
+        rect.collide(draw.visible_rectangle) and bottom < rect.bottom
+        for bottom, draw in layer
+    )
+
+
+type _Gid = int
+
+
+class _TileCoordinate(NamedTuple):
+    top: int
+    left: int
+
+
+class _Collider(NamedTuple):
+    coord: _TileCoordinate
+    obj: TiledObject

@@ -1,3 +1,7 @@
+"""
+Logger module.
+"""
+
 from dataclasses import dataclass, replace
 from functools import cached_property
 from itertools import chain
@@ -31,7 +35,7 @@ class Logger:
 
     def debug(
         self,
-        message: Template,
+        message: Template | str,
         *,
         duration: Millisecond | DurationFromConfig | None = None,
     ) -> None:
@@ -52,7 +56,7 @@ class Logger:
 
     def info(
         self,
-        message: Template,
+        message: Template | str,
         *,
         duration: Millisecond | DurationFromConfig | None = None,
     ) -> None:
@@ -71,7 +75,7 @@ class Logger:
 
     def warning(
         self,
-        message: Template,
+        message: Template | str,
         *,
         duration: Millisecond | DurationFromConfig | None = None,
     ) -> None:
@@ -90,7 +94,7 @@ class Logger:
 
     def error(
         self,
-        message: Template,
+        message: Template | str,
         *,
         duration: Millisecond | DurationFromConfig | None = None,
     ) -> None:
@@ -185,11 +189,12 @@ def _pop(time_delta: Millisecond) -> None:
 def _add(
     component: str,
     level: LogLevel,
-    message: Template,
+    message: Template | str,
     duration: Millisecond | DurationFromConfig | None,
 ) -> None:
     if not (debug := config().debug):
         return
+    message = Template(message) if isinstance(message, str) else message
     if duration is None:
         _entries.append(_LogEntry(component, level, message))
         return

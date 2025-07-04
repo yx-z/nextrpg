@@ -22,6 +22,7 @@ from nextrpg.model import cached
 
 logger = Logger("Draw")
 
+
 class Coordinate(namedtuple("Coordinate", "left top")):
     """
     Represents a 2D coordinate with immutability and provides methods
@@ -99,8 +100,11 @@ class Coordinate(namedtuple("Coordinate", "left top")):
     def __repr__(self) -> str:
         return f"({self.left:.1f}, {self.top:.1f})"
 
-@cached(lambda: config().resource.drawing_cache_size,
-        lambda resource: None if isinstance(resource, Surface) else resource)
+
+@cached(
+    lambda: config().resource.drawing_cache_size,
+    lambda resource: None if isinstance(resource, Surface) else resource,
+)
 @dataclass
 class Drawing:
     """
@@ -207,7 +211,7 @@ class Drawing:
     def _surface(self) -> Surface:
         if isinstance(self.resource, Surface):
             return self.resource
-        logger.debug(t"Loading {self.resource}", duration=FROM_CONFIG)
+        logger.debug("Loading {self.resource}", duration=FROM_CONFIG)
         return load(self.resource).convert_alpha()
 
 

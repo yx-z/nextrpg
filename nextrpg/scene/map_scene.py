@@ -2,15 +2,21 @@
 Map scene implementation.
 """
 
+from collections.abc import Iterable
 from dataclasses import field, replace
 from functools import cached_property
+from heapq import merge
+from itertools import chain
 from pathlib import Path
-from typing import NamedTuple, override
+from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.character.npc_on_screen import MovingNpcOnScreen, StaticNpcOnScreen
+from nextrpg.character.npc_on_screen import (
+    NpcOnScreen,
+)
 from nextrpg.character.npc_spec import MovingNpcSpec, StaticNpcSpec
+from nextrpg.character.npcs import Npcs
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import ResizeMode, config, initial_config
 from nextrpg.core import Millisecond, Pixel, Size
@@ -20,8 +26,8 @@ from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.logger import Logger
 from nextrpg.model import instance_init, register_instance_init
 from nextrpg.scene.map_helper import (
+    LayerTileBottomAndDrawOnScreen,
     MapHelper,
-    TileBottomAndDrawOnScreen,
     get_polygon,
 )
 from nextrpg.scene.scene import Scene
@@ -37,23 +43,6 @@ def _init_player(self: MapScene) -> PlayerOnScreen:
         Coordinate(player.x, player.y),
         self._map_helper.collisions,
     )
-
-
-def _init_static_npcs(self: MapScene) -> list[StaticNpcOnScreen]:
-    return list(map(self._init_static_npc, self.static_npc_specs))
-
-
-def _init_moving_npcs(self: MapScene) -> list[MovingNpcOnScreen]:
-    return list(map(self._init_moving_npc, self.moving_npc_specs))
-
-
-type _LayerIndex = int
-
-
-class _LayerTileBottomAndDrawOnScreen(NamedTuple):
-    layer: _LayerIndex
-    bottom: Pixel
-    draw_on_screen: DrawOnScreen
 
 
 @register_instance_init
@@ -82,9 +71,12 @@ class MapScene(Scene):
     moves: list[Move] = field(default_factory=list)
     static_npc_specs: list[StaticNpcSpec] = field(default_factory=list)
     moving_npc_specs: list[MovingNpcSpec] = field(default_factory=list)
-    _player: CharacterOnScreen = instance_init(_init_player)
-    _static_npcs: list[StaticNpcOnScreen] = instance_init(_init_static_npcs)
-    _moving_npcs: list[MovingNpcOnScreen] = instance_init(_init_moving_npcs)
+    _player: PlayerOnScreen = instance_init(_init_player)
+    _npcs: Npcs = instance_init(
+        lambda self: Npcs(
+            self._map_helper, self.static_npc_specs, self.moving_npc_specs
+        )
+    )
 
     @cached_property
     @override
@@ -99,11 +91,11 @@ class MapScene(Scene):
             `list[DrawOnScreen]`: The complete list of drawable elements in the
             correct rendering order.
         """
-        draws = (
-            self._map_helper.background
-            + self._foreground_and_characters
-            + self._map_helper.above_character
-            + self._collision_visuals
+        draws = chain(
+            self._map_helper.background,
+            self._foreground_and_characters,
+            self._map_helper.above_character,
+            self._collision_visuals,
         )
         return [d + self._player_offset for d in draws]
 
@@ -137,26 +129,40 @@ class MapScene(Scene):
         Returns:
             `Scene`: The updated scene after the time step.
         """
+
         player = self._player.tick(time_delta)
-        logger.debug(t"Player {player.coordinate}")
-        return self._move_to_scene(player) or replace(
-            self,
-            _player=player,
-            _static_npcs=[t.tick(time_delta) for t in self._static_npcs],
-            _moving_npcs=[t.tick(time_delta) for t in self._moving_npcs],
+        logger.debug("Player {player.coordinate}")
+        if moved := self._move_to_scene(player):
+            return moved
+
+        if npc := self._collided_npc:
+            logger.debug("Collied with {npc.name}")
+
+        return replace(self, _player=player, _npcs=self._npcs.tick(time_delta))
+
+    @cached_property
+    def _collided_npc(self) -> NpcOnScreen | None:
+        collided = (n for n in self._npcs.list if self._collide_with_player(n))
+        return next(collided, None)
+
+    def _collide_with_player(self, npc: NpcOnScreen) -> bool:
+        return npc.draw_on_screen.rectangle.collide(
+            self._player.draw_on_screen.rectangle
         )
 
     @cached_property
-    def _foreground_and_characters(self) -> list[DrawOnScreen]:
-        foregrounds = [
-            _LayerTileBottomAndDrawOnScreen(i, bottom, draw)
+    def _foreground_and_characters(self) -> Iterable[DrawOnScreen]:
+        foregrounds = (
+            LayerTileBottomAndDrawOnScreen(i, bottom, draw)
             for i, layer in enumerate(self._map_helper.foreground)
             for bottom, draw in layer
-        ]
-        characters = [self._player] + self._static_npcs + self._moving_npcs
-        bottom_and_draws = list(map(self._layer_bottom_and_draw, characters))
-        layers = sorted(foregrounds + bottom_and_draws, key=lambda t: t[:2])
-        return [draw for _, _, draw in layers]
+        )
+        characters = [self._player] + self._npcs.list
+        bottom_and_draw = sorted(
+            map(self._map_helper.layer_bottom_and_draw, characters)
+        )
+        layers = merge(foregrounds, bottom_and_draw)
+        return (draw for _, _, draw in layers)
 
     @cached_property
     def _player_offset(self) -> Coordinate:
@@ -166,7 +172,7 @@ class MapScene(Scene):
         left_offset = _offset(player.left, gui_width, map_width)
         top_offset = _offset(player.top, gui_height, map_height)
         offset = Coordinate(left_offset, top_offset)
-        logger.debug(t"Player offset {offset}")
+        logger.debug("Player offset {offset}")
         return offset
 
     def _move_to_scene(self, player: CharacterOnScreen) -> Scene | None:
@@ -196,40 +202,6 @@ class MapScene(Scene):
     def _map_helper(self) -> MapHelper:
         return MapHelper(self.tmx_file)
 
-    def _init_static_npc(self, spec: StaticNpcSpec) -> StaticNpcOnScreen:
-        obj = self._map_helper.get_object(spec.name)
-        return StaticNpcOnScreen(spec.drawing, Coordinate(obj.x, obj.y))
-
-    def _init_moving_npc(self, spec: MovingNpcSpec) -> MovingNpcOnScreen:
-        obj = self._map_helper.get_object(spec.name)
-        return MovingNpcOnScreen(
-            spec.drawing,
-            Coordinate(obj.x, obj.y),
-            self._map_helper.collisions if spec.observe_collisions else [],
-            spec.move_speed,
-            path=get_polygon(obj),
-            idle_duration=spec.idle_duration,
-            move_duration=spec.move_duration,
-        )
-
-    def _character_layer(self, character: CharacterOnScreen) -> _LayerIndex:
-        reversed_layers = reversed(list(enumerate(self._map_helper.foreground)))
-        above_character = (
-            i
-            for i, layer in reversed_layers
-            if _above_character(layer, character)
-        )
-        return next(above_character, 0)
-
-    def _layer_bottom_and_draw(
-        self, character: CharacterOnScreen
-    ) -> _LayerTileBottomAndDrawOnScreen:
-        return _LayerTileBottomAndDrawOnScreen(
-            self._character_layer(character),
-            character.draw_on_screen.visible_rectangle.bottom,
-            character.draw_on_screen,
-        )
-
 
 def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
     if player_axis < gui_axis / 2:
@@ -246,14 +218,3 @@ def _gui_size() -> Size:
         case ResizeMode.KEEP_NATIVE_SIZE:
             return config().gui.size
     raise ValueError(f"Invalid resize mode {config().gui.resize_mode}")
-
-
-def _above_character(
-    layer: list[TileBottomAndDrawOnScreen],
-    character: CharacterOnScreen,
-) -> bool:
-    rect = character.draw_on_screen.visible_rectangle
-    return any(
-        rect.collide(draw.visible_rectangle) and bottom < rect.bottom
-        for bottom, draw in layer
-    )

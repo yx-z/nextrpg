@@ -6,13 +6,12 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field, replace
 from functools import cached_property
 from itertools import product
-from typing import NamedTuple, override
+from typing import NamedTuple, Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
 from nextrpg.core import Direction, Millisecond, PixelPerMillisecond
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Polygon
-from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.logger import FROM_CONFIG, Logger
 
 logger = Logger("CharacterOnScreen")
@@ -51,18 +50,7 @@ class CharacterOnScreen(ABC):
         return DrawOnScreen(self.coordinate, self.character.drawing)
 
     @abstractmethod
-    def event(self, e: PygameEvent) -> CharacterOnScreen:
-        """
-
-        Arguments:
-            e:
-
-        Returns:
-
-        """
-
-    @abstractmethod
-    def tick(self, time_delta: Millisecond) -> CharacterOnScreen:
+    def tick(self, time_delta: Millisecond) -> Self:
         """
         Update the character's state for a single game loop.
 
@@ -104,7 +92,7 @@ class MovingCharacterOnScreen(CharacterOnScreen):
         """
 
     @override
-    def tick(self, time_delta: Millisecond) -> CharacterOnScreen:
+    def tick(self, time_delta: Millisecond) -> Self:
         """
         Update the character's state for a single game step/frame.
 
@@ -164,7 +152,7 @@ class MovingCharacterOnScreen(CharacterOnScreen):
         if collision_and_coord := self._collide(hit_coords):
             collision, coord = collision_and_coord
             logger.debug(
-                t"Collission {coord} and {collision.points}",
+                "Collision {coord} and {collision.points}",
                 duration=FROM_CONFIG,
             )
             return False

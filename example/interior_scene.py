@@ -3,8 +3,10 @@ Sample scene.
 """
 
 from pathlib import Path
+from typing import Any
 
 from nextrpg.character.character_drawing import CharacterDrawing
+from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npc_spec import MovingNpcSpec, StaticNpcSpec
 from nextrpg.character.rpg_maker_character_drawing import (
     Margin,
@@ -15,6 +17,7 @@ from nextrpg.character.rpg_maker_character_drawing import (
 from nextrpg.core import Direction
 from nextrpg.draw_on_screen import Drawing
 from nextrpg.event.move import Move
+from nextrpg.scene.map_helper import MapHelper
 from nextrpg.scene.map_scene import MapScene
 from nextrpg.scene.scene import Scene
 
@@ -50,9 +53,18 @@ def interior_scene(
         player_coordinate_object,
         # Move to another map.
         [Move("from_interior", "to_exterior", exterior_scene)],
-        [StaticNpcSpec("david", david())],
-        [MovingNpcSpec("alisa", alisa())],
+        [StaticNpcSpec("david", david(), greet)],
+        [MovingNpcSpec("alisa", alisa(), greet)],
     )
+
+
+def greet(
+    player: CharacterOnScreen,
+    npc: CharacterOnScreen,
+    map_helper: MapHelper,
+    **kwargs: Any
+) -> None:
+    pass
 
 
 def sprite_sheet() -> SpriteSheet:

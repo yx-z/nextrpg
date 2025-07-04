@@ -25,7 +25,6 @@ from nextrpg.event.pygame_event import (
 class PlayerOnScreen(MovingCharacterOnScreen):
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
-    @override
     @singledispatchmethod
     def event(self, e: PygameEvent) -> CharacterOnScreen:
         """

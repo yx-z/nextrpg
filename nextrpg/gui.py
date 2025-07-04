@@ -94,7 +94,7 @@ class Gui:
             `None`.
         """
         logger.debug(
-            t"Size {self.current_config.size} Shift {self._center_shift}"
+            "Size {self.current_config.size} Shift {self._center_shift}"
         )
         self._screen.fill(self.current_config.background_color)
         match self.current_config.resize_mode:
@@ -151,8 +151,8 @@ class Gui:
 def _toggle_gui_mode(self, e: KeyPressDown) -> Gui:
     if e.key is not KeyboardKey.GUI_MODE_TOGGLE:
         return self
-    current_config = replace(self.current_config,
-        gui_mode=self.current_config.gui_mode.opposite
+    current_config = replace(
+        self.current_config, gui_mode=self.current_config.gui_mode.opposite
     )
     set_config(replace(config(), gui=current_config))
     return replace(

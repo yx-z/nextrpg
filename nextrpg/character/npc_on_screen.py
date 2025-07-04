@@ -8,23 +8,23 @@ from nextrpg.character.character_on_screen import (
 )
 from nextrpg.core import Millisecond, Timer
 from nextrpg.draw_on_screen import Polygon
-from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.model import instance_init, register_instance_init
 
 
-class Npc(CharacterOnScreen):
-    def event(self, e: PygameEvent) -> CharacterOnScreen:
-        pass
+@dataclass
+class NpcOnScreen(CharacterOnScreen):
+    _: KW_ONLY = field()
+    name: str = field()
 
 
 @dataclass
-class StaticNpcOnScreen(Npc):
+class StaticNpcOnScreen(NpcOnScreen):
     def tick(self, time_delta: Millisecond) -> CharacterOnScreen:
         return replace(self, character=self.character.idle(time_delta))
 
 
 @register_instance_init
-class MovingNpcOnScreen(Npc, MovingCharacterOnScreen):
+class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     _: KW_ONLY = field()
     path: Polygon = field()
     idle_duration: Millisecond

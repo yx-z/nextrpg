@@ -8,8 +8,6 @@ from nextrpg.core import Millisecond, Timer
 from nextrpg.draw_on_screen import Drawing
 from nextrpg.model import instance_init, register_instance_init
 
-type _FrameIndex = int
-
 
 @register_instance_init
 class CyclicFrames:
@@ -78,3 +76,6 @@ class CyclicFrames:
             the beginning of the sequence.
         """
         return replace(self, _index=0, _timer=self._timer.reset())
+
+
+type _FrameIndex = int

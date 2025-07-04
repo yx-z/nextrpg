@@ -31,6 +31,21 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
+                    <a class="class" href="#NpcTriggerMode">NpcTriggerMode</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="variable" href="#NpcTriggerMode.CONFIRM_KEY">CONFIRM_KEY</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#NpcTriggerMode.PLAYER_COLLIDES_NPC">PLAYER_COLLIDES_NPC</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#NpcTriggerMode.NRC_COLLIDES_PLAYER">NRC_COLLIDES_PLAYER</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
                     <a class="class" href="#StaticNpcSpec">StaticNpcSpec</a>
                             <ul class="memberlist">
                         <li>
@@ -41,6 +56,12 @@
                         </li>
                         <li>
                                 <a class="variable" href="#StaticNpcSpec.drawing">drawing</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#StaticNpcSpec.event_spec">event_spec</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#StaticNpcSpec.trigger_mode">trigger_mode</a>
                         </li>
                 </ul>
 
@@ -88,34 +109,101 @@
                         <label class="view-source-button" for="mod-npc_spec-view-source"><span>View Source</span></label>
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">PixelPerMillisecond</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="nd">@dataclass</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StaticNpcSpec</span><span class="p">:</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="nd">@dataclass</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingNpcSpec</span><span class="p">(</span><span class="n">StaticNpcSpec</span><span class="p">):</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_speed</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="p">)</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">idle_duration</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="p">)</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_duration</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="p">)</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">observe_collisions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">PixelPerMillisecond</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.rpg_event_spec</span><span class="w"> </span><span class="kn">import</span> <span class="n">RpgEventSpec</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NpcTriggerMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">CONFIRM_KEY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">PLAYER_COLLIDES_NPC</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">NRC_COLLIDES_PLAYER</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="nd">@dataclass</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StaticNpcSpec</span><span class="p">:</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">event_spec</span><span class="p">:</span> <span class="n">RpgEventSpec</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="n">trigger_mode</span><span class="p">:</span> <span class="n">NpcTriggerMode</span> <span class="o">=</span> <span class="n">NpcTriggerMode</span><span class="o">.</span><span class="n">CONFIRM_KEY</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="nd">@dataclass</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingNpcSpec</span><span class="p">(</span><span class="n">StaticNpcSpec</span><span class="p">):</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_speed</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="p">)</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">idle_duration</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="p">)</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_duration</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="p">)</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">observe_collisions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span></pre></div>
 
 
             </section>
+                <section id="NpcTriggerMode">
+                            <input id="NpcTriggerMode-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">NpcTriggerMode</span><wbr>(<span class="base">enum.Enum</span>):
+
+                <label class="view-source-button" for="NpcTriggerMode-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#NpcTriggerMode"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="NpcTriggerMode-11"><a href="#NpcTriggerMode-11"><span class="linenos">11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NpcTriggerMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="NpcTriggerMode-12"><a href="#NpcTriggerMode-12"><span class="linenos">12</span></a>    <span class="n">CONFIRM_KEY</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="NpcTriggerMode-13"><a href="#NpcTriggerMode-13"><span class="linenos">13</span></a>    <span class="n">PLAYER_COLLIDES_NPC</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="NpcTriggerMode-14"><a href="#NpcTriggerMode-14"><span class="linenos">14</span></a>    <span class="n">NRC_COLLIDES_PLAYER</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span></pre></div>
+
+
+    
+
+                            <div id="NpcTriggerMode.CONFIRM_KEY" class="classattr">
+                                <div class="attr variable">
+            <span class="name">CONFIRM_KEY</span>        =
+<span class="default_value">&lt;<a href="#NpcTriggerMode.CONFIRM_KEY">NpcTriggerMode.CONFIRM_KEY</a>: 1&gt;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#NpcTriggerMode.CONFIRM_KEY"></a>
+    
+    
+
+                            </div>
+                            <div id="NpcTriggerMode.PLAYER_COLLIDES_NPC" class="classattr">
+                                <div class="attr variable">
+            <span class="name">PLAYER_COLLIDES_NPC</span>        =
+<span class="default_value">&lt;<a href="#NpcTriggerMode.PLAYER_COLLIDES_NPC">NpcTriggerMode.PLAYER_COLLIDES_NPC</a>: 2&gt;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#NpcTriggerMode.PLAYER_COLLIDES_NPC"></a>
+    
+    
+
+                            </div>
+                            <div id="NpcTriggerMode.NRC_COLLIDES_PLAYER" class="classattr">
+                                <div class="attr variable">
+            <span class="name">NRC_COLLIDES_PLAYER</span>        =
+<span class="default_value">&lt;<a href="#NpcTriggerMode.NRC_COLLIDES_PLAYER">NpcTriggerMode.NRC_COLLIDES_PLAYER</a>: 3&gt;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#NpcTriggerMode.NRC_COLLIDES_PLAYER"></a>
+    
+    
+
+                            </div>
+                </section>
                 <section id="StaticNpcSpec">
                             <input id="StaticNpcSpec-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
@@ -128,10 +216,12 @@
 
     </div>
     <a class="headerlink" href="#StaticNpcSpec"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StaticNpcSpec-9"><a href="#StaticNpcSpec-9"><span class="linenos"> 9</span></a><span class="nd">@dataclass</span>
-</span><span id="StaticNpcSpec-10"><a href="#StaticNpcSpec-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StaticNpcSpec</span><span class="p">:</span>
-</span><span id="StaticNpcSpec-11"><a href="#StaticNpcSpec-11"><span class="linenos">11</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="StaticNpcSpec-12"><a href="#StaticNpcSpec-12"><span class="linenos">12</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StaticNpcSpec-17"><a href="#StaticNpcSpec-17"><span class="linenos">17</span></a><span class="nd">@dataclass</span>
+</span><span id="StaticNpcSpec-18"><a href="#StaticNpcSpec-18"><span class="linenos">18</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StaticNpcSpec</span><span class="p">:</span>
+</span><span id="StaticNpcSpec-19"><a href="#StaticNpcSpec-19"><span class="linenos">19</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="StaticNpcSpec-20"><a href="#StaticNpcSpec-20"><span class="linenos">20</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
+</span><span id="StaticNpcSpec-21"><a href="#StaticNpcSpec-21"><span class="linenos">21</span></a>    <span class="n">event_spec</span><span class="p">:</span> <span class="n">RpgEventSpec</span>
+</span><span id="StaticNpcSpec-22"><a href="#StaticNpcSpec-22"><span class="linenos">22</span></a>    <span class="n">trigger_mode</span><span class="p">:</span> <span class="n">NpcTriggerMode</span> <span class="o">=</span> <span class="n">NpcTriggerMode</span><span class="o">.</span><span class="n">CONFIRM_KEY</span>
 </span></pre></div>
 
 
@@ -140,7 +230,7 @@
                             <div id="StaticNpcSpec.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">StaticNpcSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">name</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">drawing</span><span class="p">:</span> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span></span>)</span>
+        <span class="name">StaticNpcSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">name</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">drawing</span><span class="p">:</span> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span>,</span><span class="param">	<span class="n">event_spec</span><span class="p">:</span> <span class="n"><a href="../event/rpg_event_spec.html#RpgEventSpec">nextrpg.event.rpg_event_spec.RpgEventSpec</a></span>,</span><span class="param">	<span class="n">trigger_mode</span><span class="p">:</span> <span class="n"><a href="#NpcTriggerMode">NpcTriggerMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#NpcTriggerMode.CONFIRM_KEY">NpcTriggerMode.CONFIRM_KEY</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -171,6 +261,29 @@
     
 
                             </div>
+                            <div id="StaticNpcSpec.event_spec" class="classattr">
+                                <div class="attr variable">
+            <span class="name">event_spec</span><span class="annotation">: <a href="../event/rpg_event_spec.html#RpgEventSpec">nextrpg.event.rpg_event_spec.RpgEventSpec</a></span>
+
+        
+    </div>
+    <a class="headerlink" href="#StaticNpcSpec.event_spec"></a>
+    
+    
+
+                            </div>
+                            <div id="StaticNpcSpec.trigger_mode" class="classattr">
+                                <div class="attr variable">
+            <span class="name">trigger_mode</span><span class="annotation">: <a href="#NpcTriggerMode">NpcTriggerMode</a></span>        =
+<span class="default_value">&lt;<a href="#NpcTriggerMode.CONFIRM_KEY">NpcTriggerMode.CONFIRM_KEY</a>: 1&gt;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#StaticNpcSpec.trigger_mode"></a>
+    
+    
+
+                            </div>
                 </section>
                 <section id="MovingNpcSpec">
                             <input id="MovingNpcSpec-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -184,18 +297,18 @@
 
     </div>
     <a class="headerlink" href="#MovingNpcSpec"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingNpcSpec-15"><a href="#MovingNpcSpec-15"><span class="linenos">15</span></a><span class="nd">@dataclass</span>
-</span><span id="MovingNpcSpec-16"><a href="#MovingNpcSpec-16"><span class="linenos">16</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingNpcSpec</span><span class="p">(</span><span class="n">StaticNpcSpec</span><span class="p">):</span>
-</span><span id="MovingNpcSpec-17"><a href="#MovingNpcSpec-17"><span class="linenos">17</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
-</span><span id="MovingNpcSpec-18"><a href="#MovingNpcSpec-18"><span class="linenos">18</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_speed</span>
-</span><span id="MovingNpcSpec-19"><a href="#MovingNpcSpec-19"><span class="linenos">19</span></a>    <span class="p">)</span>
-</span><span id="MovingNpcSpec-20"><a href="#MovingNpcSpec-20"><span class="linenos">20</span></a>    <span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
-</span><span id="MovingNpcSpec-21"><a href="#MovingNpcSpec-21"><span class="linenos">21</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">idle_duration</span>
-</span><span id="MovingNpcSpec-22"><a href="#MovingNpcSpec-22"><span class="linenos">22</span></a>    <span class="p">)</span>
-</span><span id="MovingNpcSpec-23"><a href="#MovingNpcSpec-23"><span class="linenos">23</span></a>    <span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
-</span><span id="MovingNpcSpec-24"><a href="#MovingNpcSpec-24"><span class="linenos">24</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_duration</span>
-</span><span id="MovingNpcSpec-25"><a href="#MovingNpcSpec-25"><span class="linenos">25</span></a>    <span class="p">)</span>
-</span><span id="MovingNpcSpec-26"><a href="#MovingNpcSpec-26"><span class="linenos">26</span></a>    <span class="n">observe_collisions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingNpcSpec-25"><a href="#MovingNpcSpec-25"><span class="linenos">25</span></a><span class="nd">@dataclass</span>
+</span><span id="MovingNpcSpec-26"><a href="#MovingNpcSpec-26"><span class="linenos">26</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingNpcSpec</span><span class="p">(</span><span class="n">StaticNpcSpec</span><span class="p">):</span>
+</span><span id="MovingNpcSpec-27"><a href="#MovingNpcSpec-27"><span class="linenos">27</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+</span><span id="MovingNpcSpec-28"><a href="#MovingNpcSpec-28"><span class="linenos">28</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_speed</span>
+</span><span id="MovingNpcSpec-29"><a href="#MovingNpcSpec-29"><span class="linenos">29</span></a>    <span class="p">)</span>
+</span><span id="MovingNpcSpec-30"><a href="#MovingNpcSpec-30"><span class="linenos">30</span></a>    <span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+</span><span id="MovingNpcSpec-31"><a href="#MovingNpcSpec-31"><span class="linenos">31</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">idle_duration</span>
+</span><span id="MovingNpcSpec-32"><a href="#MovingNpcSpec-32"><span class="linenos">32</span></a>    <span class="p">)</span>
+</span><span id="MovingNpcSpec-33"><a href="#MovingNpcSpec-33"><span class="linenos">33</span></a>    <span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+</span><span id="MovingNpcSpec-34"><a href="#MovingNpcSpec-34"><span class="linenos">34</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_duration</span>
+</span><span id="MovingNpcSpec-35"><a href="#MovingNpcSpec-35"><span class="linenos">35</span></a>    <span class="p">)</span>
+</span><span id="MovingNpcSpec-36"><a href="#MovingNpcSpec-36"><span class="linenos">36</span></a>    <span class="n">observe_collisions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span></pre></div>
 
 
@@ -204,7 +317,7 @@
                             <div id="MovingNpcSpec.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">MovingNpcSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">name</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">drawing</span><span class="p">:</span> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span>,</span><span class="param">	<span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">observe_collisions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
+        <span class="name">MovingNpcSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">name</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">drawing</span><span class="p">:</span> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span>,</span><span class="param">	<span class="n">event_spec</span><span class="p">:</span> <span class="n"><a href="../event/rpg_event_spec.html#RpgEventSpec">nextrpg.event.rpg_event_spec.RpgEventSpec</a></span>,</span><span class="param">	<span class="n">trigger_mode</span><span class="p">:</span> <span class="n"><a href="#NpcTriggerMode">NpcTriggerMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#NpcTriggerMode.CONFIRM_KEY">NpcTriggerMode.CONFIRM_KEY</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">observe_collisions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
 
         
     </div>
@@ -264,6 +377,8 @@
                                     <div><dt><a href="#StaticNpcSpec">StaticNpcSpec</a></dt>
                                 <dd id="MovingNpcSpec.name" class="variable"><a href="#StaticNpcSpec.name">name</a></dd>
                 <dd id="MovingNpcSpec.drawing" class="variable"><a href="#StaticNpcSpec.drawing">drawing</a></dd>
+                <dd id="MovingNpcSpec.event_spec" class="variable"><a href="#StaticNpcSpec.event_spec">event_spec</a></dd>
+                <dd id="MovingNpcSpec.trigger_mode" class="variable"><a href="#StaticNpcSpec.trigger_mode">trigger_mode</a></dd>
 
             </div>
                                 </dl>
