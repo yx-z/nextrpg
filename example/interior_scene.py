@@ -64,10 +64,9 @@ def greet(
     player: CharacterOnScreen,
     npc: CharacterOnScreen,
     map_helper: MapHelper,
-    **kwargs: Any
+    **kwargs: Any,
 ) -> Generator:
-    yield from say(player, "Hello World!")
-    yield from say(player, "Bye Bye!")
+    yield say(player, "Hello World!")
 
 
 def sprite_sheet() -> SpriteSheet:

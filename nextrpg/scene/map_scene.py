@@ -8,7 +8,7 @@ from functools import cached_property
 from heapq import merge
 from itertools import chain
 from pathlib import Path
-from typing import Self, override
+from typing import Any, Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
@@ -80,6 +80,7 @@ class MapScene(Scene):
         )
     )
     _current_event: Generator[Callable[[Self], Scene], None, None] | None = None
+    _current_value: Any = None
 
     @cached_property
     @override
@@ -134,7 +135,9 @@ class MapScene(Scene):
         """
         if self._current_event:
             try:
-                return next(self._current_event)(self._current_event, self)
+                return self._current_event.send(self._current_value)(
+                    self._current_event, self
+                )
             except StopIteration:
                 obj = self._map_helper.get_object(self.player_coordinate_object)
                 return replace(

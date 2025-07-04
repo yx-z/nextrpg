@@ -12,8 +12,8 @@ from nextrpg.text import Text
 
 def say(
     player: CharacterOnScreen, message: str
-) -> Generator[Callable[[Generator, Scene], Scene], None, None]:
-    yield lambda generator, scene: SayEvent(generator, scene, player, message)
+) -> Callable[[Generator, Scene], Scene]:
+    return lambda generator, scene: SayEvent(generator, scene, player, message)
 
 
 @dataclass
