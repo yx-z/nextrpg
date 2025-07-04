@@ -23,6 +23,7 @@ from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.gui import gui_size
 from nextrpg.logger import Logger
 from nextrpg.model import instance_init, register_instance_init
+from nextrpg.scene.eventful_scene import EventfulScene
 from nextrpg.scene.map_helper import (
     LayerTileBottomAndDrawOnScreen,
     MapHelper,
@@ -44,7 +45,7 @@ def _init_player(self: MapScene) -> PlayerOnScreen:
 
 
 @register_instance_init
-class MapScene[T](Scene):
+class MapScene[T](EventfulScene):
     """
     A scene implementation that represents a game map loaded from Tiled TMX.
 
@@ -72,8 +73,6 @@ class MapScene[T](Scene):
     _npcs: Npcs = instance_init(
         lambda self: Npcs(map_helper=self._map_helper, specs=self.npcs)
     )
-    _ongoing_event: RpgEventGenerator[T] | None = None
-    _rpg_event_result: T | None = None
 
     @cached_property
     @override
@@ -92,27 +91,19 @@ class MapScene[T](Scene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
-        if self._ongoing_event:
-            try:
-                return self._ongoing_event.send(self._rpg_event_result)(
-                    self._ongoing_event, self
-                )
-            except StopIteration:
-                return replace(
-                    self,
-                    _player=self._player.untick,
-                    _ongoing_event=None,
-                    _rpg_event_result=None,
-                )
+        if event := self.next_event:
+            return event
 
         player = self._player.tick(time_delta)
         logger.debug(t"Player {player.coordinate}")
-
         return (
             self._move_to_scene(player)
             or self._npcs.trigger(player, self)
             or replace(self, _player=player, _npcs=self._npcs.tick(time_delta))
         )
+    @cached_property
+    def event_complete(self) -> Scene:
+        return replace(super().event_complete, _player=self._player.untick)
 
     @cached_property
     def _foreground_and_characters(self) -> Iterable[DrawOnScreen]:

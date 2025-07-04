@@ -1,4 +1,4 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 from functools import cached_property, singledispatchmethod
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
@@ -6,7 +6,7 @@ from nextrpg.character.npcs import RpgEventGenerator
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.event.rpg_event import register_rpg_event
-from nextrpg.scene.map_scene import MapScene
+from nextrpg.scene.eventful_scene import EventfulScene
 from nextrpg.scene.scene import Scene
 from nextrpg.text import Text
 
@@ -48,7 +48,7 @@ class SayEvent(Scene):
     """
 
     generator: RpgEventGenerator
-    scene: MapScene
+    scene: EventfulScene
     character: CharacterOnScreen
     message: str
 
@@ -64,6 +64,8 @@ class SayEvent(Scene):
 
     @event.register
     def _confirm(self, e: KeyPressDown) -> Scene:
-        if e.key is KeyboardKey.CONFIRM:
-            return replace(self.scene, _ongoing_event=self.generator)
-        return self
+        return (
+            self.scene.send(self.generator, self.message)
+            if e.key is KeyboardKey.CONFIRM
+            else self
+        )

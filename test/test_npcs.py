@@ -107,4 +107,4 @@ def test_npcs(mocker: MockerFixture) -> None:
     assert say_event.event(KeyPressDown(Event(KEYDOWN, key=K_SPACE)))
     new_scene = say_event.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
     assert isinstance(new_scene, MapScene)
-    assert new_scene._ongoing_event.send(None)
+    assert new_scene._event.send(None)
