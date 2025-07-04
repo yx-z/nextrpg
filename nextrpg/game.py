@@ -32,7 +32,9 @@ class Game:
     """
 
     entry_scene: Callable[[], Scene]
-    _loop: _GameLoop = instance_init(lambda self: _GameLoop(self.entry_scene))
+    _loop: _GameLoop = instance_init(
+        lambda self: _GameLoop(entry_scene=self.entry_scene)
+    )
 
     def start(self) -> None:
         """
@@ -65,7 +67,7 @@ class _GameLoop:
         )
 
     def tick(self) -> _GameLoop:
-        logger.debug(t"FPS: {self._clock.get_fps():.0f}")
+        logger.debug("FPS: {self._clock.get_fps():.0f}")
         self._clock.tick(config().gui.frames_per_second)
         time_delta = self._clock.get_time()
 

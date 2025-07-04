@@ -1,6 +1,7 @@
-from dataclasses import KW_ONLY, dataclass, field, replace
+from abc import ABC
+from dataclasses import dataclass, replace
 from functools import cached_property
-from typing import override
+from typing import Self, override
 
 from nextrpg.character.character_on_screen import (
     CharacterOnScreen,
@@ -8,25 +9,25 @@ from nextrpg.character.character_on_screen import (
 )
 from nextrpg.core import Millisecond, Timer
 from nextrpg.draw_on_screen import Polygon
+from nextrpg.event.rpg_event_spec import RpgEventSpec
 from nextrpg.model import instance_init, register_instance_init
 
 
-@dataclass
-class NpcOnScreen(CharacterOnScreen):
-    _: KW_ONLY = field()
-    name: str = field()
+@dataclass(kw_only=True)
+class NpcOnScreen(CharacterOnScreen, ABC):
+    name: str
+    event_spec: RpgEventSpec
 
 
-@dataclass
+@dataclass(kw_only=True)
 class StaticNpcOnScreen(NpcOnScreen):
-    def tick(self, time_delta: Millisecond) -> CharacterOnScreen:
+    def tick(self, time_delta: Millisecond) -> Self:
         return replace(self, character=self.character.idle(time_delta))
 
 
 @register_instance_init
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
-    _: KW_ONLY = field()
-    path: Polygon = field()
+    path: Polygon
     idle_duration: Millisecond
     move_duration: Millisecond
     _idle_timer: Timer = instance_init(lambda self: Timer(self.idle_duration))
@@ -34,7 +35,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     _is_moving: bool = False
 
     @override
-    def tick(self, time_delta: Millisecond) -> CharacterOnScreen:
+    def tick(self, time_delta: Millisecond) -> Self:
         if self._is_moving:
             move_timer = self._move_timer.tick(time_delta)
             idle_timer = self._idle_timer

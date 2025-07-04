@@ -35,7 +35,7 @@ def test_game(mocker: MockerFixture) -> None:
             return self
 
     gui = MockGui()
-    game = Game(lambda: scene)
+    game = Game(entry_scene=lambda: scene)
     game._loop = replace(game._loop, _scene=scene, _clock=clock, _gui=gui)
     game.start()
     scene.tick.assert_called_once()

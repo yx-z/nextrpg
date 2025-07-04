@@ -159,7 +159,7 @@
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="nd">@dataclass</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingCharacterOnScreen</span><span class="p">(</span><span class="n">CharacterOnScreen</span><span class="p">):</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Polygon</span><span class="p">]</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
@@ -462,7 +462,7 @@ character interactions with the game environment.</p>
                 <section id="MovingCharacterOnScreen">
                             <input id="MovingCharacterOnScreen-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass">@dataclass</div>
+                    <div class="decorator decorator-dataclass">@dataclass(kw_only=True)</div>
 
     <span class="def">class</span>
     <span class="name">MovingCharacterOnScreen</span><wbr>(<span class="base"><a href="#CharacterOnScreen">CharacterOnScreen</a></span>):
@@ -471,7 +471,7 @@ character interactions with the game environment.</p>
 
     </div>
     <a class="headerlink" href="#MovingCharacterOnScreen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingCharacterOnScreen-66"><a href="#MovingCharacterOnScreen-66"><span class="linenos"> 66</span></a><span class="nd">@dataclass</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingCharacterOnScreen-66"><a href="#MovingCharacterOnScreen-66"><span class="linenos"> 66</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="MovingCharacterOnScreen-67"><a href="#MovingCharacterOnScreen-67"><span class="linenos"> 67</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingCharacterOnScreen</span><span class="p">(</span><span class="n">CharacterOnScreen</span><span class="p">):</span>
 </span><span id="MovingCharacterOnScreen-68"><a href="#MovingCharacterOnScreen-68"><span class="linenos"> 68</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Polygon</span><span class="p">]</span>
 </span><span id="MovingCharacterOnScreen-69"><a href="#MovingCharacterOnScreen-69"><span class="linenos"> 69</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>

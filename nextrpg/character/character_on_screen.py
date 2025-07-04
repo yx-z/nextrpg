@@ -62,7 +62,7 @@ class CharacterOnScreen(ABC):
         """
 
 
-@dataclass
+@dataclass(kw_only=True)
 class MovingCharacterOnScreen(CharacterOnScreen):
     collisions: list[Polygon]
     move_speed: PixelPerMillisecond = field(

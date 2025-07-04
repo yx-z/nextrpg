@@ -22,7 +22,7 @@ def instance_init(init: Callable[[Any], Any]) -> Any:
     return field(repr=False, default_factory=lambda: _Init(init))
 
 
-@dataclass_transform()
+@dataclass_transform(kw_only_default=True)
 def register_instance_init[T](cls: type[T]) -> type[T]:
     """
     Class decorator to allow the use of `instance_init` in dataclasses.
@@ -44,7 +44,7 @@ def register_instance_init[T](cls: type[T]) -> type[T]:
         object.__setattr__(self, _INTERNAL_FIELDS_INITIALIZED, True)
 
     cls.__post_init__ = post_init
-    return dataclass(cls)
+    return dataclass(cls, kw_only=True)
 
 
 def _key(*args: Any, **kwargs: Any) -> tuple:

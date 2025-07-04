@@ -158,8 +158,8 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     sprite_sheet: SpriteSheet
     sprite_sheet_selection: SpriteSheetSelection | None = None
     animate_on_idle: bool = False
-    frame_duration: Millisecond = field(
-        default_factory=lambda: config().rpg_maker_character.frame_duration
+    duration_per_frame: Millisecond = field(
+        default_factory=lambda: config().rpg_maker_character.duration_per_frame
     )
     _frames: dict[Direction, CyclicFrames] = instance_init(_init_frames)
 
@@ -274,8 +274,10 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             for d in self._crop_into_frames_at_row(drawing, row)
         ]
         return CyclicFrames(
-            [frames[i] for i in self.sprite_sheet.style._frame_indices()],
-            self.frame_duration,
+            frames=[
+                frames[i] for i in self.sprite_sheet.style._frame_indices()
+            ],
+            duration_per_frame=self.duration_per_frame,
         )
 
     def _crop_into_frames_at_row(

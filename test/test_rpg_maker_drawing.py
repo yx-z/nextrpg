@@ -18,10 +18,10 @@ def test_rpg_maker_drawing():
     assert len(XpFrameType) == 4
 
     character = RpgMakerCharacterDrawing(
-        Direction.DOWN,
-        SpriteSheet(Drawing(Surface((24, 16)))),
-        SpriteSheetSelection(0, 0),
-        frame_duration=1,
+        direction=Direction.DOWN,
+        sprite_sheet=SpriteSheet(Drawing(Surface((24, 16)))),
+        sprite_sheet_selection=SpriteSheetSelection(0, 0),
+        duration_per_frame=1,
         animate_on_idle=True,
     )
     assert character.drawing.size == Size(2, 2)
@@ -31,10 +31,10 @@ def test_rpg_maker_drawing():
     assert character.idle(2).drawing.size == Size(2, 2)
 
     character = RpgMakerCharacterDrawing(
-        Direction.DOWN,
-        SpriteSheet(Drawing(Surface((24, 16)))),
-        SpriteSheetSelection(0, 0),
-        frame_duration=1,
+        direction=Direction.DOWN,
+        sprite_sheet=SpriteSheet(Drawing(Surface((24, 16)))),
+        sprite_sheet_selection=SpriteSheetSelection(0, 0),
+        duration_per_frame=1,
         animate_on_idle=False,
     )
     assert character.idle(2).drawing.size == Size(2, 2)

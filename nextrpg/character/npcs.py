@@ -40,30 +40,27 @@ class Npcs:
             _moving_npcs=[n.tick(time_delta) for n in self._moving_npcs],
         )
 
-    @cached_property
-    def _collided_npc(self) -> NpcOnScreen | None:
-        collided = (npc for npc in self._npcs if self._collide_with_player(npc))
-        return next(collided, None)
-
-    def _collide_with_player(self, npc: NpcOnScreen) -> bool:
-        return npc.draw_on_screen.rectangle.collide(
-            self._player.draw_on_screen.rectangle
-        )
-
     def _init_static_npc(self, spec: StaticNpcSpec) -> StaticNpcOnScreen:
         obj = self.map_helper.get_object(spec.name)
         return StaticNpcOnScreen(
-            spec.drawing, Coordinate(obj.x, obj.y), name=spec.name
+            character=spec.drawing,
+            coordinate=Coordinate(obj.x, obj.y),
+            event_spec=spec.event_spec,
+            name=spec.name,
         )
 
     def _init_moving_npc(self, spec: MovingNpcSpec) -> MovingNpcOnScreen:
         obj = self.map_helper.get_object(spec.name)
+        collisions = (
+            self.map_helper.collisions if spec.observe_collisions else []
+        )
         return MovingNpcOnScreen(
-            spec.drawing,
-            Coordinate(obj.x, obj.y),
-            self.map_helper.collisions if spec.observe_collisions else [],
-            spec.move_speed,
+            character=spec.drawing,
+            coordinate=Coordinate(obj.x, obj.y),
+            collisions=collisions,
+            move_speed=spec.move_speed,
             name=spec.name,
+            event_spec=spec.event_spec,
             path=get_polygon(obj),
             idle_duration=spec.idle_duration,
             move_duration=spec.move_duration,

@@ -39,9 +39,9 @@ logger = Logger("MapScene")
 def _init_player(self: MapScene) -> PlayerOnScreen:
     player = self._map_helper.get_object(self.player_coordinate_object)
     return PlayerOnScreen(
-        self.initial_player_drawing,
-        Coordinate(player.x, player.y),
-        self._map_helper.collisions,
+        character=self.initial_player_drawing,
+        coordinate=Coordinate(player.x, player.y),
+        collisions=self._map_helper.collisions,
     )
 
 
@@ -74,7 +74,9 @@ class MapScene(Scene):
     _player: PlayerOnScreen = instance_init(_init_player)
     _npcs: Npcs = instance_init(
         lambda self: Npcs(
-            self._map_helper, self.static_npc_specs, self.moving_npc_specs
+            map_helper=self._map_helper,
+            static_npc_specs=self.static_npc_specs,
+            moving_npc_specs=self.moving_npc_specs,
         )
     )
 

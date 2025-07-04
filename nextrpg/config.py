@@ -215,7 +215,7 @@ class RpgMakerCharacterDrawingConfig:
             the character.
     """
 
-    frame_duration: Millisecond = 150
+    duration_per_frame: Millisecond = 150
 
 
 type KeyCode = int

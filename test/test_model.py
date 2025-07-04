@@ -14,7 +14,7 @@ def test_instance_init():
             lambda self: f"internal {self.public_data}"
         )
 
-    mm = MyModel("user_input")
+    mm = MyModel(user_input="user_input")
     mm.__post_init__()
     assert mm.public_data == "public"
     assert mm._internal_data == "internal public"

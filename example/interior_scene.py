@@ -46,15 +46,15 @@ def interior_scene(
 
     return MapScene(
         # Tiled/tmx tile map.
-        Path("example/assets/interior.tmx"),
+        tmx_file=Path("example/assets/interior.tmx"),
         # Use default player drawing when this scene is an entry scene.
-        player or init_player(),
+        initial_player_drawing=player or init_player(),
         # Player coordinate on the map.
-        player_coordinate_object,
+        player_coordinate_object=player_coordinate_object,
         # Move to another map.
-        [Move("from_interior", "to_exterior", exterior_scene)],
-        [StaticNpcSpec("david", david(), greet)],
-        [MovingNpcSpec("alisa", alisa(), greet)],
+        moves=[Move("from_interior", "to_exterior", exterior_scene)],
+        static_npc_specs=[StaticNpcSpec("david", david(), greet)],
+        moving_npc_specs=[MovingNpcSpec("alisa", alisa(), greet)],
     )
 
 
@@ -78,20 +78,24 @@ def sprite_sheet() -> SpriteSheet:
 
 def init_player() -> CharacterDrawing:
     return RpgMakerCharacterDrawing(
-        Direction.DOWN,
-        sprite_sheet(),
+        direction=Direction.DOWN,
+        sprite_sheet=sprite_sheet(),
         # Select a character from the sprite sheet.
-        SpriteSheetSelection(row=0, column=0),
+        sprite_sheet_selection=SpriteSheetSelection(row=0, column=0),
     )
 
 
 def alisa() -> CharacterDrawing:
     return RpgMakerCharacterDrawing(
-        Direction.DOWN, sprite_sheet(), SpriteSheetSelection(0, 1)
+        direction=Direction.DOWN,
+        sprite_sheet=sprite_sheet(),
+        sprite_sheet_selection=SpriteSheetSelection(0, 1),
     )
 
 
 def david() -> CharacterDrawing:
     return RpgMakerCharacterDrawing(
-        Direction.DOWN, sprite_sheet(), SpriteSheetSelection(0, 2)
+        direction=Direction.DOWN,
+        sprite_sheet=sprite_sheet(),
+        sprite_sheet_selection=SpriteSheetSelection(0, 2),
     )

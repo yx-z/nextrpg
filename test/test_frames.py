@@ -5,7 +5,8 @@ from test.util import MockSurface
 
 def test_cyclic_frames() -> None:
     frames = CyclicFrames(
-        [Drawing(MockSurface(x)) for x in ["a", "b", "c"]], duration_per_frame=5
+        frames=[Drawing(MockSurface(x)) for x in ["a", "b", "c"]],
+        duration_per_frame=5,
     )
     assert frames.current_frame._surface.data == "a"
     assert frames.tick(1).tick(4).current_frame._surface.data == "b"

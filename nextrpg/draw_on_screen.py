@@ -121,7 +121,7 @@ class Drawing:
             or a `pygame.Surface` object.
     """
 
-    resource: PathLike | Surface
+    resource: str | PathLike | Surface
 
     @property
     def width(self) -> Pixel:

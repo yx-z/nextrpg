@@ -23,11 +23,11 @@ def exterior_scene(
 
     return MapScene(
         # Tiled/tmx tile map .
-        Path("example/assets/exterior.tmx"),
+        tmx_file=Path("example/assets/exterior.tmx"),
         # Reuse the same character drawing from the previous map.
-        player,
+        initial_player_drawing=player,
         # Player coordinate on the map.
-        player_coordinate_object,
+        player_coordinate_object=player_coordinate_object,
         # Move to another map.
-        [Move("from_exterior", "to_interior", interior_scene)],
+        moves=[Move("from_exterior", "to_interior", interior_scene)],
     )

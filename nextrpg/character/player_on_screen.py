@@ -21,7 +21,7 @@ from nextrpg.event.pygame_event import (
 )
 
 
-@dataclass
+@dataclass(kw_only=True)
 class PlayerOnScreen(MovingCharacterOnScreen):
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
