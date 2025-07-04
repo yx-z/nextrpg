@@ -2,6 +2,7 @@
 Sample scene.
 """
 
+from collections.abc import Generator
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +18,7 @@ from nextrpg.character.rpg_maker_character_drawing import (
 from nextrpg.core import Direction
 from nextrpg.draw_on_screen import Drawing
 from nextrpg.event.move import Move
+from nextrpg.event.say import say
 from nextrpg.scene.map_helper import MapHelper
 from nextrpg.scene.map_scene import MapScene
 from nextrpg.scene.scene import Scene
@@ -63,8 +65,9 @@ def greet(
     npc: CharacterOnScreen,
     map_helper: MapHelper,
     **kwargs: Any
-) -> None:
-    pass
+) -> Generator:
+    yield from say(player, "Hello World!")
+    yield from say(player, "Bye Bye!")
 
 
 def sprite_sheet() -> SpriteSheet:

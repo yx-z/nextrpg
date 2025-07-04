@@ -2,13 +2,13 @@
 Map scene implementation.
 """
 
-from collections.abc import Iterable
+from collections.abc import Callable, Generator, Iterable
 from dataclasses import field, replace
 from functools import cached_property
 from heapq import merge
 from itertools import chain
 from pathlib import Path
-from typing import override
+from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
@@ -79,6 +79,7 @@ class MapScene(Scene):
             moving_npc_specs=self.moving_npc_specs,
         )
     )
+    _current_event: Generator[Callable[[Self], Scene], None, None] | None = None
 
     @cached_property
     @override
@@ -131,6 +132,18 @@ class MapScene(Scene):
         Returns:
             `Scene`: The updated scene after the time step.
         """
+        if self._current_event:
+            try:
+                return next(self._current_event)(self._current_event, self)
+            except StopIteration:
+                obj = self._map_helper.get_object(self.player_coordinate_object)
+                return replace(
+                    self,
+                    _player=replace(
+                        self._player, coordinate=Coordinate(obj.x, obj.y)
+                    ),
+                    _current_event=None,
+                )
 
         player = self._player.tick(time_delta)
         logger.debug("Player {player.coordinate}")
@@ -139,6 +152,8 @@ class MapScene(Scene):
 
         if npc := self._collided_npc:
             logger.debug("Collied with {npc.name}")
+            generator = npc.event_spec(player, npc, self._map_helper)
+            return next(generator)(generator, self)
 
         return replace(self, _player=player, _npcs=self._npcs.tick(time_delta))
 

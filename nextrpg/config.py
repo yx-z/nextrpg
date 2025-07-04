@@ -7,7 +7,8 @@ or pass the customized instance to `nextrpg.start_game.start_game`.
 from dataclasses import dataclass
 from enum import Enum, IntEnum, auto
 
-from pygame.locals import K_DOWN, K_F1, K_LEFT, K_RIGHT, K_SPACE, K_UP
+from pygame import K_RETURN
+from pygame.locals import K_DOWN, K_F1, K_LEFT, K_RIGHT, K_UP
 
 from nextrpg.core import (
     Direction,
@@ -256,7 +257,7 @@ class KeyMappingConfig:
     right: KeyCode = K_RIGHT
     up: KeyCode = K_UP
     down: KeyCode = K_DOWN
-    confirm: KeyCode = K_SPACE
+    confirm: KeyCode = K_RETURN
     gui_mode_toggle: KeyCode | None = K_F1
 
 

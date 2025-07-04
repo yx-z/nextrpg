@@ -35,7 +35,11 @@ def test_map_scene(mocker: MockerFixture) -> None:
     )
     helper.collisions = [Rectangle(Coordinate(0, 0), Size(0, 0))]
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=helper)
-    map = MapScene(tmx_file=Path("test"), initial_player_drawing=MockCharacterDrawing(), player_coordinate_object="")
+    map = MapScene(
+        tmx_file=Path("test"),
+        initial_player_drawing=MockCharacterDrawing(),
+        player_coordinate_object="",
+    )
     assert map.event(Quit(Event(QUIT)))
     with override_config(Config(debug=DebugConfig())):
         assert map._collision_visuals
