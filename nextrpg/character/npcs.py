@@ -3,6 +3,7 @@ from collections.abc import Callable, Generator
 from dataclasses import dataclass, field, replace
 from functools import cached_property, wraps
 from inspect import getsource
+from textwrap import dedent
 from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -76,11 +77,12 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
             move_timer = self._move_timer
             idle_timer = self._idle_timer.tick(time_delta)
 
-        is_moving = self._is_moving
         if self._is_moving and move_timer.expired:
             is_moving = False
-        if not self._is_moving and idle_timer.expired:
+        elif not self._is_moving and idle_timer.expired:
             is_moving = True
+        else:
+            is_moving = self._is_moving
 
         return replace(
             super().tick(time_delta),
@@ -245,7 +247,7 @@ def _wrap_spec(
     def wraped(
         player: PlayerOnScreen, npc: NpcOnScreen, npcs: Npcs
     ) -> RpgEventGenerator:
-        src = getsource(fun)
+        src = dedent(getsource(fun))
         tree = fix_missing_locations(_yield.visit(parse(src)))
         code = compile(tree, "<npcs>", "exec")
         ctx = fun.__globals__

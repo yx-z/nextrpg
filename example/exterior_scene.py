@@ -2,8 +2,6 @@
 Sample exterior scene.
 """
 
-from pathlib import Path
-
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.event.move import Move
 from nextrpg.scene.map_scene import MapScene
@@ -27,7 +25,7 @@ def exterior_scene(
 
     return MapScene(
         # Tiled/tmx tile map .
-        tmx_file=Path("example/assets/exterior.tmx"),
+        tmx_file="example/assets/exterior.tmx",
         # Reuse the same character drawing from the previous map.
         initial_player_drawing=player,
         # Player coordinate on the map.

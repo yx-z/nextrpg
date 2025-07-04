@@ -2,7 +2,6 @@
 Sample interior scene.
 """
 
-from pathlib import Path
 from typing import Any
 
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -46,7 +45,7 @@ def interior_scene(
 
     return MapScene(
         # Tiled/tmx tile map.
-        tmx_file=Path("example/assets/interior.tmx"),
+        tmx_file="example/assets/interior.tmx",
         # Use default player drawing when this scene is an entry scene.
         initial_player_drawing=player or init_player(),
         # Player coordinate on the map.

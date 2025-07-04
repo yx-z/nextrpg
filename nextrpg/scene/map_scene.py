@@ -7,6 +7,7 @@ from dataclasses import field, replace
 from functools import cached_property
 from heapq import merge
 from itertools import chain
+from os import PathLike
 from pathlib import Path
 from typing import override
 
@@ -62,7 +63,7 @@ class MapScene[T](Scene):
             map.
     """
 
-    tmx_file: Path
+    tmx_file: PathLike | str
     initial_player_drawing: CharacterDrawing
     player_coordinate_object: str
     moves: list[Move] = field(default_factory=list)

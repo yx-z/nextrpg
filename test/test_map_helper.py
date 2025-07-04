@@ -4,10 +4,12 @@ from unittest.mock import MagicMock
 
 from pytest_mock import MockerFixture
 
+from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import Config, ResourceConfig
 from nextrpg.core import Size
+from nextrpg.draw_on_screen import Coordinate
 from nextrpg.scene.map_helper import MapHelper
-from test.util import MockSurface, override_config
+from test.util import MockCharacterDrawing, MockSurface, override_config
 
 
 @override_config(Config(resource=ResourceConfig(map_cache_size=1)))
@@ -74,5 +76,12 @@ def test_map_helper(mocker: MockerFixture) -> None:
     assert helper.foreground
     assert helper.get_object("obj")
     assert helper.collisions
+    assert helper.layer_bottom_and_draw(
+        PlayerOnScreen(
+            coordinate=Coordinate(0, 0),
+            character=MockCharacterDrawing(),
+            collisions=[],
+        )
+    )
     assert MapHelper(Path("abc")) is helper
     assert MapHelper(Path("def")) is not helper

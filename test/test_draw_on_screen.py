@@ -48,14 +48,7 @@ def test_draw_on_screen() -> None:
     surface, coord = draw_on_screen.pygame
     assert isinstance(surface, Surface)
     assert coord == (10, 20)
-
-    assert Rectangle(Coordinate(0, 0), Size(1, 2)).fill(
-        Rgba(0, 0, 0, 0)
-    ).top_left == Coordinate(0, 0)
-
-    assert Rectangle(Coordinate(0, 0), Size(0, 0)).fill(
-        Rgba(0, 0, 0, 0)
-    ).visible_rectangle.size == Size(0, 0)
+    assert draw_on_screen.shift(Coordinate(1, 2)).top_left == Coordinate(11, 22)
 
 
 def test_coordinate() -> None:
@@ -84,6 +77,7 @@ def test_coordinate() -> None:
         DirectionalOffset(Direction.DOWN_RIGHT, 10)
     ) == approx(Coordinate(17.071067811865476, 27.071067811865476))
     assert Coordinate(10, 20).shift(Coordinate(1, 2)) == Coordinate(11, 22)
+    assert not Coordinate(10, 20).shift(DirectionalOffset("invalid", 1))
 
 
 def test_rectangle() -> None:
@@ -107,6 +101,12 @@ def test_rectangle() -> None:
     assert rect.collide(
         Polygon([Coordinate(10, 20), Coordinate(11, 20), Coordinate(11, 21)])
     )
+    assert Rectangle(Coordinate(0, 0), Size(1, 2)).fill(
+        Rgba(0, 0, 0, 0)
+    ).top_left == Coordinate(0, 0)
+    assert Rectangle(Coordinate(0, 0), Size(0, 0)).fill(
+        Rgba(0, 0, 0, 0)
+    ).visible_rectangle.size == Size(0, 0)
 
 
 def test_polygon() -> None:

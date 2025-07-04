@@ -3,16 +3,14 @@ from types import SimpleNamespace
 from unittest.mock import MagicMock
 
 from pygame import Event, QUIT
-from pytest import raises
 from pytest_mock import MockerFixture
 
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.config import Config, DebugConfig, GuiConfig, ResizeMode
+from nextrpg.config import Config, DebugConfig
 from nextrpg.core import Size
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing, Rectangle
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import Quit
-from nextrpg.gui import gui_size
 from nextrpg.scene.map_helper import TileBottomAndDrawOnScreen
 from nextrpg.scene.map_scene import MapScene, _offset
 from nextrpg.scene.scene import Scene
@@ -22,13 +20,10 @@ from test.util import MockCharacterDrawing, MockSurface, override_config
 def test_map_scene(mocker: MockerFixture) -> None:
     helper = MagicMock()
     helper.background = []
-    helper.foreground = [
-        [
-            TileBottomAndDrawOnScreen(
-                10, DrawOnScreen(Coordinate(1, 2), Drawing(MockSurface()))
-            )
-        ]
-    ]
+    foreground = TileBottomAndDrawOnScreen(
+        10, DrawOnScreen(Coordinate(1, 2), Drawing(MockSurface()))
+    )
+    helper.foreground = [[foreground]]
     helper.above_character = []
     helper.map_size = (100, 200)
     helper.get_object.return_value = SimpleNamespace(
@@ -41,9 +36,17 @@ def test_map_scene(mocker: MockerFixture) -> None:
         initial_player_drawing=MockCharacterDrawing(),
         player_coordinate_object="",
     )
-    assert map.event(Quit(Event(QUIT)))
     with override_config(Config(debug=DebugConfig())):
         assert map._collision_visuals
+    mocker.patch(
+        "nextrpg.scene.map_scene.merge",
+        return_value=[
+            (None, None, DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())))
+        ],
+    )
+    assert map.draw_on_screens
+    assert not map.tick(0)._collision_visuals
+    assert map.event(Quit(Event(QUIT)))
 
 
 def test_move_to_scene(mocker: MockerFixture) -> None:
@@ -87,15 +90,3 @@ def test_offset() -> None:
     assert _offset(12, 3, 2) == 1
     assert _offset(12, 10, 100) == -7
     assert _offset(0, 10, 10) == 0
-
-
-def test_gui_size() -> None:
-    with override_config(
-        Config(GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE_SIZE))
-    ):
-        assert gui_size() == Size(1280, 720)
-
-    with raises(ValueError), override_config(
-        Config(GuiConfig(resize_mode="INVALID"))
-    ):
-        gui_size()

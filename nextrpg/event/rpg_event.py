@@ -21,7 +21,7 @@ def register_rpg_event[R, **P](fun: Callable[P, R]) -> Callable[P, R]:
 
 
 @dataclass
-class _YieldFromEvents(NodeTransformer):
+class _YieldEvents(NodeTransformer):
     def visit_Expr(self, node: Expr) -> Expr:
         return Expr(Yield(node.value)) if self._is_event(node) else node
 
@@ -40,4 +40,4 @@ class _YieldFromEvents(NodeTransformer):
 
 
 _events: set[str] = set()
-_yield = _YieldFromEvents()
+_yield = _YieldEvents()
