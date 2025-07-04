@@ -8,7 +8,7 @@ from functools import cached_property
 from heapq import merge
 from itertools import chain
 from pathlib import Path
-from typing import Any, Self, override
+from typing import Any, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
@@ -79,8 +79,10 @@ class MapScene(Scene):
             moving_npc_specs=self.moving_npc_specs,
         )
     )
-    _current_event: Generator[Callable[[Self], Scene], None, None] | None = None
-    _current_value: Any = None
+    _rpg_event: (
+        Generator[Callable[[Generator, Scene], Scene], None, None] | None
+    ) = None
+    _rpg_event_result: Any = None
 
     @cached_property
     @override
@@ -133,10 +135,10 @@ class MapScene(Scene):
         Returns:
             `Scene`: The updated scene after the time step.
         """
-        if self._current_event:
+        if self._rpg_event:
             try:
-                return self._current_event.send(self._current_value)(
-                    self._current_event, self
+                return self._rpg_event.send(self._rpg_event_result)(
+                    self._rpg_event, self
                 )
             except StopIteration:
                 obj = self._map_helper.get_object(self.player_coordinate_object)
@@ -155,7 +157,7 @@ class MapScene(Scene):
 
         if npc := self._collided_npc:
             logger.debug("Collied with {npc.name}")
-            generator = npc.event_spec(player, npc, self._map_helper)
+            generator = npc.event_spec(player, npc, self._npcs)
             return next(generator)(generator, self)
 
         return replace(self, _player=player, _npcs=self._npcs.tick(time_delta))

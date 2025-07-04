@@ -1,7 +1,7 @@
 from typing import Any, Protocol
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.scene.map_helper import MapHelper
+from nextrpg.character.npcs import Npcs
 
 
 class RpgEventSpec(Protocol):
@@ -9,6 +9,6 @@ class RpgEventSpec(Protocol):
         self,
         player: CharacterOnScreen,
         npc: CharacterOnScreen,
-        map_helper: MapHelper,
+        npcs: Npcs,
         **kwargs: Any
     ) -> None: ...

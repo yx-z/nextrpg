@@ -19,7 +19,6 @@ from nextrpg.core import Direction
 from nextrpg.draw_on_screen import Drawing
 from nextrpg.event.move import Move
 from nextrpg.event.say import say
-from nextrpg.scene.map_helper import MapHelper
 from nextrpg.scene.map_scene import MapScene
 from nextrpg.scene.scene import Scene
 
@@ -55,17 +54,13 @@ def interior_scene(
         player_coordinate_object=player_coordinate_object,
         # Move to another map.
         moves=[Move("from_interior", "to_exterior", exterior_scene)],
+        # NPC/events.
         static_npc_specs=[StaticNpcSpec("david", david(), greet)],
         moving_npc_specs=[MovingNpcSpec("alisa", alisa(), greet)],
     )
 
 
-def greet(
-    player: CharacterOnScreen,
-    npc: CharacterOnScreen,
-    map_helper: MapHelper,
-    **kwargs: Any,
-) -> Generator:
+def greet(player: CharacterOnScreen, **kwargs: Any) -> Generator:
     yield say(player, "Hello World!")
 
 
