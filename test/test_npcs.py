@@ -67,18 +67,18 @@ def test_npcs(mocker: MockerFixture) -> None:
             NpcSpec(
                 name="name",
                 event_spec=event,
-                drawing=MockCharacterDrawing(),
+                character=MockCharacterDrawing(),
             ),
             MovingNpcSpec(
                 name="name",
                 event_spec=event,
-                drawing=MockCharacterDrawing(),
+                character=MockCharacterDrawing(),
                 observe_collisions=False,
             ),
         ],
     )
     assert npcs.tick(1)
-    assert not npcs.trigger(
+    assert not npcs.event(
         PlayerOnScreen(
             character=MockCharacterDrawing(),
             coordinate=Coordinate(100, 100),
@@ -100,7 +100,7 @@ def test_npcs(mocker: MockerFixture) -> None:
         player_coordinate_object="",
     )
     map_scene.draw_on_screens = []
-    say_event = npcs.trigger(player, map_scene)
+    say_event = npcs.event(player, map_scene)
     assert say_event
     assert say_event.draw_on_screens
     assert say_event.event(Quit(Event(QUIT)))

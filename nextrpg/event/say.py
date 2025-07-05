@@ -3,12 +3,11 @@ from functools import cached_property, singledispatchmethod
 from typing import Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.character.npcs import RpgEventGenerator
+from nextrpg.character.npcs import EventfulScene, RpgEventGenerator
 from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.event.rpg_event import register_rpg_event
-from nextrpg.scene.eventful_scene import EventfulScene
 from nextrpg.scene.map_scene import MapScene
 from nextrpg.scene.scene import Scene
 from nextrpg.text import Text

@@ -2,28 +2,32 @@
 Map scene implementation.
 """
 
-from collections.abc import Iterable
 from dataclasses import field, replace
-from functools import cached_property, singledispatchmethod
+from functools import cached_property
 from heapq import merge
 from itertools import chain
 from os import PathLike
-from pathlib import Path
-from typing import Self, override
+from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.character.npcs import NpcSpec, Npcs, RpgEventGenerator
+from nextrpg.character.npcs import (
+    EventfulScene,
+    MovingNpcOnScreen,
+    MovingNpcSpec,
+    NpcOnScreen,
+    NpcSpec,
+    Npcs,
+)
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
 from nextrpg.core import Millisecond, Pixel
-from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
+from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Polygon
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.gui import gui_size
 from nextrpg.logger import Logger
 from nextrpg.model import instance_init, register_instance_init
-from nextrpg.scene.eventful_scene import EventfulScene
 from nextrpg.scene.map_helper import (
     LayerTileBottomAndDrawOnScreen,
     MapHelper,
@@ -42,6 +46,14 @@ def _init_player(self: MapScene) -> PlayerOnScreen:
         coordinate=Coordinate(player.x, player.y),
         collisions=self._map_helper.collisions,
     )
+
+
+def _init_npcs(self: "MapScene") -> Npcs:
+    npcs = [
+        self._init_moving(n) if isinstance(n, MovingNpcSpec) else self._init(n)
+        for n in self.npc_specs
+    ]
+    return Npcs(list=npcs)
 
 
 @register_instance_init
@@ -68,11 +80,9 @@ class MapScene[T](EventfulScene):
     initial_player_drawing: CharacterDrawing
     player_coordinate_object: str
     moves: list[Move] = field(default_factory=list)
-    npcs: list[NpcSpec] = field(default_factory=list)
+    npc_specs: list[NpcSpec] = field(default_factory=list)
+    npcs: Npcs = instance_init(_init_npcs)
     _player: PlayerOnScreen = instance_init(_init_player)
-    _npcs: Npcs = instance_init(
-        lambda self: Npcs(map_helper=self._map_helper, specs=self.npcs)
-    )
 
     @cached_property
     @override
@@ -85,24 +95,19 @@ class MapScene[T](EventfulScene):
         )
 
     @override
-    def event(self, e: PygameEvent) -> Scene:
-        if (
-            isinstance(e, KeyPressDown)
-            and e.key is KeyboardKey.CONFIRM
-            and (scene := self._npcs.trigger(self._player, self))
-        ):
-            return scene
-        return replace(self, _player=self._player.event(e))
+    def event(self, event: PygameEvent) -> Scene:
+        return self.npcs.event(event, self._player, self) or replace(
+            self, _player=self._player.event(event)
+        )
 
     @override
-    def tick(self, time_delta: Millisecond) -> Scene:
-        if self.next_event:
-            return self.next_event
-
+    def tick_without_event(self, time_delta: Millisecond) -> Scene:
         player = self._player.tick(time_delta)
         logger.debug(t"Player {player.coordinate}")
         return self._move_to_scene(player) or replace(
-            self, _player=self._player.tick(time_delta)
+            self,
+            npcs=self.npcs.tick(time_delta),
+            _player=self._player.tick(time_delta),
         )
 
     @cached_property
@@ -112,7 +117,7 @@ class MapScene[T](EventfulScene):
             for i, layer in enumerate(self._map_helper.foreground)
             for bottom, draw in layer
         )
-        characters = chain([self._player], self._npcs.list)
+        characters = chain([self._player], self.npcs.list)
         bottom_and_draw = sorted(
             map(self._map_helper.layer_bottom_and_draw, characters)
         )
@@ -157,6 +162,19 @@ class MapScene[T](EventfulScene):
     @cached_property
     def _map_helper(self) -> MapHelper:
         return MapHelper(self.tmx_file)
+
+    def _init(self, spec: NpcSpec) -> NpcOnScreen:
+        obj = self._map_helper.get_object(spec.name)
+        return spec.draw_on_screen(Coordinate(obj.x, obj.y))
+
+    def _init_moving(self, spec: MovingNpcSpec) -> MovingNpcOnScreen:
+        obj = self._map_helper.get_object(spec.name)
+        collisions = (
+            self._map_helper.collisions if spec.observe_collisions else []
+        )
+        return spec.draw_moving_on_screen(
+            Coordinate(obj.x, obj.y), get_polygon(obj), collisions
+        )
 
 
 def _shift(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:

@@ -53,7 +53,7 @@ def interior_scene(
         # Move to another map.
         moves=[Move("from_interior", "to_exterior", exterior_scene)],
         # NPC/events.
-        npcs=[
+        npc_specs=[
             NpcSpec("david", david(), greet),
             MovingNpcSpec("alisa", alisa(), greet),
         ],

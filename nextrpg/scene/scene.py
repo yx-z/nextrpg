@@ -2,6 +2,7 @@
 Scene is an interface of all game interactions like exploration, menu, etc.
 """
 
+from dataclasses import dataclass
 from functools import cached_property
 
 from nextrpg.core import Millisecond
@@ -9,6 +10,7 @@ from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.pygame_event import PygameEvent
 
 
+@dataclass
 class Scene:
     """
     Base class representing a game scene.
