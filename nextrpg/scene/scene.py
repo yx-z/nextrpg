@@ -10,7 +10,6 @@ from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.pygame_event import PygameEvent
 
 
-@dataclass
 class Scene:
     """
     Base class representing a game scene.

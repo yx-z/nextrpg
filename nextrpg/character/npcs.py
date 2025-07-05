@@ -1,5 +1,4 @@
-from abc import ABC, abstractmethod
-from collections.abc import Callable, Generator
+from abc import ABC
 from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import Self, override
@@ -14,7 +13,7 @@ from nextrpg.config import config
 from nextrpg.core import Millisecond, PixelPerMillisecond, Timer
 from nextrpg.draw_on_screen import Coordinate, Polygon
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
-from nextrpg.event.rpg_event import RpgEventGenerator, wrap_spec, RpgEventSpec
+from nextrpg.event.rpg_event import RpgEventGenerator, RpgEventSpec, wrap_spec
 from nextrpg.logger import Logger
 from nextrpg.model import instance_init, register_instance_init
 from nextrpg.scene.scene import Scene
@@ -40,9 +39,13 @@ class NpcOnScreen(CharacterOnScreen):
     def tick(self, time_delta: Millisecond) -> Self:
         return replace(self, character=self.character.idle(time_delta))
 
+    def trigger(self, player: PlayerOnScreen) -> Self:
+        direction = player.character.direction.opposite
+        return replace(self, character=self.character.turn(direction))
+
     @cached_property
-    def toggled(self) -> Self:
-        return replace(self, _is_triggered=not self._is_triggered)
+    def completed(self) -> Self:
+        return replace(self, _is_triggered=False)
 
 
 @register_instance_init
@@ -113,10 +116,15 @@ class Npcs[T]:
     def dict(self) -> dict[str, NpcOnScreen]:
         return {n.name: n for n in self.list}
 
-    def toggle(self, npc: NpcOnScreen) -> Self:
+    def complete(self, npc: NpcOnScreen) -> Self:
         return replace(
             self,
-            list=[n.toggled if n.name == npc.name else n for n in self.list],
+            list=[n.completed if n.name == npc.name else n for n in self.list],
+        )
+
+    def trigger(self,player: PlayerOnScreen, npc: NpcOnScreen) -> Self:
+        return replace(
+           self, list=[n.trigger(player) if n.name == npc.name else n for n in self.list]
         )
 
     def event(
@@ -141,12 +149,12 @@ class Npcs[T]:
             and (npc := self._collided_npc(player))
         ):
             logger.debug(t"Collied with {npc.name}")
-            toggled_npcs = self.toggle(npc)
-            toggled_scene = scene.toggle_npc(npc)
+            triggered_npc = self.trigger(player, npc)
+            triggered_scene = scene.trigger_npc(player, npc)
             generator = wrap_spec(npc.event_spec)(
-                player, toggled_scene, toggled_npcs
+                player, triggered_scene, triggered_npc
             )
-            return next(generator)(generator, toggled_scene)
+            return next(generator)(generator, triggered_scene)
         return None
 
     def tick(self, time_delta: Millisecond) -> Self:
@@ -292,8 +300,8 @@ class EventfulScene[T](Scene, ABC):
         """
         return replace(self, _event=event, _event_result=result)
 
-    def toggle_npc(self, npc: NpcOnScreen) -> Self:
-        return replace(self, _npc=npc, npcs=self.npcs.toggle(npc))
+    def trigger_npc(self, player: PlayerOnScreen, npc: NpcOnScreen) -> Self:
+        return replace(self, _npc=npc, npcs=self.npcs.trigger(player, npc))
 
     @cached_property
     def _next_event(self) -> Scene | None:
@@ -310,7 +318,7 @@ class EventfulScene[T](Scene, ABC):
         except StopIteration:
             return replace(
                 self,
-                npcs=self.npcs.toggle(self._npc),
+                npcs=self.npcs.complete(self._npc),
                 _npc=None,
                 _event=None,
                 _event_result=None,

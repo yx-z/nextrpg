@@ -77,6 +77,21 @@ class Direction(Enum):
     DOWN_LEFT = auto()
     DOWN_RIGHT = auto()
 
+    @property
+    def opposite(self) -> Direction:
+        return _OPPOSITE_DIRECTION[self]
+
+
+_OPPOSITE_DIRECTION = {
+    Direction.DOWN: Direction.UP,
+    Direction.LEFT: Direction.RIGHT,
+    Direction.RIGHT: Direction.LEFT,
+    Direction.UP: Direction.DOWN,
+    Direction.UP_LEFT: Direction.DOWN_RIGHT,
+    Direction.UP_RIGHT: Direction.DOWN_LEFT,
+    Direction.DOWN_LEFT: Direction.UP_RIGHT,
+    Direction.DOWN_RIGHT: Direction.UP_LEFT,
+}
 
 type Pixel = int | float
 """
