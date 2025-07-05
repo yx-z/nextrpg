@@ -36,7 +36,7 @@ class EventfulScene[T](Scene):
             return self.event_complete
 
     @cached_property
-    def event_complete(self) -> Scene:
+    def event_complete(self) -> Self:
         """
         Get the scene upon event execution completion.
 

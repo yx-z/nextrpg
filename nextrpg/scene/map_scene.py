@@ -9,7 +9,7 @@ from heapq import merge
 from itertools import chain
 from os import PathLike
 from pathlib import Path
-from typing import override
+from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
@@ -83,7 +83,7 @@ class MapScene[T](EventfulScene):
             self._map_helper.above_character,
             self._collision_visuals,
         )
-        return [d.shift(self._player_offset) for d in draw_on_screens]
+        return [d.shift(self._offset) for d in draw_on_screens]
 
     @override
     def event(self, event: PygameEvent) -> Scene:
@@ -91,18 +91,19 @@ class MapScene[T](EventfulScene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
-        if event := self.next_event:
-            return event
+        if self.next_event:
+            return self.next_event
 
         player = self._player.tick(time_delta)
         logger.debug(t"Player {player.coordinate}")
         return (
             self._move_to_scene(player)
             or self._npcs.trigger(player, self)
-            or replace(self, _player=player, _npcs=self._npcs.tick(time_delta))
+            or replace(self, _player=self._player.tick(time_delta))
         )
+
     @cached_property
-    def event_complete(self) -> Scene:
+    def event_complete(self) -> Self:
         return replace(super().event_complete, _player=self._player.untick)
 
     @cached_property
@@ -120,7 +121,7 @@ class MapScene[T](EventfulScene):
         return (draw for _, _, draw in layers)
 
     @cached_property
-    def _player_offset(self) -> Coordinate:
+    def _offset(self) -> Coordinate:
         player = self._player.draw_on_screen.rectangle.center
         map_width, map_height = self._map_helper.map_size
         gui_width, gui_height = gui_size()

@@ -163,7 +163,7 @@ class TileMapConfig:
 
     background: str = "background"
     foreground: str = "foreground"
-    above_character: str = "above_character"
+    above_character: str = "above_charactet"
     collision: str = "collision"
 
 

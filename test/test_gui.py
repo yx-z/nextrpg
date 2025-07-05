@@ -58,7 +58,7 @@ def test_gui(mocker: MockerFixture) -> None:
     assert _resize(gui, GuiResize(Event(VIDEORESIZE, w=width, h=height))) is gui
 
     with override_config(Config(debug=DebugConfig())):
-        Logger("TestGuiLogger").debug("test")
+        Logger("TestGuiLogget").debug("test")
         gui._draw_log(0)
 
 

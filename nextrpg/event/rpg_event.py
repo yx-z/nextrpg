@@ -14,9 +14,9 @@ def register_rpg_event[R, **P](fun: Callable[P, R]) -> Callable[P, R]:
     Returns:
         `Callable`: The original function.
     """
-    if (name := fun.__name__) in _events:
-        raise ValueError(f"Event {name} already registered.")
-    _events.add(name)
+    if fun.__name__ in _events:
+        raise ValueError(f"Event {fun.__name__} already registered.")
+    _events.add(fun.__name__)
     return fun
 
 
@@ -34,8 +34,8 @@ class _YieldEvents(NodeTransformer):
 
     def _is_event(self, node) -> bool:
         return (
-            isinstance(v := node.value, Call)
-            and getattr(v.func, "id", None) in _events
+            isinstance(node.value, Call)
+            and getattr(node.value.func, "id", None) in _events
         )
 
 

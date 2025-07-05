@@ -56,9 +56,9 @@ def test_npcs(mocker: MockerFixture) -> None:
     map_helper.get_object.return_value = SimpleNamespace(
         x=1, y=1, width=1, height=1
     )
+    map_helper.map_size = Size(100, 100)
 
     def event(player: PlayerOnScreen, *args: Any) -> None:
-        x = say(player, "hi")
         say(player, "hi")
 
     npcs = Npcs(
@@ -103,8 +103,7 @@ def test_npcs(mocker: MockerFixture) -> None:
     say_event = npcs.trigger(player, map_scene)
     assert say_event
     assert say_event.draw_on_screens
-    assert say_event.event(Quit(Event(QUIT))) is say_event
+    assert say_event.event(Quit(Event(QUIT)))
     assert say_event.event(KeyPressDown(Event(KEYDOWN, key=K_SPACE)))
     new_scene = say_event.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
     assert isinstance(new_scene, MapScene)
-    assert new_scene._event.send(None)

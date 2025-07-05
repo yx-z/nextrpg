@@ -1,12 +1,15 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from functools import cached_property, singledispatchmethod
+from typing import Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npcs import RpgEventGenerator
+from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.event.rpg_event import register_rpg_event
 from nextrpg.scene.eventful_scene import EventfulScene
+from nextrpg.scene.map_scene import MapScene
 from nextrpg.scene.scene import Scene
 from nextrpg.text import Text
 
@@ -53,14 +56,20 @@ class SayEvent(Scene):
     message: str
 
     @cached_property
+    @override
     def draw_on_screens(self) -> list[DrawOnScreen]:
         return self.scene.draw_on_screens + [
-            Text(self.message, Coordinate(200, 200)).draw_on_screen
+            Text(self.message, self._coordinate).draw_on_screen
         ]
 
+    @override
+    def tick(self, time_delta: Millisecond) -> Self:
+        return replace(self, scene=self.scene.tick_self(time_delta))
+
     @singledispatchmethod
+    @override
     def event(self, e: PygameEvent) -> Scene:
-        return self
+        return replace(self, scene=self.scene.event(e))
 
     @event.register
     def _confirm(self, e: KeyPressDown) -> Scene:
@@ -68,4 +77,13 @@ class SayEvent(Scene):
             self.scene.send(self.generator, self.message)
             if e.key is KeyboardKey.CONFIRM
             else self
+        )
+
+    @cached_property
+    def _coordinate(self) -> Coordinate:
+        coord = self.character.coordinate
+        return (
+            coord.shift(self.scene._offset)
+            if isinstance(self.scene, MapScene)
+            else coord
         )

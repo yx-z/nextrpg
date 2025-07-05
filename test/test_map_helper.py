@@ -33,7 +33,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
     ]
     mock_foreground.data = [[1, 0], [0, 0]]
     mock_above_character = MagicMock()
-    setattr(mock_above_character, "class", "above_character")
+    setattr(mock_above_character, "class", "above_charactet")
     mock_above_character.tiles = lambda: [(5, 6, MockSurface())]
     mock_object = MagicMock()
     obj = SimpleNamespace(

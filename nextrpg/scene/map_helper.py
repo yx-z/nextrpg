@@ -69,6 +69,7 @@ class LayerTileBottomAndDrawOnScreen(NamedTuple):
 
         `draw_on_screen`: The `DrawOnScreen` of the tile itself.
     """
+
     layer: LayerIndex
     bottom: Pixel
     draw_on_screen: DrawOnScreen
@@ -401,8 +402,15 @@ def _above_character(
         for bottom, draw in layer
     )
 
+
 def _is_not_rect(obj: TiledObject) -> bool:
-    return obj.x is None or obj.y is None or obj.width is None or obj.height is None
+    return (
+        obj.x is None
+        or obj.y is None
+        or obj.width is None
+        or obj.height is None
+    )
+
 
 type _Gid = int
 
