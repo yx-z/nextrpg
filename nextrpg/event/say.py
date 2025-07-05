@@ -58,13 +58,13 @@ class SayEvent(Scene):
     @cached_property
     @override
     def draw_on_screens(self) -> list[DrawOnScreen]:
-        return self.scene.draw_on_screens + [
+        return self.scene.draw_on_screens_shifted + [
             Text(self.message, self._coordinate).draw_on_screen
         ]
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        return replace(self, scene=self.scene.tick_self(time_delta))
+        return replace(self, scene=self.scene.tick(time_delta))
 
     @singledispatchmethod
     @override
@@ -83,7 +83,7 @@ class SayEvent(Scene):
     def _coordinate(self) -> Coordinate:
         coord = self.character.coordinate
         return (
-            coord.shift(self.scene._offset)
+            coord.shift(self.scene.draw_on_screen_shift)
             if isinstance(self.scene, MapScene)
             else coord
         )

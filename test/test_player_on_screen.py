@@ -41,5 +41,3 @@ def test_player_on_screen():
 
     with override_config(Config(debug=DebugConfig(ignore_map_collisions=True))):
         assert player._can_move(Coordinate(10, 20))
-
-    assert player.tick(0).untick

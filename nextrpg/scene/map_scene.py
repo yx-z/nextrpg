@@ -4,7 +4,7 @@ Map scene implementation.
 
 from collections.abc import Iterable
 from dataclasses import field, replace
-from functools import cached_property
+from functools import cached_property, singledispatchmethod
 from heapq import merge
 from itertools import chain
 from os import PathLike
@@ -19,7 +19,7 @@ from nextrpg.config import config
 from nextrpg.core import Millisecond, Pixel
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.move import Move
-from nextrpg.event.pygame_event import PygameEvent
+from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.gui import gui_size
 from nextrpg.logger import Logger
 from nextrpg.model import instance_init, register_instance_init
@@ -77,17 +77,22 @@ class MapScene[T](EventfulScene):
     @cached_property
     @override
     def draw_on_screens(self) -> list[DrawOnScreen]:
-        draw_on_screens = chain(
-            self._map_helper.background,
-            self._foreground_and_characters,
-            self._map_helper.above_character,
-            self._collision_visuals,
+        return (
+            self._map_helper.background
+            + self._foreground_and_characters
+            + self._map_helper.above_character
+            + self._collision_visuals
         )
-        return [d.shift(self._offset) for d in draw_on_screens]
 
     @override
-    def event(self, event: PygameEvent) -> Scene:
-        return replace(self, _player=self._player.event(event))
+    def event(self, e: PygameEvent) -> Scene:
+        if (
+            isinstance(e, KeyPressDown)
+            and e.key is KeyboardKey.CONFIRM
+            and (scene := self._npcs.trigger(self._player, self))
+        ):
+            return scene
+        return replace(self, _player=self._player.event(e))
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
@@ -96,18 +101,12 @@ class MapScene[T](EventfulScene):
 
         player = self._player.tick(time_delta)
         logger.debug(t"Player {player.coordinate}")
-        return (
-            self._move_to_scene(player)
-            or self._npcs.trigger(player, self)
-            or replace(self, _player=self._player.tick(time_delta))
+        return self._move_to_scene(player) or replace(
+            self, _player=self._player.tick(time_delta)
         )
 
     @cached_property
-    def event_complete(self) -> Self:
-        return replace(super().event_complete, _player=self._player.untick)
-
-    @cached_property
-    def _foreground_and_characters(self) -> Iterable[DrawOnScreen]:
+    def _foreground_and_characters(self) -> list[DrawOnScreen]:
         foregrounds = (
             LayerTileBottomAndDrawOnScreen(i, bottom, draw)
             for i, layer in enumerate(self._map_helper.foreground)
@@ -118,18 +117,19 @@ class MapScene[T](EventfulScene):
             map(self._map_helper.layer_bottom_and_draw, characters)
         )
         layers = merge(foregrounds, bottom_and_draw)
-        return (draw for _, _, draw in layers)
+        return [draw for _, _, draw in layers]
 
     @cached_property
-    def _offset(self) -> Coordinate:
+    @override
+    def draw_on_screen_shift(self) -> Coordinate:
         player = self._player.draw_on_screen.rectangle.center
         map_width, map_height = self._map_helper.map_size
         gui_width, gui_height = gui_size()
-        left_offset = _offset(player.left, gui_width, map_width)
-        top_offset = _offset(player.top, gui_height, map_height)
-        offset = Coordinate(left_offset, top_offset)
-        logger.debug(t"Player offset {offset}")
-        return offset
+        left_shift = _shift(player.left, gui_width, map_width)
+        top_shift = _shift(player.top, gui_height, map_height)
+        shift = Coordinate(left_shift, top_shift)
+        logger.debug(t"Player shift {shift}")
+        return shift
 
     def _move_to_scene(self, player: CharacterOnScreen) -> Scene | None:
         moved = (m for move in self.moves if (m := self._move(player, move)))
@@ -159,7 +159,7 @@ class MapScene[T](EventfulScene):
         return MapHelper(self.tmx_file)
 
 
-def _offset(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
+def _shift(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
     if player_axis < gui_axis / 2:
         return 0
     if player_axis > map_axis - gui_axis / 2:

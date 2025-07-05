@@ -72,7 +72,7 @@ class _GameLoop:
         time_delta = self._clock.get_time()
 
         self._update_gui()
-        self._gui.draw(self._scene.draw_on_screens, time_delta)
+        self._gui.draw(self._scene.draw_on_screens_shifted, time_delta)
 
         return reduce(
             lambda loop, e: loop.event(to_typed_event(e)),

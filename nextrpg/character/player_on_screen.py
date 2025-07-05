@@ -24,7 +24,6 @@ from nextrpg.event.pygame_event import (
 @dataclass(kw_only=True)
 class PlayerOnScreen(MovingCharacterOnScreen):
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
-    _last: Self | None = None
 
     @singledispatchmethod
     def event(self, e: PygameEvent) -> CharacterOnScreen:
@@ -62,20 +61,6 @@ class PlayerOnScreen(MovingCharacterOnScreen):
                 self.character.direction, self.move_speed * time_delta
             )
         )
-
-    @override
-    def tick(self, time_delta: Millisecond) -> Self:
-        return replace(super().tick(time_delta), _last=self)
-
-    @cached_property
-    def untick(self) -> Self:
-        """
-        Get the last tick of the player, with no moving.
-
-        Returns:
-            `PlayerOnScreen`: The player state before the last tick.
-        """
-        return replace(self._last, _movement_keys=frozenset())
 
 
 _MOVEMENT_KEYS = {

@@ -23,7 +23,7 @@ class EventfulScene[T](Scene):
     @cached_property
     def next_event(self) -> Scene | None:
         """
-        Get the scene for next event.
+        Get the scene for the next event.
 
         Returns:
             `Scene | None`: The next scene to continue event execution, if any.
@@ -33,17 +33,7 @@ class EventfulScene[T](Scene):
         try:
             return self._event.send(self._event_result)(self._event, self)
         except StopIteration:
-            return self.event_complete
-
-    @cached_property
-    def event_complete(self) -> Self:
-        """
-        Get the scene upon event execution completion.
-
-        Returns:
-            `Scene`: The scene upon event execution completion.
-        """
-        return replace(self, _event=None, _event_result=None)
+            return replace(self, _event=None, _event_result=None)
 
     def send(self, event: RpgEventGenerator, result: T | None = None) -> Self:
         """
