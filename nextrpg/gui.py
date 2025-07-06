@@ -74,24 +74,9 @@ class Gui:
         if not self._screen:
             init()
             font.init()
-        if (
-            self._title is None
-            or self.current_config.title != self.last_config.title
-        ):
-            object.__setattr__(self, "_title", self.current_config.title)
-            set_caption(self._title)
-        if (
-            self._screen is None
-            or self.last_config.size != self.current_config.size
-            or self.last_config.gui_mode != self.current_config.gui_mode
-            or self.last_config.allow_window_resize
-            != self.current_config.allow_window_resize
-        ):
-            object.__setattr__(
-                self,
-                "_screen",
-                set_mode(self.current_config.size, self._current_gui_flag),
-            )
+
+        self._update_title()
+        self._update_screen()
 
     @singledispatchmethod
     def event(self, e: PygameEvent) -> Gui:
@@ -176,6 +161,28 @@ class Gui:
         return reduce(
             or_, [flag for check, flag in check_and_flags if check], 0
         )
+
+    def _update_title(self) -> None:
+        if (
+            self._title is None
+            or self.current_config.title != self.last_config.title
+        ):
+            object.__setattr__(self, "_title", self.current_config.title)
+            set_caption(self._title)
+
+    def _update_screen(self) -> None:
+        if (
+            self._screen is None
+            or self.last_config.size != self.current_config.size
+            or self.last_config.gui_mode != self.current_config.gui_mode
+            or self.last_config.allow_window_resize
+            != self.current_config.allow_window_resize
+        ):
+            object.__setattr__(
+                self,
+                "_screen",
+                set_mode(self.current_config.size, self._current_gui_flag),
+            )
 
 
 @Gui.event.register

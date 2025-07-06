@@ -114,12 +114,12 @@ class Drawing:
 
     @cached_property
     def _debug_surface(self) -> Surface | None:
-        if not (debug := config().debug):
-            return None
-        surface = Surface(self.size, SRCALPHA)
-        surface.fill(debug.drawing_background_color)
-        surface.blit(self._surface, (0, 0))
-        return surface
+        if debug := config().debug:
+            surface = Surface(self.size, SRCALPHA)
+            surface.fill(debug.drawing_background_color)
+            surface.blit(self._surface, (0, 0))
+            return surface
+        return None
 
     @cached_property
     def _surface(self) -> Surface:

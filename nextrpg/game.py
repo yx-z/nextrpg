@@ -84,17 +84,13 @@ class _GameLoop:
         )
 
     def _update_gui(self) -> None:
-        if config().gui is self._gui.current_config:
-            return
-        object.__setattr__(
-            self,
-            "_gui",
-            replace(
+        if config().gui is not self._gui.current_config:
+            new_gui = replace(
                 self._gui,
                 current_config=config().gui,
                 last_config=self._gui.current_config,
-            ),
-        )
+            )
+            object.__setattr__(self, "_gui", new_gui)
 
 
 @_GameLoop.event.register

@@ -54,7 +54,7 @@ class NpcOnScreen(CharacterOnScreen):
         )
 
     @cached_property
-    def _completed(self) -> Self:
+    def _complete(self) -> Self:
         return replace(self, _triggered=False)
 
 
@@ -123,7 +123,7 @@ class Npcs[T]:
     def _complete(self, npc: NpcOnScreen) -> Self:
         return replace(
             self,
-            list=[n._completed if n.name == npc.name else n for n in self.list],
+            list=[n._complete if n.name == npc.name else n for n in self.list],
         )
 
     def _trigger(self, player: PlayerOnScreen, npc: NpcOnScreen) -> Self:
