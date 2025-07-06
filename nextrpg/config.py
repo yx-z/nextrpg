@@ -54,8 +54,8 @@ class DebugConfig:
             in milliseconds.
     """
 
-    drawing_background_color: Rgba = Rgba(0, 0, 255, 32)
-    collision_rectangle_color: Rgba = Rgba(255, 0, 0, 96)
+    drawing_background_color: Rgba = Rgba(0, 0, 255, 16)
+    collision_rectangle_color: Rgba = Rgba(255, 0, 0, 64)
     ignore_map_collisions: bool = False
     log_level: LogLevel = LogLevel.DEBUG
     log_duration: Millisecond = 3000
@@ -187,8 +187,8 @@ class CharacterConfig:
             Default to all directions (up, left, right, down, and diagonals).
     """
 
-    move_speed: PixelPerMillisecond = 0.15
-    idle_duration: Millisecond = 0
+    move_speed: PixelPerMillisecond = 0.1
+    idle_duration: Millisecond = 500
     move_duration: Millisecond = 1000
     directions: frozenset[Direction] = frozenset(Direction)
 

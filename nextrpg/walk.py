@@ -21,7 +21,7 @@ class Walk:
 
     @cached_property
     def direction(self) -> Direction:
-        return self.coordinate.direction(self._last_coordinate)
+        return self.coordinate.relative_to(self._last_coordinate)
 
     @cached_property
     def reset(self) -> Self:

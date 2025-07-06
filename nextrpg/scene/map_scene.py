@@ -10,13 +10,7 @@ from os import PathLike
 from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.character.npcs import (
-    EventfulScene,
-    NpcOnScreen,
-    NpcSpec,
-    Npcs,
-)
+from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
 from nextrpg.character.moving_npc import MovingNpcOnScreen, MovingNpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
@@ -48,12 +42,11 @@ def _init_player(self: MapScene) -> PlayerOnScreen:
     )
 
 
-def _init_npcs(self: "MapScene") -> Npcs:
-    npcs = [
+def _init_npcs(self: "MapScene") -> list[NpcOnScreen]:
+    return [
         self._init_moving(n) if isinstance(n, MovingNpcSpec) else self._init(n)
         for n in self.npc_specs
     ]
-    return Npcs(list=npcs)
 
 
 @register_instance_init
@@ -81,7 +74,7 @@ class MapScene[T](EventfulScene):
     player_coordinate_object: str
     moves: list[Move] = field(default_factory=list)
     npc_specs: list[NpcSpec] = field(default_factory=list)
-    _npcs: Npcs = instance_init(_init_npcs)
+    _npcs: list[NpcOnScreen] = instance_init(_init_npcs)
     _player: PlayerOnScreen = instance_init(_init_player)
 
     @cached_property
@@ -95,27 +88,16 @@ class MapScene[T](EventfulScene):
         )
 
     @override
-    def event(self, event: PygameEvent) -> Scene:
-        return self._npcs.event(event, self._player, self) or replace(
-            self, _player=self._player.event(event)
-        )
-
-    @override
-    def tick_without_event(self, time_delta: Millisecond) -> Scene:
-        player = self._player.tick(time_delta)
-        logger.debug(t"Player {player.coordinate}")
-        return self._move_to_scene(player) or replace(
-            self,
-            _npcs=self._npcs.tick(time_delta),
-            _player=self._player.tick(time_delta),
-        )
+    def tick(self, time_delta: Millisecond) -> Scene:
+        logger.debug(t"Player {self._player.coordinate}")
+        return self._move_to_scene or super().tick(time_delta)
 
     @cached_property
     def _foreground_and_characters(self) -> list[DrawOnScreen]:
         foregrounds = (
             t for layer in self._map_helper.foreground for t in layer.tiles
         )
-        characters = chain([self._player], self._npcs.list)
+        characters = chain([self._player], self._npcs)
         bottom_and_draw = sorted(
             map(self._map_helper.layer_bottom_and_draw, characters)
         )
@@ -134,17 +116,18 @@ class MapScene[T](EventfulScene):
         logger.debug(t"Player shift {shift}")
         return shift
 
-    def _move_to_scene(self, player: CharacterOnScreen) -> Scene | None:
-        moved = (m for move in self.moves if (m := self._move(player, move)))
+    @cached_property
+    def _move_to_scene(self) -> Scene | None:
+        moved = (m for move in self.moves if (m := self._move(move)))
         return next(moved, None)
 
-    def _move(self, player: CharacterOnScreen, move: Move) -> Scene | None:
+    def _move(self, move: Move) -> Scene | None:
         move_poly = get_polygon(
             self._map_helper.get_object(move.trigger_object)
         )
         return (
-            TransitionScene(self, move.to_scene(player.character))
-            if player.draw_on_screen.rectangle.collide(move_poly)
+            TransitionScene(self, move.to_scene(self._player.character))
+            if self._player.draw_on_screen.rectangle.collide(move_poly)
             else None
         )
 

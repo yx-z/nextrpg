@@ -129,5 +129,4 @@ def david() -> CharacterDrawing:
         direction=Direction.DOWN,
         sprite_sheet=sprite_sheet(),
         sprite_sheet_selection=SpriteSheetSelection(0, 2),
-        animate_on_idle=True,
     )

@@ -62,6 +62,10 @@ class CharacterOnScreen(ABC):
             `CharacterOnScreen`: The updated character state after the step.
         """
 
+    def trigger(self, character: CharacterOnScreen) -> Self:
+        direction = character.coordinate.relative_to(self.coordinate)
+        return replace(self, character=self.character.turn(direction))
+
 
 @dataclass(kw_only=True, frozen=True)
 class MovingCharacterOnScreen(CharacterOnScreen):
@@ -108,19 +112,17 @@ class MovingCharacterOnScreen(CharacterOnScreen):
             `CharacterOnScreen`: The updated character state after the step.
         """
         moved_coord = self.move(time_delta) if self.moving else None
-        return replace(
-            self,
-            character=(
-                self.character.move(time_delta)
-                if self.moving
-                else self.character.idle(time_delta)
-            ),
-            coordinate=(
-                moved_coord
-                if moved_coord and self._can_move(moved_coord)
-                else self.coordinate
-            ),
+        character = (
+            self.character.move(time_delta)
+            if self.moving
+            else self.character.idle(time_delta)
         )
+        coordinate = (
+            moved_coord
+            if moved_coord and self._can_move(moved_coord)
+            else self.coordinate
+        )
+        return replace(self, character=character, coordinate=coordinate)
 
     def _can_move(self, coordinate: Coordinate) -> bool:
         if (debug := config().debug) and debug.ignore_map_collisions:

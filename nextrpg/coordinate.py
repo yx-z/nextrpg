@@ -69,7 +69,7 @@ class Coordinate(namedtuple("Coordinate", "left top")):
             case Direction.DOWN_RIGHT:
                 return Coordinate(self.left + diag, self.top + diag)
 
-    def direction(self, other: Coordinate) -> Direction:
+    def relative_to(self, other: Coordinate) -> Direction:
         dx = self.left - other.left
         dy = self.top - other.top
         angle = (degrees(atan2(-dy, dx)) + 360) % 360

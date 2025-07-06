@@ -25,29 +25,26 @@ from nextrpg.event.pygame_event import (
 class PlayerOnScreen(MovingCharacterOnScreen):
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
-    @singledispatchmethod
-    def event(self, e: PygameEvent) -> CharacterOnScreen:
-        """
-        Process a pygame event and update the character state accordingly.
-
-        Arguments:
-            `e`: The event to process.
-
-        Returns:
-            `CharacterOnScreen`: The updated character state
-                after processing the event.
-        """
-        return self
+    def event(self, event: PygameEvent) -> CharacterOnScreen:
+        if not isinstance(event, (KeyPressDown, KeyPressUp)):
+            return self
+        updated_keys = self._updated_movement_key(event)
+        direction = _key_to_dir(updated_keys)
+        character = (
+            self.character.turn(direction)
+            if direction in config().character.directions
+            else self.character
+        )
+        return replace(self, character=character, _movement_keys=updated_keys)
 
     def _updated_movement_key(
-        self, e: KeyPressDown | KeyPressUp
+        self, event: KeyPressDown | KeyPressUp
     ) -> frozenset[KeyboardKey]:
-        if e.key not in _MOVEMENT_KEYS:
+        if event.key not in _MOVEMENT_KEYS:
             return self._movement_keys
-        assert isinstance(e.key, KeyboardKey)
-        if isinstance(e, KeyPressDown):
-            return self._movement_keys | {e.key}
-        return self._movement_keys - {e.key}
+        if isinstance(event, KeyPressDown):
+            return self._movement_keys | {event.key}
+        return self._movement_keys - {event.key}
 
     @cached_property
     @override
@@ -85,19 +82,4 @@ _KEY_TO_DIR = {
 def _key_to_dir(current_keys: frozenset[KeyboardKey]) -> Direction | None:
     return next(
         (d for keys, d in _KEY_TO_DIR.items() if keys <= current_keys), None
-    )
-
-
-@PlayerOnScreen.event.register
-def _on_key(self, e: KeyPressDown | KeyPressUp) -> CharacterOnScreen:
-    updated_keys = self._updated_movement_key(e)
-    direction = _key_to_dir(updated_keys)
-    return replace(
-        self,
-        character=(
-            self.character.turn(direction)
-            if direction in config().character.directions
-            else self.character
-        ),
-        _movement_keys=updated_keys,
     )

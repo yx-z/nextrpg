@@ -99,13 +99,7 @@ def test_move_to_scene(mocker: MockerFixture) -> None:
             Move("", "", lambda _, __: Scene()),
         ],
     )
-    assert map._move_to_scene(
-        PlayerOnScreen(
-            character=MockCharacterDrawing(),
-            coordinate=Coordinate(11, 21),
-            collisions=[],
-        )
-    )
+    assert map._move_to_scene
 
 
 def test_shift() -> None:

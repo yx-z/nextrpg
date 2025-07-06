@@ -107,7 +107,7 @@
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">direction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_coordinate</span><span class="p">)</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_coordinate</span><span class="p">)</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
@@ -183,7 +183,7 @@
 </span><span id="Walk-22"><a href="#Walk-22"><span class="linenos">22</span></a>
 </span><span id="Walk-23"><a href="#Walk-23"><span class="linenos">23</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Walk-24"><a href="#Walk-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
-</span><span id="Walk-25"><a href="#Walk-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">direction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_coordinate</span><span class="p">)</span>
+</span><span id="Walk-25"><a href="#Walk-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_coordinate</span><span class="p">)</span>
 </span><span id="Walk-26"><a href="#Walk-26"><span class="linenos">26</span></a>
 </span><span id="Walk-27"><a href="#Walk-27"><span class="linenos">27</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Walk-28"><a href="#Walk-28"><span class="linenos">28</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
@@ -303,7 +303,7 @@
     <a class="headerlink" href="#Walk.direction"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Walk.direction-23"><a href="#Walk.direction-23"><span class="linenos">23</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Walk.direction-24"><a href="#Walk.direction-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
-</span><span id="Walk.direction-25"><a href="#Walk.direction-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">direction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_coordinate</span><span class="p">)</span>
+</span><span id="Walk.direction-25"><a href="#Walk.direction-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_last_coordinate</span><span class="p">)</span>
 </span></pre></div>
 
 
