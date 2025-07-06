@@ -1,21 +1,20 @@
-from abc import ABC
-from dataclasses import dataclass, field, replace
-from functools import cached_property
-from typing import Self, override
+from __future__ import annotations
 
-from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.character.character_on_screen import (
-    CharacterOnScreen,
-    MovingCharacterOnScreen,
-)
+from ast import fix_missing_locations, parse
+from collections.abc import Callable, Generator
+from inspect import getsource
+from dataclasses import dataclass, replace
+from functools import cached_property, wraps
+from textwrap import dedent
+from typing import Self
+
+from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.config import config
-from nextrpg.core import Millisecond, PixelPerMillisecond, Timer
-from nextrpg.draw_on_screen import Coordinate, Polygon
+from nextrpg.core import Millisecond
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
-from nextrpg.event.rpg_event import RpgEventGenerator, RpgEventSpec, wrap_spec
-from nextrpg.logger import Logger
-from nextrpg.model import instance_init, register_instance_init
+from nextrpg.event.rpg_event import _yield
+from nextrpg.logger import FROM_CONFIG, Logger
+from nextrpg.model import register_instance_init
 from nextrpg.scene.scene import Scene
 
 logger = Logger("Npcs")
@@ -39,66 +38,13 @@ class NpcOnScreen(CharacterOnScreen):
     def tick(self, time_delta: Millisecond) -> Self:
         return replace(self, character=self.character.idle(time_delta))
 
-    def trigger(self, player: PlayerOnScreen) -> Self:
+    def _trigger(self, player: PlayerOnScreen) -> Self:
         direction = player.character.direction.opposite
-        return replace(self, character=self.character.turn(direction))
+        return replace(self, character=self.character.turn(direction), _is_triggered=True)
 
     @cached_property
-    def completed(self) -> Self:
+    def _completed(self) -> Self:
         return replace(self, _is_triggered=False)
-
-
-@register_instance_init
-class MovingNpcOnScreen(MovingCharacterOnScreen, NpcOnScreen):
-    """
-    Moving NPC interface.
-
-    Arguments:
-        `path`: Polygon representing the path of the NPC.
-
-        `idle_duration`: Duration of the idle state.
-
-        `move_duration`: Duration of the moving state.
-    """
-
-    path: Polygon
-    idle_duration: Millisecond
-    move_duration: Millisecond
-    _idle_timer: Timer = instance_init(lambda self: Timer(self.idle_duration))
-    _move_timer: Timer = instance_init(lambda self: Timer(self.move_duration))
-    _is_moving: bool = False
-
-    @override
-    def tick(self, time_delta: Millisecond) -> Self:
-        if self._is_moving:
-            move_timer = self._move_timer.tick(time_delta)
-            idle_timer = self._idle_timer
-        else:
-            move_timer = self._move_timer
-            idle_timer = self._idle_timer.tick(time_delta)
-
-        if self._is_moving and move_timer.expired:
-            is_moving = False
-        elif not self._is_moving and idle_timer.expired:
-            is_moving = True
-        else:
-            is_moving = self._is_moving
-
-        return replace(
-            super().tick(time_delta),
-            _idle_timer=idle_timer.reset() if is_moving else idle_timer,
-            _move_timer=move_timer.reset() if not is_moving else move_timer,
-            _is_moving=is_moving,
-        )
-
-    @cached_property
-    @override
-    def is_moving(self) -> bool:
-        return self._is_moving and not self._is_triggered
-
-    @override
-    def move(self, time_delta: Millisecond) -> Coordinate:
-        return self.coordinate
 
 
 @register_instance_init
@@ -112,24 +58,12 @@ class Npcs[T]:
 
     list: list[NpcOnScreen]
 
-    @cached_property
-    def dict(self) -> dict[str, NpcOnScreen]:
-        return {n.name: n for n in self.list}
-
-    def complete(self, npc: NpcOnScreen) -> Self:
-        return replace(
-            self,
-            list=[n.completed if n.name == npc.name else n for n in self.list],
-        )
-
-    def trigger(self,player: PlayerOnScreen, npc: NpcOnScreen) -> Self:
-        return replace(
-           self, list=[n.trigger(player) if n.name == npc.name else n for n in self.list]
-        )
-
     def event(
-        self, event: PygameEvent, player: PlayerOnScreen, scene: EventfulScene
-    ) -> Scene | None:
+        self,
+        event: PygameEvent,
+        player: PlayerOnScreen,
+        scene: EventfulScene[T],
+    ) -> RpgEventScene | None:
         """
         Trigger the NPC event.
 
@@ -148,11 +82,10 @@ class Npcs[T]:
             and event.key is KeyboardKey.CONFIRM
             and (npc := self._collided_npc(player))
         ):
-            logger.debug(t"Collied with {npc.name}")
-            triggered_npc = self.trigger(player, npc)
-            triggered_scene = scene.trigger_npc(player, npc)
-            generator = wrap_spec(npc.event_spec)(
-                player, triggered_scene, triggered_npc
+            logger.debug(t"Collided with {npc.name}", duration=FROM_CONFIG)
+            triggered_scene = scene._trigger(player, npc)
+            generator = _wrap_spec(npc.event_spec)(
+                player, triggered_scene, triggered_scene._npcs
             )
             return next(generator)(generator, triggered_scene)
         return None
@@ -177,91 +110,30 @@ class Npcs[T]:
         return next(collide, None)
 
 
-@dataclass
-class NpcSpec:
-    """
-    Base class to define NPC specifications.
+    def _complete(self, npc: NpcOnScreen) -> Self:
+        return replace(
+            self,
+            list=[n._completed if n.name == npc.name else n for n in self.list],
+        )
 
-    Arguments:
-        `name`: Name of the NPC.
-
-        `drawing`: Character drawing for the NPC.
-
-        `event_spec`: Event specification for player/NPC interactions.
-    """
-
-    name: str
-    character: CharacterDrawing
-    event_spec: RpgEventSpec
-
-    def draw_on_screen(self, coord: Coordinate) -> NpcOnScreen:
-        """
-        Draw the NPC on screen.
-
-        Arguments:
-            `coord`: The coordinate of the NPC on screen.
-
-        Returns:
-            `NpcOnScreen`: The NPC on screen.
-        """
-        return NpcOnScreen(
-            coordinate=coord,
-            character=self.character,
-            event_spec=self.event_spec,
-            name=self.name,
+    def _trigger(self, player: PlayerOnScreen, npc: NpcOnScreen) -> Self:
+        return replace(
+            self,
+            list=[
+                n._trigger(player) if n.name == npc.name else n
+                for n in self.list
+            ],
         )
 
 
 @dataclass
-class MovingNpcSpec(NpcSpec):
-    """
-    Moving NPC specification.
-
-    Arguments:
-        `move_speed`: Movement speed of the NPC in pixels per millisecond.
-
-        `idle_duration`: Duration of the idle state.
-
-        `move_duration`: Duration of the moving state.
-
-        `observe_collisions`: Whether to observe collisions with the map.
-    """
-
-    move_speed: PixelPerMillisecond = field(
-        default_factory=lambda: config().character.move_speed
-    )
-    idle_duration: Millisecond = field(
-        default_factory=lambda: config().character.idle_duration
-    )
-    move_duration: Millisecond = field(
-        default_factory=lambda: config().character.move_duration
-    )
-    observe_collisions: bool = True
-
-    def draw_moving_on_screen(
-        self, coord: Coordinate, path: Polygon, collisions: list[Polygon]
-    ) -> MovingNpcOnScreen:
-        return MovingNpcOnScreen(
-            character=self.character,
-            coordinate=coord,
-            collisions=collisions,
-            move_speed=self.move_speed,
-            name=self.name,
-            event_spec=self.event_spec,
-            path=path,
-            idle_duration=self.idle_duration,
-            move_duration=self.move_duration,
-        )
-
-
-@dataclass
-class EventfulScene[T](Scene, ABC):
+class EventfulScene[T](Scene):
     """
     EventfulScene allows scenes to continue event execution via coroutine/
         generator.
     """
 
-    npcs: Npcs
+    _npcs: Npcs
     _npc: NpcOnScreen | None = None
     _event: RpgEventGenerator[T] | None = None
     _event_result: T | None = None
@@ -300,8 +172,8 @@ class EventfulScene[T](Scene, ABC):
         """
         return replace(self, _event=event, _event_result=result)
 
-    def trigger_npc(self, player: PlayerOnScreen, npc: NpcOnScreen) -> Self:
-        return replace(self, _npc=npc, npcs=self.npcs.trigger(player, npc))
+    def _trigger(self, player: PlayerOnScreen, npc: NpcOnScreen) -> Self:
+        return replace(self, _npc=npc,_npcs=self._npcs._trigger(player, npc))
 
     @cached_property
     def _next_event(self) -> Scene | None:
@@ -318,11 +190,59 @@ class EventfulScene[T](Scene, ABC):
         except StopIteration:
             return replace(
                 self,
-                npcs=self.npcs.complete(self._npc),
+                _npcs=self._npcs._complete(self._npc),
                 _npc=None,
                 _event=None,
                 _event_result=None,
             )
+
+type RpgEventSpec = Callable[[PlayerOnScreen, NpcOnScreen, Npcs], None]
+"""
+Abstract protocol to define Rpg Event for player/NPC interactions.
+"""
+
+type RpgEventGenerator[T] = Generator[RpgEventCallable, T, None]
+"""
+The event generator type that can be used to yield an event.
+"""
+
+type RpgEventCallable[T] = Callable[
+    [RpgEventGenerator[T], EventfulScene], RpgEventScene
+]
+"""
+The event callable type that can be used to generate a scene for certain event.
+"""
+
+
+@dataclass
+class RpgEventScene(Scene):
+    """
+    Arguments:
+        `generator`: The generator to continue after the event.
+
+        `scene`: The scene to continue.
+    """
+
+    _generator: RpgEventGenerator
+    _scene: EventfulScene
+
+
+def _wrap_spec[T](
+    fun: RpgEventSpec,
+) -> Callable[[PlayerOnScreen, NpcOnScreen, Npcs], RpgEventGenerator[T]]:
+    @wraps(fun)
+    def wraped(
+        player: PlayerOnScreen, npc: NpcOnScreen, npcs: Npcs
+    ) -> RpgEventGenerator:
+        src = dedent(getsource(fun))
+        tree = fix_missing_locations(_yield.visit(parse(src)))
+        code = compile(tree, "<npcs>", "exec")
+        ctx = fun.__globals__
+        exec(code, ctx)
+        return ctx[fun.__name__](player, npc, npcs)
+
+    return wraped
+
 
 
 def _collide_with_player(npc: NpcOnScreen, player: PlayerOnScreen) -> bool:

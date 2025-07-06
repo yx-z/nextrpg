@@ -1,10 +1,11 @@
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, Mock
 
 from pygame import Event, QUIT
 from pytest_mock import MockerFixture
 
+from nextrpg.character.npc_spec import MovingNpcSpec, NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import Config, DebugConfig
 from nextrpg.core import Size
@@ -47,6 +48,23 @@ def test_map_scene(mocker: MockerFixture) -> None:
     assert map.draw_on_screens
     assert not map.tick(0)._collision_visuals
     assert map.event(Quit(Event(QUIT)))
+
+
+def test_init_npc(mocker: MockerFixture) -> None:
+    map_helper = Mock()
+    map_helper.get_object.return_value = SimpleNamespace(x=1, y=2)
+    map_helper.collisions = []
+    mocker.patch("nextrpg.scene.map_scene.MapHelper", map_helper)
+    map_scene = MapScene(
+        tmx_file="",
+        initial_player_drawing=MockCharacterDrawing(),
+        player_coordinate_object="",
+        npc_specs=[
+            NpcSpec("", MockCharacterDrawing(), lambda *_: None),
+            MovingNpcSpec("", MockCharacterDrawing(), lambda *_: None),
+        ],
+    )
+    assert map_scene._npcs
 
 
 def test_move_to_scene(mocker: MockerFixture) -> None:

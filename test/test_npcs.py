@@ -6,30 +6,34 @@ from pygame import Event, K_SPACE
 from pygame.locals import KEYDOWN, K_RETURN, QUIT
 from pytest_mock import MockerFixture
 
+from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.npcs import (
-    MovingNpcOnScreen,
-    MovingNpcSpec,
+    EventfulScene,
     NpcOnScreen,
-    NpcSpec,
     Npcs,
+    RpgEventGenerator,
+    RpgEventScene,
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.core import Size
+from nextrpg.core import Direction, Size
 from nextrpg.draw_on_screen import Coordinate, Rectangle
 from nextrpg.event.pygame_event import KeyPressDown, Quit
 from nextrpg.event.say import say
 from nextrpg.scene.map_scene import MapScene
-from nextrpg.scene.scene import Scene
 from test.util import MockCharacterDrawing
 
 
 def test_npc_on_screen() -> None:
-    assert NpcOnScreen(
+    npc = NpcOnScreen(
         coordinate=Coordinate(0, 0),
         character=MockCharacterDrawing(),
         name="name",
         event_spec=lambda *_: None,
     ).tick(0)
+    assert npc
+    assert npc._trigger(PlayerOnScreen(
+        collisions=[], character=MockCharacterDrawing(), coordinate=Coordinate(0, 0)
+    )).character.direction is Direction.UP
 
 
 def test_moving_npc_on_screen() -> None:
@@ -52,42 +56,52 @@ def test_moving_npc_on_screen() -> None:
 
 
 def test_npcs(mocker: MockerFixture) -> None:
-    map_helper = Mock()
-    map_helper.get_object.return_value = SimpleNamespace(
-        x=1, y=1, width=1, height=1
-    )
-    map_helper.map_size = Size(100, 100)
-
     def event(player: PlayerOnScreen, *args: Any) -> None:
+        res = say(player, "hi")
+        assert res
         say(player, "hi")
 
     npcs = Npcs(
-        map_helper=map_helper,
-        specs=[
-            NpcSpec(
+        list=[
+            NpcOnScreen(
+                coordinate=Coordinate(0, 0),
                 name="name",
                 event_spec=event,
                 character=MockCharacterDrawing(),
             ),
-            MovingNpcSpec(
+            MovingNpcOnScreen(
+                coordinate=Coordinate(0, 0),
                 name="name",
                 event_spec=event,
                 character=MockCharacterDrawing(),
-                observe_collisions=False,
+                collisions=[],
+                path=Rectangle(Coordinate(0, 0), Size(10, 10)),
+                idle_duration=10,
+                move_duration=10,
             ),
         ],
     )
     assert npcs.tick(1)
     assert not npcs.event(
+        KeyPressDown(Event(KEYDOWN, key=K_RETURN)),
         PlayerOnScreen(
             character=MockCharacterDrawing(),
             coordinate=Coordinate(100, 100),
             collisions=[],
         ),
-        Scene(),
+        EventfulScene(npcs),
     )
 
+    map_helper = Mock()
+    map_helper.get_object.return_value = SimpleNamespace(
+        x=1, y=1, width=1, height=1
+    )
+    map_helper.foreground = []
+    map_helper.background = []
+    map_helper.above_character = []
+    map_helper.map_size = Size(100, 100)
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=map_helper)
+    mocker.patch("nextrpg.scene.map_scene.merge", return_value=[])
     player = PlayerOnScreen(
         character=MockCharacterDrawing(),
         coordinate=Coordinate(0, 0),
@@ -100,10 +114,41 @@ def test_npcs(mocker: MockerFixture) -> None:
         player_coordinate_object="",
     )
     map_scene.draw_on_screens = []
-    say_event = npcs.event(player, map_scene)
-    assert say_event
+    say_event = npcs.event(
+        KeyPressDown(Event(KEYDOWN, key=K_RETURN)), player, map_scene
+    )
+    assert say_event.tick(0)
     assert say_event.draw_on_screens
     assert say_event.event(Quit(Event(QUIT)))
     assert say_event.event(KeyPressDown(Event(KEYDOWN, key=K_SPACE)))
     new_scene = say_event.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
     assert isinstance(new_scene, MapScene)
+
+
+def test_eventful_scene() -> None:
+    def event() -> RpgEventGenerator:
+        yield lambda generator, scene: RpgEventScene(generator, scene)
+
+    gen = event()
+    eventful = EventfulScene(
+        Npcs(
+            list=[
+                NpcOnScreen(
+                    name="npc",
+                    coordinate=Coordinate(0, 0),
+                    character=MockCharacterDrawing(),
+                    event_spec=lambda *_: None,
+                )
+            ]
+        ),
+        _event=gen,
+        _npc=NpcOnScreen(
+            name="npc",
+            coordinate=Coordinate(0, 0),
+            character=MockCharacterDrawing(),
+            event_spec=lambda *_: None,
+        ),
+    )
+    assert eventful.tick_without_event(0)
+    next(gen)
+    assert eventful._next_event

@@ -3,7 +3,7 @@ from functools import cached_property, singledispatchmethod
 from typing import Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.character.npcs import EventfulScene, RpgEventGenerator
+from nextrpg.character.npcs import RpgEventScene
 from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
@@ -35,45 +35,39 @@ def say(character: CharacterOnScreen, message: str) -> None:
 
 
 @dataclass
-class SayEvent(Scene):
+class SayEvent(RpgEventScene):
     """
     `say` scene.
 
     Arguments:
-        `generator`: The generator to continue after the event.
-
-        `scene`: The scene to continue.
-
         `character`: The character to say the message.
 
         `message`: The message to say.
     """
 
-    generator: RpgEventGenerator
-    scene: EventfulScene
     character: CharacterOnScreen
     message: str
 
     @cached_property
     @override
     def draw_on_screens(self) -> list[DrawOnScreen]:
-        return self.scene.draw_on_screens_shifted + [
+        return self._scene.draw_on_screens_shifted + [
             Text(self.message, self._coordinate).draw_on_screen
         ]
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        return replace(self, scene=self.scene.tick(time_delta))
+        return replace(self, _scene=self._scene.tick(time_delta))
 
     @singledispatchmethod
     @override
     def event(self, e: PygameEvent) -> Scene:
-        return replace(self, scene=self.scene.event(e))
+        return replace(self, _scene=self._scene.event(e))
 
     @event.register
     def _confirm(self, e: KeyPressDown) -> Scene:
         return (
-            self.scene.send(self.generator, self.message)
+            self._scene.send(self._generator)
             if e.key is KeyboardKey.CONFIRM
             else self
         )
@@ -82,7 +76,7 @@ class SayEvent(Scene):
     def _coordinate(self) -> Coordinate:
         coord = self.character.coordinate
         return (
-            coord.shift(self.scene.draw_on_screen_shift)
-            if isinstance(self.scene, MapScene)
+            coord.shift(self._scene.draw_on_screen_shift)
+            if isinstance(self._scene, MapScene)
             else coord
         )

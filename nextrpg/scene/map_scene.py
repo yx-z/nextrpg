@@ -13,12 +13,11 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npcs import (
     EventfulScene,
-    MovingNpcOnScreen,
-    MovingNpcSpec,
     NpcOnScreen,
-    NpcSpec,
     Npcs,
 )
+from nextrpg.character.npc_spec import MovingNpcSpec, NpcSpec
+from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
 from nextrpg.core import Millisecond, Pixel
@@ -81,7 +80,7 @@ class MapScene[T](EventfulScene):
     player_coordinate_object: str
     moves: list[Move] = field(default_factory=list)
     npc_specs: list[NpcSpec] = field(default_factory=list)
-    npcs: Npcs = instance_init(_init_npcs)
+    _npcs: Npcs = instance_init(_init_npcs)
     _player: PlayerOnScreen = instance_init(_init_player)
 
     @cached_property
@@ -96,7 +95,7 @@ class MapScene[T](EventfulScene):
 
     @override
     def event(self, event: PygameEvent) -> Scene:
-        return self.npcs.event(event, self._player, self) or replace(
+        return self._npcs.event(event, self._player, self) or replace(
             self, _player=self._player.event(event)
         )
 
@@ -106,7 +105,7 @@ class MapScene[T](EventfulScene):
         logger.debug(t"Player {player.coordinate}")
         return self._move_to_scene(player) or replace(
             self,
-            npcs=self.npcs.tick(time_delta),
+            _npcs=self._npcs.tick(time_delta),
             _player=self._player.tick(time_delta),
         )
 
@@ -117,7 +116,7 @@ class MapScene[T](EventfulScene):
             for i, layer in enumerate(self._map_helper.foreground)
             for bottom, draw in layer
         )
-        characters = chain([self._player], self.npcs.list)
+        characters = chain([self._player], self._npcs.list)
         bottom_and_draw = sorted(
             map(self._map_helper.layer_bottom_and_draw, characters)
         )
@@ -165,14 +164,14 @@ class MapScene[T](EventfulScene):
 
     def _init(self, spec: NpcSpec) -> NpcOnScreen:
         obj = self._map_helper.get_object(spec.name)
-        return spec.draw_on_screen(Coordinate(obj.x, obj.y))
+        return spec.put_on_screen(Coordinate(obj.x, obj.y))
 
     def _init_moving(self, spec: MovingNpcSpec) -> MovingNpcOnScreen:
         obj = self._map_helper.get_object(spec.name)
         collisions = (
             self._map_helper.collisions if spec.observe_collisions else []
         )
-        return spec.draw_moving_on_screen(
+        return spec.put_moving_on_screen(
             Coordinate(obj.x, obj.y), get_polygon(obj), collisions
         )
 
