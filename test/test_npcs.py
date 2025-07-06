@@ -6,10 +6,11 @@ from pygame import Event, K_SPACE
 from pygame.locals import KEYDOWN, K_RETURN, QUIT
 from pytest_mock import MockerFixture
 
-from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
+from nextrpg.character.moving_npc import MovingNpcOnScreen, MovingNpcSpec
 from nextrpg.character.npcs import (
     EventfulScene,
     NpcOnScreen,
+    NpcSpec,
     Npcs,
     RpgEventGenerator,
     RpgEventScene,
@@ -26,26 +27,36 @@ from test.util import MockCharacterDrawing
 def test_npc_on_screen() -> None:
     npc = NpcOnScreen(
         coordinate=Coordinate(0, 0),
-        character=MockCharacterDrawing(),
-        name="name",
-        event_spec=lambda *_: None,
+        spec=NpcSpec(
+            "name",
+            MockCharacterDrawing(),
+            lambda *_: None,
+        ),
     ).tick(0)
     assert npc
-    assert npc._trigger(PlayerOnScreen(
-        collisions=[], character=MockCharacterDrawing(), coordinate=Coordinate(0, 0)
-    )).character.direction is Direction.UP
+    assert (
+        npc._trigger(
+            PlayerOnScreen(
+                collisions=[],
+                character=MockCharacterDrawing(),
+                coordinate=Coordinate(0, 0),
+            )
+        ).character.direction
+        is Direction.UP
+    )
 
 
 def test_moving_npc_on_screen() -> None:
     npc = MovingNpcOnScreen(
         coordinate=Coordinate(0, 0),
-        character=MockCharacterDrawing(),
-        name="name",
-        event_spec=lambda *_: None,
-        move_speed=0.2,
+        spec=MovingNpcSpec(
+            "name",
+            MockCharacterDrawing(),
+            lambda *_: None,
+            idle_duration=10,
+            move_duration=10,
+        ),
         path=Rectangle(Coordinate(0, 0), Size(10, 10)),
-        idle_duration=10,
-        move_duration=10,
         collisions=[],
     )
     assert not npc.tick(0).is_moving
@@ -56,28 +67,26 @@ def test_moving_npc_on_screen() -> None:
 
 
 def test_npcs(mocker: MockerFixture) -> None:
-    def event(player: PlayerOnScreen, *args: Any) -> None:
-        res = say(player, "hi")
+    def event(p: PlayerOnScreen, *args: Any) -> None:
+        res = say(p, "hi")
         assert res
-        say(player, "hi")
+        say(p, "hi")
 
     npcs = Npcs(
         list=[
             NpcOnScreen(
                 coordinate=Coordinate(0, 0),
-                name="name",
-                event_spec=event,
-                character=MockCharacterDrawing(),
+                spec=NpcSpec("name", MockCharacterDrawing(), event),
             ),
             MovingNpcOnScreen(
                 coordinate=Coordinate(0, 0),
-                name="name",
-                event_spec=event,
-                character=MockCharacterDrawing(),
+                spec=MovingNpcSpec(
+                    "name",
+                    MockCharacterDrawing(),
+                    event,
+                ),
                 collisions=[],
                 path=Rectangle(Coordinate(0, 0), Size(10, 10)),
-                idle_duration=10,
-                move_duration=10,
             ),
         ],
     )
@@ -134,19 +143,21 @@ def test_eventful_scene() -> None:
         Npcs(
             list=[
                 NpcOnScreen(
-                    name="npc",
                     coordinate=Coordinate(0, 0),
-                    character=MockCharacterDrawing(),
-                    event_spec=lambda *_: None,
+                    spec=NpcSpec(
+                        "npc", MockCharacterDrawing(), lambda *_: None
+                    ),
                 )
             ]
         ),
         _event=gen,
         _npc=NpcOnScreen(
-            name="npc",
             coordinate=Coordinate(0, 0),
-            character=MockCharacterDrawing(),
-            event_spec=lambda *_: None,
+            spec=NpcSpec(
+                "npc",
+                MockCharacterDrawing(),
+                lambda *_: None,
+            ),
         ),
     )
     assert eventful.tick_without_event(0)

@@ -5,7 +5,8 @@ Sample interior scene.
 from typing import Any
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.character.npc_spec import MovingNpcSpec, NpcSpec
+from nextrpg.character.moving_npc import MovingNpcSpec
+from nextrpg.character.npcs import NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.rpg_maker_character_drawing import (
     Margin,

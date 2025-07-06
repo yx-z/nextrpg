@@ -17,7 +17,7 @@ from nextrpg.logger import FROM_CONFIG, Logger
 logger = Logger("CharacterOnScreen")
 
 
-@dataclass
+@dataclass(kw_only=True)
 class CharacterOnScreen(ABC):
     """
     Represents a character that can be displayed and moved on screen.

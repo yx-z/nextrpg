@@ -5,7 +5,8 @@ from unittest.mock import MagicMock, Mock
 from pygame import Event, QUIT
 from pytest_mock import MockerFixture
 
-from nextrpg.character.npc_spec import MovingNpcSpec, NpcSpec
+from nextrpg.character.moving_npc import MovingNpcSpec
+from nextrpg.character.npcs import NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import Config, DebugConfig
 from nextrpg.core import Size

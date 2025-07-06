@@ -114,7 +114,7 @@
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">(</span><span class="s2">&quot;CharacterOnScreen&quot;</span><span class="p">)</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="nd">@dataclass</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="sd">    Represents a character that can be displayed and moved on screen.</span>
@@ -288,7 +288,7 @@
                 <section id="CharacterOnScreen">
                             <input id="CharacterOnScreen-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass">@dataclass</div>
+                    <div class="decorator decorator-dataclass">@dataclass(kw_only=True)</div>
 
     <span class="def">class</span>
     <span class="name">CharacterOnScreen</span><wbr>(<span class="base">abc.ABC</span>):
@@ -297,7 +297,7 @@
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen-21"><a href="#CharacterOnScreen-21"><span class="linenos">21</span></a><span class="nd">@dataclass</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen-21"><a href="#CharacterOnScreen-21"><span class="linenos">21</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="CharacterOnScreen-22"><a href="#CharacterOnScreen-22"><span class="linenos">22</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 </span><span id="CharacterOnScreen-23"><a href="#CharacterOnScreen-23"><span class="linenos">23</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen-24"><a href="#CharacterOnScreen-24"><span class="linenos">24</span></a><span class="sd">    Represents a character that can be displayed and moved on screen.</span>

@@ -14,10 +14,10 @@ from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npcs import (
     EventfulScene,
     NpcOnScreen,
+    NpcSpec,
     Npcs,
 )
-from nextrpg.character.npc_spec import MovingNpcSpec, NpcSpec
-from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
+from nextrpg.character.moving_npc import MovingNpcOnScreen, MovingNpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
 from nextrpg.core import Millisecond, Pixel
@@ -164,15 +164,18 @@ class MapScene[T](EventfulScene):
 
     def _init(self, spec: NpcSpec) -> NpcOnScreen:
         obj = self._map_helper.get_object(spec.name)
-        return spec.put_on_screen(Coordinate(obj.x, obj.y))
+        return NpcOnScreen(coordinate=Coordinate(obj.x, obj.y), spec=spec)
 
     def _init_moving(self, spec: MovingNpcSpec) -> MovingNpcOnScreen:
         obj = self._map_helper.get_object(spec.name)
         collisions = (
             self._map_helper.collisions if spec.observe_collisions else []
         )
-        return spec.put_moving_on_screen(
-            Coordinate(obj.x, obj.y), get_polygon(obj), collisions
+        return MovingNpcOnScreen(
+            coordinate=Coordinate(obj.x, obj.y),
+            path=get_polygon(obj),
+            collisions=collisions,
+            spec=spec,
         )
 
 

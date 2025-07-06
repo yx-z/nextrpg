@@ -1,16 +1,44 @@
-from dataclasses import replace
+from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import Self, override
 
 from nextrpg.character.character_on_screen import MovingCharacterOnScreen
-from nextrpg.character.npcs import NpcOnScreen
-from nextrpg.core import Millisecond, Timer
+from nextrpg.character.npcs import NpcOnScreen, NpcSpec
+from nextrpg.config import config
+from nextrpg.core import Millisecond, PixelPerMillisecond, Timer
 from nextrpg.draw_on_screen import Coordinate, Polygon
 from nextrpg.model import instance_init, register_instance_init
 
 
+@dataclass
+class MovingNpcSpec(NpcSpec):
+    """
+    Moving NPC specification.
+
+    Arguments:
+        `move_speed`: Movement speed of the NPC in pixels per millisecond.
+
+        `idle_duration`: Duration of the idle state.
+
+        `move_duration`: Duration of the moving state.
+
+        `observe_collisions`: Whether to observe collisions with the map.
+    """
+
+    move_speed: PixelPerMillisecond = field(
+        default_factory=lambda: config().character.move_speed
+    )
+    idle_duration: Millisecond = field(
+        default_factory=lambda: config().character.idle_duration
+    )
+    move_duration: Millisecond = field(
+        default_factory=lambda: config().character.move_duration
+    )
+    observe_collisions: bool = True
+
+
 @register_instance_init
-class MovingNpcOnScreen(MovingCharacterOnScreen, NpcOnScreen):
+class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     """
     Moving NPC interface.
 
@@ -23,10 +51,12 @@ class MovingNpcOnScreen(MovingCharacterOnScreen, NpcOnScreen):
     """
 
     path: Polygon
-    idle_duration: Millisecond
-    move_duration: Millisecond
-    _idle_timer: Timer = instance_init(lambda self: Timer(self.idle_duration))
-    _move_timer: Timer = instance_init(lambda self: Timer(self.move_duration))
+    _idle_timer: Timer = instance_init(
+        lambda self: Timer(self.spec.idle_duration)
+    )
+    _move_timer: Timer = instance_init(
+        lambda self: Timer(self.spec.move_duration)
+    )
     _is_moving: bool = False
 
     @override
