@@ -77,7 +77,7 @@ class EventfulScene[T](Scene):
         ):
             logger.debug(t"Collided with {npc.name}", duration=FROM_CONFIG)
             scene = self._trigger(npc)
-            generator = npc._generator(self._player, scene, scene)
+            generator = npc._generator(self._player, scene)
             return next(generator)(generator, scene)
         return replace(self, _player=self._player.event(event))
 
@@ -209,18 +209,18 @@ class NpcSpec:
     event: RpgEventSpec
 
     @cached_property
-    def _generator(
+    def _generator[T](
         self,
-    ) -> Callable[[PlayerOnScreen, NpcOnScreen, Npcs], RpgEventGenerator[T]]:
+    ) -> Callable[[PlayerOnScreen, EventfulScene[T]], RpgEventGenerator[T]]:
         @wraps(self.event)
         def wraped(
-            player: PlayerOnScreen, npc: NpcOnScreen, npcs: Npcs
+            player: PlayerOnScreen, scene: EventfulScene[T]
         ) -> RpgEventGenerator:
             src = dedent(getsource(self.event))
             tree = fix_missing_locations(_yield.visit(parse(src)))
             code = compile(tree, "<npcs>", "exec")
             ctx = self.event.__globals__
             exec(code, ctx)
-            return ctx[self.event.__name__](player, npc, npcs)
+            return ctx[self.event.__name__](player, scene)
 
         return wraped
