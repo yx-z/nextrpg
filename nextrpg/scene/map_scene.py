@@ -21,7 +21,8 @@ from nextrpg.character.moving_npc import MovingNpcOnScreen, MovingNpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
 from nextrpg.core import Millisecond, Pixel
-from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Polygon
+from nextrpg.draw_on_screen import DrawOnScreen, Polygon
+from nextrpg.coordinate import Coordinate
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.gui import gui_size
@@ -171,7 +172,7 @@ class MapScene[T](EventfulScene):
         return MovingNpcOnScreen(
             coordinate=Coordinate(obj.x, obj.y),
             path=get_polygon(obj),
-            spec=spec
+            spec=spec,
         )
 
 

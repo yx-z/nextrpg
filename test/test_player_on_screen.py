@@ -4,7 +4,8 @@ from pygame.locals import KEYDOWN, KEYUP, K_RIGHT, K_SPACE, QUIT
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import Config, DebugConfig
 from nextrpg.core import Size
-from nextrpg.draw_on_screen import Coordinate, Rectangle
+from nextrpg.draw_on_screen import Rectangle
+from nextrpg.coordinate import Coordinate
 from nextrpg.event.pygame_event import KeyPressDown, KeyPressUp, Quit
 from nextrpg.logger import pop_messages
 from test.util import MockCharacterDrawing, override_config

@@ -10,7 +10,9 @@ from nextrpg.character.npcs import NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import Config, DebugConfig
 from nextrpg.core import Size
-from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing, Rectangle
+from nextrpg.draw_on_screen import DrawOnScreen, Rectangle
+from nextrpg.drawing import Drawing
+from nextrpg.coordinate import Coordinate
 from nextrpg.event.move import Move
 from nextrpg.event.pygame_event import Quit
 from nextrpg.scene.map_helper import TileBottomAndDrawOnScreen

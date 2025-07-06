@@ -1,4 +1,4 @@
-from nextrpg.draw_on_screen import Coordinate
+from nextrpg.coordinate import Coordinate
 from nextrpg.text import Text
 
 

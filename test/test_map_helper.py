@@ -7,7 +7,7 @@ from pytest_mock import MockerFixture
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import Config, ResourceConfig
 from nextrpg.core import Size
-from nextrpg.draw_on_screen import Coordinate
+from nextrpg.coordinate import Coordinate
 from nextrpg.scene.map_helper import MapHelper
 from test.util import MockCharacterDrawing, MockSurface, override_config
 
@@ -33,7 +33,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
     ]
     mock_foreground.data = [[1, 0], [0, 0]]
     mock_above_character = MagicMock()
-    setattr(mock_above_character, "class", "above_charactet")
+    setattr(mock_above_character, "class", "above_character")
     mock_above_character.tiles = lambda: [(5, 6, MockSurface())]
     mock_object = MagicMock()
     obj = SimpleNamespace(
@@ -41,6 +41,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
         type="collision",
         width=None,
         points=[(1, 2), (3, 4), (5, 6)],
+        closed=True,
     )
     mock_object.__iter__.return_value = iter([obj])
     tmx.visible_tile_layers = [0, 1, 2]
@@ -58,13 +59,18 @@ def test_map_helper(mocker: MockerFixture) -> None:
         4: {
             "colliders": [
                 SimpleNamespace(
-                    as_points=[(1, 2), (3, 4), (5, 6)], x=None, width=None
+                    as_points=[(1, 2), (3, 4), (5, 6)],
+                    x=None,
+                    width=None,
+                    closed=True,
                 )
             ]
         },
         5: {
             "colliders": [
-                SimpleNamespace(as_points=[], x=1, y=2, width=3, height=4)
+                SimpleNamespace(
+                    as_points=[], x=1, y=2, width=3, height=4, closed=True
+                )
             ]
         },
     }

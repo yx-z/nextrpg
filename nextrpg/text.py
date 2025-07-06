@@ -8,7 +8,9 @@ from functools import cached_property
 from pygame import Surface
 
 from nextrpg.config import TextConfig, config
-from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
+from nextrpg.draw_on_screen import DrawOnScreen
+from nextrpg.drawing import Drawing
+from nextrpg.coordinate import Coordinate
 
 
 @dataclass

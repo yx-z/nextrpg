@@ -20,12 +20,12 @@ from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config import config
 from nextrpg.core import Pixel, Size
 from nextrpg.draw_on_screen import (
-    Coordinate,
     DrawOnScreen,
-    Drawing,
     Polygon,
     Rectangle,
 )
+from nextrpg.drawing import Drawing
+from nextrpg.coordinate import Coordinate
 from nextrpg.logger import FROM_CONFIG, Logger
 from nextrpg.model import cached
 
@@ -86,7 +86,9 @@ def get_polygon(obj: TiledObject) -> Polygon:
         `Polygon`: The polygon created from the Tiled object.
     """
     if hasattr(obj, "points"):
-        return Polygon(tuple(Coordinate(x, y) for x, y in obj.points), obj.closed)
+        return Polygon(
+            tuple(Coordinate(x, y) for x, y in obj.points), obj.closed
+        )
     return Rectangle(Coordinate(obj.x, obj.y), Size(obj.width, obj.height))
 
 

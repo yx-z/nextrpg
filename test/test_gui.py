@@ -4,7 +4,9 @@ from pytest_mock import MockerFixture
 
 from nextrpg.config import Config, DebugConfig, GuiConfig, GuiMode, ResizeMode
 from nextrpg.core import Size
-from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
+from nextrpg.draw_on_screen import DrawOnScreen
+from nextrpg.drawing import Drawing
+from nextrpg.coordinate import Coordinate
 from nextrpg.event.pygame_event import GuiResize, KeyPressDown, KeyPressUp
 from nextrpg.gui import Gui, _resize, gui_size
 from nextrpg.logger import Logger

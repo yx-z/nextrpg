@@ -194,11 +194,11 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Pixel</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">,</span> <span class="n">Size</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.frames</span><span class="w"> </span><span class="kn">import</span> <span class="n">CyclicFrames</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">instance_init</span><span class="p">,</span> <span class="n">register_instance_init</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="nb">type</span> <span class="n">_FrameIndices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.frames</span><span class="w"> </span><span class="kn">import</span> <span class="n">CyclicFrames</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">instance_init</span><span class="p">,</span> <span class="n">register_instance_init</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DefaultFrameType</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
@@ -211,7 +211,7 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>    <span class="n">_LEFT_FOOT</span> <span class="o">=</span> <span class="mi">2</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_frame_indices</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_FrameIndices</span><span class="p">:</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_frame_indices</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
 </span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>        <span class="k">return</span> <span class="p">[</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>            <span class="n">DefaultFrameType</span><span class="o">.</span><span class="n">_IDLE</span><span class="p">,</span>
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>            <span class="n">DefaultFrameType</span><span class="o">.</span><span class="n">_RIGHT_FOOT</span><span class="p">,</span>
@@ -231,7 +231,7 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>    <span class="n">_LEFT_FOOT</span> <span class="o">=</span> <span class="mi">3</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>    <span class="nd">@classmethod</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_frame_indices</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_FrameIndices</span><span class="p">:</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_frame_indices</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
@@ -473,7 +473,7 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="DefaultFrameType-38"><a href="#DefaultFrameType-38"><span class="linenos">38</span></a>    <span class="n">_LEFT_FOOT</span> <span class="o">=</span> <span class="mi">2</span>
 </span><span id="DefaultFrameType-39"><a href="#DefaultFrameType-39"><span class="linenos">39</span></a>
 </span><span id="DefaultFrameType-40"><a href="#DefaultFrameType-40"><span class="linenos">40</span></a>    <span class="nd">@classmethod</span>
-</span><span id="DefaultFrameType-41"><a href="#DefaultFrameType-41"><span class="linenos">41</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_frame_indices</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_FrameIndices</span><span class="p">:</span>
+</span><span id="DefaultFrameType-41"><a href="#DefaultFrameType-41"><span class="linenos">41</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_frame_indices</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
 </span><span id="DefaultFrameType-42"><a href="#DefaultFrameType-42"><span class="linenos">42</span></a>        <span class="k">return</span> <span class="p">[</span>
 </span><span id="DefaultFrameType-43"><a href="#DefaultFrameType-43"><span class="linenos">43</span></a>            <span class="n">DefaultFrameType</span><span class="o">.</span><span class="n">_IDLE</span><span class="p">,</span>
 </span><span id="DefaultFrameType-44"><a href="#DefaultFrameType-44"><span class="linenos">44</span></a>            <span class="n">DefaultFrameType</span><span class="o">.</span><span class="n">_RIGHT_FOOT</span><span class="p">,</span>
@@ -510,7 +510,7 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="XpFrameType-58"><a href="#XpFrameType-58"><span class="linenos">58</span></a>    <span class="n">_LEFT_FOOT</span> <span class="o">=</span> <span class="mi">3</span>
 </span><span id="XpFrameType-59"><a href="#XpFrameType-59"><span class="linenos">59</span></a>
 </span><span id="XpFrameType-60"><a href="#XpFrameType-60"><span class="linenos">60</span></a>    <span class="nd">@classmethod</span>
-</span><span id="XpFrameType-61"><a href="#XpFrameType-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_frame_indices</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_FrameIndices</span><span class="p">:</span>
+</span><span id="XpFrameType-61"><a href="#XpFrameType-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_frame_indices</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
 </span><span id="XpFrameType-62"><a href="#XpFrameType-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
 </span></pre></div>
 
@@ -793,7 +793,7 @@ from a sprite sheet image.</p>
                             <div id="SpriteSheet.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">SpriteSheet</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">drawing</span><span class="p">:</span> <span class="n"><a href="../draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawing</a></span>,</span><span class="param">	<span class="n">margin</span><span class="p">:</span> <span class="n"><a href="#Margin">Margin</a></span> <span class="o">=</span> <span class="n">Margin</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>,</span><span class="param">	<span class="n">style</span><span class="p">:</span> <span class="n">FrameType</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">enum</span> <span class="s1">&#39;DefaultFrameType&#39;</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">SpriteSheet</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">drawing</span><span class="p">:</span> <span class="n"><a href="../drawing.html#Drawing">nextrpg.drawing.Drawing</a></span>,</span><span class="param">	<span class="n">margin</span><span class="p">:</span> <span class="n"><a href="#Margin">Margin</a></span> <span class="o">=</span> <span class="n">Margin</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>,</span><span class="param">	<span class="n">style</span><span class="p">:</span> <span class="n">FrameType</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">enum</span> <span class="s1">&#39;DefaultFrameType&#39;</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -804,7 +804,7 @@ from a sprite sheet image.</p>
                             </div>
                             <div id="SpriteSheet.drawing" class="classattr">
                                 <div class="attr variable">
-            <span class="name">drawing</span><span class="annotation">: <a href="../draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawing</a></span>
+            <span class="name">drawing</span><span class="annotation">: <a href="../drawing.html#Drawing">nextrpg.drawing.Drawing</a></span>
 
         
     </div>
@@ -1041,7 +1041,7 @@ If not specified, the default direction from <code>Config</code> is used.</li>
                             <div id="RpgMakerCharacterDrawing.drawing" class="classattr">
                                         <input id="RpgMakerCharacterDrawing.drawing-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">drawing</span><span class="annotation">: <a href="../draw_on_screen.html#Drawing">nextrpg.draw_on_screen.Drawing</a></span>
+            <span class="name">drawing</span><span class="annotation">: <a href="../drawing.html#Drawing">nextrpg.drawing.Drawing</a></span>
 
                 <label class="view-source-button" for="RpgMakerCharacterDrawing.drawing-view-source"><span>View Source</span></label>
 

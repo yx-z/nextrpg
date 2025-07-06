@@ -1,6 +1,8 @@
 from pytest_mock import MockerFixture
 
-from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
+from nextrpg.draw_on_screen import DrawOnScreen
+from nextrpg.drawing import Drawing
+from nextrpg.coordinate import Coordinate
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 from test.util import MockSurface

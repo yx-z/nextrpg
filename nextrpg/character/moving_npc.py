@@ -6,7 +6,8 @@ from nextrpg.character.character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npcs import NpcOnScreen, NpcSpec
 from nextrpg.config import config
 from nextrpg.core import Millisecond, PixelPerMillisecond, Timer
-from nextrpg.draw_on_screen import Coordinate, Polygon
+from nextrpg.draw_on_screen import Polygon
+from nextrpg.coordinate import Coordinate
 from nextrpg.model import instance_init, register_instance_init
 from nextrpg.walk import Walk
 

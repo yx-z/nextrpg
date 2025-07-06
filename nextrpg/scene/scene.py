@@ -5,7 +5,8 @@ Scene is an interface of all game interactions like exploration, menu, etc.
 from functools import cached_property
 
 from nextrpg.core import Millisecond
-from nextrpg.draw_on_screen import Coordinate, DrawOnScreen
+from nextrpg.draw_on_screen import DrawOnScreen
+from nextrpg.coordinate import Coordinate
 from nextrpg.event.pygame_event import PygameEvent
 
 

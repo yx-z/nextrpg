@@ -21,7 +21,9 @@ from nextrpg.config import (
     set_config,
 )
 from nextrpg.core import Millisecond, Pixel, Size
-from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Drawing
+from nextrpg.draw_on_screen import DrawOnScreen
+from nextrpg.drawing import Drawing
+from nextrpg.coordinate import Coordinate
 from nextrpg.event.pygame_event import (
     GuiResize,
     KeyPressDown,

@@ -12,7 +12,7 @@ from nextrpg.character.character_on_screen import (
 )
 from nextrpg.config import config
 from nextrpg.core import Direction, DirectionalOffset, Millisecond
-from nextrpg.draw_on_screen import Coordinate
+from nextrpg.coordinate import Coordinate
 from nextrpg.event.pygame_event import (
     KeyPressDown,
     KeyPressUp,

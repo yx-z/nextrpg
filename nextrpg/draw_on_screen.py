@@ -2,221 +2,19 @@
 Drawable on screen.
 """
 
-from collections import namedtuple
 from dataclasses import dataclass
 from functools import cached_property
 from itertools import product
-from math import ceil, sqrt
-from os import PathLike
-from typing import Self, override
+from math import ceil
+from typing import Self
 
 from pygame import Mask, SRCALPHA, Surface
 from pygame.draw import polygon
-from pygame.image import load
 from pygame.mask import from_surface
 
-from nextrpg.config import config
-from nextrpg.core import Alpha, Direction, DirectionalOffset, Pixel, Rgba, Size
-from nextrpg.logger import FROM_CONFIG, Logger
-from nextrpg.model import cached
-
-logger = Logger("Draw")
-
-
-class Coordinate(namedtuple("Coordinate", "left top")):
-    """
-    Represents a 2D coordinate with immutability and provides methods
-    for scaling and shifting coordinates.
-
-    Attributes:
-        `left`: The horizontal position of the coordinate, measured by
-            the number of pixels from the left edge of the game window.
-
-        `top`: The vertical position of the coordinate, measured by
-            the number of pixels from the top edge of the game window.
-    """
-
-    left: Pixel
-    top: Pixel
-
-    @cached_property
-    def negate(self) -> Self:
-        return Coordinate(-self.left, -self.top)
-
-    def shift(self, offset: DirectionalOffset | Self) -> Self:
-        """
-        Shifts the coordinate in the specified direction by a given offset.
-        Supports both orthogonal and diagonal directions.
-
-        Or add two coordinates together.
-
-        For diagonal directions, the offset is divided proportionally.
-        For example, an offset of `sqrt(2)` in `UP_LEFT` direction shifts
-        the coordinate `Pixel(1)` in both `UP` and `LEFT` directions.
-
-        Arguments:
-            `offset`: A `DirectionalOffset` representing the direction
-                and offset, or `Coordinate` to add to the current `Coordinate`.
-
-        Returns:
-            `Coordinate`: A new coordinate shifted by the specified offset in
-            the given direction.
-        """
-        if isinstance(offset, Coordinate):
-            return Coordinate(self.left + offset.left, self.top + offset.top)
-
-        match offset.direction:
-            case Direction.UP:
-                return Coordinate(self.left, self.top - offset.offset)
-            case Direction.DOWN:
-                return Coordinate(self.left, self.top + offset.offset)
-            case Direction.LEFT:
-                return Coordinate(self.left - offset.offset, self.top)
-            case Direction.RIGHT:
-                return Coordinate(self.left + offset.offset, self.top)
-
-        diag = offset.offset / sqrt(2)
-        match offset.direction:
-            case Direction.UP_LEFT:
-                return Coordinate(self.left - diag, self.top - diag)
-            case Direction.UP_RIGHT:
-                return Coordinate(self.left + diag, self.top - diag)
-            case Direction.DOWN_LEFT:
-                return Coordinate(self.left - diag, self.top + diag)
-            case Direction.DOWN_RIGHT:
-                return Coordinate(self.left + diag, self.top + diag)
-
-    def relative_to(self, other: Coordinate) -> Direction:
-        dx = self.left - other.left
-        dy = self.top - other.top
-        if dx == 0:
-            return Direction.UP if dy > 0 else Direction.DOWN
-        if dy == 0:
-            return Direction.LEFT if dx > 0 else Direction.RIGHT
-        if dx > 0 and dy > 0:
-            return Direction.DOWN_RIGHT
-        if dx > 0 and dy < 0:
-            return Direction.UP_RIGHT
-        if dx < 0 and dy > 0:
-            return Direction.DOWN_LEFT
-        return Direction.UP_LEFT
-
-    def __repr__(self) -> str:
-        return f"({self.left:.1f}, {self.top:.1f})"
-
-
-@cached(
-    lambda: config().resource.drawing_cache_size,
-    lambda resource: None if isinstance(resource, Surface) else resource,
-)
-@dataclass
-class Drawing:
-    """
-    Represents a drawable element and provides methods for accessing its size
-    and dimensions.
-
-    This class loads a surface from a file or directly accepts a
-    `pygame.Surface` as input.
-    It provides properties to access surface dimensions and size and methods to
-    crop and scale the surface.
-
-    Arguments:
-        `resource`: A path to a file containing the drawing resource,
-            or a `pygame.Surface` object.
-    """
-
-    resource: str | PathLike | Surface
-
-    @property
-    def width(self) -> Pixel:
-        """
-        Gets the width of the surface.
-
-        Returns:
-            `Pixel`: The width of the surface in pixel measurement.
-        """
-        return self._surface.get_width()
-
-    @property
-    def height(self) -> Pixel:
-        """
-        Gets the height of the surface.
-
-        Returns:
-            `Pixel`: The height of the surface in pixel measurement.
-        """
-        return self._surface.get_height()
-
-    @property
-    def size(self) -> Size:
-        """
-        Gets the size of an object as a combination of its width and height
-
-        Returns:
-            `Size`: A Size object containing the width and height of the object.
-        """
-        return Size(self.width, self.height)
-
-    @property
-    def pygame(self) -> Surface:
-        """
-        Gets the current `pygame.Surface` for the object.
-
-        Returns:
-            `pygame.Surface`: The underlying `pygame.Surface`.
-        """
-        return self._debug_surface or self._surface
-
-    def crop(self, top_left: Coordinate, size: Size) -> Self:
-        """
-        Crops a rectangular portion of the drawing specified by the
-        top-left corner and the size.
-
-        The method extracts a subsection of the drawing based on the provided
-        coordinates and dimensions and returns a new `Drawing` instance.
-        The original drawing remains unchanged.
-
-        Arguments:
-            `top_left`: The top-left coordinate of the rectangle to be cropped.
-
-            `size`: The width and height of the rectangle to be cropped.
-
-        Returns:
-            `Drawing`: A new `Drawing` instance representing the cropped area.
-        """
-        left, top = top_left
-        width, height = size
-        return Drawing(self._surface.subsurface((left, top, width, height)))
-
-    def set_alpha(self, alpha: Alpha) -> Self:
-        """
-        Creates a new `Drawing` with the specified alpha value.
-
-        Arguments:
-            `alpha`: The new alpha value.
-
-        Returns:
-            `Drawing`: A new `Drawing` with the specified alpha value.
-        """
-        surface = self._surface.copy()
-        surface.set_alpha(alpha)
-        return Drawing(surface)
-
-    @cached_property
-    def _debug_surface(self) -> Surface | None:
-        if not (debug := config().debug):
-            return None
-        surface = Surface(self.size, SRCALPHA)
-        surface.fill(debug.drawing_background_color)
-        surface.blit(self._surface, (0, 0))
-        return surface
-
-    @cached_property
-    def _surface(self) -> Surface:
-        if isinstance(self.resource, Surface):
-            return self.resource
-        logger.debug(t"Loading {self.resource}", duration=FROM_CONFIG)
-        return load(self.resource).convert_alpha()
+from nextrpg.coordinate import Coordinate
+from nextrpg.core import Pixel, Rgba, Size
+from nextrpg.drawing import Drawing
 
 
 @dataclass
@@ -361,8 +159,8 @@ class Polygon:
         """
         if not self.bounding_rectangle.collide(poly.bounding_rectangle):
             return False
-        offset = (
-            self.bounding_rectangle.top_left - poly.bounding_rectangle.top_left
+        offset = self.bounding_rectangle.top_left.shift(
+            poly.bounding_rectangle.top_left.negate
         )
         return bool(self._mask.overlap(poly._mask, offset))
 
@@ -379,7 +177,7 @@ class Polygon:
         Returns:
             `bool`: Whether the coordinate lies within the rectangle.
         """
-        x, y = coordinate - self.bounding_rectangle.top_left
+        x, y = coordinate.shift(self.bounding_rectangle.top_left.negate)
         width, height = self._mask.get_size()
         if 0 <= x < width and 0 <= y < height:
             return bool(self._mask.get_at((x, y)))

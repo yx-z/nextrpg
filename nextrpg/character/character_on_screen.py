@@ -11,7 +11,8 @@ from typing import NamedTuple, Self, override
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
 from nextrpg.core import Direction, Millisecond, PixelPerMillisecond
-from nextrpg.draw_on_screen import Coordinate, DrawOnScreen, Polygon
+from nextrpg.draw_on_screen import DrawOnScreen, Polygon
+from nextrpg.coordinate import Coordinate
 from nextrpg.logger import FROM_CONFIG, Logger
 
 logger = Logger("CharacterOnScreen")

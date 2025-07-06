@@ -4,7 +4,8 @@ from math import hypot
 from typing import Self
 
 from nextrpg.core import Direction, Millisecond, PixelPerMillisecond
-from nextrpg.draw_on_screen import Coordinate, Polygon
+from nextrpg.draw_on_screen import Polygon
+from nextrpg.coordinate import Coordinate
 from nextrpg.model import instance_init, register_instance_init
 
 
@@ -20,7 +21,7 @@ class Walk:
 
     @cached_property
     def direction(self) -> Direction:
-        return self.coordinate.relative_to(self._last_coordinate)
+        return self.coordinate.direction(self._last_coordinate)
 
     @cached_property
     def reset(self) -> Self:

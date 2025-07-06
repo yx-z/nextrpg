@@ -1,42 +1,13 @@
-from pathlib import Path
+from pygame import Surface
 
-from pygame import Color, SRCALPHA, Surface
-from pytest import approx
-from pytest_mock import MockerFixture
-
-from nextrpg.config import Config, DebugConfig
-from nextrpg.core import Direction, DirectionalOffset, Rgba, Size
+from nextrpg.core import Rgba, Size
 from nextrpg.draw_on_screen import (
-    Coordinate,
     DrawOnScreen,
-    Drawing,
     Polygon,
     Rectangle,
 )
-from test.util import MockSurface, override_config
-
-
-def test_drawing(mocker: MockerFixture) -> None:
-    surf = MockSurface()
-    assert Drawing(surf)._surface
-
-    mocker.patch("nextrpg.draw_on_screen.load")
-    assert Drawing(Path("abc"))._surface
-    drawing = Drawing(Surface((1, 2), SRCALPHA))
-    assert drawing.width == 1
-    assert drawing.height == 2
-    assert drawing.size == Size(1, 2)
-    assert drawing.crop(Coordinate(0, 0), Size(1, 2)).size == Size(1, 2)
-    assert isinstance(drawing.pygame, Surface)
-
-    assert drawing.set_alpha(0) is not drawing
-
-    with override_config(
-        Config(debug=DebugConfig(drawing_background_color=Rgba(0, 0, 255, 32)))
-    ):
-        surface = Drawing(Surface((1, 2), SRCALPHA)).pygame
-        assert isinstance(surface, Surface)
-        assert surface.get_at((0, 0)) == Color(0, 0, 255, 32)
+from nextrpg.drawing import Drawing
+from nextrpg.coordinate import Coordinate
 
 
 def test_draw_on_screen() -> None:
@@ -49,35 +20,6 @@ def test_draw_on_screen() -> None:
     assert isinstance(surface, Surface)
     assert coord == (10, 20)
     assert draw_on_screen.shift(Coordinate(1, 2)).top_left == Coordinate(11, 22)
-
-
-def test_coordinate() -> None:
-    assert Coordinate(10, 20).shift(
-        DirectionalOffset(Direction.UP, 5)
-    ) == Coordinate(10, 15)
-    assert Coordinate(10, 20).shift(
-        DirectionalOffset(Direction.DOWN, 5)
-    ) == Coordinate(10, 25)
-    assert Coordinate(10, 20).shift(
-        DirectionalOffset(Direction.LEFT, 5)
-    ) == Coordinate(5, 20)
-    assert Coordinate(10, 20).shift(
-        DirectionalOffset(Direction.RIGHT, 5)
-    ) == Coordinate(15, 20)
-    assert Coordinate(10, 20).shift(
-        DirectionalOffset(Direction.UP_LEFT, 10)
-    ) == approx(Coordinate(2.9289321881345254, 12.928932188134524))
-    assert Coordinate(10, 20).shift(
-        DirectionalOffset(Direction.UP_RIGHT, 10)
-    ) == approx(Coordinate(17.071067811865476, 12.928932188134524))
-    assert Coordinate(10, 20).shift(
-        DirectionalOffset(Direction.DOWN_LEFT, 10)
-    ) == approx(Coordinate(2.9289321881345254, 27.071067811865476))
-    assert Coordinate(10, 20).shift(
-        DirectionalOffset(Direction.DOWN_RIGHT, 10)
-    ) == approx(Coordinate(17.071067811865476, 27.071067811865476))
-    assert Coordinate(10, 20).shift(Coordinate(1, 2)) == Coordinate(11, 22)
-    assert not Coordinate(10, 20).shift(DirectionalOffset("invalid", 1))
 
 
 def test_rectangle() -> None:

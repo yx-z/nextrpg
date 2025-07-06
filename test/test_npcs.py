@@ -17,7 +17,8 @@ from nextrpg.character.npcs import (
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core import Direction, Size
-from nextrpg.draw_on_screen import Coordinate, Rectangle
+from nextrpg.draw_on_screen import Rectangle
+from nextrpg.coordinate import Coordinate
 from nextrpg.event.pygame_event import KeyPressDown, Quit
 from nextrpg.event.say import say
 from nextrpg.scene.map_scene import MapScene
