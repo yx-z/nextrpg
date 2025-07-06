@@ -13,7 +13,7 @@ from nextrpg.drawing import Drawing
 from nextrpg.coordinate import Coordinate
 
 
-@dataclass
+@dataclass(frozen=True)
 class Text:
     """
     Text printed on screen.

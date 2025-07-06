@@ -26,7 +26,7 @@ def register_rpg_event[R, **P](fun: Callable[P, R]) -> Callable[P, R]:
     return fun
 
 
-@dataclass
+@dataclass(frozen=True)
 class _YieldEvents(NodeTransformer):
     def visit_Expr(self, node: Expr) -> Expr:
         return Expr(Yield(node.value)) if self._is_event(node) else node

@@ -13,7 +13,7 @@ from nextrpg.config import KeyCode, config
 from nextrpg.draw_on_screen import Size
 
 
-@dataclass
+@dataclass(frozen=True)
 class PygameEvent:
     """
     Base class for all pygame events.

@@ -9,7 +9,7 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.scene.scene import Scene
 
 
-@dataclass
+@dataclass(frozen=True)
 class Move:
     """
     Move event from the current scene to another.

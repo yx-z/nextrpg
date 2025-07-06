@@ -19,7 +19,7 @@ logger = Logger("Draw")
     lambda: config().resource.drawing_cache_size,
     lambda resource: None if isinstance(resource, Surface) else resource,
 )
-@dataclass
+@dataclass(frozen=True)
 class Drawing:
     """
     Represents a drawable element and provides methods for accessing its size

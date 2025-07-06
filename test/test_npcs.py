@@ -123,7 +123,7 @@ def test_npcs(mocker: MockerFixture) -> None:
         initial_player_drawing=MockCharacterDrawing(),
         player_coordinate_object="",
     )
-    map_scene.draw_on_screens = []
+    object.__setattr__(map_scene, "draw_on_screens", [])
     say_event = npcs.event(
         KeyPressDown(Event(KEYDOWN, key=K_RETURN)), player, map_scene
     )

@@ -34,10 +34,10 @@ def test_gui(mocker: MockerFixture) -> None:
     assert gui.current_config.size == Size(200, 300)
 
     draw_debug = gui._draw_log
-    gui._draw_log = lambda _: None
+    object.__setattr__(gui, "_draw_log", lambda _: None)
     gui.draw([], 0)
     gui._screen.blits.assert_not_called()
-    gui._draw_log = draw_debug
+    object.__setattr__(gui, "_draw_log", draw_debug)
 
     gui2 = Gui(GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE_SIZE))
     gui2.draw([], 0)

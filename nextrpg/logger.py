@@ -22,7 +22,7 @@ FROM_CONFIG = DurationFromConfig()
 """Sentinel object to indicate that the log duration is taken from config."""
 
 
-@dataclass
+@dataclass(frozen=True)
 class Logger:
     """
     On-screen logger.
@@ -159,7 +159,7 @@ class _Key:
     template: tuple[str, ...]
 
 
-@dataclass
+@dataclass(frozen=True)
 class _LogEntry:
     component: str
     level: LogLevel
@@ -170,7 +170,7 @@ class _LogEntry:
         return "".join(map(_format, self.message))
 
 
-@dataclass
+@dataclass(frozen=True)
 class _TimedLogEntry(_LogEntry):
     timer: Timer
 

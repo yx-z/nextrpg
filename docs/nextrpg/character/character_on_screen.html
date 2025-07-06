@@ -115,7 +115,7 @@
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">(</span><span class="s2">&quot;CharacterOnScreen&quot;</span><span class="p">)</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="sd">    Represents a character that can be displayed and moved on screen.</span>
@@ -160,7 +160,7 @@
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingCharacterOnScreen</span><span class="p">(</span><span class="n">CharacterOnScreen</span><span class="p">):</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Polygon</span><span class="p">]</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
@@ -289,7 +289,7 @@
                 <section id="CharacterOnScreen">
                             <input id="CharacterOnScreen-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass">@dataclass(kw_only=True)</div>
+                    <div class="decorator decorator-dataclass">@dataclass(kw_only=True, frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">CharacterOnScreen</span><wbr>(<span class="base">abc.ABC</span>):
@@ -298,7 +298,7 @@
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen-22"><a href="#CharacterOnScreen-22"><span class="linenos">22</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen-22"><a href="#CharacterOnScreen-22"><span class="linenos">22</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="CharacterOnScreen-23"><a href="#CharacterOnScreen-23"><span class="linenos">23</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 </span><span id="CharacterOnScreen-24"><a href="#CharacterOnScreen-24"><span class="linenos">24</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen-25"><a href="#CharacterOnScreen-25"><span class="linenos">25</span></a><span class="sd">    Represents a character that can be displayed and moved on screen.</span>
@@ -463,7 +463,7 @@ character interactions with the game environment.</p>
                 <section id="MovingCharacterOnScreen">
                             <input id="MovingCharacterOnScreen-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass">@dataclass(kw_only=True)</div>
+                    <div class="decorator decorator-dataclass">@dataclass(kw_only=True, frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">MovingCharacterOnScreen</span><wbr>(<span class="base"><a href="#CharacterOnScreen">CharacterOnScreen</a></span>):
@@ -472,7 +472,7 @@ character interactions with the game environment.</p>
 
     </div>
     <a class="headerlink" href="#MovingCharacterOnScreen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingCharacterOnScreen-67"><a href="#MovingCharacterOnScreen-67"><span class="linenos"> 67</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingCharacterOnScreen-67"><a href="#MovingCharacterOnScreen-67"><span class="linenos"> 67</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="MovingCharacterOnScreen-68"><a href="#MovingCharacterOnScreen-68"><span class="linenos"> 68</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingCharacterOnScreen</span><span class="p">(</span><span class="n">CharacterOnScreen</span><span class="p">):</span>
 </span><span id="MovingCharacterOnScreen-69"><a href="#MovingCharacterOnScreen-69"><span class="linenos"> 69</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Polygon</span><span class="p">]</span>
 </span><span id="MovingCharacterOnScreen-70"><a href="#MovingCharacterOnScreen-70"><span class="linenos"> 70</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>

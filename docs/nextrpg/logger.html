@@ -128,7 +128,7 @@
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="sd">&quot;&quot;&quot;Sentinel object to indicate that the log duration is taken from config.&quot;&quot;&quot;</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="nd">@dataclass</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Logger</span><span class="p">:</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="sd">    On-screen logger.</span>
@@ -265,7 +265,7 @@
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>    <span class="n">template</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 </span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>
 </span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="nd">@dataclass</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_LogEntry</span><span class="p">:</span>
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>    <span class="n">component</span><span class="p">:</span> <span class="nb">str</span>
 </span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>    <span class="n">level</span><span class="p">:</span> <span class="n">LogLevel</span>
@@ -276,7 +276,7 @@
 </span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">_format</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">))</span>
 </span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>
 </span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="nd">@dataclass</span>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_TimedLogEntry</span><span class="p">(</span><span class="n">_LogEntry</span><span class="p">):</span>
 </span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>    <span class="n">timer</span><span class="p">:</span> <span class="n">Timer</span>
 </span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>
@@ -361,7 +361,7 @@
                 <section id="Logger">
                             <input id="Logger-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass">@dataclass</div>
+                    <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">Logger</span>:
@@ -370,7 +370,7 @@
 
     </div>
     <a class="headerlink" href="#Logger"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger-26"><a href="#Logger-26"><span class="linenos"> 26</span></a><span class="nd">@dataclass</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Logger-26"><a href="#Logger-26"><span class="linenos"> 26</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="Logger-27"><a href="#Logger-27"><span class="linenos"> 27</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Logger</span><span class="p">:</span>
 </span><span id="Logger-28"><a href="#Logger-28"><span class="linenos"> 28</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Logger-29"><a href="#Logger-29"><span class="linenos"> 29</span></a><span class="sd">    On-screen logger.</span>

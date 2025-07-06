@@ -24,7 +24,7 @@ def test_game(mocker: MockerFixture) -> None:
     clock = MagicMock()
     clock.get_fps = MagicMock(return_value=60)
 
-    @dataclass
+    @dataclass(frozen=True)
     class MockGui:
         current_config: Mock = Mock()
         last_config: Mock = Mock()
@@ -36,14 +36,16 @@ def test_game(mocker: MockerFixture) -> None:
 
     gui = MockGui()
     game = Game(entry_scene=lambda: scene)
-    game._loop = replace(game._loop, _scene=scene, _clock=clock, _gui=gui)
+    object.__setattr__(
+        game, "_loop", replace(game._loop, _scene=scene, _clock=clock, _gui=gui)
+    )
     game.start()
     scene.tick.assert_called_once()
     clock.tick.assert_called_once_with(60)
     gui.draw.assert_called_once()
 
     sleep = AsyncMock()
-    game._loop = replace(game._loop, is_running=True)
+    object.__setattr__(game, "_loop", replace(game._loop, is_running=True))
     mocker.patch("nextrpg.game.sleep", sleep)
     run(game.start_async())
     sleep.assert_called_once_with(0)

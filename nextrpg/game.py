@@ -41,15 +41,18 @@ class Game:
         Start the game in a local pygame window.
         """
         while self._loop.is_running:
-            self._loop = self._loop.tick()
+            self._tick()
 
     async def start_async(self) -> None:
         """
         Start the game in async fashion in the context of pygbag/web.
         """
         while self._loop.is_running:
-            self._loop = self._loop.tick()
+            self._tick()
             await sleep(0)
+
+    def _tick(self) -> None:
+        object.__setattr__(self, "_loop", self._loop.tick())
 
 
 @register_instance_init
@@ -83,10 +86,14 @@ class _GameLoop:
     def _update_gui(self) -> None:
         if config().gui is self._gui.current_config:
             return
-        self._gui = replace(
-            self._gui,
-            current_config=config().gui,
-            last_config=self._gui.current_config,
+        object.__setattr__(
+            self,
+            "_gui",
+            replace(
+                self._gui,
+                current_config=config().gui,
+                last_config=self._gui.current_config,
+            ),
         )
 
 

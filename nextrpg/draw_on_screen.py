@@ -17,7 +17,7 @@ from nextrpg.core import Pixel, Rgba, Size
 from nextrpg.drawing import Drawing
 
 
-@dataclass
+@dataclass(frozen=True)
 class DrawOnScreen:
     """
     Represents a drawable element positioned on the screen with its coordinates.
@@ -102,7 +102,7 @@ class DrawOnScreen:
         return DrawOnScreen(self.top_left.shift(coord), self.drawing)
 
 
-@dataclass
+@dataclass(frozen=True)
 class Polygon:
     """
     Polygon is a sequence of points.

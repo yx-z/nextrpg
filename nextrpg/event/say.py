@@ -35,7 +35,7 @@ def say(character: CharacterOnScreen, message: str) -> None:
     )
 
 
-@dataclass
+@dataclass(frozen=True)
 class SayEvent(RpgEventScene):
     """
     `say` scene.

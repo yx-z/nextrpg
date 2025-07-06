@@ -136,7 +136,7 @@ class Npcs[T]:
         )
 
 
-@dataclass
+@dataclass(frozen=True)
 class EventfulScene[T](Scene):
     """
     EventfulScene allows scenes to continue event execution via coroutine/
@@ -226,7 +226,7 @@ The event callable type that can be used to generate a scene for certain event.
 """
 
 
-@dataclass
+@dataclass(frozen=True)
 class RpgEventScene(Scene):
     """
     The event scene.
@@ -241,7 +241,7 @@ class RpgEventScene(Scene):
     _scene: EventfulScene
 
 
-@dataclass
+@dataclass(frozen=True)
 class NpcSpec:
     """
     Base class to define NPC specifications.

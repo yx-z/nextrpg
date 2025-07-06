@@ -8,7 +8,7 @@ from nextrpg.draw_on_screen import DrawOnScreen
 from nextrpg.scene.scene import Scene
 
 
-@dataclass
+@dataclass(frozen=True)
 class TransitionScene(Scene):
     """
     Transition from one scene to another.

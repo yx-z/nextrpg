@@ -93,7 +93,7 @@ def get_polygon(obj: TiledObject) -> Polygon:
 
 
 @cached(lambda: config().resource.map_cache_size)
-@dataclass
+@dataclass(frozen=True)
 class MapHelper:
     """
     Tiled tmx map helper class for loading the tiles.

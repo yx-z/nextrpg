@@ -12,7 +12,7 @@ from nextrpg.model import instance_init, register_instance_init
 from nextrpg.walk import Walk
 
 
-@dataclass
+@dataclass(frozen=True)
 class MovingNpcSpec(NpcSpec):
     """
     Moving NPC specification.

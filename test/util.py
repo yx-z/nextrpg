@@ -18,7 +18,7 @@ class MockColor(NamedTuple):
     a: int
 
 
-@dataclass
+@dataclass(frozen=True)
 class MockSurface(Surface):
     data: str = ""
 
@@ -35,7 +35,7 @@ class MockSurface(Surface):
         pass
 
 
-@dataclass
+@dataclass(frozen=True)
 class MockCharacterDrawing(CharacterDrawing):
     direction: Direction = Direction.DOWN
 

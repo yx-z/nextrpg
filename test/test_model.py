@@ -29,7 +29,7 @@ def test_instance_init():
 
 def test_cached() -> None:
     @cached(lambda: 1)
-    @dataclass
+    @dataclass(frozen=True)
     class MyCache:
         i: int
 
@@ -40,7 +40,7 @@ def test_cached() -> None:
     assert MyCache(2) is b
 
     @cached(lambda: 1, lambda _: None)
-    @dataclass
+    @dataclass(frozen=True)
     class MyModel2:
         s: str
 

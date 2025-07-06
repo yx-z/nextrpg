@@ -226,7 +226,7 @@
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="nd">@cached</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">map_cache_size</span><span class="p">)</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="nd">@dataclass</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MapHelper</span><span class="p">:</span>
 </span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">    Tiled tmx map helper class for loading the tiles.</span>
@@ -827,7 +827,7 @@ into multiple tiles in a Tiled tmx map.</p>
                             <input id="MapHelper-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
                     <div class="decorator decorator-cached">@cached(lambda: config().resource.map_cache_size)</div>
-        <div class="decorator decorator-dataclass">@dataclass</div>
+        <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">MapHelper</span>:
@@ -837,7 +837,7 @@ into multiple tiles in a Tiled tmx map.</p>
     </div>
     <a class="headerlink" href="#MapHelper"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="MapHelper-96"><a href="#MapHelper-96"><span class="linenos"> 96</span></a><span class="nd">@cached</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">map_cache_size</span><span class="p">)</span>
-</span><span id="MapHelper-97"><a href="#MapHelper-97"><span class="linenos"> 97</span></a><span class="nd">@dataclass</span>
+</span><span id="MapHelper-97"><a href="#MapHelper-97"><span class="linenos"> 97</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="MapHelper-98"><a href="#MapHelper-98"><span class="linenos"> 98</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MapHelper</span><span class="p">:</span>
 </span><span id="MapHelper-99"><a href="#MapHelper-99"><span class="linenos"> 99</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="MapHelper-100"><a href="#MapHelper-100"><span class="linenos">100</span></a><span class="sd">    Tiled tmx map helper class for loading the tiles.</span>

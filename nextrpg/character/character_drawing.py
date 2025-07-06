@@ -11,7 +11,7 @@ from nextrpg.core import Direction, Millisecond
 from nextrpg.drawing import Drawing
 
 
-@dataclass
+@dataclass(frozen=True)
 class CharacterDrawing(ABC):
     """
     Interface for drawing characters on screen.

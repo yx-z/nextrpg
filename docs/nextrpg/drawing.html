@@ -105,7 +105,7 @@
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>    <span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">drawing_cache_size</span><span class="p">,</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>    <span class="k">lambda</span> <span class="n">resource</span><span class="p">:</span> <span class="kc">None</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resource</span><span class="p">,</span> <span class="n">Surface</span><span class="p">)</span> <span class="k">else</span> <span class="n">resource</span><span class="p">,</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="p">)</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="nd">@dataclass</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Drawing</span><span class="p">:</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="sd">    Represents a drawable element and provides methods for accessing its size</span>
@@ -233,7 +233,7 @@
                             <input id="Drawing-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
                     <div class="decorator decorator-cached">@cached(lambda: config().resource.drawing_cache_size, lambda resource: None if isinstance(resource, Surface) else resource)</div>
-        <div class="decorator decorator-dataclass">@dataclass</div>
+        <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">Drawing</span>:
@@ -246,7 +246,7 @@
 </span><span id="Drawing-20"><a href="#Drawing-20"><span class="linenos"> 20</span></a>    <span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">drawing_cache_size</span><span class="p">,</span>
 </span><span id="Drawing-21"><a href="#Drawing-21"><span class="linenos"> 21</span></a>    <span class="k">lambda</span> <span class="n">resource</span><span class="p">:</span> <span class="kc">None</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resource</span><span class="p">,</span> <span class="n">Surface</span><span class="p">)</span> <span class="k">else</span> <span class="n">resource</span><span class="p">,</span>
 </span><span id="Drawing-22"><a href="#Drawing-22"><span class="linenos"> 22</span></a><span class="p">)</span>
-</span><span id="Drawing-23"><a href="#Drawing-23"><span class="linenos"> 23</span></a><span class="nd">@dataclass</span>
+</span><span id="Drawing-23"><a href="#Drawing-23"><span class="linenos"> 23</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="Drawing-24"><a href="#Drawing-24"><span class="linenos"> 24</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Drawing</span><span class="p">:</span>
 </span><span id="Drawing-25"><a href="#Drawing-25"><span class="linenos"> 25</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Drawing-26"><a href="#Drawing-26"><span class="linenos"> 26</span></a><span class="sd">    Represents a drawable element and provides methods for accessing its size</span>

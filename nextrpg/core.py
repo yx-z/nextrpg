@@ -106,7 +106,7 @@ Used as a unit for speed.
 """
 
 
-@dataclass
+@dataclass(frozen=True)
 class DirectionalOffset:
     """
     Represents a directional offset for movement calculations.
@@ -204,7 +204,7 @@ class Font:
         return Size(width, height)
 
 
-@dataclass
+@dataclass(frozen=True)
 class Timer:
     """
     A timer with duration and elapsed time.

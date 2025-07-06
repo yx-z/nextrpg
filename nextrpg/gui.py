@@ -58,7 +58,7 @@ def gui_size() -> Size:
     raise ValueError(f"Invalid resize mode {config().gui.resize_mode}")
 
 
-@dataclass
+@dataclass(frozen=True)
 class Gui:
     """
     Initialize a `Gui` instance that scales and centers drawings.
@@ -68,12 +68,18 @@ class Gui:
     last_config: GuiConfig = field(default_factory=lambda: config().gui)
     initial_config: GuiConfig = field(default_factory=lambda: config().gui)
     _screen: Surface | None = None
+    _title: str | None = None
 
     def __post_init__(self) -> None:
         if not self._screen:
             init()
             font.init()
-        set_caption(self.current_config.title)
+        if (
+            self._title is None
+            or self.current_config.title != self.last_config.title
+        ):
+            object.__setattr__(self, "_title", self.current_config.title)
+            set_caption(self._title)
         if (
             self._screen is None
             or self.last_config.size != self.current_config.size
@@ -81,8 +87,10 @@ class Gui:
             or self.last_config.allow_window_resize
             != self.current_config.allow_window_resize
         ):
-            self._screen = set_mode(
-                self.current_config.size, self._current_gui_flag
+            object.__setattr__(
+                self,
+                "_screen",
+                set_mode(self.current_config.size, self._current_gui_flag),
             )
 
     @singledispatchmethod

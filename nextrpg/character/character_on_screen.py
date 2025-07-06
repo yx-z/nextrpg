@@ -18,7 +18,7 @@ from nextrpg.logger import FROM_CONFIG, Logger
 logger = Logger("CharacterOnScreen")
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, frozen=True)
 class CharacterOnScreen(ABC):
     """
     Represents a character that can be displayed and moved on screen.
@@ -63,7 +63,7 @@ class CharacterOnScreen(ABC):
         """
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, frozen=True)
 class MovingCharacterOnScreen(CharacterOnScreen):
     collisions: list[Polygon]
     move_speed: PixelPerMillisecond = field(

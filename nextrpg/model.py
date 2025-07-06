@@ -22,7 +22,7 @@ def instance_init(init: Callable[[Any], Any]) -> Any:
     return field(repr=False, default_factory=lambda: _Init(init))
 
 
-@dataclass_transform(kw_only_default=True)
+@dataclass_transform(kw_only_default=True, frozen_default=True)
 def register_instance_init[T](cls: type[T]) -> type[T]:
     """
     Class decorator to allow the use of `instance_init` in dataclasses.
@@ -44,14 +44,14 @@ def register_instance_init[T](cls: type[T]) -> type[T]:
         object.__setattr__(self, _INTERNAL_FIELDS_INITIALIZED, True)
 
     cls.__post_init__ = post_init
-    return dataclass(cls, kw_only=True)
+    return dataclass(cls, kw_only=True, frozen=True)
 
 
 def _key(*args: Any, **kwargs: Any) -> tuple:
     return args, frozenset(kwargs.items())
 
 
-@dataclass
+@dataclass(frozen=True)
 class cached[T, K, **P]:
     """
     Class decorator to `T` that caches instances of `T` by a certain size
@@ -90,7 +90,7 @@ class cached[T, K, **P]:
         return cls
 
 
-@dataclass
+@dataclass(frozen=True)
 class _Init:
     init: Callable[[Any], Any]
 

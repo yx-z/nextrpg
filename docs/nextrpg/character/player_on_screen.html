@@ -94,7 +94,7 @@
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="p">)</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PlayerOnScreen</span><span class="p">(</span><span class="n">MovingCharacterOnScreen</span><span class="p">):</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="n">_movement_keys</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">)</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>
@@ -181,7 +181,7 @@
                 <section id="PlayerOnScreen">
                             <input id="PlayerOnScreen-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass">@dataclass(kw_only=True)</div>
+                    <div class="decorator decorator-dataclass">@dataclass(kw_only=True, frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">PlayerOnScreen</span><wbr>(<span class="base"><a href="character_on_screen.html#MovingCharacterOnScreen">nextrpg.character.character_on_screen.MovingCharacterOnScreen</a></span>):
@@ -190,7 +190,7 @@
 
     </div>
     <a class="headerlink" href="#PlayerOnScreen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen-25"><a href="#PlayerOnScreen-25"><span class="linenos">25</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen-25"><a href="#PlayerOnScreen-25"><span class="linenos">25</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="PlayerOnScreen-26"><a href="#PlayerOnScreen-26"><span class="linenos">26</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PlayerOnScreen</span><span class="p">(</span><span class="n">MovingCharacterOnScreen</span><span class="p">):</span>
 </span><span id="PlayerOnScreen-27"><a href="#PlayerOnScreen-27"><span class="linenos">27</span></a>    <span class="n">_movement_keys</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">)</span>
 </span><span id="PlayerOnScreen-28"><a href="#PlayerOnScreen-28"><span class="linenos">28</span></a>
