@@ -2,7 +2,6 @@
 Scene is an interface of all game interactions like exploration, menu, etc.
 """
 
-from dataclasses import dataclass
 from functools import cached_property
 
 from nextrpg.core import Millisecond

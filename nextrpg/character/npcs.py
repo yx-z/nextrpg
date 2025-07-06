@@ -41,7 +41,11 @@ class NpcOnScreen(CharacterOnScreen):
     _is_triggered: bool = False
 
     def tick(self, time_delta: Millisecond) -> Self:
-        return replace(self, character=self.character.idle(time_delta))
+        return (
+            self
+            if self._is_triggered
+            else replace(self, character=self.character.idle(time_delta))
+        )
 
     def _trigger(self, player: PlayerOnScreen) -> Self:
         direction = player.character.direction.opposite

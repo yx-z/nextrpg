@@ -85,8 +85,8 @@ def get_polygon(obj: TiledObject) -> Polygon:
     Returns:
         `Polygon`: The polygon created from the Tiled object.
     """
-    if obj.width is None or obj.height is None:
-        return Polygon(tuple(Coordinate(x, y) for x, y in obj.as_points))
+    if hasattr(obj, "points"):
+        return Polygon(tuple(Coordinate(x, y) for x, y in obj.points))
     return Rectangle(Coordinate(obj.x, obj.y), Size(obj.width, obj.height))
 
 

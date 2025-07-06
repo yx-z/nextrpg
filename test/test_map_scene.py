@@ -53,9 +53,12 @@ def test_map_scene(mocker: MockerFixture) -> None:
 
 def test_init_npc(mocker: MockerFixture) -> None:
     map_helper = Mock()
-    map_helper.get_object.return_value = SimpleNamespace(x=1, y=2)
+    map_helper.get_object.return_value = SimpleNamespace(
+        x=1, y=2, width=1, height=1, points=[SimpleNamespace(x=1, y=2)]
+    )
     map_helper.collisions = []
     mocker.patch("nextrpg.scene.map_scene.MapHelper", map_helper)
+    mocker.patch("nextrpg.scene.map_scene.get_polygon")
     map_scene = MapScene(
         tmx_file="",
         initial_player_drawing=MockCharacterDrawing(),

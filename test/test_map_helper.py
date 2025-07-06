@@ -40,7 +40,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
         name="obj",
         type="collision",
         width=None,
-        as_points=[(1, 2), (3, 4), (5, 6)],
+        points=[(1, 2), (3, 4), (5, 6)],
     )
     mock_object.__iter__.return_value = iter([obj])
     tmx.visible_tile_layers = [0, 1, 2]

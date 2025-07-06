@@ -76,7 +76,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
             is_moving = self._is_moving
 
         return replace(
-            super().tick(time_delta),
+            MovingCharacterOnScreen.tick(self, time_delta),
             _idle_timer=idle_timer.reset() if is_moving else idle_timer,
             _move_timer=move_timer.reset() if not is_moving else move_timer,
             _is_moving=is_moving,
@@ -89,4 +89,6 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
 
     @override
     def move(self, time_delta: Millisecond) -> Coordinate:
+        if not self.is_moving:
+            return self.coordinate
         return self.coordinate
