@@ -45,7 +45,7 @@ def test_game(mocker: MockerFixture) -> None:
     gui.draw.assert_called_once()
 
     sleep = AsyncMock()
-    object.__setattr__(game, "_loop", replace(game._loop, is_running=True))
+    object.__setattr__(game, "_loop", replace(game._loop, running=True))
     mocker.patch("nextrpg.game.sleep", sleep)
     run(game.start_async())
     sleep.assert_called_once_with(0)

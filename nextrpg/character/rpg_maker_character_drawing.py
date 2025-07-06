@@ -173,7 +173,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             self,
             direction=direction,
             _frames={
-                d: frames if d == _adjust(direction) else frames.reset()
+                d: frames if d == _adjust(direction) else frames.reset
                 for d, frames in self._frames.items()
             },
         )
@@ -204,7 +204,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             return self.move(time_delta)
         return replace(
             self,
-            _frames={d: frames.reset() for d, frames in self._frames.items()},
+            _frames={d: frames.reset for d, frames in self._frames.items()},
         )
 
     def _crop_by_selection(self, selection: SpriteSheetSelection) -> Drawing:

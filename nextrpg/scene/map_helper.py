@@ -267,14 +267,14 @@ class MapHelper:
     def _from_rect(
         self, coord: _TileCoordinate, obj: TiledObject
     ) -> Rectangle | None:
-        if _is_not_rect(obj):
-            return None
-        w, h = self._tile_size
-        cx, cy = coord
-        return Rectangle(
-            Coordinate(cx * w + obj.x, cy * h + obj.y),
-            Size(obj.width, obj.height),
-        )
+        if _is_rect(obj):
+            w, h = self._tile_size
+            cx, cy = coord
+            return Rectangle(
+                Coordinate(cx * w + obj.x, cy * h + obj.y),
+                Size(obj.width, obj.height),
+            )
+        return None
 
     def _tile_layers(self, class_name: str) -> list[TiledTileLayer]:
         return [
@@ -405,12 +405,12 @@ def _above_character(
     )
 
 
-def _is_not_rect(obj: TiledObject) -> bool:
+def _is_rect(obj: TiledObject) -> bool:
     return (
-        obj.x is None
-        or obj.y is None
-        or obj.width is None
-        or obj.height is None
+        obj.x is not None
+        and obj.y is not None
+        and obj.width is not None
+        and obj.height is not None
     )
 
 

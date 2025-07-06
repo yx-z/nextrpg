@@ -67,7 +67,7 @@
                                 <a class="variable" href="#Polygon.points">points</a>
                         </li>
                         <li>
-                                <a class="variable" href="#Polygon.is_closed">is_closed</a>
+                                <a class="variable" href="#Polygon.closed">closed</a>
                         </li>
                         <li>
                                 <a class="variable" href="#Polygon.bounding_rectangle">bounding_rectangle</a>
@@ -278,7 +278,7 @@
 </span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>    <span class="n">points</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="n">is_closed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="n">closed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>
 </span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bounding_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
@@ -859,7 +859,7 @@ ignoring transparent pixels.</p>
 </span><span id="Polygon-110"><a href="#Polygon-110"><span class="linenos">110</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="Polygon-111"><a href="#Polygon-111"><span class="linenos">111</span></a>
 </span><span id="Polygon-112"><a href="#Polygon-112"><span class="linenos">112</span></a>    <span class="n">points</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-</span><span id="Polygon-113"><a href="#Polygon-113"><span class="linenos">113</span></a>    <span class="n">is_closed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="Polygon-113"><a href="#Polygon-113"><span class="linenos">113</span></a>    <span class="n">closed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="Polygon-114"><a href="#Polygon-114"><span class="linenos">114</span></a>
 </span><span id="Polygon-115"><a href="#Polygon-115"><span class="linenos">115</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Polygon-116"><a href="#Polygon-116"><span class="linenos">116</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bounding_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Rectangle</span><span class="p">:</span>
@@ -942,7 +942,7 @@ ignoring transparent pixels.</p>
                             <div id="Polygon.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">Polygon</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">points</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="coordinate.html#Coordinate">nextrpg.coordinate.Coordinate</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>,</span><span class="param">	<span class="n">is_closed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
+        <span class="name">Polygon</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">points</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="coordinate.html#Coordinate">nextrpg.coordinate.Coordinate</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>,</span><span class="param">	<span class="n">closed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
 
         
     </div>
@@ -962,14 +962,14 @@ ignoring transparent pixels.</p>
     
 
                             </div>
-                            <div id="Polygon.is_closed" class="classattr">
+                            <div id="Polygon.closed" class="classattr">
                                 <div class="attr variable">
-            <span class="name">is_closed</span><span class="annotation">: bool</span>        =
+            <span class="name">closed</span><span class="annotation">: bool</span>        =
 <span class="default_value">True</span>
 
         
     </div>
-    <a class="headerlink" href="#Polygon.is_closed"></a>
+    <a class="headerlink" href="#Polygon.closed"></a>
     
     
 
@@ -1907,7 +1907,7 @@ including points on the edges.</p>
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt><a href="#Polygon">Polygon</a></dt>
-                                <dd id="Rectangle.is_closed" class="variable"><a href="#Polygon.is_closed">is_closed</a></dd>
+                                <dd id="Rectangle.closed" class="variable"><a href="#Polygon.closed">closed</a></dd>
                 <dd id="Rectangle.bounding_rectangle" class="variable"><a href="#Polygon.bounding_rectangle">bounding_rectangle</a></dd>
                 <dd id="Rectangle.fill" class="function"><a href="#Polygon.fill">fill</a></dd>
 

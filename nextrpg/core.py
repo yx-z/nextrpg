@@ -225,6 +225,7 @@ class Timer:
         """
         return replace(self, elapsed=self.elapsed + time_delta)
 
+    @cached_property
     def reset(self) -> Self:
         """
         Get a reset timer.

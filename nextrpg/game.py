@@ -40,14 +40,14 @@ class Game:
         """
         Start the game in a local pygame window.
         """
-        while self._loop.is_running:
+        while self._loop.running:
             self._tick()
 
     async def start_async(self) -> None:
         """
         Start the game in async fashion in the context of pygbag/web.
         """
-        while self._loop.is_running:
+        while self._loop.running:
             self._tick()
             await sleep(0)
 
@@ -58,7 +58,7 @@ class Game:
 @register_instance_init
 class _GameLoop:
     entry_scene: Callable[[], Scene]
-    is_running: bool = True
+    running: bool = True
     _clock: Clock = field(default_factory=Clock)
     _gui: Gui = field(default_factory=Gui)
     _scene: Scene = instance_init(lambda self: self.entry_scene())
@@ -99,4 +99,4 @@ class _GameLoop:
 
 @_GameLoop.event.register
 def _quit(self, e: Quit) -> _GameLoop:
-    return replace(self, _scene=self._scene.event(e), is_running=False)
+    return replace(self, _scene=self._scene.event(e), running=False)

@@ -61,7 +61,7 @@
                                 <a class="variable" href="#MovingCharacterOnScreen.move_speed">move_speed</a>
                         </li>
                         <li>
-                                <a class="variable" href="#MovingCharacterOnScreen.is_moving">is_moving</a>
+                                <a class="variable" href="#MovingCharacterOnScreen.moving">moving</a>
                         </li>
                         <li>
                                 <a class="function" href="#MovingCharacterOnScreen.move">move</a>
@@ -169,7 +169,7 @@
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">        Get whether the character is currently moving.</span>
 </span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>
@@ -204,12 +204,12 @@
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="sd">        Returns:</span>
 </span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="sd">            `CharacterOnScreen`: The updated character state after the step.</span>
 </span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="n">moved_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_moving</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="n">moved_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span> <span class="k">else</span> <span class="kc">None</span>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>            <span class="n">character</span><span class="o">=</span><span class="p">(</span>
 </span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_moving</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>                <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>            <span class="p">),</span>
 </span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>            <span class="n">coordinate</span><span class="o">=</span><span class="p">(</span>
@@ -481,7 +481,7 @@ character interactions with the game environment.</p>
 </span><span id="MovingCharacterOnScreen-73"><a href="#MovingCharacterOnScreen-73"><span class="linenos"> 73</span></a>
 </span><span id="MovingCharacterOnScreen-74"><a href="#MovingCharacterOnScreen-74"><span class="linenos"> 74</span></a>    <span class="nd">@cached_property</span>
 </span><span id="MovingCharacterOnScreen-75"><a href="#MovingCharacterOnScreen-75"><span class="linenos"> 75</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="MovingCharacterOnScreen-76"><a href="#MovingCharacterOnScreen-76"><span class="linenos"> 76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="MovingCharacterOnScreen-76"><a href="#MovingCharacterOnScreen-76"><span class="linenos"> 76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="MovingCharacterOnScreen-77"><a href="#MovingCharacterOnScreen-77"><span class="linenos"> 77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="MovingCharacterOnScreen-78"><a href="#MovingCharacterOnScreen-78"><span class="linenos"> 78</span></a><span class="sd">        Get whether the character is currently moving.</span>
 </span><span id="MovingCharacterOnScreen-79"><a href="#MovingCharacterOnScreen-79"><span class="linenos"> 79</span></a>
@@ -516,12 +516,12 @@ character interactions with the game environment.</p>
 </span><span id="MovingCharacterOnScreen-108"><a href="#MovingCharacterOnScreen-108"><span class="linenos">108</span></a><span class="sd">        Returns:</span>
 </span><span id="MovingCharacterOnScreen-109"><a href="#MovingCharacterOnScreen-109"><span class="linenos">109</span></a><span class="sd">            `CharacterOnScreen`: The updated character state after the step.</span>
 </span><span id="MovingCharacterOnScreen-110"><a href="#MovingCharacterOnScreen-110"><span class="linenos">110</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="MovingCharacterOnScreen-111"><a href="#MovingCharacterOnScreen-111"><span class="linenos">111</span></a>        <span class="n">moved_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_moving</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span id="MovingCharacterOnScreen-111"><a href="#MovingCharacterOnScreen-111"><span class="linenos">111</span></a>        <span class="n">moved_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span> <span class="k">else</span> <span class="kc">None</span>
 </span><span id="MovingCharacterOnScreen-112"><a href="#MovingCharacterOnScreen-112"><span class="linenos">112</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
 </span><span id="MovingCharacterOnScreen-113"><a href="#MovingCharacterOnScreen-113"><span class="linenos">113</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="MovingCharacterOnScreen-114"><a href="#MovingCharacterOnScreen-114"><span class="linenos">114</span></a>            <span class="n">character</span><span class="o">=</span><span class="p">(</span>
 </span><span id="MovingCharacterOnScreen-115"><a href="#MovingCharacterOnScreen-115"><span class="linenos">115</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-116"><a href="#MovingCharacterOnScreen-116"><span class="linenos">116</span></a>                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_moving</span>
+</span><span id="MovingCharacterOnScreen-116"><a href="#MovingCharacterOnScreen-116"><span class="linenos">116</span></a>                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span>
 </span><span id="MovingCharacterOnScreen-117"><a href="#MovingCharacterOnScreen-117"><span class="linenos">117</span></a>                <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
 </span><span id="MovingCharacterOnScreen-118"><a href="#MovingCharacterOnScreen-118"><span class="linenos">118</span></a>            <span class="p">),</span>
 </span><span id="MovingCharacterOnScreen-119"><a href="#MovingCharacterOnScreen-119"><span class="linenos">119</span></a>            <span class="n">coordinate</span><span class="o">=</span><span class="p">(</span>
@@ -604,24 +604,24 @@ character interactions with the game environment.</p>
     
 
                             </div>
-                            <div id="MovingCharacterOnScreen.is_moving" class="classattr">
-                                        <input id="MovingCharacterOnScreen.is_moving-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="MovingCharacterOnScreen.moving" class="classattr">
+                                        <input id="MovingCharacterOnScreen.moving-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">is_moving</span><span class="annotation">: bool</span>
+            <span class="name">moving</span><span class="annotation">: bool</span>
 
-                <label class="view-source-button" for="MovingCharacterOnScreen.is_moving-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="MovingCharacterOnScreen.moving-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#MovingCharacterOnScreen.is_moving"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingCharacterOnScreen.is_moving-74"><a href="#MovingCharacterOnScreen.is_moving-74"><span class="linenos">74</span></a>    <span class="nd">@cached_property</span>
-</span><span id="MovingCharacterOnScreen.is_moving-75"><a href="#MovingCharacterOnScreen.is_moving-75"><span class="linenos">75</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="MovingCharacterOnScreen.is_moving-76"><a href="#MovingCharacterOnScreen.is_moving-76"><span class="linenos">76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen.is_moving-77"><a href="#MovingCharacterOnScreen.is_moving-77"><span class="linenos">77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="MovingCharacterOnScreen.is_moving-78"><a href="#MovingCharacterOnScreen.is_moving-78"><span class="linenos">78</span></a><span class="sd">        Get whether the character is currently moving.</span>
-</span><span id="MovingCharacterOnScreen.is_moving-79"><a href="#MovingCharacterOnScreen.is_moving-79"><span class="linenos">79</span></a>
-</span><span id="MovingCharacterOnScreen.is_moving-80"><a href="#MovingCharacterOnScreen.is_moving-80"><span class="linenos">80</span></a><span class="sd">        Returns:</span>
-</span><span id="MovingCharacterOnScreen.is_moving-81"><a href="#MovingCharacterOnScreen.is_moving-81"><span class="linenos">81</span></a><span class="sd">            `bool`: Whether the character is currently moving.</span>
-</span><span id="MovingCharacterOnScreen.is_moving-82"><a href="#MovingCharacterOnScreen.is_moving-82"><span class="linenos">82</span></a><span class="sd">        &quot;&quot;&quot;</span>
+    <a class="headerlink" href="#MovingCharacterOnScreen.moving"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingCharacterOnScreen.moving-74"><a href="#MovingCharacterOnScreen.moving-74"><span class="linenos">74</span></a>    <span class="nd">@cached_property</span>
+</span><span id="MovingCharacterOnScreen.moving-75"><a href="#MovingCharacterOnScreen.moving-75"><span class="linenos">75</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="MovingCharacterOnScreen.moving-76"><a href="#MovingCharacterOnScreen.moving-76"><span class="linenos">76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="MovingCharacterOnScreen.moving-77"><a href="#MovingCharacterOnScreen.moving-77"><span class="linenos">77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="MovingCharacterOnScreen.moving-78"><a href="#MovingCharacterOnScreen.moving-78"><span class="linenos">78</span></a><span class="sd">        Get whether the character is currently moving.</span>
+</span><span id="MovingCharacterOnScreen.moving-79"><a href="#MovingCharacterOnScreen.moving-79"><span class="linenos">79</span></a>
+</span><span id="MovingCharacterOnScreen.moving-80"><a href="#MovingCharacterOnScreen.moving-80"><span class="linenos">80</span></a><span class="sd">        Returns:</span>
+</span><span id="MovingCharacterOnScreen.moving-81"><a href="#MovingCharacterOnScreen.moving-81"><span class="linenos">81</span></a><span class="sd">            `bool`: Whether the character is currently moving.</span>
+</span><span id="MovingCharacterOnScreen.moving-82"><a href="#MovingCharacterOnScreen.moving-82"><span class="linenos">82</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -706,12 +706,12 @@ character interactions with the game environment.</p>
 </span><span id="MovingCharacterOnScreen.tick-108"><a href="#MovingCharacterOnScreen.tick-108"><span class="linenos">108</span></a><span class="sd">        Returns:</span>
 </span><span id="MovingCharacterOnScreen.tick-109"><a href="#MovingCharacterOnScreen.tick-109"><span class="linenos">109</span></a><span class="sd">            `CharacterOnScreen`: The updated character state after the step.</span>
 </span><span id="MovingCharacterOnScreen.tick-110"><a href="#MovingCharacterOnScreen.tick-110"><span class="linenos">110</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="MovingCharacterOnScreen.tick-111"><a href="#MovingCharacterOnScreen.tick-111"><span class="linenos">111</span></a>        <span class="n">moved_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_moving</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span id="MovingCharacterOnScreen.tick-111"><a href="#MovingCharacterOnScreen.tick-111"><span class="linenos">111</span></a>        <span class="n">moved_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span> <span class="k">else</span> <span class="kc">None</span>
 </span><span id="MovingCharacterOnScreen.tick-112"><a href="#MovingCharacterOnScreen.tick-112"><span class="linenos">112</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
 </span><span id="MovingCharacterOnScreen.tick-113"><a href="#MovingCharacterOnScreen.tick-113"><span class="linenos">113</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="MovingCharacterOnScreen.tick-114"><a href="#MovingCharacterOnScreen.tick-114"><span class="linenos">114</span></a>            <span class="n">character</span><span class="o">=</span><span class="p">(</span>
 </span><span id="MovingCharacterOnScreen.tick-115"><a href="#MovingCharacterOnScreen.tick-115"><span class="linenos">115</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen.tick-116"><a href="#MovingCharacterOnScreen.tick-116"><span class="linenos">116</span></a>                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_moving</span>
+</span><span id="MovingCharacterOnScreen.tick-116"><a href="#MovingCharacterOnScreen.tick-116"><span class="linenos">116</span></a>                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span>
 </span><span id="MovingCharacterOnScreen.tick-117"><a href="#MovingCharacterOnScreen.tick-117"><span class="linenos">117</span></a>                <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
 </span><span id="MovingCharacterOnScreen.tick-118"><a href="#MovingCharacterOnScreen.tick-118"><span class="linenos">118</span></a>            <span class="p">),</span>
 </span><span id="MovingCharacterOnScreen.tick-119"><a href="#MovingCharacterOnScreen.tick-119"><span class="linenos">119</span></a>            <span class="n">coordinate</span><span class="o">=</span><span class="p">(</span>

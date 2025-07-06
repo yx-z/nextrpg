@@ -72,7 +72,7 @@ class MovingCharacterOnScreen(CharacterOnScreen):
 
     @cached_property
     @abstractmethod
-    def is_moving(self) -> bool:
+    def moving(self) -> bool:
         """
         Get whether the character is currently moving.
 
@@ -107,12 +107,12 @@ class MovingCharacterOnScreen(CharacterOnScreen):
         Returns:
             `CharacterOnScreen`: The updated character state after the step.
         """
-        moved_coord = self.move(time_delta) if self.is_moving else None
+        moved_coord = self.move(time_delta) if self.moving else None
         return replace(
             self,
             character=(
                 self.character.move(time_delta)
-                if self.is_moving
+                if self.moving
                 else self.character.idle(time_delta)
             ),
             coordinate=(

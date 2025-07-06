@@ -109,7 +109,7 @@ class Polygon:
     """
 
     points: tuple[Coordinate, ...]
-    is_closed: bool = True
+    closed: bool = True
 
     @cached_property
     def bounding_rectangle(self) -> Rectangle:

@@ -10,4 +10,4 @@ def test_cyclic_frames() -> None:
     )
     assert frames.current_frame._surface.data == "a"
     assert frames.tick(1).tick(4).current_frame._surface.data == "b"
-    assert frames.tick(6).reset().current_frame._surface.data == "a"
+    assert frames.tick(6).reset.current_frame._surface.data == "a"

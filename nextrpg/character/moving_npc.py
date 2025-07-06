@@ -70,47 +70,47 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     _move_timer: Timer = instance_init(
         lambda self: Timer(self.spec.move_duration)
     )
-    _is_moving: bool = False
+    _moving: bool = False
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        if self._is_moving:
+        if self._moving:
             move_timer = self._move_timer.tick(time_delta)
             idle_timer = self._idle_timer
         else:
             move_timer = self._move_timer
             idle_timer = self._idle_timer.tick(time_delta)
 
-        if self._is_moving and move_timer.expired:
-            is_moving = False
-        elif not self._is_moving and idle_timer.expired:
-            is_moving = True
+        if self._moving and move_timer.expired:
+            moving = False
+        elif not self._moving and idle_timer.expired:
+            moving = True
         else:
-            is_moving = self._is_moving
+            moving = self._moving
 
-        if is_moving:
+        if moving:
             moved = MovingCharacterOnScreen.tick(self, time_delta)
             walked = self._walk.tick(time_delta)
             return replace(
                 moved,
                 character=moved.character.turn(walked.direction),
                 _walk=walked,
-                _idle_timer=idle_timer.reset(),
+                _idle_timer=idle_timer.reset,
                 _move_timer=move_timer,
-                _is_moving=is_moving,
+                _moving=moving,
             )
 
         return replace(
             NpcOnScreen.tick(self, time_delta),
             _idle_timer=idle_timer,
-            _move_timer=move_timer.reset(),
-            _is_moving=is_moving,
+            _move_timer=move_timer.reset,
+            _moving=moving,
         )
 
     @cached_property
     @override
-    def is_moving(self) -> bool:
-        return self._is_moving and not self._is_triggered
+    def moving(self) -> bool:
+        return self._moving and not self._triggered
 
     @override
     def move(self, time_delta: Millisecond) -> Coordinate:

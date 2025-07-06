@@ -166,7 +166,7 @@
                                 <a class="function" href="#Timer.tick">tick</a>
                         </li>
                         <li>
-                                <a class="function" href="#Timer.reset">reset</a>
+                                <a class="variable" href="#Timer.reset">reset</a>
                         </li>
                         <li>
                                 <a class="variable" href="#Timer.expired">expired</a>
@@ -424,24 +424,25 @@
 </span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
 </span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>
-</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">        Get a reset timer.</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>
-</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a><span class="sd">        Returns:</span>
-</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
-</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>
-</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a><span class="sd">        Get whether the timer has expired.</span>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>
-</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a><span class="sd">        Returns:</span>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a><span class="sd">            `bool`: Whether the timer has expired.</span>
-</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="sd">        Get a reset timer.</span>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a><span class="sd">        Returns:</span>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a><span class="sd">        Get whether the timer has expired.</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a><span class="sd">        Returns:</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a><span class="sd">            `bool`: Whether the timer has expired.</span>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
@@ -1250,24 +1251,25 @@ multiplied.</li>
 </span><span id="Timer-226"><a href="#Timer-226"><span class="linenos">226</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Timer-227"><a href="#Timer-227"><span class="linenos">227</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
 </span><span id="Timer-228"><a href="#Timer-228"><span class="linenos">228</span></a>
-</span><span id="Timer-229"><a href="#Timer-229"><span class="linenos">229</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Timer-230"><a href="#Timer-230"><span class="linenos">230</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer-231"><a href="#Timer-231"><span class="linenos">231</span></a><span class="sd">        Get a reset timer.</span>
-</span><span id="Timer-232"><a href="#Timer-232"><span class="linenos">232</span></a>
-</span><span id="Timer-233"><a href="#Timer-233"><span class="linenos">233</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer-234"><a href="#Timer-234"><span class="linenos">234</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
-</span><span id="Timer-235"><a href="#Timer-235"><span class="linenos">235</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer-236"><a href="#Timer-236"><span class="linenos">236</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span><span id="Timer-237"><a href="#Timer-237"><span class="linenos">237</span></a>
-</span><span id="Timer-238"><a href="#Timer-238"><span class="linenos">238</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Timer-239"><a href="#Timer-239"><span class="linenos">239</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Timer-240"><a href="#Timer-240"><span class="linenos">240</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer-241"><a href="#Timer-241"><span class="linenos">241</span></a><span class="sd">        Get whether the timer has expired.</span>
-</span><span id="Timer-242"><a href="#Timer-242"><span class="linenos">242</span></a>
-</span><span id="Timer-243"><a href="#Timer-243"><span class="linenos">243</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer-244"><a href="#Timer-244"><span class="linenos">244</span></a><span class="sd">            `bool`: Whether the timer has expired.</span>
-</span><span id="Timer-245"><a href="#Timer-245"><span class="linenos">245</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer-246"><a href="#Timer-246"><span class="linenos">246</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="Timer-229"><a href="#Timer-229"><span class="linenos">229</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Timer-230"><a href="#Timer-230"><span class="linenos">230</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Timer-231"><a href="#Timer-231"><span class="linenos">231</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer-232"><a href="#Timer-232"><span class="linenos">232</span></a><span class="sd">        Get a reset timer.</span>
+</span><span id="Timer-233"><a href="#Timer-233"><span class="linenos">233</span></a>
+</span><span id="Timer-234"><a href="#Timer-234"><span class="linenos">234</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer-235"><a href="#Timer-235"><span class="linenos">235</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
+</span><span id="Timer-236"><a href="#Timer-236"><span class="linenos">236</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer-237"><a href="#Timer-237"><span class="linenos">237</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="Timer-238"><a href="#Timer-238"><span class="linenos">238</span></a>
+</span><span id="Timer-239"><a href="#Timer-239"><span class="linenos">239</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Timer-240"><a href="#Timer-240"><span class="linenos">240</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Timer-241"><a href="#Timer-241"><span class="linenos">241</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer-242"><a href="#Timer-242"><span class="linenos">242</span></a><span class="sd">        Get whether the timer has expired.</span>
+</span><span id="Timer-243"><a href="#Timer-243"><span class="linenos">243</span></a>
+</span><span id="Timer-244"><a href="#Timer-244"><span class="linenos">244</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer-245"><a href="#Timer-245"><span class="linenos">245</span></a><span class="sd">            `bool`: Whether the timer has expired.</span>
+</span><span id="Timer-246"><a href="#Timer-246"><span class="linenos">246</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer-247"><a href="#Timer-247"><span class="linenos">247</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
@@ -1354,23 +1356,22 @@ multiplied.</li>
                             </div>
                             <div id="Timer.reset" class="classattr">
                                         <input id="Timer.reset-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">reset</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
+<div class="attr variable">
+            <span class="name">reset</span><span class="annotation">: Self</span>
 
                 <label class="view-source-button" for="Timer.reset-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Timer.reset"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.reset-229"><a href="#Timer.reset-229"><span class="linenos">229</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Timer.reset-230"><a href="#Timer.reset-230"><span class="linenos">230</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer.reset-231"><a href="#Timer.reset-231"><span class="linenos">231</span></a><span class="sd">        Get a reset timer.</span>
-</span><span id="Timer.reset-232"><a href="#Timer.reset-232"><span class="linenos">232</span></a>
-</span><span id="Timer.reset-233"><a href="#Timer.reset-233"><span class="linenos">233</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer.reset-234"><a href="#Timer.reset-234"><span class="linenos">234</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
-</span><span id="Timer.reset-235"><a href="#Timer.reset-235"><span class="linenos">235</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer.reset-236"><a href="#Timer.reset-236"><span class="linenos">236</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.reset-229"><a href="#Timer.reset-229"><span class="linenos">229</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Timer.reset-230"><a href="#Timer.reset-230"><span class="linenos">230</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Timer.reset-231"><a href="#Timer.reset-231"><span class="linenos">231</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer.reset-232"><a href="#Timer.reset-232"><span class="linenos">232</span></a><span class="sd">        Get a reset timer.</span>
+</span><span id="Timer.reset-233"><a href="#Timer.reset-233"><span class="linenos">233</span></a>
+</span><span id="Timer.reset-234"><a href="#Timer.reset-234"><span class="linenos">234</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer.reset-235"><a href="#Timer.reset-235"><span class="linenos">235</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
+</span><span id="Timer.reset-236"><a href="#Timer.reset-236"><span class="linenos">236</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer.reset-237"><a href="#Timer.reset-237"><span class="linenos">237</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -1394,15 +1395,15 @@ multiplied.</li>
 
     </div>
     <a class="headerlink" href="#Timer.expired"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.expired-238"><a href="#Timer.expired-238"><span class="linenos">238</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Timer.expired-239"><a href="#Timer.expired-239"><span class="linenos">239</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Timer.expired-240"><a href="#Timer.expired-240"><span class="linenos">240</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer.expired-241"><a href="#Timer.expired-241"><span class="linenos">241</span></a><span class="sd">        Get whether the timer has expired.</span>
-</span><span id="Timer.expired-242"><a href="#Timer.expired-242"><span class="linenos">242</span></a>
-</span><span id="Timer.expired-243"><a href="#Timer.expired-243"><span class="linenos">243</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer.expired-244"><a href="#Timer.expired-244"><span class="linenos">244</span></a><span class="sd">            `bool`: Whether the timer has expired.</span>
-</span><span id="Timer.expired-245"><a href="#Timer.expired-245"><span class="linenos">245</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer.expired-246"><a href="#Timer.expired-246"><span class="linenos">246</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.expired-239"><a href="#Timer.expired-239"><span class="linenos">239</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Timer.expired-240"><a href="#Timer.expired-240"><span class="linenos">240</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Timer.expired-241"><a href="#Timer.expired-241"><span class="linenos">241</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer.expired-242"><a href="#Timer.expired-242"><span class="linenos">242</span></a><span class="sd">        Get whether the timer has expired.</span>
+</span><span id="Timer.expired-243"><a href="#Timer.expired-243"><span class="linenos">243</span></a>
+</span><span id="Timer.expired-244"><a href="#Timer.expired-244"><span class="linenos">244</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer.expired-245"><a href="#Timer.expired-245"><span class="linenos">245</span></a><span class="sd">            `bool`: Whether the timer has expired.</span>
+</span><span id="Timer.expired-246"><a href="#Timer.expired-246"><span class="linenos">246</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer.expired-247"><a href="#Timer.expired-247"><span class="linenos">247</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 

@@ -3,6 +3,7 @@ Static frames, when played sequentially, become animated.
 """
 
 from dataclasses import replace
+from functools import cached_property
 from typing import Self
 
 from nextrpg.core import Millisecond, Timer
@@ -65,6 +66,7 @@ class CyclicFrames:
             _timer=replace(t, elapsed=t.elapsed % self.duration_per_frame),
         )
 
+    @cached_property
     def reset(self) -> Self:
         """
         Reset the animation sequence to its initial state.
@@ -76,4 +78,4 @@ class CyclicFrames:
             `CyclicFrames`: A new instance with the animation state reset to
             the beginning of the sequence.
         """
-        return replace(self, _index=0, _timer=self._timer.reset())
+        return replace(self, _index=0, _timer=self._timer.reset)

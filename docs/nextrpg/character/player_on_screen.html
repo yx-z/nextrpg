@@ -40,7 +40,7 @@
                                 <a class="function" href="#PlayerOnScreen.event">event</a>
                         </li>
                         <li>
-                                <a class="variable" href="#PlayerOnScreen.is_moving">is_moving</a>
+                                <a class="variable" href="#PlayerOnScreen.moving">moving</a>
                         </li>
                         <li>
                                 <a class="function" href="#PlayerOnScreen.move">move</a>
@@ -124,7 +124,7 @@
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>    <span class="nd">@override</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span><span class="p">)</span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>    <span class="nd">@override</span>
@@ -220,7 +220,7 @@
 </span><span id="PlayerOnScreen-52"><a href="#PlayerOnScreen-52"><span class="linenos">52</span></a>
 </span><span id="PlayerOnScreen-53"><a href="#PlayerOnScreen-53"><span class="linenos">53</span></a>    <span class="nd">@cached_property</span>
 </span><span id="PlayerOnScreen-54"><a href="#PlayerOnScreen-54"><span class="linenos">54</span></a>    <span class="nd">@override</span>
-</span><span id="PlayerOnScreen-55"><a href="#PlayerOnScreen-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="PlayerOnScreen-55"><a href="#PlayerOnScreen-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="PlayerOnScreen-56"><a href="#PlayerOnScreen-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span><span class="p">)</span>
 </span><span id="PlayerOnScreen-57"><a href="#PlayerOnScreen-57"><span class="linenos">57</span></a>
 </span><span id="PlayerOnScreen-58"><a href="#PlayerOnScreen-58"><span class="linenos">58</span></a>    <span class="nd">@override</span>
@@ -293,19 +293,19 @@
 
 
                             </div>
-                            <div id="PlayerOnScreen.is_moving" class="classattr">
-                                        <input id="PlayerOnScreen.is_moving-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="PlayerOnScreen.moving" class="classattr">
+                                        <input id="PlayerOnScreen.moving-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">is_moving</span><span class="annotation">: bool</span>
+            <span class="name">moving</span><span class="annotation">: bool</span>
 
-                <label class="view-source-button" for="PlayerOnScreen.is_moving-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="PlayerOnScreen.moving-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#PlayerOnScreen.is_moving"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen.is_moving-53"><a href="#PlayerOnScreen.is_moving-53"><span class="linenos">53</span></a>    <span class="nd">@cached_property</span>
-</span><span id="PlayerOnScreen.is_moving-54"><a href="#PlayerOnScreen.is_moving-54"><span class="linenos">54</span></a>    <span class="nd">@override</span>
-</span><span id="PlayerOnScreen.is_moving-55"><a href="#PlayerOnScreen.is_moving-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="PlayerOnScreen.is_moving-56"><a href="#PlayerOnScreen.is_moving-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span><span class="p">)</span>
+    <a class="headerlink" href="#PlayerOnScreen.moving"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen.moving-53"><a href="#PlayerOnScreen.moving-53"><span class="linenos">53</span></a>    <span class="nd">@cached_property</span>
+</span><span id="PlayerOnScreen.moving-54"><a href="#PlayerOnScreen.moving-54"><span class="linenos">54</span></a>    <span class="nd">@override</span>
+</span><span id="PlayerOnScreen.moving-55"><a href="#PlayerOnScreen.moving-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="PlayerOnScreen.moving-56"><a href="#PlayerOnScreen.moving-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span><span class="p">)</span>
 </span></pre></div>
 
 

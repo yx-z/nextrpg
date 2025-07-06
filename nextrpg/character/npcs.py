@@ -38,24 +38,24 @@ class NpcOnScreen(CharacterOnScreen):
     _generator: RpgEventGenerator = instance_init(
         lambda self: self.spec._generator
     )
-    _is_triggered: bool = False
+    _triggered: bool = False
 
     def tick(self, time_delta: Millisecond) -> Self:
         return (
             self
-            if self._is_triggered
+            if self._triggered
             else replace(self, character=self.character.idle(time_delta))
         )
 
     def _trigger(self, player: PlayerOnScreen) -> Self:
         direction = player.character.direction.opposite
         return replace(
-            self, character=self.character.turn(direction), _is_triggered=True
+            self, character=self.character.turn(direction), _triggered=True
         )
 
     @cached_property
     def _completed(self) -> Self:
-        return replace(self, _is_triggered=False)
+        return replace(self, _triggered=False)
 
 
 @register_instance_init

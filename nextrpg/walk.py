@@ -28,18 +28,18 @@ class Walk:
         return Walk(path=self.path, move_speed=self.move_speed)
 
     @cached_property
-    def is_completed(self) -> bool:
+    def completed(self) -> bool:
         if self.cyclic:
             return False
 
         return (
             self._index == 0 and self._last_index != 0
-            if self.path.is_closed
+            if self.path.closed
             else self._next_index == 0
         )
 
     def tick(self, time_delta: Millisecond) -> Self:
-        if self.is_completed:
+        if self.completed:
             return self
 
         end = self.path.points[self._next_index]
