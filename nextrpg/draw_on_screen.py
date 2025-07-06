@@ -39,18 +39,9 @@ class Coordinate(namedtuple("Coordinate", "left top")):
     left: Pixel
     top: Pixel
 
-    @override
-    def __sub__(self, offset: Self) -> Self:
-        """
-        Subtracts a coordinate from this coordinate.
-
-        Arguments:
-            `offset`: Coordinate to subtract from the current coordinate.
-
-        Returns:
-            `Coordinate`: A new coordinate shifted by the specified offset.
-        """
-        return Coordinate(self.left - offset.left, self.top - offset.top)
+    @cached_property
+    def negate(self) -> Self:
+        return Coordinate(-self.left, -self.top)
 
     def shift(self, offset: DirectionalOffset | Self) -> Self:
         """
@@ -94,6 +85,21 @@ class Coordinate(namedtuple("Coordinate", "left top")):
                 return Coordinate(self.left - diag, self.top + diag)
             case Direction.DOWN_RIGHT:
                 return Coordinate(self.left + diag, self.top + diag)
+
+    def relative_to(self, other: Coordinate) -> Direction:
+        dx = self.left - other.left
+        dy = self.top - other.top
+        if dx == 0:
+            return Direction.UP if dy > 0 else Direction.DOWN
+        if dy == 0:
+            return Direction.LEFT if dx > 0 else Direction.RIGHT
+        if dx > 0 and dy > 0:
+            return Direction.DOWN_RIGHT
+        if dx > 0 and dy < 0:
+            return Direction.UP_RIGHT
+        if dx < 0 and dy > 0:
+            return Direction.DOWN_LEFT
+        return Direction.UP_LEFT
 
     def __repr__(self) -> str:
         return f"({self.left:.1f}, {self.top:.1f})"
@@ -305,6 +311,7 @@ class Polygon:
     """
 
     points: tuple[Coordinate, ...]
+    is_closed: bool = True
 
     @cached_property
     def bounding_rectangle(self) -> Rectangle:
@@ -337,9 +344,10 @@ class Polygon:
             `DrawOnScreen`: A transparent surface matching rectangle dimensions.
         """
         rect = self.bounding_rectangle
-        surface = Surface(rect.size, SRCALPHA)
-        polygon(surface, color, [(p - rect.top_left) for p in self.points])
-        return DrawOnScreen(rect.top_left, Drawing(surface))
+        surf = Surface(rect.size, SRCALPHA)
+        negated = [(p.shift(rect.top_left.negate)) for p in self.points]
+        polygon(surf, color, negated)
+        return DrawOnScreen(rect.top_left, Drawing(surf))
 
     def collide(self, poly: Self) -> bool:
         """

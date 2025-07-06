@@ -168,14 +168,10 @@ class MapScene[T](EventfulScene):
 
     def _init_moving(self, spec: MovingNpcSpec) -> MovingNpcOnScreen:
         obj = self._map_helper.get_object(spec.name)
-        collisions = (
-            self._map_helper.collisions if spec.observe_collisions else []
-        )
         return MovingNpcOnScreen(
             coordinate=Coordinate(obj.x, obj.y),
             path=get_polygon(obj),
-            collisions=collisions,
-            spec=spec,
+            spec=spec
         )
 
 

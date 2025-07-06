@@ -50,7 +50,7 @@ class DebugConfig:
 
         `log_level`: The minimum level of log messages to display.
 
-        `log_duration`: The default duration of the log message display
+        `log_duration`: The default duration of the log message is displayed
             in milliseconds.
     """
 
@@ -163,7 +163,7 @@ class TileMapConfig:
 
     background: str = "background"
     foreground: str = "foreground"
-    above_character: str = "above_charactet"
+    above_character: str = "above_character"
     collision: str = "collision"
 
 
@@ -187,9 +187,9 @@ class CharacterConfig:
             Default to all directions (up, left, right, down, and diagonals).
     """
 
-    move_speed: PixelPerMillisecond = 0.25
-    idle_duration: Millisecond = 1000
-    move_duration: Millisecond = 2000
+    move_speed: PixelPerMillisecond = 0.15
+    idle_duration: Millisecond = 0
+    move_duration: Millisecond = 1000
     directions: frozenset[Direction] = frozenset(Direction)
 
 

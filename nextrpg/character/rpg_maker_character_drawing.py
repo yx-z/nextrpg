@@ -24,8 +24,6 @@ from nextrpg.draw_on_screen import Coordinate, Drawing, Size
 from nextrpg.frames import CyclicFrames
 from nextrpg.model import instance_init, register_instance_init
 
-type _FrameIndices = list[int]
-
 
 class DefaultFrameType(IntEnum):
     """
@@ -37,7 +35,7 @@ class DefaultFrameType(IntEnum):
     _LEFT_FOOT = 2
 
     @classmethod
-    def _frame_indices(cls) -> _FrameIndices:
+    def _frame_indices(cls) -> list[int]:
         return [
             DefaultFrameType._IDLE,
             DefaultFrameType._RIGHT_FOOT,
@@ -57,7 +55,7 @@ class XpFrameType(IntEnum):
     _LEFT_FOOT = 3
 
     @classmethod
-    def _frame_indices(cls) -> _FrameIndices:
+    def _frame_indices(cls) -> list[int]:
         return list(cls)
 
 

@@ -8,6 +8,7 @@ from nextrpg.config import config
 from nextrpg.core import Millisecond, PixelPerMillisecond, Timer
 from nextrpg.draw_on_screen import Coordinate, Polygon
 from nextrpg.model import instance_init, register_instance_init
+from nextrpg.walk import Walk
 
 
 @dataclass
@@ -34,7 +35,7 @@ class MovingNpcSpec(NpcSpec):
     move_duration: Millisecond = field(
         default_factory=lambda: config().character.move_duration
     )
-    observe_collisions: bool = True
+    cyclic_walk: bool = True
 
 
 @register_instance_init
@@ -51,6 +52,17 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     """
 
     path: Polygon
+    collisions: list[Polygon] = field(default_factory=list)
+    move_speed: PixelPerMillisecond = instance_init(
+        lambda self: self.spec.move_speed
+    )
+    _walk: Walk = instance_init(
+        lambda self: Walk(
+            path=self.path,
+            move_speed=self.move_speed,
+            cyclic=self.spec.cyclic_walk,
+        )
+    )
     _idle_timer: Timer = instance_init(
         lambda self: Timer(self.spec.idle_duration)
     )
@@ -75,10 +87,22 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
         else:
             is_moving = self._is_moving
 
+        if is_moving:
+            moved = MovingCharacterOnScreen.tick(self, time_delta)
+            walked = self._walk.tick(time_delta)
+            return replace(
+                moved,
+                character=moved.character.turn(walked.direction),
+                _walk=walked,
+                _idle_timer=idle_timer.reset(),
+                _move_timer=move_timer,
+                _is_moving=is_moving,
+            )
+
         return replace(
-            MovingCharacterOnScreen.tick(self, time_delta),
-            _idle_timer=idle_timer.reset() if is_moving else idle_timer,
-            _move_timer=move_timer.reset() if not is_moving else move_timer,
+            NpcOnScreen.tick(self, time_delta),
+            _idle_timer=idle_timer,
+            _move_timer=move_timer.reset(),
             _is_moving=is_moving,
         )
 
@@ -89,6 +113,4 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
 
     @override
     def move(self, time_delta: Millisecond) -> Coordinate:
-        if not self.is_moving:
-            return self.coordinate
-        return self.coordinate
+        return self._walk.tick(time_delta).coordinate

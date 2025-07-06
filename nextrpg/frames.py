@@ -26,7 +26,7 @@ class CyclicFrames:
 
     frames: list[Drawing]
     duration_per_frame: Millisecond
-    _index: _FrameIndex = 0
+    _index: int = 0
     _timer: Timer = instance_init(lambda self: Timer(self.duration_per_frame))
 
     @property
@@ -77,6 +77,3 @@ class CyclicFrames:
             the beginning of the sequence.
         """
         return replace(self, _index=0, _timer=self._timer.reset())
-
-
-type _FrameIndex = int
