@@ -3,7 +3,7 @@ Map helper class for loading the TMX tiles.
 """
 
 from dataclasses import dataclass
-from functools import cached_property
+from functools import cached_property, lru_cache
 from pathlib import Path
 from typing import NamedTuple
 
@@ -21,10 +21,10 @@ from nextrpg.config import config
 from nextrpg.core import Pixel, Size
 from nextrpg.draw_on_screen import (
     DrawOnScreen,
+    Drawing,
     Polygon,
     Rectangle,
 )
-from nextrpg.drawing import Drawing
 from nextrpg.coordinate import Coordinate
 from nextrpg.logger import FROM_CONFIG, Logger
 from nextrpg.model import cached
@@ -55,9 +55,6 @@ class TileBottomAndDrawOnScreen(NamedTuple):
     draw: DrawOnScreen
 
 
-type LayerIndex = int
-
-
 class LayerTileBottomAndDrawOnScreen(NamedTuple):
     """
     Similar to `TileBottomAndDrawOnScreen`, but with a foreground layer.
@@ -70,9 +67,15 @@ class LayerTileBottomAndDrawOnScreen(NamedTuple):
         `draw_on_screen`: The `DrawOnScreen` of the tile itself.
     """
 
-    layer: LayerIndex
+    layer: int
     bottom: Pixel
     draw_on_screen: DrawOnScreen
+
+
+class ForegroundLayer(NamedTuple):
+    tiles: list[LayerTileBottomAndDrawOnScreen]
+    index: int
+    bottom: Pixel
 
 
 def get_polygon(obj: TiledObject) -> Polygon:
@@ -128,7 +131,7 @@ class MapHelper:
         return self._draw_layers(config().map.background)
 
     @cached_property
-    def foreground(self) -> list[list[TileBottomAndDrawOnScreen]]:
+    def foreground(self) -> list[ForegroundLayer]:
         """
         The list of foreground drawings with bottom pixel info.
 
@@ -142,8 +145,11 @@ class MapHelper:
             `list[list[TileBottomAndDrawOnScreen]]`: The list of foreground drawings.
         """
         return [
-            self._bottom_and_draw(layer)
-            for layer in self._tile_layers(config().map.foreground)
+            _foreground_layer(i, tiles)
+            for i, layer in enumerate(
+                self._tile_layers(config().map.foreground)
+            )
+            if (tiles := self._bottom_and_draw(layer))
         ]
 
     @cached_property
@@ -220,19 +226,17 @@ class MapHelper:
             character.draw_on_screen,
         )
 
-    def _character_layer(self, character: CharacterOnScreen) -> LayerIndex:
+    def _character_layer(self, character: CharacterOnScreen) -> int:
         above = (
-            i
-            for i, layer in self._reversed_foregrounds
+            layer.index
+            for layer in self._reversed_foregrounds
             if _above_character(layer, character)
         )
         return next(above, 0)
 
     @cached_property
-    def _reversed_foregrounds(
-        self,
-    ) -> list[tuple[LayerIndex, list[TileBottomAndDrawOnScreen]]]:
-        return list(reversed(list(enumerate(self.foreground))))
+    def _reversed_foregrounds(self) -> list[ForegroundLayer]:
+        return list(reversed(self.foreground))
 
     @cached_property
     def _all_objects(self) -> list[TiledObject]:
@@ -395,13 +399,12 @@ class MapHelper:
 
 
 def _above_character(
-    layer: list[TileBottomAndDrawOnScreen],
-    character: CharacterOnScreen,
+    layer: ForegroundLayer, character: CharacterOnScreen
 ) -> bool:
     rect = character.draw_on_screen.visible_rectangle
-    return any(
-        rect.collide(draw.visible_rectangle) and bottom < rect.bottom
-        for bottom, draw in layer
+    return layer.bottom < rect.bottom and any(
+        bottom < rect.bottom and rect.collide(draw.visible_rectangle)
+        for _, bottom, draw in layer.tiles
     )
 
 
@@ -412,6 +415,16 @@ def _is_rect(obj: TiledObject) -> bool:
         and obj.width is not None
         and obj.height is not None
     )
+
+
+def _foreground_layer(
+    idx: int, tiles: list[TileBottomAndDrawOnScreen]
+) -> ForegroundLayer:
+    layer_bottom_and_draw = [
+        LayerTileBottomAndDrawOnScreen(idx, bottom, draw)
+        for bottom, draw in tiles
+    ]
+    return ForegroundLayer(layer_bottom_and_draw, idx, min(b for b, _ in tiles))
 
 
 type _Gid = int

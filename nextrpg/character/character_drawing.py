@@ -8,7 +8,7 @@ from functools import cached_property
 from typing import Self
 
 from nextrpg.core import Direction, Millisecond
-from nextrpg.drawing import Drawing
+from nextrpg.draw_on_screen import Drawing
 
 
 @dataclass(frozen=True)
@@ -32,7 +32,7 @@ class CharacterDrawing(ABC):
         Get the character drawing.
 
         Returns:
-            `Drawing`: The character drawing.
+            `nextrpg.draw_on_screen.Drawing`: The character drawing.
         """
 
     @abstractmethod

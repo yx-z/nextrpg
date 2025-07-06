@@ -8,7 +8,7 @@ from nextrpg.character.rpg_maker_character_drawing import (
     XpFrameType,
 )
 from nextrpg.core import Direction, Size
-from nextrpg.drawing import Drawing
+from nextrpg.draw_on_screen import Drawing
 
 
 def test_rpg_maker_drawing():

@@ -20,8 +20,7 @@ from typing import Self, override
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
 from nextrpg.core import Direction, Millisecond, Pixel
-from nextrpg.draw_on_screen import Size
-from nextrpg.drawing import Drawing
+from nextrpg.draw_on_screen import Drawing, Size
 from nextrpg.coordinate import Coordinate
 from nextrpg.frames import CyclicFrames
 from nextrpg.model import instance_init, register_instance_init

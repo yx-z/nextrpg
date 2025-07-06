@@ -3,18 +3,158 @@ Drawable on screen.
 """
 
 from dataclasses import dataclass
-from functools import cached_property
+from functools import cached_property, lru_cache
 from itertools import product
 from math import ceil
+from os import PathLike
 from typing import Self
 
 from pygame import Mask, SRCALPHA, Surface
 from pygame.draw import polygon
+from pygame.image import load
 from pygame.mask import from_surface
 
+from nextrpg.config import config
 from nextrpg.coordinate import Coordinate
-from nextrpg.core import Pixel, Rgba, Size
-from nextrpg.drawing import Drawing
+from nextrpg.core import Alpha, Pixel, Rgba, Size
+from nextrpg.logger import FROM_CONFIG, Logger
+from nextrpg.model import cached
+
+
+logger = Logger("Draw")
+
+
+@cached(
+    lambda: config().resource.drawing_cache_size,
+    lambda resource: None if isinstance(resource, Surface) else resource,
+)
+@dataclass(frozen=True)
+class Drawing:
+    """
+    Represents a drawable element and provides methods for accessing its size
+    and dimensions.
+
+    This class loads a surface from a file or directly accepts a
+    `pygame.Surface` as input.
+    It provides properties to access surface dimensions and size and methods to
+    crop and scale the surface.
+
+    Arguments:
+        `resource`: A path to a file containing the drawing resource,
+            or a `pygame.Surface` object.
+    """
+
+    resource: str | PathLike | Surface
+
+    @property
+    def width(self) -> Pixel:
+        """
+        Gets the width of the surface.
+
+        Returns:
+            `Pixel`: The width of the surface in pixel measurement.
+        """
+        return self._surface.get_width()
+
+    @property
+    def height(self) -> Pixel:
+        """
+        Gets the height of the surface.
+
+        Returns:
+            `Pixel`: The height of the surface in pixel measurement.
+        """
+        return self._surface.get_height()
+
+    @property
+    def size(self) -> Size:
+        """
+        Gets the size of an object as a combination of its width and height
+
+        Returns:
+            `Size`: A Size object containing the width and height of the object.
+        """
+        return Size(self.width, self.height)
+
+    @property
+    def pygame(self) -> Surface:
+        """
+        Gets the current `pygame.Surface` for the object.
+
+        Returns:
+            `pygame.Surface`: The underlying `pygame.Surface`.
+        """
+        return self._debug_surface or self._surface
+
+    def crop(self, top_left: Coordinate, size: Size) -> Self:
+        """
+        Crops a rectangular portion of the drawing specified by the
+        top-left corner and the size.
+
+        The method extracts a subsection of the drawing based on the provided
+        coordinates and dimensions and returns a new `Drawing` instance.
+        The original drawing remains unchanged.
+
+        Arguments:
+            `top_left`: The top-left coordinate of the rectangle to be cropped.
+
+            `size`: The width and height of the rectangle to be cropped.
+
+        Returns:
+            `Drawing`: A new `Drawing` instance representing the cropped area.
+        """
+        left, top = top_left
+        width, height = size
+        return Drawing(self._surface.subsurface((left, top, width, height)))
+
+    def set_alpha(self, alpha: Alpha) -> Self:
+        """
+        Creates a new `Drawing` with the specified alpha value.
+
+        Arguments:
+            `alpha`: The new alpha value.
+
+        Returns:
+            `Drawing`: A new `Drawing` with the specified alpha value.
+        """
+        surface = self._surface.copy()
+        surface.set_alpha(alpha)
+        return Drawing(surface)
+
+    @cached_property
+    def visible_rectangle(self) -> Rectangle:
+        coords = product(range(ceil(self.width)), range(ceil(self.height)))
+        visible = [
+            Coordinate(x, y)
+            for x, y in coords
+            if self._surface.get_at((x, y)).a
+        ]
+        if not visible:
+            return Rectangle(Coordinate(0, 0), Size(0, 0))
+
+        min_x = min(c.left for c in visible)
+        min_y = min(c.top for c in visible)
+        max_x = max(c.left for c in visible)
+        max_y = max(c.top for c in visible)
+        return Rectangle(
+            Coordinate(min_x, min_y), Size(max_x - min_x, max_y - min_y)
+        )
+
+    @cached_property
+    def _debug_surface(self) -> Surface | None:
+        if debug := config().debug:
+            surface = Surface(self.size, SRCALPHA)
+            surface.fill(debug.drawing_background_color)
+            surface.blit(self._surface, (0, 0))
+            return surface
+        return None
+
+    @cached_property
+    def _surface(self) -> Surface:
+        if isinstance(self.resource, Surface):
+            return self.resource
+        logger.debug(t"Loading {self.resource}", duration=FROM_CONFIG)
+        return load(self.resource).convert_alpha()
 
 
 @dataclass(frozen=True)
@@ -56,26 +196,7 @@ class DrawOnScreen:
             `Rectangle`: A rectangle defining only the visible (non-transparent)
             portion of the drawing on screen.
         """
-        visible = [
-            Coordinate(x, y)
-            for x, y in product(
-                range(ceil(self.drawing.width)),
-                range(ceil(self.drawing.height)),
-            )
-            # `drawing._surface` to ignore the debug background.
-            if self.drawing._surface.get_at((x, y)).a
-        ]
-        if not visible:
-            return Rectangle(Coordinate(0, 0), Size(0, 0))
-
-        min_x = min(c.left for c in visible)
-        min_y = min(c.top for c in visible)
-        max_x = max(c.left for c in visible)
-        max_y = max(c.top for c in visible)
-        return Rectangle(
-            self.top_left.shift(Coordinate(min_x, min_y)),
-            Size(max_x - min_x, max_y - min_y),
-        )
+        return self.drawing.visible_rectangle.shift(self.top_left)
 
     @property
     def pygame(self) -> tuple[Surface, Coordinate]:
@@ -130,6 +251,11 @@ class Polygon:
     @cached_property
     def _mask(self) -> Mask:
         return from_surface(self.fill(Rgba(0, 0, 0, 255)).drawing.pygame)
+
+    def shift(self, coordinate: Coordinate) -> Self:
+        return Polygon(
+            tuple(c.shift(coordinate) for c in self.points), self.closed
+        )
 
     def fill(self, color: Rgba) -> DrawOnScreen:
         """
@@ -352,3 +478,6 @@ class Rectangle(Polygon):
             self.left < coordinate.left < self.right
             and self.top < coordinate.top < self.bottom
         )
+
+    def shift(self, coordinate: Coordinate) -> Self:
+        return Rectangle(self.top_left.shift(coordinate), self.size)

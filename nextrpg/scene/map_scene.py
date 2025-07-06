@@ -113,9 +113,7 @@ class MapScene[T](EventfulScene):
     @cached_property
     def _foreground_and_characters(self) -> list[DrawOnScreen]:
         foregrounds = (
-            LayerTileBottomAndDrawOnScreen(i, bottom, draw)
-            for i, layer in enumerate(self._map_helper.foreground)
-            for bottom, draw in layer
+            t for layer in self._map_helper.foreground for t in layer.tiles
         )
         characters = chain([self._player], self._npcs.list)
         bottom_and_draw = sorted(
