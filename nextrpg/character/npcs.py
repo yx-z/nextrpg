@@ -1,4 +1,4 @@
-from ast import fix_missing_locations, parse
+from ast import fix_missing_locations, parse, unparse
 from collections.abc import Callable, Generator
 from dataclasses import dataclass, field, replace
 from functools import cached_property, wraps
@@ -10,7 +10,7 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core import Millisecond
-from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
+from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.event.rpg_event import _yield
 from nextrpg.logger import FROM_CONFIG, Logger
 from nextrpg.model import instance_init, register_instance_init
@@ -34,9 +34,6 @@ class NpcOnScreen(CharacterOnScreen):
     name: str = instance_init(lambda self: self.spec.name)
     character: CharacterDrawing = instance_init(
         lambda self: self.spec.character
-    )
-    _generator: RpgEventGenerator = instance_init(
-        lambda self: self.spec._generator
     )
     _triggered: bool = False
 
@@ -81,11 +78,13 @@ class EventfulScene[T](Scene):
         ):
             logger.debug(t"Collided with {npc.name}", duration=FROM_CONFIG)
             scene = self._trigger(npc)
-            generator = npc._generator(self._player, npc, self.npc_dict, scene)
+            generator = npc.spec._generator(
+                self._player, npc, self.npc_dict, scene
+            )
             return next(generator)(generator, scene)
         return replace(self, _player=self._player.event(event))
 
-    def tick(self, time_delta: Millisecond) -> Self:
+    def tick(self, time_delta: Millisecond) -> Scene:
         if self._next_event:
             return self._next_event
         return replace(
@@ -197,7 +196,7 @@ class RpgEventScene(Scene):
 
 
 @dataclass(frozen=True)
-class NpcSpec:
+class NpcSpec[T]:
     """
     Base class to define NPC specifications.
 
@@ -211,17 +210,27 @@ class NpcSpec:
 
     name: str
     character: CharacterDrawing
-    event: RpgEventSpec
+    event: RpgEventSpec[T]
 
     @cached_property
-    def _generator[T, **P](self) -> Callable[P, RpgEventGenerator[T]]:
+    def _generator(
+        self,
+    ) -> Callable[
+        [PlayerOnScreen, NpcOnScreen, dict[str, NpcOnScreen], EventfulScene[T]],
+        RpgEventGenerator[T],
+    ]:
         @wraps(self.event)
-        def wraped[**P](*args: P.args, **kwargs: P.kwargs) -> RpgEventGenerator:
+        def wrapped(
+            player: PlayerOnScreen,
+            npc: NpcOnScreen,
+            npc_dict: dict[str, NpcOnScreen],
+            scene: EventfulScene[T],
+        ) -> RpgEventGenerator:
             src = dedent(getsource(self.event))
             tree = fix_missing_locations(_yield.visit(parse(src)))
             code = compile(tree, "<npcs>", "exec")
             ctx = self.event.__globals__
             exec(code, ctx)
-            return ctx[self.event.__name__](*args, **kwargs)
+            return ctx[self.event.__name__](player, npc, npc_dict, scene)
 
-        return wraped
+        return wrapped
