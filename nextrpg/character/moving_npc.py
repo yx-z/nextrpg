@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field, replace
 from functools import cached_property
-from typing import Self, override
+from typing import NamedTuple, Self, override
 
 from nextrpg.character.character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npcs import NpcOnScreen, NpcSpec
@@ -23,8 +23,6 @@ class MovingNpcSpec(NpcSpec):
         `idle_duration`: Duration of the idle state.
 
         `move_duration`: Duration of the moving state.
-
-        `observe_collisions`: Whether to observe collisions with the map.
     """
 
     move_speed: PixelPerMillisecond = field(
@@ -53,6 +51,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     """
 
     path: Polygon
+    spec: MovingNpcSpec
     collisions: list[Polygon] = field(default_factory=list)
     move_speed: PixelPerMillisecond = instance_init(
         lambda self: self.spec.move_speed
@@ -77,20 +76,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
         if self._triggered:
             return self
 
-        if self._moving:
-            move_timer = self._move_timer.tick(time_delta)
-            idle_timer = self._idle_timer
-        else:
-            move_timer = self._move_timer
-            idle_timer = self._idle_timer.tick(time_delta)
-
-        if self._moving and move_timer.expired:
-            moving = False
-        elif not self._moving and idle_timer.expired:
-            moving = True
-        else:
-            moving = self._moving
-
+        move_timer, idle_timer, moving = self._timers_and_moving(time_delta)
         if moving:
             moved = MovingCharacterOnScreen.tick(self, time_delta)
             walked = self._walk.tick(time_delta)
@@ -102,7 +88,6 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
                 _move_timer=move_timer,
                 _moving=moving,
             )
-
         return replace(
             NpcOnScreen.tick(self, time_delta),
             _idle_timer=idle_timer,
@@ -118,3 +103,26 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     @override
     def move(self, time_delta: Millisecond) -> Coordinate:
         return self._walk.tick(time_delta).coordinate
+
+    def _timers_and_moving(self, time_delta: Millisecond) -> _TimerAndMoving:
+        if self._moving:
+            move_timer = self._move_timer.tick(time_delta)
+            idle_timer = self._idle_timer
+        else:
+            move_timer = self._move_timer
+            idle_timer = self._idle_timer.tick(time_delta)
+
+        if self._moving and move_timer.expired:
+            moving = False
+        elif not self._moving and idle_timer.expired:
+            moving = True
+        else:
+            moving = self._moving
+
+        return _TimerAndMoving(move_timer, idle_timer, moving)
+
+
+class _TimerAndMoving(NamedTuple):
+    move_timer: Timer
+    idle_timer: Timer
+    moving: bool

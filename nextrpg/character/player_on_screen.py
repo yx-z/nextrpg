@@ -3,16 +3,16 @@ Handles character movement and collision detection.
 """
 
 from dataclasses import dataclass, field, replace
-from functools import cached_property, singledispatchmethod
-from typing import Self, override
+from functools import cached_property
+from typing import override
 
 from nextrpg.character.character_on_screen import (
     CharacterOnScreen,
     MovingCharacterOnScreen,
 )
 from nextrpg.config import config
-from nextrpg.core import Direction, DirectionalOffset, Millisecond
 from nextrpg.coordinate import Coordinate
+from nextrpg.core import Direction, DirectionalOffset, Millisecond
 from nextrpg.event.pygame_event import (
     KeyPressDown,
     KeyPressUp,
