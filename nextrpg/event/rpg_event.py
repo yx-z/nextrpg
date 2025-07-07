@@ -1,4 +1,5 @@
 from ast import (
+    Name,
     Assign,
     Call,
     Expr,
@@ -28,20 +29,12 @@ def register_rpg_event[R, **P](fun: Callable[P, R]) -> Callable[P, R]:
 
 @dataclass(frozen=True)
 class _YieldEvents(NodeTransformer):
-    def visit_Expr(self, node: Expr) -> Expr:
-        return Expr(Yield(node.value)) if self._is_event(node) else node
-
-    def visit_Assign(self, node: Assign) -> Assign:
+    def visit_Call(self, node: Call) -> Call:
+        self.generic_visit(node)
         return (
-            Assign(node.targets, Yield(node.value))
-            if self._is_event(node)
+            Yield(node)
+            if isinstance(node.func, Name) and node.func.id in _events
             else node
-        )
-
-    def _is_event(self, node) -> bool:
-        return (
-            isinstance(node.value, Call)
-            and getattr(node.value.func, "id", None) in _events
         )
 
 

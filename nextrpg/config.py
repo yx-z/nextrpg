@@ -187,7 +187,7 @@ class CharacterConfig:
             Default to all directions (up, left, right, down, and diagonals).
     """
 
-    move_speed: PixelPerMillisecond = 0.1
+    move_speed: PixelPerMillisecond = 0.2
     idle_duration: Millisecond = 500
     move_duration: Millisecond = 1000
     directions: frozenset[Direction] = frozenset(Direction)
