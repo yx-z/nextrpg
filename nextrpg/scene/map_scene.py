@@ -10,15 +10,15 @@ from os import PathLike
 from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
 from nextrpg.character.moving_npc import MovingNpcOnScreen, MovingNpcSpec
+from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
+from nextrpg.coordinate import Coordinate
 from nextrpg.core import Millisecond, Pixel
 from nextrpg.draw_on_screen import DrawOnScreen, Polygon
-from nextrpg.coordinate import Coordinate
 from nextrpg.event.move import Move
-from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
+from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.gui import gui_size
 from nextrpg.logger import Logger
 from nextrpg.model import instance_init, register_instance_init
@@ -89,7 +89,6 @@ class MapScene[T](EventfulScene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
-        logger.debug(t"Player {self._player.coordinate}")
         return self._move_to_scene or super().tick(time_delta)
 
     @cached_property
@@ -113,7 +112,7 @@ class MapScene[T](EventfulScene):
         left_shift = _shift(player.left, gui_width, map_width)
         top_shift = _shift(player.top, gui_height, map_height)
         shift = Coordinate(left_shift, top_shift)
-        logger.debug(t"Player shift {shift}")
+        logger.debug(t"Player {self._player.coordinate} Shift {shift}")
         return shift
 
     @cached_property
