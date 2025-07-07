@@ -69,6 +69,10 @@ class EventfulScene[T](Scene):
     _event: RpgEventGenerator[T] | None = None
     _event_result: T | None = None
 
+    @cached_property
+    def npc_dict(self) -> dict[str, NpcOnScreen]:
+        return {n.name: n for n in self._npcs}
+
     def event(self, event: PygameEvent) -> Scene:
         if (
             isinstance(event, KeyPressDown)
@@ -77,7 +81,7 @@ class EventfulScene[T](Scene):
         ):
             logger.debug(t"Collided with {npc.name}", duration=FROM_CONFIG)
             scene = self._trigger(npc)
-            generator = npc._generator(self._player, scene)
+            generator = npc._generator(self._player, npc, self.npc_dict, scene)
             return next(generator)(generator, scene)
         return replace(self, _player=self._player.event(event))
 
@@ -157,7 +161,8 @@ class EventfulScene[T](Scene):
 
 
 type RpgEventSpec[T] = Callable[
-    [PlayerOnScreen, NpcOnScreen, EventfulScene[T]], None
+    [PlayerOnScreen, NpcOnScreen, dict[str, NpcOnScreen], EventfulScene[T]],
+    None,
 ]
 """
 Abstract protocol to define Rpg Event for player/NPC interactions.
@@ -209,18 +214,14 @@ class NpcSpec:
     event: RpgEventSpec
 
     @cached_property
-    def _generator[T](
-        self,
-    ) -> Callable[[PlayerOnScreen, EventfulScene[T]], RpgEventGenerator[T]]:
+    def _generator[T, **P](self) -> Callable[P, RpgEventGenerator[T]]:
         @wraps(self.event)
-        def wraped(
-            player: PlayerOnScreen, scene: EventfulScene[T]
-        ) -> RpgEventGenerator:
+        def wraped[**P](*args: P.args, **kwargs: P.kwargs) -> RpgEventGenerator:
             src = dedent(getsource(self.event))
             tree = fix_missing_locations(_yield.visit(parse(src)))
             code = compile(tree, "<npcs>", "exec")
             ctx = self.event.__globals__
             exec(code, ctx)
-            return ctx[self.event.__name__](player, scene)
+            return ctx[self.event.__name__](*args, **kwargs)
 
         return wraped
