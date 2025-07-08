@@ -4,7 +4,6 @@ Logger module.
 
 from dataclasses import dataclass, replace
 from functools import cached_property
-from itertools import chain
 from string.templatelib import Interpolation, Template
 from typing import NamedTuple
 
@@ -146,7 +145,7 @@ def pop_messages(time_delta: Millisecond) -> tuple[ComponentAndMessage, ...]:
         return ()
     msgs = tuple(
         ComponentAndMessage(e.component, e.formatted)
-        for e in chain(_entries, _timed_entries.values())
+        for e in _entries + list(_timed_entries.values())
         if e.level >= debug.log_level
     )
     _pop(time_delta)

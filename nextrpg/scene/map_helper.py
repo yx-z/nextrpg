@@ -4,7 +4,6 @@ Map helper class for loading the TMX tiles.
 
 from dataclasses import dataclass
 from functools import cached_property
-from itertools import chain
 from pathlib import Path
 from typing import NamedTuple
 
@@ -172,14 +171,14 @@ class MapHelper:
         Returns:
             `tuple[Polygon, ...]`: Tuple of collision polygons.
         """
-        from_tiles = (
+        from_tiles = tuple(
             self._polygon(coord, obj) for coord, obj in self._colliders
         )
-        from_objects = (
+        from_objects = tuple(
             get_polygon(obj)
             for obj in self.get_objects_by_class_name(config().map.collision)
         )
-        return tuple(chain(from_tiles, from_objects))
+        return from_tiles+ from_objects
 
     def get_object(self, name: str) -> TiledObject:
         """

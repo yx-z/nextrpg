@@ -5,7 +5,6 @@ Handles character movement and collision detection.
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field, replace
 from functools import cached_property
-from itertools import product
 from typing import NamedTuple, Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -166,7 +165,8 @@ class MovingCharacterOnScreen(CharacterOnScreen):
     ) -> _CollisionAndCoord | None:
         collided = (
             _CollisionAndCoord(collision, coord)
-            for collision, coord in product(self.collisions, hit_coords)
+            for collision in self.collisions
+            for coord in hit_coords
             if collision.contain(coord)
         )
         return next(collided, None)

@@ -3,8 +3,7 @@ Drawable on screen.
 """
 
 from dataclasses import dataclass
-from functools import cached_property, lru_cache
-from itertools import product
+from functools import cached_property
 from math import ceil
 from os import PathLike
 from typing import Self
@@ -19,7 +18,6 @@ from nextrpg.coordinate import Coordinate
 from nextrpg.core import Alpha, Pixel, Rgba, Size
 from nextrpg.logger import FROM_CONFIG, Logger
 from nextrpg.model import cached
-
 
 logger = Logger("Draw")
 
@@ -123,10 +121,10 @@ class Drawing:
 
     @cached_property
     def visible_rectangle(self) -> Rectangle:
-        coords = product(range(ceil(self.width)), range(ceil(self.height)))
         visible = [
             Coordinate(x, y)
-            for x, y in coords
+            for x in range(ceil(self.width))
+            for y in range(ceil(self.height))
             if self._surface.get_at((x, y)).a
         ]
         if not visible:

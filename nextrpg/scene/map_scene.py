@@ -2,11 +2,8 @@
 Map scene implementation.
 """
 
-from collections.abc import Iterable
-from dataclasses import field, replace
+from dataclasses import field
 from functools import cached_property
-from heapq import merge
-from itertools import chain
 from os import PathLike
 from typing import override
 
@@ -17,14 +14,12 @@ from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
 from nextrpg.coordinate import Coordinate
 from nextrpg.core import Millisecond, Pixel
-from nextrpg.draw_on_screen import DrawOnScreen, Polygon
+from nextrpg.draw_on_screen import DrawOnScreen
 from nextrpg.event.move import Move
-from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.gui import gui_size
 from nextrpg.logger import Logger
 from nextrpg.model import instance_init, register_instance_init
 from nextrpg.scene.map_helper import (
-    LayerTileBottomAndDrawOnScreen,
     MapHelper,
     get_polygon,
 )
