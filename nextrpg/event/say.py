@@ -51,19 +51,21 @@ class SayEvent(RpgEventScene):
 
     @cached_property
     @override
-    def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         return self._scene.draw_on_screens + (
             Text(self.message, self._coordinate).draw_on_screen,
         )
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        return replace(self, _scene=self._scene.tick(time_delta))
+        return replace(self, _scene=self._scene.tick_without_event(time_delta))
 
     @override
     def event(self, e: PygameEvent) -> Scene:
         if not isinstance(e, KeyPressDown):
-            return replace(self, _scene=self._scene.event(e))
+            return replace(
+                self, _scene=self._scene.event_without_npc_trigger(e)
+            )
 
         if e.key is KeyboardKey.CONFIRM:
             return self._scene.send(self._generator)
@@ -72,6 +74,6 @@ class SayEvent(RpgEventScene):
     @cached_property
     def _coordinate(self) -> Coordinate:
         coord = self.character.coordinate
-        if isinstance(self._scene, MapScene):
+        if self._scene.draw_on_screen_shift:
             return coord.shift(self._scene.draw_on_screen_shift)
         return coord

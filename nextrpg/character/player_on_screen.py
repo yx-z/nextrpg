@@ -25,9 +25,14 @@ from nextrpg.event.pygame_event import (
 class PlayerOnScreen(MovingCharacterOnScreen):
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
+    @override
+    def trigger(self, character: CharacterOnScreen) -> Self:
+        return replace(super().trigger(character), _movement_keys=frozenset())
+
     def event(self, event: PygameEvent) -> Self:
-        if not isinstance(event, (KeyPressDown, KeyPressUp)):
+        if self._triggered or not isinstance(event, (KeyPressDown, KeyPressUp)):
             return self
+
         updated_keys = self._updated_movement_key(event)
         direction = _key_to_dir(updated_keys)
         character = (

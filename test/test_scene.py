@@ -9,4 +9,4 @@ def test_scene() -> None:
     scene = Scene()
     assert scene.event(PygameEvent(Event(QUIT))) is scene
     assert scene.tick(10) is scene
-    assert not scene._draw_on_screens
+    assert not scene.draw_on_screens_before_shift

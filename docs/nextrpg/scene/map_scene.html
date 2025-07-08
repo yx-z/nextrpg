@@ -60,6 +60,9 @@
                         <li>
                                 <a class="variable" href="#MapScene.draw_on_screen_shift">draw_on_screen_shift</a>
                         </li>
+                        <li>
+                                <a class="variable" href="#MapScene.draw_on_screens_before_shift">draw_on_screens_before_shift</a>
+                        </li>
                 </ul>
 
             </li>
@@ -107,7 +110,7 @@
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.gui</span><span class="w"> </span><span class="kn">import</span> <span class="n">gui_size</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logger</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">instance_init</span><span class="p">,</span> <span class="n">dataclass_with_instance_init</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.color_scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">ColorScene</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.static_scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">StaticScene</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.map_helper</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>    <span class="n">MapHelper</span><span class="p">,</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>    <span class="n">get_polygon</span><span class="p">,</span>
@@ -205,7 +208,7 @@
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="o">.</span><span class="n">rectangle</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">move_poly</span><span class="p">):</span>
 </span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>            <span class="k">return</span> <span class="n">TransitionTriple</span><span class="p">(</span>
 </span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>                <span class="n">from_scene</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>                <span class="n">intermediary</span><span class="o">=</span><span class="n">ColorScene</span><span class="p">(),</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>                <span class="n">intermediary</span><span class="o">=</span><span class="n">StaticScene</span><span class="p">(),</span>
 </span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>                <span class="n">to_scene</span><span class="o">=</span><span class="n">move</span><span class="o">.</span><span class="n">to_scene</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">character</span><span class="p">),</span>
 </span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>            <span class="p">)</span>
 </span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>        <span class="k">return</span> <span class="kc">None</span>
@@ -237,7 +240,7 @@
 </span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>
 </span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>    <span class="nd">@override</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>        <span class="k">return</span> <span class="p">(</span>
 </span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_map_helper</span><span class="o">.</span><span class="n">background</span>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_foreground_and_characters</span>
@@ -350,7 +353,7 @@
 </span><span id="MapScene-118"><a href="#MapScene-118"><span class="linenos">118</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="o">.</span><span class="n">rectangle</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">move_poly</span><span class="p">):</span>
 </span><span id="MapScene-119"><a href="#MapScene-119"><span class="linenos">119</span></a>            <span class="k">return</span> <span class="n">TransitionTriple</span><span class="p">(</span>
 </span><span id="MapScene-120"><a href="#MapScene-120"><span class="linenos">120</span></a>                <span class="n">from_scene</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
-</span><span id="MapScene-121"><a href="#MapScene-121"><span class="linenos">121</span></a>                <span class="n">intermediary</span><span class="o">=</span><span class="n">ColorScene</span><span class="p">(),</span>
+</span><span id="MapScene-121"><a href="#MapScene-121"><span class="linenos">121</span></a>                <span class="n">intermediary</span><span class="o">=</span><span class="n">StaticScene</span><span class="p">(),</span>
 </span><span id="MapScene-122"><a href="#MapScene-122"><span class="linenos">122</span></a>                <span class="n">to_scene</span><span class="o">=</span><span class="n">move</span><span class="o">.</span><span class="n">to_scene</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_player</span><span class="o">.</span><span class="n">character</span><span class="p">),</span>
 </span><span id="MapScene-123"><a href="#MapScene-123"><span class="linenos">123</span></a>            <span class="p">)</span>
 </span><span id="MapScene-124"><a href="#MapScene-124"><span class="linenos">124</span></a>        <span class="k">return</span> <span class="kc">None</span>
@@ -382,7 +385,7 @@
 </span><span id="MapScene-150"><a href="#MapScene-150"><span class="linenos">150</span></a>
 </span><span id="MapScene-151"><a href="#MapScene-151"><span class="linenos">151</span></a>    <span class="nd">@cached_property</span>
 </span><span id="MapScene-152"><a href="#MapScene-152"><span class="linenos">152</span></a>    <span class="nd">@override</span>
-</span><span id="MapScene-153"><a href="#MapScene-153"><span class="linenos">153</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="MapScene-153"><a href="#MapScene-153"><span class="linenos">153</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="MapScene-154"><a href="#MapScene-154"><span class="linenos">154</span></a>        <span class="k">return</span> <span class="p">(</span>
 </span><span id="MapScene-155"><a href="#MapScene-155"><span class="linenos">155</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_map_helper</span><span class="o">.</span><span class="n">background</span>
 </span><span id="MapScene-156"><a href="#MapScene-156"><span class="linenos">156</span></a>            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_foreground_and_characters</span>
@@ -554,12 +557,38 @@ scaling), so that the drawings are shifted correctly on screen.</p>
 
 
                             </div>
+                            <div id="MapScene.draw_on_screens_before_shift" class="classattr">
+                                        <input id="MapScene.draw_on_screens_before_shift-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">draw_on_screens_before_shift</span><span class="annotation">: tuple[<a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a>, ...]</span>
+
+                <label class="view-source-button" for="MapScene.draw_on_screens_before_shift-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#MapScene.draw_on_screens_before_shift"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MapScene.draw_on_screens_before_shift-151"><a href="#MapScene.draw_on_screens_before_shift-151"><span class="linenos">151</span></a>    <span class="nd">@cached_property</span>
+</span><span id="MapScene.draw_on_screens_before_shift-152"><a href="#MapScene.draw_on_screens_before_shift-152"><span class="linenos">152</span></a>    <span class="nd">@override</span>
+</span><span id="MapScene.draw_on_screens_before_shift-153"><a href="#MapScene.draw_on_screens_before_shift-153"><span class="linenos">153</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="MapScene.draw_on_screens_before_shift-154"><a href="#MapScene.draw_on_screens_before_shift-154"><span class="linenos">154</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="MapScene.draw_on_screens_before_shift-155"><a href="#MapScene.draw_on_screens_before_shift-155"><span class="linenos">155</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_map_helper</span><span class="o">.</span><span class="n">background</span>
+</span><span id="MapScene.draw_on_screens_before_shift-156"><a href="#MapScene.draw_on_screens_before_shift-156"><span class="linenos">156</span></a>            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_foreground_and_characters</span>
+</span><span id="MapScene.draw_on_screens_before_shift-157"><a href="#MapScene.draw_on_screens_before_shift-157"><span class="linenos">157</span></a>            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_helper</span><span class="o">.</span><span class="n">above_character</span>
+</span><span id="MapScene.draw_on_screens_before_shift-158"><a href="#MapScene.draw_on_screens_before_shift-158"><span class="linenos">158</span></a>            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collision_visuals</span>
+</span><span id="MapScene.draw_on_screens_before_shift-159"><a href="#MapScene.draw_on_screens_before_shift-159"><span class="linenos">159</span></a>        <span class="p">)</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt><a href="../character/npcs.html#EventfulScene">nextrpg.character.npcs.EventfulScene</a></dt>
                                 <dd id="MapScene.npcs" class="variable"><a href="../character/npcs.html#EventfulScene.npcs">npcs</a></dd>
                 <dd id="MapScene.event" class="function"><a href="../character/npcs.html#EventfulScene.event">event</a></dd>
+                <dd id="MapScene.event_without_npc_trigger" class="function"><a href="../character/npcs.html#EventfulScene.event_without_npc_trigger">event_without_npc_trigger</a></dd>
+                <dd id="MapScene.tick_without_event" class="function"><a href="../character/npcs.html#EventfulScene.tick_without_event">tick_without_event</a></dd>
                 <dd id="MapScene.send" class="function"><a href="../character/npcs.html#EventfulScene.send">send</a></dd>
 
             </div>

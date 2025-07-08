@@ -19,7 +19,7 @@ from nextrpg.event.move import Move
 from nextrpg.gui import gui_size
 from nextrpg.logger import Logger
 from nextrpg.model import instance_init, dataclass_with_instance_init
-from nextrpg.scene.color_scene import ColorScene
+from nextrpg.scene.static_scene import StaticScene
 from nextrpg.scene.map_helper import (
     MapHelper,
     get_polygon,
@@ -117,7 +117,7 @@ class MapScene(EventfulScene):
         if self._player.draw_on_screen.rectangle.collide(move_poly):
             return TransitionTriple(
                 from_scene=self,
-                intermediary=ColorScene(),
+                intermediary=StaticScene(),
                 to_scene=move.to_scene(self._player.character),
             )
         return None
@@ -149,7 +149,7 @@ class MapScene(EventfulScene):
 
     @cached_property
     @override
-    def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+    def draw_on_screens_before_shift(self) -> tuple[DrawOnScreen, ...]:
         return (
             self._map_helper.background
             + self._foreground_and_characters

@@ -18,7 +18,7 @@ logger = Logger("CharacterOnScreen")
 
 
 @dataclass(kw_only=True, frozen=True)
-class CharacterOnScreen(ABC):
+class CharacterOnScreen:
     """
     Represents a character that can be displayed and moved on screen.
 
@@ -37,6 +37,7 @@ class CharacterOnScreen(ABC):
 
     character: CharacterDrawing
     coordinate: Coordinate
+    _triggered: bool = False
 
     @cached_property
     def draw_on_screen(self) -> DrawOnScreen:
@@ -49,7 +50,6 @@ class CharacterOnScreen(ABC):
         """
         return DrawOnScreen(self.coordinate, self.character.drawing)
 
-    @abstractmethod
     def tick(self, time_delta: Millisecond) -> Self:
         """
         Update the character's state for a single game loop.
@@ -60,14 +60,21 @@ class CharacterOnScreen(ABC):
         Returns:
             `CharacterOnScreen`: The updated character state after the step.
         """
+        return replace(self, character=self.character.idle(time_delta))
 
     def trigger(self, character: CharacterOnScreen) -> Self:
         direction = character.coordinate.relative_to(self.coordinate)
-        return replace(self, character=self.character.turn(direction))
+        return replace(
+            self, character=self.character.turn(direction), _triggered=True
+        )
+
+    @cached_property
+    def complete(self) -> Self:
+        return replace(self, _triggered=False)
 
 
 @dataclass(kw_only=True, frozen=True)
-class MovingCharacterOnScreen(CharacterOnScreen):
+class MovingCharacterOnScreen(CharacterOnScreen, ABC):
     collisions: tuple[Polygon, ...]
     move_speed: PixelPerMillisecond = field(
         default_factory=lambda: config().character.move_speed
@@ -110,6 +117,9 @@ class MovingCharacterOnScreen(CharacterOnScreen):
         Returns:
             `CharacterOnScreen`: The updated character state after the step.
         """
+        if self._triggered:
+            return super().tick(time_delta)
+
         moved_coord = self.move(time_delta) if self.moving else None
         character = (
             self.character.move(time_delta)

@@ -20,7 +20,7 @@ from nextrpg.config import (
     set_config,
 )
 from nextrpg.core import Millisecond, Pixel, Size
-from nextrpg.draw_on_screen import DrawOnScreen, Drawing
+from nextrpg.draw_on_screen import DrawOnScreen, Drawing, Rectangle
 from nextrpg.coordinate import Coordinate
 from nextrpg.event.pygame_event import (
     GuiResize,
@@ -54,6 +54,10 @@ def gui_size() -> Size:
         case ResizeMode.KEEP_NATIVE_SIZE:
             return config().gui.size
     raise ValueError(f"Invalid resize mode {config().gui.resize_mode}")
+
+
+def screen() -> Rectangle:
+    return Rectangle(Coordinate(0, 0), gui_size())
 
 
 @dataclass(frozen=True)

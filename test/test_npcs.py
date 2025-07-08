@@ -62,7 +62,8 @@ def test_npcs(mocker: MockerFixture) -> None:
     map_helper.map_size = Size(100, 100)
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=map_helper)
     mocker.patch(
-        "nextrpg.scene.map_scene.MapScene._draw_on_screens", return_value=()
+        "nextrpg.scene.map_scene.MapScene.draw_on_screens_before_shift",
+        return_value=(),
     )
     player = PlayerOnScreen(
         character=MockCharacterDrawing(),
@@ -94,7 +95,7 @@ def test_npcs(mocker: MockerFixture) -> None:
     say_event = map_scene.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
     object.__setattr__(say_event._scene, "draw_on_screens", ())
     assert say_event.tick(0)
-    assert say_event._draw_on_screens
+    assert say_event.draw_on_screens
     assert say_event.event(Quit(Event(QUIT)))
     assert say_event.event(KeyPressDown(Event(KEYDOWN, key=K_SPACE)))
     new_scene = say_event.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))

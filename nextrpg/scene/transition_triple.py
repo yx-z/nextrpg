@@ -14,10 +14,10 @@ class TransitionTriple(Scene):
     from_scene: Scene
     intermediary: Scene
     to_scene: Scene
-    _from_and_intermediary: TransitionScene | Scene = instance_init(
+    _from_and_intermediary: Scene = instance_init(
         lambda self: TransitionScene(self.from_scene, self.intermediary)
     )
-    _intermediary_and_to: TransitionScene | Scene = instance_init(
+    _intermediary_and_to: Scene = instance_init(
         lambda self: TransitionScene(self.intermediary, self.to_scene)
     )
 
@@ -34,7 +34,7 @@ class TransitionTriple(Scene):
 
     @cached_property
     @override
-    def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+    def draw_on_screens_before_shift(self) -> tuple[DrawOnScreen, ...]:
         if self._before_intermediary:
             return self._from_and_intermediary.draw_on_screens
         return self._intermediary_and_to.draw_on_screens

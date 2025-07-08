@@ -48,7 +48,7 @@ class TransitionScene(Scene):
 
     @cached_property
     @override
-    def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         return self.from_scene.draw_on_screens + self._to_scene_drawings
 
 

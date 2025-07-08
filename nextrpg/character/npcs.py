@@ -32,20 +32,6 @@ class NpcOnScreen(CharacterOnScreen):
     character: CharacterDrawing = instance_init(
         lambda self: self.spec.character
     )
-    _triggered: bool = False
-
-    def tick(self, time_delta: Millisecond) -> Self:
-        if self._triggered:
-            return self
-        return replace(self, character=self.character.idle(time_delta))
-
-    @override
-    def trigger(self, character: CharacterOnScreen) -> Self:
-        return replace(super().trigger(character), _triggered=True)
-
-    @cached_property
-    def _complete(self) -> Self:
-        return replace(self, _triggered=False)
 
 
 @dataclass(frozen=True)
@@ -78,11 +64,17 @@ class EventfulScene(Scene):
                 scene._player, scene._npc, scene._npcs, scene
             )
             return next(generator)(generator, scene)
+        return self.event_without_npc_trigger(event)
+
+    def event_without_npc_trigger(self, event: PygameEvent) -> Self:
         return replace(self, _player=self._player.event(event))
 
     def tick(self, time_delta: Millisecond) -> Scene:
         if self._next_event:
             return self._next_event
+        return self.tick_without_event(time_delta)
+
+    def tick_without_event(self, time_delta: Millisecond) -> Self:
         return replace(
             self,
             _player=self._player.tick(time_delta),
@@ -117,12 +109,14 @@ class EventfulScene(Scene):
         )
 
     def _trigger(self, npc: NpcOnScreen) -> Self:
-        triggered = npc.trigger(self._player)
-        npcs = tuple(triggered if n.name == npc.name else n for n in self._npcs)
+        triggered_npc = npc.trigger(self._player)
+        npcs = tuple(
+            triggered_npc if n.name == npc.name else n for n in self._npcs
+        )
         return replace(
             self,
-            _player=self._player.trigger(triggered),
-            _npc=triggered,
+            _player=self._player.trigger(triggered_npc),
+            _npc=triggered_npc,
             _npcs=npcs,
         )
 
@@ -142,17 +136,16 @@ class EventfulScene(Scene):
         except StopIteration:
             return replace(
                 self,
-                _npcs=self._complete,
+                _player=self._player.complete,
+                _npcs=self._completed_npcs,
                 _npc=None,
                 _event=None,
                 _event_result=None,
             )
 
     @cached_property
-    def _complete(self) -> tuple[NpcOnScreen, ...]:
-        return tuple(
-            n._complete if n.name == self._npc.name else n for n in self._npcs
-        )
+    def _completed_npcs(self) -> tuple[NpcOnScreen, ...]:
+        return tuple(n.complete for n in self._npcs)
 
 
 type RpgEventSpec = Callable[

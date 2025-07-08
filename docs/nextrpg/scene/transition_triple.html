@@ -48,6 +48,9 @@
                         <li>
                                 <a class="function" href="#TransitionTriple.tick">tick</a>
                         </li>
+                        <li>
+                                <a class="variable" href="#TransitionTriple.draw_on_screens_before_shift">draw_on_screens_before_shift</a>
+                        </li>
                 </ul>
 
             </li>
@@ -88,10 +91,10 @@
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">from_scene</span><span class="p">:</span> <span class="n">Scene</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">intermediary</span><span class="p">:</span> <span class="n">Scene</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">to_scene</span><span class="p">:</span> <span class="n">Scene</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">_from_and_intermediary</span><span class="p">:</span> <span class="n">TransitionScene</span> <span class="o">|</span> <span class="n">Scene</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">_from_and_intermediary</span><span class="p">:</span> <span class="n">Scene</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">TransitionScene</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">intermediary</span><span class="p">)</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="p">)</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">_intermediary_and_to</span><span class="p">:</span> <span class="n">TransitionScene</span> <span class="o">|</span> <span class="n">Scene</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">_intermediary_and_to</span><span class="p">:</span> <span class="n">Scene</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">TransitionScene</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intermediary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_scene</span><span class="p">)</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="p">)</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
@@ -108,7 +111,7 @@
 </span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
 </span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="nd">@override</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_before_intermediary</span><span class="p">:</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_from_and_intermediary</span><span class="o">.</span><span class="n">draw_on_screens</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_intermediary_and_to</span><span class="o">.</span><span class="n">draw_on_screens</span>
@@ -137,10 +140,10 @@
 </span><span id="TransitionTriple-15"><a href="#TransitionTriple-15"><span class="linenos">15</span></a>    <span class="n">from_scene</span><span class="p">:</span> <span class="n">Scene</span>
 </span><span id="TransitionTriple-16"><a href="#TransitionTriple-16"><span class="linenos">16</span></a>    <span class="n">intermediary</span><span class="p">:</span> <span class="n">Scene</span>
 </span><span id="TransitionTriple-17"><a href="#TransitionTriple-17"><span class="linenos">17</span></a>    <span class="n">to_scene</span><span class="p">:</span> <span class="n">Scene</span>
-</span><span id="TransitionTriple-18"><a href="#TransitionTriple-18"><span class="linenos">18</span></a>    <span class="n">_from_and_intermediary</span><span class="p">:</span> <span class="n">TransitionScene</span> <span class="o">|</span> <span class="n">Scene</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="TransitionTriple-18"><a href="#TransitionTriple-18"><span class="linenos">18</span></a>    <span class="n">_from_and_intermediary</span><span class="p">:</span> <span class="n">Scene</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
 </span><span id="TransitionTriple-19"><a href="#TransitionTriple-19"><span class="linenos">19</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">TransitionScene</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">intermediary</span><span class="p">)</span>
 </span><span id="TransitionTriple-20"><a href="#TransitionTriple-20"><span class="linenos">20</span></a>    <span class="p">)</span>
-</span><span id="TransitionTriple-21"><a href="#TransitionTriple-21"><span class="linenos">21</span></a>    <span class="n">_intermediary_and_to</span><span class="p">:</span> <span class="n">TransitionScene</span> <span class="o">|</span> <span class="n">Scene</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="TransitionTriple-21"><a href="#TransitionTriple-21"><span class="linenos">21</span></a>    <span class="n">_intermediary_and_to</span><span class="p">:</span> <span class="n">Scene</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
 </span><span id="TransitionTriple-22"><a href="#TransitionTriple-22"><span class="linenos">22</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">TransitionScene</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intermediary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_scene</span><span class="p">)</span>
 </span><span id="TransitionTriple-23"><a href="#TransitionTriple-23"><span class="linenos">23</span></a>    <span class="p">)</span>
 </span><span id="TransitionTriple-24"><a href="#TransitionTriple-24"><span class="linenos">24</span></a>
@@ -157,7 +160,7 @@
 </span><span id="TransitionTriple-35"><a href="#TransitionTriple-35"><span class="linenos">35</span></a>
 </span><span id="TransitionTriple-36"><a href="#TransitionTriple-36"><span class="linenos">36</span></a>    <span class="nd">@cached_property</span>
 </span><span id="TransitionTriple-37"><a href="#TransitionTriple-37"><span class="linenos">37</span></a>    <span class="nd">@override</span>
-</span><span id="TransitionTriple-38"><a href="#TransitionTriple-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="TransitionTriple-38"><a href="#TransitionTriple-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="TransitionTriple-39"><a href="#TransitionTriple-39"><span class="linenos">39</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_before_intermediary</span><span class="p">:</span>
 </span><span id="TransitionTriple-40"><a href="#TransitionTriple-40"><span class="linenos">40</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_from_and_intermediary</span><span class="o">.</span><span class="n">draw_on_screens</span>
 </span><span id="TransitionTriple-41"><a href="#TransitionTriple-41"><span class="linenos">41</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_intermediary_and_to</span><span class="o">.</span><span class="n">draw_on_screens</span>
@@ -173,7 +176,7 @@
                             <div id="TransitionTriple.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">TransitionTriple</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">from_scene</span><span class="p">:</span> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>,</span><span class="param">	<span class="n">intermediary</span><span class="p">:</span> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>,</span><span class="param">	<span class="n">to_scene</span><span class="p">:</span> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>,</span><span class="param">	<span class="n">_from_and_intermediary</span><span class="p">:</span> <span class="n"><a href="transition_scene.html#TransitionScene">nextrpg.scene.transition_scene.TransitionScene</a></span> <span class="o">|</span> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_intermediary_and_to</span><span class="p">:</span> <span class="n"><a href="transition_scene.html#TransitionScene">nextrpg.scene.transition_scene.TransitionScene</a></span> <span class="o">|</span> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">TransitionTriple</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">from_scene</span><span class="p">:</span> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>,</span><span class="param">	<span class="n">intermediary</span><span class="p">:</span> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>,</span><span class="param">	<span class="n">to_scene</span><span class="p">:</span> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>,</span><span class="param">	<span class="n">_from_and_intermediary</span><span class="p">:</span> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_intermediary_and_to</span><span class="p">:</span> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -259,6 +262,27 @@ used for calculating time-based changes.</li>
 </blockquote>
 </div>
 
+
+                            </div>
+                            <div id="TransitionTriple.draw_on_screens_before_shift" class="classattr">
+                                        <input id="TransitionTriple.draw_on_screens_before_shift-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">draw_on_screens_before_shift</span><span class="annotation">: tuple[<a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a>, ...]</span>
+
+                <label class="view-source-button" for="TransitionTriple.draw_on_screens_before_shift-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#TransitionTriple.draw_on_screens_before_shift"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TransitionTriple.draw_on_screens_before_shift-36"><a href="#TransitionTriple.draw_on_screens_before_shift-36"><span class="linenos">36</span></a>    <span class="nd">@cached_property</span>
+</span><span id="TransitionTriple.draw_on_screens_before_shift-37"><a href="#TransitionTriple.draw_on_screens_before_shift-37"><span class="linenos">37</span></a>    <span class="nd">@override</span>
+</span><span id="TransitionTriple.draw_on_screens_before_shift-38"><a href="#TransitionTriple.draw_on_screens_before_shift-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="TransitionTriple.draw_on_screens_before_shift-39"><a href="#TransitionTriple.draw_on_screens_before_shift-39"><span class="linenos">39</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_before_intermediary</span><span class="p">:</span>
+</span><span id="TransitionTriple.draw_on_screens_before_shift-40"><a href="#TransitionTriple.draw_on_screens_before_shift-40"><span class="linenos">40</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_from_and_intermediary</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="TransitionTriple.draw_on_screens_before_shift-41"><a href="#TransitionTriple.draw_on_screens_before_shift-41"><span class="linenos">41</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_intermediary_and_to</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span></pre></div>
+
+
+    
 
                             </div>
                             <div class="inherited">

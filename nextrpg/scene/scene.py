@@ -42,14 +42,15 @@ class Scene:
         Returns:
             `tuple[DrawOnScreen, ...]`: The tuple of drawables to be rendered.
         """
-        if self.draw_on_screen_shift is None:
-            return self._draw_on_screens
-        return tuple(
-            d.shift(self.draw_on_screen_shift) for d in self._draw_on_screens
-        )
+        if self.draw_on_screen_shift:
+            return tuple(
+                d.shift(self.draw_on_screen_shift)
+                for d in self.draw_on_screens_before_shift
+            )
+        return self.draw_on_screens_before_shift
 
     @cached_property
-    def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+    def draw_on_screens_before_shift(self) -> tuple[DrawOnScreen, ...]:
         return ()
 
     def event(self, event: PygameEvent) -> Scene:
