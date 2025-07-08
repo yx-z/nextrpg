@@ -5,7 +5,7 @@ Game window / Graphical User Interface (GUI).
 from dataclasses import dataclass, field, replace
 from functools import cached_property
 
-from pygame import font
+from pygame import DOUBLEBUF, font
 from pygame.display import flip, init, set_caption, set_mode
 from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
@@ -157,7 +157,7 @@ class Gui:
 
     @cached_property
     def _current_gui_flag(self) -> _GuiFlag:
-        flag = 0
+        flag = DOUBLEBUF
         if self.current_config.gui_mode is GuiMode.FULL_SCREEN:
             flag |= FULLSCREEN
         if self.current_config.allow_window_resize:
@@ -186,17 +186,15 @@ class Gui:
                 set_mode(self.current_config.size, self._current_gui_flag),
             )
 
-
     @cached_property
     def _toggle_gui_mode(self) -> Gui:
         current_config = replace(
-        self.current_config, gui_mode=self.current_config.gui_mode.opposite
-    )
+            self.current_config, gui_mode=self.current_config.gui_mode.opposite
+        )
         set_config(replace(config(), gui=current_config))
         return replace(
-        self, current_config=current_config, last_config=self.current_config
-    )
-
+            self, current_config=current_config, last_config=self.current_config
+        )
 
     def _resize(self, size: Size) -> Gui:
         if size == self.current_config.size:
@@ -204,8 +202,8 @@ class Gui:
         current_config = replace(self.current_config, size=size)
         set_config(replace(config(), gui=current_config))
         return replace(
-        self, current_config=current_config, last_config=self.current_config
-    )
+            self, current_config=current_config, last_config=self.current_config
+        )
 
 
 def _log_text(msgs: tuple[ComponentAndMessage, ...]) -> tuple[Text, ...]:

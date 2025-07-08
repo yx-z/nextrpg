@@ -26,17 +26,10 @@ class TransitionScene(Scene):
     )
     _elapsed: Millisecond = 0
 
-    @cached_property
-    @override
-    def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return self.from_scene.draw_on_screens_shifted + self._to_scene_drawings
-
     def tick(self, time_delta: Millisecond) -> Scene:
-        return (
-            self.to_scene
-            if (total_elapsed := self._elapsed + time_delta) > self.duration
-            else replace(self, _elapsed=total_elapsed)
-        )
+        if (total_elapsed := self._elapsed + time_delta) > self.duration:
+            return self.to_scene
+        return replace(self, _elapsed=total_elapsed)
 
     @cached_property
     def _to_scene_drawings(self) -> tuple[DrawOnScreen, ...]:
@@ -52,6 +45,11 @@ class TransitionScene(Scene):
     @cached_property
     def _alpha_percentage(self) -> float:
         return self._elapsed / self.duration
+
+    @cached_property
+    @override
+    def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+        return self.from_scene.draw_on_screens_shifted + self._to_scene_drawings
 
 
 def _scale(alpha_percentage: float) -> Alpha:

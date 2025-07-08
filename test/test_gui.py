@@ -7,7 +7,7 @@ from nextrpg.core import Size
 from nextrpg.draw_on_screen import DrawOnScreen, Drawing
 from nextrpg.coordinate import Coordinate
 from nextrpg.event.pygame_event import GuiResize, KeyPressDown, KeyPressUp
-from nextrpg.gui import Gui, _resize, gui_size
+from nextrpg.gui import Gui, gui_size
 from nextrpg.logger import Logger
 from test.util import MockSurface, override_config
 
@@ -55,11 +55,10 @@ def test_gui(mocker: MockerFixture) -> None:
         is GuiMode.FULL_SCREEN
     )
 
-    width, height = gui.current_config.size
-    assert _resize(gui, GuiResize(Event(VIDEORESIZE, w=width, h=height))) is gui
+    assert gui._resize(gui.current_config.size) is gui
 
     with override_config(Config(debug=DebugConfig())):
-        Logger("TestGuiLogget").debug("test")
+        Logger("TestGuiLogger").debug("test")
         gui._draw_log(0)
 
 

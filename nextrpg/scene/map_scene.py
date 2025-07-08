@@ -19,12 +19,14 @@ from nextrpg.event.move import Move
 from nextrpg.gui import gui_size
 from nextrpg.logger import Logger
 from nextrpg.model import instance_init, register_instance_init
+from nextrpg.scene.color_scene import ColorScene
 from nextrpg.scene.map_helper import (
     MapHelper,
     get_polygon,
 )
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
+from nextrpg.scene.transition_chain import TransitionChain
 
 logger = Logger("MapScene")
 
@@ -106,15 +108,17 @@ class MapScene(EventfulScene):
         moved = (m for move in self.moves if (m := self._move(move)))
         return next(moved, None)
 
-    def _move(self, move: Move) -> Scene | None:
+    def _move(self, move: Move) -> TransitionChain | None:
         move_poly = get_polygon(
             self._map_helper.get_object(move.trigger_object)
         )
-        return (
-            TransitionScene(self, move.to_scene(self._player.character))
-            if self._player.draw_on_screen.rectangle.collide(move_poly)
-            else None
-        )
+        if self._player.draw_on_screen.rectangle.collide(move_poly):
+            return TransitionChain(
+                from_scene=self,
+                intermediary_scene=ColorScene(),
+                to_scene=move.to_scene(self._player.character),
+            )
+        return None
 
     @cached_property
     def _collision_visuals(self) -> tuple[DrawOnScreen, ...]:

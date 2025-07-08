@@ -180,7 +180,7 @@ def _pop(time_delta: Millisecond) -> None:
     _timed_entries = {
         k: t
         for k, v in _timed_entries.items()
-        if not (t := replace(v, timer=v.timer.tick(time_delta))).timer.expired
+        if not (t := replace(v, timer=v.timer.tick(time_delta))).timer.complete
     }
 
 

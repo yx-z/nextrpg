@@ -236,11 +236,11 @@ class Timer:
         return replace(self, elapsed=0)
 
     @cached_property
-    def expired(self) -> bool:
+    def complete(self) -> bool:
         """
-        Get whether the timer has expired.
+        Get whether the timer has completed.
 
         Returns:
-            `bool`: Whether the timer has expired.
+            `bool`: Whether the timer has completed.
         """
         return self.elapsed > self.duration

@@ -169,7 +169,7 @@
                                 <a class="variable" href="#Timer.reset">reset</a>
                         </li>
                         <li>
-                                <a class="variable" href="#Timer.expired">expired</a>
+                                <a class="variable" href="#Timer.complete">complete</a>
                         </li>
                 </ul>
 
@@ -435,12 +435,12 @@
 </span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>
 </span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a><span class="sd">        Get whether the timer has expired.</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a><span class="sd">        Get whether the timer has completed.</span>
 </span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>
 </span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a><span class="sd">        Returns:</span>
-</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a><span class="sd">            `bool`: Whether the timer has expired.</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a><span class="sd">            `bool`: Whether the timer has completed.</span>
 </span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
@@ -1262,12 +1262,12 @@ multiplied.</li>
 </span><span id="Timer-237"><a href="#Timer-237"><span class="linenos">237</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </span><span id="Timer-238"><a href="#Timer-238"><span class="linenos">238</span></a>
 </span><span id="Timer-239"><a href="#Timer-239"><span class="linenos">239</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Timer-240"><a href="#Timer-240"><span class="linenos">240</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Timer-240"><a href="#Timer-240"><span class="linenos">240</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="Timer-241"><a href="#Timer-241"><span class="linenos">241</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer-242"><a href="#Timer-242"><span class="linenos">242</span></a><span class="sd">        Get whether the timer has expired.</span>
+</span><span id="Timer-242"><a href="#Timer-242"><span class="linenos">242</span></a><span class="sd">        Get whether the timer has completed.</span>
 </span><span id="Timer-243"><a href="#Timer-243"><span class="linenos">243</span></a>
 </span><span id="Timer-244"><a href="#Timer-244"><span class="linenos">244</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer-245"><a href="#Timer-245"><span class="linenos">245</span></a><span class="sd">            `bool`: Whether the timer has expired.</span>
+</span><span id="Timer-245"><a href="#Timer-245"><span class="linenos">245</span></a><span class="sd">            `bool`: Whether the timer has completed.</span>
 </span><span id="Timer-246"><a href="#Timer-246"><span class="linenos">246</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Timer-247"><a href="#Timer-247"><span class="linenos">247</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
@@ -1386,33 +1386,33 @@ multiplied.</li>
 
 
                             </div>
-                            <div id="Timer.expired" class="classattr">
-                                        <input id="Timer.expired-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="Timer.complete" class="classattr">
+                                        <input id="Timer.complete-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">expired</span><span class="annotation">: bool</span>
+            <span class="name">complete</span><span class="annotation">: bool</span>
 
-                <label class="view-source-button" for="Timer.expired-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="Timer.complete-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Timer.expired"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.expired-239"><a href="#Timer.expired-239"><span class="linenos">239</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Timer.expired-240"><a href="#Timer.expired-240"><span class="linenos">240</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Timer.expired-241"><a href="#Timer.expired-241"><span class="linenos">241</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer.expired-242"><a href="#Timer.expired-242"><span class="linenos">242</span></a><span class="sd">        Get whether the timer has expired.</span>
-</span><span id="Timer.expired-243"><a href="#Timer.expired-243"><span class="linenos">243</span></a>
-</span><span id="Timer.expired-244"><a href="#Timer.expired-244"><span class="linenos">244</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer.expired-245"><a href="#Timer.expired-245"><span class="linenos">245</span></a><span class="sd">            `bool`: Whether the timer has expired.</span>
-</span><span id="Timer.expired-246"><a href="#Timer.expired-246"><span class="linenos">246</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer.expired-247"><a href="#Timer.expired-247"><span class="linenos">247</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+    <a class="headerlink" href="#Timer.complete"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.complete-239"><a href="#Timer.complete-239"><span class="linenos">239</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Timer.complete-240"><a href="#Timer.complete-240"><span class="linenos">240</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Timer.complete-241"><a href="#Timer.complete-241"><span class="linenos">241</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer.complete-242"><a href="#Timer.complete-242"><span class="linenos">242</span></a><span class="sd">        Get whether the timer has completed.</span>
+</span><span id="Timer.complete-243"><a href="#Timer.complete-243"><span class="linenos">243</span></a>
+</span><span id="Timer.complete-244"><a href="#Timer.complete-244"><span class="linenos">244</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer.complete-245"><a href="#Timer.complete-245"><span class="linenos">245</span></a><span class="sd">            `bool`: Whether the timer has completed.</span>
+</span><span id="Timer.complete-246"><a href="#Timer.complete-246"><span class="linenos">246</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer.complete-247"><a href="#Timer.complete-247"><span class="linenos">247</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Get whether the timer has expired.</p>
+            <div class="docstring"><p>Get whether the timer has completed.</p>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>bool</code>: Whether the timer has expired.</p>
+  <p><code>bool</code>: Whether the timer has completed.</p>
 </blockquote>
 </div>
 

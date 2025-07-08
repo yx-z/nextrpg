@@ -90,5 +90,3 @@ class _GameLoop:
                 last_config=self._gui.current_config,
             )
             object.__setattr__(self, "_gui", new_gui)
-
-

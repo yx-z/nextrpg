@@ -112,9 +112,9 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
             move_timer = self._move_timer
             idle_timer = self._idle_timer.tick(time_delta)
 
-        if self._moving and move_timer.expired:
+        if self._moving and move_timer.complete:
             moving = False
-        elif not self._moving and idle_timer.expired:
+        elif not self._moving and idle_timer.complete:
             moving = True
         else:
             moving = self._moving

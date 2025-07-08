@@ -223,4 +223,5 @@ class NpcSpec:
             ctx = self.event.__globals__.copy()
             exec(transform_event(self.event), ctx)
             return ctx[self.event.__name__](player, npc, npc_dict, scene)
+
         return wrapped
