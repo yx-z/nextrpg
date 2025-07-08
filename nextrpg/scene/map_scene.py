@@ -1,7 +1,7 @@
 """
 Map scene implementation.
 """
-
+from collections.abc import Iterable
 from dataclasses import field, replace
 from functools import cached_property
 from heapq import merge
@@ -77,15 +77,6 @@ class MapScene(EventfulScene):
     _npcs: tuple[NpcOnScreen, ...] = instance_init(_init_npcs)
     _player: PlayerOnScreen = instance_init(_init_player)
 
-    @cached_property
-    @override
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return (
-            self._map_helper.background
-            + self._foreground_and_characters
-            + self._map_helper.above_character
-            + self._collision_visuals
-        )
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
@@ -93,14 +84,14 @@ class MapScene(EventfulScene):
 
     @cached_property
     def _foreground_and_characters(self) -> tuple[DrawOnScreen, ...]:
-        foregrounds = (
+        foregrounds = [
             t for layer in self._map_helper.foreground for t in layer
-        )
-        characters = chain((self._player,), self._npcs)
+        ]
+        characters = (self._player,)+ self._npcs
         bottom_and_draw = sorted(
             map(self._map_helper.layer_bottom_and_draw, characters)
         )
-        layers = merge(foregrounds, bottom_and_draw)
+        layers = sorted(foregrounds + bottom_and_draw, key=lambda x: x[:2])
         return tuple(draw for _, _, draw in layers)
 
     @cached_property
@@ -155,6 +146,15 @@ class MapScene(EventfulScene):
             spec=spec,
         )
 
+    @cached_property
+    @override
+    def _draw_on_screens(self) -> tuple[DrawOnScreen,...]:
+        return (
+            self._map_helper.background
+            + self._foreground_and_characters
+            + self._map_helper.above_character
+            + self._collision_visuals
+        )
 
 def _shift(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
     if player_axis < gui_axis / 2:

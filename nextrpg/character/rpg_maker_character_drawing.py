@@ -221,9 +221,9 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             for d in self._crop_into_frames_at_row(drawing, row)
         ]
         return CyclicFrames(
-            frames=[
+            frames=tuple(
                 frames[i] for i in self.sprite_sheet.style._frame_indices()
-            ],
+            ),
             duration_per_frame=self.duration_per_frame,
         )
 

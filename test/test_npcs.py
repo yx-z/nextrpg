@@ -92,7 +92,7 @@ def test_npcs(mocker: MockerFixture) -> None:
     say_event = map_scene.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
     object.__setattr__(say_event._scene, "draw_on_screens", ())
     assert say_event.tick(0)
-    assert say_event.draw_on_screens
+    assert say_event._draw_on_screens
     assert say_event.event(Quit(Event(QUIT)))
     assert say_event.event(KeyPressDown(Event(KEYDOWN, key=K_SPACE)))
     new_scene = say_event.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
@@ -131,7 +131,7 @@ def test_eventful_scene() -> None:
 
     gen2 = event()
     next(gen2)
-    npc =NpcOnScreen(
+    npc = NpcOnScreen(
         name="abc",
         character=MockCharacterDrawing(),
         coordinate=Coordinate(0, 0),
@@ -144,7 +144,7 @@ def test_eventful_scene() -> None:
             collisions=(),
         ),
         _npc=npc,
-        _npcs=(npc, ),
+        _npcs=(npc,),
         _event=gen2,
     )
     assert scene._next_event

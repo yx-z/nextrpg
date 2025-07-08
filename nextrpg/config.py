@@ -119,7 +119,7 @@ class GuiConfig:
         `size`: The resolution or dimensions of the GUI window defined
             by width and height. This also defines the aspect ratio of the game.
 
-        `frames_per_second`: The target frame rate for the application's
+        `frames_per_second`: FPS. The target frame rate for the application's
             rendering performance.
 
         `background_color`: The background color of the GUI window.
@@ -135,7 +135,7 @@ class GuiConfig:
 
     title: str = "nextrpg"
     size: Size = Size(1280, 720)
-    frames_per_second: int = 60
+    frames_per_second: int = 120
     background_color: Rgba = Rgba(0, 0, 0, 0)
     gui_mode: GuiMode = GuiMode.WINDOWED
     resize_mode: ResizeMode = ResizeMode.SCALE

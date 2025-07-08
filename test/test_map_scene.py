@@ -51,7 +51,7 @@ def test_map_scene(mocker: MockerFixture) -> None:
             ),
         ),
     )
-    assert map.draw_on_screens
+    assert map._draw_on_screens
     assert not map.tick(0)._collision_visuals
     assert map.event(Quit(Event(QUIT)))
 

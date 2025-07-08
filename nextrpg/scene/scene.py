@@ -3,6 +3,7 @@ Scene is an interface of all game interactions like exploration, menu, etc.
 """
 
 from functools import cached_property
+from collections.abc import Iterable
 
 from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import DrawOnScreen
@@ -18,17 +19,6 @@ class Scene:
     handling events and drawing content on the screen. All game scenes must
     implement these methods.
     """
-
-    @cached_property
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        """
-        Get the tuple of drawables to be rendered on the screen.
-
-        Returns:
-            `tuple[DrawOnScreen, ...]`: The tuple of drawables to be rendered
-                on the screen.
-        """
-        return ()
 
     @cached_property
     def draw_on_screen_shift(self) -> Coordinate:
@@ -53,8 +43,12 @@ class Scene:
             `tuple[DrawOnScreen, ...]`: The tuple of drawables to be rendered.
         """
         return tuple(
-            d.shift(self.draw_on_screen_shift) for d in self.draw_on_screens
+            d.shift(self.draw_on_screen_shift) for d in self._draw_on_screens
         )
+
+    @cached_property
+    def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+        return ()
 
     def event(self, event: PygameEvent) -> Scene:
         """

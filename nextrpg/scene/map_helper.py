@@ -127,7 +127,7 @@ class MapHelper:
 
     @cached_property
     def foreground(
-        self,
+        self
     ) -> tuple[tuple[LayerTileBottomAndDrawOnScreen, ...], ...]:
         """
         The tuple of foreground drawings with bottom pixel info.
@@ -230,7 +230,7 @@ class MapHelper:
         above = (
             index
             for index, layer in enumerate(self._reversed_foregrounds)
-            if _above_character(layer, character)
+            if _below_character_layer(layer, character)
         )
         return next(above, 0)
 
@@ -402,14 +402,14 @@ class MapHelper:
         return load_pygame(self.tmx_file)
 
 
-def _above_character(
+def _below_character_layer(
     layer: tuple[LayerTileBottomAndDrawOnScreen, ...],
     character: CharacterOnScreen,
 ) -> bool:
     rect = character.draw_on_screen.visible_rectangle
-    return any(
+    return layer[-1].bottom < rect.bottom and any(
         bottom < rect.bottom and rect.collide(draw.visible_rectangle)
-        for _, bottom, draw in reversed(layer)
+        for _, bottom, draw in layer
     )
 
 
