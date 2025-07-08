@@ -61,7 +61,9 @@ def test_npcs(mocker: MockerFixture) -> None:
     map_helper.above_character = ()
     map_helper.map_size = Size(100, 100)
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=map_helper)
-    mocker.patch("nextrpg.scene.map_scene.merge", return_value=())
+    mocker.patch(
+        "nextrpg.scene.map_scene.MapScene._draw_on_screens", return_value=()
+    )
     player = PlayerOnScreen(
         character=MockCharacterDrawing(),
         coordinate=Coordinate(0, 0),

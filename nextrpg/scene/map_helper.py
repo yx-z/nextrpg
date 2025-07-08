@@ -127,7 +127,7 @@ class MapHelper:
 
     @cached_property
     def foreground(
-        self
+        self,
     ) -> tuple[tuple[LayerTileBottomAndDrawOnScreen, ...], ...]:
         """
         The tuple of foreground drawings with bottom pixel info.

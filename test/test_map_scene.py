@@ -42,14 +42,14 @@ def test_map_scene(mocker: MockerFixture) -> None:
     with override_config(Config(debug=DebugConfig())):
         assert map._collision_visuals
     mocker.patch(
-        "nextrpg.scene.map_scene.merge",
-        return_value=(
+        "nextrpg.scene.map_scene.sorted",
+        return_value=[
             (
                 None,
                 None,
                 DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),
-            ),
-        ),
+            )
+        ],
     )
     assert map._draw_on_screens
     assert not map.tick(0)._collision_visuals

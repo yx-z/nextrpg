@@ -46,9 +46,6 @@
                                 <a class="variable" href="#TransitionScene.duration">duration</a>
                         </li>
                         <li>
-                                <a class="variable" href="#TransitionScene.draw_on_screens">draw_on_screens</a>
-                        </li>
-                        <li>
                                 <a class="function" href="#TransitionScene.tick">tick</a>
                         </li>
                 </ul>
@@ -105,7 +102,7 @@
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
 </span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="nd">@override</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">draw_on_screens_shifted</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_scene_drawings</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
 </span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
@@ -169,7 +166,7 @@
 </span><span id="TransitionScene-29"><a href="#TransitionScene-29"><span class="linenos">29</span></a>
 </span><span id="TransitionScene-30"><a href="#TransitionScene-30"><span class="linenos">30</span></a>    <span class="nd">@cached_property</span>
 </span><span id="TransitionScene-31"><a href="#TransitionScene-31"><span class="linenos">31</span></a>    <span class="nd">@override</span>
-</span><span id="TransitionScene-32"><a href="#TransitionScene-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="TransitionScene-32"><a href="#TransitionScene-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="TransitionScene-33"><a href="#TransitionScene-33"><span class="linenos">33</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">draw_on_screens_shifted</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_scene_drawings</span>
 </span><span id="TransitionScene-34"><a href="#TransitionScene-34"><span class="linenos">34</span></a>
 </span><span id="TransitionScene-35"><a href="#TransitionScene-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
@@ -250,34 +247,6 @@
     <a class="headerlink" href="#TransitionScene.duration"></a>
     
     
-
-                            </div>
-                            <div id="TransitionScene.draw_on_screens" class="classattr">
-                                        <input id="TransitionScene.draw_on_screens-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr variable">
-            <span class="name">draw_on_screens</span><span class="annotation">: tuple[<a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a>, ...]</span>
-
-                <label class="view-source-button" for="TransitionScene.draw_on_screens-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#TransitionScene.draw_on_screens"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TransitionScene.draw_on_screens-30"><a href="#TransitionScene.draw_on_screens-30"><span class="linenos">30</span></a>    <span class="nd">@cached_property</span>
-</span><span id="TransitionScene.draw_on_screens-31"><a href="#TransitionScene.draw_on_screens-31"><span class="linenos">31</span></a>    <span class="nd">@override</span>
-</span><span id="TransitionScene.draw_on_screens-32"><a href="#TransitionScene.draw_on_screens-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="TransitionScene.draw_on_screens-33"><a href="#TransitionScene.draw_on_screens-33"><span class="linenos">33</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">draw_on_screens_shifted</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_scene_drawings</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Get the tuple of drawables to be rendered on the screen.</p>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>tuple[DrawOnScreen, ...]</code>: The tuple of drawables to be rendered
-      on the screen.</p>
-</blockquote>
-</div>
-
 
                             </div>
                             <div id="TransitionScene.tick" class="classattr">

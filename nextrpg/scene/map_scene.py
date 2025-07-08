@@ -1,6 +1,7 @@
 """
 Map scene implementation.
 """
+
 from collections.abc import Iterable
 from dataclasses import field, replace
 from functools import cached_property
@@ -77,7 +78,6 @@ class MapScene(EventfulScene):
     _npcs: tuple[NpcOnScreen, ...] = instance_init(_init_npcs)
     _player: PlayerOnScreen = instance_init(_init_player)
 
-
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
         return self._move_to_scene or super().tick(time_delta)
@@ -87,7 +87,7 @@ class MapScene(EventfulScene):
         foregrounds = [
             t for layer in self._map_helper.foreground for t in layer
         ]
-        characters = (self._player,)+ self._npcs
+        characters = (self._player,) + self._npcs
         bottom_and_draw = sorted(
             map(self._map_helper.layer_bottom_and_draw, characters)
         )
@@ -148,13 +148,14 @@ class MapScene(EventfulScene):
 
     @cached_property
     @override
-    def _draw_on_screens(self) -> tuple[DrawOnScreen,...]:
+    def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         return (
             self._map_helper.background
             + self._foreground_and_characters
             + self._map_helper.above_character
             + self._collision_visuals
         )
+
 
 def _shift(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
     if player_axis < gui_axis / 2:
