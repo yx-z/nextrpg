@@ -282,11 +282,11 @@ class TransitionConfig:
     This config is used by `nextrpg.scene.transition_scene.TransitionScene`.
 
     Arguments:
-        `transition_duration`: The total duration of the transition
+        `duration`: The total duration of the transition
             in milliseconds.
     """
 
-    duration: Millisecond = 200
+    duration: Millisecond = 500
 
 
 @dataclass(frozen=True)
