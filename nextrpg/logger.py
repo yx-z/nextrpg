@@ -131,7 +131,7 @@ class ComponentAndMessage(NamedTuple):
     message: str
 
 
-def pop_messages(time_delta: Millisecond) -> list[ComponentAndMessage]:
+def pop_messages(time_delta: Millisecond) -> tuple[ComponentAndMessage, ...]:
     """
     Pop all log messages and return them in a formatted fashion.
 
@@ -139,16 +139,16 @@ def pop_messages(time_delta: Millisecond) -> list[ComponentAndMessage]:
         `time_delta`: Milliseconds since the last game loop.
 
     Returns:
-        `list[ComponentAndMessage]`: List of log messages.
+        `tuple[ComponentAndMessage]`: Tuple of log messages.
     """
     if not (debug := config().debug):
         _pop(time_delta)
-        return []
-    msgs = [
+        return ()
+    msgs = tuple(
         ComponentAndMessage(e.component, e.formatted)
         for e in chain(_entries, _timed_entries.values())
         if e.level >= debug.log_level
-    ]
+    )
     _pop(time_delta)
     return msgs
 

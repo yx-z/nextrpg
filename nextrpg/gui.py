@@ -95,7 +95,7 @@ class Gui:
         return self
 
     def draw(
-        self, draw_on_screens: list[DrawOnScreen], time_delta: Millisecond
+        self, draw_on_screens: tuple[DrawOnScreen, ...], time_delta: Millisecond
     ) -> None:
         """
         Draw the given drawings to the screen.
@@ -124,7 +124,7 @@ class Gui:
         if msgs := pop_messages(time_delta):
             self._screen.blits(t.draw_on_screen.pygame for t in _log_text(msgs))
 
-    def _scale(self, draws: list[DrawOnScreen]) -> DrawOnScreen:
+    def _scale(self, draws: tuple[DrawOnScreen, ...]) -> DrawOnScreen:
         screen = Surface(self.initial_config.size)
         screen.blits(d.pygame for d in draws)
         return DrawOnScreen(
@@ -153,12 +153,12 @@ class Gui:
 
     @cached_property
     def _current_gui_flag(self) -> _GuiFlag:
-        check_and_flags = [
+        check_and_flags = (
             (self.current_config.gui_mode is GuiMode.FULL_SCREEN, FULLSCREEN),
             (self.current_config.allow_window_resize, RESIZABLE),
-        ]
+        )
         return reduce(
-            or_, [flag for check, flag in check_and_flags if check], 0
+            or_, (flag for check, flag in check_and_flags if check), 0
         )
 
     def _update_title(self) -> None:
@@ -208,20 +208,20 @@ def _resize(self, e: GuiResize) -> Gui:
     )
 
 
-def _log_text(msgs: list[ComponentAndMessage]) -> list[Text]:
+def _log_text(msgs: tuple[ComponentAndMessage, ...]) -> tuple[Text, ...]:
     margin = config().text.margin
     msg_margin = (
         max(config().text.font.text_size(m.component).width for m in msgs)
         + 2 * margin
     )
-    return [
+    return tuple(
         text
         for i, (component, msg) in enumerate(msgs)
         for text in (
             Text(component, Coordinate(margin, _line_height(i))),
             Text(msg, Coordinate(msg_margin, _line_height(i))),
         )
-    ]
+    )
 
 
 def _line_height(line_index: int) -> Pixel:

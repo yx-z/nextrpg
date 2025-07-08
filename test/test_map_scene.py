@@ -22,17 +22,17 @@ from test.util import MockCharacterDrawing, MockSurface, override_config
 
 def test_map_scene(mocker: MockerFixture) -> None:
     helper = MagicMock()
-    helper.background = []
+    helper.background = ()
     foreground = TileBottomAndDrawOnScreen(
         10, DrawOnScreen(Coordinate(1, 2), Drawing(MockSurface()))
     )
-    helper.foreground = [[foreground]]
-    helper.above_character = []
+    helper.foreground = ((foreground,),)
+    helper.above_character = ()
     helper.map_size = (100, 200)
     helper.get_object.return_value = SimpleNamespace(
         x=0, y=0, width=1, height=2, properties={}
     )
-    helper.collisions = [Rectangle(Coordinate(0, 0), Size(0, 0))]
+    helper.collisions = (Rectangle(Coordinate(0, 0), Size(0, 0)),)
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=helper)
     map = MapScene(
         tmx_file=Path("test"),
@@ -43,9 +43,13 @@ def test_map_scene(mocker: MockerFixture) -> None:
         assert map._collision_visuals
     mocker.patch(
         "nextrpg.scene.map_scene.merge",
-        return_value=[
-            (None, None, DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())))
-        ],
+        return_value=(
+            (
+                None,
+                None,
+                DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),
+            ),
+        ),
     )
     assert map.draw_on_screens
     assert not map.tick(0)._collision_visuals
@@ -55,34 +59,34 @@ def test_map_scene(mocker: MockerFixture) -> None:
 def test_init_npc(mocker: MockerFixture) -> None:
     map_helper = Mock()
     map_helper.get_object.return_value = SimpleNamespace(
-        x=1, y=2, width=1, height=1, points=[SimpleNamespace(x=1, y=2)]
+        x=1, y=2, width=1, height=1, points=(SimpleNamespace(x=1, y=2),)
     )
-    map_helper.collisions = []
+    map_helper.collisions = ()
     mocker.patch("nextrpg.scene.map_scene.MapHelper", map_helper)
     mocker.patch("nextrpg.scene.map_scene.get_polygon")
     map_scene = MapScene(
         tmx_file="",
         initial_player_drawing=MockCharacterDrawing(),
         player_coordinate_object="",
-        npc_specs=[
+        npc_specs=(
             NpcSpec("", MockCharacterDrawing(), lambda *_: None),
             MovingNpcSpec("", MockCharacterDrawing(), lambda *_: None),
-        ],
+        ),
     )
     assert map_scene._npcs
 
 
 def test_move_to_scene(mocker: MockerFixture) -> None:
     helper = MagicMock()
-    helper.background = []
-    helper.foreground = [
-        [
+    helper.background = ()
+    helper.foreground = (
+        (
             TileBottomAndDrawOnScreen(
                 10, DrawOnScreen(Coordinate(1, 2), Drawing(MockSurface()))
-            )
-        ]
-    ]
-    helper.above_character = []
+            ),
+        ),
+    )
+    helper.above_character = ()
     helper.map_size = (100, 200)
     helper.get_object = lambda name: (
         SimpleNamespace(x=0, y=0, width=1, height=2, properties={})
@@ -94,10 +98,10 @@ def test_move_to_scene(mocker: MockerFixture) -> None:
         tmx_file=Path("test"),
         initial_player_drawing=MockCharacterDrawing(),
         player_coordinate_object="",
-        moves=[
+        moves=(
             Move("to", "from", lambda _, __: Scene()),
             Move("", "", lambda _, __: Scene()),
-        ],
+        ),
     )
     assert map._move_to_scene
 

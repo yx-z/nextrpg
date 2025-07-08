@@ -33,7 +33,7 @@ class CharacterOnScreen(ABC):
 
         `speed`: Movement speed of the character in pixels.
 
-        `collisions`: List of polygons representing collision boundaries.
+        `collisions`: Tuple of polygons representing collision boundaries.
     """
 
     character: CharacterDrawing
@@ -69,7 +69,7 @@ class CharacterOnScreen(ABC):
 
 @dataclass(kw_only=True, frozen=True)
 class MovingCharacterOnScreen(CharacterOnScreen):
-    collisions: list[Polygon]
+    collisions: tuple[Polygon, ...]
     move_speed: PixelPerMillisecond = field(
         default_factory=lambda: config().character.move_speed
     )

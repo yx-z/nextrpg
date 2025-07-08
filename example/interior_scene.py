@@ -52,12 +52,12 @@ def interior_scene(
         # Player coordinate on the map.
         player_coordinate_object=player_coordinate_object,
         # Move to another map.
-        moves=[Move("from_interior", "to_exterior", exterior_scene)],
+        moves=(Move("from_interior", "to_exterior", exterior_scene),),
         # NPC/events.
-        npc_specs=[
+        npc_specs=(
             NpcSpec("david", david(), greet),
             MovingNpcSpec("alisa", alisa(), greet),
-        ],
+        ),
     )
 
 

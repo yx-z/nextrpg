@@ -14,11 +14,11 @@ def test_game(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.game.Gui.__post_init__")
     mocker.patch(
         "pygame.event.get",
-        lambda: [
+        lambda: (
             Event(KEYDOWN, key=K_LEFT),
             Event(VIDEORESIZE, w=200, h=300),
             Event(QUIT),
-        ],
+        ),
     )
     scene = Mock()
     clock = MagicMock()

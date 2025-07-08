@@ -28,7 +28,7 @@ class TransitionScene(Scene):
 
     @cached_property
     @override
-    def draw_on_screens(self) -> list[DrawOnScreen]:
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         return self.from_scene.draw_on_screens_shifted + self._to_scene_drawings
 
     def tick(self, time_delta: Millisecond) -> Scene:
@@ -39,11 +39,11 @@ class TransitionScene(Scene):
         )
 
     @cached_property
-    def _to_scene_drawings(self) -> list[DrawOnScreen]:
-        return [
+    def _to_scene_drawings(self) -> tuple[DrawOnScreen, ...]:
+        return tuple(
             DrawOnScreen(d.top_left, d.drawing.set_alpha(self._alpha))
             for d in self.to_scene.draw_on_screens_shifted
-        ]
+        )
 
     @cached_property
     def _alpha(self) -> Alpha:

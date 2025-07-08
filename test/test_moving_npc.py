@@ -16,7 +16,7 @@ def test_moving_npc_on_screen() -> None:
             move_duration=10,
         ),
         path=Rectangle(Coordinate(0, 0), Size(10, 10)),
-        collisions=[],
+        collisions=(),
     )
     assert not npc.tick(0).moving
     assert not npc.tick(5).tick(1).moving

@@ -133,7 +133,7 @@
 </span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="sd">        `speed`: Movement speed of the character in pixels.</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>
-</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">        `collisions`: List of polygons representing collision boundaries.</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">        `collisions`: Tuple of polygons representing collision boundaries.</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
@@ -169,7 +169,7 @@
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingCharacterOnScreen</span><span class="p">(</span><span class="n">CharacterOnScreen</span><span class="p">):</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Polygon</span><span class="p">]</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Polygon</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_speed</span>
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="p">)</span>
@@ -318,7 +318,7 @@
 </span><span id="CharacterOnScreen-34"><a href="#CharacterOnScreen-34"><span class="linenos">34</span></a>
 </span><span id="CharacterOnScreen-35"><a href="#CharacterOnScreen-35"><span class="linenos">35</span></a><span class="sd">        `speed`: Movement speed of the character in pixels.</span>
 </span><span id="CharacterOnScreen-36"><a href="#CharacterOnScreen-36"><span class="linenos">36</span></a>
-</span><span id="CharacterOnScreen-37"><a href="#CharacterOnScreen-37"><span class="linenos">37</span></a><span class="sd">        `collisions`: List of polygons representing collision boundaries.</span>
+</span><span id="CharacterOnScreen-37"><a href="#CharacterOnScreen-37"><span class="linenos">37</span></a><span class="sd">        `collisions`: Tuple of polygons representing collision boundaries.</span>
 </span><span id="CharacterOnScreen-38"><a href="#CharacterOnScreen-38"><span class="linenos">38</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen-39"><a href="#CharacterOnScreen-39"><span class="linenos">39</span></a>
 </span><span id="CharacterOnScreen-40"><a href="#CharacterOnScreen-40"><span class="linenos">40</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
@@ -364,7 +364,7 @@ character interactions with the game environment.</p>
 <li><strong><code>character_drawing</code>:</strong>  The visual representation of the character.</li>
 <li><strong><code><a href="#CharacterOnScreen.coordinate">coordinate</a></code>:</strong>  The current position of the character on screen.</li>
 <li><strong><code>speed</code>:</strong>  Movement speed of the character in pixels.</li>
-<li><strong><code>collisions</code>:</strong>  List of polygons representing collision boundaries.</li>
+<li><strong><code>collisions</code>:</strong>  Tuple of polygons representing collision boundaries.</li>
 </ul>
 </div>
 
@@ -503,7 +503,7 @@ character interactions with the game environment.</p>
     <a class="headerlink" href="#MovingCharacterOnScreen"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="MovingCharacterOnScreen-71"><a href="#MovingCharacterOnScreen-71"><span class="linenos"> 71</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="MovingCharacterOnScreen-72"><a href="#MovingCharacterOnScreen-72"><span class="linenos"> 72</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingCharacterOnScreen</span><span class="p">(</span><span class="n">CharacterOnScreen</span><span class="p">):</span>
-</span><span id="MovingCharacterOnScreen-73"><a href="#MovingCharacterOnScreen-73"><span class="linenos"> 73</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Polygon</span><span class="p">]</span>
+</span><span id="MovingCharacterOnScreen-73"><a href="#MovingCharacterOnScreen-73"><span class="linenos"> 73</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Polygon</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 </span><span id="MovingCharacterOnScreen-74"><a href="#MovingCharacterOnScreen-74"><span class="linenos"> 74</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
 </span><span id="MovingCharacterOnScreen-75"><a href="#MovingCharacterOnScreen-75"><span class="linenos"> 75</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_speed</span>
 </span><span id="MovingCharacterOnScreen-76"><a href="#MovingCharacterOnScreen-76"><span class="linenos"> 76</span></a>    <span class="p">)</span>
@@ -611,7 +611,7 @@ character interactions with the game environment.</p>
 
                             <div id="MovingCharacterOnScreen.collisions" class="classattr">
                                 <div class="attr variable">
-            <span class="name">collisions</span><span class="annotation">: list[<a href="../draw_on_screen.html#Polygon">nextrpg.draw_on_screen.Polygon</a>]</span>
+            <span class="name">collisions</span><span class="annotation">: tuple[<a href="../draw_on_screen.html#Polygon">nextrpg.draw_on_screen.Polygon</a>, ...]</span>
 
         
     </div>

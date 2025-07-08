@@ -10,9 +10,9 @@ from test.util import MockSurface
 def test_transition_scene(mocker: MockerFixture) -> None:
     scene1 = Scene()
     scene2 = Scene()
-    scene2.draw_on_screens = [
-        DrawOnScreen(Coordinate(1, 2), Drawing(MockSurface()))
-    ]
+    scene2.draw_on_screens = (
+        DrawOnScreen(Coordinate(1, 2), Drawing(MockSurface())),
+    )
     transition = TransitionScene(scene1, scene2)
     assert transition.tick(10000) is scene2
     mocker.patch("nextrpg.draw_on_screen.Drawing.set_alpha")

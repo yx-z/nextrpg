@@ -16,7 +16,7 @@ def test_player_on_screen():
         character=MockCharacterDrawing(),
         coordinate=Coordinate(10, 20),
         move_speed=0.2,
-        collisions=[Rectangle(Coordinate(12, 20), Size(10, 10))],
+        collisions=(Rectangle(Coordinate(12, 20), Size(10, 10)),),
     )
     assert player.event(Quit(Event(QUIT))) is player
     assert player.tick(100).coordinate == Coordinate(10, 20)

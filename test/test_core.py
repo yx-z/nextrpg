@@ -3,6 +3,10 @@ from unittest.mock import Mock
 from nextrpg.core import Direction, DirectionalOffset, Font, Size
 
 
+def test_direction() -> None:
+    assert Direction.UP.opposite is Direction.DOWN
+
+
 def test_directional_offset() -> None:
     assert DirectionalOffset(Direction.UP, 10).direction is Direction.UP
     assert DirectionalOffset(Direction.UP, 10).offset == 10

@@ -4,7 +4,7 @@ Handles character movement and collision detection.
 
 from dataclasses import dataclass, field, replace
 from functools import cached_property
-from typing import override
+from typing import Self, override
 
 from nextrpg.character.character_on_screen import (
     CharacterOnScreen,
@@ -25,7 +25,7 @@ from nextrpg.event.pygame_event import (
 class PlayerOnScreen(MovingCharacterOnScreen):
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
-    def event(self, event: PygameEvent) -> CharacterOnScreen:
+    def event(self, event: PygameEvent) -> Self:
         if not isinstance(event, (KeyPressDown, KeyPressUp)):
             return self
         updated_keys = self._updated_movement_key(event)

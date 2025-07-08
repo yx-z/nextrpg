@@ -20,15 +20,15 @@ class Scene:
     """
 
     @cached_property
-    def draw_on_screens(self) -> list[DrawOnScreen]:
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         """
-        Get the list of drawables to be rendered on the screen.
+        Get the tuple of drawables to be rendered on the screen.
 
         Returns:
-            `list[DrawOnScreen]`: The list of drawables to be rendered
+            `tuple[DrawOnScreen, ...]`: The tuple of drawables to be rendered
                 on the screen.
         """
-        return []
+        return ()
 
     @cached_property
     def draw_on_screen_shift(self) -> Coordinate:
@@ -44,17 +44,17 @@ class Scene:
         return Coordinate(0, 0)
 
     @cached_property
-    def draw_on_screens_shifted(self) -> list[DrawOnScreen]:
+    def draw_on_screens_shifted(self) -> tuple[DrawOnScreen, ...]:
         """
-        Get the list of drawables to be rendered on the screen, shifted by
+        Get the tuple of drawables to be rendered on the screen, shifted by
         `self.draw_on_screen_shift`.
 
         Returns:
-            `list[DrawOnScreen]`: The list of drawables to be rendered.
+            `tuple[DrawOnScreen, ...]`: The tuple of drawables to be rendered.
         """
-        return [
+        return tuple(
             d.shift(self.draw_on_screen_shift) for d in self.draw_on_screens
-        ]
+        )
 
     def event(self, event: PygameEvent) -> Scene:
         """

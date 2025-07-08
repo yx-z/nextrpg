@@ -52,7 +52,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
 
     path: Polygon
     spec: MovingNpcSpec
-    collisions: list[Polygon] = field(default_factory=list)
+    collisions: tuple[Polygon, ...] = field(default_factory=tuple)
     move_speed: PixelPerMillisecond = instance_init(
         lambda self: self.spec.move_speed
     )

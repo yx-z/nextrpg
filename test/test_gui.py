@@ -25,7 +25,7 @@ def test_gui(mocker: MockerFixture) -> None:
         last_config=GuiConfig(Size(10, 10)),
     )
     drawing = gui._scale(
-        [DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface()))]
+        (DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),)
     )
     assert drawing.top_left == Coordinate(280, 0)
 
@@ -34,15 +34,15 @@ def test_gui(mocker: MockerFixture) -> None:
 
     draw_debug = gui._draw_log
     object.__setattr__(gui, "_draw_log", lambda _: None)
-    gui.draw([], 0)
+    gui.draw((), 0)
     gui._screen.blits.assert_not_called()
     object.__setattr__(gui, "_draw_log", draw_debug)
 
     gui2 = Gui(GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE_SIZE))
-    gui2.draw([], 0)
+    gui2.draw((), 0)
     gui2._screen.blit.assert_called()
 
-    Gui(GuiConfig(resize_mode="Invalid resize mode")).draw([], 0)
+    Gui(GuiConfig(resize_mode="Invalid resize mode")).draw((), 0)
     Gui(gui.current_config, gui.current_config, gui.current_config, "screen")
 
     assert gui.event(KeyPressUp(Event(KEYDOWN, key=K_LEFT))) is gui

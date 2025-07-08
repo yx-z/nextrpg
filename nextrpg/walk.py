@@ -14,8 +14,8 @@ class Walk:
     path: Polygon
     move_speed: PixelPerMillisecond
     cyclic: bool
-    coordinate: Coordinate = instance_init(lambda self: self.path.points[0])
-    _last_coordinate: Coordinate = instance_init(lambda self: self.coordinate)
+    coordinate: Coordinate = instance_init(lambda self: self._source)
+    _last_coordinate: Coordinate = instance_init(lambda self: self._source)
     _index: int = 0
     _last_index: int = 0
 
@@ -25,21 +25,16 @@ class Walk:
 
     @cached_property
     def reset(self) -> Self:
-        return Walk(path=self.path, move_speed=self.move_speed)
-
-    @cached_property
-    def completed(self) -> bool:
-        if self.cyclic:
-            return False
-
-        return (
-            self._index == 0 and self._last_index != 0
-            if self.path.closed
-            else self._next_index == 0
+        return replace(
+            self,
+            coordinate=self._source,
+            _last_coordinate=self._source,
+            _index=0,
+            _last_index=0,
         )
 
     def tick(self, time_delta: Millisecond) -> Self:
-        if self.completed:
+        if self._completed:
             return self
 
         end = self.path.points[self._next_index]
@@ -69,3 +64,18 @@ class Walk:
     @cached_property
     def _next_index(self) -> int:
         return nex if (nex := self._index + 1) < len(self.path.points) else 0
+
+    @cached_property
+    def _source(self) -> Coordinate:
+        return self.path.points[0]
+
+    @cached_property
+    def _completed(self) -> bool:
+        if self.cyclic:
+            return False
+
+        return (
+            self._index == 0 and self._last_index != 0
+            if self.path.closed
+            else self._next_index == 0
+        )

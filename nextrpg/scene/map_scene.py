@@ -42,15 +42,15 @@ def _init_player(self: MapScene) -> PlayerOnScreen:
     )
 
 
-def _init_npcs(self: "MapScene") -> list[NpcOnScreen]:
-    return [
+def _init_npcs(self: "MapScene") -> tuple[NpcOnScreen, ...]:
+    return tuple(
         self._init_moving(n) if isinstance(n, MovingNpcSpec) else self._init(n)
         for n in self.npc_specs
-    ]
+    )
 
 
 @register_instance_init
-class MapScene[T](EventfulScene):
+class MapScene(EventfulScene):
     """
     A scene implementation that represents a game map loaded from Tiled TMX.
 
@@ -65,21 +65,21 @@ class MapScene[T](EventfulScene):
         `player_coordinate_object`: Name of the object to use as the player.
             Default to `None` to use the `config().map.player`.
 
-        `moves`: List of move objects to trigger when the player enters a new
+        `moves`: Tuple of move objects to trigger when the player enters a new
             map.
     """
 
     tmx_file: PathLike | str
     initial_player_drawing: CharacterDrawing
     player_coordinate_object: str
-    moves: list[Move] = field(default_factory=list)
-    npc_specs: list[NpcSpec] = field(default_factory=list)
-    _npcs: list[NpcOnScreen] = instance_init(_init_npcs)
+    moves: tuple[Move, ...] = field(default_factory=tuple)
+    npc_specs: tuple[NpcSpec, ...] = field(default_factory=tuple)
+    _npcs: tuple[NpcOnScreen, ...] = instance_init(_init_npcs)
     _player: PlayerOnScreen = instance_init(_init_player)
 
     @cached_property
     @override
-    def draw_on_screens(self) -> list[DrawOnScreen]:
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         return (
             self._map_helper.background
             + self._foreground_and_characters
@@ -92,16 +92,16 @@ class MapScene[T](EventfulScene):
         return self._move_to_scene or super().tick(time_delta)
 
     @cached_property
-    def _foreground_and_characters(self) -> list[DrawOnScreen]:
+    def _foreground_and_characters(self) -> tuple[DrawOnScreen, ...]:
         foregrounds = (
-            t for layer in self._map_helper.foreground for t in layer.tiles
+            t for layer in self._map_helper.foreground for t in layer
         )
-        characters = chain([self._player], self._npcs)
+        characters = chain((self._player,), self._npcs)
         bottom_and_draw = sorted(
             map(self._map_helper.layer_bottom_and_draw, characters)
         )
         layers = merge(foregrounds, bottom_and_draw)
-        return [draw for _, _, draw in layers]
+        return tuple(draw for _, _, draw in layers)
 
     @cached_property
     @override
@@ -131,13 +131,13 @@ class MapScene[T](EventfulScene):
         )
 
     @cached_property
-    def _collision_visuals(self) -> list[DrawOnScreen]:
+    def _collision_visuals(self) -> tuple[DrawOnScreen, ...]:
         if not (debug := config().debug):
-            return []
-        return [
+            return ()
+        return tuple(
             c.fill(debug.collision_rectangle_color)
             for c in self._map_helper.collisions
-        ]
+        )
 
     @cached_property
     def _map_helper(self) -> MapHelper:

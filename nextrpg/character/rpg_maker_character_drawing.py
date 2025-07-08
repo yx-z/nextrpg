@@ -36,13 +36,13 @@ class DefaultFrameType(IntEnum):
     _LEFT_FOOT = 2
 
     @classmethod
-    def _frame_indices(cls) -> list[int]:
-        return [
+    def _frame_indices(cls) -> tuple[int, ...]:
+        return (
             DefaultFrameType._IDLE,
             DefaultFrameType._RIGHT_FOOT,
             DefaultFrameType._IDLE,
             DefaultFrameType._LEFT_FOOT,
-        ]
+        )
 
 
 class XpFrameType(IntEnum):
@@ -56,8 +56,8 @@ class XpFrameType(IntEnum):
     _LEFT_FOOT = 3
 
     @classmethod
-    def _frame_indices(cls) -> list[int]:
-        return list(cls)
+    def _frame_indices(cls) -> tuple[int, ...]:
+        return tuple(cls)
 
 
 type FrameType = type[DefaultFrameType | XpFrameType]
@@ -229,16 +229,16 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
 
     def _crop_into_frames_at_row(
         self, drawing: Drawing, row: int
-    ) -> list[Drawing]:
+    ) -> tuple[Drawing, ...]:
         num_frames = len(self.sprite_sheet.style)
         width = drawing.width / num_frames
         height = drawing.height / 4
-        return [
+        return tuple(
             drawing.crop(
                 Coordinate(width * i, height * row), Size(width, height)
             )
             for i in range(num_frames)
-        ]
+        )
 
     def _crop_margin(self, drawing: Drawing) -> Drawing:
         margin = self.sprite_sheet.margin

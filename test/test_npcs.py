@@ -37,7 +37,7 @@ def test_npc_on_screen() -> None:
     assert (
         npc.trigger(
             PlayerOnScreen(
-                collisions=[],
+                collisions=(),
                 character=MockCharacterDrawing(),
                 coordinate=Coordinate(0, 0),
             )
@@ -56,23 +56,23 @@ def test_npcs(mocker: MockerFixture) -> None:
     map_helper.get_object.return_value = SimpleNamespace(
         x=1, y=1, width=1, height=1
     )
-    map_helper.foreground = []
-    map_helper.background = []
-    map_helper.above_character = []
+    map_helper.foreground = ()
+    map_helper.background = ()
+    map_helper.above_character = ()
     map_helper.map_size = Size(100, 100)
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=map_helper)
-    mocker.patch("nextrpg.scene.map_scene.merge", return_value=[])
+    mocker.patch("nextrpg.scene.map_scene.merge", return_value=())
     player = PlayerOnScreen(
         character=MockCharacterDrawing(),
         coordinate=Coordinate(0, 0),
-        collisions=[],
+        collisions=(),
     )
     assert not event(player)
     map_scene = MapScene(
         tmx_file="",
         initial_player_drawing=MockCharacterDrawing(),
         player_coordinate_object="",
-        _npcs=[
+        _npcs=(
             NpcOnScreen(
                 coordinate=Coordinate(0, 0),
                 spec=NpcSpec("name", MockCharacterDrawing(), event),
@@ -84,13 +84,13 @@ def test_npcs(mocker: MockerFixture) -> None:
                     MockCharacterDrawing(),
                     event,
                 ),
-                collisions=[],
+                collisions=(),
                 path=Rectangle(Coordinate(0, 0), Size(10, 10)),
             ),
-        ],
+        ),
     )
     say_event = map_scene.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
-    object.__setattr__(say_event._scene, "draw_on_screens", [])
+    object.__setattr__(say_event._scene, "draw_on_screens", ())
     assert say_event.tick(0)
     assert say_event.draw_on_screens
     assert say_event.event(Quit(Event(QUIT)))
@@ -108,14 +108,14 @@ def test_eventful_scene() -> None:
         _player=PlayerOnScreen(
             coordinate=Coordinate(0, 0),
             character=MockCharacterDrawing(),
-            collisions=[],
+            collisions=(),
         ),
-        _npcs=[
+        _npcs=(
             NpcOnScreen(
                 coordinate=Coordinate(0, 0),
                 spec=NpcSpec("npc", MockCharacterDrawing(), lambda *_: None),
-            )
-        ],
+            ),
+        ),
         _event=gen,
         _npc=NpcOnScreen(
             coordinate=Coordinate(0, 0),
@@ -128,3 +128,23 @@ def test_eventful_scene() -> None:
     )
     assert eventful.tick(0)
     assert eventful._next_event
+
+    gen2 = event()
+    next(gen2)
+    npc =NpcOnScreen(
+        name="abc",
+        character=MockCharacterDrawing(),
+        coordinate=Coordinate(0, 0),
+        spec=lambda *_: None,
+    )
+    scene = EventfulScene(
+        _player=PlayerOnScreen(
+            coordinate=Coordinate(0, 0),
+            character=MockCharacterDrawing(),
+            collisions=(),
+        ),
+        _npc=npc,
+        _npcs=(npc, ),
+        _event=gen2,
+    )
+    assert scene._next_event

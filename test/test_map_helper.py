@@ -21,57 +21,57 @@ def test_map_helper(mocker: MockerFixture) -> None:
     tmx.tileheight = 3
     mock_background = MagicMock()
     setattr(mock_background, "class", "background")
-    mock_background.tiles = lambda: [(1, 2, MockSurface())]
+    mock_background.tiles = lambda: ((1, 2, MockSurface()),)
     mock_foreground = MagicMock()
     setattr(mock_foreground, "class", "foreground")
     mock_foreground.__iter__.return_value = iter(
-        [(1, 2, 4), (2, 3, 5), (3, 4, 6)]
+        ((1, 2, 4), (2, 3, 5), (3, 4, 6))
     )
-    mock_foreground.tiles = lambda: [
+    mock_foreground.tiles = lambda: (
         (0, 0, MockSurface()),
         (1, 1, MockSurface()),
-    ]
-    mock_foreground.data = [[1, 0], [0, 0]]
+    )
+    mock_foreground.data = ((1, 0), (0, 0))
     mock_above_character = MagicMock()
     setattr(mock_above_character, "class", "above_character")
-    mock_above_character.tiles = lambda: [(5, 6, MockSurface())]
+    mock_above_character.tiles = lambda: ((5, 6, MockSurface()),)
     mock_object = MagicMock()
     obj = SimpleNamespace(
         name="obj",
         type="collision",
         width=None,
-        points=[(1, 2), (3, 4), (5, 6)],
+        points=((1, 2), (3, 4), (5, 6)),
         closed=True,
     )
-    mock_object.__iter__.return_value = iter([obj])
-    tmx.visible_tile_layers = [0, 1, 2]
-    tmx.layers = [
+    mock_object.__iter__.return_value = iter((obj,))
+    tmx.visible_tile_layers = (0, 1, 2)
+    tmx.layers = (
         mock_background,
         mock_foreground,
         mock_above_character,
         mock_object,
-    ]
-    tmx.visible_object_groups = [3]
+    )
+    tmx.visible_object_groups = (3,)
     tmx.tile_properties = {
         1: {"id": 1, "type": "abc"},
         2: {"id": 2, "type": "abc"},
         3: {"id": 3, "type": "def"},
         4: {
-            "colliders": [
+            "colliders": (
                 SimpleNamespace(
-                    as_points=[(1, 2), (3, 4), (5, 6)],
+                    as_points=((1, 2), (3, 4), (5, 6)),
                     x=None,
                     width=None,
                     closed=True,
-                )
-            ]
+                ),
+            )
         },
         5: {
-            "colliders": [
+            "colliders": (
                 SimpleNamespace(
-                    as_points=[], x=1, y=2, width=3, height=4, closed=True
-                )
-            ]
+                    as_points=(), x=1, y=2, width=3, height=4, closed=True
+                ),
+            )
         },
     }
     mocker.patch("nextrpg.scene.map_helper.load_pygame", return_value=tmx)
@@ -86,7 +86,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
         PlayerOnScreen(
             coordinate=Coordinate(0, 0),
             character=MockCharacterDrawing(),
-            collisions=[],
+            collisions=(),
         )
     )
     assert MapHelper(Path("abc")) is helper

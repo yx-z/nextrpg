@@ -81,6 +81,7 @@ def test_rectangle() -> None:
 
 def test_polygon() -> None:
     polygon = Polygon((Coordinate(0, 0), Coordinate(1, 0), Coordinate(1, 1)))
+    assert polygon.shift(Coordinate(0, 0))
     assert polygon.bounding_rectangle == Rectangle(Coordinate(0, 0), Size(1, 1))
 
     assert polygon.collide(

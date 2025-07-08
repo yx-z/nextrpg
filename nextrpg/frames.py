@@ -17,7 +17,7 @@ class CyclicFrames:
     Static frames that can be played sequentially to create animations.
 
     Arguments:
-        `frames`: List of drawings that make up the animation sequence.
+        `frames`: Tuple of drawings that make up the animation sequence.
 
         `duration_per_frame`: Time to display each frame in milliseconds.
 
@@ -25,7 +25,7 @@ class CyclicFrames:
         `CyclicFrames`: An instance managing a frame-based animation sequence.
     """
 
-    frames: list[Drawing]
+    frames: tuple[Drawing, ...]
     duration_per_frame: Millisecond
     _index: int = 0
     _timer: Timer = instance_init(lambda self: Timer(self.duration_per_frame))
@@ -55,8 +55,6 @@ class CyclicFrames:
 
         Returns:
             `CyclicFrames`: A new instance with an updated animation state.
-            The frame index is updated according to elapsed time and
-            wraps around when it reaches the end of the frame list.
         """
         t = self._timer.tick(time_delta)
         frames_to_step = t.elapsed // self.duration_per_frame

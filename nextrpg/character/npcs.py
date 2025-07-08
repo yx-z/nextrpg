@@ -4,14 +4,14 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property, wraps
 from inspect import getsource
 from textwrap import dedent
-from typing import Self, override
+from typing import Any, Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core import Millisecond
 from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
-from nextrpg.event.rpg_event import _yield
+from nextrpg.event.rpg_event import _yield, transform_event
 from nextrpg.logger import FROM_CONFIG, Logger
 from nextrpg.model import instance_init, register_instance_init
 from nextrpg.scene.scene import Scene
@@ -54,17 +54,17 @@ class NpcOnScreen(CharacterOnScreen):
 
 
 @dataclass(frozen=True)
-class EventfulScene[T](Scene):
+class EventfulScene(Scene):
     """
     EventfulScene allows scenes to continue event execution via coroutine/
         generator.
     """
 
     _player: PlayerOnScreen
-    _npcs: list[NpcOnScreen] = field(default_factory=list)
+    _npcs: tuple[NpcOnScreen, ...] = field(default_factory=tuple)
     _npc: NpcOnScreen | None = None
-    _event: RpgEventGenerator[T] | None = None
-    _event_result: T | None = None
+    _event: RpgEventGenerator | None = None
+    _event_result: Any = None
 
     @cached_property
     def npc_dict(self) -> dict[str, NpcOnScreen]:
@@ -90,10 +90,10 @@ class EventfulScene[T](Scene):
         return replace(
             self,
             _player=self._player.tick(time_delta),
-            _npcs=[n.tick(time_delta) for n in self._npcs],
+            _npcs=tuple(n.tick(time_delta) for n in self._npcs),
         )
 
-    def send(self, event: RpgEventGenerator, result: T | None = None) -> Self:
+    def send(self, event: RpgEventGenerator, result: Any = None) -> Self:
         """
         Continue event execution and optionally send the result of
         the current event.
@@ -119,10 +119,10 @@ class EventfulScene[T](Scene):
         )
 
     def _trigger(self, npc: NpcOnScreen) -> Self:
-        npcs = [
+        npcs = tuple(
             n.trigger(self._player) if n.name == npc.name else n
             for n in self._npcs
-        ]
+        )
         return replace(
             self,
             _player=self._player.trigger(npc),
@@ -153,27 +153,27 @@ class EventfulScene[T](Scene):
             )
 
     @cached_property
-    def _complete(self) -> list[NpcOnScreen]:
-        return [
+    def _complete(self) -> tuple[NpcOnScreen, ...]:
+        return tuple(
             n._complete if n.name == self._npc.name else n for n in self._npcs
-        ]
+        )
 
 
-type RpgEventSpec[T] = Callable[
-    [PlayerOnScreen, NpcOnScreen, dict[str, NpcOnScreen], EventfulScene[T]],
+type RpgEventSpec = Callable[
+    [PlayerOnScreen, NpcOnScreen, dict[str, NpcOnScreen], EventfulScene],
     None,
 ]
 """
 Abstract protocol to define Rpg Event for player/NPC interactions.
 """
 
-type RpgEventGenerator[T] = Generator[RpgEventCallable, T, None]
+type RpgEventGenerator = Generator[RpgEventCallable, Any, None]
 """
 The event generator type that can be used to yield an event.
 """
 
-type RpgEventCallable[T] = Callable[
-    [RpgEventGenerator[T], EventfulScene], RpgEventScene
+type RpgEventCallable = Callable[
+    [RpgEventGenerator, EventfulScene], RpgEventScene
 ]
 """
 The event callable type that can be used to generate a scene for certain event.
@@ -196,7 +196,7 @@ class RpgEventScene(Scene):
 
 
 @dataclass(frozen=True)
-class NpcSpec[T]:
+class NpcSpec:
     """
     Base class to define NPC specifications.
 
@@ -210,27 +210,22 @@ class NpcSpec[T]:
 
     name: str
     character: CharacterDrawing
-    event: RpgEventSpec[T]
+    event: RpgEventSpec
 
     @cached_property
-    def _generator(
-        self,
-    ) -> Callable[
-        [PlayerOnScreen, NpcOnScreen, dict[str, NpcOnScreen], EventfulScene[T]],
-        RpgEventGenerator[T],
+    def _generator(self) -> Callable[
+        [PlayerOnScreen, NpcOnScreen, dict[str, NpcOnScreen], EventfulScene],
+        RpgEventGenerator,
     ]:
         @wraps(self.event)
         def wrapped(
             player: PlayerOnScreen,
             npc: NpcOnScreen,
             npc_dict: dict[str, NpcOnScreen],
-            scene: EventfulScene[T],
+            scene: EventfulScene,
         ) -> RpgEventGenerator:
-            src = dedent(getsource(self.event))
-            tree = fix_missing_locations(_yield.visit(parse(src)))
-            code = compile(tree, "<npcs>", "exec")
-            ctx = self.event.__globals__
-            exec(code, ctx)
+            ctx = self.event.__globals__.copy()
+            exec(transform_event(self.event), ctx)
             return ctx[self.event.__name__](player, npc, npc_dict, scene)
 
         return wrapped

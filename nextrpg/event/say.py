@@ -51,10 +51,10 @@ class SayEvent(RpgEventScene):
 
     @cached_property
     @override
-    def draw_on_screens(self) -> list[DrawOnScreen]:
-        return self._scene.draw_on_screens_shifted + [
-            Text(self.message, self._coordinate).draw_on_screen
-        ]
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+        return self._scene.draw_on_screens_shifted + (
+            Text(self.message, self._coordinate).draw_on_screen,
+        )
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
