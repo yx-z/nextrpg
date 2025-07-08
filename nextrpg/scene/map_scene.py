@@ -18,7 +18,7 @@ from nextrpg.draw_on_screen import DrawOnScreen
 from nextrpg.event.move import Move
 from nextrpg.gui import gui_size
 from nextrpg.logger import Logger
-from nextrpg.model import instance_init, register_instance_init
+from nextrpg.model import instance_init, dataclass_with_instance_init
 from nextrpg.scene.color_scene import ColorScene
 from nextrpg.scene.map_helper import (
     MapHelper,
@@ -26,7 +26,7 @@ from nextrpg.scene.map_helper import (
 )
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
-from nextrpg.scene.transition_chain import TransitionChain
+from nextrpg.scene.transition_triple import TransitionTriple
 
 logger = Logger("MapScene")
 
@@ -47,7 +47,7 @@ def _init_npcs(self: "MapScene") -> tuple[NpcOnScreen, ...]:
     )
 
 
-@register_instance_init
+@dataclass_with_instance_init
 class MapScene(EventfulScene):
     """
     A scene implementation that represents a game map loaded from Tiled TMX.
@@ -105,17 +105,19 @@ class MapScene(EventfulScene):
 
     @cached_property
     def _move_to_scene(self) -> Scene | None:
-        moved = (m for move in self.moves if (m := self._move(move)))
-        return next(moved, None)
+        for move in self.moves:
+            if m := self._move(move):
+                return m
+        return None
 
-    def _move(self, move: Move) -> TransitionChain | None:
+    def _move(self, move: Move) -> TransitionTriple | None:
         move_poly = get_polygon(
             self._map_helper.get_object(move.trigger_object)
         )
         if self._player.draw_on_screen.rectangle.collide(move_poly):
-            return TransitionChain(
+            return TransitionTriple(
                 from_scene=self,
-                intermediary_scene=ColorScene(),
+                intermediary=ColorScene(),
                 to_scene=move.to_scene(self._player.character),
             )
         return None

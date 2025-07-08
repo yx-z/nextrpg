@@ -190,7 +190,10 @@ class MapHelper:
         Returns:
             `TiledObject`: The tile object with the given name.
         """
-        return next(obj for obj in self._all_objects if obj.name == name)
+        for obj in self._all_objects:
+            if obj.name == name:
+                return obj
+        raise RuntimeError(f"Object {name} not found.")
 
     def get_objects_by_class_name(
         self, class_name: str
@@ -226,12 +229,10 @@ class MapHelper:
         )
 
     def _character_layer(self, character: CharacterOnScreen) -> int:
-        above = (
-            index
-            for index, layer in enumerate(self._reversed_foregrounds)
-            if _below_character_layer(layer, character)
-        )
-        return next(above, 0)
+        for index, layer in enumerate(self._reversed_foregrounds):
+            if _below_character_layer(layer, character):
+                return index
+        return 0
 
     @cached_property
     def _reversed_foregrounds(

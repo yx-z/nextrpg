@@ -112,7 +112,7 @@
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">PixelPerMillisecond</span><span class="p">,</span> <span class="n">Timer</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">instance_init</span><span class="p">,</span> <span class="n">register_instance_init</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">instance_init</span><span class="p">,</span> <span class="n">dataclass_with_instance_init</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.walk</span><span class="w"> </span><span class="kn">import</span> <span class="n">Walk</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>
@@ -141,7 +141,7 @@
 </span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>    <span class="n">cyclic_walk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="nd">@register_instance_init</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="nd">@dataclass_with_instance_init</span>
 </span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingNpcOnScreen</span><span class="p">(</span><span class="n">NpcOnScreen</span><span class="p">,</span> <span class="n">MovingCharacterOnScreen</span><span class="p">):</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">    Moving NPC interface.</span>
@@ -356,7 +356,7 @@
                 <section id="MovingNpcOnScreen">
                             <input id="MovingNpcOnScreen-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-register_instance_init">@register_instance_init</div>
+                    <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init</div>
 
     <span class="def">class</span>
     <span class="name">MovingNpcOnScreen</span><wbr>(<span class="base"><a href="npcs.html#NpcOnScreen">nextrpg.character.npcs.NpcOnScreen</a></span>, <span class="base"><a href="character_on_screen.html#MovingCharacterOnScreen">nextrpg.character.character_on_screen.MovingCharacterOnScreen</a></span>):
@@ -365,7 +365,7 @@
 
     </div>
     <a class="headerlink" href="#MovingNpcOnScreen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingNpcOnScreen-41"><a href="#MovingNpcOnScreen-41"><span class="linenos"> 41</span></a><span class="nd">@register_instance_init</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingNpcOnScreen-41"><a href="#MovingNpcOnScreen-41"><span class="linenos"> 41</span></a><span class="nd">@dataclass_with_instance_init</span>
 </span><span id="MovingNpcOnScreen-42"><a href="#MovingNpcOnScreen-42"><span class="linenos"> 42</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingNpcOnScreen</span><span class="p">(</span><span class="n">NpcOnScreen</span><span class="p">,</span> <span class="n">MovingCharacterOnScreen</span><span class="p">):</span>
 </span><span id="MovingNpcOnScreen-43"><a href="#MovingNpcOnScreen-43"><span class="linenos"> 43</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="MovingNpcOnScreen-44"><a href="#MovingNpcOnScreen-44"><span class="linenos"> 44</span></a><span class="sd">    Moving NPC interface.</span>

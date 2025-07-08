@@ -35,7 +35,7 @@ class TransitionScene(Scene):
     def _to_scene_drawings(self) -> tuple[DrawOnScreen, ...]:
         return tuple(
             DrawOnScreen(d.top_left, d.drawing.set_alpha(self._alpha))
-            for d in self.to_scene.draw_on_screens_shifted
+            for d in self.to_scene.draw_on_screens
         )
 
     @cached_property
@@ -49,7 +49,7 @@ class TransitionScene(Scene):
     @cached_property
     @override
     def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return self.from_scene.draw_on_screens_shifted + self._to_scene_drawings
+        return self.from_scene.draw_on_screens + self._to_scene_drawings
 
 
 def _scale(alpha_percentage: float) -> Alpha:

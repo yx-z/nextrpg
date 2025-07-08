@@ -80,6 +80,7 @@ _KEY_TO_DIR = {
 
 
 def _key_to_dir(current_keys: frozenset[KeyboardKey]) -> Direction | None:
-    return next(
-        (d for keys, d in _KEY_TO_DIR.items() if keys <= current_keys), None
-    )
+    for keys, d in _KEY_TO_DIR.items():
+        if keys <= current_keys:
+            return d
+    return None

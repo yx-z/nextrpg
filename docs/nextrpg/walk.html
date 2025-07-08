@@ -89,10 +89,10 @@
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">PixelPerMillisecond</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">instance_init</span><span class="p">,</span> <span class="n">register_instance_init</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">instance_init</span><span class="p">,</span> <span class="n">dataclass_with_instance_init</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="nd">@register_instance_init</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="nd">@dataclass_with_instance_init</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Walk</span><span class="p">:</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Polygon</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span>
@@ -157,11 +157,9 @@
 </span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cyclic</span><span class="p">:</span>
 </span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>            <span class="k">return</span> <span class="kc">False</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_index</span> <span class="o">!=</span> <span class="mi">0</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">closed</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_index</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="p">)</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_index</span> <span class="o">!=</span> <span class="mi">0</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_index</span> <span class="o">==</span> <span class="mi">0</span>
 </span></pre></div>
 
 
@@ -169,7 +167,7 @@
                 <section id="Walk">
                             <input id="Walk-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-register_instance_init">@register_instance_init</div>
+                    <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init</div>
 
     <span class="def">class</span>
     <span class="name">Walk</span>:
@@ -178,7 +176,7 @@
 
     </div>
     <a class="headerlink" href="#Walk"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Walk-13"><a href="#Walk-13"><span class="linenos">13</span></a><span class="nd">@register_instance_init</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Walk-13"><a href="#Walk-13"><span class="linenos">13</span></a><span class="nd">@dataclass_with_instance_init</span>
 </span><span id="Walk-14"><a href="#Walk-14"><span class="linenos">14</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Walk</span><span class="p">:</span>
 </span><span id="Walk-15"><a href="#Walk-15"><span class="linenos">15</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Polygon</span>
 </span><span id="Walk-16"><a href="#Walk-16"><span class="linenos">16</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span>
@@ -243,11 +241,9 @@
 </span><span id="Walk-75"><a href="#Walk-75"><span class="linenos">75</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cyclic</span><span class="p">:</span>
 </span><span id="Walk-76"><a href="#Walk-76"><span class="linenos">76</span></a>            <span class="k">return</span> <span class="kc">False</span>
 </span><span id="Walk-77"><a href="#Walk-77"><span class="linenos">77</span></a>
-</span><span id="Walk-78"><a href="#Walk-78"><span class="linenos">78</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="Walk-79"><a href="#Walk-79"><span class="linenos">79</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_index</span> <span class="o">!=</span> <span class="mi">0</span>
-</span><span id="Walk-80"><a href="#Walk-80"><span class="linenos">80</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">closed</span>
-</span><span id="Walk-81"><a href="#Walk-81"><span class="linenos">81</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_index</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span id="Walk-82"><a href="#Walk-82"><span class="linenos">82</span></a>        <span class="p">)</span>
+</span><span id="Walk-78"><a href="#Walk-78"><span class="linenos">78</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
+</span><span id="Walk-79"><a href="#Walk-79"><span class="linenos">79</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_index</span> <span class="o">!=</span> <span class="mi">0</span>
+</span><span id="Walk-80"><a href="#Walk-80"><span class="linenos">80</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_index</span> <span class="o">==</span> <span class="mi">0</span>
 </span></pre></div>
 
 

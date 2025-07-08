@@ -13,13 +13,13 @@ from nextrpg.config import config
 from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
 from nextrpg.gui import Gui
 from nextrpg.logger import Logger
-from nextrpg.model import instance_init, register_instance_init
+from nextrpg.model import instance_init, dataclass_with_instance_init
 from nextrpg.scene.scene import Scene
 
 logger = Logger("GameLoop")
 
 
-@register_instance_init
+@dataclass_with_instance_init
 class Game:
     """
     Sets up a game window, loads the entry scene.
@@ -54,7 +54,7 @@ class Game:
         object.__setattr__(self, "_loop", self._loop.tick())
 
 
-@register_instance_init
+@dataclass_with_instance_init
 class _GameLoop:
     entry_scene: Callable[[], Scene]
     running: bool = True
@@ -75,7 +75,7 @@ class _GameLoop:
         time_delta = self._clock.get_time()
 
         self._update_gui()
-        self._gui.draw(self._scene.draw_on_screens_shifted, time_delta)
+        self._gui.draw(self._scene.draw_on_screens, time_delta)
 
         loop = replace(self, _scene=self._scene.tick(time_delta))
         for e in pygame.event.get():

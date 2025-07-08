@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field, replace
 
-from nextrpg.model import cached, instance_init, register_instance_init
+from nextrpg.model import cached, instance_init, dataclass_with_instance_init
 
 
 def test_instance_init():
-    @register_instance_init
+    @dataclass_with_instance_init
     class MyModel:
         user_input: str
         public_data: str = "public"

@@ -263,18 +263,16 @@
 </span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_collide</span><span class="p">(</span>
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">hit_coords</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">]</span>
 </span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_CollisionAndCoord</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>        <span class="n">collided</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>            <span class="n">_CollisionAndCoord</span><span class="p">(</span><span class="n">collision</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>            <span class="k">for</span> <span class="n">collision</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collisions</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>            <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">hit_coords</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>            <span class="k">if</span> <span class="n">collision</span><span class="o">.</span><span class="n">contain</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>        <span class="p">)</span>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>        <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">collided</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>
-</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_CollisionAndCoord</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>    <span class="n">polygon</span><span class="p">:</span> <span class="n">Polygon</span>
-</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>    <span class="n">coord</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>        <span class="k">for</span> <span class="n">collision</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collisions</span><span class="p">:</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>            <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">hit_coords</span><span class="p">:</span>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>                <span class="k">if</span> <span class="n">collision</span><span class="o">.</span><span class="n">contain</span><span class="p">(</span><span class="n">coord</span><span class="p">):</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>                    <span class="k">return</span> <span class="n">_CollisionAndCoord</span><span class="p">(</span><span class="n">collision</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>        <span class="k">return</span> <span class="kc">None</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_CollisionAndCoord</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>    <span class="n">polygon</span><span class="p">:</span> <span class="n">Polygon</span>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>    <span class="n">coord</span><span class="p">:</span> <span class="n">Coordinate</span>
 </span></pre></div>
 
 
@@ -598,13 +596,11 @@ character interactions with the game environment.</p>
 </span><span id="MovingCharacterOnScreen-164"><a href="#MovingCharacterOnScreen-164"><span class="linenos">164</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_collide</span><span class="p">(</span>
 </span><span id="MovingCharacterOnScreen-165"><a href="#MovingCharacterOnScreen-165"><span class="linenos">165</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">hit_coords</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">]</span>
 </span><span id="MovingCharacterOnScreen-166"><a href="#MovingCharacterOnScreen-166"><span class="linenos">166</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_CollisionAndCoord</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen-167"><a href="#MovingCharacterOnScreen-167"><span class="linenos">167</span></a>        <span class="n">collided</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="MovingCharacterOnScreen-168"><a href="#MovingCharacterOnScreen-168"><span class="linenos">168</span></a>            <span class="n">_CollisionAndCoord</span><span class="p">(</span><span class="n">collision</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-169"><a href="#MovingCharacterOnScreen-169"><span class="linenos">169</span></a>            <span class="k">for</span> <span class="n">collision</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collisions</span>
-</span><span id="MovingCharacterOnScreen-170"><a href="#MovingCharacterOnScreen-170"><span class="linenos">170</span></a>            <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">hit_coords</span>
-</span><span id="MovingCharacterOnScreen-171"><a href="#MovingCharacterOnScreen-171"><span class="linenos">171</span></a>            <span class="k">if</span> <span class="n">collision</span><span class="o">.</span><span class="n">contain</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-172"><a href="#MovingCharacterOnScreen-172"><span class="linenos">172</span></a>        <span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-173"><a href="#MovingCharacterOnScreen-173"><span class="linenos">173</span></a>        <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">collided</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</span><span id="MovingCharacterOnScreen-167"><a href="#MovingCharacterOnScreen-167"><span class="linenos">167</span></a>        <span class="k">for</span> <span class="n">collision</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collisions</span><span class="p">:</span>
+</span><span id="MovingCharacterOnScreen-168"><a href="#MovingCharacterOnScreen-168"><span class="linenos">168</span></a>            <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">hit_coords</span><span class="p">:</span>
+</span><span id="MovingCharacterOnScreen-169"><a href="#MovingCharacterOnScreen-169"><span class="linenos">169</span></a>                <span class="k">if</span> <span class="n">collision</span><span class="o">.</span><span class="n">contain</span><span class="p">(</span><span class="n">coord</span><span class="p">):</span>
+</span><span id="MovingCharacterOnScreen-170"><a href="#MovingCharacterOnScreen-170"><span class="linenos">170</span></a>                    <span class="k">return</span> <span class="n">_CollisionAndCoord</span><span class="p">(</span><span class="n">collision</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
+</span><span id="MovingCharacterOnScreen-171"><a href="#MovingCharacterOnScreen-171"><span class="linenos">171</span></a>        <span class="k">return</span> <span class="kc">None</span>
 </span></pre></div>
 
 

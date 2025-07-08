@@ -23,7 +23,7 @@ def instance_init(init: Callable[[Any], Any]) -> Any:
 
 
 @dataclass_transform(kw_only_default=True, frozen_default=True)
-def register_instance_init[T](cls: type[T]) -> type[T]:
+def dataclass_with_instance_init[T](cls: type[T]) -> type[T]:
     """
     Class decorator to allow the use of `instance_init` in dataclasses.
 

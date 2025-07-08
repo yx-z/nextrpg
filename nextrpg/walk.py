@@ -6,10 +6,10 @@ from typing import Self
 from nextrpg.core import Direction, Millisecond, PixelPerMillisecond
 from nextrpg.draw_on_screen import Polygon
 from nextrpg.coordinate import Coordinate
-from nextrpg.model import instance_init, register_instance_init
+from nextrpg.model import instance_init, dataclass_with_instance_init
 
 
-@register_instance_init
+@dataclass_with_instance_init
 class Walk:
     path: Polygon
     move_speed: PixelPerMillisecond
@@ -74,8 +74,6 @@ class Walk:
         if self.cyclic:
             return False
 
-        return (
-            self._index == 0 and self._last_index != 0
-            if self.path.closed
-            else self._next_index == 0
-        )
+        if self.path.closed:
+            return self._index == 0 and self._last_index != 0
+        return self._next_index == 0

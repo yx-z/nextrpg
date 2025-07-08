@@ -46,16 +46,16 @@ class _AddParent(NodeTransformer):
 
 
 class _YieldEvents(NodeTransformer):
-    def visit_Call(self, node: Call) -> Call:
+    def visit_Call(self, node: Call) -> Yield | Call:
         self.generic_visit(node)
-        return (
-            Yield(node)
-            if isinstance(node.func, Name)
+        if (
+            isinstance(node.func, Name)
             and node.func.id in _events
             and (parent := getattr(node, "_nextrpg_parent", None))
             and not isinstance(parent, Yield)
-            else node
-        )
+        ):
+            return Yield(node)
+        return node
 
 
 _events: set[str] = set()

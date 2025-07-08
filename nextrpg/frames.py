@@ -8,10 +8,10 @@ from typing import Self
 
 from nextrpg.core import Millisecond, Timer
 from nextrpg.draw_on_screen import Drawing
-from nextrpg.model import instance_init, register_instance_init
+from nextrpg.model import instance_init, dataclass_with_instance_init
 
 
-@register_instance_init
+@dataclass_with_instance_init
 class CyclicFrames:
     """
     Static frames that can be played sequentially to create animations.

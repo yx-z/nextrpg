@@ -10,13 +10,13 @@ from nextrpg.core import Millisecond
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.event.rpg_event import transform_event
 from nextrpg.logger import FROM_CONFIG, Logger
-from nextrpg.model import instance_init, register_instance_init
+from nextrpg.model import instance_init, dataclass_with_instance_init
 from nextrpg.scene.scene import Scene
 
 logger = Logger("Npcs")
 
 
-@register_instance_init
+@dataclass_with_instance_init
 class NpcOnScreen(CharacterOnScreen):
     """
     In-game NPC interface, where NPC doesn't move.
@@ -35,11 +35,9 @@ class NpcOnScreen(CharacterOnScreen):
     _triggered: bool = False
 
     def tick(self, time_delta: Millisecond) -> Self:
-        return (
-            self
-            if self._triggered
-            else replace(self, character=self.character.idle(time_delta))
-        )
+        if self._triggered:
+            return self
+        return replace(self, character=self.character.idle(time_delta))
 
     @override
     def trigger(self, character: CharacterOnScreen) -> Self:
@@ -64,19 +62,20 @@ class EventfulScene(Scene):
     _event_result: Any = None
 
     @cached_property
-    def npc_dict(self) -> dict[str, NpcOnScreen]:
+    def npcs(self) -> dict[str, NpcOnScreen]:
         return {n.name: n for n in self._npcs}
 
     def event(self, event: PygameEvent) -> Scene:
         if (
-            isinstance(event, KeyPressDown)
+            not self._npc
+            and isinstance(event, KeyPressDown)
             and event.key is KeyboardKey.CONFIRM
             and (npc := self._collided_npc)
         ):
             logger.debug(t"Collided with {npc.name}", duration=FROM_CONFIG)
             scene = self._trigger(npc)
-            generator = npc.spec._generator(
-                self._player, npc, self.npc_dict, scene
+            generator = scene._npc.spec._generator(
+                scene._player, scene._npc, scene._npcs, scene
             )
             return next(generator)(generator, scene)
         return replace(self, _player=self._player.event(event))
@@ -107,8 +106,10 @@ class EventfulScene(Scene):
 
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:
-        collide = (n for n in self._npcs if self._collide(n))
-        return next(collide, None)
+        for npc in self._npcs:
+            if self._collide(npc):
+                return npc
+        return None
 
     def _collide(self, npc: NpcOnScreen) -> bool:
         return npc.draw_on_screen.rectangle.collide(
@@ -116,14 +117,12 @@ class EventfulScene(Scene):
         )
 
     def _trigger(self, npc: NpcOnScreen) -> Self:
-        npcs = tuple(
-            n.trigger(self._player) if n.name == npc.name else n
-            for n in self._npcs
-        )
+        triggered = npc.trigger(self._player)
+        npcs = tuple(triggered if n.name == npc.name else n for n in self._npcs)
         return replace(
             self,
-            _player=self._player.trigger(npc),
-            _npc=npc.trigger(self._player),
+            _player=self._player.trigger(triggered),
+            _npc=triggered,
             _npcs=npcs,
         )
 

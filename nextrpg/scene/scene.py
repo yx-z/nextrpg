@@ -21,7 +21,7 @@ class Scene:
     """
 
     @cached_property
-    def draw_on_screen_shift(self) -> Coordinate:
+    def draw_on_screen_shift(self) -> Coordinate | None:
         """
         The offset of all drawings applied after `draw_on_screens` (before GUI
         scaling), so that the drawings are shifted correctly on screen.
@@ -31,10 +31,10 @@ class Scene:
         Returns:
             `Coordinate`: The shift offset of all drawings.
         """
-        return Coordinate(0, 0)
+        return None
 
     @cached_property
-    def draw_on_screens_shifted(self) -> tuple[DrawOnScreen, ...]:
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         """
         Get the tuple of drawables to be rendered on the screen, shifted by
         `self.draw_on_screen_shift`.
@@ -42,6 +42,8 @@ class Scene:
         Returns:
             `tuple[DrawOnScreen, ...]`: The tuple of drawables to be rendered.
         """
+        if self.draw_on_screen_shift is None:
+            return self._draw_on_screens
         return tuple(
             d.shift(self.draw_on_screen_shift) for d in self._draw_on_screens
         )

@@ -52,7 +52,7 @@ class SayEvent(RpgEventScene):
     @cached_property
     @override
     def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return self._scene.draw_on_screens_shifted + (
+        return self._scene.draw_on_screens + (
             Text(self.message, self._coordinate).draw_on_screen,
         )
 
@@ -62,19 +62,16 @@ class SayEvent(RpgEventScene):
 
     @override
     def event(self, e: PygameEvent) -> Scene:
-        if isinstance(e, KeyPressDown):
-            return (
-                self._scene.send(self._generator)
-                if e.key is KeyboardKey.CONFIRM
-                else self
-            )
-        return replace(self, _scene=self._scene.event(e))
+        if not isinstance(e, KeyPressDown):
+            return replace(self, _scene=self._scene.event(e))
+
+        if e.key is KeyboardKey.CONFIRM:
+            return self._scene.send(self._generator)
+        return self
 
     @cached_property
     def _coordinate(self) -> Coordinate:
         coord = self.character.coordinate
-        return (
-            coord.shift(self._scene.draw_on_screen_shift)
-            if isinstance(self._scene, MapScene)
-            else coord
-        )
+        if isinstance(self._scene, MapScene):
+            return coord.shift(self._scene.draw_on_screen_shift)
+        return coord

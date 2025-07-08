@@ -23,7 +23,7 @@ from nextrpg.core import Direction, Millisecond, Pixel
 from nextrpg.draw_on_screen import Drawing, Size
 from nextrpg.coordinate import Coordinate
 from nextrpg.frames import CyclicFrames
-from nextrpg.model import instance_init, register_instance_init
+from nextrpg.model import instance_init, dataclass_with_instance_init
 
 
 class DefaultFrameType(IntEnum):
@@ -137,7 +137,7 @@ def _init_frames(
     }
 
 
-@register_instance_init
+@dataclass_with_instance_init
 class RpgMakerCharacterDrawing(CharacterDrawing):
     """
     RPG Maker style character drawing.
@@ -191,11 +191,9 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         self, time_delta: Millisecond, adjusted_direction: Direction
     ) -> CyclicFrames:
         frames = self._frames[adjusted_direction]
-        return (
-            frames.tick(time_delta)
-            if adjusted_direction == _adjust(self.direction)
-            else frames
-        )
+        if adjusted_direction == _adjust(self.direction):
+            return frames.tick(time_delta)
+        return frames
 
     @override
     def idle(self, time_delta: Millisecond) -> Self:

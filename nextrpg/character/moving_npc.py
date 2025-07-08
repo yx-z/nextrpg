@@ -8,7 +8,7 @@ from nextrpg.config import config
 from nextrpg.core import Millisecond, PixelPerMillisecond, Timer
 from nextrpg.draw_on_screen import Polygon
 from nextrpg.coordinate import Coordinate
-from nextrpg.model import instance_init, register_instance_init
+from nextrpg.model import instance_init, dataclass_with_instance_init
 from nextrpg.walk import Walk
 
 
@@ -37,7 +37,7 @@ class MovingNpcSpec(NpcSpec):
     cyclic_walk: bool = True
 
 
-@register_instance_init
+@dataclass_with_instance_init
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     """
     Moving NPC interface.

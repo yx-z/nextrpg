@@ -163,13 +163,11 @@ class MovingCharacterOnScreen(CharacterOnScreen):
     def _collide(
         self, hit_coords: set[Coordinate]
     ) -> _CollisionAndCoord | None:
-        collided = (
-            _CollisionAndCoord(collision, coord)
-            for collision in self.collisions
-            for coord in hit_coords
-            if collision.contain(coord)
-        )
-        return next(collided, None)
+        for collision in self.collisions:
+            for coord in hit_coords:
+                if collision.contain(coord):
+                    return _CollisionAndCoord(collision, coord)
+        return None
 
 
 class _CollisionAndCoord(NamedTuple):
