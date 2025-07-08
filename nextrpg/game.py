@@ -4,7 +4,6 @@ Start the game window and game loop.
 
 from asyncio import sleep
 from dataclasses import field, replace
-from functools import reduce, singledispatchmethod
 from typing import Callable
 
 import pygame
@@ -63,8 +62,9 @@ class _GameLoop:
     _gui: Gui = field(default_factory=Gui)
     _scene: Scene = instance_init(lambda self: self.entry_scene())
 
-    @singledispatchmethod
     def event(self, e: PygameEvent) -> _GameLoop:
+        if isinstance(e, Quit):
+            return replace(self, _scene=self._scene.event(e), running=False)
         return replace(
             self, _scene=self._scene.event(e), _gui=self._gui.event(e)
         )
@@ -77,11 +77,10 @@ class _GameLoop:
         self._update_gui()
         self._gui.draw(self._scene.draw_on_screens_shifted, time_delta)
 
-        return reduce(
-            lambda loop, e: loop.event(to_typed_event(e)),
-            pygame.event.get(),
-            replace(self, _scene=self._scene.tick(time_delta)),
-        )
+        loop = replace(self, _scene=self._scene.tick(time_delta))
+        for e in pygame.event.get():
+            loop = loop.event(to_typed_event(e))
+        return loop
 
     def _update_gui(self) -> None:
         if config().gui is not self._gui.current_config:
@@ -93,6 +92,3 @@ class _GameLoop:
             object.__setattr__(self, "_gui", new_gui)
 
 
-@_GameLoop.event.register
-def _quit(self, e: Quit) -> _GameLoop:
-    return replace(self, _scene=self._scene.event(e), running=False)

@@ -1,17 +1,14 @@
-from ast import fix_missing_locations, parse, unparse
 from collections.abc import Callable, Generator
 from dataclasses import dataclass, field, replace
-from functools import cached_property, wraps
-from inspect import getsource
-from textwrap import dedent
+from functools import cached_property
 from typing import Any, Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core import Millisecond
-from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
-from nextrpg.event.rpg_event import _yield, transform_event
+from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
+from nextrpg.event.rpg_event import transform_event
 from nextrpg.logger import FROM_CONFIG, Logger
 from nextrpg.model import instance_init, register_instance_init
 from nextrpg.scene.scene import Scene
@@ -217,7 +214,6 @@ class NpcSpec:
         [PlayerOnScreen, NpcOnScreen, dict[str, NpcOnScreen], EventfulScene],
         RpgEventGenerator,
     ]:
-        @wraps(self.event)
         def wrapped(
             player: PlayerOnScreen,
             npc: NpcOnScreen,
@@ -227,5 +223,4 @@ class NpcSpec:
             ctx = self.event.__globals__.copy()
             exec(transform_event(self.event), ctx)
             return ctx[self.event.__name__](player, npc, npc_dict, scene)
-
         return wrapped

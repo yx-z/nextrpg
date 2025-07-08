@@ -3,8 +3,7 @@ Game window / Graphical User Interface (GUI).
 """
 
 from dataclasses import dataclass, field, replace
-from functools import cached_property, reduce, singledispatchmethod
-from operator import or_
+from functools import cached_property
 
 from pygame import font
 from pygame.display import flip, init, set_caption, set_mode
@@ -77,7 +76,6 @@ class Gui:
         self._update_title()
         self._update_screen()
 
-    @singledispatchmethod
     def event(self, e: PygameEvent) -> Gui:
         """
         `Gui` will action on `KeyPressDown` and `GuiResize` events.
@@ -92,6 +90,12 @@ class Gui:
         Returns:
             `Gui`: An updated `Gui` instance.
         """
+        match e:
+            case GuiResize():
+                return self._resize(e.size)
+            case KeyPressDown():
+                if e.key is KeyboardKey.GUI_MODE_TOGGLE:
+                    return self._toggle_gui_mode
         return self
 
     def draw(
@@ -153,13 +157,12 @@ class Gui:
 
     @cached_property
     def _current_gui_flag(self) -> _GuiFlag:
-        check_and_flags = (
-            (self.current_config.gui_mode is GuiMode.FULL_SCREEN, FULLSCREEN),
-            (self.current_config.allow_window_resize, RESIZABLE),
-        )
-        return reduce(
-            or_, (flag for check, flag in check_and_flags if check), 0
-        )
+        flag = 0
+        if self.current_config.gui_mode is GuiMode.FULL_SCREEN:
+            flag |= FULLSCREEN
+        if self.current_config.allow_window_resize:
+            flag |= RESIZABLE
+        return flag
 
     def _update_title(self) -> None:
         if (
@@ -184,26 +187,23 @@ class Gui:
             )
 
 
-@Gui.event.register
-def _toggle_gui_mode(self, e: KeyPressDown) -> Gui:
-    if e.key is not KeyboardKey.GUI_MODE_TOGGLE:
-        return self
-    current_config = replace(
+    @cached_property
+    def _toggle_gui_mode(self) -> Gui:
+        current_config = replace(
         self.current_config, gui_mode=self.current_config.gui_mode.opposite
     )
-    set_config(replace(config(), gui=current_config))
-    return replace(
+        set_config(replace(config(), gui=current_config))
+        return replace(
         self, current_config=current_config, last_config=self.current_config
     )
 
 
-@Gui.event.register
-def _resize(self, e: GuiResize) -> Gui:
-    if e.size == self.current_config.size:
-        return self
-    current_config = replace(self.current_config, size=e.size)
-    set_config(replace(config(), gui=current_config))
-    return replace(
+    def _resize(self, size: Size) -> Gui:
+        if size == self.current_config.size:
+            return self
+        current_config = replace(self.current_config, size=size)
+        set_config(replace(config(), gui=current_config))
+        return replace(
         self, current_config=current_config, last_config=self.current_config
     )
 
