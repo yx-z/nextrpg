@@ -178,7 +178,7 @@ class MapHelper:
             get_polygon(obj)
             for obj in self.get_objects_by_class_name(config().map.collision)
         )
-        return from_tiles+ from_objects
+        return from_tiles + from_objects
 
     def get_object(self, name: str) -> TiledObject:
         """
