@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from math import ceil
 from os import PathLike
-from typing import Self
+from typing import Self, override
 
 from pygame import Mask, SRCALPHA, Surface
 from pygame.draw import polygon
@@ -250,11 +250,6 @@ class Polygon:
     def _mask(self) -> Mask:
         return from_surface(self.fill(Rgba(0, 0, 0, 255)).drawing.pygame)
 
-    def shift(self, coordinate: Coordinate) -> Self:
-        return Polygon(
-            tuple(c.shift(coordinate) for c in self.points), self.closed
-        )
-
     def fill(self, color: Rgba) -> DrawOnScreen:
         """
         Creates a colored `DrawOnScreen` with the provided color.
@@ -445,7 +440,7 @@ class Rectangle(Polygon):
         width, height = self.size
         return Coordinate(self.left + width / 2, self.top + height / 2)
 
-    @property
+    @cached_property
     def points(self) -> tuple[Coordinate, ...]:
         """
         Get the coordinates of the corners of the rectangle.
@@ -461,6 +456,7 @@ class Rectangle(Polygon):
             self.bottom_left,
         )
 
+    @override
     def collide(self, poly: Polygon) -> bool:
         if isinstance(poly, Rectangle):
             return (
@@ -471,6 +467,7 @@ class Rectangle(Polygon):
             )
         return super().collide(poly)
 
+    @override
     def contain(self, coordinate: Coordinate) -> bool:
         return (
             self.left < coordinate.left < self.right

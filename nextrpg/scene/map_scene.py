@@ -18,14 +18,13 @@ from nextrpg.draw_on_screen import DrawOnScreen
 from nextrpg.event.move import Move
 from nextrpg.gui import gui_size
 from nextrpg.logger import Logger
-from nextrpg.model import instance_init, dataclass_with_instance_init
-from nextrpg.scene.static_scene import StaticScene
+from nextrpg.model import dataclass_with_instance_init, instance_init
 from nextrpg.scene.map_helper import (
     MapHelper,
     get_polygon,
 )
 from nextrpg.scene.scene import Scene
-from nextrpg.scene.transition_scene import TransitionScene
+from nextrpg.scene.static_scene import StaticScene
 from nextrpg.scene.transition_triple import TransitionTriple
 
 logger = Logger("MapScene")
@@ -72,6 +71,9 @@ class MapScene(EventfulScene):
     player_coordinate_object: str
     moves: tuple[Move, ...] = field(default_factory=tuple)
     npc_specs: tuple[NpcSpec, ...] = field(default_factory=tuple)
+    collision_visuals: tuple[DrawOnScreen, ...] = instance_init(
+        lambda self: self._collision_visuals
+    )
     _npcs: tuple[NpcOnScreen, ...] = instance_init(_init_npcs)
     _player: PlayerOnScreen = instance_init(_init_player)
 
@@ -154,7 +156,7 @@ class MapScene(EventfulScene):
             self._map_helper.background
             + self._foreground_and_characters
             + self._map_helper.above_character
-            + self._collision_visuals
+            + self.collision_visuals
         )
 
 

@@ -8,7 +8,7 @@ from nextrpg.gui import screen
 from nextrpg.scene.scene import Scene
 
 
-@dataclass
+@dataclass(frozen=True)
 class StaticScene(Scene):
     resource: Rgba | DrawOnScreen = field(
         default_factory=lambda: config().gui.background_color

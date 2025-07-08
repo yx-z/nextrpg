@@ -21,7 +21,7 @@ def exterior_scene(
         `Scene`: The exterior scene.
     """
     # Local import to avoid circular dependency.
-    from example.interior_scene import interior_scene
+    from interior_scene import interior_scene
 
     return MapScene(
         # Tiled/tmx tile map .

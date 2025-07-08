@@ -1,7 +1,7 @@
 from collections.abc import Callable, Generator
 from dataclasses import dataclass, field, replace
 from functools import cached_property
-from typing import Any, Self, override
+from typing import Any, Self
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
@@ -10,7 +10,7 @@ from nextrpg.core import Millisecond
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.event.rpg_event import transform_event
 from nextrpg.logger import FROM_CONFIG, Logger
-from nextrpg.model import instance_init, dataclass_with_instance_init
+from nextrpg.model import dataclass_with_instance_init, instance_init
 from nextrpg.scene.scene import Scene
 
 logger = Logger("Npcs")
@@ -60,7 +60,7 @@ class EventfulScene(Scene):
         ):
             logger.debug(t"Collided with {npc.name}", duration=FROM_CONFIG)
             scene = self._trigger(npc)
-            generator = scene._npc.spec._generator(
+            generator = scene._npc.spec.generator(
                 scene._player, scene._npc, scene._npcs, scene
             )
             return next(generator)(generator, scene)
@@ -109,13 +109,13 @@ class EventfulScene(Scene):
         )
 
     def _trigger(self, npc: NpcOnScreen) -> Self:
-        triggered_npc = npc.trigger(self._player)
+        triggered_npc = npc.start_event(self._player)
         npcs = tuple(
             triggered_npc if n.name == npc.name else n for n in self._npcs
         )
         return replace(
             self,
-            _player=self._player.trigger(triggered_npc),
+            _player=self._player.start_event(triggered_npc),
             _npc=triggered_npc,
             _npcs=npcs,
         )
@@ -136,7 +136,7 @@ class EventfulScene(Scene):
         except StopIteration:
             return replace(
                 self,
-                _player=self._player.complete,
+                _player=self._player.complete_event,
                 _npcs=self._completed_npcs,
                 _npc=None,
                 _event=None,
@@ -145,13 +145,14 @@ class EventfulScene(Scene):
 
     @cached_property
     def _completed_npcs(self) -> tuple[NpcOnScreen, ...]:
-        return tuple(n.complete for n in self._npcs)
+        return tuple(n.complete_event for n in self._npcs)
 
 
-type RpgEventSpec = Callable[
-    [PlayerOnScreen, NpcOnScreen, dict[str, NpcOnScreen], EventfulScene],
-    None,
+type RpgEventSpecParams = tuple[
+    PlayerOnScreen, NpcOnScreen, dict[str, NpcOnScreen]
 ]
+
+type RpgEventSpec = Callable[[*RpgEventSpecParams], None]
 """
 Abstract protocol to define Rpg Event for player/NPC interactions.
 """
@@ -184,7 +185,7 @@ class RpgEventScene(Scene):
     _scene: EventfulScene
 
 
-@dataclass(frozen=True)
+@dataclass_with_instance_init
 class NpcSpec:
     """
     Base class to define NPC specifications.
@@ -200,12 +201,12 @@ class NpcSpec:
     name: str
     character: CharacterDrawing
     event: RpgEventSpec
+    generator: Callable[[*RpgEventSpecParams], RpgEventGenerator] = (
+        instance_init(lambda self: self._generator)
+    )
 
     @cached_property
-    def _generator(self) -> Callable[
-        [PlayerOnScreen, NpcOnScreen, dict[str, NpcOnScreen], EventfulScene],
-        RpgEventGenerator,
-    ]:
+    def _generator(self) -> Callable[[*RpgEventSpecParams], RpgEventGenerator]:
         def wrapped(
             player: PlayerOnScreen,
             npc: NpcOnScreen,

@@ -76,7 +76,7 @@
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="nd">@dataclass</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StaticScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">|</span> <span class="n">DrawOnScreen</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">background_color</span>
@@ -94,7 +94,7 @@
                 <section id="StaticScene">
                             <input id="StaticScene-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass">@dataclass</div>
+                    <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">StaticScene</span><wbr>(<span class="base"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>):
@@ -103,7 +103,7 @@
 
     </div>
     <a class="headerlink" href="#StaticScene"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StaticScene-12"><a href="#StaticScene-12"><span class="linenos">12</span></a><span class="nd">@dataclass</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StaticScene-12"><a href="#StaticScene-12"><span class="linenos">12</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="StaticScene-13"><a href="#StaticScene-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StaticScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
 </span><span id="StaticScene-14"><a href="#StaticScene-14"><span class="linenos">14</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">|</span> <span class="n">DrawOnScreen</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
 </span><span id="StaticScene-15"><a href="#StaticScene-15"><span class="linenos">15</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">background_color</span>

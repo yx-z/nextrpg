@@ -52,10 +52,10 @@
                                 <a class="function" href="#CharacterOnScreen.tick">tick</a>
                         </li>
                         <li>
-                                <a class="function" href="#CharacterOnScreen.trigger">trigger</a>
+                                <a class="function" href="#CharacterOnScreen.start_event">start_event</a>
                         </li>
                         <li>
-                                <a class="variable" href="#CharacterOnScreen.complete">complete</a>
+                                <a class="variable" href="#CharacterOnScreen.complete_event">complete_event</a>
                         </li>
                 </ul>
 
@@ -168,14 +168,14 @@
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">),</span> <span class="n">_triggered</span><span class="o">=</span><span class="kc">True</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>        <span class="p">)</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
@@ -362,14 +362,14 @@
 </span><span id="CharacterOnScreen-63"><a href="#CharacterOnScreen-63"><span class="linenos">63</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen-64"><a href="#CharacterOnScreen-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
 </span><span id="CharacterOnScreen-65"><a href="#CharacterOnScreen-65"><span class="linenos">65</span></a>
-</span><span id="CharacterOnScreen-66"><a href="#CharacterOnScreen-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-66"><a href="#CharacterOnScreen-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="CharacterOnScreen-67"><a href="#CharacterOnScreen-67"><span class="linenos">67</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
 </span><span id="CharacterOnScreen-68"><a href="#CharacterOnScreen-68"><span class="linenos">68</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
 </span><span id="CharacterOnScreen-69"><a href="#CharacterOnScreen-69"><span class="linenos">69</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">),</span> <span class="n">_triggered</span><span class="o">=</span><span class="kc">True</span>
 </span><span id="CharacterOnScreen-70"><a href="#CharacterOnScreen-70"><span class="linenos">70</span></a>        <span class="p">)</span>
 </span><span id="CharacterOnScreen-71"><a href="#CharacterOnScreen-71"><span class="linenos">71</span></a>
 </span><span id="CharacterOnScreen-72"><a href="#CharacterOnScreen-72"><span class="linenos">72</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen-73"><a href="#CharacterOnScreen-73"><span class="linenos">73</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-73"><a href="#CharacterOnScreen-73"><span class="linenos">73</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="CharacterOnScreen-74"><a href="#CharacterOnScreen-74"><span class="linenos">74</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span></pre></div>
 
@@ -500,40 +500,40 @@ character interactions with the game environment.</p>
 
 
                             </div>
-                            <div id="CharacterOnScreen.trigger" class="classattr">
-                                        <input id="CharacterOnScreen.trigger-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="CharacterOnScreen.start_event" class="classattr">
+                                        <input id="CharacterOnScreen.start_event-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">trigger</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="#CharacterOnScreen">CharacterOnScreen</a></span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
+        <span class="name">start_event</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="#CharacterOnScreen">CharacterOnScreen</a></span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
-                <label class="view-source-button" for="CharacterOnScreen.trigger-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="CharacterOnScreen.start_event-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#CharacterOnScreen.trigger"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.trigger-66"><a href="#CharacterOnScreen.trigger-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">trigger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen.trigger-67"><a href="#CharacterOnScreen.trigger-67"><span class="linenos">67</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
-</span><span id="CharacterOnScreen.trigger-68"><a href="#CharacterOnScreen.trigger-68"><span class="linenos">68</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-</span><span id="CharacterOnScreen.trigger-69"><a href="#CharacterOnScreen.trigger-69"><span class="linenos">69</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">),</span> <span class="n">_triggered</span><span class="o">=</span><span class="kc">True</span>
-</span><span id="CharacterOnScreen.trigger-70"><a href="#CharacterOnScreen.trigger-70"><span class="linenos">70</span></a>        <span class="p">)</span>
+    <a class="headerlink" href="#CharacterOnScreen.start_event"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.start_event-66"><a href="#CharacterOnScreen.start_event-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen.start_event-67"><a href="#CharacterOnScreen.start_event-67"><span class="linenos">67</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
+</span><span id="CharacterOnScreen.start_event-68"><a href="#CharacterOnScreen.start_event-68"><span class="linenos">68</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="CharacterOnScreen.start_event-69"><a href="#CharacterOnScreen.start_event-69"><span class="linenos">69</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">),</span> <span class="n">_triggered</span><span class="o">=</span><span class="kc">True</span>
+</span><span id="CharacterOnScreen.start_event-70"><a href="#CharacterOnScreen.start_event-70"><span class="linenos">70</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
     
 
                             </div>
-                            <div id="CharacterOnScreen.complete" class="classattr">
-                                        <input id="CharacterOnScreen.complete-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="CharacterOnScreen.complete_event" class="classattr">
+                                        <input id="CharacterOnScreen.complete_event-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">complete</span><span class="annotation">: Self</span>
+            <span class="name">complete_event</span><span class="annotation">: Self</span>
 
-                <label class="view-source-button" for="CharacterOnScreen.complete-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="CharacterOnScreen.complete_event-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#CharacterOnScreen.complete"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.complete-72"><a href="#CharacterOnScreen.complete-72"><span class="linenos">72</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen.complete-73"><a href="#CharacterOnScreen.complete-73"><span class="linenos">73</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen.complete-74"><a href="#CharacterOnScreen.complete-74"><span class="linenos">74</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <a class="headerlink" href="#CharacterOnScreen.complete_event"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.complete_event-72"><a href="#CharacterOnScreen.complete_event-72"><span class="linenos">72</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen.complete_event-73"><a href="#CharacterOnScreen.complete_event-73"><span class="linenos">73</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen.complete_event-74"><a href="#CharacterOnScreen.complete_event-74"><span class="linenos">74</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -833,8 +833,8 @@ the last update, used for calculating movement distance.</li>
                                 <dd id="MovingCharacterOnScreen.character" class="variable"><a href="#CharacterOnScreen.character">character</a></dd>
                 <dd id="MovingCharacterOnScreen.coordinate" class="variable"><a href="#CharacterOnScreen.coordinate">coordinate</a></dd>
                 <dd id="MovingCharacterOnScreen.draw_on_screen" class="variable"><a href="#CharacterOnScreen.draw_on_screen">draw_on_screen</a></dd>
-                <dd id="MovingCharacterOnScreen.trigger" class="function"><a href="#CharacterOnScreen.trigger">trigger</a></dd>
-                <dd id="MovingCharacterOnScreen.complete" class="variable"><a href="#CharacterOnScreen.complete">complete</a></dd>
+                <dd id="MovingCharacterOnScreen.start_event" class="function"><a href="#CharacterOnScreen.start_event">start_event</a></dd>
+                <dd id="MovingCharacterOnScreen.complete_event" class="variable"><a href="#CharacterOnScreen.complete_event">complete_event</a></dd>
 
             </div>
                                 </dl>

@@ -42,7 +42,7 @@ def interior_scene(
         `Scene`: The interior scene.
     """
     # Local import to avoid circular dependency.
-    from example.exterior_scene import exterior_scene
+    from exterior_scene import exterior_scene
 
     return MapScene(
         # Tiled/tmx tile map.
@@ -55,8 +55,8 @@ def interior_scene(
         moves=(Move("from_interior", "to_exterior", exterior_scene),),
         # NPC/events.
         npc_specs=(
-            NpcSpec("david", david(), greet),
-            MovingNpcSpec("alisa", alisa(), greet),
+            NpcSpec(name="david", character=david(), event=greet),
+            MovingNpcSpec(name="alisa", character=alisa(), event=greet),
         ),
     )
 

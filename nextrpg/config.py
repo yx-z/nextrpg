@@ -286,7 +286,7 @@ class TransitionConfig:
             in milliseconds.
     """
 
-    transition_duration: Millisecond = 200
+    duration: Millisecond = 200
 
 
 @dataclass(frozen=True)

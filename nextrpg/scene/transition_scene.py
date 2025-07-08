@@ -22,7 +22,7 @@ class TransitionScene(Scene):
     from_scene: Scene
     to_scene: Scene
     duration: Millisecond = field(
-        default_factory=lambda: config().transition.transition_duration
+        default_factory=lambda: config().transition.duration
     )
     _elapsed: Millisecond = 0
 

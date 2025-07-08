@@ -28,14 +28,14 @@ def test_npc_on_screen() -> None:
     npc = NpcOnScreen(
         coordinate=Coordinate(0, 0),
         spec=NpcSpec(
-            "name",
-            MockCharacterDrawing(),
-            lambda *_: None,
+            name="name",
+            character=MockCharacterDrawing(),
+            event=lambda *_: None,
         ),
     ).tick(0)
     assert npc
     assert (
-        npc.trigger(
+        npc.start_event(
             PlayerOnScreen(
                 collisions=(),
                 character=MockCharacterDrawing(),
@@ -78,14 +78,16 @@ def test_npcs(mocker: MockerFixture) -> None:
         _npcs=(
             NpcOnScreen(
                 coordinate=Coordinate(0, 0),
-                spec=NpcSpec("name", MockCharacterDrawing(), event),
+                spec=NpcSpec(
+                    name="name", character=MockCharacterDrawing(), event=event
+                ),
             ),
             MovingNpcOnScreen(
                 coordinate=Coordinate(0, 0),
                 spec=MovingNpcSpec(
-                    "name",
-                    MockCharacterDrawing(),
-                    event,
+                    name="name",
+                    character=MockCharacterDrawing(),
+                    event=event,
                 ),
                 collisions=(),
                 path=Rectangle(Coordinate(0, 0), Size(10, 10)),
@@ -116,16 +118,20 @@ def test_eventful_scene() -> None:
         _npcs=(
             NpcOnScreen(
                 coordinate=Coordinate(0, 0),
-                spec=NpcSpec("npc", MockCharacterDrawing(), lambda *_: None),
+                spec=NpcSpec(
+                    name="npc",
+                    character=MockCharacterDrawing(),
+                    event=lambda *_: None,
+                ),
             ),
         ),
         _event=gen,
         _npc=NpcOnScreen(
             coordinate=Coordinate(0, 0),
             spec=NpcSpec(
-                "npc",
-                MockCharacterDrawing(),
-                lambda *_: None,
+                name="npc",
+                character=MockCharacterDrawing(),
+                event=lambda *_: None,
             ),
         ),
     )

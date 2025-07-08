@@ -26,8 +26,10 @@ class PlayerOnScreen(MovingCharacterOnScreen):
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
     @override
-    def trigger(self, character: CharacterOnScreen) -> Self:
-        return replace(super().trigger(character), _movement_keys=frozenset())
+    def start_event(self, character: CharacterOnScreen) -> Self:
+        return replace(
+            super().start_event(character), _movement_keys=frozenset()
+        )
 
     def event(self, event: PygameEvent) -> Self:
         if self._triggered or not isinstance(event, (KeyPressDown, KeyPressUp)):

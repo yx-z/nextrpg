@@ -166,7 +166,7 @@ class _LogEntry:
 
     @cached_property
     def formatted(self) -> str:
-        return "".join(map(_format, self.message))
+        return "".join(_format(m) for m in self.message)
 
 
 @dataclass(frozen=True)

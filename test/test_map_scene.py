@@ -40,7 +40,11 @@ def test_map_scene(mocker: MockerFixture) -> None:
         player_coordinate_object="",
     )
     with override_config(Config(debug=DebugConfig())):
-        assert map._collision_visuals
+        assert MapScene(
+            tmx_file=Path("test"),
+            initial_player_drawing=MockCharacterDrawing(),
+            player_coordinate_object="",
+        ).collision_visuals
     mocker.patch(
         "nextrpg.scene.map_scene.sorted",
         return_value=[
@@ -69,8 +73,12 @@ def test_init_npc(mocker: MockerFixture) -> None:
         initial_player_drawing=MockCharacterDrawing(),
         player_coordinate_object="",
         npc_specs=(
-            NpcSpec("", MockCharacterDrawing(), lambda *_: None),
-            MovingNpcSpec("", MockCharacterDrawing(), lambda *_: None),
+            NpcSpec(
+                name="", character=MockCharacterDrawing(), event=lambda *_: None
+            ),
+            MovingNpcSpec(
+                name="", character=MockCharacterDrawing(), event=lambda *_: None
+            ),
         ),
     )
     assert map_scene._npcs

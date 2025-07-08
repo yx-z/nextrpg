@@ -62,14 +62,14 @@ class CharacterOnScreen:
         """
         return replace(self, character=self.character.idle(time_delta))
 
-    def trigger(self, character: CharacterOnScreen) -> Self:
+    def start_event(self, character: CharacterOnScreen) -> Self:
         direction = character.coordinate.relative_to(self.coordinate)
         return replace(
             self, character=self.character.turn(direction), _triggered=True
         )
 
     @cached_property
-    def complete(self) -> Self:
+    def complete_event(self) -> Self:
         return replace(self, _triggered=False)
 
 

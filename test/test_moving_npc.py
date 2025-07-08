@@ -9,9 +9,9 @@ def test_moving_npc_on_screen() -> None:
     npc = MovingNpcOnScreen(
         coordinate=Coordinate(0, 0),
         spec=MovingNpcSpec(
-            "name",
-            MockCharacterDrawing(),
-            lambda *_: None,
+            name="name",
+            character=MockCharacterDrawing(),
+            event=lambda *_: None,
             idle_duration=10,
             move_duration=10,
         ),
