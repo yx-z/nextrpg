@@ -2,6 +2,7 @@
 Drawable on screen.
 """
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from functools import cached_property
 from math import ceil
@@ -260,11 +261,7 @@ class Polygon:
         Returns:
             `DrawOnScreen`: A transparent surface matching rectangle dimensions.
         """
-        rect = self.bounding_rectangle
-        surf = Surface(rect.size, SRCALPHA)
-        negated = [(p.shift(rect.top_left.negate)) for p in self.points]
-        polygon(surf, color, negated)
-        return DrawOnScreen(rect.top_left, Drawing(surf))
+        return self._draw(lambda surf, points: polygon(surf, color, points))
 
     def line(
         self, color: Rgba, stroke_width: Pixel | None = None
@@ -274,10 +271,19 @@ class Polygon:
             if stroke_width is None
             else stroke_width
         )
+        return self._draw(
+            lambda surf, points: lines(
+                surf, color, self.closed, points, stroke_width
+            )
+        )
+
+    def _draw(
+        self, surf_and_points: Callable[[Surface, tuple[Coordinate, ...]], None]
+    ) -> DrawOnScreen:
         rect = self.bounding_rectangle
         surf = Surface(rect.size, SRCALPHA)
-        negated = [(p.shift(rect.top_left.negate)) for p in self.points]
-        lines(surf, color, self.closed, negated, stroke_width)
+        negated = tuple((p.shift(rect.top_left.negate)) for p in self.points)
+        surf_and_points(surf, negated)
         return DrawOnScreen(rect.top_left, Drawing(surf))
 
     def collide(self, poly: Self) -> bool:
