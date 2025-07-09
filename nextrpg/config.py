@@ -56,6 +56,7 @@ class DebugConfig:
 
     drawing_background_color: Rgba = Rgba(0, 0, 255, 16)
     collision_rectangle_color: Rgba = Rgba(255, 0, 0, 64)
+    npc_path_color: Rgba = Rgba(0, 255, 0, 64)
     ignore_map_collisions: bool = False
     log_level: LogLevel = LogLevel.DEBUG
     log_duration: Millisecond = 3000
@@ -311,6 +312,11 @@ class TextConfig:
 
 
 @dataclass(frozen=True)
+class DrawOnScreenConfig:
+    stroke_width: Pixel = 2
+
+
+@dataclass(frozen=True)
 class Config:
     """
     Main configuration class that aggregates all configuration components.
@@ -359,6 +365,7 @@ class Config:
     resource: ResourceConfig = ResourceConfig()
     transition: TransitionConfig = TransitionConfig()
     text: TextConfig = TextConfig()
+    draw_on_screen: DrawOnScreenConfig = DrawOnScreenConfig()
     debug: DebugConfig | None = None
 
 

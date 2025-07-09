@@ -82,6 +82,11 @@ class Coordinate(namedtuple("Coordinate", "left top")):
     def __repr__(self) -> str:
         return f"({self.left:.1f}, {self.top:.1f})"
 
+    def distance(self, other: Coordinate) -> Pixel:
+        dx = self.left - other.left
+        dy = self.top - other.top
+        return sqrt(dx**2 + dy**2)
+
 
 def _angle_difference(a1: float, a2: float) -> float:
     return abs((a1 - a2 + 180) % 360 - 180)

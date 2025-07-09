@@ -126,6 +126,10 @@ class MapScene(EventfulScene):
         return tuple(
             c.fill(debug.collision_rectangle_color)
             for c in self._map_helper.collisions
+        ) + tuple(
+            n.path.line(debug.npc_path_color)
+            for n in self._npcs
+            if isinstance(n, MovingNpcOnScreen)
         )
 
     @cached_property

@@ -4,12 +4,12 @@ Drawable on screen.
 
 from dataclasses import dataclass
 from functools import cached_property
-from math import ceil, hypot
+from math import ceil
 from os import PathLike
 from typing import Self, override
 
 from pygame import Mask, SRCALPHA, Surface
-from pygame.draw import polygon
+from pygame.draw import lines, polygon
 from pygame.image import load
 from pygame.mask import from_surface
 
@@ -266,6 +266,20 @@ class Polygon:
         polygon(surf, color, negated)
         return DrawOnScreen(rect.top_left, Drawing(surf))
 
+    def line(
+        self, color: Rgba, stroke_width: Pixel | None = None
+    ) -> DrawOnScreen:
+        stroke_width = (
+            config().draw_on_screen.stroke_width
+            if stroke_width is None
+            else stroke_width
+        )
+        rect = self.bounding_rectangle
+        surf = Surface(rect.size, SRCALPHA)
+        negated = [(p.shift(rect.top_left.negate)) for p in self.points]
+        lines(surf, color, self.closed, negated, stroke_width)
+        return DrawOnScreen(rect.top_left, Drawing(surf))
+
     def collide(self, poly: Self) -> bool:
         """
         Checks if this rectangle overlaps with another polygon.
@@ -304,18 +318,10 @@ class Polygon:
 
     @cached_property
     def length(self) -> Pixel:
-        total = 0
-        for i in range(len(self.points) - 1):
-            total += hypot(
-                self.points[i + 1].left - self.points[i].left,
-                self.points[i + 1].top - self.points[i].top,
-                )
-        if self.closed:
-            total += hypot(
-                self.points[0].left - self.points[-1].left,
-                self.points[0].top - self.points[-1].top
-                )
-        return total
+        return sum(
+            p.distance(np) for p, np in zip(self.points, self.points[1:])
+        ) + (self.points[-1].distance(self.points[0]) if self.closed else 0)
+
 
 class Rectangle(Polygon):
     """
