@@ -18,15 +18,15 @@ from nextrpg.model import dataclass_with_instance_init, instance_init
 
 logger = Logger("CharacterOnScreen")
 
-type CharacterVisual = Callable[[CharacterOnScreen], DrawOnScreen]
+type CharacterVisual = Callable[[CharacterOnScreen], tuple[DrawOnScreen, ...]]
 
 
 @dataclass(kw_only=True, frozen=True)
 class CharacterSpec:
     name: str
     character: CharacterDrawing
-    above_foreground_visuals: tuple[CharacterVisual, ...] = ()
     below_foreground_visuals: tuple[CharacterVisual, ...] = ()
+    above_foreground_visuals: tuple[CharacterVisual, ...] = ()
 
 
 @dataclass_with_instance_init
@@ -53,6 +53,12 @@ class CharacterOnScreen:
         lambda self: self.spec.character
     )
     _triggered: bool = False
+
+    @cached_property
+    def character_and_visuals(self) -> tuple[DrawOnScreen, ...]:
+        below = self._visuals(self.spec.below_foreground_visuals)
+        above = self._visuals(self.spec.above_foreground_visuals)
+        return below + (self.draw_on_screen,) + above
 
     @cached_property
     def draw_on_screen(self) -> DrawOnScreen:
@@ -86,6 +92,11 @@ class CharacterOnScreen:
     @cached_property
     def complete_event(self) -> Self:
         return replace(self, _triggered=False)
+
+    def _visuals(
+        self, visuals: tuple[CharacterVisual, ...]
+    ) -> tuple[DrawOnScreen, ...]:
+        return tuple(d for f in visuals for d in f(self))
 
 
 @dataclass(kw_only=True, frozen=True)

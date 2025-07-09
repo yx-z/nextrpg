@@ -275,15 +275,6 @@ class Polygon:
             lambda surf, points: lines(surf, color, self.closed, points, stroke)
         )
 
-    def _draw(
-        self, surf_and_points: Callable[[Surface, tuple[Coordinate, ...]], None]
-    ) -> DrawOnScreen:
-        rect = self.bounding_rectangle
-        surf = Surface(rect.size, SRCALPHA)
-        negated = tuple((p.shift(rect.top_left.negate)) for p in self.points)
-        surf_and_points(surf, negated)
-        return DrawOnScreen(rect.top_left, Drawing(surf))
-
     def collide(self, poly: Self) -> bool:
         """
         Checks if this rectangle overlaps with another polygon.
@@ -328,6 +319,15 @@ class Polygon:
         if self.closed:
             length += self.points[0].distance(self.points[-1])
         return length
+
+    def _draw(
+        self, surf_and_points: Callable[[Surface, tuple[Coordinate, ...]], None]
+    ) -> DrawOnScreen:
+        rect = self.bounding_rectangle
+        surf = Surface(rect.size, SRCALPHA)
+        negated = tuple((p.shift(rect.top_left.negate)) for p in self.points)
+        surf_and_points(surf, negated)
+        return DrawOnScreen(rect.top_left, Drawing(surf))
 
 
 class Rectangle(Polygon):

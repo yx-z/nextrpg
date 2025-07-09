@@ -83,14 +83,16 @@ class MapScene(EventfulScene):
 
     @cached_property
     def _foreground_and_characters(self) -> tuple[DrawOnScreen, ...]:
+        characters = (self._player,) + self._npcs
+        layer_bottom_draws = sorted(
+            draw
+            for character in characters
+            for draw in self._map_helper.layer_bottom_and_draw(character)
+        )
         foregrounds = [
             t for layer in self._map_helper.foreground for t in layer
         ]
-        characters = (self._player,) + self._npcs
-        bottom_and_draw = sorted(
-            map(self._map_helper.layer_bottom_and_draw, characters)
-        )
-        layers = sorted(foregrounds + bottom_and_draw, key=lambda x: x[:2])
+        layers = sorted(foregrounds + layer_bottom_draws, key=lambda x: x[:2])
         return tuple(draw for _, _, draw in layers)
 
     @cached_property

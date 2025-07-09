@@ -211,7 +211,7 @@ class MapHelper:
 
     def layer_bottom_and_draw(
         self, character: CharacterOnScreen
-    ) -> LayerTileBottomAndDrawOnScreen:
+    ) -> tuple[LayerTileBottomAndDrawOnScreen, ...]:
         """
         Retrieve the character foreground layer, bottom pixel, and the draw.
 
@@ -222,10 +222,13 @@ class MapHelper:
             `LayerTileBottomAndDrawOnScreen`: The foreground layer,
                 bottom pixel, and the draw.
         """
-        return LayerTileBottomAndDrawOnScreen(
-            self._character_layer(character),
-            character.draw_on_screen.visible_rectangle.bottom,
-            character.draw_on_screen,
+        character_layer = self._character_layer(character)
+        character_bottom = character.draw_on_screen.visible_rectangle.bottom
+        return tuple(
+            LayerTileBottomAndDrawOnScreen(
+                character_layer, character_bottom, draw_on_screen
+            )
+            for draw_on_screen in character.character_and_visuals
         )
 
     def _character_layer(self, character: CharacterOnScreen) -> int:
