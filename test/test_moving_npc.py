@@ -1,6 +1,7 @@
 from dataclasses import replace
 
-from nextrpg.character.moving_npc import MovingNpcOnScreen, MovingNpcSpec
+from nextrpg.character.moving_npc import MovingNpcOnScreen
+from nextrpg.character.npcs import NpcSpec
 from nextrpg.coordinate import Coordinate
 from nextrpg.core import Size
 from nextrpg.draw_on_screen import Rectangle
@@ -10,7 +11,7 @@ from test.util import MockCharacterDrawing
 def test_moving_npc_on_screen() -> None:
     npc = MovingNpcOnScreen(
         coordinate=Coordinate(0, 0),
-        spec=MovingNpcSpec(
+        spec=NpcSpec(
             name="name",
             character=MockCharacterDrawing(),
             event=lambda *_: None,

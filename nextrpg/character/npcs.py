@@ -8,7 +8,9 @@ from nextrpg.character.character_on_screen import (
     CharacterSpec,
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.core import Millisecond
+from nextrpg.config import config
+from nextrpg.core import Millisecond, PixelPerMillisecond
+from nextrpg.draw_on_screen import Polygon
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.event.rpg_event import transform_event
 from nextrpg.logger import FROM_CONFIG, Logger
@@ -203,6 +205,16 @@ class NpcSpec(CharacterSpec):
     """
 
     event: RpgEventSpec
+    move_speed: PixelPerMillisecond = field(
+        default_factory=lambda: config().character.move_speed
+    )
+    idle_duration: Millisecond = field(
+        default_factory=lambda: config().character.idle_duration
+    )
+    move_duration: Millisecond = field(
+        default_factory=lambda: config().character.move_duration
+    )
+    cyclic_walk: bool = True
 
     @cached_property
     def generator(

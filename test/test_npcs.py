@@ -8,7 +8,7 @@ from pygame.locals import KEYDOWN, K_RETURN, QUIT
 from pytest_mock import MockerFixture
 
 from nextrpg.character.character_on_screen import CharacterSpec
-from nextrpg.character.moving_npc import MovingNpcOnScreen, MovingNpcSpec
+from nextrpg.character.moving_npc import MovingNpcOnScreen
 from nextrpg.character.npcs import (
     EventfulScene,
     NpcOnScreen,
@@ -85,10 +85,8 @@ def test_npcs(mocker: MockerFixture) -> None:
             ),
             MovingNpcOnScreen(
                 coordinate=Coordinate(0, 0),
-                spec=MovingNpcSpec(
-                    name="name",
-                    character=MockCharacterDrawing(),
-                    event=event,
+                spec=NpcSpec(
+                    name="name", character=MockCharacterDrawing(), event=event
                 ),
                 collisions=(),
                 path=Rectangle(Coordinate(0, 0), Size(10, 10)),

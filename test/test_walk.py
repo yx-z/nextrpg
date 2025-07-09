@@ -19,7 +19,7 @@ def test_walk() -> None:
         path=Polygon((Coordinate(0, 0), Coordinate(1, 0), Coordinate(0, 1))),
         move_speed=1,
         cyclic=False,
-    )._completed
+    ).completed
 
     w2 = Walk(
         path=Polygon(

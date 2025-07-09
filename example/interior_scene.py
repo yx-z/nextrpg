@@ -6,7 +6,6 @@ from typing import Any
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterSpec
-from nextrpg.character.moving_npc import MovingNpcSpec
 from nextrpg.character.npcs import NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.rpg_maker_character_drawing import (
@@ -52,7 +51,7 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> Scene:
         # NPC/events.
         npc_specs=(
             NpcSpec(name="david", character=david(), event=greet),
-            MovingNpcSpec(name="alisa", character=alisa(), event=greet),
+            NpcSpec(name="alisa", character=alisa(), event=greet),
         ),
     )
 
@@ -93,7 +92,7 @@ def init_player() -> CharacterSpec:
         `CharacterSpec`: The player name and drawing.
     """
     return CharacterSpec(
-        # Name of the object on Tiled/tmx map.
+        # Name of the object on the Tiled/tmx map.
         name="player",
         character=RpgMakerCharacterDrawing(
             direction=Direction.DOWN,

@@ -34,7 +34,7 @@ class Walk:
         )
 
     def tick(self, time_delta: Millisecond) -> Self:
-        if self._completed:
+        if self.completed:
             return self
 
         current_coord = self.coordinate
@@ -46,7 +46,7 @@ class Walk:
         if self.cyclic:
             remaining_distance %= self.path.length
         else:
-            if remaining_distance >= self._remaining_length:
+            if remaining_distance > self._remaining_length:
                 return replace(
                     self,
                     coordinate=self.path.points[-1],
@@ -73,10 +73,18 @@ class Walk:
             _last_index=last_index,
         )
 
+    @cached_property
+    def completed(self) -> bool:
+        if self.cyclic:
+            return False
+        if self.path.closed:
+            return self._index == 0 and self._last_index != 0
+        return self._next_index(self._index) == 0
+
     def _tick_segment(
         self, current_coord: Coordinate, index: int, max_distance: float
     ) -> _StepResult:
-        next_index = index + 1 if index + 1 < len(self.path.points) else 0
+        next_index = self._next_index(index)
         end = self.path.points[next_index]
         dx = end.left - current_coord.left
         dy = end.top - current_coord.top
@@ -109,21 +117,12 @@ class Walk:
             return False
         return index >= len(self.path.points) - 1
 
-    @cached_property
-    def _next_index(self) -> int:
-        return self._index + 1 if self._index + 1 < len(self.path.points) else 0
+    def _next_index(self, i: int) -> int:
+        return i + 1 if i + 1 < len(self.path.points) else 0
 
     @cached_property
     def _source(self) -> Coordinate:
         return self.path.points[0]
-
-    @cached_property
-    def _completed(self) -> bool:
-        if self.cyclic:
-            return False
-        if self.path.closed:
-            return self._index == 0 and self._last_index != 0
-        return self._next_index == 0
 
     @cached_property
     def _remaining_length(self) -> Pixel:

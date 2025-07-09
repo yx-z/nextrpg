@@ -7,9 +7,8 @@ from functools import cached_property
 from os import PathLike
 from typing import override
 
-from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterSpec
-from nextrpg.character.moving_npc import MovingNpcOnScreen, MovingNpcSpec
+from nextrpg.character.moving_npc import MovingNpcOnScreen
 from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
@@ -41,10 +40,7 @@ def _init_player(self: MapScene) -> PlayerOnScreen:
 
 
 def _init_npcs(self: "MapScene") -> tuple[NpcOnScreen, ...]:
-    return tuple(
-        self._init_moving(n) if isinstance(n, MovingNpcSpec) else self._init(n)
-        for n in self.npc_specs
-    )
+    return tuple(self._init_npc(n) for n in self.npc_specs)
 
 
 @dataclass_with_instance_init
@@ -141,17 +137,12 @@ class MapScene(EventfulScene):
     def _map_helper(self) -> MapHelper:
         return MapHelper(self.tmx_file)
 
-    def _init(self, spec: NpcSpec) -> NpcOnScreen:
+    def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
         obj = self._map_helper.get_object(spec.name)
-        return NpcOnScreen(coordinate=Coordinate(obj.x, obj.y), spec=spec)
-
-    def _init_moving(self, spec: MovingNpcSpec) -> MovingNpcOnScreen:
-        obj = self._map_helper.get_object(spec.name)
-        return MovingNpcOnScreen(
-            coordinate=Coordinate(obj.x, obj.y),
-            path=get_polygon(obj),
-            spec=spec,
-        )
+        coord = Coordinate(obj.x, obj.y)
+        if poly := get_polygon(obj):
+            return MovingNpcOnScreen(coordinate=coord, path=poly, spec=spec)
+        return NpcOnScreen(coordinate=coord, spec=spec)
 
     @cached_property
     @override

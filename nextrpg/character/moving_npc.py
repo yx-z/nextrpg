@@ -1,40 +1,14 @@
-from dataclasses import dataclass, field, replace
+from dataclasses import field, replace
 from functools import cached_property
 from typing import NamedTuple, Self, override
 
 from nextrpg.character.character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npcs import NpcOnScreen, NpcSpec
-from nextrpg.config import config
+from nextrpg.coordinate import Coordinate
 from nextrpg.core import Millisecond, PixelPerMillisecond, Timer
 from nextrpg.draw_on_screen import Polygon
-from nextrpg.coordinate import Coordinate
-from nextrpg.model import instance_init, dataclass_with_instance_init
+from nextrpg.model import dataclass_with_instance_init, instance_init
 from nextrpg.walk import Walk
-
-
-@dataclass(frozen=True)
-class MovingNpcSpec(NpcSpec):
-    """
-    Moving NPC specification.
-
-    Arguments:
-        `move_speed`: Movement speed of the NPC in pixels per millisecond.
-
-        `idle_duration`: Duration of the idle state.
-
-        `move_duration`: Duration of the moving state.
-    """
-
-    move_speed: PixelPerMillisecond = field(
-        default_factory=lambda: config().character.move_speed
-    )
-    idle_duration: Millisecond = field(
-        default_factory=lambda: config().character.idle_duration
-    )
-    move_duration: Millisecond = field(
-        default_factory=lambda: config().character.move_duration
-    )
-    cyclic_walk: bool = True
 
 
 @dataclass_with_instance_init
@@ -51,7 +25,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     """
 
     path: Polygon
-    spec: MovingNpcSpec
+    spec: NpcSpec
     collisions: tuple[Polygon, ...] = field(default_factory=tuple)
     move_speed: PixelPerMillisecond = instance_init(
         lambda self: self.spec.move_speed
@@ -60,7 +34,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
         lambda self: Walk(
             path=self.path,
             move_speed=self.move_speed,
-            cyclic=self.spec.cyclic_walk,
+            cyclic=self.spec.cyclic_walk and self.path.closed,
         )
     )
     _idle_timer: Timer = instance_init(
@@ -73,7 +47,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        if self._triggered:
+        if self._triggered or self._walk.completed:
             return super().tick(time_delta)
 
         move_timer, idle_timer, moving = self._timers_and_moving(time_delta)
@@ -98,7 +72,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     @cached_property
     @override
     def moving(self) -> bool:
-        return self._moving and not self._triggered
+        return self._moving and not self._triggered and not self._walk.completed
 
     @override
     def move(self, time_delta: Millisecond) -> Coordinate:

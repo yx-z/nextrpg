@@ -72,7 +72,7 @@ class LayerTileBottomAndDrawOnScreen(NamedTuple):
     draw_on_screen: DrawOnScreen
 
 
-def get_polygon(obj: TiledObject) -> Polygon:
+def get_polygon(obj: TiledObject) -> Polygon | None:
     """
     Create a polygon from a Tiled object on a map.
 
@@ -86,7 +86,9 @@ def get_polygon(obj: TiledObject) -> Polygon:
         return Polygon(
             tuple(Coordinate(x, y) for x, y in obj.points), obj.closed
         )
-    return Rectangle(Coordinate(obj.x, obj.y), Size(obj.width, obj.height))
+    if _is_rect(obj):
+        return Rectangle(Coordinate(obj.x, obj.y), Size(obj.width, obj.height))
+    return None
 
 
 @cached(lambda: config().resource.map_cache_size)
@@ -420,8 +422,8 @@ def _is_rect(obj: TiledObject) -> bool:
     return (
         obj.x is not None
         and obj.y is not None
-        and obj.width is not None
-        and obj.height is not None
+        and obj.width
+        and obj.height
     )
 
 

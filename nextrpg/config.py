@@ -268,7 +268,7 @@ class ResourceConfig:
     Configuration class for resource loading.
 
     Attributes:
-        `map_cache_size`: The maximum number of TMX maps to cache in memory.
+        `map_cache_size`: The maximum number of map scenes to cache in memory.
     """
 
     map_cache_size: int = 8
