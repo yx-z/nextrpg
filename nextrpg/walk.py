@@ -1,12 +1,12 @@
-from dataclasses import dataclass, replace
+from dataclasses import replace
 from functools import cached_property
 from math import hypot
-from typing import Self
+from typing import NamedTuple, Self
 
+from nextrpg.coordinate import Coordinate
 from nextrpg.core import Direction, Millisecond, PixelPerMillisecond
 from nextrpg.draw_on_screen import Polygon
-from nextrpg.coordinate import Coordinate
-from nextrpg.model import instance_init, dataclass_with_instance_init
+from nextrpg.model import dataclass_with_instance_init, instance_init
 
 
 @dataclass_with_instance_init
@@ -37,33 +37,73 @@ class Walk:
         if self._completed:
             return self
 
-        end = self.path.points[self._next_index]
-        dx = end.left - self.coordinate.left
-        dy = end.top - self.coordinate.top
+        current_coord = self.coordinate
+        last_coord = self.coordinate
+        index = self._index
+        last_index = self._index
 
-        distance = hypot(dx, dy)
-        max_distance = self.move_speed * time_delta
-        if distance <= max_distance:
-            return replace(
-                self,
-                coordinate=end,
-                _last_coordinate=self.coordinate,
-                _index=self._next_index,
-                _last_index=self._index,
+        remaining_distance = self.move_speed * time_delta
+
+        while remaining_distance > 0 and not self._is_final_index(index):
+            step = self._step_forward_along_segment(
+                current_coord, index, remaining_distance
             )
+            remaining_distance -= step.distance_used
+            current_coord = step.coordinate
+            last_coord = step.last_coordinate
+            index = step.index
+            last_index = step.last_index
 
-        ratio = max_distance / distance
-        new_x = self.coordinate.left + dx * ratio
-        new_y = self.coordinate.top + dy * ratio
+            if not step.stepped:
+                break
+
         return replace(
             self,
-            coordinate=Coordinate(new_x, new_y),
-            _last_coordinate=self.coordinate,
+            coordinate=current_coord,
+            _last_coordinate=last_coord,
+            _index=index,
+            _last_index=last_index,
         )
+
+    def _step_forward_along_segment(
+        self, current_coord: Coordinate, index: int, max_distance: float
+    ) -> _StepResult:
+        next_index = index + 1 if index + 1 < len(self.path.points) else 0
+        end = self.path.points[next_index]
+        dx = end.left - current_coord.left
+        dy = end.top - current_coord.top
+        segment_distance = hypot(dx, dy)
+
+        if segment_distance <= max_distance:
+            return _StepResult(
+                stepped=True,
+                coordinate=end,
+                last_coordinate=current_coord,
+                index=next_index,
+                last_index=index,
+                distance_used=segment_distance,
+            )
+
+        ratio = max_distance / segment_distance
+        new_x = current_coord.left + dx * ratio
+        new_y = current_coord.top + dy * ratio
+        return _StepResult(
+            stepped=False,
+            coordinate=Coordinate(new_x, new_y),
+            last_coordinate=current_coord,
+            index=index,
+            last_index=index,
+            distance_used=max_distance,
+        )
+
+    def _is_final_index(self, index: int) -> bool:
+        if self.cyclic:
+            return False
+        return index >= len(self.path.points) - 1
 
     @cached_property
     def _next_index(self) -> int:
-        return nex if (nex := self._index + 1) < len(self.path.points) else 0
+        return self._index + 1 if self._index + 1 < len(self.path.points) else 0
 
     @cached_property
     def _source(self) -> Coordinate:
@@ -73,7 +113,15 @@ class Walk:
     def _completed(self) -> bool:
         if self.cyclic:
             return False
-
         if self.path.closed:
             return self._index == 0 and self._last_index != 0
         return self._next_index == 0
+
+
+class _StepResult(NamedTuple):
+    stepped: bool
+    coordinate: Coordinate
+    last_coordinate: Coordinate
+    index: int
+    last_index: int
+    distance_used: float
