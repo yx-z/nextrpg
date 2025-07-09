@@ -3,6 +3,7 @@ Handles character movement and collision detection.
 """
 
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import NamedTuple, Self, override
@@ -13,11 +14,22 @@ from nextrpg.core import Direction, Millisecond, PixelPerMillisecond
 from nextrpg.draw_on_screen import DrawOnScreen, Polygon
 from nextrpg.coordinate import Coordinate
 from nextrpg.logger import FROM_CONFIG, Logger
+from nextrpg.model import dataclass_with_instance_init, instance_init
 
 logger = Logger("CharacterOnScreen")
 
+type CharacterVisual = Callable[[CharacterOnScreen], DrawOnScreen]
+
 
 @dataclass(kw_only=True, frozen=True)
+class CharacterSpec:
+    name: str
+    character: CharacterDrawing
+    above_foreground_visuals: tuple[CharacterVisual, ...] = ()
+    below_foreground_visuals: tuple[CharacterVisual, ...] = ()
+
+
+@dataclass_with_instance_init
 class CharacterOnScreen:
     """
     Represents a character that can be displayed and moved on screen.
@@ -35,8 +47,11 @@ class CharacterOnScreen:
         `collisions`: Tuple of polygons representing collision boundaries.
     """
 
-    character: CharacterDrawing
+    spec: CharacterSpec
     coordinate: Coordinate
+    character: CharacterDrawing = instance_init(
+        lambda self: self.spec.character
+    )
     _triggered: bool = False
 
     @cached_property

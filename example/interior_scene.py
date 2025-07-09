@@ -5,6 +5,7 @@ Sample interior scene.
 from typing import Any
 
 from nextrpg.character.character_drawing import CharacterDrawing
+from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.moving_npc import MovingNpcSpec
 from nextrpg.character.npcs import NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
@@ -22,10 +23,7 @@ from nextrpg.scene.map_scene import MapScene
 from nextrpg.scene.scene import Scene
 
 
-def interior_scene(
-    player: CharacterDrawing | None = None,
-    player_coordinate_object: str = "player",
-) -> Scene:
+def interior_scene(player_spec: CharacterSpec | None = None) -> Scene:
     """
     Defines an interior scene.
 
@@ -48,9 +46,7 @@ def interior_scene(
         # Tiled/tmx tile map.
         tmx_file="example/assets/interior.tmx",
         # Use default player drawing when this scene is an entry scene.
-        initial_player_drawing=player or init_player(),
-        # Player coordinate on the map.
-        player_coordinate_object=player_coordinate_object,
+        player_spec=player_spec or init_player(),
         # Move to another map.
         moves=(Move("from_interior", "to_exterior", exterior_scene),),
         # NPC/events.
@@ -89,18 +85,22 @@ def sprite_sheet() -> SpriteSheet:
     )
 
 
-def init_player() -> CharacterDrawing:
+def init_player() -> CharacterSpec:
     """
     Initialize the player drawing.
 
     Returns:
-        `CharacterDrawing`: The player character drawing.
+        `CharacterSpec`: The player name and drawing.
     """
-    return RpgMakerCharacterDrawing(
-        direction=Direction.DOWN,
-        sprite_sheet=sprite_sheet(),
-        # Select a character from the sprite sheet.
-        sprite_sheet_selection=SpriteSheetSelection(row=0, column=0),
+    return CharacterSpec(
+        # Name of the object on Tiled/tmx map.
+        name="player",
+        character=RpgMakerCharacterDrawing(
+            direction=Direction.DOWN,
+            sprite_sheet=sprite_sheet(),
+            # Select a character from the sprite sheet.
+            sprite_sheet_selection=SpriteSheetSelection(row=0, column=0),
+        ),
     )
 
 

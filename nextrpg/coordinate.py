@@ -1,6 +1,6 @@
 from collections import namedtuple
 from functools import cached_property
-from math import atan2, degrees, sqrt
+from math import atan2, degrees, hypot, sqrt
 from typing import Self
 
 from nextrpg.core import Direction, DirectionalOffset, Pixel

@@ -8,6 +8,7 @@ from os import PathLike
 from typing import override
 
 from nextrpg.character.character_drawing import CharacterDrawing
+from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.moving_npc import MovingNpcOnScreen, MovingNpcSpec
 from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
@@ -30,11 +31,12 @@ logger = Logger("MapScene")
 
 
 def _init_player(self: MapScene) -> PlayerOnScreen:
-    player = self._map_helper.get_object(self.player_coordinate_object)
+    player = self._map_helper.get_object(self.player_spec.name)
     return PlayerOnScreen(
-        character=self.initial_player_drawing,
+        character=self.player_spec.character,
         coordinate=Coordinate(player.x, player.y),
         collisions=self._map_helper.collisions,
+        spec=self.player_spec,
     )
 
 
@@ -66,8 +68,7 @@ class MapScene(EventfulScene):
     """
 
     tmx_file: PathLike | str
-    initial_player_drawing: CharacterDrawing
-    player_coordinate_object: str
+    player_spec: CharacterSpec
     moves: tuple[Move, ...] = field(default_factory=tuple)
     npc_specs: tuple[NpcSpec, ...] = field(default_factory=tuple)
     collision_visuals: tuple[DrawOnScreen, ...] = instance_init(
@@ -123,14 +124,16 @@ class MapScene(EventfulScene):
     def _collision_visuals(self) -> tuple[DrawOnScreen, ...]:
         if not (debug := config().debug):
             return ()
-        return tuple(
+        collisions = tuple(
             c.fill(debug.collision_rectangle_color)
             for c in self._map_helper.collisions
-        ) + tuple(
+        )
+        npc_paths = tuple(
             n.path.line(debug.npc_path_color)
             for n in self._npcs
             if isinstance(n, MovingNpcOnScreen)
         )
+        return collisions + npc_paths
 
     @cached_property
     def _map_helper(self) -> MapHelper:

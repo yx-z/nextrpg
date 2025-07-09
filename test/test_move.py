@@ -5,5 +5,5 @@ from test.util import MockCharacterDrawing
 
 def test_move() -> None:
     scene = Scene()
-    move = Move("", "", lambda _, __: scene)
+    move = Move("", "", lambda _: scene)
     assert move.to_scene(scene, MockCharacterDrawing())

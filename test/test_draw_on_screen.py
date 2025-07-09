@@ -95,3 +95,4 @@ def test_polygon() -> None:
         (Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20)),
         closed=False,
     ).length
+    assert polygon.line(Rgba(0, 0, 0, 0), 2)

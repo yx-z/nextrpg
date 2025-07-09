@@ -4,6 +4,7 @@ from unittest.mock import MagicMock
 from pytest import raises
 from pytest_mock import MockerFixture
 
+from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import Config, ResourceConfig
 from nextrpg.core import Size
@@ -85,7 +86,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
     assert helper.layer_bottom_and_draw(
         PlayerOnScreen(
             coordinate=Coordinate(0, 0),
-            character=MockCharacterDrawing(),
+            spec=CharacterSpec(name="", character=MockCharacterDrawing()),
             collisions=(),
         )
     )
@@ -100,7 +101,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
         efg._character_layer(
             PlayerOnScreen(
                 coordinate=Coordinate(0, 0),
-                character=MockCharacterDrawing(),
+                spec=CharacterSpec(name="", character=MockCharacterDrawing()),
                 collisions=(),
             )
         )

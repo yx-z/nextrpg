@@ -318,9 +318,12 @@ class Polygon:
 
     @cached_property
     def length(self) -> Pixel:
-        return sum(
+        length = sum(
             p.distance(np) for p, np in zip(self.points, self.points[1:])
-        ) + (self.points[-1].distance(self.points[0]) if self.closed else 0)
+        )
+        if self.closed:
+            length += self.points[0].distance(self.points[-1])
+        return length
 
 
 class Rectangle(Polygon):

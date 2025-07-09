@@ -6,6 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from nextrpg.character.character_drawing import CharacterDrawing
+from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.static_scene import StaticScene
 from nextrpg.scene.transition_triple import TransitionTriple
@@ -26,7 +27,7 @@ class Move:
 
     to_object: str
     trigger_object: str
-    next_scene: Callable[[CharacterDrawing, str], Scene]
+    next_scene: Callable[[CharacterSpec], Scene]
 
     def to_scene(
         self, from_scene: Scene, character: CharacterDrawing
@@ -45,5 +46,7 @@ class Move:
         return TransitionTriple(
             from_scene=from_scene,
             intermediary=StaticScene(),
-            to_scene=self.next_scene(character, self.to_object),
+            to_scene=self.next_scene(
+                CharacterSpec(name=self.to_object, character=character)
+            ),
         )

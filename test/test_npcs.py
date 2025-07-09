@@ -7,6 +7,7 @@ from pygame import Event, K_SPACE
 from pygame.locals import KEYDOWN, K_RETURN, QUIT
 from pytest_mock import MockerFixture
 
+from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.moving_npc import MovingNpcOnScreen, MovingNpcSpec
 from nextrpg.character.npcs import (
     EventfulScene,
@@ -39,7 +40,7 @@ def test_npc_on_screen() -> None:
         npc.start_event(
             PlayerOnScreen(
                 collisions=(),
-                character=MockCharacterDrawing(),
+                spec=CharacterSpec(name="", character=MockCharacterDrawing()),
                 coordinate=Coordinate(0, 0),
             )
         ).character.direction
@@ -67,15 +68,14 @@ def test_npcs(mocker: MockerFixture) -> None:
         return_value=(),
     )
     player = PlayerOnScreen(
-        character=MockCharacterDrawing(),
+        spec=CharacterSpec(name="", character=MockCharacterDrawing()),
         coordinate=Coordinate(0, 0),
         collisions=(),
     )
     assert not event(player)
     map_scene = MapScene(
         tmx_file="",
-        initial_player_drawing=MockCharacterDrawing(),
-        player_coordinate_object="",
+        player_spec=CharacterSpec(character=MockCharacterDrawing(), name=""),
         _npcs=(
             NpcOnScreen(
                 coordinate=Coordinate(0, 0),
@@ -113,10 +113,12 @@ def test_eventful_scene() -> None:
         yield lambda generator, scene: RpgEventScene(generator, scene)
 
     gen = event()
+    from nextrpg.character.character_on_screen import CharacterSpec
+
     eventful = EventfulScene(
         _player=PlayerOnScreen(
             coordinate=Coordinate(0, 0),
-            character=MockCharacterDrawing(),
+            spec=CharacterSpec(name="", character=MockCharacterDrawing()),
             collisions=(),
         ),
         _npcs=(
@@ -145,15 +147,15 @@ def test_eventful_scene() -> None:
     gen2 = event()
     next(gen2)
     npc = NpcOnScreen(
-        name="abc",
-        character=MockCharacterDrawing(),
+        spec=NpcSpec(
+            name="abc", event=lambda *_: None, character=MockCharacterDrawing()
+        ),
         coordinate=Coordinate(0, 0),
-        spec=lambda *_: None,
     )
     scene = EventfulScene(
         _player=PlayerOnScreen(
             coordinate=Coordinate(0, 0),
-            character=MockCharacterDrawing(),
+            spec=CharacterSpec(name="", character=MockCharacterDrawing()),
             collisions=(),
         ),
         _npc=npc,

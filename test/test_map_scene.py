@@ -5,6 +5,7 @@ from unittest.mock import MagicMock, Mock
 from pygame import Event, QUIT
 from pytest_mock import MockerFixture
 
+from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.moving_npc import MovingNpcSpec
 from nextrpg.character.npcs import NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
@@ -36,14 +37,14 @@ def test_map_scene(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=helper)
     map = MapScene(
         tmx_file=Path("test"),
-        initial_player_drawing=MockCharacterDrawing(),
-        player_coordinate_object="",
+        player_spec=CharacterSpec(character=MockCharacterDrawing(), name=""),
     )
     with override_config(Config(debug=DebugConfig())):
         assert MapScene(
             tmx_file=Path("test"),
-            initial_player_drawing=MockCharacterDrawing(),
-            player_coordinate_object="",
+            player_spec=CharacterSpec(
+                character=MockCharacterDrawing(), name=""
+            ),
         ).collision_visuals
     mocker.patch(
         "nextrpg.scene.map_scene.sorted",
@@ -70,8 +71,7 @@ def test_init_npc(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.scene.map_scene.get_polygon")
     map_scene = MapScene(
         tmx_file="",
-        initial_player_drawing=MockCharacterDrawing(),
-        player_coordinate_object="",
+        player_spec=CharacterSpec(character=MockCharacterDrawing(), name=""),
         npc_specs=(
             NpcSpec(
                 name="", character=MockCharacterDrawing(), event=lambda *_: None
@@ -104,11 +104,10 @@ def test_move_to_scene(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=helper)
     map = MapScene(
         tmx_file=Path("test"),
-        initial_player_drawing=MockCharacterDrawing(),
-        player_coordinate_object="",
+        player_spec=CharacterSpec(name="", character=MockCharacterDrawing()),
         moves=(
-            Move("to", "from", lambda _, __: Scene()),
-            Move("", "", lambda _, __: Scene()),
+            Move("to", "from", lambda _: Scene()),
+            Move("", "", lambda _: Scene()),
         ),
     )
     assert map._move_to_scene

@@ -3,8 +3,10 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import Any, Self
 
-from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.character.character_on_screen import CharacterOnScreen
+from nextrpg.character.character_on_screen import (
+    CharacterOnScreen,
+    CharacterSpec,
+)
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core import Millisecond
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
@@ -28,9 +30,8 @@ class NpcOnScreen(CharacterOnScreen):
     """
 
     spec: NpcSpec
-    name: str = instance_init(lambda self: self.spec.name)
-    character: CharacterDrawing = instance_init(
-        lambda self: self.spec.character
+    generator: Callable[[*RpgEventSpecParams], RpgEventGenerator] = (
+        instance_init(lambda self: self.spec.generator)
     )
 
 
@@ -49,7 +50,7 @@ class EventfulScene(Scene):
 
     @cached_property
     def npcs(self) -> dict[str, NpcOnScreen]:
-        return {n.name: n for n in self._npcs}
+        return {n.spec.name: n for n in self._npcs}
 
     def event(self, event: PygameEvent) -> Scene:
         if (
@@ -58,9 +59,11 @@ class EventfulScene(Scene):
             and event.key is KeyboardKey.CONFIRM
             and (npc := self._collided_npc)
         ):
-            logger.debug(t"Collided with {npc.name}", duration=FROM_CONFIG)
+            logger.debug(
+                t"Collided with {npc.spec.name}", duration=FROM_CONFIG
+            )
             scene = self._trigger(npc)
-            generator = scene._npc.spec._generator(
+            generator = scene._npc.generator(
                 scene._player, scene._npc, scene._npcs, scene
             )
             return next(generator)(generator, scene)
@@ -111,7 +114,8 @@ class EventfulScene(Scene):
     def _trigger(self, npc: NpcOnScreen) -> Self:
         triggered_npc = npc.start_event(self._player)
         npcs = tuple(
-            triggered_npc if n.name == npc.name else n for n in self._npcs
+            triggered_npc if n.spec.name == npc.spec.name else n
+            for n in self._npcs
         )
         return replace(
             self,
@@ -186,7 +190,7 @@ class RpgEventScene(Scene):
 
 
 @dataclass_with_instance_init
-class NpcSpec:
+class NpcSpec(CharacterSpec):
     """
     Base class to define NPC specifications.
 
@@ -198,15 +202,10 @@ class NpcSpec:
         `event`: Event specification for player/NPC interactions.
     """
 
-    name: str
-    character: CharacterDrawing
     event: RpgEventSpec
-    _generator: Callable[[*RpgEventSpecParams], RpgEventGenerator] = (
-        instance_init(lambda self: self._create_generator)
-    )
 
     @cached_property
-    def _create_generator(
+    def generator(
         self,
     ) -> Callable[[*RpgEventSpecParams], RpgEventGenerator]:
         def yield_event(
@@ -215,8 +214,12 @@ class NpcSpec:
             npc_dict: dict[str, NpcOnScreen],
             scene: EventfulScene,
         ) -> RpgEventGenerator:
-            ctx = self.event.__globals__.copy()
-            exec(transform_event(self.event), ctx)
-            return ctx[self.event.__name__](player, npc, npc_dict, scene)
+            fun = self.event
+            ctx = fun.__globals__ | {
+                v: c.cell_contents
+                for v, c in zip(fun.__code__.co_freevars, fun.__closure__ or ())
+            }
+            exec(transform_event(fun), ctx)
+            return ctx[fun.__name__](player, npc, npc_dict, scene)
 
         return yield_event

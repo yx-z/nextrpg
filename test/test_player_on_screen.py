@@ -1,6 +1,7 @@
 from pygame.event import Event
 from pygame.locals import KEYDOWN, KEYUP, K_RIGHT, K_SPACE, QUIT
 
+from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import Config, DebugConfig
 from nextrpg.core import Size
@@ -13,7 +14,7 @@ from test.util import MockCharacterDrawing, override_config
 
 def test_player_on_screen():
     player = PlayerOnScreen(
-        character=MockCharacterDrawing(),
+        spec=CharacterSpec(name="", character=MockCharacterDrawing()),
         coordinate=Coordinate(10, 20),
         move_speed=0.2,
         collisions=(Rectangle(Coordinate(12, 20), Size(10, 10)),),

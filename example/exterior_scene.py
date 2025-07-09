@@ -3,19 +3,16 @@ Sample exterior scene.
 """
 
 from nextrpg.character.character_drawing import CharacterDrawing
+from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.event.move import Move
 from nextrpg.scene.map_scene import MapScene
 from nextrpg.scene.scene import Scene
 
 
-def exterior_scene(
-    player: CharacterDrawing, player_coordinate_object: str
-) -> Scene:
+def exterior_scene(player_spec: CharacterSpec) -> Scene:
     """
     Arguments:
-        `player`: The character drawing to use for the player.
-
-        `player_coordinate_object`: Name of the object to use as the player.
+        `player_spec`: Character drawing and name to use for the player.
 
     Returns:
         `Scene`: The exterior scene.
@@ -27,9 +24,7 @@ def exterior_scene(
         # Tiled/tmx tile map .
         tmx_file="example/assets/exterior.tmx",
         # Reuse the same character drawing from the previous map.
-        initial_player_drawing=player,
-        # Player coordinate on the map.
-        player_coordinate_object=player_coordinate_object,
+        player_spec=player_spec,
         # Move to another map.
         moves=(Move("from_exterior", "to_interior", interior_scene),),
     )
