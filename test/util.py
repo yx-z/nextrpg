@@ -1,14 +1,15 @@
 from contextlib import contextmanager
 from dataclasses import dataclass, replace
 from functools import cached_property
-from typing import Any, Generator, NamedTuple
+from typing import Any, Generator, NamedTuple, Self
 
 from pygame import Surface
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import Config, config, set_config
+from nextrpg.coordinate import Coordinate
 from nextrpg.core import Direction, Millisecond
-from nextrpg.draw_on_screen import Drawing
+from nextrpg.draw_on_screen import DrawOnScreen, Drawing
 
 
 class MockColor(NamedTuple):
@@ -21,6 +22,12 @@ class MockColor(NamedTuple):
 @dataclass(frozen=True)
 class MockSurface(Surface):
     data: str = ""
+
+    def set_alpha(self, *_: Any) -> Self:
+        return self
+
+    def copy(self) -> Self:
+        return self
 
     def get_width(self) -> int:
         return 2
@@ -38,6 +45,10 @@ class MockSurface(Surface):
 @dataclass(frozen=True)
 class MockCharacterDrawing(CharacterDrawing):
     direction: Direction = Direction.DOWN
+
+    @cached_property
+    def coordinate(self) -> Coordinate:
+        return Coordinate(0, 0)
 
     @cached_property
     def drawing(self) -> Drawing:

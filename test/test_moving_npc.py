@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 from nextrpg.character.moving_npc import MovingNpcOnScreen, MovingNpcSpec
 from nextrpg.coordinate import Coordinate
 from nextrpg.core import Size
@@ -23,3 +25,4 @@ def test_moving_npc_on_screen() -> None:
     assert npc.tick(11).tick(9).moving
     assert not npc.tick(11).tick(20).moving
     assert npc.move(0) == Coordinate(0, 0)
+    assert replace(npc, _triggered=True).tick(0)

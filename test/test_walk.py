@@ -13,3 +13,9 @@ def test_walk() -> None:
     )
     assert w.reset.coordinate == Coordinate(0, 0)
     assert w.tick(100).tick(2000).tick(20000)
+
+    assert not Walk(
+        path=Polygon((Coordinate(0, 0), Coordinate(1, 0), Coordinate(0, 1))),
+        move_speed=1,
+        cyclic=False,
+    )._completed

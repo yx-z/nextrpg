@@ -1,3 +1,4 @@
+from dataclasses import replace
 from types import SimpleNamespace
 from typing import Any
 from unittest.mock import Mock
@@ -94,6 +95,7 @@ def test_npcs(mocker: MockerFixture) -> None:
             ),
         ),
     )
+    assert map_scene.npcs
     say_event = map_scene.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
     object.__setattr__(say_event._scene, "draw_on_screens", ())
     assert say_event.tick(0)
@@ -102,6 +104,8 @@ def test_npcs(mocker: MockerFixture) -> None:
     assert say_event.event(KeyPressDown(Event(KEYDOWN, key=K_SPACE)))
     new_scene = say_event.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
     assert isinstance(new_scene, MapScene)
+    player = replace(map_scene._player, coordinate=Coordinate(123, 100))
+    assert not replace(map_scene, _player=player)._collided_npc
 
 
 def test_eventful_scene() -> None:

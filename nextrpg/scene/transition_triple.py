@@ -42,7 +42,7 @@ class TransitionTriple(Scene):
 
     @cached_property
     @override
-    def draw_on_screens_before_shift(self) -> tuple[DrawOnScreen, ...]:
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         if self._before_intermediary:
             return self._from_and_intermediary.draw_on_screens
         return self._intermediary_and_to.draw_on_screens

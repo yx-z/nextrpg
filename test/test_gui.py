@@ -42,6 +42,8 @@ def test_gui(mocker: MockerFixture) -> None:
     gui2.draw((), 0)
     gui2._screen.blit.assert_called()
 
+    assert Gui(GuiConfig(allow_window_resize=False))._current_gui_flag
+
     Gui(GuiConfig(resize_mode="Invalid resize mode")).draw((), 0)
     Gui(gui.current_config, gui.current_config, gui.current_config, "screen")
 
