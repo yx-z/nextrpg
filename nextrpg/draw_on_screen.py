@@ -266,15 +266,13 @@ class Polygon:
     def line(
         self, color: Rgba, stroke_width: Pixel | None = None
     ) -> DrawOnScreen:
-        stroke_width = (
+        stroke = (
             config().draw_on_screen.stroke_width
             if stroke_width is None
             else stroke_width
         )
         return self._draw(
-            lambda surf, points: lines(
-                surf, color, self.closed, points, stroke_width
-            )
+            lambda surf, points: lines(surf, color, self.closed, points, stroke)
         )
 
     def _draw(
