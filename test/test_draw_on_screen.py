@@ -91,3 +91,7 @@ def test_polygon() -> None:
     )
     assert polygon.contain(Coordinate(0.5, 0.5))
     assert not polygon.contain(Coordinate(10, 20))
+    assert Polygon(
+        (Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20)),
+        closed=False,
+    ).length

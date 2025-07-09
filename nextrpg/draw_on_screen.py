@@ -4,7 +4,7 @@ Drawable on screen.
 
 from dataclasses import dataclass
 from functools import cached_property
-from math import ceil
+from math import ceil, hypot
 from os import PathLike
 from typing import Self, override
 
@@ -302,6 +302,20 @@ class Polygon:
             return bool(self._mask.get_at((x, y)))
         return False
 
+    @cached_property
+    def length(self) -> Pixel:
+        total = 0
+        for i in range(len(self.points) - 1):
+            total += hypot(
+                self.points[i + 1].left - self.points[i].left,
+                self.points[i + 1].top - self.points[i].top,
+                )
+        if self.closed:
+            total += hypot(
+                self.points[0].left - self.points[-1].left,
+                self.points[0].top - self.points[-1].top
+                )
+        return total
 
 class Rectangle(Polygon):
     """

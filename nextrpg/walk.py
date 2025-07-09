@@ -44,7 +44,7 @@ class Walk:
 
         remaining_distance = self.move_speed * time_delta
         if self.cyclic:
-            remaining_distance %= self._path_length
+            remaining_distance %= self.path.length
         else:
             if remaining_distance >= self._remaining_length:
                 return replace(
@@ -124,22 +124,6 @@ class Walk:
         if self.path.closed:
             return self._index == 0 and self._last_index != 0
         return self._next_index == 0
-
-    @cached_property
-    def _path_length(self) -> Pixel:
-        total = 0
-        points = self.path.points
-        for i in range(len(points) - 1):
-            total += hypot(
-                points[i + 1].left - points[i].left,
-                points[i + 1].top - points[i].top,
-            )
-        if self.cyclic:
-            total += hypot(
-                points[0].left - points[-1].left,
-                points[0].top - points[-1].top,
-            )
-        return total
 
     @cached_property
     def _remaining_length(self) -> Pixel:
