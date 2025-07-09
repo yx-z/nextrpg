@@ -27,9 +27,15 @@ class TransitionScene(Scene):
     _elapsed: Millisecond = 0
 
     def tick(self, time_delta: Millisecond) -> Scene:
+        tick_to_scene = self.to_scene.tick(time_delta)
         if (total_elapsed := self._elapsed + time_delta) > self.duration:
-            return self.to_scene
-        return replace(self, _elapsed=total_elapsed)
+            return tick_to_scene
+        return replace(
+            self,
+            _elapsed=total_elapsed,
+            from_scene=self.from_scene.tick(time_delta),
+            to_scene=tick_to_scene,
+        )
 
     @cached_property
     def _to_scene_drawings(self) -> tuple[DrawOnScreen, ...]:

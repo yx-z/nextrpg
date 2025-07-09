@@ -23,33 +23,38 @@ class TransitionTriple(Scene):
             self.from_scene, self.intermediary, self._half_duration
         )
     )
-    _intermediary_and_to: Scene = instance_init(
+    _intermediary_and_to: TransitionScene = instance_init(
         lambda self: TransitionScene(
             self.intermediary, self.to_scene, self._half_duration
         )
     )
+    _elapsed: Millisecond = 0
 
     def tick(self, time_delta: Millisecond) -> Scene:
-        if self._before_intermediary:
+        total_elapsed = self._elapsed + time_delta
+        if total_elapsed < self._half_duration:
             from_and_intermediary = self._from_and_intermediary.tick(time_delta)
-            return replace(self, _from_and_intermediary=from_and_intermediary)
+            return replace(
+                self,
+                _from_and_intermediary=from_and_intermediary,
+                _elapsed=total_elapsed,
+            )
 
-        if self._intermediary_and_to is not self.to_scene:
-            intermediary_and_to = self._intermediary_and_to.tick(time_delta)
-            return replace(self, _intermediary_and_to=intermediary_and_to)
-
-        return self.to_scene
+        intermediary_and_to = self._intermediary_and_to.tick(time_delta)
+        if isinstance(intermediary_and_to, TransitionScene):
+            return replace(
+                self,
+                _intermediary_and_to=intermediary_and_to,
+                _elapsed=total_elapsed,
+            )
+        return intermediary_and_to
 
     @cached_property
     @override
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        if self._before_intermediary:
+        if self._elapsed < self._half_duration:
             return self._from_and_intermediary.draw_on_screens
         return self._intermediary_and_to.draw_on_screens
-
-    @cached_property
-    def _before_intermediary(self) -> DrawOnScreen:
-        return self._from_and_intermediary is not self.intermediary
 
     @cached_property
     def _half_duration(self) -> Millisecond:

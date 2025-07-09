@@ -69,7 +69,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     _move_timer: Timer = instance_init(
         lambda self: Timer(self.spec.move_duration)
     )
-    _moving: bool = False
+    _moving: bool = True
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:

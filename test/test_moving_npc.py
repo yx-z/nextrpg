@@ -20,9 +20,7 @@ def test_moving_npc_on_screen() -> None:
         path=Rectangle(Coordinate(0, 0), Size(10, 10)),
         collisions=(),
     )
-    assert not npc.tick(0).moving
-    assert not npc.tick(5).tick(1).moving
-    assert npc.tick(11).tick(9).moving
-    assert not npc.tick(11).tick(20).moving
+    assert npc.tick(1).tick(1).moving
+    assert npc.tick(11).tick(20).moving
     assert npc.move(0) == Coordinate(0, 0)
     assert replace(npc, _triggered=True).tick(0)
