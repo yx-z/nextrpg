@@ -60,7 +60,7 @@ class CharacterOnScreen:
         Returns:
             `CharacterOnScreen`: The updated character state after the step.
         """
-        return replace(self, character=self.character.idle(time_delta))
+        return replace(self, character=self.character.tick_idle(time_delta))
 
     def start_event(self, character: CharacterOnScreen) -> Self:
         direction = character.coordinate.relative_to(self.coordinate)
@@ -122,9 +122,9 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
         moved_coord = self.move(time_delta) if self.moving else None
         character = (
-            self.character.move(time_delta)
+            self.character.tick_move(time_delta)
             if self.moving
-            else self.character.idle(time_delta)
+            else self.character.tick_idle(time_delta)
         )
         coordinate = (
             moved_coord

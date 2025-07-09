@@ -130,10 +130,10 @@
                                 <a class="function" href="#RpgMakerCharacterDrawing.turn">turn</a>
                         </li>
                         <li>
-                                <a class="function" href="#RpgMakerCharacterDrawing.move">move</a>
+                                <a class="function" href="#RpgMakerCharacterDrawing.tick_move">tick_move</a>
                         </li>
                         <li>
-                                <a class="function" href="#RpgMakerCharacterDrawing.idle">idle</a>
+                                <a class="function" href="#RpgMakerCharacterDrawing.tick_idle">tick_idle</a>
                         </li>
                 </ul>
 
@@ -352,16 +352,16 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>        <span class="p">)</span>
 </span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>
 </span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>    <span class="nd">@override</span>
-</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
 </span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>            <span class="n">_frames</span><span class="o">=</span><span class="p">{</span>
-</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>                <span class="n">direction</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_move_frame</span><span class="p">(</span><span class="n">time_delta</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>                <span class="n">direction</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tick_frames</span><span class="p">(</span><span class="n">time_delta</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
 </span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>                <span class="k">for</span> <span class="n">direction</span><span class="p">,</span> <span class="n">frames</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
 </span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a>            <span class="p">},</span>
 </span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>        <span class="p">)</span>
 </span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>
-</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_move_frame</span><span class="p">(</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_tick_frames</span><span class="p">(</span>
 </span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">adjusted_direction</span><span class="p">:</span> <span class="n">Direction</span>
 </span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CyclicFrames</span><span class="p">:</span>
 </span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>        <span class="n">frames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">[</span><span class="n">adjusted_direction</span><span class="p">]</span>
@@ -370,9 +370,9 @@ even if you own a copy of RPG Maker.</p>
 </span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>        <span class="k">return</span> <span class="n">frames</span>
 </span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>
 </span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>    <span class="nd">@override</span>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">animate_on_idle</span><span class="p">:</span>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
 </span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>            <span class="n">_frames</span><span class="o">=</span><span class="p">{</span><span class="n">d</span><span class="p">:</span> <span class="n">frames</span><span class="o">.</span><span class="n">reset</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">frames</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
@@ -888,16 +888,16 @@ from a sprite sheet image.</p>
 </span><span id="RpgMakerCharacterDrawing-179"><a href="#RpgMakerCharacterDrawing-179"><span class="linenos">179</span></a>        <span class="p">)</span>
 </span><span id="RpgMakerCharacterDrawing-180"><a href="#RpgMakerCharacterDrawing-180"><span class="linenos">180</span></a>
 </span><span id="RpgMakerCharacterDrawing-181"><a href="#RpgMakerCharacterDrawing-181"><span class="linenos">181</span></a>    <span class="nd">@override</span>
-</span><span id="RpgMakerCharacterDrawing-182"><a href="#RpgMakerCharacterDrawing-182"><span class="linenos">182</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="RpgMakerCharacterDrawing-182"><a href="#RpgMakerCharacterDrawing-182"><span class="linenos">182</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="RpgMakerCharacterDrawing-183"><a href="#RpgMakerCharacterDrawing-183"><span class="linenos">183</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
 </span><span id="RpgMakerCharacterDrawing-184"><a href="#RpgMakerCharacterDrawing-184"><span class="linenos">184</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="RpgMakerCharacterDrawing-185"><a href="#RpgMakerCharacterDrawing-185"><span class="linenos">185</span></a>            <span class="n">_frames</span><span class="o">=</span><span class="p">{</span>
-</span><span id="RpgMakerCharacterDrawing-186"><a href="#RpgMakerCharacterDrawing-186"><span class="linenos">186</span></a>                <span class="n">direction</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_move_frame</span><span class="p">(</span><span class="n">time_delta</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+</span><span id="RpgMakerCharacterDrawing-186"><a href="#RpgMakerCharacterDrawing-186"><span class="linenos">186</span></a>                <span class="n">direction</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tick_frames</span><span class="p">(</span><span class="n">time_delta</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
 </span><span id="RpgMakerCharacterDrawing-187"><a href="#RpgMakerCharacterDrawing-187"><span class="linenos">187</span></a>                <span class="k">for</span> <span class="n">direction</span><span class="p">,</span> <span class="n">frames</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
 </span><span id="RpgMakerCharacterDrawing-188"><a href="#RpgMakerCharacterDrawing-188"><span class="linenos">188</span></a>            <span class="p">},</span>
 </span><span id="RpgMakerCharacterDrawing-189"><a href="#RpgMakerCharacterDrawing-189"><span class="linenos">189</span></a>        <span class="p">)</span>
 </span><span id="RpgMakerCharacterDrawing-190"><a href="#RpgMakerCharacterDrawing-190"><span class="linenos">190</span></a>
-</span><span id="RpgMakerCharacterDrawing-191"><a href="#RpgMakerCharacterDrawing-191"><span class="linenos">191</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_move_frame</span><span class="p">(</span>
+</span><span id="RpgMakerCharacterDrawing-191"><a href="#RpgMakerCharacterDrawing-191"><span class="linenos">191</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_tick_frames</span><span class="p">(</span>
 </span><span id="RpgMakerCharacterDrawing-192"><a href="#RpgMakerCharacterDrawing-192"><span class="linenos">192</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">adjusted_direction</span><span class="p">:</span> <span class="n">Direction</span>
 </span><span id="RpgMakerCharacterDrawing-193"><a href="#RpgMakerCharacterDrawing-193"><span class="linenos">193</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CyclicFrames</span><span class="p">:</span>
 </span><span id="RpgMakerCharacterDrawing-194"><a href="#RpgMakerCharacterDrawing-194"><span class="linenos">194</span></a>        <span class="n">frames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">[</span><span class="n">adjusted_direction</span><span class="p">]</span>
@@ -906,9 +906,9 @@ from a sprite sheet image.</p>
 </span><span id="RpgMakerCharacterDrawing-197"><a href="#RpgMakerCharacterDrawing-197"><span class="linenos">197</span></a>        <span class="k">return</span> <span class="n">frames</span>
 </span><span id="RpgMakerCharacterDrawing-198"><a href="#RpgMakerCharacterDrawing-198"><span class="linenos">198</span></a>
 </span><span id="RpgMakerCharacterDrawing-199"><a href="#RpgMakerCharacterDrawing-199"><span class="linenos">199</span></a>    <span class="nd">@override</span>
-</span><span id="RpgMakerCharacterDrawing-200"><a href="#RpgMakerCharacterDrawing-200"><span class="linenos">200</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="RpgMakerCharacterDrawing-200"><a href="#RpgMakerCharacterDrawing-200"><span class="linenos">200</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="RpgMakerCharacterDrawing-201"><a href="#RpgMakerCharacterDrawing-201"><span class="linenos">201</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">animate_on_idle</span><span class="p">:</span>
-</span><span id="RpgMakerCharacterDrawing-202"><a href="#RpgMakerCharacterDrawing-202"><span class="linenos">202</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="RpgMakerCharacterDrawing-202"><a href="#RpgMakerCharacterDrawing-202"><span class="linenos">202</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
 </span><span id="RpgMakerCharacterDrawing-203"><a href="#RpgMakerCharacterDrawing-203"><span class="linenos">203</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
 </span><span id="RpgMakerCharacterDrawing-204"><a href="#RpgMakerCharacterDrawing-204"><span class="linenos">204</span></a>            <span class="bp">self</span><span class="p">,</span>
 </span><span id="RpgMakerCharacterDrawing-205"><a href="#RpgMakerCharacterDrawing-205"><span class="linenos">205</span></a>            <span class="n">_frames</span><span class="o">=</span><span class="p">{</span><span class="n">d</span><span class="p">:</span> <span class="n">frames</span><span class="o">.</span><span class="n">reset</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">frames</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
@@ -1101,27 +1101,27 @@ If not specified, the default direction from <code>Config</code> is used.</li>
 
 
                             </div>
-                            <div id="RpgMakerCharacterDrawing.move" class="classattr">
-                                        <input id="RpgMakerCharacterDrawing.move-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="RpgMakerCharacterDrawing.tick_move" class="classattr">
+                                        <input id="RpgMakerCharacterDrawing.tick_move-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator decorator-override">@override</div>
 
         <span class="def">def</span>
-        <span class="name">move</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
+        <span class="name">tick_move</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
-                <label class="view-source-button" for="RpgMakerCharacterDrawing.move-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="RpgMakerCharacterDrawing.tick_move-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#RpgMakerCharacterDrawing.move"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="RpgMakerCharacterDrawing.move-181"><a href="#RpgMakerCharacterDrawing.move-181"><span class="linenos">181</span></a>    <span class="nd">@override</span>
-</span><span id="RpgMakerCharacterDrawing.move-182"><a href="#RpgMakerCharacterDrawing.move-182"><span class="linenos">182</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="RpgMakerCharacterDrawing.move-183"><a href="#RpgMakerCharacterDrawing.move-183"><span class="linenos">183</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-</span><span id="RpgMakerCharacterDrawing.move-184"><a href="#RpgMakerCharacterDrawing.move-184"><span class="linenos">184</span></a>            <span class="bp">self</span><span class="p">,</span>
-</span><span id="RpgMakerCharacterDrawing.move-185"><a href="#RpgMakerCharacterDrawing.move-185"><span class="linenos">185</span></a>            <span class="n">_frames</span><span class="o">=</span><span class="p">{</span>
-</span><span id="RpgMakerCharacterDrawing.move-186"><a href="#RpgMakerCharacterDrawing.move-186"><span class="linenos">186</span></a>                <span class="n">direction</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_move_frame</span><span class="p">(</span><span class="n">time_delta</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
-</span><span id="RpgMakerCharacterDrawing.move-187"><a href="#RpgMakerCharacterDrawing.move-187"><span class="linenos">187</span></a>                <span class="k">for</span> <span class="n">direction</span><span class="p">,</span> <span class="n">frames</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-</span><span id="RpgMakerCharacterDrawing.move-188"><a href="#RpgMakerCharacterDrawing.move-188"><span class="linenos">188</span></a>            <span class="p">},</span>
-</span><span id="RpgMakerCharacterDrawing.move-189"><a href="#RpgMakerCharacterDrawing.move-189"><span class="linenos">189</span></a>        <span class="p">)</span>
+    <a class="headerlink" href="#RpgMakerCharacterDrawing.tick_move"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="RpgMakerCharacterDrawing.tick_move-181"><a href="#RpgMakerCharacterDrawing.tick_move-181"><span class="linenos">181</span></a>    <span class="nd">@override</span>
+</span><span id="RpgMakerCharacterDrawing.tick_move-182"><a href="#RpgMakerCharacterDrawing.tick_move-182"><span class="linenos">182</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="RpgMakerCharacterDrawing.tick_move-183"><a href="#RpgMakerCharacterDrawing.tick_move-183"><span class="linenos">183</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="RpgMakerCharacterDrawing.tick_move-184"><a href="#RpgMakerCharacterDrawing.tick_move-184"><span class="linenos">184</span></a>            <span class="bp">self</span><span class="p">,</span>
+</span><span id="RpgMakerCharacterDrawing.tick_move-185"><a href="#RpgMakerCharacterDrawing.tick_move-185"><span class="linenos">185</span></a>            <span class="n">_frames</span><span class="o">=</span><span class="p">{</span>
+</span><span id="RpgMakerCharacterDrawing.tick_move-186"><a href="#RpgMakerCharacterDrawing.tick_move-186"><span class="linenos">186</span></a>                <span class="n">direction</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tick_frames</span><span class="p">(</span><span class="n">time_delta</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+</span><span id="RpgMakerCharacterDrawing.tick_move-187"><a href="#RpgMakerCharacterDrawing.tick_move-187"><span class="linenos">187</span></a>                <span class="k">for</span> <span class="n">direction</span><span class="p">,</span> <span class="n">frames</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+</span><span id="RpgMakerCharacterDrawing.tick_move-188"><a href="#RpgMakerCharacterDrawing.tick_move-188"><span class="linenos">188</span></a>            <span class="p">},</span>
+</span><span id="RpgMakerCharacterDrawing.tick_move-189"><a href="#RpgMakerCharacterDrawing.tick_move-189"><span class="linenos">189</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -1144,26 +1144,26 @@ last update.</li>
 
 
                             </div>
-                            <div id="RpgMakerCharacterDrawing.idle" class="classattr">
-                                        <input id="RpgMakerCharacterDrawing.idle-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="RpgMakerCharacterDrawing.tick_idle" class="classattr">
+                                        <input id="RpgMakerCharacterDrawing.tick_idle-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator decorator-override">@override</div>
 
         <span class="def">def</span>
-        <span class="name">idle</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
+        <span class="name">tick_idle</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
-                <label class="view-source-button" for="RpgMakerCharacterDrawing.idle-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="RpgMakerCharacterDrawing.tick_idle-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#RpgMakerCharacterDrawing.idle"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="RpgMakerCharacterDrawing.idle-199"><a href="#RpgMakerCharacterDrawing.idle-199"><span class="linenos">199</span></a>    <span class="nd">@override</span>
-</span><span id="RpgMakerCharacterDrawing.idle-200"><a href="#RpgMakerCharacterDrawing.idle-200"><span class="linenos">200</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="RpgMakerCharacterDrawing.idle-201"><a href="#RpgMakerCharacterDrawing.idle-201"><span class="linenos">201</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">animate_on_idle</span><span class="p">:</span>
-</span><span id="RpgMakerCharacterDrawing.idle-202"><a href="#RpgMakerCharacterDrawing.idle-202"><span class="linenos">202</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="RpgMakerCharacterDrawing.idle-203"><a href="#RpgMakerCharacterDrawing.idle-203"><span class="linenos">203</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-</span><span id="RpgMakerCharacterDrawing.idle-204"><a href="#RpgMakerCharacterDrawing.idle-204"><span class="linenos">204</span></a>            <span class="bp">self</span><span class="p">,</span>
-</span><span id="RpgMakerCharacterDrawing.idle-205"><a href="#RpgMakerCharacterDrawing.idle-205"><span class="linenos">205</span></a>            <span class="n">_frames</span><span class="o">=</span><span class="p">{</span><span class="n">d</span><span class="p">:</span> <span class="n">frames</span><span class="o">.</span><span class="n">reset</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">frames</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
-</span><span id="RpgMakerCharacterDrawing.idle-206"><a href="#RpgMakerCharacterDrawing.idle-206"><span class="linenos">206</span></a>        <span class="p">)</span>
+    <a class="headerlink" href="#RpgMakerCharacterDrawing.tick_idle"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="RpgMakerCharacterDrawing.tick_idle-199"><a href="#RpgMakerCharacterDrawing.tick_idle-199"><span class="linenos">199</span></a>    <span class="nd">@override</span>
+</span><span id="RpgMakerCharacterDrawing.tick_idle-200"><a href="#RpgMakerCharacterDrawing.tick_idle-200"><span class="linenos">200</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="RpgMakerCharacterDrawing.tick_idle-201"><a href="#RpgMakerCharacterDrawing.tick_idle-201"><span class="linenos">201</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">animate_on_idle</span><span class="p">:</span>
+</span><span id="RpgMakerCharacterDrawing.tick_idle-202"><a href="#RpgMakerCharacterDrawing.tick_idle-202"><span class="linenos">202</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="RpgMakerCharacterDrawing.tick_idle-203"><a href="#RpgMakerCharacterDrawing.tick_idle-203"><span class="linenos">203</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="RpgMakerCharacterDrawing.tick_idle-204"><a href="#RpgMakerCharacterDrawing.tick_idle-204"><span class="linenos">204</span></a>            <span class="bp">self</span><span class="p">,</span>
+</span><span id="RpgMakerCharacterDrawing.tick_idle-205"><a href="#RpgMakerCharacterDrawing.tick_idle-205"><span class="linenos">205</span></a>            <span class="n">_frames</span><span class="o">=</span><span class="p">{</span><span class="n">d</span><span class="p">:</span> <span class="n">frames</span><span class="o">.</span><span class="n">reset</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">frames</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
+</span><span id="RpgMakerCharacterDrawing.tick_idle-206"><a href="#RpgMakerCharacterDrawing.tick_idle-206"><span class="linenos">206</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 

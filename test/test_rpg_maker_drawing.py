@@ -27,8 +27,8 @@ def test_rpg_maker_drawing():
     assert character.drawing.size == Size(2, 2)
     assert character.direction is Direction.DOWN
     assert character.turn(Direction.UP_RIGHT).direction is Direction.UP_RIGHT
-    assert character.move(2).drawing.size == Size(2, 2)
-    assert character.idle(2).drawing.size == Size(2, 2)
+    assert character.tick_move(2).drawing.size == Size(2, 2)
+    assert character.tick_idle(2).drawing.size == Size(2, 2)
 
     character = RpgMakerCharacterDrawing(
         direction=Direction.DOWN,
@@ -37,4 +37,4 @@ def test_rpg_maker_drawing():
         duration_per_frame=1,
         animate_on_idle=False,
     )
-    assert character.idle(2).drawing.size == Size(2, 2)
+    assert character.tick_idle(2).drawing.size == Size(2, 2)

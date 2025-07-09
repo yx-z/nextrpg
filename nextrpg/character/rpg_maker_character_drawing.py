@@ -178,16 +178,16 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         )
 
     @override
-    def move(self, time_delta: Millisecond) -> Self:
+    def tick_move(self, time_delta: Millisecond) -> Self:
         return replace(
             self,
             _frames={
-                direction: self._move_frame(time_delta, direction)
+                direction: self._tick_frames(time_delta, direction)
                 for direction, frames in self._frames.items()
             },
         )
 
-    def _move_frame(
+    def _tick_frames(
         self, time_delta: Millisecond, adjusted_direction: Direction
     ) -> CyclicFrames:
         frames = self._frames[adjusted_direction]
@@ -196,9 +196,9 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         return frames
 
     @override
-    def idle(self, time_delta: Millisecond) -> Self:
+    def tick_idle(self, time_delta: Millisecond) -> Self:
         if self.animate_on_idle:
-            return self.move(time_delta)
+            return self.tick_move(time_delta)
         return replace(
             self,
             _frames={d: frames.reset for d, frames in self._frames.items()},

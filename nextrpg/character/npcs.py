@@ -60,7 +60,7 @@ class EventfulScene(Scene):
         ):
             logger.debug(t"Collided with {npc.name}", duration=FROM_CONFIG)
             scene = self._trigger(npc)
-            generator = scene._npc.spec.generator(
+            generator = scene._npc.spec._generator(
                 scene._player, scene._npc, scene._npcs, scene
             )
             return next(generator)(generator, scene)
@@ -201,13 +201,15 @@ class NpcSpec:
     name: str
     character: CharacterDrawing
     event: RpgEventSpec
-    generator: Callable[[*RpgEventSpecParams], RpgEventGenerator] = (
-        instance_init(lambda self: self._generator)
+    _generator: Callable[[*RpgEventSpecParams], RpgEventGenerator] = (
+        instance_init(lambda self: self._create_generator)
     )
 
     @cached_property
-    def _generator(self) -> Callable[[*RpgEventSpecParams], RpgEventGenerator]:
-        def wrapped(
+    def _create_generator(
+        self,
+    ) -> Callable[[*RpgEventSpecParams], RpgEventGenerator]:
+        def yield_event(
             player: PlayerOnScreen,
             npc: NpcOnScreen,
             npc_dict: dict[str, NpcOnScreen],
@@ -217,4 +219,4 @@ class NpcSpec:
             exec(transform_event(self.event), ctx)
             return ctx[self.event.__name__](player, npc, npc_dict, scene)
 
-        return wrapped
+        return yield_event

@@ -74,7 +74,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     @override
     def tick(self, time_delta: Millisecond) -> Self:
         if self._triggered:
-            return self
+            return super().tick(time_delta)
 
         move_timer, idle_timer, moving = self._timers_and_moving(time_delta)
         if moving:

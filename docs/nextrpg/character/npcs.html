@@ -114,9 +114,6 @@
                         <li>
                                 <a class="variable" href="#NpcSpec.event">event</a>
                         </li>
-                        <li>
-                                <a class="variable" href="#NpcSpec.generator">generator</a>
-                        </li>
                 </ul>
 
             </li>
@@ -203,7 +200,7 @@
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>        <span class="p">):</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Collided with </span><span class="si">{npc.name}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">FROM_CONFIG</span><span class="p">)</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>            <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trigger</span><span class="p">(</span><span class="n">npc</span><span class="p">)</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>            <span class="n">generator</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">_npc</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">generator</span><span class="p">(</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>            <span class="n">generator</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">_npc</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>                <span class="n">scene</span><span class="o">.</span><span class="n">_player</span><span class="p">,</span> <span class="n">scene</span><span class="o">.</span><span class="n">_npc</span><span class="p">,</span> <span class="n">scene</span><span class="o">.</span><span class="n">_npcs</span><span class="p">,</span> <span class="n">scene</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>            <span class="p">)</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>            <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">generator</span><span class="p">)(</span><span class="n">generator</span><span class="p">,</span> <span class="n">scene</span><span class="p">)</span>
@@ -344,13 +341,13 @@
 </span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
 </span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">RpgEventSpec</span>
-</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>    <span class="n">generator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">*</span><span class="n">RpgEventSpecParams</span><span class="p">],</span> <span class="n">RpgEventGenerator</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>        <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span><span class="p">)</span>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>    <span class="n">_generator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">*</span><span class="n">RpgEventSpecParams</span><span class="p">],</span> <span class="n">RpgEventGenerator</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>        <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_generator</span><span class="p">)</span>
 </span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>    <span class="p">)</span>
 </span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>
 </span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">*</span><span class="n">RpgEventSpecParams</span><span class="p">],</span> <span class="n">RpgEventGenerator</span><span class="p">]:</span>
-</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">wrapped</span><span class="p">(</span>
+</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_create_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">*</span><span class="n">RpgEventSpecParams</span><span class="p">],</span> <span class="n">RpgEventGenerator</span><span class="p">]:</span>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">yield_event</span><span class="p">(</span>
 </span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>            <span class="n">player</span><span class="p">:</span> <span class="n">PlayerOnScreen</span><span class="p">,</span>
 </span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>            <span class="n">npc</span><span class="p">:</span> <span class="n">NpcOnScreen</span><span class="p">,</span>
 </span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>            <span class="n">npc_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">NpcOnScreen</span><span class="p">],</span>
@@ -360,7 +357,7 @@
 </span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>            <span class="n">exec</span><span class="p">(</span><span class="n">transform_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">),</span> <span class="n">ctx</span><span class="p">)</span>
 </span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>            <span class="k">return</span> <span class="n">ctx</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="vm">__name__</span><span class="p">](</span><span class="n">player</span><span class="p">,</span> <span class="n">npc</span><span class="p">,</span> <span class="n">npc_dict</span><span class="p">,</span> <span class="n">scene</span><span class="p">)</span>
 </span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>
-</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>        <span class="k">return</span> <span class="n">wrapped</span>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>        <span class="k">return</span> <span class="n">yield_event</span>
 </span></pre></div>
 
 
@@ -516,7 +513,7 @@
 </span><span id="EventfulScene-61"><a href="#EventfulScene-61"><span class="linenos"> 61</span></a>        <span class="p">):</span>
 </span><span id="EventfulScene-62"><a href="#EventfulScene-62"><span class="linenos"> 62</span></a>            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Collided with </span><span class="si">{npc.name}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">FROM_CONFIG</span><span class="p">)</span>
 </span><span id="EventfulScene-63"><a href="#EventfulScene-63"><span class="linenos"> 63</span></a>            <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trigger</span><span class="p">(</span><span class="n">npc</span><span class="p">)</span>
-</span><span id="EventfulScene-64"><a href="#EventfulScene-64"><span class="linenos"> 64</span></a>            <span class="n">generator</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">_npc</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">generator</span><span class="p">(</span>
+</span><span id="EventfulScene-64"><a href="#EventfulScene-64"><span class="linenos"> 64</span></a>            <span class="n">generator</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">_npc</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span>
 </span><span id="EventfulScene-65"><a href="#EventfulScene-65"><span class="linenos"> 65</span></a>                <span class="n">scene</span><span class="o">.</span><span class="n">_player</span><span class="p">,</span> <span class="n">scene</span><span class="o">.</span><span class="n">_npc</span><span class="p">,</span> <span class="n">scene</span><span class="o">.</span><span class="n">_npcs</span><span class="p">,</span> <span class="n">scene</span>
 </span><span id="EventfulScene-66"><a href="#EventfulScene-66"><span class="linenos"> 66</span></a>            <span class="p">)</span>
 </span><span id="EventfulScene-67"><a href="#EventfulScene-67"><span class="linenos"> 67</span></a>            <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">generator</span><span class="p">)(</span><span class="n">generator</span><span class="p">,</span> <span class="n">scene</span><span class="p">)</span>
@@ -660,7 +657,7 @@
 </span><span id="EventfulScene.event-61"><a href="#EventfulScene.event-61"><span class="linenos">61</span></a>        <span class="p">):</span>
 </span><span id="EventfulScene.event-62"><a href="#EventfulScene.event-62"><span class="linenos">62</span></a>            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Collided with </span><span class="si">{npc.name}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">FROM_CONFIG</span><span class="p">)</span>
 </span><span id="EventfulScene.event-63"><a href="#EventfulScene.event-63"><span class="linenos">63</span></a>            <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trigger</span><span class="p">(</span><span class="n">npc</span><span class="p">)</span>
-</span><span id="EventfulScene.event-64"><a href="#EventfulScene.event-64"><span class="linenos">64</span></a>            <span class="n">generator</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">_npc</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">generator</span><span class="p">(</span>
+</span><span id="EventfulScene.event-64"><a href="#EventfulScene.event-64"><span class="linenos">64</span></a>            <span class="n">generator</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">_npc</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">_generator</span><span class="p">(</span>
 </span><span id="EventfulScene.event-65"><a href="#EventfulScene.event-65"><span class="linenos">65</span></a>                <span class="n">scene</span><span class="o">.</span><span class="n">_player</span><span class="p">,</span> <span class="n">scene</span><span class="o">.</span><span class="n">_npc</span><span class="p">,</span> <span class="n">scene</span><span class="o">.</span><span class="n">_npcs</span><span class="p">,</span> <span class="n">scene</span>
 </span><span id="EventfulScene.event-66"><a href="#EventfulScene.event-66"><span class="linenos">66</span></a>            <span class="p">)</span>
 </span><span id="EventfulScene.event-67"><a href="#EventfulScene.event-67"><span class="linenos">67</span></a>            <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">generator</span><span class="p">)(</span><span class="n">generator</span><span class="p">,</span> <span class="n">scene</span><span class="p">)</span>
@@ -998,13 +995,13 @@ the current event.</p>
 </span><span id="NpcSpec-202"><a href="#NpcSpec-202"><span class="linenos">202</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
 </span><span id="NpcSpec-203"><a href="#NpcSpec-203"><span class="linenos">203</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
 </span><span id="NpcSpec-204"><a href="#NpcSpec-204"><span class="linenos">204</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">RpgEventSpec</span>
-</span><span id="NpcSpec-205"><a href="#NpcSpec-205"><span class="linenos">205</span></a>    <span class="n">generator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">*</span><span class="n">RpgEventSpecParams</span><span class="p">],</span> <span class="n">RpgEventGenerator</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="NpcSpec-206"><a href="#NpcSpec-206"><span class="linenos">206</span></a>        <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generator</span><span class="p">)</span>
+</span><span id="NpcSpec-205"><a href="#NpcSpec-205"><span class="linenos">205</span></a>    <span class="n">_generator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">*</span><span class="n">RpgEventSpecParams</span><span class="p">],</span> <span class="n">RpgEventGenerator</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="NpcSpec-206"><a href="#NpcSpec-206"><span class="linenos">206</span></a>        <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_generator</span><span class="p">)</span>
 </span><span id="NpcSpec-207"><a href="#NpcSpec-207"><span class="linenos">207</span></a>    <span class="p">)</span>
 </span><span id="NpcSpec-208"><a href="#NpcSpec-208"><span class="linenos">208</span></a>
 </span><span id="NpcSpec-209"><a href="#NpcSpec-209"><span class="linenos">209</span></a>    <span class="nd">@cached_property</span>
-</span><span id="NpcSpec-210"><a href="#NpcSpec-210"><span class="linenos">210</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">*</span><span class="n">RpgEventSpecParams</span><span class="p">],</span> <span class="n">RpgEventGenerator</span><span class="p">]:</span>
-</span><span id="NpcSpec-211"><a href="#NpcSpec-211"><span class="linenos">211</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">wrapped</span><span class="p">(</span>
+</span><span id="NpcSpec-210"><a href="#NpcSpec-210"><span class="linenos">210</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_create_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">*</span><span class="n">RpgEventSpecParams</span><span class="p">],</span> <span class="n">RpgEventGenerator</span><span class="p">]:</span>
+</span><span id="NpcSpec-211"><a href="#NpcSpec-211"><span class="linenos">211</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">yield_event</span><span class="p">(</span>
 </span><span id="NpcSpec-212"><a href="#NpcSpec-212"><span class="linenos">212</span></a>            <span class="n">player</span><span class="p">:</span> <span class="n">PlayerOnScreen</span><span class="p">,</span>
 </span><span id="NpcSpec-213"><a href="#NpcSpec-213"><span class="linenos">213</span></a>            <span class="n">npc</span><span class="p">:</span> <span class="n">NpcOnScreen</span><span class="p">,</span>
 </span><span id="NpcSpec-214"><a href="#NpcSpec-214"><span class="linenos">214</span></a>            <span class="n">npc_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">NpcOnScreen</span><span class="p">],</span>
@@ -1014,7 +1011,7 @@ the current event.</p>
 </span><span id="NpcSpec-218"><a href="#NpcSpec-218"><span class="linenos">218</span></a>            <span class="n">exec</span><span class="p">(</span><span class="n">transform_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">),</span> <span class="n">ctx</span><span class="p">)</span>
 </span><span id="NpcSpec-219"><a href="#NpcSpec-219"><span class="linenos">219</span></a>            <span class="k">return</span> <span class="n">ctx</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="vm">__name__</span><span class="p">](</span><span class="n">player</span><span class="p">,</span> <span class="n">npc</span><span class="p">,</span> <span class="n">npc_dict</span><span class="p">,</span> <span class="n">scene</span><span class="p">)</span>
 </span><span id="NpcSpec-220"><a href="#NpcSpec-220"><span class="linenos">220</span></a>
-</span><span id="NpcSpec-221"><a href="#NpcSpec-221"><span class="linenos">221</span></a>        <span class="k">return</span> <span class="n">wrapped</span>
+</span><span id="NpcSpec-221"><a href="#NpcSpec-221"><span class="linenos">221</span></a>        <span class="k">return</span> <span class="n">yield_event</span>
 </span></pre></div>
 
 
@@ -1033,7 +1030,7 @@ the current event.</p>
                             <div id="NpcSpec.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">NpcSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">name</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span>,</span><span class="param">	<span class="n">event</span><span class="p">:</span> <span class="n">RpgEventSpec</span>,</span><span class="param">	<span class="n">generator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">typing</span><span class="o">.</span><span class="n">Unpack</span><span class="p">[</span><span class="n">RpgEventSpecParams</span><span class="p">]],</span> <span class="n">RpgEventGenerator</span><span class="p">]</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">NpcSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">name</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span>,</span><span class="param">	<span class="n">event</span><span class="p">:</span> <span class="n">RpgEventSpec</span>,</span><span class="param">	<span class="n">_generator</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">typing</span><span class="o">.</span><span class="n">Unpack</span><span class="p">[</span><span class="n">RpgEventSpecParams</span><span class="p">]],</span> <span class="n">RpgEventGenerator</span><span class="p">]</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -1071,17 +1068,6 @@ the current event.</p>
         
     </div>
     <a class="headerlink" href="#NpcSpec.event"></a>
-    
-    
-
-                            </div>
-                            <div id="NpcSpec.generator" class="classattr">
-                                <div class="attr variable">
-            <span class="name">generator</span><span class="annotation">: Callable[[typing.Unpack[RpgEventSpecParams]], RpgEventGenerator]</span>
-
-        
-    </div>
-    <a class="headerlink" href="#NpcSpec.generator"></a>
     
     
 

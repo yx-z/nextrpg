@@ -43,10 +43,10 @@
                                 <a class="function" href="#CharacterDrawing.turn">turn</a>
                         </li>
                         <li>
-                                <a class="function" href="#CharacterDrawing.move">move</a>
+                                <a class="function" href="#CharacterDrawing.tick_move">tick_move</a>
                         </li>
                         <li>
-                                <a class="function" href="#CharacterDrawing.idle">idle</a>
+                                <a class="function" href="#CharacterDrawing.tick_idle">tick_idle</a>
                         </li>
                 </ul>
 
@@ -124,7 +124,7 @@
 </span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
 </span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">        Update the character&#39;s position based on movement over</span>
 </span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">        the given time delta.</span>
@@ -138,7 +138,7 @@
 </span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
 </span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="sd">        Update the character&#39;s idle animation state over the given time delta.</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>
@@ -203,7 +203,7 @@
 </span><span id="CharacterDrawing-49"><a href="#CharacterDrawing-49"><span class="linenos">49</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="CharacterDrawing-50"><a href="#CharacterDrawing-50"><span class="linenos">50</span></a>
 </span><span id="CharacterDrawing-51"><a href="#CharacterDrawing-51"><span class="linenos">51</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing-52"><a href="#CharacterDrawing-52"><span class="linenos">52</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterDrawing-52"><a href="#CharacterDrawing-52"><span class="linenos">52</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="CharacterDrawing-53"><a href="#CharacterDrawing-53"><span class="linenos">53</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterDrawing-54"><a href="#CharacterDrawing-54"><span class="linenos">54</span></a><span class="sd">        Update the character&#39;s position based on movement over</span>
 </span><span id="CharacterDrawing-55"><a href="#CharacterDrawing-55"><span class="linenos">55</span></a><span class="sd">        the given time delta.</span>
@@ -217,7 +217,7 @@
 </span><span id="CharacterDrawing-63"><a href="#CharacterDrawing-63"><span class="linenos">63</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="CharacterDrawing-64"><a href="#CharacterDrawing-64"><span class="linenos">64</span></a>
 </span><span id="CharacterDrawing-65"><a href="#CharacterDrawing-65"><span class="linenos">65</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing-66"><a href="#CharacterDrawing-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterDrawing-66"><a href="#CharacterDrawing-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="CharacterDrawing-67"><a href="#CharacterDrawing-67"><span class="linenos">67</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterDrawing-68"><a href="#CharacterDrawing-68"><span class="linenos">68</span></a><span class="sd">        Update the character&#39;s idle animation state over the given time delta.</span>
 </span><span id="CharacterDrawing-69"><a href="#CharacterDrawing-69"><span class="linenos">69</span></a>
@@ -331,31 +331,31 @@ character movement visualization on the screen.</p>
 
 
                             </div>
-                            <div id="CharacterDrawing.move" class="classattr">
-                                        <input id="CharacterDrawing.move-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="CharacterDrawing.tick_move" class="classattr">
+                                        <input id="CharacterDrawing.tick_move-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator decorator-abstractmethod">@abstractmethod</div>
 
         <span class="def">def</span>
-        <span class="name">move</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
+        <span class="name">tick_move</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
-                <label class="view-source-button" for="CharacterDrawing.move-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="CharacterDrawing.tick_move-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#CharacterDrawing.move"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.move-51"><a href="#CharacterDrawing.move-51"><span class="linenos">51</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing.move-52"><a href="#CharacterDrawing.move-52"><span class="linenos">52</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterDrawing.move-53"><a href="#CharacterDrawing.move-53"><span class="linenos">53</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterDrawing.move-54"><a href="#CharacterDrawing.move-54"><span class="linenos">54</span></a><span class="sd">        Update the character&#39;s position based on movement over</span>
-</span><span id="CharacterDrawing.move-55"><a href="#CharacterDrawing.move-55"><span class="linenos">55</span></a><span class="sd">        the given time delta.</span>
-</span><span id="CharacterDrawing.move-56"><a href="#CharacterDrawing.move-56"><span class="linenos">56</span></a>
-</span><span id="CharacterDrawing.move-57"><a href="#CharacterDrawing.move-57"><span class="linenos">57</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterDrawing.move-58"><a href="#CharacterDrawing.move-58"><span class="linenos">58</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
-</span><span id="CharacterDrawing.move-59"><a href="#CharacterDrawing.move-59"><span class="linenos">59</span></a><span class="sd">                last update.</span>
-</span><span id="CharacterDrawing.move-60"><a href="#CharacterDrawing.move-60"><span class="linenos">60</span></a>
-</span><span id="CharacterDrawing.move-61"><a href="#CharacterDrawing.move-61"><span class="linenos">61</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterDrawing.move-62"><a href="#CharacterDrawing.move-62"><span class="linenos">62</span></a><span class="sd">            `CharacterDrawing`: The updated drawing with a new position.</span>
-</span><span id="CharacterDrawing.move-63"><a href="#CharacterDrawing.move-63"><span class="linenos">63</span></a><span class="sd">        &quot;&quot;&quot;</span>
+    <a class="headerlink" href="#CharacterDrawing.tick_move"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.tick_move-51"><a href="#CharacterDrawing.tick_move-51"><span class="linenos">51</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing.tick_move-52"><a href="#CharacterDrawing.tick_move-52"><span class="linenos">52</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterDrawing.tick_move-53"><a href="#CharacterDrawing.tick_move-53"><span class="linenos">53</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing.tick_move-54"><a href="#CharacterDrawing.tick_move-54"><span class="linenos">54</span></a><span class="sd">        Update the character&#39;s position based on movement over</span>
+</span><span id="CharacterDrawing.tick_move-55"><a href="#CharacterDrawing.tick_move-55"><span class="linenos">55</span></a><span class="sd">        the given time delta.</span>
+</span><span id="CharacterDrawing.tick_move-56"><a href="#CharacterDrawing.tick_move-56"><span class="linenos">56</span></a>
+</span><span id="CharacterDrawing.tick_move-57"><a href="#CharacterDrawing.tick_move-57"><span class="linenos">57</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterDrawing.tick_move-58"><a href="#CharacterDrawing.tick_move-58"><span class="linenos">58</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
+</span><span id="CharacterDrawing.tick_move-59"><a href="#CharacterDrawing.tick_move-59"><span class="linenos">59</span></a><span class="sd">                last update.</span>
+</span><span id="CharacterDrawing.tick_move-60"><a href="#CharacterDrawing.tick_move-60"><span class="linenos">60</span></a>
+</span><span id="CharacterDrawing.tick_move-61"><a href="#CharacterDrawing.tick_move-61"><span class="linenos">61</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing.tick_move-62"><a href="#CharacterDrawing.tick_move-62"><span class="linenos">62</span></a><span class="sd">            `CharacterDrawing`: The updated drawing with a new position.</span>
+</span><span id="CharacterDrawing.tick_move-63"><a href="#CharacterDrawing.tick_move-63"><span class="linenos">63</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -378,31 +378,31 @@ last update.</li>
 
 
                             </div>
-                            <div id="CharacterDrawing.idle" class="classattr">
-                                        <input id="CharacterDrawing.idle-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="CharacterDrawing.tick_idle" class="classattr">
+                                        <input id="CharacterDrawing.tick_idle-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator decorator-abstractmethod">@abstractmethod</div>
 
         <span class="def">def</span>
-        <span class="name">idle</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
+        <span class="name">tick_idle</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
-                <label class="view-source-button" for="CharacterDrawing.idle-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="CharacterDrawing.tick_idle-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#CharacterDrawing.idle"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.idle-65"><a href="#CharacterDrawing.idle-65"><span class="linenos">65</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing.idle-66"><a href="#CharacterDrawing.idle-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterDrawing.idle-67"><a href="#CharacterDrawing.idle-67"><span class="linenos">67</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterDrawing.idle-68"><a href="#CharacterDrawing.idle-68"><span class="linenos">68</span></a><span class="sd">        Update the character&#39;s idle animation state over the given time delta.</span>
-</span><span id="CharacterDrawing.idle-69"><a href="#CharacterDrawing.idle-69"><span class="linenos">69</span></a>
-</span><span id="CharacterDrawing.idle-70"><a href="#CharacterDrawing.idle-70"><span class="linenos">70</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterDrawing.idle-71"><a href="#CharacterDrawing.idle-71"><span class="linenos">71</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
-</span><span id="CharacterDrawing.idle-72"><a href="#CharacterDrawing.idle-72"><span class="linenos">72</span></a><span class="sd">                last update.</span>
-</span><span id="CharacterDrawing.idle-73"><a href="#CharacterDrawing.idle-73"><span class="linenos">73</span></a>
-</span><span id="CharacterDrawing.idle-74"><a href="#CharacterDrawing.idle-74"><span class="linenos">74</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterDrawing.idle-75"><a href="#CharacterDrawing.idle-75"><span class="linenos">75</span></a><span class="sd">            `CharacterDrawing`: The updated drawing with</span>
-</span><span id="CharacterDrawing.idle-76"><a href="#CharacterDrawing.idle-76"><span class="linenos">76</span></a><span class="sd">                a new idle animation state.</span>
-</span><span id="CharacterDrawing.idle-77"><a href="#CharacterDrawing.idle-77"><span class="linenos">77</span></a><span class="sd">        &quot;&quot;&quot;</span>
+    <a class="headerlink" href="#CharacterDrawing.tick_idle"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.tick_idle-65"><a href="#CharacterDrawing.tick_idle-65"><span class="linenos">65</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing.tick_idle-66"><a href="#CharacterDrawing.tick_idle-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterDrawing.tick_idle-67"><a href="#CharacterDrawing.tick_idle-67"><span class="linenos">67</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing.tick_idle-68"><a href="#CharacterDrawing.tick_idle-68"><span class="linenos">68</span></a><span class="sd">        Update the character&#39;s idle animation state over the given time delta.</span>
+</span><span id="CharacterDrawing.tick_idle-69"><a href="#CharacterDrawing.tick_idle-69"><span class="linenos">69</span></a>
+</span><span id="CharacterDrawing.tick_idle-70"><a href="#CharacterDrawing.tick_idle-70"><span class="linenos">70</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterDrawing.tick_idle-71"><a href="#CharacterDrawing.tick_idle-71"><span class="linenos">71</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
+</span><span id="CharacterDrawing.tick_idle-72"><a href="#CharacterDrawing.tick_idle-72"><span class="linenos">72</span></a><span class="sd">                last update.</span>
+</span><span id="CharacterDrawing.tick_idle-73"><a href="#CharacterDrawing.tick_idle-73"><span class="linenos">73</span></a>
+</span><span id="CharacterDrawing.tick_idle-74"><a href="#CharacterDrawing.tick_idle-74"><span class="linenos">74</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing.tick_idle-75"><a href="#CharacterDrawing.tick_idle-75"><span class="linenos">75</span></a><span class="sd">            `CharacterDrawing`: The updated drawing with</span>
+</span><span id="CharacterDrawing.tick_idle-76"><a href="#CharacterDrawing.tick_idle-76"><span class="linenos">76</span></a><span class="sd">                a new idle animation state.</span>
+</span><span id="CharacterDrawing.tick_idle-77"><a href="#CharacterDrawing.tick_idle-77"><span class="linenos">77</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 

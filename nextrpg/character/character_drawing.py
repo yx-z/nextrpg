@@ -48,7 +48,7 @@ class CharacterDrawing(ABC):
         """
 
     @abstractmethod
-    def move(self, time_delta: Millisecond) -> Self:
+    def tick_move(self, time_delta: Millisecond) -> Self:
         """
         Update the character's position based on movement over
         the given time delta.
@@ -62,7 +62,7 @@ class CharacterDrawing(ABC):
         """
 
     @abstractmethod
-    def idle(self, time_delta: Millisecond) -> Self:
+    def tick_idle(self, time_delta: Millisecond) -> Self:
         """
         Update the character's idle animation state over the given time delta.
 

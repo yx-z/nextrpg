@@ -178,9 +178,9 @@ def _pop(time_delta: Millisecond) -> None:
     _entries.clear()
     global _timed_entries
     _timed_entries = {
-        k: t
+        k: replace(v, timer=timer)
         for k, v in _timed_entries.items()
-        if not (t := replace(v, timer=v.timer.tick(time_delta))).timer.complete
+        if not (timer := v.timer.tick(time_delta)).complete
     }
 
 

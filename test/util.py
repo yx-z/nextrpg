@@ -57,10 +57,10 @@ class MockCharacterDrawing(CharacterDrawing):
     def turn(self, direction: Direction) -> CharacterDrawing:
         return replace(self, direction=direction)
 
-    def move(self, time_delta: Millisecond) -> CharacterDrawing:
+    def tick_move(self, time_delta: Millisecond) -> CharacterDrawing:
         return self
 
-    def idle(self, time_delta: Millisecond) -> CharacterDrawing:
+    def tick_idle(self, time_delta: Millisecond) -> CharacterDrawing:
         return self
 
 
