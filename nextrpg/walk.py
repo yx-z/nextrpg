@@ -4,7 +4,7 @@ from math import hypot
 from typing import NamedTuple, Self
 
 from nextrpg.coordinate import Coordinate
-from nextrpg.core import Direction, Millisecond, PixelPerMillisecond
+from nextrpg.core import Direction, Millisecond, Pixel, PixelPerMillisecond
 from nextrpg.draw_on_screen import Polygon
 from nextrpg.model import dataclass_with_instance_init, instance_init
 
@@ -43,17 +43,25 @@ class Walk:
         last_index = self._index
 
         remaining_distance = self.move_speed * time_delta
+        if self.cyclic:
+            remaining_distance %= self._path_length
+        else:
+            if remaining_distance >= self._remaining_length:
+                return replace(
+                    self,
+                    coordinate=self.path.points[-1],
+                    _last_coordinate=current_coord,
+                    _index=len(self.path.points) - 1,
+                    _last_index=index,
+                )
 
         while remaining_distance > 0 and not self._is_final_index(index):
-            step = self._step_forward_along_segment(
-                current_coord, index, remaining_distance
-            )
+            step = self._tick_segment(current_coord, index, remaining_distance)
             remaining_distance -= step.distance_used
             current_coord = step.coordinate
             last_coord = step.last_coordinate
             index = step.index
             last_index = step.last_index
-
             if not step.stepped:
                 break
 
@@ -65,7 +73,7 @@ class Walk:
             _last_index=last_index,
         )
 
-    def _step_forward_along_segment(
+    def _tick_segment(
         self, current_coord: Coordinate, index: int, max_distance: float
     ) -> _StepResult:
         next_index = index + 1 if index + 1 < len(self.path.points) else 0
@@ -116,6 +124,33 @@ class Walk:
         if self.path.closed:
             return self._index == 0 and self._last_index != 0
         return self._next_index == 0
+
+    @cached_property
+    def _path_length(self) -> Pixel:
+        total = 0
+        points = self.path.points
+        for i in range(len(points) - 1):
+            total += hypot(
+                points[i + 1].left - points[i].left,
+                points[i + 1].top - points[i].top,
+            )
+        if self.cyclic:
+            total += hypot(
+                points[0].left - points[-1].left,
+                points[0].top - points[-1].top,
+            )
+        return total
+
+    @cached_property
+    def _remaining_length(self) -> Pixel:
+        points = self.path.points
+        total = 0.0
+        start = self.coordinate
+        for i in range(self._index, len(points) - 1):
+            end = points[i + 1]
+            total += hypot(end.left - start.left, end.top - start.top)
+            start = end
+        return total
 
 
 class _StepResult(NamedTuple):
