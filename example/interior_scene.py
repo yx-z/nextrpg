@@ -6,7 +6,7 @@ from typing import Any
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterSpec
-from nextrpg.character.npcs import NpcSpec
+from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.rpg_maker_character_drawing import (
     Margin,
@@ -55,17 +55,32 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> Scene:
     )
 
 
-def greet(player: PlayerOnScreen, *args: Any) -> None:
+def greet(
+    player: PlayerOnScreen,
+    npc: NpcOnScreen,
+    npc_dict: dict[str, NpcOnScreen],
+    scene: EventfulScene,
+) -> None:
     """
     Greet event specification.
 
     Arguments:
         `player`: Player.
 
+        `npc`: The triggerd NPC.
+
+        `npc_dict`: Dictionary of NPCs in the scene.
+
+        `scene`: The scene that triggered the event.
     Returns:
         `None`
     """
-    say(player, "Hello World!")
+    say(player, f"Hello {npc.spec.name}!")
+    say(npc, f"Hello {player.spec.name}!")
+    other_npc = {"david": npc_dict["alisa"], "alisa": npc_dict["david"]}[
+        npc.spec.name
+    ]
+    say(other_npc, f"Hello, I am {other_npc.spec.name}!")
 
 
 def sprite_sheet() -> SpriteSheet:

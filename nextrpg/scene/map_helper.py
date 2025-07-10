@@ -404,7 +404,7 @@ class MapHelper:
 
     @cached_property
     def _tmx(self) -> TiledMap:
-        logger.debug(t"Loading {self.tmx_file}", duration=FROM_CONFIG)
+        logger.debug(t"Loading {self.tmx_file}")
         return load_pygame(self.tmx_file)
 
 

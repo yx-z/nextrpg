@@ -61,13 +61,12 @@ class EventfulScene(Scene):
             and event.key is KeyboardKey.CONFIRM
             and (npc := self._collided_npc)
         ):
-            logger.debug(
-                t"Collided with {npc.spec.name}", duration=FROM_CONFIG
-            )
+            logger.debug(t"Collided with {npc.spec.name}")
             scene = self._trigger(npc)
             generator = scene.npc.generator(
                 scene.player, scene.npc, scene.npc_dict, scene
             )
+            logger.debug(t"Event {generator.__name__} started.")
             return next(generator)(generator, scene)
         return self.event_without_npc_trigger(event)
 
@@ -123,7 +122,7 @@ class EventfulScene(Scene):
             self,
             player=self.player.start_event(triggered_npc),
             npc=triggered_npc,
-            npcs=npcs
+            npcs=npcs,
         )
 
     @cached_property
@@ -138,14 +137,14 @@ class EventfulScene(Scene):
             return None
 
         try:
-            return self.event_generator.send(self.event_result)(
-                self.event_generator, self
-            )
+            create_next_scene = self.event_generator.send(self.event_result)
+            return create_next_scene(self.event_generator, self)
         except StopIteration:
             return self._clear_event
 
     @cached_property
     def _clear_event(self) -> Self:
+        logger.debug(t"Event {self.event_generator.__name__} completed.")
         return replace(
             self,
             player=self.player.complete_event,
@@ -161,7 +160,7 @@ class EventfulScene(Scene):
 
 
 type RpgEventSpecParams = tuple[
-    PlayerOnScreen, NpcOnScreen, dict[str, NpcOnScreen]
+    PlayerOnScreen, NpcOnScreen, dict[str, NpcOnScreen], EventfulScene
 ]
 
 type RpgEventSpec = Callable[[*RpgEventSpecParams], None]
@@ -193,8 +192,8 @@ class RpgEventScene(Scene):
         `scene`: The scene to continue.
     """
 
-    _generator: RpgEventGenerator
-    _scene: EventfulScene
+    generator: RpgEventGenerator
+    scene: EventfulScene
 
 
 @dataclass_with_instance_init

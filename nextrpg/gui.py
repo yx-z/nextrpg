@@ -117,7 +117,8 @@ class Gui:
             `None`.
         """
         logger.debug(
-            t"Size {self.current_config.size} Shift {self._center_shift}"
+            t"Size {self.current_config.size} Shift {self._center_shift}",
+            duration=None,
         )
         self._screen.fill(self.current_config.background_color)
         match self.current_config.resize_mode:

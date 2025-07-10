@@ -5,8 +5,8 @@ from test.util import MockCharacterDrawing
 
 def test_say() -> None:
     event = SayEvent(
-        _generator=None,
-        _scene=Scene(),
+        generator=None,
+        scene=Scene(),
         character=MockCharacterDrawing(),
         message="",
     )

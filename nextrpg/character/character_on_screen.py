@@ -52,7 +52,7 @@ class CharacterOnScreen:
     character: CharacterDrawing = instance_init(
         lambda self: self.spec.character
     )
-    _triggered: bool = False
+    _event_triggered: bool = False
 
     @cached_property
     def character_and_visuals(self) -> tuple[DrawOnScreen, ...]:
@@ -85,13 +85,12 @@ class CharacterOnScreen:
 
     def start_event(self, character: CharacterOnScreen) -> Self:
         direction = character.coordinate.relative_to(self.coordinate)
-        return replace(
-            self, character=self.character.turn(direction), _triggered=True
-        )
+        turned_character = self.character.turn(direction)
+        return replace(self, character=turned_character, _event_triggered=True)
 
     @cached_property
     def complete_event(self) -> Self:
-        return replace(self, _triggered=False)
+        return replace(self, _event_triggered=False)
 
     def _visuals(
         self, visuals: tuple[CharacterVisual, ...]
@@ -143,7 +142,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         Returns:
             `CharacterOnScreen`: The updated character state after the step.
         """
-        if self._triggered:
+        if self._event_triggered:
             return super().tick(time_delta)
 
         moved_coord = self.move(time_delta) if self.moving else None
@@ -189,10 +188,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
         if collision_and_coord := self._collide(hit_coords):
             collision, coord = collision_and_coord
-            logger.debug(
-                t"Collision {coord} and {collision.points}",
-                duration=FROM_CONFIG,
-            )
+            logger.debug(t"Collision {coord} and {collision.points}")
             return False
         return True
 

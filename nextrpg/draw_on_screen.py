@@ -152,7 +152,7 @@ class Drawing:
     def _surface(self) -> Surface:
         if isinstance(self.resource, Surface):
             return self.resource
-        logger.debug(t"Loading {self.resource}", duration=FROM_CONFIG)
+        logger.debug(t"Loading {self.resource}")
         return load(self.resource).convert_alpha()
 
 

@@ -95,7 +95,7 @@ def test_npcs(mocker: MockerFixture) -> None:
     )
     assert map_scene.npc_dict
     say_event = map_scene.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
-    object.__setattr__(say_event._scene, "draw_on_screens", ())
+    object.__setattr__(say_event.scene, "draw_on_screens", ())
     assert say_event.tick(0)
     assert say_event.draw_on_screens
     assert say_event.event(Quit(Event(QUIT)))

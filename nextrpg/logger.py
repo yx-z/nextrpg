@@ -36,7 +36,7 @@ class Logger:
         self,
         message: Template | str,
         *,
-        duration: Millisecond | DurationFromConfig | None = None,
+        duration: Millisecond | DurationFromConfig | None = FROM_CONFIG,
     ) -> None:
         """
         Debug log message.

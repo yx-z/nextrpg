@@ -24,4 +24,4 @@ def test_moving_npc_on_screen() -> None:
     assert npc.tick(1).tick(1).moving
     assert npc.tick(11).tick(20).moving
     assert npc.move(0) == Coordinate(0, 0)
-    assert replace(npc, _triggered=True).tick(0)
+    assert replace(npc, _event_triggered=True).tick(0)

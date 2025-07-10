@@ -32,7 +32,9 @@ class PlayerOnScreen(MovingCharacterOnScreen):
         )
 
     def event(self, event: PygameEvent) -> Self:
-        if self._triggered or not isinstance(event, (KeyPressDown, KeyPressUp)):
+        if self._event_triggered or not isinstance(
+            event, (KeyPressDown, KeyPressUp)
+        ):
             return self
 
         updated_keys = self._updated_movement_key(event)

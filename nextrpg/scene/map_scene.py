@@ -104,7 +104,9 @@ class MapScene(EventfulScene):
         left_shift = _shift(player.left, gui_width, map_width)
         top_shift = _shift(player.top, gui_height, map_height)
         shift = Coordinate(left_shift, top_shift)
-        logger.debug(t"Player {self.player.coordinate} Shift {shift}")
+        logger.debug(
+            t"Player {self.player.coordinate} Shift {shift}", duration=None
+        )
         return shift
 
     @cached_property
