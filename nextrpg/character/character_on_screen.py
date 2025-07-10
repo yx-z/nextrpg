@@ -13,8 +13,14 @@ from nextrpg.config import config
 from nextrpg.core import Direction, Millisecond, PixelPerMillisecond
 from nextrpg.draw_on_screen import DrawOnScreen, Polygon
 from nextrpg.coordinate import Coordinate
+from nextrpg.event.rpg_event import registered_events
 from nextrpg.logger import FROM_CONFIG, Logger
-from nextrpg.model import dataclass_with_instance_init, instance_init
+from nextrpg.model import (
+    NEXTRPG_INSTANCE_INIT,
+    dataclass_with_instance_init,
+    instance_init,
+)
+from nextrpg.scene.scene import Scene
 
 logger = Logger("CharacterOnScreen")
 
@@ -91,6 +97,15 @@ class CharacterOnScreen:
     @cached_property
     def complete_event(self) -> Self:
         return replace(self, _event_triggered=False)
+
+    def __getattr__(self, attr: str) -> Callable[..., Scene] | None:
+        if event := registered_events.get(attr):
+            return lambda *args, **kwargs: event(self, *args, **kwargs)
+        if attr == NEXTRPG_INSTANCE_INIT:
+            return None
+        raise AttributeError(
+            f"{attr} is neither a registered RPG event nor a member of {self}."
+        )
 
     def _visuals(
         self, visuals: tuple[CharacterVisual, ...]

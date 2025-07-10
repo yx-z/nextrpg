@@ -192,8 +192,11 @@ class Move:
         spec = CharacterSpec(name=self.to_object, character=character)
         now = get_timepoint()
 
-        next_scene = self.next_scene(spec)
-        if timed_scene := _scenes.get(str(next_scene.tmx_file)):
+        if not (tmx := _tmxs.get(self.next_scene)):
+            next_scene = self.next_scene(spec)
+            tmx = str(next_scene.tmx_file)
+
+        if timed_scene := _scenes.get(tmx):
             timepoint, scene = timed_scene
             time_delta = now - timepoint
             player = scene.init_player(spec)
@@ -201,11 +204,15 @@ class Move:
                 time_delta
             )
         else:
-            to_scene = next_scene
+            to_scene = self.next_scene(spec)
 
         while _scenes and len(_scenes) >= config().resource.map_cache_size:
             _scenes.popitem(last=False)
         _scenes[str(from_scene.tmx_file)] = _TimedScene(now, from_scene)
+
+        while _tmxs and len(_tmxs) >= config().resource.map_cache_size:
+            _tmxs.popitem(last=False)
+        _tmxs[self.next_scene] = tmx
 
         return TransitionTriple(
             from_scene=from_scene, intermediary=StaticScene(), to_scene=to_scene
@@ -225,4 +232,5 @@ def _shift(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
     return gui_axis / 2 - player_axis
 
 
+_tmxs = OrderedDict[Callable[..., MapScene], str]()
 _scenes = OrderedDict[str, _TimedScene]()

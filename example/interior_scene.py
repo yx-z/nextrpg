@@ -75,12 +75,13 @@ def greet(
     Returns:
         `None`
     """
-    say(player, f"Hello {npc.spec.name}!")
-    say(npc, f"Hello {player.spec.name}!")
-    other_npc = {"david": npc_dict["alisa"], "alisa": npc_dict["david"]}[
-        npc.spec.name
-    ]
-    say(other_npc, f"Hello, I am {other_npc.spec.name}!")
+    player.say(f"Hello {npc.spec.name}!")
+    npc.say(f"Hello {player.spec.name}!")
+    other_npc = {
+        "david": npc_dict["alisa"],
+        "alisa": npc_dict["david"],
+    }[npc.spec.name]
+    other_npc.say(f"Hello, I am {other_npc.spec.name}!")
 
 
 def sprite_sheet() -> SpriteSheet:

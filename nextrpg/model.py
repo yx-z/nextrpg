@@ -35,16 +35,19 @@ def dataclass_with_instance_init[T](cls: type[T]) -> type[T]:
     """
 
     def post_init(self) -> None:
-        if getattr(self, _INTERNAL_FIELDS_INITIALIZED, None):
+        if getattr(self, NEXTRPG_INSTANCE_INIT, None):
             return
 
         for f in fields(self):
             if isinstance(attr := getattr(self, f.name), _Init):
                 object.__setattr__(self, f.name, attr.init(self))
-        object.__setattr__(self, _INTERNAL_FIELDS_INITIALIZED, True)
+        object.__setattr__(self, NEXTRPG_INSTANCE_INIT, True)
 
     cls.__post_init__ = post_init
     return dataclass(cls, kw_only=True, frozen=True)
+
+
+NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"
 
 
 def _key(*args: Any, **kwargs: Any) -> tuple:
@@ -93,6 +96,3 @@ class cached[T, K, **P]:
 @dataclass(frozen=True)
 class _Init:
     init: Callable[[Any], Any]
-
-
-_INTERNAL_FIELDS_INITIALIZED = "_INTERNAL_FIELDS_INITIALIZED"

@@ -1,5 +1,6 @@
 from ast import (
     AST,
+    Attribute,
     Call,
     Name,
     NodeTransformer,
@@ -25,9 +26,9 @@ def register_rpg_event[R, **P](fun: Callable[P, R]) -> Callable[P, R]:
     Returns:
         `Callable`: The original function.
     """
-    if fun.__name__ in _events:
+    if fun.__name__ in registered_events:
         raise ValueError(f"Event {fun.__name__} already registered.")
-    _events.add(fun.__name__)
+    registered_events[fun.__name__] = fun
     return fun
 
 
@@ -48,16 +49,21 @@ class _AddParent(NodeTransformer):
 class _YieldEvents(NodeTransformer):
     def visit_Call(self, node: Call) -> Yield | Call:
         self.generic_visit(node)
-        if (
-            isinstance(node.func, Name)
-            and node.func.id in _events
-            and (parent := getattr(node, "_nextrpg_parent", None))
-            and not isinstance(parent, Yield)
-        ):
+        func_event = (
+            isinstance(node.func, Name) and node.func.id in registered_events
+        )
+        attr_event = (
+            isinstance(node.func, Attribute)
+            and node.func.attr in registered_events
+        )
+        no_outer_yield = not isinstance(
+            getattr(node, "_nextrpg_parent", None), Yield
+        )
+        if (func_event or attr_event) and no_outer_yield:
             return Yield(node)
         return node
 
 
-_events: set[str] = set()
+registered_events: dict[str, Callable[..., None]] = {}
 _add_parent = _AddParent()
 _yield = _YieldEvents()
