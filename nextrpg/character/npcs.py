@@ -44,19 +44,19 @@ class EventfulScene(Scene):
         generator.
     """
 
-    _player: PlayerOnScreen
-    _npcs: tuple[NpcOnScreen, ...] = field(default_factory=tuple)
-    _npc: NpcOnScreen | None = None
-    _event: RpgEventGenerator | None = None
-    _event_result: Any = None
+    player: PlayerOnScreen
+    npcs: tuple[NpcOnScreen, ...] = field(default_factory=tuple)
+    npc: NpcOnScreen | None = None
+    event_generator: RpgEventGenerator | None = None
+    event_result: Any = None
 
     @cached_property
-    def npcs(self) -> dict[str, NpcOnScreen]:
-        return {n.spec.name: n for n in self._npcs}
+    def npc_dict(self) -> dict[str, NpcOnScreen]:
+        return {n.spec.name: n for n in self.npcs}
 
     def event(self, event: PygameEvent) -> Scene:
         if (
-            not self._npc
+            not self.npc
             and isinstance(event, KeyPressDown)
             and event.key is KeyboardKey.CONFIRM
             and (npc := self._collided_npc)
@@ -65,14 +65,14 @@ class EventfulScene(Scene):
                 t"Collided with {npc.spec.name}", duration=FROM_CONFIG
             )
             scene = self._trigger(npc)
-            generator = scene._npc.generator(
-                scene._player, scene._npc, scene._npcs, scene
+            generator = scene.npc.generator(
+                scene.player, scene.npc, scene.npc_dict, scene
             )
             return next(generator)(generator, scene)
         return self.event_without_npc_trigger(event)
 
     def event_without_npc_trigger(self, event: PygameEvent) -> Self:
-        return replace(self, _player=self._player.event(event))
+        return replace(self, player=self.player.event(event))
 
     def tick(self, time_delta: Millisecond) -> Scene:
         if self._next_event:
@@ -82,8 +82,8 @@ class EventfulScene(Scene):
     def tick_without_event(self, time_delta: Millisecond) -> Self:
         return replace(
             self,
-            _player=self._player.tick(time_delta),
-            _npcs=tuple(n.tick(time_delta) for n in self._npcs),
+            player=self.player.tick(time_delta),
+            npcs=tuple(n.tick(time_delta) for n in self.npcs),
         )
 
     def send(self, event: RpgEventGenerator, result: Any = None) -> Self:
@@ -99,31 +99,31 @@ class EventfulScene(Scene):
         Returns:
             `Scene`: The scene that shall continue with the next event.
         """
-        return replace(self, _event=event, _event_result=result)
+        return replace(self, event_generator=event, event_result=result)
 
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:
-        for npc in self._npcs:
+        for npc in self.npcs:
             if self._collide(npc):
                 return npc
         return None
 
     def _collide(self, npc: NpcOnScreen) -> bool:
         return npc.draw_on_screen.rectangle.collide(
-            self._player.draw_on_screen.rectangle
+            self.player.draw_on_screen.rectangle
         )
 
     def _trigger(self, npc: NpcOnScreen) -> Self:
-        triggered_npc = npc.start_event(self._player)
+        triggered_npc = npc.start_event(self.player)
         npcs = tuple(
             triggered_npc if n.spec.name == npc.spec.name else n
-            for n in self._npcs
+            for n in self.npcs
         )
         return replace(
             self,
-            _player=self._player.start_event(triggered_npc),
-            _npc=triggered_npc,
-            _npcs=npcs,
+            player=self.player.start_event(triggered_npc),
+            npc=triggered_npc,
+            npcs=npcs
         )
 
     @cached_property
@@ -134,24 +134,30 @@ class EventfulScene(Scene):
         Returns:
             `Scene | None`: The next scene to continue event execution, if any.
         """
-        if not self._event:
+        if not self.event_generator:
             return None
 
         try:
-            return self._event.send(self._event_result)(self._event, self)
-        except StopIteration:
-            return replace(
-                self,
-                _player=self._player.complete_event,
-                _npcs=self._completed_npcs,
-                _npc=None,
-                _event=None,
-                _event_result=None,
+            return self.event_generator.send(self.event_result)(
+                self.event_generator, self
             )
+        except StopIteration:
+            return self._clear_event
+
+    @cached_property
+    def _clear_event(self) -> Self:
+        return replace(
+            self,
+            player=self.player.complete_event,
+            npcs=self._completed_npcs,
+            npc=None,
+            event_generator=None,
+            event_result=None,
+        )
 
     @cached_property
     def _completed_npcs(self) -> tuple[NpcOnScreen, ...]:
-        return tuple(n.complete_event for n in self._npcs)
+        return tuple(n.complete_event for n in self.npcs)
 
 
 type RpgEventSpecParams = tuple[

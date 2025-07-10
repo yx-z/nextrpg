@@ -16,9 +16,8 @@ from nextrpg.character.rpg_maker_character_drawing import (
 )
 from nextrpg.core import Direction
 from nextrpg.draw_on_screen import Drawing
-from nextrpg.event.move import Move
 from nextrpg.event.say import say
-from nextrpg.scene.map_scene import MapScene
+from nextrpg.scene.map_scene import MapScene, Move
 from nextrpg.scene.scene import Scene
 
 

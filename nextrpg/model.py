@@ -75,11 +75,11 @@ class cached[T, K, **P]:
             if (key := self.key_fun(*args, **kwargs)) is None:
                 return super(klass, klass).__new__(klass)
 
-            if key in klass._instances:
+            if (instance := klass._instances.get(key)) is not None:
                 klass._instances.move_to_end(key)
-                return klass._instances[key]
+                return instance
 
-            while len(klass._instances) >= self.size_fun():
+            while klass._instances and len(klass._instances) >= self.size_fun():
                 klass._instances.popitem(last=False)
 
             instance = super(klass, klass).__new__(klass)

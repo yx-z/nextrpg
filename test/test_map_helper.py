@@ -9,7 +9,7 @@ from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import Config, ResourceConfig
 from nextrpg.core import Size
 from nextrpg.coordinate import Coordinate
-from nextrpg.scene.map_helper import MapHelper
+from nextrpg.scene.map_helper import MapHelper, get_polygon
 from test.util import MockCharacterDrawing, MockSurface, override_config
 
 
@@ -109,3 +109,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
     object.__setattr__(efg, "_all_objects", [SimpleNamespace(name="def")])
     with raises(RuntimeError):
         efg.get_object("abc")
+
+
+def test_get_polygon() -> None:
+    assert not get_polygon(SimpleNamespace(x=1, y=1, width=1, height=0))

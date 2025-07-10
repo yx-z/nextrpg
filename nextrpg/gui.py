@@ -9,7 +9,7 @@ from pygame import DOUBLEBUF, font
 from pygame.display import flip, init, set_caption, set_mode
 from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
-from pygame.transform import scale
+from pygame.transform import smoothscale
 
 from nextrpg.config import (
     GuiConfig,
@@ -138,7 +138,9 @@ class Gui:
         return DrawOnScreen(
             self._center_shift,
             Drawing(
-                scale(screen, self.initial_config.size.scale(self._scaling))
+                smoothscale(
+                    screen, self.initial_config.size.scale(self._scaling)
+                )
             ),
         )
 

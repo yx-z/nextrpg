@@ -76,7 +76,7 @@ def test_npcs(mocker: MockerFixture) -> None:
     map_scene = MapScene(
         tmx_file="",
         player_spec=CharacterSpec(character=MockCharacterDrawing(), name=""),
-        _npcs=(
+        npcs=(
             NpcOnScreen(
                 coordinate=Coordinate(0, 0),
                 spec=NpcSpec(
@@ -93,7 +93,7 @@ def test_npcs(mocker: MockerFixture) -> None:
             ),
         ),
     )
-    assert map_scene.npcs
+    assert map_scene.npc_dict
     say_event = map_scene.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
     object.__setattr__(say_event._scene, "draw_on_screens", ())
     assert say_event.tick(0)
@@ -102,8 +102,8 @@ def test_npcs(mocker: MockerFixture) -> None:
     assert say_event.event(KeyPressDown(Event(KEYDOWN, key=K_SPACE)))
     new_scene = say_event.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
     assert isinstance(new_scene, MapScene)
-    player = replace(map_scene._player, coordinate=Coordinate(123, 100))
-    assert not replace(map_scene, _player=player)._collided_npc
+    player = replace(map_scene.player, coordinate=Coordinate(123, 100))
+    assert not replace(map_scene, player=player)._collided_npc
 
 
 def test_eventful_scene() -> None:
@@ -114,12 +114,12 @@ def test_eventful_scene() -> None:
     from nextrpg.character.character_on_screen import CharacterSpec
 
     eventful = EventfulScene(
-        _player=PlayerOnScreen(
+        player=PlayerOnScreen(
             coordinate=Coordinate(0, 0),
             spec=CharacterSpec(name="", character=MockCharacterDrawing()),
             collisions=(),
         ),
-        _npcs=(
+        npcs=(
             NpcOnScreen(
                 coordinate=Coordinate(0, 0),
                 spec=NpcSpec(
@@ -129,8 +129,8 @@ def test_eventful_scene() -> None:
                 ),
             ),
         ),
-        _event=gen,
-        _npc=NpcOnScreen(
+        event_generator=gen,
+        npc=NpcOnScreen(
             coordinate=Coordinate(0, 0),
             spec=NpcSpec(
                 name="npc",
@@ -151,13 +151,13 @@ def test_eventful_scene() -> None:
         coordinate=Coordinate(0, 0),
     )
     scene = EventfulScene(
-        _player=PlayerOnScreen(
+        player=PlayerOnScreen(
             coordinate=Coordinate(0, 0),
             spec=CharacterSpec(name="", character=MockCharacterDrawing()),
             collisions=(),
         ),
-        _npc=npc,
-        _npcs=(npc,),
-        _event=gen2,
+        npc=npc,
+        npcs=(npc,),
+        event_generator=gen2,
     )
     assert scene._next_event

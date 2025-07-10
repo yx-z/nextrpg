@@ -177,8 +177,9 @@ class MapHelper:
             self._polygon(coord, obj) for coord, obj in self._colliders
         )
         from_objects = tuple(
-            get_polygon(obj)
+            poly
             for obj in self.get_objects_by_class_name(config().map.collision)
+            if (poly := get_polygon(obj))
         )
         return from_tiles + from_objects
 
