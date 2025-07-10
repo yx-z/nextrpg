@@ -419,12 +419,7 @@ def _below_character_layer(
 
 
 def _is_rect(obj: TiledObject) -> bool:
-    return (
-        obj.x is not None
-        and obj.y is not None
-        and obj.width
-        and obj.height
-    )
+    return obj.x is not None and obj.y is not None and obj.width and obj.height
 
 
 def _foreground_layer(
