@@ -89,9 +89,9 @@
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">hypot</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Self</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">,</span> <span class="n">PixelPerMillisecond</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass_with_instance_init</span><span class="p">,</span> <span class="n">instance_init</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a>
@@ -378,7 +378,7 @@
                             <div id="Walk.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">Walk</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">path</span><span class="p">:</span> <span class="n"><a href="draw_on_screen.html#Polygon">nextrpg.draw_on_screen.Polygon</a></span>,</span><span class="param">	<span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span>,</span><span class="param">	<span class="n">cyclic</span><span class="p">:</span> <span class="nb">bool</span>,</span><span class="param">	<span class="n">coordinate</span><span class="p">:</span> <span class="n"><a href="coordinate.html#Coordinate">nextrpg.coordinate.Coordinate</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_last_coordinate</span><span class="p">:</span> <span class="n"><a href="coordinate.html#Coordinate">nextrpg.coordinate.Coordinate</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>,</span><span class="param">	<span class="n">_last_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></span>)</span>
+        <span class="name">Walk</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">path</span><span class="p">:</span> <span class="n"><a href="draw/draw_on_screen.html#Polygon">nextrpg.draw.draw_on_screen.Polygon</a></span>,</span><span class="param">	<span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span>,</span><span class="param">	<span class="n">cyclic</span><span class="p">:</span> <span class="nb">bool</span>,</span><span class="param">	<span class="n">coordinate</span><span class="p">:</span> <span class="n"><a href="draw/coordinate.html#Coordinate">nextrpg.draw.coordinate.Coordinate</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_last_coordinate</span><span class="p">:</span> <span class="n"><a href="draw/coordinate.html#Coordinate">nextrpg.draw.coordinate.Coordinate</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>,</span><span class="param">	<span class="n">_last_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></span>)</span>
 
         
     </div>
@@ -389,7 +389,7 @@
                             </div>
                             <div id="Walk.path" class="classattr">
                                 <div class="attr variable">
-            <span class="name">path</span><span class="annotation">: <a href="draw_on_screen.html#Polygon">nextrpg.draw_on_screen.Polygon</a></span>
+            <span class="name">path</span><span class="annotation">: <a href="draw/draw_on_screen.html#Polygon">nextrpg.draw.draw_on_screen.Polygon</a></span>
 
         
     </div>
@@ -422,7 +422,7 @@
                             </div>
                             <div id="Walk.coordinate" class="classattr">
                                 <div class="attr variable">
-            <span class="name">coordinate</span><span class="annotation">: <a href="coordinate.html#Coordinate">nextrpg.coordinate.Coordinate</a></span>
+            <span class="name">coordinate</span><span class="annotation">: <a href="draw/coordinate.html#Coordinate">nextrpg.draw.coordinate.Coordinate</a></span>
 
         
     </div>

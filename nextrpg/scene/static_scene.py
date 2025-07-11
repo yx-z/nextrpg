@@ -3,8 +3,8 @@ from functools import cached_property
 
 from nextrpg.config import config
 from nextrpg.core import Rgba
-from nextrpg.draw_on_screen import DrawOnScreen
-from nextrpg.gui import screen
+from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.gui.area import screen
 from nextrpg.scene.scene import Scene
 
 

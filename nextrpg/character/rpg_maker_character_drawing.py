@@ -20,9 +20,9 @@ from typing import Self, override
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import config
 from nextrpg.core import Direction, Millisecond, Pixel
-from nextrpg.draw_on_screen import Drawing, Size
-from nextrpg.coordinate import Coordinate
-from nextrpg.frames import CyclicFrames
+from nextrpg.draw.draw_on_screen import Drawing, Size
+from nextrpg.draw.coordinate import Coordinate
+from nextrpg.draw.frames import CyclicFrames
 from nextrpg.model import instance_init, dataclass_with_instance_init
 
 
@@ -91,9 +91,9 @@ class SpriteSheetSelection:
 
 
 @dataclass(frozen=True)
-class Margin:
+class Trim:
     """
-    Margin of a single character frame to crop from the sprite sheet.
+    Trim of a single character frame to crop from the sprite sheet.
     """
 
     top: Pixel = 0
@@ -113,13 +113,11 @@ class SpriteSheet:
     Arguments:
         `drawing`: The sprite sheet image to process.
 
-        `selection`: Optional for selecting a portion of the sprite sheet.
-
         `style`: The sprite sheet format style to use.
     """
 
     drawing: Drawing
-    margin: Margin = Margin()
+    trim: Trim = Trim()
     style: FrameType = DefaultFrameType
 
 
@@ -215,8 +213,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
 
     def _load_frames_row(self, drawing: Drawing, row: int) -> CyclicFrames:
         frames = [
-            self._crop_margin(d)
-            for d in self._crop_into_frames_at_row(drawing, row)
+            self._trim(d) for d in self._crop_into_frames_at_row(drawing, row)
         ]
         return CyclicFrames(
             frames=tuple(
@@ -238,13 +235,13 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             for i in range(num_frames)
         )
 
-    def _crop_margin(self, drawing: Drawing) -> Drawing:
-        margin = self.sprite_sheet.margin
+    def _trim(self, drawing: Drawing) -> Drawing:
+        trim = self.sprite_sheet.trim
         return drawing.crop(
-            Coordinate(margin.left, margin.top),
+            Coordinate(trim.left, trim.top),
             Size(
-                drawing.width - margin.left - margin.right,
-                drawing.height - margin.top - margin.bottom,
+                drawing.width - trim.left - trim.right,
+                drawing.height - trim.top - trim.bottom,
             ),
         )
 

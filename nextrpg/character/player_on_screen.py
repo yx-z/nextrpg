@@ -6,12 +6,10 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.character.character_on_screen import (
-    CharacterOnScreen,
-    MovingCharacterOnScreen,
-)
+from nextrpg.character.character_on_screen import CharacterOnScreen
+from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.config import config
-from nextrpg.coordinate import Coordinate
+from nextrpg.draw.coordinate import Coordinate
 from nextrpg.core import Direction, DirectionalOffset, Millisecond
 from nextrpg.event.pygame_event import (
     KeyPressDown,

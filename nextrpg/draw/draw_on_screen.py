@@ -9,15 +9,15 @@ from math import ceil
 from os import PathLike
 from typing import Self, override
 
-from pygame import Mask, SRCALPHA, Surface
-from pygame.draw import lines, polygon
+from pygame import Mask, Rect, SRCALPHA, Surface
+from pygame.draw import lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
 
 from nextrpg.config import config
-from nextrpg.coordinate import Coordinate
-from nextrpg.core import Alpha, Pixel, Rgba, Size
-from nextrpg.logger import FROM_CONFIG, Logger
+from nextrpg.draw.coordinate import Coordinate
+from nextrpg.core import Alpha, BLACK, Pixel, Rgba, Size
+from nextrpg.logger import Logger
 from nextrpg.model import cached
 
 logger = Logger("Draw")
@@ -249,7 +249,7 @@ class Polygon:
 
     @cached_property
     def _mask(self) -> Mask:
-        return from_surface(self.fill(Rgba(0, 0, 0, 255)).drawing.pygame)
+        return from_surface(self.fill(BLACK).drawing.pygame)
 
     def fill(self, color: Rgba) -> DrawOnScreen:
         """
@@ -503,3 +503,14 @@ class Rectangle(Polygon):
 
     def shift(self, coordinate: Coordinate) -> Self:
         return Rectangle(self.top_left.shift(coordinate), self.size)
+
+    def fill(
+        self, color: Rgba, border_radius: Pixel | None = None
+    ) -> DrawOnScreen:
+        surf = Surface(self.size, SRCALPHA)
+        rectangle = Rect(Coordinate(0, 0), self.size)
+        if border_radius:
+            rect(surf, color, rectangle, border_radius=border_radius)
+        else:
+            rect(surf, color, rectangle)
+        return DrawOnScreen(self.top_left, Drawing(surf))

@@ -3,9 +3,9 @@ from functools import cached_property
 from math import hypot
 from typing import NamedTuple, Self
 
-from nextrpg.coordinate import Coordinate
+from nextrpg.draw.coordinate import Coordinate
 from nextrpg.core import Direction, Millisecond, Pixel, PixelPerMillisecond
-from nextrpg.draw_on_screen import Polygon
+from nextrpg.draw.draw_on_screen import Polygon
 from nextrpg.model import dataclass_with_instance_init, instance_init
 
 

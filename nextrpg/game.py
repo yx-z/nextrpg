@@ -11,7 +11,7 @@ from pygame.time import Clock
 
 from nextrpg.config import config
 from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
-from nextrpg.gui import Gui
+from nextrpg.gui.window import Gui
 from nextrpg.logger import Logger
 from nextrpg.model import dataclass_with_instance_init, instance_init
 from nextrpg.scene.scene import Scene

@@ -10,7 +10,7 @@ from pygame.event import Event
 from pygame.locals import KEYDOWN, KEYUP, QUIT, VIDEORESIZE
 
 from nextrpg.config import KeyCode, config
-from nextrpg.draw_on_screen import Size
+from nextrpg.draw.draw_on_screen import Size
 
 
 @dataclass(frozen=True)

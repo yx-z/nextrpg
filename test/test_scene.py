@@ -1,8 +1,8 @@
 from pygame import Event
 from pygame.locals import QUIT
 
-from nextrpg.coordinate import Coordinate
-from nextrpg.draw_on_screen import DrawOnScreen, Drawing
+from nextrpg.draw.coordinate import Coordinate
+from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing
 from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.scene.scene import Scene
 from test.util import MockSurface

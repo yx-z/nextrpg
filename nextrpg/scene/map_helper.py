@@ -19,14 +19,14 @@ from pytmx import (
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config import config
 from nextrpg.core import Pixel, Size
-from nextrpg.draw_on_screen import (
+from nextrpg.draw.draw_on_screen import (
     DrawOnScreen,
     Drawing,
     Polygon,
     Rectangle,
 )
-from nextrpg.coordinate import Coordinate
-from nextrpg.logger import FROM_CONFIG, Logger
+from nextrpg.draw.coordinate import Coordinate
+from nextrpg.logger import Logger
 from nextrpg.model import cached
 
 logger = Logger("MapHelper")

@@ -1,6 +1,6 @@
 from _pytest.python_api import approx
 
-from nextrpg.coordinate import Coordinate
+from nextrpg.draw.coordinate import Coordinate
 from nextrpg.core import Direction, DirectionalOffset
 
 

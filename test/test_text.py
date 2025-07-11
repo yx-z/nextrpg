@@ -1,7 +1,7 @@
 from pytest_mock import MockerFixture
 
-from nextrpg.coordinate import Coordinate
-from nextrpg.text import Text
+from nextrpg.draw.coordinate import Coordinate
+from nextrpg.draw.text import Text
 
 
 def test_text(mocker: MockerFixture) -> None:

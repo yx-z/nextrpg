@@ -2,7 +2,6 @@
 Sample exterior scene.
 """
 
-from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.scene.map_scene import MapScene, Move
 from nextrpg.scene.scene import Scene

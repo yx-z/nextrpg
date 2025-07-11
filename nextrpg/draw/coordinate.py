@@ -85,7 +85,7 @@ class Coordinate(namedtuple("Coordinate", "left top")):
     def distance(self, other: Coordinate) -> Pixel:
         dx = self.left - other.left
         dy = self.top - other.top
-        return sqrt(dx**2 + dy**2)
+        return hypot(dx, dy)
 
 
 def _angle_difference(a1: float, a2: float) -> float:

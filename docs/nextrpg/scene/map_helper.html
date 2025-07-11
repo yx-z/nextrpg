@@ -149,14 +149,14 @@
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterOnScreen</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pixel</span><span class="p">,</span> <span class="n">Size</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>    <span class="n">DrawOnScreen</span><span class="p">,</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>    <span class="n">Drawing</span><span class="p">,</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>    <span class="n">Polygon</span><span class="p">,</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="n">Rectangle</span><span class="p">,</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="p">)</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">FROM_CONFIG</span><span class="p">,</span> <span class="n">Logger</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logger</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>
 </span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">(</span><span class="s2">&quot;MapHelper&quot;</span><span class="p">)</span>
@@ -647,7 +647,7 @@ into multiple tiles in a Tiled tmx map.</p>
                             <div id="TileBottomAndDrawOnScreen.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">TileBottomAndDrawOnScreen</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">bottom</span><span class="p">:</span> <span class="n">Pixel</span>, </span><span class="param"><span class="n">draw</span><span class="p">:</span> <span class="n"><a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a></span></span>)</span>
+        <span class="name">TileBottomAndDrawOnScreen</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">bottom</span><span class="p">:</span> <span class="n">Pixel</span>, </span><span class="param"><span class="n">draw</span><span class="p">:</span> <span class="n"><a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span></span>)</span>
 
         
     </div>
@@ -673,7 +673,7 @@ into multiple tiles in a Tiled tmx map.</p>
                             </div>
                             <div id="TileBottomAndDrawOnScreen.draw" class="classattr">
                                 <div class="attr variable">
-            <span class="name">draw</span><span class="annotation">: <a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a></span>
+            <span class="name">draw</span><span class="annotation">: <a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span>
 
         
     </div>
@@ -729,7 +729,7 @@ into multiple tiles in a Tiled tmx map.</p>
                             <div id="LayerTileBottomAndDrawOnScreen.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">LayerTileBottomAndDrawOnScreen</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">layer</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">bottom</span><span class="p">:</span> <span class="n">Pixel</span>,</span><span class="param">	<span class="n">draw_on_screen</span><span class="p">:</span> <span class="n"><a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a></span></span>)</span>
+        <span class="name">LayerTileBottomAndDrawOnScreen</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">layer</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">bottom</span><span class="p">:</span> <span class="n">Pixel</span>,</span><span class="param">	<span class="n">draw_on_screen</span><span class="p">:</span> <span class="n"><a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span></span>)</span>
 
         
     </div>
@@ -768,7 +768,7 @@ into multiple tiles in a Tiled tmx map.</p>
                             </div>
                             <div id="LayerTileBottomAndDrawOnScreen.draw_on_screen" class="classattr">
                                 <div class="attr variable">
-            <span class="name">draw_on_screen</span><span class="annotation">: <a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a></span>
+            <span class="name">draw_on_screen</span><span class="annotation">: <a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span>
 
         
     </div>
@@ -785,7 +785,7 @@ into multiple tiles in a Tiled tmx map.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">get_polygon</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">obj</span><span class="p">:</span> <span class="n">pytmx</span><span class="o">.</span><span class="n">pytmx</span><span class="o">.</span><span class="n">TiledObject</span></span><span class="return-annotation">) -> <span class="n"><a href="../draw_on_screen.html#Polygon">nextrpg.draw_on_screen.Polygon</a></span> <span class="o">|</span> <span class="kc">None</span>:</span></span>
+        <span class="name">get_polygon</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">obj</span><span class="p">:</span> <span class="n">pytmx</span><span class="o">.</span><span class="n">pytmx</span><span class="o">.</span><span class="n">TiledObject</span></span><span class="return-annotation">) -> <span class="n"><a href="../draw/draw_on_screen.html#Polygon">nextrpg.draw.draw_on_screen.Polygon</a></span> <span class="o">|</span> <span class="kc">None</span>:</span></span>
 
                 <label class="view-source-button" for="get_polygon-view-source"><span>View Source</span></label>
 
@@ -1224,7 +1224,7 @@ into multiple tiles in a Tiled tmx map.</p>
                             <div id="MapHelper.background" class="classattr">
                                         <input id="MapHelper.background-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">background</span><span class="annotation">: tuple[<a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a>, ...]</span>
+            <span class="name">background</span><span class="annotation">: tuple[<a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a>, ...]</span>
 
                 <label class="view-source-button" for="MapHelper.background-view-source"><span>View Source</span></label>
 
@@ -1350,7 +1350,7 @@ with the class name <code>config().map.above_character</code>.</p>
                             <div id="MapHelper.collisions" class="classattr">
                                         <input id="MapHelper.collisions-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">collisions</span><span class="annotation">: tuple[<a href="../draw_on_screen.html#Polygon">nextrpg.draw_on_screen.Polygon</a>, ...]</span>
+            <span class="name">collisions</span><span class="annotation">: tuple[<a href="../draw/draw_on_screen.html#Polygon">nextrpg.draw.draw_on_screen.Polygon</a>, ...]</span>
 
                 <label class="view-source-button" for="MapHelper.collisions-view-source"><span>View Source</span></label>
 

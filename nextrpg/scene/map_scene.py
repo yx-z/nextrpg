@@ -5,7 +5,7 @@ Map scene implementation.
 from dataclasses import dataclass, field, replace
 from functools import cached_property
 from os import PathLike
-from typing import Callable, NamedTuple, OrderedDict, Self, override
+from typing import Callable, NamedTuple, OrderedDict, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterSpec
@@ -13,10 +13,10 @@ from nextrpg.character.moving_npc import MovingNpcOnScreen
 from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
-from nextrpg.coordinate import Coordinate
+from nextrpg.draw.coordinate import Coordinate
 from nextrpg.core import Millisecond, Pixel
-from nextrpg.draw_on_screen import DrawOnScreen
-from nextrpg.gui import gui_size
+from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.gui.area import gui_size
 from nextrpg.logger import Logger
 from nextrpg.model import dataclass_with_instance_init, instance_init
 from nextrpg.scene.map_helper import MapHelper, get_polygon

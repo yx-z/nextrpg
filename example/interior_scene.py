@@ -2,21 +2,19 @@
 Sample interior scene.
 """
 
-from typing import Any
-
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.rpg_maker_character_drawing import (
-    Margin,
+    Trim,
     RpgMakerCharacterDrawing,
     SpriteSheet,
     SpriteSheetSelection,
 )
 from nextrpg.core import Direction
-from nextrpg.draw_on_screen import Drawing
-from nextrpg.event.say import say
+from nextrpg.draw.draw_on_screen import Drawing
+from nextrpg.event.plugins import say
 from nextrpg.scene.map_scene import MapScene, Move
 from nextrpg.scene.scene import Scene
 
@@ -75,13 +73,14 @@ def greet(
     Returns:
         `None`
     """
-    player.say(f"Hello {npc.spec.name}!")
-    npc.say(f"Hello {player.spec.name}!")
+    player: f"Hello {npc.spec.name}!"
+    npc: f"Hello {player.spec.name}!"
+
     other_npc = {
         "david": npc_dict["alisa"],
         "alisa": npc_dict["david"],
     }[npc.spec.name]
-    other_npc.say(f"Hello, I am {other_npc.spec.name}!")
+    other_npc: f"Hello, I am {other_npc.spec.name}!"
 
 
 def sprite_sheet() -> SpriteSheet:
@@ -94,8 +93,8 @@ def sprite_sheet() -> SpriteSheet:
     return SpriteSheet(
         # Player sprite sheet.
         Drawing("example/assets/Characters_MV.png"),
-        # Declare margins to correctly detect collision/bounding box.
-        Margin(top=25),
+        # Declare trims to correctly detect collision/bounding box.
+        Trim(top=25),
     )
 
 

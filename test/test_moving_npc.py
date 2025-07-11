@@ -2,9 +2,9 @@ from dataclasses import replace
 
 from nextrpg.character.moving_npc import MovingNpcOnScreen
 from nextrpg.character.npcs import NpcSpec
-from nextrpg.coordinate import Coordinate
+from nextrpg.draw.coordinate import Coordinate
 from nextrpg.core import Size
-from nextrpg.draw_on_screen import Rectangle
+from nextrpg.draw.draw_on_screen import Rectangle
 from test.util import MockCharacterDrawing
 
 

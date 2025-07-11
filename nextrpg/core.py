@@ -12,6 +12,8 @@ from typing import Self
 import pygame
 from pygame.font import SysFont
 
+from nextrpg.model import cached
+
 type Alpha = int
 """
 Alpha channel that defines the transparency between [0, 255] for images.
@@ -38,6 +40,9 @@ class Rgba(namedtuple("Rgba", "red green blue alpha")):
     blue: int
     alpha: Alpha
 
+
+BLACK = Rgba(0, 0, 0, 255)
+WHITE = Rgba(255, 255, 255, 255)
 
 type Millisecond = int | float
 """

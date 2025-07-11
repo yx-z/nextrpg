@@ -8,7 +8,7 @@ from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import Config, ResourceConfig
 from nextrpg.core import Size
-from nextrpg.coordinate import Coordinate
+from nextrpg.draw.coordinate import Coordinate
 from nextrpg.scene.map_helper import MapHelper, get_polygon
 from test.util import MockCharacterDrawing, MockSurface, override_config
 

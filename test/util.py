@@ -7,9 +7,9 @@ from pygame import Surface
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config import Config, config, set_config
-from nextrpg.coordinate import Coordinate
+from nextrpg.draw.coordinate import Coordinate
 from nextrpg.core import Direction, Millisecond
-from nextrpg.draw_on_screen import DrawOnScreen, Drawing
+from nextrpg.draw.draw_on_screen import Drawing
 
 
 class MockColor(NamedTuple):

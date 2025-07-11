@@ -4,13 +4,16 @@ You can either use the implicit, default configuration
 or pass the customized instance to `nextrpg.start_game.start_game`.
 """
 
-from dataclasses import dataclass
+from ast import NodeTransformer
+from dataclasses import dataclass, field
 from enum import Enum, IntEnum, auto
+from types import ModuleType
 
 from pygame import K_RETURN
 from pygame.locals import K_DOWN, K_F1, K_LEFT, K_RIGHT, K_UP
 
 from nextrpg.core import (
+    BLACK,
     Direction,
     Font,
     Millisecond,
@@ -18,7 +21,10 @@ from nextrpg.core import (
     PixelPerMillisecond,
     Rgba,
     Size,
+    WHITE,
 )
+from nextrpg.event import plugins
+from nextrpg.event.code_transformers import ADD_PARENT, ADD_YIELD, ANNOTATE_SAY
 
 
 class LogLevel(IntEnum):
@@ -137,7 +143,7 @@ class GuiConfig:
     title: str = "nextrpg"
     size: Size = Size(1280, 720)
     frames_per_second: int = 60
-    background_color: Rgba = Rgba(0, 0, 0, 255)
+    background_color: Rgba = BLACK
     gui_mode: GuiMode = GuiMode.WINDOWED
     resize_mode: ResizeMode = ResizeMode.SCALE
     allow_window_resize: bool = True
@@ -300,20 +306,34 @@ class TextConfig:
 
         `color`: The color to use for rendering text.
 
-        `margin`: The margin to use for rendering text.
+        `line_spacing`: The line spacing to use for rendering text.
 
         `antialias`: Whether to use antialiasing for rendering text.
     """
 
     font: Font = Font(24)
-    color: Rgba = Rgba(255, 255, 255, 255)
-    margin: Pixel = 4
+    color: Rgba = WHITE
+    line_spacing: Pixel = 4
     antialias: bool = True
 
 
 @dataclass(frozen=True)
 class DrawOnScreenConfig:
     stroke_width: Pixel = 2
+
+
+@dataclass(frozen=True)
+class EventConfig:
+    modules: list[ModuleType] = field(default_factory=lambda: [plugins])
+    transformers: list[NodeTransformer] = field(
+        default_factory=lambda: [ADD_PARENT, ADD_YIELD, ANNOTATE_SAY]
+    )
+
+
+@dataclass(frozen=True)
+class SayEventConfig:
+    background: Rgba = WHITE
+    text: TextConfig = TextConfig(color=BLACK)
 
 
 @dataclass(frozen=True)
@@ -366,6 +386,8 @@ class Config:
     transition: TransitionConfig = TransitionConfig()
     text: TextConfig = TextConfig()
     draw_on_screen: DrawOnScreenConfig = DrawOnScreenConfig()
+    event: EventConfig = EventConfig()
+    say_event: SayEventConfig = SayEventConfig()
     debug: DebugConfig | None = None
 
 

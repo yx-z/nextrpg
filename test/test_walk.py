@@ -1,5 +1,5 @@
-from nextrpg.coordinate import Coordinate
-from nextrpg.draw_on_screen import Polygon
+from nextrpg.draw.coordinate import Coordinate
+from nextrpg.draw.draw_on_screen import Polygon
 from nextrpg.walk import Walk
 
 

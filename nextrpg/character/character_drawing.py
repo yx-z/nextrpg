@@ -8,7 +8,7 @@ from functools import cached_property
 from typing import Self
 
 from nextrpg.core import Direction, Millisecond
-from nextrpg.draw_on_screen import Drawing
+from nextrpg.draw.draw_on_screen import Drawing
 
 
 @dataclass(frozen=True)

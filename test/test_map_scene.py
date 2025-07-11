@@ -8,13 +8,12 @@ from pytest_mock import MockerFixture
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.npcs import NpcSpec
 from nextrpg.config import Config, DebugConfig, ResourceConfig
-from nextrpg.coordinate import Coordinate
+from nextrpg.draw.coordinate import Coordinate
 from nextrpg.core import Size
-from nextrpg.draw_on_screen import DrawOnScreen, Drawing, Rectangle
+from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing, Rectangle
 from nextrpg.event.pygame_event import Quit
 from nextrpg.scene.map_helper import TileBottomAndDrawOnScreen
 from nextrpg.scene.map_scene import MapScene, Move, _shift
-from nextrpg.scene.scene import Scene
 from test.util import MockCharacterDrawing, MockSurface, override_config
 
 

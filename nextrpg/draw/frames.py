@@ -7,7 +7,7 @@ from functools import cached_property
 from typing import Self
 
 from nextrpg.core import Millisecond, Timer
-from nextrpg.draw_on_screen import Drawing
+from nextrpg.draw.draw_on_screen import Drawing
 from nextrpg.model import instance_init, dataclass_with_instance_init
 
 

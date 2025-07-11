@@ -10,10 +10,9 @@ from nextrpg.character.character_on_screen import (
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
 from nextrpg.core import Millisecond, PixelPerMillisecond
-from nextrpg.draw_on_screen import Polygon
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
-from nextrpg.event.rpg_event import transform_event
-from nextrpg.logger import FROM_CONFIG, Logger
+from nextrpg.event.transform_event import transform_event
+from nextrpg.logger import Logger
 from nextrpg.model import dataclass_with_instance_init, instance_init
 from nextrpg.scene.scene import Scene
 

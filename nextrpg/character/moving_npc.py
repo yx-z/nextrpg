@@ -2,11 +2,11 @@ from dataclasses import field, replace
 from functools import cached_property
 from typing import NamedTuple, Self, override
 
-from nextrpg.character.character_on_screen import MovingCharacterOnScreen
+from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npcs import NpcOnScreen, NpcSpec
-from nextrpg.coordinate import Coordinate
+from nextrpg.draw.coordinate import Coordinate
 from nextrpg.core import Millisecond, PixelPerMillisecond, Timer
-from nextrpg.draw_on_screen import Polygon
+from nextrpg.draw.draw_on_screen import Polygon
 from nextrpg.model import dataclass_with_instance_init, instance_init
 from nextrpg.walk import Walk
 

@@ -2,7 +2,8 @@ from ast import parse
 
 from pytest import raises
 
-from nextrpg.event.rpg_event import _yield, register_rpg_event
+from nextrpg.event.rpg_event import register_rpg_event
+from nextrpg.event.code_transformers import ADD_YIELD
 
 
 def test_register_rpg_event() -> None:
@@ -17,4 +18,4 @@ def test_register_rpg_event() -> None:
 
 
 def test_yield_events() -> None:
-    assert _yield.visit(parse("""def fun():\n  print()"""))
+    assert ADD_YIELD.visit(parse("""def fun():\n  print()"""))

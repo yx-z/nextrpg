@@ -4,7 +4,7 @@ from typing import override
 
 from nextrpg.config import config
 from nextrpg.core import Millisecond
-from nextrpg.draw_on_screen import DrawOnScreen
+from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.model import instance_init, dataclass_with_instance_init
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene

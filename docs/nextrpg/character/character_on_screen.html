@@ -31,9 +31,6 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
-                    <a class="variable" href="#logger">logger</a>
-            </li>
-            <li>
                     <a class="variable" href="#CharacterVisual">CharacterVisual</a>
             </li>
             <li>
@@ -90,27 +87,6 @@
                 </ul>
 
             </li>
-            <li>
-                    <a class="class" href="#MovingCharacterOnScreen">MovingCharacterOnScreen</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="variable" href="#MovingCharacterOnScreen.collisions">collisions</a>
-                        </li>
-                        <li>
-                                <a class="variable" href="#MovingCharacterOnScreen.move_speed">move_speed</a>
-                        </li>
-                        <li>
-                                <a class="variable" href="#MovingCharacterOnScreen.moving">moving</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#MovingCharacterOnScreen.move">move</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#MovingCharacterOnScreen.tick">tick</a>
-                        </li>
-                </ul>
-
-            </li>
     </ul>
 
 
@@ -138,245 +114,119 @@
 </span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="sd">Handles character movement and collision detection.</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Self</span><span class="p">,</span> <span class="n">override</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">PixelPerMillisecond</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span><span class="p">,</span> <span class="n">Polygon</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.rpg_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">registered_events</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">FROM_CONFIG</span><span class="p">,</span> <span class="n">Logger</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>    <span class="n">NEXTRPG_INSTANCE_INIT</span><span class="p">,</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>    <span class="n">dataclass_with_instance_init</span><span class="p">,</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>    <span class="n">instance_init</span><span class="p">,</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="p">)</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">replace</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.rpg_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">registered_events</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a>    <span class="n">NEXTRPG_INSTANCE_INIT</span><span class="p">,</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>    <span class="n">dataclass_with_instance_init</span><span class="p">,</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>    <span class="n">instance_init</span><span class="p">,</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="p">)</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="nb">type</span> <span class="n">CharacterVisual</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CharacterOnScreen</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">(</span><span class="s2">&quot;CharacterOnScreen&quot;</span><span class="p">)</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="nb">type</span> <span class="n">CharacterVisual</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CharacterOnScreen</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>
-</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterSpec</span><span class="p">:</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>    <span class="n">below_foreground_visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CharacterVisual</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>    <span class="n">above_foreground_visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CharacterVisual</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterSpec</span><span class="p">:</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>    <span class="n">below_foreground_visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CharacterVisual</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>    <span class="n">above_foreground_visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CharacterVisual</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="nd">@dataclass_with_instance_init</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">:</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">    Represents a character that can be displayed and moved on screen.</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="nd">@dataclass_with_instance_init</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">:</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="sd">    Represents a character that can be displayed and moved on screen.</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>
-</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">    Handles character movement, collision detection, and event processing for</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">    character interactions with the game environment.</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="sd">    Handles character movement, collision detection, and event processing for</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="sd">    character interactions with the game environment.</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="sd">    Arguments:</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="sd">        `character_drawing`: The visual representation of the character.</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">        `coordinate`: The current position of the character on screen.</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>
-</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="sd">        `character_drawing`: The visual representation of the character.</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>
-</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="sd">        `coordinate`: The current position of the character on screen.</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="sd">        `speed`: Movement speed of the character in pixels.</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="sd">        `collisions`: Tuple of polygons representing collision boundaries.</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">        `speed`: Movement speed of the character in pixels.</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>
-</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="sd">        `collisions`: Tuple of polygons representing collision boundaries.</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">CharacterSpec</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">character</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>    <span class="p">)</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>    <span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>        <span class="n">below</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">below_foreground_visuals</span><span class="p">)</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="n">above</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">above_foreground_visuals</span><span class="p">)</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>        <span class="k">return</span> <span class="n">below</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span> <span class="o">+</span> <span class="n">above</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">CharacterSpec</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">character</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>    <span class="p">)</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>    <span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>        <span class="n">below</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">below_foreground_visuals</span><span class="p">)</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>        <span class="n">above</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">above_foreground_visuals</span><span class="p">)</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>        <span class="k">return</span> <span class="n">below</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span> <span class="o">+</span> <span class="n">above</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">        Creates drawable representations of the character and visuals.</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">        Creates drawable representations of the character and visuals.</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">        Returns:</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">            `CharacterAndVisuals`: A tuple containing the character&#39;s drawable</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">            representation and any associated visual elements.</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">        Update the character&#39;s state for a single game loop.</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">            `time_delta`: The elapsed time since the last update.</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">        Returns:</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">            `CharacterAndVisuals`: A tuple containing the character&#39;s drawable</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">            representation and any associated visual elements.</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">        Update the character&#39;s state for a single game loop.</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">            `time_delta`: The elapsed time since the last update.</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">        Returns:</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">            `CharacterOnScreen`: The updated character state after the step.</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">        Returns:</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">            `CharacterOnScreen`: The updated character state after the step.</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Scene</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>        <span class="k">if</span> <span class="n">event</span> <span class="o">:=</span> <span class="n">registered_events</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr</span><span class="p">):</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>            <span class="k">return</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="k">if</span> <span class="n">attr</span> <span class="o">==</span> <span class="n">NEXTRPG_INSTANCE_INIT</span><span class="p">:</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>            <span class="k">return</span> <span class="kc">None</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2"> is neither a registered RPG event nor a member of </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">.&quot;</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>        <span class="p">)</span>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_visuals</span><span class="p">(</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CharacterVisual</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">d</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">visuals</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingCharacterOnScreen</span><span class="p">(</span><span class="n">CharacterOnScreen</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Polygon</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_speed</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>    <span class="p">)</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">        Get whether the character is currently moving.</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="sd">        Returns:</span>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a><span class="sd">            `bool`: Whether the character is currently moving.</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">        Move the character based on the current speed and time delta.</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">            `time_delta`: The time that has passed since the last update.</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">        Returns:</span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">            `Coordinate`: The updated character position after the move step.</span>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>    <span class="nd">@override</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="sd">        Update the character&#39;s state for a single game step/frame.</span>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="sd">        Calculates movement based on currently pressed keys, handles collision</span>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">        detection, and updates the character&#39;s drawing state (moving or idle).</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">            `time_delta`: The time that has passed since</span>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">                the last update, used for calculating movement distance.</span>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">        Returns:</span>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">            `CharacterOnScreen`: The updated character state after the step.</span>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span><span class="p">:</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>        <span class="n">moved_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span> <span class="k">else</span> <span class="kc">None</span>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>        <span class="n">character</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>        <span class="p">)</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>        <span class="n">coordinate</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>            <span class="n">moved_coord</span>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>            <span class="k">if</span> <span class="n">moved_coord</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_can_move</span><span class="p">(</span><span class="n">moved_coord</span><span class="p">)</span>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>        <span class="p">)</span>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">character</span><span class="p">,</span> <span class="n">coordinate</span><span class="o">=</span><span class="n">coordinate</span><span class="p">)</span>
-</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>
-</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_can_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">debug</span> <span class="o">:=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">)</span> <span class="ow">and</span> <span class="n">debug</span><span class="o">.</span><span class="n">ignore_map_collisions</span><span class="p">:</span>
-</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>            <span class="k">return</span> <span class="kc">True</span>
-</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>
-</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>        <span class="n">rect</span> <span class="o">=</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span><span class="o">.</span><span class="n">rectangle</span>
-</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>        <span class="n">hit_coords</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="p">{</span><span class="n">rect</span><span class="o">.</span><span class="n">bottom_left</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">center_left</span><span class="p">},</span>
-</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="p">{</span><span class="n">rect</span><span class="o">.</span><span class="n">bottom_right</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">center_right</span><span class="p">},</span>
-</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_right</span><span class="p">,</span>
-</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_center</span><span class="p">,</span>
-</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_left</span><span class="p">,</span>
-</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>            <span class="p">},</span>
-</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span> <span class="p">{</span><span class="n">rect</span><span class="o">.</span><span class="n">center_right</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">center</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">center_left</span><span class="p">},</span>
-</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">:</span> <span class="p">{</span><span class="n">rect</span><span class="o">.</span><span class="n">center_left</span><span class="p">},</span>
-</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">:</span> <span class="p">{</span><span class="n">rect</span><span class="o">.</span><span class="n">center_right</span><span class="p">},</span>
-</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_left</span><span class="p">,</span>
-</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">center_left</span><span class="p">,</span>
-</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_center</span><span class="p">,</span>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>            <span class="p">},</span>
-</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_right</span><span class="p">,</span>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">center_right</span><span class="p">,</span>
-</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_center</span><span class="p">,</span>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>            <span class="p">},</span>
-</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>        <span class="p">}[</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">direction</span><span class="p">]</span>
-</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>
-</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>        <span class="k">if</span> <span class="n">collision_and_coord</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collide</span><span class="p">(</span><span class="n">hit_coords</span><span class="p">):</span>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>            <span class="n">collision</span><span class="p">,</span> <span class="n">coord</span> <span class="o">=</span> <span class="n">collision_and_coord</span>
-</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Collision </span><span class="si">{coord}</span><span class="s2"> and </span><span class="si">{collision.points}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>        <span class="k">return</span> <span class="kc">True</span>
-</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>
-</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_collide</span><span class="p">(</span>
-</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">hit_coords</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">]</span>
-</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_CollisionAndCoord</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>        <span class="k">for</span> <span class="n">collision</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collisions</span><span class="p">:</span>
-</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>            <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">hit_coords</span><span class="p">:</span>
-</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>                <span class="k">if</span> <span class="n">collision</span><span class="o">.</span><span class="n">contain</span><span class="p">(</span><span class="n">coord</span><span class="p">):</span>
-</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>                    <span class="k">return</span> <span class="n">_CollisionAndCoord</span><span class="p">(</span><span class="n">collision</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
-</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>        <span class="k">return</span> <span class="kc">None</span>
-</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>
-</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>
-</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_CollisionAndCoord</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>    <span class="n">polygon</span><span class="p">:</span> <span class="n">Polygon</span>
-</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>    <span class="n">coord</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Scene</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>        <span class="k">if</span> <span class="n">event</span> <span class="o">:=</span> <span class="n">registered_events</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr</span><span class="p">):</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>            <span class="k">return</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="k">if</span> <span class="n">attr</span> <span class="o">==</span> <span class="n">NEXTRPG_INSTANCE_INIT</span><span class="p">:</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2"> is neither a registered RPG event nor a member of </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">.&quot;</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>        <span class="p">)</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_visuals</span><span class="p">(</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CharacterVisual</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">d</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">visuals</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 </span></pre></div>
 
 
             </section>
-                <section id="logger">
-                    <div class="attr variable">
-            <span class="name">logger</span>        =
-<span class="default_value">Logger(component=&#39;CharacterOnScreen&#39;)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#logger"></a>
-    
-    
-
-                </section>
                 <section id="CharacterVisual">
                     <div class="attr variable">
             <span class="def">type</span> <span class="name">CharacterVisual</span>        =
 <input id="CharacterVisual-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-            <label class="view-value-button pdoc-button" for="CharacterVisual-view-value"></label><span class="default_value">Callable[[<a href="#CharacterOnScreen">CharacterOnScreen</a>], tuple[<a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a>, ...]]</span>
+            <label class="view-value-button pdoc-button" for="CharacterVisual-view-value"></label><span class="default_value">Callable[[<a href="#CharacterOnScreen">CharacterOnScreen</a>], tuple[<a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a>, ...]]</span>
 
         
     </div>
@@ -397,12 +247,12 @@
 
     </div>
     <a class="headerlink" href="#CharacterSpec"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterSpec-31"><a href="#CharacterSpec-31"><span class="linenos">31</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="CharacterSpec-32"><a href="#CharacterSpec-32"><span class="linenos">32</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterSpec</span><span class="p">:</span>
-</span><span id="CharacterSpec-33"><a href="#CharacterSpec-33"><span class="linenos">33</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="CharacterSpec-34"><a href="#CharacterSpec-34"><span class="linenos">34</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
-</span><span id="CharacterSpec-35"><a href="#CharacterSpec-35"><span class="linenos">35</span></a>    <span class="n">below_foreground_visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CharacterVisual</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
-</span><span id="CharacterSpec-36"><a href="#CharacterSpec-36"><span class="linenos">36</span></a>    <span class="n">above_foreground_visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CharacterVisual</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterSpec-26"><a href="#CharacterSpec-26"><span class="linenos">26</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="CharacterSpec-27"><a href="#CharacterSpec-27"><span class="linenos">27</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterSpec</span><span class="p">:</span>
+</span><span id="CharacterSpec-28"><a href="#CharacterSpec-28"><span class="linenos">28</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="CharacterSpec-29"><a href="#CharacterSpec-29"><span class="linenos">29</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
+</span><span id="CharacterSpec-30"><a href="#CharacterSpec-30"><span class="linenos">30</span></a>    <span class="n">below_foreground_visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CharacterVisual</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+</span><span id="CharacterSpec-31"><a href="#CharacterSpec-31"><span class="linenos">31</span></a>    <span class="n">above_foreground_visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CharacterVisual</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
 </span></pre></div>
 
 
@@ -479,82 +329,82 @@
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen-39"><a href="#CharacterOnScreen-39"><span class="linenos"> 39</span></a><span class="nd">@dataclass_with_instance_init</span>
-</span><span id="CharacterOnScreen-40"><a href="#CharacterOnScreen-40"><span class="linenos"> 40</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">:</span>
-</span><span id="CharacterOnScreen-41"><a href="#CharacterOnScreen-41"><span class="linenos"> 41</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-42"><a href="#CharacterOnScreen-42"><span class="linenos"> 42</span></a><span class="sd">    Represents a character that can be displayed and moved on screen.</span>
-</span><span id="CharacterOnScreen-43"><a href="#CharacterOnScreen-43"><span class="linenos"> 43</span></a>
-</span><span id="CharacterOnScreen-44"><a href="#CharacterOnScreen-44"><span class="linenos"> 44</span></a><span class="sd">    Handles character movement, collision detection, and event processing for</span>
-</span><span id="CharacterOnScreen-45"><a href="#CharacterOnScreen-45"><span class="linenos"> 45</span></a><span class="sd">    character interactions with the game environment.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen-34"><a href="#CharacterOnScreen-34"><span class="linenos"> 34</span></a><span class="nd">@dataclass_with_instance_init</span>
+</span><span id="CharacterOnScreen-35"><a href="#CharacterOnScreen-35"><span class="linenos"> 35</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-36"><a href="#CharacterOnScreen-36"><span class="linenos"> 36</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-37"><a href="#CharacterOnScreen-37"><span class="linenos"> 37</span></a><span class="sd">    Represents a character that can be displayed and moved on screen.</span>
+</span><span id="CharacterOnScreen-38"><a href="#CharacterOnScreen-38"><span class="linenos"> 38</span></a>
+</span><span id="CharacterOnScreen-39"><a href="#CharacterOnScreen-39"><span class="linenos"> 39</span></a><span class="sd">    Handles character movement, collision detection, and event processing for</span>
+</span><span id="CharacterOnScreen-40"><a href="#CharacterOnScreen-40"><span class="linenos"> 40</span></a><span class="sd">    character interactions with the game environment.</span>
+</span><span id="CharacterOnScreen-41"><a href="#CharacterOnScreen-41"><span class="linenos"> 41</span></a>
+</span><span id="CharacterOnScreen-42"><a href="#CharacterOnScreen-42"><span class="linenos"> 42</span></a><span class="sd">    Arguments:</span>
+</span><span id="CharacterOnScreen-43"><a href="#CharacterOnScreen-43"><span class="linenos"> 43</span></a><span class="sd">        `character_drawing`: The visual representation of the character.</span>
+</span><span id="CharacterOnScreen-44"><a href="#CharacterOnScreen-44"><span class="linenos"> 44</span></a>
+</span><span id="CharacterOnScreen-45"><a href="#CharacterOnScreen-45"><span class="linenos"> 45</span></a><span class="sd">        `coordinate`: The current position of the character on screen.</span>
 </span><span id="CharacterOnScreen-46"><a href="#CharacterOnScreen-46"><span class="linenos"> 46</span></a>
-</span><span id="CharacterOnScreen-47"><a href="#CharacterOnScreen-47"><span class="linenos"> 47</span></a><span class="sd">    Arguments:</span>
-</span><span id="CharacterOnScreen-48"><a href="#CharacterOnScreen-48"><span class="linenos"> 48</span></a><span class="sd">        `character_drawing`: The visual representation of the character.</span>
-</span><span id="CharacterOnScreen-49"><a href="#CharacterOnScreen-49"><span class="linenos"> 49</span></a>
-</span><span id="CharacterOnScreen-50"><a href="#CharacterOnScreen-50"><span class="linenos"> 50</span></a><span class="sd">        `coordinate`: The current position of the character on screen.</span>
+</span><span id="CharacterOnScreen-47"><a href="#CharacterOnScreen-47"><span class="linenos"> 47</span></a><span class="sd">        `speed`: Movement speed of the character in pixels.</span>
+</span><span id="CharacterOnScreen-48"><a href="#CharacterOnScreen-48"><span class="linenos"> 48</span></a>
+</span><span id="CharacterOnScreen-49"><a href="#CharacterOnScreen-49"><span class="linenos"> 49</span></a><span class="sd">        `collisions`: Tuple of polygons representing collision boundaries.</span>
+</span><span id="CharacterOnScreen-50"><a href="#CharacterOnScreen-50"><span class="linenos"> 50</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen-51"><a href="#CharacterOnScreen-51"><span class="linenos"> 51</span></a>
-</span><span id="CharacterOnScreen-52"><a href="#CharacterOnScreen-52"><span class="linenos"> 52</span></a><span class="sd">        `speed`: Movement speed of the character in pixels.</span>
-</span><span id="CharacterOnScreen-53"><a href="#CharacterOnScreen-53"><span class="linenos"> 53</span></a>
-</span><span id="CharacterOnScreen-54"><a href="#CharacterOnScreen-54"><span class="linenos"> 54</span></a><span class="sd">        `collisions`: Tuple of polygons representing collision boundaries.</span>
-</span><span id="CharacterOnScreen-55"><a href="#CharacterOnScreen-55"><span class="linenos"> 55</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-56"><a href="#CharacterOnScreen-56"><span class="linenos"> 56</span></a>
-</span><span id="CharacterOnScreen-57"><a href="#CharacterOnScreen-57"><span class="linenos"> 57</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">CharacterSpec</span>
-</span><span id="CharacterOnScreen-58"><a href="#CharacterOnScreen-58"><span class="linenos"> 58</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="CharacterOnScreen-59"><a href="#CharacterOnScreen-59"><span class="linenos"> 59</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
-</span><span id="CharacterOnScreen-60"><a href="#CharacterOnScreen-60"><span class="linenos"> 60</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">character</span>
-</span><span id="CharacterOnScreen-61"><a href="#CharacterOnScreen-61"><span class="linenos"> 61</span></a>    <span class="p">)</span>
-</span><span id="CharacterOnScreen-62"><a href="#CharacterOnScreen-62"><span class="linenos"> 62</span></a>    <span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="CharacterOnScreen-63"><a href="#CharacterOnScreen-63"><span class="linenos"> 63</span></a>
-</span><span id="CharacterOnScreen-64"><a href="#CharacterOnScreen-64"><span class="linenos"> 64</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen-65"><a href="#CharacterOnScreen-65"><span class="linenos"> 65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="CharacterOnScreen-66"><a href="#CharacterOnScreen-66"><span class="linenos"> 66</span></a>        <span class="n">below</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">below_foreground_visuals</span><span class="p">)</span>
-</span><span id="CharacterOnScreen-67"><a href="#CharacterOnScreen-67"><span class="linenos"> 67</span></a>        <span class="n">above</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">above_foreground_visuals</span><span class="p">)</span>
-</span><span id="CharacterOnScreen-68"><a href="#CharacterOnScreen-68"><span class="linenos"> 68</span></a>        <span class="k">return</span> <span class="n">below</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span> <span class="o">+</span> <span class="n">above</span>
+</span><span id="CharacterOnScreen-52"><a href="#CharacterOnScreen-52"><span class="linenos"> 52</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">CharacterSpec</span>
+</span><span id="CharacterOnScreen-53"><a href="#CharacterOnScreen-53"><span class="linenos"> 53</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="CharacterOnScreen-54"><a href="#CharacterOnScreen-54"><span class="linenos"> 54</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="CharacterOnScreen-55"><a href="#CharacterOnScreen-55"><span class="linenos"> 55</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">character</span>
+</span><span id="CharacterOnScreen-56"><a href="#CharacterOnScreen-56"><span class="linenos"> 56</span></a>    <span class="p">)</span>
+</span><span id="CharacterOnScreen-57"><a href="#CharacterOnScreen-57"><span class="linenos"> 57</span></a>    <span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="CharacterOnScreen-58"><a href="#CharacterOnScreen-58"><span class="linenos"> 58</span></a>
+</span><span id="CharacterOnScreen-59"><a href="#CharacterOnScreen-59"><span class="linenos"> 59</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen-60"><a href="#CharacterOnScreen-60"><span class="linenos"> 60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="CharacterOnScreen-61"><a href="#CharacterOnScreen-61"><span class="linenos"> 61</span></a>        <span class="n">below</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">below_foreground_visuals</span><span class="p">)</span>
+</span><span id="CharacterOnScreen-62"><a href="#CharacterOnScreen-62"><span class="linenos"> 62</span></a>        <span class="n">above</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">above_foreground_visuals</span><span class="p">)</span>
+</span><span id="CharacterOnScreen-63"><a href="#CharacterOnScreen-63"><span class="linenos"> 63</span></a>        <span class="k">return</span> <span class="n">below</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span> <span class="o">+</span> <span class="n">above</span>
+</span><span id="CharacterOnScreen-64"><a href="#CharacterOnScreen-64"><span class="linenos"> 64</span></a>
+</span><span id="CharacterOnScreen-65"><a href="#CharacterOnScreen-65"><span class="linenos"> 65</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen-66"><a href="#CharacterOnScreen-66"><span class="linenos"> 66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-67"><a href="#CharacterOnScreen-67"><span class="linenos"> 67</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-68"><a href="#CharacterOnScreen-68"><span class="linenos"> 68</span></a><span class="sd">        Creates drawable representations of the character and visuals.</span>
 </span><span id="CharacterOnScreen-69"><a href="#CharacterOnScreen-69"><span class="linenos"> 69</span></a>
-</span><span id="CharacterOnScreen-70"><a href="#CharacterOnScreen-70"><span class="linenos"> 70</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen-71"><a href="#CharacterOnScreen-71"><span class="linenos"> 71</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
-</span><span id="CharacterOnScreen-72"><a href="#CharacterOnScreen-72"><span class="linenos"> 72</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-73"><a href="#CharacterOnScreen-73"><span class="linenos"> 73</span></a><span class="sd">        Creates drawable representations of the character and visuals.</span>
-</span><span id="CharacterOnScreen-74"><a href="#CharacterOnScreen-74"><span class="linenos"> 74</span></a>
-</span><span id="CharacterOnScreen-75"><a href="#CharacterOnScreen-75"><span class="linenos"> 75</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen-76"><a href="#CharacterOnScreen-76"><span class="linenos"> 76</span></a><span class="sd">            `CharacterAndVisuals`: A tuple containing the character&#39;s drawable</span>
-</span><span id="CharacterOnScreen-77"><a href="#CharacterOnScreen-77"><span class="linenos"> 77</span></a><span class="sd">            representation and any associated visual elements.</span>
-</span><span id="CharacterOnScreen-78"><a href="#CharacterOnScreen-78"><span class="linenos"> 78</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-79"><a href="#CharacterOnScreen-79"><span class="linenos"> 79</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
-</span><span id="CharacterOnScreen-80"><a href="#CharacterOnScreen-80"><span class="linenos"> 80</span></a>
-</span><span id="CharacterOnScreen-81"><a href="#CharacterOnScreen-81"><span class="linenos"> 81</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen-82"><a href="#CharacterOnScreen-82"><span class="linenos"> 82</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-83"><a href="#CharacterOnScreen-83"><span class="linenos"> 83</span></a><span class="sd">        Update the character&#39;s state for a single game loop.</span>
-</span><span id="CharacterOnScreen-84"><a href="#CharacterOnScreen-84"><span class="linenos"> 84</span></a>
-</span><span id="CharacterOnScreen-85"><a href="#CharacterOnScreen-85"><span class="linenos"> 85</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterOnScreen-86"><a href="#CharacterOnScreen-86"><span class="linenos"> 86</span></a><span class="sd">            `time_delta`: The elapsed time since the last update.</span>
+</span><span id="CharacterOnScreen-70"><a href="#CharacterOnScreen-70"><span class="linenos"> 70</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen-71"><a href="#CharacterOnScreen-71"><span class="linenos"> 71</span></a><span class="sd">            `CharacterAndVisuals`: A tuple containing the character&#39;s drawable</span>
+</span><span id="CharacterOnScreen-72"><a href="#CharacterOnScreen-72"><span class="linenos"> 72</span></a><span class="sd">            representation and any associated visual elements.</span>
+</span><span id="CharacterOnScreen-73"><a href="#CharacterOnScreen-73"><span class="linenos"> 73</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-74"><a href="#CharacterOnScreen-74"><span class="linenos"> 74</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
+</span><span id="CharacterOnScreen-75"><a href="#CharacterOnScreen-75"><span class="linenos"> 75</span></a>
+</span><span id="CharacterOnScreen-76"><a href="#CharacterOnScreen-76"><span class="linenos"> 76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-77"><a href="#CharacterOnScreen-77"><span class="linenos"> 77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-78"><a href="#CharacterOnScreen-78"><span class="linenos"> 78</span></a><span class="sd">        Update the character&#39;s state for a single game loop.</span>
+</span><span id="CharacterOnScreen-79"><a href="#CharacterOnScreen-79"><span class="linenos"> 79</span></a>
+</span><span id="CharacterOnScreen-80"><a href="#CharacterOnScreen-80"><span class="linenos"> 80</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterOnScreen-81"><a href="#CharacterOnScreen-81"><span class="linenos"> 81</span></a><span class="sd">            `time_delta`: The elapsed time since the last update.</span>
+</span><span id="CharacterOnScreen-82"><a href="#CharacterOnScreen-82"><span class="linenos"> 82</span></a>
+</span><span id="CharacterOnScreen-83"><a href="#CharacterOnScreen-83"><span class="linenos"> 83</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen-84"><a href="#CharacterOnScreen-84"><span class="linenos"> 84</span></a><span class="sd">            `CharacterOnScreen`: The updated character state after the step.</span>
+</span><span id="CharacterOnScreen-85"><a href="#CharacterOnScreen-85"><span class="linenos"> 85</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-86"><a href="#CharacterOnScreen-86"><span class="linenos"> 86</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
 </span><span id="CharacterOnScreen-87"><a href="#CharacterOnScreen-87"><span class="linenos"> 87</span></a>
-</span><span id="CharacterOnScreen-88"><a href="#CharacterOnScreen-88"><span class="linenos"> 88</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen-89"><a href="#CharacterOnScreen-89"><span class="linenos"> 89</span></a><span class="sd">            `CharacterOnScreen`: The updated character state after the step.</span>
-</span><span id="CharacterOnScreen-90"><a href="#CharacterOnScreen-90"><span class="linenos"> 90</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-91"><a href="#CharacterOnScreen-91"><span class="linenos"> 91</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
+</span><span id="CharacterOnScreen-88"><a href="#CharacterOnScreen-88"><span class="linenos"> 88</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-89"><a href="#CharacterOnScreen-89"><span class="linenos"> 89</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
+</span><span id="CharacterOnScreen-90"><a href="#CharacterOnScreen-90"><span class="linenos"> 90</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+</span><span id="CharacterOnScreen-91"><a href="#CharacterOnScreen-91"><span class="linenos"> 91</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="CharacterOnScreen-92"><a href="#CharacterOnScreen-92"><span class="linenos"> 92</span></a>
-</span><span id="CharacterOnScreen-93"><a href="#CharacterOnScreen-93"><span class="linenos"> 93</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen-94"><a href="#CharacterOnScreen-94"><span class="linenos"> 94</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
-</span><span id="CharacterOnScreen-95"><a href="#CharacterOnScreen-95"><span class="linenos"> 95</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
-</span><span id="CharacterOnScreen-96"><a href="#CharacterOnScreen-96"><span class="linenos"> 96</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="CharacterOnScreen-97"><a href="#CharacterOnScreen-97"><span class="linenos"> 97</span></a>
-</span><span id="CharacterOnScreen-98"><a href="#CharacterOnScreen-98"><span class="linenos"> 98</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen-99"><a href="#CharacterOnScreen-99"><span class="linenos"> 99</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen-100"><a href="#CharacterOnScreen-100"><span class="linenos">100</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</span><span id="CharacterOnScreen-101"><a href="#CharacterOnScreen-101"><span class="linenos">101</span></a>
-</span><span id="CharacterOnScreen-102"><a href="#CharacterOnScreen-102"><span class="linenos">102</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Scene</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="CharacterOnScreen-103"><a href="#CharacterOnScreen-103"><span class="linenos">103</span></a>        <span class="k">if</span> <span class="n">event</span> <span class="o">:=</span> <span class="n">registered_events</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr</span><span class="p">):</span>
-</span><span id="CharacterOnScreen-104"><a href="#CharacterOnScreen-104"><span class="linenos">104</span></a>            <span class="k">return</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</span><span id="CharacterOnScreen-105"><a href="#CharacterOnScreen-105"><span class="linenos">105</span></a>        <span class="k">if</span> <span class="n">attr</span> <span class="o">==</span> <span class="n">NEXTRPG_INSTANCE_INIT</span><span class="p">:</span>
-</span><span id="CharacterOnScreen-106"><a href="#CharacterOnScreen-106"><span class="linenos">106</span></a>            <span class="k">return</span> <span class="kc">None</span>
-</span><span id="CharacterOnScreen-107"><a href="#CharacterOnScreen-107"><span class="linenos">107</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
-</span><span id="CharacterOnScreen-108"><a href="#CharacterOnScreen-108"><span class="linenos">108</span></a>            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2"> is neither a registered RPG event nor a member of </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">.&quot;</span>
-</span><span id="CharacterOnScreen-109"><a href="#CharacterOnScreen-109"><span class="linenos">109</span></a>        <span class="p">)</span>
-</span><span id="CharacterOnScreen-110"><a href="#CharacterOnScreen-110"><span class="linenos">110</span></a>
-</span><span id="CharacterOnScreen-111"><a href="#CharacterOnScreen-111"><span class="linenos">111</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_visuals</span><span class="p">(</span>
-</span><span id="CharacterOnScreen-112"><a href="#CharacterOnScreen-112"><span class="linenos">112</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CharacterVisual</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-</span><span id="CharacterOnScreen-113"><a href="#CharacterOnScreen-113"><span class="linenos">113</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="CharacterOnScreen-114"><a href="#CharacterOnScreen-114"><span class="linenos">114</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">d</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">visuals</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+</span><span id="CharacterOnScreen-93"><a href="#CharacterOnScreen-93"><span class="linenos"> 93</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen-94"><a href="#CharacterOnScreen-94"><span class="linenos"> 94</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-95"><a href="#CharacterOnScreen-95"><span class="linenos"> 95</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span id="CharacterOnScreen-96"><a href="#CharacterOnScreen-96"><span class="linenos"> 96</span></a>
+</span><span id="CharacterOnScreen-97"><a href="#CharacterOnScreen-97"><span class="linenos"> 97</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Scene</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-98"><a href="#CharacterOnScreen-98"><span class="linenos"> 98</span></a>        <span class="k">if</span> <span class="n">event</span> <span class="o">:=</span> <span class="n">registered_events</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr</span><span class="p">):</span>
+</span><span id="CharacterOnScreen-99"><a href="#CharacterOnScreen-99"><span class="linenos"> 99</span></a>            <span class="k">return</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="CharacterOnScreen-100"><a href="#CharacterOnScreen-100"><span class="linenos">100</span></a>        <span class="k">if</span> <span class="n">attr</span> <span class="o">==</span> <span class="n">NEXTRPG_INSTANCE_INIT</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-101"><a href="#CharacterOnScreen-101"><span class="linenos">101</span></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="CharacterOnScreen-102"><a href="#CharacterOnScreen-102"><span class="linenos">102</span></a>        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+</span><span id="CharacterOnScreen-103"><a href="#CharacterOnScreen-103"><span class="linenos">103</span></a>            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2"> is neither a registered RPG event nor a member of </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">.&quot;</span>
+</span><span id="CharacterOnScreen-104"><a href="#CharacterOnScreen-104"><span class="linenos">104</span></a>        <span class="p">)</span>
+</span><span id="CharacterOnScreen-105"><a href="#CharacterOnScreen-105"><span class="linenos">105</span></a>
+</span><span id="CharacterOnScreen-106"><a href="#CharacterOnScreen-106"><span class="linenos">106</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_visuals</span><span class="p">(</span>
+</span><span id="CharacterOnScreen-107"><a href="#CharacterOnScreen-107"><span class="linenos">107</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">CharacterVisual</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</span><span id="CharacterOnScreen-108"><a href="#CharacterOnScreen-108"><span class="linenos">108</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="CharacterOnScreen-109"><a href="#CharacterOnScreen-109"><span class="linenos">109</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">d</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">visuals</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -577,7 +427,7 @@ character interactions with the game environment.</p>
                             <div id="CharacterOnScreen.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">CharacterOnScreen</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">spec</span><span class="p">:</span> <span class="n"><a href="#CharacterSpec">CharacterSpec</a></span>,</span><span class="param">	<span class="n">coordinate</span><span class="p">:</span> <span class="n"><a href="../coordinate.html#Coordinate">nextrpg.coordinate.Coordinate</a></span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span>)</span>
+        <span class="name">CharacterOnScreen</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">spec</span><span class="p">:</span> <span class="n"><a href="#CharacterSpec">CharacterSpec</a></span>,</span><span class="param">	<span class="n">coordinate</span><span class="p">:</span> <span class="n"><a href="../draw/coordinate.html#Coordinate">nextrpg.draw.coordinate.Coordinate</a></span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></span>)</span>
 
         
     </div>
@@ -599,7 +449,7 @@ character interactions with the game environment.</p>
                             </div>
                             <div id="CharacterOnScreen.coordinate" class="classattr">
                                 <div class="attr variable">
-            <span class="name">coordinate</span><span class="annotation">: <a href="../coordinate.html#Coordinate">nextrpg.coordinate.Coordinate</a></span>
+            <span class="name">coordinate</span><span class="annotation">: <a href="../draw/coordinate.html#Coordinate">nextrpg.draw.coordinate.Coordinate</a></span>
 
         
     </div>
@@ -622,17 +472,17 @@ character interactions with the game environment.</p>
                             <div id="CharacterOnScreen.character_and_visuals" class="classattr">
                                         <input id="CharacterOnScreen.character_and_visuals-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">character_and_visuals</span><span class="annotation">: tuple[<a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a>, ...]</span>
+            <span class="name">character_and_visuals</span><span class="annotation">: tuple[<a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a>, ...]</span>
 
                 <label class="view-source-button" for="CharacterOnScreen.character_and_visuals-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.character_and_visuals"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.character_and_visuals-64"><a href="#CharacterOnScreen.character_and_visuals-64"><span class="linenos">64</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen.character_and_visuals-65"><a href="#CharacterOnScreen.character_and_visuals-65"><span class="linenos">65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="CharacterOnScreen.character_and_visuals-66"><a href="#CharacterOnScreen.character_and_visuals-66"><span class="linenos">66</span></a>        <span class="n">below</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">below_foreground_visuals</span><span class="p">)</span>
-</span><span id="CharacterOnScreen.character_and_visuals-67"><a href="#CharacterOnScreen.character_and_visuals-67"><span class="linenos">67</span></a>        <span class="n">above</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">above_foreground_visuals</span><span class="p">)</span>
-</span><span id="CharacterOnScreen.character_and_visuals-68"><a href="#CharacterOnScreen.character_and_visuals-68"><span class="linenos">68</span></a>        <span class="k">return</span> <span class="n">below</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span> <span class="o">+</span> <span class="n">above</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.character_and_visuals-59"><a href="#CharacterOnScreen.character_and_visuals-59"><span class="linenos">59</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen.character_and_visuals-60"><a href="#CharacterOnScreen.character_and_visuals-60"><span class="linenos">60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="CharacterOnScreen.character_and_visuals-61"><a href="#CharacterOnScreen.character_and_visuals-61"><span class="linenos">61</span></a>        <span class="n">below</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">below_foreground_visuals</span><span class="p">)</span>
+</span><span id="CharacterOnScreen.character_and_visuals-62"><a href="#CharacterOnScreen.character_and_visuals-62"><span class="linenos">62</span></a>        <span class="n">above</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">above_foreground_visuals</span><span class="p">)</span>
+</span><span id="CharacterOnScreen.character_and_visuals-63"><a href="#CharacterOnScreen.character_and_visuals-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="n">below</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span> <span class="o">+</span> <span class="n">above</span>
 </span></pre></div>
 
 
@@ -642,22 +492,22 @@ character interactions with the game environment.</p>
                             <div id="CharacterOnScreen.draw_on_screen" class="classattr">
                                         <input id="CharacterOnScreen.draw_on_screen-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">draw_on_screen</span><span class="annotation">: <a href="../draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a></span>
+            <span class="name">draw_on_screen</span><span class="annotation">: <a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span>
 
                 <label class="view-source-button" for="CharacterOnScreen.draw_on_screen-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.draw_on_screen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.draw_on_screen-70"><a href="#CharacterOnScreen.draw_on_screen-70"><span class="linenos">70</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen.draw_on_screen-71"><a href="#CharacterOnScreen.draw_on_screen-71"><span class="linenos">71</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
-</span><span id="CharacterOnScreen.draw_on_screen-72"><a href="#CharacterOnScreen.draw_on_screen-72"><span class="linenos">72</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.draw_on_screen-73"><a href="#CharacterOnScreen.draw_on_screen-73"><span class="linenos">73</span></a><span class="sd">        Creates drawable representations of the character and visuals.</span>
-</span><span id="CharacterOnScreen.draw_on_screen-74"><a href="#CharacterOnScreen.draw_on_screen-74"><span class="linenos">74</span></a>
-</span><span id="CharacterOnScreen.draw_on_screen-75"><a href="#CharacterOnScreen.draw_on_screen-75"><span class="linenos">75</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen.draw_on_screen-76"><a href="#CharacterOnScreen.draw_on_screen-76"><span class="linenos">76</span></a><span class="sd">            `CharacterAndVisuals`: A tuple containing the character&#39;s drawable</span>
-</span><span id="CharacterOnScreen.draw_on_screen-77"><a href="#CharacterOnScreen.draw_on_screen-77"><span class="linenos">77</span></a><span class="sd">            representation and any associated visual elements.</span>
-</span><span id="CharacterOnScreen.draw_on_screen-78"><a href="#CharacterOnScreen.draw_on_screen-78"><span class="linenos">78</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.draw_on_screen-79"><a href="#CharacterOnScreen.draw_on_screen-79"><span class="linenos">79</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.draw_on_screen-65"><a href="#CharacterOnScreen.draw_on_screen-65"><span class="linenos">65</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen.draw_on_screen-66"><a href="#CharacterOnScreen.draw_on_screen-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="CharacterOnScreen.draw_on_screen-67"><a href="#CharacterOnScreen.draw_on_screen-67"><span class="linenos">67</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.draw_on_screen-68"><a href="#CharacterOnScreen.draw_on_screen-68"><span class="linenos">68</span></a><span class="sd">        Creates drawable representations of the character and visuals.</span>
+</span><span id="CharacterOnScreen.draw_on_screen-69"><a href="#CharacterOnScreen.draw_on_screen-69"><span class="linenos">69</span></a>
+</span><span id="CharacterOnScreen.draw_on_screen-70"><a href="#CharacterOnScreen.draw_on_screen-70"><span class="linenos">70</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen.draw_on_screen-71"><a href="#CharacterOnScreen.draw_on_screen-71"><span class="linenos">71</span></a><span class="sd">            `CharacterAndVisuals`: A tuple containing the character&#39;s drawable</span>
+</span><span id="CharacterOnScreen.draw_on_screen-72"><a href="#CharacterOnScreen.draw_on_screen-72"><span class="linenos">72</span></a><span class="sd">            representation and any associated visual elements.</span>
+</span><span id="CharacterOnScreen.draw_on_screen-73"><a href="#CharacterOnScreen.draw_on_screen-73"><span class="linenos">73</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.draw_on_screen-74"><a href="#CharacterOnScreen.draw_on_screen-74"><span class="linenos">74</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -684,17 +534,17 @@ character interactions with the game environment.</p>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.tick-81"><a href="#CharacterOnScreen.tick-81"><span class="linenos">81</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen.tick-82"><a href="#CharacterOnScreen.tick-82"><span class="linenos">82</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.tick-83"><a href="#CharacterOnScreen.tick-83"><span class="linenos">83</span></a><span class="sd">        Update the character&#39;s state for a single game loop.</span>
-</span><span id="CharacterOnScreen.tick-84"><a href="#CharacterOnScreen.tick-84"><span class="linenos">84</span></a>
-</span><span id="CharacterOnScreen.tick-85"><a href="#CharacterOnScreen.tick-85"><span class="linenos">85</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterOnScreen.tick-86"><a href="#CharacterOnScreen.tick-86"><span class="linenos">86</span></a><span class="sd">            `time_delta`: The elapsed time since the last update.</span>
-</span><span id="CharacterOnScreen.tick-87"><a href="#CharacterOnScreen.tick-87"><span class="linenos">87</span></a>
-</span><span id="CharacterOnScreen.tick-88"><a href="#CharacterOnScreen.tick-88"><span class="linenos">88</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen.tick-89"><a href="#CharacterOnScreen.tick-89"><span class="linenos">89</span></a><span class="sd">            `CharacterOnScreen`: The updated character state after the step.</span>
-</span><span id="CharacterOnScreen.tick-90"><a href="#CharacterOnScreen.tick-90"><span class="linenos">90</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.tick-91"><a href="#CharacterOnScreen.tick-91"><span class="linenos">91</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.tick-76"><a href="#CharacterOnScreen.tick-76"><span class="linenos">76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen.tick-77"><a href="#CharacterOnScreen.tick-77"><span class="linenos">77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.tick-78"><a href="#CharacterOnScreen.tick-78"><span class="linenos">78</span></a><span class="sd">        Update the character&#39;s state for a single game loop.</span>
+</span><span id="CharacterOnScreen.tick-79"><a href="#CharacterOnScreen.tick-79"><span class="linenos">79</span></a>
+</span><span id="CharacterOnScreen.tick-80"><a href="#CharacterOnScreen.tick-80"><span class="linenos">80</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterOnScreen.tick-81"><a href="#CharacterOnScreen.tick-81"><span class="linenos">81</span></a><span class="sd">            `time_delta`: The elapsed time since the last update.</span>
+</span><span id="CharacterOnScreen.tick-82"><a href="#CharacterOnScreen.tick-82"><span class="linenos">82</span></a>
+</span><span id="CharacterOnScreen.tick-83"><a href="#CharacterOnScreen.tick-83"><span class="linenos">83</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen.tick-84"><a href="#CharacterOnScreen.tick-84"><span class="linenos">84</span></a><span class="sd">            `CharacterOnScreen`: The updated character state after the step.</span>
+</span><span id="CharacterOnScreen.tick-85"><a href="#CharacterOnScreen.tick-85"><span class="linenos">85</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.tick-86"><a href="#CharacterOnScreen.tick-86"><span class="linenos">86</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -726,10 +576,10 @@ character interactions with the game environment.</p>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.start_event"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.start_event-93"><a href="#CharacterOnScreen.start_event-93"><span class="linenos">93</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen.start_event-94"><a href="#CharacterOnScreen.start_event-94"><span class="linenos">94</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
-</span><span id="CharacterOnScreen.start_event-95"><a href="#CharacterOnScreen.start_event-95"><span class="linenos">95</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
-</span><span id="CharacterOnScreen.start_event-96"><a href="#CharacterOnScreen.start_event-96"><span class="linenos">96</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.start_event-88"><a href="#CharacterOnScreen.start_event-88"><span class="linenos">88</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen.start_event-89"><a href="#CharacterOnScreen.start_event-89"><span class="linenos">89</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
+</span><span id="CharacterOnScreen.start_event-90"><a href="#CharacterOnScreen.start_event-90"><span class="linenos">90</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+</span><span id="CharacterOnScreen.start_event-91"><a href="#CharacterOnScreen.start_event-91"><span class="linenos">91</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -745,312 +595,14 @@ character interactions with the game environment.</p>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.complete_event"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.complete_event-98"><a href="#CharacterOnScreen.complete_event-98"><span class="linenos"> 98</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen.complete_event-99"><a href="#CharacterOnScreen.complete_event-99"><span class="linenos"> 99</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen.complete_event-100"><a href="#CharacterOnScreen.complete_event-100"><span class="linenos">100</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.complete_event-93"><a href="#CharacterOnScreen.complete_event-93"><span class="linenos">93</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen.complete_event-94"><a href="#CharacterOnScreen.complete_event-94"><span class="linenos">94</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen.complete_event-95"><a href="#CharacterOnScreen.complete_event-95"><span class="linenos">95</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span></pre></div>
 
 
     
 
-                            </div>
-                </section>
-                <section id="MovingCharacterOnScreen">
-                            <input id="MovingCharacterOnScreen-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr class">
-                    <div class="decorator decorator-dataclass">@dataclass(kw_only=True, frozen=True)</div>
-
-    <span class="def">class</span>
-    <span class="name">MovingCharacterOnScreen</span><wbr>(<span class="base"><a href="#CharacterOnScreen">CharacterOnScreen</a></span>, <span class="base">abc.ABC</span>):
-
-                <label class="view-source-button" for="MovingCharacterOnScreen-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#MovingCharacterOnScreen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingCharacterOnScreen-117"><a href="#MovingCharacterOnScreen-117"><span class="linenos">117</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-118"><a href="#MovingCharacterOnScreen-118"><span class="linenos">118</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingCharacterOnScreen</span><span class="p">(</span><span class="n">CharacterOnScreen</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
-</span><span id="MovingCharacterOnScreen-119"><a href="#MovingCharacterOnScreen-119"><span class="linenos">119</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Polygon</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-</span><span id="MovingCharacterOnScreen-120"><a href="#MovingCharacterOnScreen-120"><span class="linenos">120</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
-</span><span id="MovingCharacterOnScreen-121"><a href="#MovingCharacterOnScreen-121"><span class="linenos">121</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_speed</span>
-</span><span id="MovingCharacterOnScreen-122"><a href="#MovingCharacterOnScreen-122"><span class="linenos">122</span></a>    <span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-123"><a href="#MovingCharacterOnScreen-123"><span class="linenos">123</span></a>
-</span><span id="MovingCharacterOnScreen-124"><a href="#MovingCharacterOnScreen-124"><span class="linenos">124</span></a>    <span class="nd">@cached_property</span>
-</span><span id="MovingCharacterOnScreen-125"><a href="#MovingCharacterOnScreen-125"><span class="linenos">125</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="MovingCharacterOnScreen-126"><a href="#MovingCharacterOnScreen-126"><span class="linenos">126</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen-127"><a href="#MovingCharacterOnScreen-127"><span class="linenos">127</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="MovingCharacterOnScreen-128"><a href="#MovingCharacterOnScreen-128"><span class="linenos">128</span></a><span class="sd">        Get whether the character is currently moving.</span>
-</span><span id="MovingCharacterOnScreen-129"><a href="#MovingCharacterOnScreen-129"><span class="linenos">129</span></a>
-</span><span id="MovingCharacterOnScreen-130"><a href="#MovingCharacterOnScreen-130"><span class="linenos">130</span></a><span class="sd">        Returns:</span>
-</span><span id="MovingCharacterOnScreen-131"><a href="#MovingCharacterOnScreen-131"><span class="linenos">131</span></a><span class="sd">            `bool`: Whether the character is currently moving.</span>
-</span><span id="MovingCharacterOnScreen-132"><a href="#MovingCharacterOnScreen-132"><span class="linenos">132</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="MovingCharacterOnScreen-133"><a href="#MovingCharacterOnScreen-133"><span class="linenos">133</span></a>
-</span><span id="MovingCharacterOnScreen-134"><a href="#MovingCharacterOnScreen-134"><span class="linenos">134</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="MovingCharacterOnScreen-135"><a href="#MovingCharacterOnScreen-135"><span class="linenos">135</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen-136"><a href="#MovingCharacterOnScreen-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="MovingCharacterOnScreen-137"><a href="#MovingCharacterOnScreen-137"><span class="linenos">137</span></a><span class="sd">        Move the character based on the current speed and time delta.</span>
-</span><span id="MovingCharacterOnScreen-138"><a href="#MovingCharacterOnScreen-138"><span class="linenos">138</span></a>
-</span><span id="MovingCharacterOnScreen-139"><a href="#MovingCharacterOnScreen-139"><span class="linenos">139</span></a><span class="sd">        Arguments:</span>
-</span><span id="MovingCharacterOnScreen-140"><a href="#MovingCharacterOnScreen-140"><span class="linenos">140</span></a><span class="sd">            `time_delta`: The time that has passed since the last update.</span>
-</span><span id="MovingCharacterOnScreen-141"><a href="#MovingCharacterOnScreen-141"><span class="linenos">141</span></a>
-</span><span id="MovingCharacterOnScreen-142"><a href="#MovingCharacterOnScreen-142"><span class="linenos">142</span></a><span class="sd">        Returns:</span>
-</span><span id="MovingCharacterOnScreen-143"><a href="#MovingCharacterOnScreen-143"><span class="linenos">143</span></a><span class="sd">            `Coordinate`: The updated character position after the move step.</span>
-</span><span id="MovingCharacterOnScreen-144"><a href="#MovingCharacterOnScreen-144"><span class="linenos">144</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="MovingCharacterOnScreen-145"><a href="#MovingCharacterOnScreen-145"><span class="linenos">145</span></a>
-</span><span id="MovingCharacterOnScreen-146"><a href="#MovingCharacterOnScreen-146"><span class="linenos">146</span></a>    <span class="nd">@override</span>
-</span><span id="MovingCharacterOnScreen-147"><a href="#MovingCharacterOnScreen-147"><span class="linenos">147</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen-148"><a href="#MovingCharacterOnScreen-148"><span class="linenos">148</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="MovingCharacterOnScreen-149"><a href="#MovingCharacterOnScreen-149"><span class="linenos">149</span></a><span class="sd">        Update the character&#39;s state for a single game step/frame.</span>
-</span><span id="MovingCharacterOnScreen-150"><a href="#MovingCharacterOnScreen-150"><span class="linenos">150</span></a>
-</span><span id="MovingCharacterOnScreen-151"><a href="#MovingCharacterOnScreen-151"><span class="linenos">151</span></a><span class="sd">        Calculates movement based on currently pressed keys, handles collision</span>
-</span><span id="MovingCharacterOnScreen-152"><a href="#MovingCharacterOnScreen-152"><span class="linenos">152</span></a><span class="sd">        detection, and updates the character&#39;s drawing state (moving or idle).</span>
-</span><span id="MovingCharacterOnScreen-153"><a href="#MovingCharacterOnScreen-153"><span class="linenos">153</span></a>
-</span><span id="MovingCharacterOnScreen-154"><a href="#MovingCharacterOnScreen-154"><span class="linenos">154</span></a><span class="sd">        Arguments:</span>
-</span><span id="MovingCharacterOnScreen-155"><a href="#MovingCharacterOnScreen-155"><span class="linenos">155</span></a><span class="sd">            `time_delta`: The time that has passed since</span>
-</span><span id="MovingCharacterOnScreen-156"><a href="#MovingCharacterOnScreen-156"><span class="linenos">156</span></a><span class="sd">                the last update, used for calculating movement distance.</span>
-</span><span id="MovingCharacterOnScreen-157"><a href="#MovingCharacterOnScreen-157"><span class="linenos">157</span></a>
-</span><span id="MovingCharacterOnScreen-158"><a href="#MovingCharacterOnScreen-158"><span class="linenos">158</span></a><span class="sd">        Returns:</span>
-</span><span id="MovingCharacterOnScreen-159"><a href="#MovingCharacterOnScreen-159"><span class="linenos">159</span></a><span class="sd">            `CharacterOnScreen`: The updated character state after the step.</span>
-</span><span id="MovingCharacterOnScreen-160"><a href="#MovingCharacterOnScreen-160"><span class="linenos">160</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="MovingCharacterOnScreen-161"><a href="#MovingCharacterOnScreen-161"><span class="linenos">161</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen-162"><a href="#MovingCharacterOnScreen-162"><span class="linenos">162</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-163"><a href="#MovingCharacterOnScreen-163"><span class="linenos">163</span></a>
-</span><span id="MovingCharacterOnScreen-164"><a href="#MovingCharacterOnScreen-164"><span class="linenos">164</span></a>        <span class="n">moved_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span> <span class="k">else</span> <span class="kc">None</span>
-</span><span id="MovingCharacterOnScreen-165"><a href="#MovingCharacterOnScreen-165"><span class="linenos">165</span></a>        <span class="n">character</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="MovingCharacterOnScreen-166"><a href="#MovingCharacterOnScreen-166"><span class="linenos">166</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-167"><a href="#MovingCharacterOnScreen-167"><span class="linenos">167</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span>
-</span><span id="MovingCharacterOnScreen-168"><a href="#MovingCharacterOnScreen-168"><span class="linenos">168</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-169"><a href="#MovingCharacterOnScreen-169"><span class="linenos">169</span></a>        <span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-170"><a href="#MovingCharacterOnScreen-170"><span class="linenos">170</span></a>        <span class="n">coordinate</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="MovingCharacterOnScreen-171"><a href="#MovingCharacterOnScreen-171"><span class="linenos">171</span></a>            <span class="n">moved_coord</span>
-</span><span id="MovingCharacterOnScreen-172"><a href="#MovingCharacterOnScreen-172"><span class="linenos">172</span></a>            <span class="k">if</span> <span class="n">moved_coord</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_can_move</span><span class="p">(</span><span class="n">moved_coord</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-173"><a href="#MovingCharacterOnScreen-173"><span class="linenos">173</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span>
-</span><span id="MovingCharacterOnScreen-174"><a href="#MovingCharacterOnScreen-174"><span class="linenos">174</span></a>        <span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-175"><a href="#MovingCharacterOnScreen-175"><span class="linenos">175</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">character</span><span class="p">,</span> <span class="n">coordinate</span><span class="o">=</span><span class="n">coordinate</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-176"><a href="#MovingCharacterOnScreen-176"><span class="linenos">176</span></a>
-</span><span id="MovingCharacterOnScreen-177"><a href="#MovingCharacterOnScreen-177"><span class="linenos">177</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_can_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen-178"><a href="#MovingCharacterOnScreen-178"><span class="linenos">178</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">debug</span> <span class="o">:=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">)</span> <span class="ow">and</span> <span class="n">debug</span><span class="o">.</span><span class="n">ignore_map_collisions</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen-179"><a href="#MovingCharacterOnScreen-179"><span class="linenos">179</span></a>            <span class="k">return</span> <span class="kc">True</span>
-</span><span id="MovingCharacterOnScreen-180"><a href="#MovingCharacterOnScreen-180"><span class="linenos">180</span></a>
-</span><span id="MovingCharacterOnScreen-181"><a href="#MovingCharacterOnScreen-181"><span class="linenos">181</span></a>        <span class="n">rect</span> <span class="o">=</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span><span class="o">.</span><span class="n">rectangle</span>
-</span><span id="MovingCharacterOnScreen-182"><a href="#MovingCharacterOnScreen-182"><span class="linenos">182</span></a>        <span class="n">hit_coords</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="MovingCharacterOnScreen-183"><a href="#MovingCharacterOnScreen-183"><span class="linenos">183</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="p">{</span><span class="n">rect</span><span class="o">.</span><span class="n">bottom_left</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">center_left</span><span class="p">},</span>
-</span><span id="MovingCharacterOnScreen-184"><a href="#MovingCharacterOnScreen-184"><span class="linenos">184</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="p">{</span><span class="n">rect</span><span class="o">.</span><span class="n">bottom_right</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">center_right</span><span class="p">},</span>
-</span><span id="MovingCharacterOnScreen-185"><a href="#MovingCharacterOnScreen-185"><span class="linenos">185</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="MovingCharacterOnScreen-186"><a href="#MovingCharacterOnScreen-186"><span class="linenos">186</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_right</span><span class="p">,</span>
-</span><span id="MovingCharacterOnScreen-187"><a href="#MovingCharacterOnScreen-187"><span class="linenos">187</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_center</span><span class="p">,</span>
-</span><span id="MovingCharacterOnScreen-188"><a href="#MovingCharacterOnScreen-188"><span class="linenos">188</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_left</span><span class="p">,</span>
-</span><span id="MovingCharacterOnScreen-189"><a href="#MovingCharacterOnScreen-189"><span class="linenos">189</span></a>            <span class="p">},</span>
-</span><span id="MovingCharacterOnScreen-190"><a href="#MovingCharacterOnScreen-190"><span class="linenos">190</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span> <span class="p">{</span><span class="n">rect</span><span class="o">.</span><span class="n">center_right</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">center</span><span class="p">,</span> <span class="n">rect</span><span class="o">.</span><span class="n">center_left</span><span class="p">},</span>
-</span><span id="MovingCharacterOnScreen-191"><a href="#MovingCharacterOnScreen-191"><span class="linenos">191</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">:</span> <span class="p">{</span><span class="n">rect</span><span class="o">.</span><span class="n">center_left</span><span class="p">},</span>
-</span><span id="MovingCharacterOnScreen-192"><a href="#MovingCharacterOnScreen-192"><span class="linenos">192</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">:</span> <span class="p">{</span><span class="n">rect</span><span class="o">.</span><span class="n">center_right</span><span class="p">},</span>
-</span><span id="MovingCharacterOnScreen-193"><a href="#MovingCharacterOnScreen-193"><span class="linenos">193</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="MovingCharacterOnScreen-194"><a href="#MovingCharacterOnScreen-194"><span class="linenos">194</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_left</span><span class="p">,</span>
-</span><span id="MovingCharacterOnScreen-195"><a href="#MovingCharacterOnScreen-195"><span class="linenos">195</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">center_left</span><span class="p">,</span>
-</span><span id="MovingCharacterOnScreen-196"><a href="#MovingCharacterOnScreen-196"><span class="linenos">196</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_center</span><span class="p">,</span>
-</span><span id="MovingCharacterOnScreen-197"><a href="#MovingCharacterOnScreen-197"><span class="linenos">197</span></a>            <span class="p">},</span>
-</span><span id="MovingCharacterOnScreen-198"><a href="#MovingCharacterOnScreen-198"><span class="linenos">198</span></a>            <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="MovingCharacterOnScreen-199"><a href="#MovingCharacterOnScreen-199"><span class="linenos">199</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_right</span><span class="p">,</span>
-</span><span id="MovingCharacterOnScreen-200"><a href="#MovingCharacterOnScreen-200"><span class="linenos">200</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">center_right</span><span class="p">,</span>
-</span><span id="MovingCharacterOnScreen-201"><a href="#MovingCharacterOnScreen-201"><span class="linenos">201</span></a>                <span class="n">rect</span><span class="o">.</span><span class="n">bottom_center</span><span class="p">,</span>
-</span><span id="MovingCharacterOnScreen-202"><a href="#MovingCharacterOnScreen-202"><span class="linenos">202</span></a>            <span class="p">},</span>
-</span><span id="MovingCharacterOnScreen-203"><a href="#MovingCharacterOnScreen-203"><span class="linenos">203</span></a>        <span class="p">}[</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">direction</span><span class="p">]</span>
-</span><span id="MovingCharacterOnScreen-204"><a href="#MovingCharacterOnScreen-204"><span class="linenos">204</span></a>
-</span><span id="MovingCharacterOnScreen-205"><a href="#MovingCharacterOnScreen-205"><span class="linenos">205</span></a>        <span class="k">if</span> <span class="n">collision_and_coord</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collide</span><span class="p">(</span><span class="n">hit_coords</span><span class="p">):</span>
-</span><span id="MovingCharacterOnScreen-206"><a href="#MovingCharacterOnScreen-206"><span class="linenos">206</span></a>            <span class="n">collision</span><span class="p">,</span> <span class="n">coord</span> <span class="o">=</span> <span class="n">collision_and_coord</span>
-</span><span id="MovingCharacterOnScreen-207"><a href="#MovingCharacterOnScreen-207"><span class="linenos">207</span></a>            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Collision </span><span class="si">{coord}</span><span class="s2"> and </span><span class="si">{collision.points}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-208"><a href="#MovingCharacterOnScreen-208"><span class="linenos">208</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="MovingCharacterOnScreen-209"><a href="#MovingCharacterOnScreen-209"><span class="linenos">209</span></a>        <span class="k">return</span> <span class="kc">True</span>
-</span><span id="MovingCharacterOnScreen-210"><a href="#MovingCharacterOnScreen-210"><span class="linenos">210</span></a>
-</span><span id="MovingCharacterOnScreen-211"><a href="#MovingCharacterOnScreen-211"><span class="linenos">211</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_collide</span><span class="p">(</span>
-</span><span id="MovingCharacterOnScreen-212"><a href="#MovingCharacterOnScreen-212"><span class="linenos">212</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">hit_coords</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">]</span>
-</span><span id="MovingCharacterOnScreen-213"><a href="#MovingCharacterOnScreen-213"><span class="linenos">213</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_CollisionAndCoord</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen-214"><a href="#MovingCharacterOnScreen-214"><span class="linenos">214</span></a>        <span class="k">for</span> <span class="n">collision</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collisions</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen-215"><a href="#MovingCharacterOnScreen-215"><span class="linenos">215</span></a>            <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">hit_coords</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen-216"><a href="#MovingCharacterOnScreen-216"><span class="linenos">216</span></a>                <span class="k">if</span> <span class="n">collision</span><span class="o">.</span><span class="n">contain</span><span class="p">(</span><span class="n">coord</span><span class="p">):</span>
-</span><span id="MovingCharacterOnScreen-217"><a href="#MovingCharacterOnScreen-217"><span class="linenos">217</span></a>                    <span class="k">return</span> <span class="n">_CollisionAndCoord</span><span class="p">(</span><span class="n">collision</span><span class="p">,</span> <span class="n">coord</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen-218"><a href="#MovingCharacterOnScreen-218"><span class="linenos">218</span></a>        <span class="k">return</span> <span class="kc">None</span>
-</span></pre></div>
-
-
-    
-
-                            <div id="MovingCharacterOnScreen.collisions" class="classattr">
-                                <div class="attr variable">
-            <span class="name">collisions</span><span class="annotation">: tuple[<a href="../draw_on_screen.html#Polygon">nextrpg.draw_on_screen.Polygon</a>, ...]</span>
-
-        
-    </div>
-    <a class="headerlink" href="#MovingCharacterOnScreen.collisions"></a>
-    
-    
-
-                            </div>
-                            <div id="MovingCharacterOnScreen.move_speed" class="classattr">
-                                <div class="attr variable">
-            <span class="name">move_speed</span><span class="annotation">: <a href="../core.html#PixelPerMillisecond">nextrpg.core.PixelPerMillisecond</a></span>
-
-        
-    </div>
-    <a class="headerlink" href="#MovingCharacterOnScreen.move_speed"></a>
-    
-    
-
-                            </div>
-                            <div id="MovingCharacterOnScreen.moving" class="classattr">
-                                        <input id="MovingCharacterOnScreen.moving-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr variable">
-            <span class="name">moving</span><span class="annotation">: bool</span>
-
-                <label class="view-source-button" for="MovingCharacterOnScreen.moving-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#MovingCharacterOnScreen.moving"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingCharacterOnScreen.moving-124"><a href="#MovingCharacterOnScreen.moving-124"><span class="linenos">124</span></a>    <span class="nd">@cached_property</span>
-</span><span id="MovingCharacterOnScreen.moving-125"><a href="#MovingCharacterOnScreen.moving-125"><span class="linenos">125</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="MovingCharacterOnScreen.moving-126"><a href="#MovingCharacterOnScreen.moving-126"><span class="linenos">126</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen.moving-127"><a href="#MovingCharacterOnScreen.moving-127"><span class="linenos">127</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="MovingCharacterOnScreen.moving-128"><a href="#MovingCharacterOnScreen.moving-128"><span class="linenos">128</span></a><span class="sd">        Get whether the character is currently moving.</span>
-</span><span id="MovingCharacterOnScreen.moving-129"><a href="#MovingCharacterOnScreen.moving-129"><span class="linenos">129</span></a>
-</span><span id="MovingCharacterOnScreen.moving-130"><a href="#MovingCharacterOnScreen.moving-130"><span class="linenos">130</span></a><span class="sd">        Returns:</span>
-</span><span id="MovingCharacterOnScreen.moving-131"><a href="#MovingCharacterOnScreen.moving-131"><span class="linenos">131</span></a><span class="sd">            `bool`: Whether the character is currently moving.</span>
-</span><span id="MovingCharacterOnScreen.moving-132"><a href="#MovingCharacterOnScreen.moving-132"><span class="linenos">132</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Get whether the character is currently moving.</p>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>bool</code>: Whether the character is currently moving.</p>
-</blockquote>
-</div>
-
-
-                            </div>
-                            <div id="MovingCharacterOnScreen.move" class="classattr">
-                                        <input id="MovingCharacterOnScreen.move-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-                    <div class="decorator decorator-abstractmethod">@abstractmethod</div>
-
-        <span class="def">def</span>
-        <span class="name">move</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n"><a href="../coordinate.html#Coordinate">nextrpg.coordinate.Coordinate</a></span>:</span></span>
-
-                <label class="view-source-button" for="MovingCharacterOnScreen.move-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#MovingCharacterOnScreen.move"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingCharacterOnScreen.move-134"><a href="#MovingCharacterOnScreen.move-134"><span class="linenos">134</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="MovingCharacterOnScreen.move-135"><a href="#MovingCharacterOnScreen.move-135"><span class="linenos">135</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen.move-136"><a href="#MovingCharacterOnScreen.move-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="MovingCharacterOnScreen.move-137"><a href="#MovingCharacterOnScreen.move-137"><span class="linenos">137</span></a><span class="sd">        Move the character based on the current speed and time delta.</span>
-</span><span id="MovingCharacterOnScreen.move-138"><a href="#MovingCharacterOnScreen.move-138"><span class="linenos">138</span></a>
-</span><span id="MovingCharacterOnScreen.move-139"><a href="#MovingCharacterOnScreen.move-139"><span class="linenos">139</span></a><span class="sd">        Arguments:</span>
-</span><span id="MovingCharacterOnScreen.move-140"><a href="#MovingCharacterOnScreen.move-140"><span class="linenos">140</span></a><span class="sd">            `time_delta`: The time that has passed since the last update.</span>
-</span><span id="MovingCharacterOnScreen.move-141"><a href="#MovingCharacterOnScreen.move-141"><span class="linenos">141</span></a>
-</span><span id="MovingCharacterOnScreen.move-142"><a href="#MovingCharacterOnScreen.move-142"><span class="linenos">142</span></a><span class="sd">        Returns:</span>
-</span><span id="MovingCharacterOnScreen.move-143"><a href="#MovingCharacterOnScreen.move-143"><span class="linenos">143</span></a><span class="sd">            `Coordinate`: The updated character position after the move step.</span>
-</span><span id="MovingCharacterOnScreen.move-144"><a href="#MovingCharacterOnScreen.move-144"><span class="linenos">144</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Move the character based on the current speed and time delta.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code>time_delta</code>:</strong>  The time that has passed since the last update.</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>Coordinate</code>: The updated character position after the move step.</p>
-</blockquote>
-</div>
-
-
-                            </div>
-                            <div id="MovingCharacterOnScreen.tick" class="classattr">
-                                        <input id="MovingCharacterOnScreen.tick-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-                    <div class="decorator decorator-override">@override</div>
-
-        <span class="def">def</span>
-        <span class="name">tick</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
-
-                <label class="view-source-button" for="MovingCharacterOnScreen.tick-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#MovingCharacterOnScreen.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingCharacterOnScreen.tick-146"><a href="#MovingCharacterOnScreen.tick-146"><span class="linenos">146</span></a>    <span class="nd">@override</span>
-</span><span id="MovingCharacterOnScreen.tick-147"><a href="#MovingCharacterOnScreen.tick-147"><span class="linenos">147</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen.tick-148"><a href="#MovingCharacterOnScreen.tick-148"><span class="linenos">148</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="MovingCharacterOnScreen.tick-149"><a href="#MovingCharacterOnScreen.tick-149"><span class="linenos">149</span></a><span class="sd">        Update the character&#39;s state for a single game step/frame.</span>
-</span><span id="MovingCharacterOnScreen.tick-150"><a href="#MovingCharacterOnScreen.tick-150"><span class="linenos">150</span></a>
-</span><span id="MovingCharacterOnScreen.tick-151"><a href="#MovingCharacterOnScreen.tick-151"><span class="linenos">151</span></a><span class="sd">        Calculates movement based on currently pressed keys, handles collision</span>
-</span><span id="MovingCharacterOnScreen.tick-152"><a href="#MovingCharacterOnScreen.tick-152"><span class="linenos">152</span></a><span class="sd">        detection, and updates the character&#39;s drawing state (moving or idle).</span>
-</span><span id="MovingCharacterOnScreen.tick-153"><a href="#MovingCharacterOnScreen.tick-153"><span class="linenos">153</span></a>
-</span><span id="MovingCharacterOnScreen.tick-154"><a href="#MovingCharacterOnScreen.tick-154"><span class="linenos">154</span></a><span class="sd">        Arguments:</span>
-</span><span id="MovingCharacterOnScreen.tick-155"><a href="#MovingCharacterOnScreen.tick-155"><span class="linenos">155</span></a><span class="sd">            `time_delta`: The time that has passed since</span>
-</span><span id="MovingCharacterOnScreen.tick-156"><a href="#MovingCharacterOnScreen.tick-156"><span class="linenos">156</span></a><span class="sd">                the last update, used for calculating movement distance.</span>
-</span><span id="MovingCharacterOnScreen.tick-157"><a href="#MovingCharacterOnScreen.tick-157"><span class="linenos">157</span></a>
-</span><span id="MovingCharacterOnScreen.tick-158"><a href="#MovingCharacterOnScreen.tick-158"><span class="linenos">158</span></a><span class="sd">        Returns:</span>
-</span><span id="MovingCharacterOnScreen.tick-159"><a href="#MovingCharacterOnScreen.tick-159"><span class="linenos">159</span></a><span class="sd">            `CharacterOnScreen`: The updated character state after the step.</span>
-</span><span id="MovingCharacterOnScreen.tick-160"><a href="#MovingCharacterOnScreen.tick-160"><span class="linenos">160</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="MovingCharacterOnScreen.tick-161"><a href="#MovingCharacterOnScreen.tick-161"><span class="linenos">161</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span><span class="p">:</span>
-</span><span id="MovingCharacterOnScreen.tick-162"><a href="#MovingCharacterOnScreen.tick-162"><span class="linenos">162</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen.tick-163"><a href="#MovingCharacterOnScreen.tick-163"><span class="linenos">163</span></a>
-</span><span id="MovingCharacterOnScreen.tick-164"><a href="#MovingCharacterOnScreen.tick-164"><span class="linenos">164</span></a>        <span class="n">moved_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span> <span class="k">else</span> <span class="kc">None</span>
-</span><span id="MovingCharacterOnScreen.tick-165"><a href="#MovingCharacterOnScreen.tick-165"><span class="linenos">165</span></a>        <span class="n">character</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="MovingCharacterOnScreen.tick-166"><a href="#MovingCharacterOnScreen.tick-166"><span class="linenos">166</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen.tick-167"><a href="#MovingCharacterOnScreen.tick-167"><span class="linenos">167</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span>
-</span><span id="MovingCharacterOnScreen.tick-168"><a href="#MovingCharacterOnScreen.tick-168"><span class="linenos">168</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen.tick-169"><a href="#MovingCharacterOnScreen.tick-169"><span class="linenos">169</span></a>        <span class="p">)</span>
-</span><span id="MovingCharacterOnScreen.tick-170"><a href="#MovingCharacterOnScreen.tick-170"><span class="linenos">170</span></a>        <span class="n">coordinate</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="MovingCharacterOnScreen.tick-171"><a href="#MovingCharacterOnScreen.tick-171"><span class="linenos">171</span></a>            <span class="n">moved_coord</span>
-</span><span id="MovingCharacterOnScreen.tick-172"><a href="#MovingCharacterOnScreen.tick-172"><span class="linenos">172</span></a>            <span class="k">if</span> <span class="n">moved_coord</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_can_move</span><span class="p">(</span><span class="n">moved_coord</span><span class="p">)</span>
-</span><span id="MovingCharacterOnScreen.tick-173"><a href="#MovingCharacterOnScreen.tick-173"><span class="linenos">173</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span>
-</span><span id="MovingCharacterOnScreen.tick-174"><a href="#MovingCharacterOnScreen.tick-174"><span class="linenos">174</span></a>        <span class="p">)</span>
-</span><span id="MovingCharacterOnScreen.tick-175"><a href="#MovingCharacterOnScreen.tick-175"><span class="linenos">175</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">character</span><span class="p">,</span> <span class="n">coordinate</span><span class="o">=</span><span class="n">coordinate</span><span class="p">)</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Update the character's state for a single game step/frame.</p>
-
-<p>Calculates movement based on currently pressed keys, handles collision
-detection, and updates the character's drawing state (moving or idle).</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code>time_delta</code>:</strong>  The time that has passed since
-the last update, used for calculating movement distance.</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code><a href="#CharacterOnScreen">CharacterOnScreen</a></code>: The updated character state after the step.</p>
-</blockquote>
-</div>
-
-
-                            </div>
-                            <div class="inherited">
-                                <h5>Inherited Members</h5>
-                                <dl>
-                                    <div><dt><a href="#CharacterOnScreen">CharacterOnScreen</a></dt>
-                                <dd id="MovingCharacterOnScreen.spec" class="variable"><a href="#CharacterOnScreen.spec">spec</a></dd>
-                <dd id="MovingCharacterOnScreen.coordinate" class="variable"><a href="#CharacterOnScreen.coordinate">coordinate</a></dd>
-                <dd id="MovingCharacterOnScreen.character" class="variable"><a href="#CharacterOnScreen.character">character</a></dd>
-                <dd id="MovingCharacterOnScreen.character_and_visuals" class="variable"><a href="#CharacterOnScreen.character_and_visuals">character_and_visuals</a></dd>
-                <dd id="MovingCharacterOnScreen.draw_on_screen" class="variable"><a href="#CharacterOnScreen.draw_on_screen">draw_on_screen</a></dd>
-                <dd id="MovingCharacterOnScreen.start_event" class="function"><a href="#CharacterOnScreen.start_event">start_event</a></dd>
-                <dd id="MovingCharacterOnScreen.complete_event" class="variable"><a href="#CharacterOnScreen.complete_event">complete_event</a></dd>
-
-            </div>
-                                </dl>
                             </div>
                 </section>
     </main>

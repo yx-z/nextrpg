@@ -1,37 +1,16 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npcs import RpgEventScene
-from nextrpg.coordinate import Coordinate
+from nextrpg.config import SayEventConfig, config
+from nextrpg.draw.coordinate import Coordinate
 from nextrpg.core import Millisecond
-from nextrpg.draw_on_screen import DrawOnScreen
+from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
-from nextrpg.event.rpg_event import register_rpg_event
 from nextrpg.scene.scene import Scene
-from nextrpg.text import Text
-
-
-@register_rpg_event
-def say(character: CharacterOnScreen, message: str) -> None:
-    """
-    Character says a message.
-
-    Arguments:
-        `character`: The character to say something.
-
-        `message`: The message to say.
-
-    Returns:
-        Type-hinted type: `None`. For user code (RpgEventSpec), `say` returns
-            no result (from the ` SayEvent ` scene).
-        Actual type: `RpgEventCallable`. For `Npcs`/`MapScene` to yield the
-            scene coroutine.
-    """
-    return lambda generator, scene: SayEvent(
-        generator, scene, character, message
-    )
+from nextrpg.draw.text import Text
 
 
 @dataclass(frozen=True)
@@ -47,6 +26,7 @@ class SayEvent(RpgEventScene):
 
     character: CharacterOnScreen
     message: str
+    cfg: SayEventConfig = field(default_factory=lambda: config().say_event)
 
     @cached_property
     @override

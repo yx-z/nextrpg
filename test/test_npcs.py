@@ -18,10 +18,10 @@ from nextrpg.character.npcs import (
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core import Direction, Size
-from nextrpg.draw_on_screen import Rectangle
-from nextrpg.coordinate import Coordinate
+from nextrpg.draw.draw_on_screen import Rectangle
+from nextrpg.draw.coordinate import Coordinate
 from nextrpg.event.pygame_event import KeyPressDown, Quit
-from nextrpg.event.say import say
+from nextrpg.event.plugins import say
 from nextrpg.scene.map_scene import MapScene
 from test.util import MockCharacterDrawing
 
@@ -97,6 +97,7 @@ def test_npcs(mocker: MockerFixture) -> None:
     say_event = map_scene.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
     object.__setattr__(say_event.scene, "draw_on_screens", ())
     assert say_event.tick(0)
+    mocker.patch("nextrpg.core.Font.pygame")
     assert say_event.draw_on_screens
     assert say_event.event(Quit(Event(QUIT)))
     assert say_event.event(KeyPressDown(Event(KEYDOWN, key=K_SPACE)))
