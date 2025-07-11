@@ -73,14 +73,16 @@ def greet(
     Returns:
         `None`
     """
-    player: f"Hello {npc.spec.name}!"
+    player: "Greetings! This is a sample nextrpg event."
+    npc: "Nice to meet you! What's your name?"
+    player: f"Hello {npc.spec.name}! I am {player.spec.name}."
     npc: f"Hello {player.spec.name}!"
 
     other_npc = {
         "david": npc_dict["alisa"],
         "alisa": npc_dict["david"],
     }[npc.spec.name]
-    other_npc: f"Hello, I am {other_npc.spec.name}!"
+    other_npc: f"Hello! I am {other_npc.spec.name}!"
 
 
 def sprite_sheet() -> SpriteSheet:
