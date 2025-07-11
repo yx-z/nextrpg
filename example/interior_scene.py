@@ -54,10 +54,7 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> Scene:
 
 
 def greet(
-    player: PlayerOnScreen,
-    npc: NpcOnScreen,
-    npc_dict: dict[str, NpcOnScreen],
-    scene: EventfulScene,
+    player: PlayerOnScreen, npc: NpcOnScreen, scene: EventfulScene
 ) -> None:
     """
     Greet event specification.
@@ -67,22 +64,21 @@ def greet(
 
         `npc`: The triggerd NPC.
 
-        `npc_dict`: Dictionary of NPCs in the scene.
-
         `scene`: The scene that triggered the event.
+
     Returns:
         `None`
     """
     player: "Greetings! This is a sample nextrpg event."
     npc: "Nice to meet you! What's your name?"
-    player: f"Hello {npc.spec.name}! I am {player.spec.name}."
-    npc: f"Hello {player.spec.name}!"
+    player: f"Hello {npc.name}! I am {player.name}."
+    npc: f"Hello {player.name}!"
 
     other_npc = {
-        "david": npc_dict["alisa"],
-        "alisa": npc_dict["david"],
+        "david": scene.npc_dict["alisa"],
+        "alisa": scene.npc_dict["david"],
     }[npc.spec.name]
-    other_npc: f"Hello! I am {other_npc.spec.name}!"
+    other_npc: f"Hello! I am {other_npc.name}!"
 
 
 def sprite_sheet() -> SpriteSheet:
@@ -110,6 +106,7 @@ def init_player() -> CharacterSpec:
     return CharacterSpec(
         # Name of the object on the Tiled/tmx map.
         name="player",
+        display_name="Will",
         character=RpgMakerCharacterDrawing(
             direction=Direction.DOWN,
             sprite_sheet=sprite_sheet(),

@@ -7,7 +7,7 @@ from typing import Callable
 from nextrpg.config import config
 
 
-def transform_event[R, **P](fun: Callable[P, R]) -> CodeType:
+def transform_and_compile[R, **P](fun: Callable[P, R]) -> CodeType:
     src = dedent(getsource(fun))
     tree = parse(src)
     for transformer in config().event.transformers:

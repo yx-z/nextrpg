@@ -17,7 +17,7 @@ def say(character, message: str) -> None:
         Actual type: `RpgEventCallable`. For `Npcs`/`MapScene` to yield the
             scene coroutine.
     """
-    from nextrpg.event.say import SayEvent
+    from nextrpg.event.say_event import SayEvent
 
     return lambda generator, scene: SayEvent(
         generator, scene, character, message

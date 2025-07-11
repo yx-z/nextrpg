@@ -22,9 +22,10 @@ from nextrpg.scene.scene import Scene
 type CharacterVisual = Callable[[CharacterOnScreen], tuple[DrawOnScreen, ...]]
 
 
-@dataclass(kw_only=True, frozen=True)
+@dataclass_with_instance_init
 class CharacterSpec:
     name: str
+    display_name: str = instance_init(lambda self: self.name)
     character: CharacterDrawing
     below_foreground_visuals: tuple[CharacterVisual, ...] = ()
     above_foreground_visuals: tuple[CharacterVisual, ...] = ()
@@ -50,6 +51,7 @@ class CharacterOnScreen:
 
     spec: CharacterSpec
     coordinate: Coordinate
+    name: str = instance_init(lambda self: self.spec.display_name)
     character: CharacterDrawing = instance_init(
         lambda self: self.spec.character
     )

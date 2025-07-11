@@ -11,7 +11,7 @@ from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
 from nextrpg.core import Millisecond, PixelPerMillisecond
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
-from nextrpg.event.transform_event import transform_event
+from nextrpg.event.event_transformer import transform_and_compile
 from nextrpg.logger import Logger
 from nextrpg.model import dataclass_with_instance_init, instance_init
 from nextrpg.scene.scene import Scene
@@ -62,9 +62,7 @@ class EventfulScene(Scene):
         ):
             logger.debug(t"Collided with {npc.spec.name}")
             scene = self._trigger(npc)
-            generator = scene.npc.generator(
-                scene.player, scene.npc, scene.npc_dict, scene
-            )
+            generator = scene.npc.generator(scene.player, scene.npc, scene)
             logger.debug(t"Event {generator.__name__} started.")
             return next(generator)(generator, scene)
         return self.event_without_npc_trigger(event)
@@ -158,9 +156,7 @@ class EventfulScene(Scene):
         return tuple(n.complete_event for n in self.npcs)
 
 
-type RpgEventSpecParams = tuple[
-    PlayerOnScreen, NpcOnScreen, dict[str, NpcOnScreen], EventfulScene
-]
+type RpgEventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, EventfulScene]
 
 type RpgEventSpec = Callable[[*RpgEventSpecParams], None]
 """
@@ -225,17 +221,14 @@ class NpcSpec(CharacterSpec):
         self,
     ) -> Callable[[*RpgEventSpecParams], RpgEventGenerator]:
         def yield_event(
-            player: PlayerOnScreen,
-            npc: NpcOnScreen,
-            npc_dict: dict[str, NpcOnScreen],
-            scene: EventfulScene,
+            player: PlayerOnScreen, npc: NpcOnScreen, scene: EventfulScene
         ) -> RpgEventGenerator:
             fun = self.event
             ctx = fun.__globals__ | {
                 v: c.cell_contents
                 for v, c in zip(fun.__code__.co_freevars, fun.__closure__ or ())
             }
-            exec(transform_event(fun), ctx)
-            return ctx[fun.__name__](player, npc, npc_dict, scene)
+            exec(transform_and_compile(fun), ctx)
+            return ctx[fun.__name__](player, npc, scene)
 
         return yield_event
