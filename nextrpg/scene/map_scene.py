@@ -28,10 +28,6 @@ from nextrpg.timepoint import Timepoint, get_timepoint
 logger = Logger("MapScene")
 
 
-def _init_npcs(self: "MapScene") -> tuple[NpcOnScreen, ...]:
-    return tuple(self._init_npc(n) for n in self.npc_specs)
-
-
 @dataclass_with_instance_init
 class MapScene(EventfulScene):
     """
@@ -59,7 +55,9 @@ class MapScene(EventfulScene):
     collision_visuals: tuple[DrawOnScreen, ...] = instance_init(
         lambda self: self._collision_visuals
     )
-    npcs: tuple[NpcOnScreen, ...] = instance_init(_init_npcs)
+    npcs: tuple[NpcOnScreen, ...] = instance_init(
+        lambda self: tuple(self._init_npc(n) for n in self.npc_specs)
+    )
     player: PlayerOnScreen = instance_init(
         lambda self: self.init_player(self.player_spec)
     )
