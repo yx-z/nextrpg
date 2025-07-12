@@ -7,6 +7,7 @@ from pytest_mock import MockerFixture
 
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.npcs import NpcSpec
+from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import Config, DebugConfig, ResourceConfig
 from nextrpg.draw.coordinate import Coordinate
 from nextrpg.core import Size
@@ -33,13 +34,15 @@ def test_map_scene(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=helper)
     map = MapScene(
         tmx_file=Path("test"),
-        player_spec=CharacterSpec(character=MockCharacterDrawing(), name=""),
+        player_spec=CharacterSpec(
+            character=MockCharacterDrawing(), object_name=""
+        ),
     )
     with override_config(Config(debug=DebugConfig())):
         assert MapScene(
             tmx_file=Path("test"),
             player_spec=CharacterSpec(
-                character=MockCharacterDrawing(), name=""
+                character=MockCharacterDrawing(), object_name=""
             ),
         ).collision_visuals
     mocker.patch(
@@ -67,13 +70,19 @@ def test_init_npc(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.scene.map_scene.get_polygon")
     map_scene = MapScene(
         tmx_file="",
-        player_spec=CharacterSpec(character=MockCharacterDrawing(), name=""),
+        player_spec=CharacterSpec(
+            character=MockCharacterDrawing(), object_name=""
+        ),
         npc_specs=(
             NpcSpec(
-                name="", character=MockCharacterDrawing(), event=lambda *_: None
+                object_name="",
+                character=MockCharacterDrawing(),
+                event=lambda *_: None,
             ),
             NpcSpec(
-                name="", character=MockCharacterDrawing(), event=lambda *_: None
+                object_name="",
+                character=MockCharacterDrawing(),
+                event=lambda *_: None,
             ),
         ),
     )
@@ -90,10 +99,14 @@ def test_init_moving_npc(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.scene.map_scene.get_polygon", return_value=None)
     map_scene = MapScene(
         tmx_file="",
-        player_spec=CharacterSpec(character=MockCharacterDrawing(), name=""),
+        player_spec=CharacterSpec(
+            character=MockCharacterDrawing(), object_name=""
+        ),
         npc_specs=(
             NpcSpec(
-                name="", character=MockCharacterDrawing(), event=lambda *_: None
+                object_name="",
+                character=MockCharacterDrawing(),
+                event=lambda *_: None,
             ),
         ),
     )
@@ -120,7 +133,9 @@ def test_move_to_scene(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=helper)
     map = MapScene(
         tmx_file=Path("test"),
-        player_spec=CharacterSpec(name="", character=MockCharacterDrawing()),
+        player_spec=CharacterSpec(
+            object_name="", character=MockCharacterDrawing()
+        ),
         moves=(
             Move("to", "from", lambda _: map),
             Move("", "", lambda _: map),
@@ -141,10 +156,17 @@ def test_move(mocker: MockerFixture) -> None:
     mocker.patch("nextrpg.scene.map_helper.MapHelper.get_object")
     scene = MapScene(
         tmx_file="tmx",
-        player_spec=CharacterSpec(name="", character=MockCharacterDrawing()),
+        player_spec=CharacterSpec(
+            object_name="", character=MockCharacterDrawing()
+        ),
     )
     move = Move("", "", lambda _: scene)
-    assert move.to_scene(scene, MockCharacterDrawing())
+    assert move.to_scene(
+        scene, CharacterSpec(object_name="", character=MockCharacterDrawing())
+    )
 
     with override_config(Config(resource=ResourceConfig(map_cache_size=0))):
-        assert move.to_scene(scene, MockCharacterDrawing())
+        assert move.to_scene(
+            scene,
+            CharacterSpec(object_name="", character=MockCharacterDrawing()),
+        )

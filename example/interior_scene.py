@@ -47,8 +47,8 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> Scene:
         moves=(Move("from_interior", "to_exterior", exterior_scene),),
         # NPC/events.
         npc_specs=(
-            NpcSpec(name="david", character=david(), event=greet),
-            NpcSpec(name="alisa", character=alisa(), event=greet),
+            NpcSpec(object_name="david", character=david(), event=greet),
+            NpcSpec(object_name="alisa", character=alisa(), event=greet),
         ),
     )
 
@@ -77,7 +77,7 @@ def greet(
     other_npc = {
         "david": scene.npc_dict["alisa"],
         "alisa": scene.npc_dict["david"],
-    }[npc.spec.name]
+    }[npc.spec.object_name]
     other_npc: f"Hello! I am {other_npc.name}!"
 
 
@@ -105,7 +105,7 @@ def init_player() -> CharacterSpec:
     """
     return CharacterSpec(
         # Name of the object on the Tiled/tmx map.
-        name="player",
+        object_name="player",
         display_name="Will",
         character=RpgMakerCharacterDrawing(
             direction=Direction.DOWN,

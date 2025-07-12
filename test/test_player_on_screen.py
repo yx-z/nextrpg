@@ -14,7 +14,7 @@ from test.util import MockCharacterDrawing, override_config
 
 def test_player_on_screen():
     player = PlayerOnScreen(
-        spec=CharacterSpec(name="", character=MockCharacterDrawing()),
+        spec=CharacterSpec(object_name="", character=MockCharacterDrawing()),
         coordinate=Coordinate(10, 20),
         move_speed=0.2,
         collisions=(Rectangle(Coordinate(12, 20), Size(10, 10)),),

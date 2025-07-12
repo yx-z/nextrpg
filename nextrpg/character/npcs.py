@@ -46,12 +46,12 @@ class EventfulScene(Scene):
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...] = field(default_factory=tuple)
     npc: NpcOnScreen | None = None
-    event_generator: RpgEventGenerator | None = None
-    event_result: Any = None
+    _event_generator: RpgEventGenerator | None = None
+    _event_result: Any = None
 
     @cached_property
     def npc_dict(self) -> dict[str, NpcOnScreen]:
-        return {n.spec.name: n for n in self.npcs}
+        return {n.spec.object_name: n for n in self.npcs}
 
     def event(self, event: PygameEvent) -> Scene:
         if (
@@ -60,7 +60,7 @@ class EventfulScene(Scene):
             and event.key is KeyboardKey.CONFIRM
             and (npc := self._collided_npc)
         ):
-            logger.debug(t"Collided with {npc.spec.name}")
+            logger.debug(t"Collided with {npc.spec.object_name}")
             scene = self._trigger(npc)
             generator = scene.npc.generator(scene.player, scene.npc, scene)
             logger.debug(t"Event {generator.__name__} started.")
@@ -95,7 +95,7 @@ class EventfulScene(Scene):
         Returns:
             `Scene`: The scene that shall continue with the next event.
         """
-        return replace(self, event_generator=event, event_result=result)
+        return replace(self, _event_generator=event, _event_result=result)
 
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:
@@ -112,7 +112,7 @@ class EventfulScene(Scene):
     def _trigger(self, npc: NpcOnScreen) -> Self:
         triggered_npc = npc.start_event(self.player)
         npcs = tuple(
-            triggered_npc if n.spec.name == npc.spec.name else n
+            triggered_npc if n.spec.object_name == npc.spec.object_name else n
             for n in self.npcs
         )
         return replace(
@@ -130,25 +130,25 @@ class EventfulScene(Scene):
         Returns:
             `Scene | None`: The next scene to continue event execution, if any.
         """
-        if not self.event_generator:
+        if not self._event_generator:
             return None
 
         try:
-            create_next_scene = self.event_generator.send(self.event_result)
-            return create_next_scene(self.event_generator, self)
+            create_next_scene = self._event_generator.send(self._event_result)
+            return create_next_scene(self._event_generator, self)
         except StopIteration:
             return self._clear_event
 
     @cached_property
     def _clear_event(self) -> Self:
-        logger.debug(t"Event {self.event_generator.__name__} completed.")
+        logger.debug(t"Event {self._event_generator.__name__} completed.")
         return replace(
             self,
             player=self.player.complete_event,
             npcs=self._completed_npcs,
             npc=None,
-            event_generator=None,
-            event_result=None,
+            _event_generator=None,
+            _event_result=None,
         )
 
     @cached_property

@@ -19,12 +19,10 @@ class SayEvent(RpgEventScene):
     `say` scene.
 
     Arguments:
-        `character`: The character to say the message.
-
         `message`: The message to say.
     """
 
-    character: CharacterOnScreen
+    character_or_scene: CharacterOnScreen | Scene
     message: str
     cfg: SayEventConfig = field(default_factory=lambda: config().say_event)
 
@@ -51,7 +49,7 @@ class SayEvent(RpgEventScene):
 
     @cached_property
     def _coordinate(self) -> Coordinate:
-        coord = self.character.coordinate
+        coord = self.character_or_scene.coordinate
         if self.scene.draw_on_screen_shift:
             return coord.shift(self.scene.draw_on_screen_shift)
         return coord

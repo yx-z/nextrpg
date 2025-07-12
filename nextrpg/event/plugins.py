@@ -2,13 +2,11 @@ from nextrpg.event.rpg_event import register_rpg_event
 
 
 @register_rpg_event
-def say(character, message: str) -> None:
+def say(character_or_scene: CharacterOnScreen | Scene, message: str) -> None:
     """
     Character says a message.
 
     Arguments:
-        `character`: The character to say something.
-
         `message`: The message to say.
 
     Returns:
@@ -20,5 +18,5 @@ def say(character, message: str) -> None:
     from nextrpg.event.say_event import SayEvent
 
     return lambda generator, scene: SayEvent(
-        generator, scene, character, message
+        generator, scene, character_or_scene, message
     )

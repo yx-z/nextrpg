@@ -86,7 +86,9 @@ def test_map_helper(mocker: MockerFixture) -> None:
     assert helper.layer_bottom_and_draw(
         PlayerOnScreen(
             coordinate=Coordinate(0, 0),
-            spec=CharacterSpec(name="", character=MockCharacterDrawing()),
+            spec=CharacterSpec(
+                object_name="", character=MockCharacterDrawing()
+            ),
             collisions=(),
         )
     )
@@ -101,7 +103,9 @@ def test_map_helper(mocker: MockerFixture) -> None:
         efg._character_layer(
             PlayerOnScreen(
                 coordinate=Coordinate(0, 0),
-                spec=CharacterSpec(name="", character=MockCharacterDrawing()),
+                spec=CharacterSpec(
+                    object_name="", character=MockCharacterDrawing()
+                ),
                 collisions=(),
             )
         )

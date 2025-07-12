@@ -30,7 +30,7 @@ def test_npc_on_screen() -> None:
     npc = NpcOnScreen(
         coordinate=Coordinate(0, 0),
         spec=NpcSpec(
-            name="name",
+            object_name="name",
             character=MockCharacterDrawing(),
             event=lambda *_: None,
         ),
@@ -40,7 +40,9 @@ def test_npc_on_screen() -> None:
         npc.start_event(
             PlayerOnScreen(
                 collisions=(),
-                spec=CharacterSpec(name="", character=MockCharacterDrawing()),
+                spec=CharacterSpec(
+                    object_name="", character=MockCharacterDrawing()
+                ),
                 coordinate=Coordinate(0, 0),
             )
         ).character.direction
@@ -68,25 +70,31 @@ def test_npcs(mocker: MockerFixture) -> None:
         return_value=(),
     )
     player = PlayerOnScreen(
-        spec=CharacterSpec(name="", character=MockCharacterDrawing()),
+        spec=CharacterSpec(object_name="", character=MockCharacterDrawing()),
         coordinate=Coordinate(0, 0),
         collisions=(),
     )
     assert not event(player)
     map_scene = MapScene(
         tmx_file="",
-        player_spec=CharacterSpec(character=MockCharacterDrawing(), name=""),
+        player_spec=CharacterSpec(
+            character=MockCharacterDrawing(), object_name=""
+        ),
         npcs=(
             NpcOnScreen(
                 coordinate=Coordinate(0, 0),
                 spec=NpcSpec(
-                    name="name", character=MockCharacterDrawing(), event=event
+                    object_name="name",
+                    character=MockCharacterDrawing(),
+                    event=event,
                 ),
             ),
             MovingNpcOnScreen(
                 coordinate=Coordinate(0, 0),
                 spec=NpcSpec(
-                    name="name", character=MockCharacterDrawing(), event=event
+                    object_name="name",
+                    character=MockCharacterDrawing(),
+                    event=event,
                 ),
                 collisions=(),
                 path=Rectangle(Coordinate(0, 0), Size(10, 10)),
@@ -117,24 +125,26 @@ def test_eventful_scene() -> None:
     eventful = EventfulScene(
         player=PlayerOnScreen(
             coordinate=Coordinate(0, 0),
-            spec=CharacterSpec(name="", character=MockCharacterDrawing()),
+            spec=CharacterSpec(
+                object_name="", character=MockCharacterDrawing()
+            ),
             collisions=(),
         ),
         npcs=(
             NpcOnScreen(
                 coordinate=Coordinate(0, 0),
                 spec=NpcSpec(
-                    name="npc",
+                    object_name="npc",
                     character=MockCharacterDrawing(),
                     event=lambda *_: None,
                 ),
             ),
         ),
-        event_generator=gen,
+        _event_generator=gen,
         npc=NpcOnScreen(
             coordinate=Coordinate(0, 0),
             spec=NpcSpec(
-                name="npc",
+                object_name="npc",
                 character=MockCharacterDrawing(),
                 event=lambda *_: None,
             ),
@@ -147,18 +157,22 @@ def test_eventful_scene() -> None:
     next(gen2)
     npc = NpcOnScreen(
         spec=NpcSpec(
-            name="abc", event=lambda *_: None, character=MockCharacterDrawing()
+            object_name="abc",
+            event=lambda *_: None,
+            character=MockCharacterDrawing(),
         ),
         coordinate=Coordinate(0, 0),
     )
     scene = EventfulScene(
         player=PlayerOnScreen(
             coordinate=Coordinate(0, 0),
-            spec=CharacterSpec(name="", character=MockCharacterDrawing()),
+            spec=CharacterSpec(
+                object_name="", character=MockCharacterDrawing()
+            ),
             collisions=(),
         ),
         npc=npc,
         npcs=(npc,),
-        event_generator=gen2,
+        _event_generator=gen2,
     )
     assert scene._next_event

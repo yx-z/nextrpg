@@ -24,8 +24,8 @@ type CharacterVisual = Callable[[CharacterOnScreen], tuple[DrawOnScreen, ...]]
 
 @dataclass_with_instance_init
 class CharacterSpec:
-    name: str
-    display_name: str = instance_init(lambda self: self.name)
+    object_name: str
+    display_name: str = instance_init(lambda self: self.object_name)
     character: CharacterDrawing
     below_foreground_visuals: tuple[CharacterVisual, ...] = ()
     above_foreground_visuals: tuple[CharacterVisual, ...] = ()

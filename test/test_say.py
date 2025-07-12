@@ -7,7 +7,7 @@ def test_say() -> None:
     event = SayEvent(
         generator=None,
         scene=Scene(),
-        character=MockCharacterDrawing(),
+        character_or_scene=MockCharacterDrawing(),
         message="",
     )
     assert event._coordinate

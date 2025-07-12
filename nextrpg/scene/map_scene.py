@@ -28,10 +28,6 @@ from nextrpg.timepoint import Timepoint, get_timepoint
 logger = Logger("MapScene")
 
 
-def _init_player(self: MapScene) -> PlayerOnScreen:
-    return self.init_player(self.player_spec)
-
-
 def _init_npcs(self: "MapScene") -> tuple[NpcOnScreen, ...]:
     return tuple(self._init_npc(n) for n in self.npc_specs)
 
@@ -64,14 +60,16 @@ class MapScene(EventfulScene):
         lambda self: self._collision_visuals
     )
     npcs: tuple[NpcOnScreen, ...] = instance_init(_init_npcs)
-    player: PlayerOnScreen = instance_init(_init_player)
+    player: PlayerOnScreen = instance_init(
+        lambda self: self.init_player(self.player_spec)
+    )
 
     @cached_property
     def map_helper(self) -> MapHelper:
         return MapHelper(self.tmx_file)
 
     def init_player(self, player_spec: CharacterSpec) -> PlayerOnScreen:
-        player = self.map_helper.get_object(player_spec.name)
+        player = self.map_helper.get_object(player_spec.object_name)
         return PlayerOnScreen(
             character=player_spec.character,
             coordinate=Coordinate(player.x, player.y),
@@ -119,7 +117,7 @@ class MapScene(EventfulScene):
     def _move(self, move: Move) -> TransitionTriple | None:
         move_poly = get_polygon(self.map_helper.get_object(move.trigger_object))
         if self.player.draw_on_screen.rectangle.collide(move_poly):
-            return move.to_scene(self, self.player.character)
+            return move.to_scene(self, self.player.spec)
         return None
 
     @cached_property
@@ -138,7 +136,7 @@ class MapScene(EventfulScene):
         return collisions + npc_paths
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
-        obj = self.map_helper.get_object(spec.name)
+        obj = self.map_helper.get_object(spec.object_name)
         coord = Coordinate(obj.x, obj.y)
         if poly := get_polygon(obj):
             return MovingNpcOnScreen(coordinate=coord, path=poly, spec=spec)
@@ -176,7 +174,7 @@ class Move:
     )
 
     def to_scene(
-        self, from_scene: MapScene, character: CharacterDrawing
+        self, from_scene: MapScene, player_spec: CharacterSpec
     ) -> TransitionTriple:
         """
         Move to another scene.
@@ -184,12 +182,10 @@ class Move:
         Arguments:
             `from_scene`: The current scene.
 
-            `character`: The character to appear in the next scene.
-
         Returns:
             `TransitionScene`: The transition to the next scene.
         """
-        spec = CharacterSpec(name=self.to_object, character=character)
+        spec = replace(player_spec, object_name=self.to_object)
         now = get_timepoint()
 
         if not (tmx := _tmxs.get(self.next_scene)):

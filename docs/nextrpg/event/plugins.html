@@ -58,26 +58,24 @@
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="nd">@register_rpg_event</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="k">def</span><span class="w"> </span><span class="nf">say</span><span class="p">(</span><span class="n">character</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="k">def</span><span class="w"> </span><span class="nf">say</span><span class="p">(</span><span class="n">character_or_scene</span><span class="p">:</span> <span class="n">CharacterOnScreen</span> <span class="o">|</span> <span class="n">Scene</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="sd">    Character says a message.</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">        `character`: The character to say something.</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">        `message`: The message to say.</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">        `message`: The message to say.</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">    Returns:</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">        Type-hinted type: `None`. For user code (RpgEventSpec), `say` returns</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">            no result (from the ` SayEvent ` scene).</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">        Actual type: `RpgEventCallable`. For `Npcs`/`MapScene` to yield the</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">            scene coroutine.</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.say_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">SayEvent</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="k">return</span> <span class="k">lambda</span> <span class="n">generator</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">SayEvent</span><span class="p">(</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>        <span class="n">generator</span><span class="p">,</span> <span class="n">scene</span><span class="p">,</span> <span class="n">character</span><span class="p">,</span> <span class="n">message</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="p">)</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">    Returns:</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">        Type-hinted type: `None`. For user code (RpgEventSpec), `say` returns</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">            no result (from the ` SayEvent ` scene).</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">        Actual type: `RpgEventCallable`. For `Npcs`/`MapScene` to yield the</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">            scene coroutine.</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.say_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">SayEvent</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="k">return</span> <span class="k">lambda</span> <span class="n">generator</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">SayEvent</span><span class="p">(</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>        <span class="n">generator</span><span class="p">,</span> <span class="n">scene</span><span class="p">,</span> <span class="n">character_or_scene</span><span class="p">,</span> <span class="n">message</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -88,33 +86,31 @@
                     <div class="decorator decorator-register_rpg_event">@register_rpg_event</div>
 
         <span class="def">def</span>
-        <span class="name">say</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">character</span>, </span><span class="param"><span class="n">message</span><span class="p">:</span> <span class="nb">str</span></span><span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
+        <span class="name">say</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">unknown</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="say-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#say"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="say-5"><a href="#say-5"><span class="linenos"> 5</span></a><span class="nd">@register_rpg_event</span>
-</span><span id="say-6"><a href="#say-6"><span class="linenos"> 6</span></a><span class="k">def</span><span class="w"> </span><span class="nf">say</span><span class="p">(</span><span class="n">character</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="say-6"><a href="#say-6"><span class="linenos"> 6</span></a><span class="k">def</span><span class="w"> </span><span class="nf">say</span><span class="p">(</span><span class="n">character_or_scene</span><span class="p">:</span> <span class="n">CharacterOnScreen</span> <span class="o">|</span> <span class="n">Scene</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="say-7"><a href="#say-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="say-8"><a href="#say-8"><span class="linenos"> 8</span></a><span class="sd">    Character says a message.</span>
 </span><span id="say-9"><a href="#say-9"><span class="linenos"> 9</span></a>
 </span><span id="say-10"><a href="#say-10"><span class="linenos">10</span></a><span class="sd">    Arguments:</span>
-</span><span id="say-11"><a href="#say-11"><span class="linenos">11</span></a><span class="sd">        `character`: The character to say something.</span>
+</span><span id="say-11"><a href="#say-11"><span class="linenos">11</span></a><span class="sd">        `message`: The message to say.</span>
 </span><span id="say-12"><a href="#say-12"><span class="linenos">12</span></a>
-</span><span id="say-13"><a href="#say-13"><span class="linenos">13</span></a><span class="sd">        `message`: The message to say.</span>
-</span><span id="say-14"><a href="#say-14"><span class="linenos">14</span></a>
-</span><span id="say-15"><a href="#say-15"><span class="linenos">15</span></a><span class="sd">    Returns:</span>
-</span><span id="say-16"><a href="#say-16"><span class="linenos">16</span></a><span class="sd">        Type-hinted type: `None`. For user code (RpgEventSpec), `say` returns</span>
-</span><span id="say-17"><a href="#say-17"><span class="linenos">17</span></a><span class="sd">            no result (from the ` SayEvent ` scene).</span>
-</span><span id="say-18"><a href="#say-18"><span class="linenos">18</span></a><span class="sd">        Actual type: `RpgEventCallable`. For `Npcs`/`MapScene` to yield the</span>
-</span><span id="say-19"><a href="#say-19"><span class="linenos">19</span></a><span class="sd">            scene coroutine.</span>
-</span><span id="say-20"><a href="#say-20"><span class="linenos">20</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="say-21"><a href="#say-21"><span class="linenos">21</span></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.say_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">SayEvent</span>
-</span><span id="say-22"><a href="#say-22"><span class="linenos">22</span></a>
-</span><span id="say-23"><a href="#say-23"><span class="linenos">23</span></a>    <span class="k">return</span> <span class="k">lambda</span> <span class="n">generator</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">SayEvent</span><span class="p">(</span>
-</span><span id="say-24"><a href="#say-24"><span class="linenos">24</span></a>        <span class="n">generator</span><span class="p">,</span> <span class="n">scene</span><span class="p">,</span> <span class="n">character</span><span class="p">,</span> <span class="n">message</span>
-</span><span id="say-25"><a href="#say-25"><span class="linenos">25</span></a>    <span class="p">)</span>
+</span><span id="say-13"><a href="#say-13"><span class="linenos">13</span></a><span class="sd">    Returns:</span>
+</span><span id="say-14"><a href="#say-14"><span class="linenos">14</span></a><span class="sd">        Type-hinted type: `None`. For user code (RpgEventSpec), `say` returns</span>
+</span><span id="say-15"><a href="#say-15"><span class="linenos">15</span></a><span class="sd">            no result (from the ` SayEvent ` scene).</span>
+</span><span id="say-16"><a href="#say-16"><span class="linenos">16</span></a><span class="sd">        Actual type: `RpgEventCallable`. For `Npcs`/`MapScene` to yield the</span>
+</span><span id="say-17"><a href="#say-17"><span class="linenos">17</span></a><span class="sd">            scene coroutine.</span>
+</span><span id="say-18"><a href="#say-18"><span class="linenos">18</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="say-19"><a href="#say-19"><span class="linenos">19</span></a>    <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.say_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">SayEvent</span>
+</span><span id="say-20"><a href="#say-20"><span class="linenos">20</span></a>
+</span><span id="say-21"><a href="#say-21"><span class="linenos">21</span></a>    <span class="k">return</span> <span class="k">lambda</span> <span class="n">generator</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">SayEvent</span><span class="p">(</span>
+</span><span id="say-22"><a href="#say-22"><span class="linenos">22</span></a>        <span class="n">generator</span><span class="p">,</span> <span class="n">scene</span><span class="p">,</span> <span class="n">character_or_scene</span><span class="p">,</span> <span class="n">message</span>
+</span><span id="say-23"><a href="#say-23"><span class="linenos">23</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -123,7 +119,6 @@
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code>character</code>:</strong>  The character to say something.</li>
 <li><strong><code>message</code>:</strong>  The message to say.</li>
 </ul>
 
