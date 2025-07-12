@@ -220,15 +220,13 @@ class NpcSpec(CharacterSpec):
     def generator(
         self,
     ) -> Callable[[*RpgEventSpecParams], RpgEventGenerator]:
-        def yield_event(
-            player: PlayerOnScreen, npc: NpcOnScreen, scene: EventfulScene
-        ) -> RpgEventGenerator:
+        def yield_event(*args: Any) -> RpgEventGenerator:
             fun = self.event
             ctx = fun.__globals__ | {
                 v: c.cell_contents
                 for v, c in zip(fun.__code__.co_freevars, fun.__closure__ or ())
             }
             exec(transform_and_compile(fun), ctx)
-            return ctx[fun.__name__](player, npc, scene)
+            return ctx[fun.__name__](*args)
 
         return yield_event
