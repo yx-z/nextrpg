@@ -9,6 +9,7 @@ from nextrpg.draw.coordinate import Coordinate
 from nextrpg.core import Millisecond
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
+from nextrpg.logger import Logger
 from nextrpg.scene.scene import Scene
 from nextrpg.draw.text import Text
 
@@ -24,14 +25,15 @@ class SayEvent(RpgEventScene):
 
     character_or_scene: CharacterOnScreen | Scene
     message: str
-    cfg: SayEventConfig = field(default_factory=lambda: config().say_event)
+    config: SayEventConfig = field(default_factory=lambda: config().say_event)
 
     @cached_property
     @override
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return self.scene.draw_on_screens + (
-            Text(self.message, self._coordinate).draw_on_screen,
-        )
+        text = Text(
+            self.message, self._coordinate, config=self.config.text
+        ).draw_on_screen
+        return self.scene.draw_on_screens + (text,)
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:

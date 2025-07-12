@@ -1,8 +1,14 @@
+from typing import Any
+
 from nextrpg.event.rpg_event import register_rpg_event
 
 
 @register_rpg_event
-def say(character_or_scene: CharacterOnScreen | Scene, message: str) -> None:
+def say(
+    character_or_scene: CharacterOnScreen | Scene,
+    message: str,
+    config: SayEventConfig | None = None,
+) -> None:
     """
     Character says a message.
 
@@ -17,6 +23,8 @@ def say(character_or_scene: CharacterOnScreen | Scene, message: str) -> None:
     """
     from nextrpg.event.say_event import SayEvent
 
-    return lambda generator, scene: SayEvent(
-        generator, scene, character_or_scene, message
+    return lambda generator, scene: (
+        SayEvent(generator, scene, character_or_scene, message, config)
+        if config
+        else SayEvent(generator, scene, character_or_scene, message)
     )

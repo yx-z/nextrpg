@@ -334,6 +334,7 @@ class EventConfig:
 class SayEventConfig:
     background: Rgba = WHITE
     text: TextConfig = TextConfig(color=BLACK)
+    padding: Pixel = 20
 
 
 @dataclass(frozen=True)

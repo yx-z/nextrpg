@@ -1,14 +1,16 @@
 from ast import (
     AST,
-    Expr,
+    AnnAssign,
     Attribute,
     Call,
-    Name,
-    Yield,
-    AnnAssign,
+    Expr,
     Load,
+    Name,
     NodeTransformer,
+    Subscript,
+    Yield,
     iter_child_nodes,
+    arg,
 )
 
 from nextrpg.event.rpg_event import registered_events
@@ -49,11 +51,23 @@ ADD_YIELD = AddYield()
 
 class AnnotateSay(NodeTransformer):
     def visit_AnnAssign(self, node: AnnAssign) -> Expr | AnnAssign:
-        if node.value is None:
-            target = Name(node.target.id, Load())
-            say = Call(Name("say", Load()), [target, node.annotation])
-            return Expr(Yield(say))
-        return node
+        if node.value is not None:
+            return node
+
+        match target_node := node.target:
+            case Name():
+                target = target_node.id
+                config = []
+            case Subscript():
+                target = target_node.value.id
+                config = [target_node.slice]
+            case _:
+                raise ValueError(f"Unexpected target: {target_node}")
+
+        function = Name("say", Load())
+        args = [Name(target, Load()), node.annotation] + config
+        say = Call(function, args)
+        return Expr(Yield(say))
 
 
 ANNOTATE_SAY = AnnotateSay()

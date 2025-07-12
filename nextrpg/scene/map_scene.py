@@ -14,7 +14,7 @@ from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config import config
 from nextrpg.draw.coordinate import Coordinate
-from nextrpg.core import Millisecond, Pixel
+from nextrpg.core import Millisecond, Pixel, Timepoint, get_timepoint
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.gui.area import gui_size
 from nextrpg.logger import Logger
@@ -23,7 +23,6 @@ from nextrpg.scene.map_helper import MapHelper, get_polygon
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.static_scene import StaticScene
 from nextrpg.scene.transition_triple import TransitionTriple
-from nextrpg.timepoint import Timepoint, get_timepoint
 
 logger = Logger("MapScene")
 
@@ -39,10 +38,7 @@ class MapScene(EventfulScene):
     Arguments:
         `tmx_file`: Path to the Tiled TMX file to load.
 
-        `player_drawing`: Character drawing representing the player.
-
-        `player_coordinate_object`: Name of the object to use as the player.
-            Default to `None` to use the `config().map.player`.
+        `player_spec`: Character drawing representing the player.
 
         `moves`: Tuple of move objects to trigger when the player enters a new
             map.

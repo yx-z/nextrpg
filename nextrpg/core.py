@@ -11,8 +11,8 @@ from typing import Self
 
 import pygame
 from pygame.font import SysFont
+from pygame.time import get_ticks
 
-from nextrpg.model import cached
 
 type Alpha = int
 """
@@ -249,3 +249,10 @@ class Timer:
             `bool`: Whether the timer has completed.
         """
         return self.elapsed > self.duration
+
+
+type Timepoint = int | float
+
+
+def get_timepoint() -> Timepoint:
+    return get_ticks()

@@ -12,7 +12,8 @@ from nextrpg.character.rpg_maker_character_drawing import (
     SpriteSheet,
     SpriteSheetSelection,
 )
-from nextrpg.core import Direction
+from nextrpg.config import SayEventConfig, TextConfig
+from nextrpg.core import BLACK, Direction, WHITE
 from nextrpg.draw.draw_on_screen import Drawing
 from nextrpg.event.plugins import say
 from nextrpg.scene.map_scene import MapScene, Move
@@ -69,7 +70,8 @@ def greet(
     Returns:
         `None`
     """
-    player: "Greetings! This is a sample nextrpg event."
+    white = SayEventConfig(text=TextConfig(color=WHITE))
+    player[white]: "Greetings! This is a sample nextrpg event."
     npc: "Nice to meet you! What's your name?"
     player: f"Hello {npc.name}! I am {player.name}."
     npc: f"Hello {player.name}!"

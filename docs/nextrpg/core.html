@@ -180,6 +180,12 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="variable" href="#Timepoint">Timepoint</a>
+            </li>
+            <li>
+                    <a class="function" href="#get_timepoint">get_timepoint</a>
+            </li>
     </ul>
 
 
@@ -216,8 +222,8 @@
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.font</span><span class="w"> </span><span class="kn">import</span> <span class="n">SysFont</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>
-</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_ticks</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a>
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="nb">type</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="nb">int</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="sd">&quot;&quot;&quot;</span>
@@ -454,6 +460,13 @@
 </span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a><span class="sd">            `bool`: Whether the timer has completed.</span>
 </span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a><span class="nb">type</span> <span class="n">Timepoint</span> <span class="o">=</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Timepoint</span><span class="p">:</span>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -1453,6 +1466,37 @@ multiplied.</li>
 
 
                             </div>
+                </section>
+                <section id="Timepoint">
+                    <div class="attr variable">
+            <span class="def">type</span> <span class="name">Timepoint</span>        =
+<span class="default_value">int | float</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Timepoint"></a>
+    
+    
+
+                </section>
+                <section id="get_timepoint">
+                            <input id="get_timepoint-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">get_timepoint</span><span class="signature pdoc-code condensed">(<span class="return-annotation">) -> <span class="n">Timepoint</span>:</span></span>
+
+                <label class="view-source-button" for="get_timepoint-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#get_timepoint"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_timepoint-258"><a href="#get_timepoint-258"><span class="linenos">258</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Timepoint</span><span class="p">:</span>
+</span><span id="get_timepoint-259"><a href="#get_timepoint-259"><span class="linenos">259</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
+</span></pre></div>
+
+
+    
+
                 </section>
     </main>
 <script>

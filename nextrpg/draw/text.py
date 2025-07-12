@@ -27,7 +27,7 @@ class Text:
 
     message: str
     top_left: Coordinate
-    cfg: TextConfig = field(default_factory=lambda: config().text)
+    config: TextConfig = field(default_factory=lambda: config().text)
 
     @cached_property
     def draw_on_screen(self) -> DrawOnScreen:
@@ -41,8 +41,8 @@ class Text:
 
     @cached_property
     def _surface(self) -> Surface:
-        return self.cfg.font.pygame.render(
+        return self.config.font.pygame.render(
             self.message,
-            antialias=self.cfg.antialias,
-            color=self.cfg.color,
+            antialias=self.config.antialias,
+            color=self.config.color,
         )
