@@ -118,16 +118,12 @@ class MapScene(EventfulScene):
     def _collision_visuals(self) -> tuple[DrawOnScreen, ...]:
         if not (debug := config().debug):
             return ()
-        collisions = tuple(
-            c.fill(debug.collision_rectangle_color)
-            for c in self.map_helper.collisions
-        )
         npc_paths = tuple(
             n.path.line(debug.npc_path_color)
             for n in self.npcs
             if isinstance(n, MovingNpcOnScreen)
         )
-        return collisions + npc_paths
+        return self.map_helper.collision_visuals + npc_paths
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
         obj = self.map_helper.get_object(spec.object_name)

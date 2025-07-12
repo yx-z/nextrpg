@@ -208,6 +208,10 @@ class Font:
         width, height = self.pygame.size(text)
         return Size(width, height)
 
+    @cached_property
+    def text_height(self) -> Pixel:
+        return self.pygame.get_linesize()
+
 
 @dataclass(frozen=True)
 class Timer:

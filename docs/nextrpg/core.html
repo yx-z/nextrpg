@@ -153,6 +153,9 @@
                         <li>
                                 <a class="function" href="#Font.text_size">text_size</a>
                         </li>
+                        <li>
+                                <a class="variable" href="#Font.text_height">text_height</a>
+                        </li>
                 </ul>
 
             </li>
@@ -419,54 +422,58 @@
 </span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 </span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
 </span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>
-</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>
-</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Timer</span><span class="p">:</span>
-</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a><span class="sd">    A timer with duration and elapsed time.</span>
-</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>
-</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span>
-</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>    <span class="n">elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>
-</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a><span class="sd">        Tick the timer in a game loop.</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
+</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">get_linesize</span><span class="p">()</span>
+</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Timer</span><span class="p">:</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">    A timer with duration and elapsed time.</span>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>    <span class="n">elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>
-</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="sd">            `time_delta`: The time elapsed since the last tick.</span>
-</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>
-</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="sd">        Returns:</span>
-</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a><span class="sd">            `Timer`: A new timer with elapsed time updated.</span>
-</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>
-</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a><span class="sd">        Get a reset timer.</span>
-</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>
-</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a><span class="sd">        Returns:</span>
-</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
-</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>
-</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a><span class="sd">        Get whether the timer has completed.</span>
-</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>
-</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a><span class="sd">        Returns:</span>
-</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a><span class="sd">            `bool`: Whether the timer has completed.</span>
-</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
-</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>
-</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>
-</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a><span class="nb">type</span> <span class="n">Timepoint</span> <span class="o">=</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span>
-</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a><span class="sd">        Tick the timer in a game loop.</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="sd">            `time_delta`: The time elapsed since the last tick.</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a><span class="sd">        Returns:</span>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a><span class="sd">            `Timer`: A new timer with elapsed time updated.</span>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a><span class="sd">        Get a reset timer.</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a><span class="sd">        Returns:</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a><span class="sd">        Get whether the timer has completed.</span>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a><span class="sd">        Returns:</span>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="sd">            `bool`: Whether the timer has completed.</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>
-</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Timepoint</span><span class="p">:</span>
-</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a><span class="nb">type</span> <span class="n">Timepoint</span> <span class="o">=</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Timepoint</span><span class="p">:</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -1141,6 +1148,10 @@ multiplied.</li>
 </span><span id="Font-208"><a href="#Font-208"><span class="linenos">208</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Font-209"><a href="#Font-209"><span class="linenos">209</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 </span><span id="Font-210"><a href="#Font-210"><span class="linenos">210</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+</span><span id="Font-211"><a href="#Font-211"><span class="linenos">211</span></a>
+</span><span id="Font-212"><a href="#Font-212"><span class="linenos">212</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Font-213"><a href="#Font-213"><span class="linenos">213</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
+</span><span id="Font-214"><a href="#Font-214"><span class="linenos">214</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">get_linesize</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -1265,6 +1276,24 @@ multiplied.</li>
 
 
                             </div>
+                            <div id="Font.text_height" class="classattr">
+                                        <input id="Font.text_height-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">text_height</span><span class="annotation">: <a href="#Pixel">Pixel</a></span>
+
+                <label class="view-source-button" for="Font.text_height-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Font.text_height"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Font.text_height-212"><a href="#Font.text_height-212"><span class="linenos">212</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Font.text_height-213"><a href="#Font.text_height-213"><span class="linenos">213</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
+</span><span id="Font.text_height-214"><a href="#Font.text_height-214"><span class="linenos">214</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">get_linesize</span><span class="p">()</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
                 </section>
                 <section id="Timer">
                             <input id="Timer-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -1278,46 +1307,46 @@ multiplied.</li>
 
     </div>
     <a class="headerlink" href="#Timer"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer-213"><a href="#Timer-213"><span class="linenos">213</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="Timer-214"><a href="#Timer-214"><span class="linenos">214</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Timer</span><span class="p">:</span>
-</span><span id="Timer-215"><a href="#Timer-215"><span class="linenos">215</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer-216"><a href="#Timer-216"><span class="linenos">216</span></a><span class="sd">    A timer with duration and elapsed time.</span>
-</span><span id="Timer-217"><a href="#Timer-217"><span class="linenos">217</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Timer-218"><a href="#Timer-218"><span class="linenos">218</span></a>
-</span><span id="Timer-219"><a href="#Timer-219"><span class="linenos">219</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span>
-</span><span id="Timer-220"><a href="#Timer-220"><span class="linenos">220</span></a>    <span class="n">elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="Timer-221"><a href="#Timer-221"><span class="linenos">221</span></a>
-</span><span id="Timer-222"><a href="#Timer-222"><span class="linenos">222</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Timer-223"><a href="#Timer-223"><span class="linenos">223</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer-224"><a href="#Timer-224"><span class="linenos">224</span></a><span class="sd">        Tick the timer in a game loop.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer-217"><a href="#Timer-217"><span class="linenos">217</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="Timer-218"><a href="#Timer-218"><span class="linenos">218</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Timer</span><span class="p">:</span>
+</span><span id="Timer-219"><a href="#Timer-219"><span class="linenos">219</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer-220"><a href="#Timer-220"><span class="linenos">220</span></a><span class="sd">    A timer with duration and elapsed time.</span>
+</span><span id="Timer-221"><a href="#Timer-221"><span class="linenos">221</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Timer-222"><a href="#Timer-222"><span class="linenos">222</span></a>
+</span><span id="Timer-223"><a href="#Timer-223"><span class="linenos">223</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span>
+</span><span id="Timer-224"><a href="#Timer-224"><span class="linenos">224</span></a>    <span class="n">elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="Timer-225"><a href="#Timer-225"><span class="linenos">225</span></a>
-</span><span id="Timer-226"><a href="#Timer-226"><span class="linenos">226</span></a><span class="sd">        Arguments:</span>
-</span><span id="Timer-227"><a href="#Timer-227"><span class="linenos">227</span></a><span class="sd">            `time_delta`: The time elapsed since the last tick.</span>
-</span><span id="Timer-228"><a href="#Timer-228"><span class="linenos">228</span></a>
-</span><span id="Timer-229"><a href="#Timer-229"><span class="linenos">229</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer-230"><a href="#Timer-230"><span class="linenos">230</span></a><span class="sd">            `Timer`: A new timer with elapsed time updated.</span>
-</span><span id="Timer-231"><a href="#Timer-231"><span class="linenos">231</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer-232"><a href="#Timer-232"><span class="linenos">232</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
-</span><span id="Timer-233"><a href="#Timer-233"><span class="linenos">233</span></a>
-</span><span id="Timer-234"><a href="#Timer-234"><span class="linenos">234</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Timer-235"><a href="#Timer-235"><span class="linenos">235</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Timer-236"><a href="#Timer-236"><span class="linenos">236</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer-237"><a href="#Timer-237"><span class="linenos">237</span></a><span class="sd">        Get a reset timer.</span>
-</span><span id="Timer-238"><a href="#Timer-238"><span class="linenos">238</span></a>
-</span><span id="Timer-239"><a href="#Timer-239"><span class="linenos">239</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer-240"><a href="#Timer-240"><span class="linenos">240</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
-</span><span id="Timer-241"><a href="#Timer-241"><span class="linenos">241</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer-242"><a href="#Timer-242"><span class="linenos">242</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span><span id="Timer-243"><a href="#Timer-243"><span class="linenos">243</span></a>
-</span><span id="Timer-244"><a href="#Timer-244"><span class="linenos">244</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Timer-245"><a href="#Timer-245"><span class="linenos">245</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Timer-246"><a href="#Timer-246"><span class="linenos">246</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer-247"><a href="#Timer-247"><span class="linenos">247</span></a><span class="sd">        Get whether the timer has completed.</span>
-</span><span id="Timer-248"><a href="#Timer-248"><span class="linenos">248</span></a>
-</span><span id="Timer-249"><a href="#Timer-249"><span class="linenos">249</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer-250"><a href="#Timer-250"><span class="linenos">250</span></a><span class="sd">            `bool`: Whether the timer has completed.</span>
-</span><span id="Timer-251"><a href="#Timer-251"><span class="linenos">251</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer-252"><a href="#Timer-252"><span class="linenos">252</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="Timer-226"><a href="#Timer-226"><span class="linenos">226</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Timer-227"><a href="#Timer-227"><span class="linenos">227</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer-228"><a href="#Timer-228"><span class="linenos">228</span></a><span class="sd">        Tick the timer in a game loop.</span>
+</span><span id="Timer-229"><a href="#Timer-229"><span class="linenos">229</span></a>
+</span><span id="Timer-230"><a href="#Timer-230"><span class="linenos">230</span></a><span class="sd">        Arguments:</span>
+</span><span id="Timer-231"><a href="#Timer-231"><span class="linenos">231</span></a><span class="sd">            `time_delta`: The time elapsed since the last tick.</span>
+</span><span id="Timer-232"><a href="#Timer-232"><span class="linenos">232</span></a>
+</span><span id="Timer-233"><a href="#Timer-233"><span class="linenos">233</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer-234"><a href="#Timer-234"><span class="linenos">234</span></a><span class="sd">            `Timer`: A new timer with elapsed time updated.</span>
+</span><span id="Timer-235"><a href="#Timer-235"><span class="linenos">235</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer-236"><a href="#Timer-236"><span class="linenos">236</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
+</span><span id="Timer-237"><a href="#Timer-237"><span class="linenos">237</span></a>
+</span><span id="Timer-238"><a href="#Timer-238"><span class="linenos">238</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Timer-239"><a href="#Timer-239"><span class="linenos">239</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Timer-240"><a href="#Timer-240"><span class="linenos">240</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer-241"><a href="#Timer-241"><span class="linenos">241</span></a><span class="sd">        Get a reset timer.</span>
+</span><span id="Timer-242"><a href="#Timer-242"><span class="linenos">242</span></a>
+</span><span id="Timer-243"><a href="#Timer-243"><span class="linenos">243</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer-244"><a href="#Timer-244"><span class="linenos">244</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
+</span><span id="Timer-245"><a href="#Timer-245"><span class="linenos">245</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer-246"><a href="#Timer-246"><span class="linenos">246</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="Timer-247"><a href="#Timer-247"><span class="linenos">247</span></a>
+</span><span id="Timer-248"><a href="#Timer-248"><span class="linenos">248</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Timer-249"><a href="#Timer-249"><span class="linenos">249</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Timer-250"><a href="#Timer-250"><span class="linenos">250</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer-251"><a href="#Timer-251"><span class="linenos">251</span></a><span class="sd">        Get whether the timer has completed.</span>
+</span><span id="Timer-252"><a href="#Timer-252"><span class="linenos">252</span></a>
+</span><span id="Timer-253"><a href="#Timer-253"><span class="linenos">253</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer-254"><a href="#Timer-254"><span class="linenos">254</span></a><span class="sd">            `bool`: Whether the timer has completed.</span>
+</span><span id="Timer-255"><a href="#Timer-255"><span class="linenos">255</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer-256"><a href="#Timer-256"><span class="linenos">256</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
@@ -1371,17 +1400,17 @@ multiplied.</li>
 
     </div>
     <a class="headerlink" href="#Timer.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.tick-222"><a href="#Timer.tick-222"><span class="linenos">222</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Timer.tick-223"><a href="#Timer.tick-223"><span class="linenos">223</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer.tick-224"><a href="#Timer.tick-224"><span class="linenos">224</span></a><span class="sd">        Tick the timer in a game loop.</span>
-</span><span id="Timer.tick-225"><a href="#Timer.tick-225"><span class="linenos">225</span></a>
-</span><span id="Timer.tick-226"><a href="#Timer.tick-226"><span class="linenos">226</span></a><span class="sd">        Arguments:</span>
-</span><span id="Timer.tick-227"><a href="#Timer.tick-227"><span class="linenos">227</span></a><span class="sd">            `time_delta`: The time elapsed since the last tick.</span>
-</span><span id="Timer.tick-228"><a href="#Timer.tick-228"><span class="linenos">228</span></a>
-</span><span id="Timer.tick-229"><a href="#Timer.tick-229"><span class="linenos">229</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer.tick-230"><a href="#Timer.tick-230"><span class="linenos">230</span></a><span class="sd">            `Timer`: A new timer with elapsed time updated.</span>
-</span><span id="Timer.tick-231"><a href="#Timer.tick-231"><span class="linenos">231</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer.tick-232"><a href="#Timer.tick-232"><span class="linenos">232</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.tick-226"><a href="#Timer.tick-226"><span class="linenos">226</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Timer.tick-227"><a href="#Timer.tick-227"><span class="linenos">227</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer.tick-228"><a href="#Timer.tick-228"><span class="linenos">228</span></a><span class="sd">        Tick the timer in a game loop.</span>
+</span><span id="Timer.tick-229"><a href="#Timer.tick-229"><span class="linenos">229</span></a>
+</span><span id="Timer.tick-230"><a href="#Timer.tick-230"><span class="linenos">230</span></a><span class="sd">        Arguments:</span>
+</span><span id="Timer.tick-231"><a href="#Timer.tick-231"><span class="linenos">231</span></a><span class="sd">            `time_delta`: The time elapsed since the last tick.</span>
+</span><span id="Timer.tick-232"><a href="#Timer.tick-232"><span class="linenos">232</span></a>
+</span><span id="Timer.tick-233"><a href="#Timer.tick-233"><span class="linenos">233</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer.tick-234"><a href="#Timer.tick-234"><span class="linenos">234</span></a><span class="sd">            `Timer`: A new timer with elapsed time updated.</span>
+</span><span id="Timer.tick-235"><a href="#Timer.tick-235"><span class="linenos">235</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer.tick-236"><a href="#Timer.tick-236"><span class="linenos">236</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -1411,15 +1440,15 @@ multiplied.</li>
 
     </div>
     <a class="headerlink" href="#Timer.reset"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.reset-234"><a href="#Timer.reset-234"><span class="linenos">234</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Timer.reset-235"><a href="#Timer.reset-235"><span class="linenos">235</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Timer.reset-236"><a href="#Timer.reset-236"><span class="linenos">236</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer.reset-237"><a href="#Timer.reset-237"><span class="linenos">237</span></a><span class="sd">        Get a reset timer.</span>
-</span><span id="Timer.reset-238"><a href="#Timer.reset-238"><span class="linenos">238</span></a>
-</span><span id="Timer.reset-239"><a href="#Timer.reset-239"><span class="linenos">239</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer.reset-240"><a href="#Timer.reset-240"><span class="linenos">240</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
-</span><span id="Timer.reset-241"><a href="#Timer.reset-241"><span class="linenos">241</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer.reset-242"><a href="#Timer.reset-242"><span class="linenos">242</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.reset-238"><a href="#Timer.reset-238"><span class="linenos">238</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Timer.reset-239"><a href="#Timer.reset-239"><span class="linenos">239</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Timer.reset-240"><a href="#Timer.reset-240"><span class="linenos">240</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer.reset-241"><a href="#Timer.reset-241"><span class="linenos">241</span></a><span class="sd">        Get a reset timer.</span>
+</span><span id="Timer.reset-242"><a href="#Timer.reset-242"><span class="linenos">242</span></a>
+</span><span id="Timer.reset-243"><a href="#Timer.reset-243"><span class="linenos">243</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer.reset-244"><a href="#Timer.reset-244"><span class="linenos">244</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
+</span><span id="Timer.reset-245"><a href="#Timer.reset-245"><span class="linenos">245</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer.reset-246"><a href="#Timer.reset-246"><span class="linenos">246</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -1443,15 +1472,15 @@ multiplied.</li>
 
     </div>
     <a class="headerlink" href="#Timer.complete"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.complete-244"><a href="#Timer.complete-244"><span class="linenos">244</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Timer.complete-245"><a href="#Timer.complete-245"><span class="linenos">245</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Timer.complete-246"><a href="#Timer.complete-246"><span class="linenos">246</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer.complete-247"><a href="#Timer.complete-247"><span class="linenos">247</span></a><span class="sd">        Get whether the timer has completed.</span>
-</span><span id="Timer.complete-248"><a href="#Timer.complete-248"><span class="linenos">248</span></a>
-</span><span id="Timer.complete-249"><a href="#Timer.complete-249"><span class="linenos">249</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer.complete-250"><a href="#Timer.complete-250"><span class="linenos">250</span></a><span class="sd">            `bool`: Whether the timer has completed.</span>
-</span><span id="Timer.complete-251"><a href="#Timer.complete-251"><span class="linenos">251</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer.complete-252"><a href="#Timer.complete-252"><span class="linenos">252</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.complete-248"><a href="#Timer.complete-248"><span class="linenos">248</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Timer.complete-249"><a href="#Timer.complete-249"><span class="linenos">249</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Timer.complete-250"><a href="#Timer.complete-250"><span class="linenos">250</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer.complete-251"><a href="#Timer.complete-251"><span class="linenos">251</span></a><span class="sd">        Get whether the timer has completed.</span>
+</span><span id="Timer.complete-252"><a href="#Timer.complete-252"><span class="linenos">252</span></a>
+</span><span id="Timer.complete-253"><a href="#Timer.complete-253"><span class="linenos">253</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer.complete-254"><a href="#Timer.complete-254"><span class="linenos">254</span></a><span class="sd">            `bool`: Whether the timer has completed.</span>
+</span><span id="Timer.complete-255"><a href="#Timer.complete-255"><span class="linenos">255</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer.complete-256"><a href="#Timer.complete-256"><span class="linenos">256</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
@@ -1490,8 +1519,8 @@ multiplied.</li>
 
     </div>
     <a class="headerlink" href="#get_timepoint"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_timepoint-258"><a href="#get_timepoint-258"><span class="linenos">258</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Timepoint</span><span class="p">:</span>
-</span><span id="get_timepoint-259"><a href="#get_timepoint-259"><span class="linenos">259</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_timepoint-262"><a href="#get_timepoint-262"><span class="linenos">262</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Timepoint</span><span class="p">:</span>
+</span><span id="get_timepoint-263"><a href="#get_timepoint-263"><span class="linenos">263</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
 </span></pre></div>
 
 

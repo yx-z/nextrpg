@@ -183,6 +183,14 @@ class MapHelper:
         )
         return from_tiles + from_objects
 
+    @cached_property
+    def collision_visuals(self) -> tuple[DrawOnScreen, ...]:
+        if debug := config().debug:
+            return tuple(
+                c.fill(debug.collision_rectangle_color) for c in self.collisions
+            )
+        return ()
+
     def get_object(self, name: str) -> TiledObject:
         """
         Get the first object of the given name from all visible object layers.

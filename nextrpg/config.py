@@ -311,9 +311,9 @@ class TextConfig:
         `antialias`: Whether to use antialiasing for rendering text.
     """
 
-    font: Font = Font(24)
+    font: Font = Font(28)
     color: Rgba = WHITE
-    line_spacing: Pixel = 4
+    line_spacing: Pixel = 8
     antialias: bool = True
 
 
@@ -333,8 +333,9 @@ class EventConfig:
 @dataclass(frozen=True)
 class SayEventConfig:
     background: Rgba = WHITE
+    border_radius: Pixel = 20
     text: TextConfig = TextConfig(color=BLACK)
-    padding: Pixel = 20
+    padding: Pixel = 16
 
 
 @dataclass(frozen=True)

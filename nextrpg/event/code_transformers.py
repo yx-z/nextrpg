@@ -10,8 +10,9 @@ from ast import (
     Subscript,
     Yield,
     iter_child_nodes,
-    arg,
+    unparse,
 )
+from typing import NoReturn
 
 from nextrpg.event.rpg_event import registered_events
 
@@ -57,17 +58,25 @@ class AnnotateSay(NodeTransformer):
         match target_node := node.target:
             case Name():
                 target = target_node.id
-                config = []
+                arg = []
             case Subscript():
-                target = target_node.value.id
-                config = [target_node.slice]
+                if isinstance(target_node.value, Name):
+                    target = target_node.value.id
+                    arg = [target_node.slice]
+                else:
+                    _raise(node)
             case _:
-                raise ValueError(f"Unexpected target: {target_node}")
+                _raise(node)
 
         function = Name("say", Load())
-        args = [Name(target, Load()), node.annotation] + config
-        say = Call(function, args)
-        return Expr(Yield(say))
+        args = [Name(target, Load()), node.annotation] + arg
+        return Expr(Yield(Call(function, args)))
+
+
+def _raise(node: AnnAssign) -> NoReturn:
+    raise ValueError(
+        f'Expect var[arg]: "...", where var is player/npc and arg is the ad-hoc config. Got complex expression {unparse(node)}'
+    )
 
 
 ANNOTATE_SAY = AnnotateSay()

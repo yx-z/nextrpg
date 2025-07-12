@@ -1,48 +1,32 @@
-"""
-Text interface.
-"""
-
 from dataclasses import dataclass, field
 from functools import cached_property
 
-from pygame import Surface
-
 from nextrpg.config import TextConfig, config
-from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing
-from nextrpg.draw.coordinate import Coordinate
+from nextrpg.core import Pixel, Size
 
 
 @dataclass(frozen=True)
 class Text:
-    """
-    Text printed on screen.
-
-    Arguments:
-        `message`: The text to print.
-
-        `top_left`: The top-left coordinate of the text.
-
-        `config`: The text configuration.
-    """
-
     message: str
-    top_left: Coordinate
     config: TextConfig = field(default_factory=lambda: config().text)
 
     @cached_property
-    def draw_on_screen(self) -> DrawOnScreen:
-        """
-        The text rendered on screen.
-
-        Returns:
-            `DrawOnScreen`: The text rendered on screen.
-        """
-        return DrawOnScreen(self.top_left, Drawing(self._surface))
+    def size(self) -> Size:
+        if not self.message:
+            return Size(0, 0)
+        text_sizes = [self.config.font.text_size(line) for line in self.lines]
+        width = max(s.width for s in text_sizes)
+        height = sum(s.height for s in text_sizes)
+        spacings = self.config.line_spacing * (len(self.lines) - 1)
+        return Size(width, height + spacings)
 
     @cached_property
-    def _surface(self) -> Surface:
-        return self.config.font.pygame.render(
-            self.message,
-            antialias=self.config.antialias,
-            color=self.config.color,
-        )
+    def line_heights(self) -> list[Pixel]:
+        return [
+            (self.config.font.text_height + self.config.line_spacing) * i
+            for i in range(len(self.lines))
+        ]
+
+    @cached_property
+    def lines(self) -> list[str]:
+        return self.message.splitlines()

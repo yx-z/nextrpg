@@ -6,12 +6,14 @@ from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npcs import RpgEventScene
 from nextrpg.config import SayEventConfig, config
 from nextrpg.draw.coordinate import Coordinate
-from nextrpg.core import Millisecond
-from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.core import Millisecond, Size
+from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing, Rectangle
+from nextrpg.draw.text import Text
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
+from nextrpg.gui.area import screen
 from nextrpg.logger import Logger
 from nextrpg.scene.scene import Scene
-from nextrpg.draw.text import Text
+from nextrpg.draw.text_on_screen import TextOnScreen
 
 
 @dataclass(frozen=True)
@@ -25,15 +27,18 @@ class SayEvent(RpgEventScene):
 
     character_or_scene: CharacterOnScreen | Scene
     message: str
+    arg: Coordinate | Drawing | None = None
     config: SayEventConfig = field(default_factory=lambda: config().say_event)
 
     @cached_property
     @override
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        text = Text(
-            self.message, self._coordinate, config=self.config.text
-        ).draw_on_screen
-        return self.scene.draw_on_screens + (text,)
+        text = TextOnScreen(self._text, self._text_top_left)
+        return (
+            self.scene.draw_on_screens
+            + (self._background,)
+            + text.draw_on_screen
+        )
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
@@ -50,8 +55,33 @@ class SayEvent(RpgEventScene):
         return self
 
     @cached_property
-    def _coordinate(self) -> Coordinate:
+    def _text(self) -> Text:
+        return Text(self.message, self.config.text)
+
+    @cached_property
+    def _text_top_left(self) -> Coordinate:
+        if isinstance(self.character_or_scene, Scene):
+            center = (
+                self.arg
+                if isinstance(self.arg, Coordinate)
+                else screen().center
+            )
+            width, height = self._text.size
+            return center.shift(Coordinate(width / 2, height / 2).negate)
+
         coord = self.character_or_scene.coordinate
         if self.scene.draw_on_screen_shift:
             return coord.shift(self.scene.draw_on_screen_shift)
         return coord
+
+    @cached_property
+    def _background(self) -> DrawOnScreen:
+        width, height = self._text.size
+        top_left = self._text_top_left.shift(
+            Coordinate(self.config.padding, self.config.padding).negate
+        )
+        padding = self.config.padding * 2
+        size = Size(width + padding, height + padding)
+        return Rectangle(top_left, size).fill(
+            self.config.background, self.config.border_radius
+        )

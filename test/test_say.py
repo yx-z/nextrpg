@@ -10,4 +10,4 @@ def test_say() -> None:
         character_or_scene=MockCharacterDrawing(),
         message="",
     )
-    assert event._coordinate
+    assert event._text_top_left

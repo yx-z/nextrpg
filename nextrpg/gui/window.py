@@ -21,6 +21,7 @@ from nextrpg.config import (
 from nextrpg.core import Millisecond, Pixel, Size
 from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing
 from nextrpg.draw.coordinate import Coordinate
+from nextrpg.draw.text import Text
 from nextrpg.event.pygame_event import (
     GuiResize,
     KeyPressDown,
@@ -28,7 +29,7 @@ from nextrpg.event.pygame_event import (
     PygameEvent,
 )
 from nextrpg.logger import ComponentAndMessage, Logger, pop_messages
-from nextrpg.draw.text import Text
+from nextrpg.draw.text_on_screen import TextOnScreen
 
 type _GuiFlag = int
 
@@ -106,7 +107,9 @@ class Gui:
 
     def _draw_log(self, time_delta: Millisecond) -> None:
         if msgs := pop_messages(time_delta):
-            self._screen.blits(t.draw_on_screen.pygame for t in _log_text(msgs))
+            self._screen.blits(
+                d.pygame for t in _log_text(msgs) for d in t.draw_on_screen
+            )
 
     def _scale(self, draws: tuple[DrawOnScreen, ...]) -> DrawOnScreen:
         screen = Surface(self.initial_config.size)
@@ -188,21 +191,25 @@ class Gui:
         )
 
 
-def _log_text(msgs: tuple[ComponentAndMessage, ...]) -> tuple[Text, ...]:
-    margin = config().text.line_spacing
-    msg_margin = (
+def _log_text(
+    msgs: tuple[ComponentAndMessage, ...],
+) -> tuple[TextOnScreen, ...]:
+    spacing = config().text.line_spacing
+    msg_spacing = (
         max(config().text.font.text_size(m.component).width for m in msgs)
-        + 2 * margin
+        + 2 * spacing
     )
     return tuple(
         text
         for i, (component, msg) in enumerate(msgs)
         for text in (
-            Text(component, Coordinate(margin, _line_height(i))),
-            Text(msg, Coordinate(msg_margin, _line_height(i))),
+            TextOnScreen(Text(component), Coordinate(spacing, _line_height(i))),
+            TextOnScreen(Text(msg), Coordinate(msg_spacing, _line_height(i))),
         )
     )
 
 
 def _line_height(line_index: int) -> Pixel:
-    return 2 * config().text.line_spacing + line_index * config().text.font.size
+    return config().text.line_spacing + line_index * (
+        config().text.line_spacing + config().text.font.text_height
+    )

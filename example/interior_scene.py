@@ -16,6 +16,7 @@ from nextrpg.config import SayEventConfig, TextConfig
 from nextrpg.core import BLACK, Direction, WHITE
 from nextrpg.draw.draw_on_screen import Drawing
 from nextrpg.event.plugins import say
+from nextrpg.gui.area import screen, top_screen
 from nextrpg.scene.map_scene import MapScene, Move
 from nextrpg.scene.scene import Scene
 
@@ -70,16 +71,16 @@ def greet(
     Returns:
         `None`
     """
-    white = SayEventConfig(text=TextConfig(color=WHITE))
-    player[white]: "Greetings! This is a sample nextrpg event."
+    scene[
+        top_screen().center
+    ]: """Greetings!
+This is a sample nextrpg event."""
+
     npc: "Nice to meet you! What's your name?"
     player: f"Hello {npc.name}! I am {player.name}."
     npc: f"Hello {player.name}!"
 
-    other_npc = {
-        "david": scene.npc_dict["alisa"],
-        "alisa": scene.npc_dict["david"],
-    }[npc.spec.object_name]
+    other_npc = scene.npc_dict["david" if npc.name == "alisa" else "alisa"]
     other_npc: f"Hello! I am {other_npc.name}!"
 
 
