@@ -1,11 +1,12 @@
-from typing import Any
-
+from nextrpg.draw.coordinate import Coordinate
 from nextrpg.event.rpg_event import register_rpg_event
 
 
 @register_rpg_event
 def say(
-    character_or_scene: CharacterOnScreen | Scene, message: str, arg: Any = None
+    character_or_scene: CharacterOnScreen | Scene,
+    message: str,
+    arg: Coordinate | Drawing | None = None,
 ) -> None:
     """
     Character says a message.

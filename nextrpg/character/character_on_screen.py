@@ -11,6 +11,7 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core import Millisecond
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.draw.coordinate import Coordinate
+from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.event.rpg_event import registered_events
 from nextrpg.model import (
     NEXTRPG_INSTANCE_INIT,
@@ -32,7 +33,7 @@ class CharacterSpec:
 
 
 @dataclass_with_instance_init
-class CharacterOnScreen:
+class CharacterOnScreen(EventAsAttr):
     """
     Represents a character that can be displayed and moved on screen.
 
@@ -94,15 +95,6 @@ class CharacterOnScreen:
     @cached_property
     def complete_event(self) -> Self:
         return replace(self, _event_triggered=False)
-
-    def __getattr__(self, attr: str) -> Callable[..., Scene] | None:
-        if event := registered_events.get(attr):
-            return lambda *args, **kwargs: event(self, *args, **kwargs)
-        if attr == NEXTRPG_INSTANCE_INIT:
-            return None
-        raise AttributeError(
-            f"{attr} is neither a registered RPG event nor a member of {self}."
-        )
 
     def _visuals(
         self, visuals: tuple[CharacterVisual, ...]

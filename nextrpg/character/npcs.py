@@ -10,6 +10,7 @@ from nextrpg.character.character_on_screen import (
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config.config import config
 from nextrpg.core import Millisecond, PixelPerMillisecond
+from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.event.event_transformer import transform_and_compile
 from nextrpg.logger import Logger
@@ -37,7 +38,7 @@ class NpcOnScreen(CharacterOnScreen):
 
 
 @dataclass(frozen=True)
-class EventfulScene(Scene):
+class EventfulScene(Scene, EventAsAttr):
     """
     EventfulScene allows scenes to continue event execution via coroutine/
         generator.
@@ -217,9 +218,7 @@ class NpcSpec(CharacterSpec):
     cyclic_walk: bool = True
 
     @cached_property
-    def generator(
-        self,
-    ) -> Callable[[*RpgEventSpecParams], RpgEventGenerator]:
+    def generator(self) -> Callable[[*RpgEventSpecParams], RpgEventGenerator]:
         def yield_event(*args: Any) -> RpgEventGenerator:
             fun = self.event
             ctx = fun.__globals__ | {

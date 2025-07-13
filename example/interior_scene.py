@@ -7,16 +7,14 @@ from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.rpg_maker_character_drawing import (
-    Trim,
     RpgMakerCharacterDrawing,
     SpriteSheet,
     SpriteSheetSelection,
+    Trim,
 )
-from nextrpg.config import SayEventConfig, TextConfig
-from nextrpg.core import BLACK, Direction, WHITE
+from nextrpg.core import Direction
 from nextrpg.draw.draw_on_screen import Drawing
-from nextrpg.event.plugins import say
-from nextrpg.gui.area import screen, top_screen
+from nextrpg.gui.area import top_screen
 from nextrpg.scene.map_scene import MapScene, Move
 from nextrpg.scene.scene import Scene
 
@@ -71,10 +69,7 @@ def greet(
     Returns:
         `None`
     """
-    scene[
-        top_screen().center
-    ]: """Greetings!
-This is a sample nextrpg event."""
+    scene: "Greetings! This is a sample nextrpg event."
 
     npc: "Nice to meet you! What's your name?"
     player: f"Hello {npc.name}! I am {player.name}."

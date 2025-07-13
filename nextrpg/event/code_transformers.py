@@ -1,9 +1,9 @@
 from ast import (
     AST,
+    Expr,
     AnnAssign,
     Attribute,
     Call,
-    Expr,
     Load,
     Name,
     NodeTransformer,
@@ -64,16 +64,15 @@ class AnnotateSay(NodeTransformer):
                     target = target_node.value.id
                     arg = [target_node.slice]
                 else:
-                    _raise(node)
+                    _raise_annotate_say(node)
             case _:
-                _raise(node)
+                _raise_annotate_say(node)
 
-        function = Name("say", Load())
-        args = [Name(target, Load()), node.annotation] + arg
-        return Expr(Yield(Call(function, args)))
+        say = Attribute(Name(target, Load()), "say", Load())
+        return Expr(Call(say, [node.annotation] + arg))
 
 
-def _raise(node: AnnAssign) -> NoReturn:
+def _raise_annotate_say(node: AnnAssign) -> NoReturn:
     raise ValueError(
         f'Expect var[arg]: "...", where var is player/npc and arg is the ad-hoc config. Got complex expression {unparse(node)}'
     )
