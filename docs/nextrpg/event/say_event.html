@@ -116,40 +116,40 @@
 </span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="nd">@override</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screens</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>            <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_background</span><span class="p">,)</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>            <span class="o">+</span> <span class="n">TextOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_top_left</span><span class="p">)</span><span class="o">.</span><span class="n">draw_on_screen</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>        <span class="p">)</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_popup</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="nd">@override</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">tick_without_event</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
 </span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
 </span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="nd">@override</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">tick_without_event</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="nd">@override</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">KeyPressDown</span><span class="p">):</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>            <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">event_without_npc_trigger</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="o">=</span><span class="n">scene</span><span class="p">)</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">KeyPressDown</span><span class="p">):</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>            <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">event_without_npc_trigger</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="o">=</span><span class="n">scene</span><span class="p">)</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">CONFIRM</span><span class="p">:</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">)</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">CONFIRM</span><span class="p">:</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">)</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>        <span class="k">return</span> <span class="n">Text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_text_top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">character_or_scene</span><span class="p">,</span> <span class="n">Scene</span><span class="p">):</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>            <span class="n">center</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">arg</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">Coordinate</span><span class="p">)</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>                <span class="k">else</span> <span class="n">screen</span><span class="p">()</span><span class="o">.</span><span class="n">center</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>            <span class="p">)</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>            <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">size</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>            <span class="k">return</span> <span class="n">center</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">negate</span><span class="p">)</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_text_popup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="n">background</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_background</span><span class="p">,)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_tail</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="n">text</span> <span class="o">=</span> <span class="n">TextOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_top_left</span><span class="p">)</span><span class="o">.</span><span class="n">draw_on_screen</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="n">background</span> <span class="o">+</span> <span class="n">text</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_text_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>        <span class="k">return</span> <span class="p">()</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="n">Text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_text_top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">character_or_scene</span><span class="p">,</span> <span class="n">Scene</span><span class="p">):</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene_top_left</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>
 </span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>        <span class="n">coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character_or_scene</span><span class="o">.</span><span class="n">coordinate</span>
 </span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">:</span>
@@ -157,16 +157,24 @@
 </span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>        <span class="k">return</span> <span class="n">coord</span>
 </span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>
 </span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">size</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>        <span class="n">top_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_top_left</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>            <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">negate</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="p">)</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>        <span class="n">padding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span> <span class="o">*</span> <span class="mi">2</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span> <span class="o">+</span> <span class="n">padding</span><span class="p">,</span> <span class="n">height</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">top_left</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">background</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">border_radius</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>        <span class="p">)</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_scene_top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>        <span class="n">center</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">arg</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="k">else</span> <span class="n">screen</span><span class="p">()</span><span class="o">.</span><span class="n">center</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>        <span class="p">)</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>        <span class="k">return</span> <span class="n">center</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">negate</span><span class="p">)</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>        <span class="n">top_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_top_left</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a>            <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">negate</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>        <span class="p">)</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>        <span class="n">padding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span> <span class="o">+</span> <span class="n">padding</span><span class="p">,</span> <span class="n">height</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">top_left</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">background</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">border_radius</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -200,40 +208,40 @@
 </span><span id="SayEvent-34"><a href="#SayEvent-34"><span class="linenos">34</span></a>    <span class="nd">@cached_property</span>
 </span><span id="SayEvent-35"><a href="#SayEvent-35"><span class="linenos">35</span></a>    <span class="nd">@override</span>
 </span><span id="SayEvent-36"><a href="#SayEvent-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="SayEvent-37"><a href="#SayEvent-37"><span class="linenos">37</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="SayEvent-38"><a href="#SayEvent-38"><span class="linenos">38</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screens</span>
-</span><span id="SayEvent-39"><a href="#SayEvent-39"><span class="linenos">39</span></a>            <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_background</span><span class="p">,)</span>
-</span><span id="SayEvent-40"><a href="#SayEvent-40"><span class="linenos">40</span></a>            <span class="o">+</span> <span class="n">TextOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_top_left</span><span class="p">)</span><span class="o">.</span><span class="n">draw_on_screen</span>
-</span><span id="SayEvent-41"><a href="#SayEvent-41"><span class="linenos">41</span></a>        <span class="p">)</span>
+</span><span id="SayEvent-37"><a href="#SayEvent-37"><span class="linenos">37</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_popup</span>
+</span><span id="SayEvent-38"><a href="#SayEvent-38"><span class="linenos">38</span></a>
+</span><span id="SayEvent-39"><a href="#SayEvent-39"><span class="linenos">39</span></a>    <span class="nd">@override</span>
+</span><span id="SayEvent-40"><a href="#SayEvent-40"><span class="linenos">40</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="SayEvent-41"><a href="#SayEvent-41"><span class="linenos">41</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">tick_without_event</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
 </span><span id="SayEvent-42"><a href="#SayEvent-42"><span class="linenos">42</span></a>
 </span><span id="SayEvent-43"><a href="#SayEvent-43"><span class="linenos">43</span></a>    <span class="nd">@override</span>
-</span><span id="SayEvent-44"><a href="#SayEvent-44"><span class="linenos">44</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="SayEvent-45"><a href="#SayEvent-45"><span class="linenos">45</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">tick_without_event</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
-</span><span id="SayEvent-46"><a href="#SayEvent-46"><span class="linenos">46</span></a>
-</span><span id="SayEvent-47"><a href="#SayEvent-47"><span class="linenos">47</span></a>    <span class="nd">@override</span>
-</span><span id="SayEvent-48"><a href="#SayEvent-48"><span class="linenos">48</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="SayEvent-49"><a href="#SayEvent-49"><span class="linenos">49</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">KeyPressDown</span><span class="p">):</span>
-</span><span id="SayEvent-50"><a href="#SayEvent-50"><span class="linenos">50</span></a>            <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">event_without_npc_trigger</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-</span><span id="SayEvent-51"><a href="#SayEvent-51"><span class="linenos">51</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="o">=</span><span class="n">scene</span><span class="p">)</span>
+</span><span id="SayEvent-44"><a href="#SayEvent-44"><span class="linenos">44</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="SayEvent-45"><a href="#SayEvent-45"><span class="linenos">45</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">KeyPressDown</span><span class="p">):</span>
+</span><span id="SayEvent-46"><a href="#SayEvent-46"><span class="linenos">46</span></a>            <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">event_without_npc_trigger</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</span><span id="SayEvent-47"><a href="#SayEvent-47"><span class="linenos">47</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="o">=</span><span class="n">scene</span><span class="p">)</span>
+</span><span id="SayEvent-48"><a href="#SayEvent-48"><span class="linenos">48</span></a>
+</span><span id="SayEvent-49"><a href="#SayEvent-49"><span class="linenos">49</span></a>        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">CONFIRM</span><span class="p">:</span>
+</span><span id="SayEvent-50"><a href="#SayEvent-50"><span class="linenos">50</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">)</span>
+</span><span id="SayEvent-51"><a href="#SayEvent-51"><span class="linenos">51</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span><span id="SayEvent-52"><a href="#SayEvent-52"><span class="linenos">52</span></a>
-</span><span id="SayEvent-53"><a href="#SayEvent-53"><span class="linenos">53</span></a>        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">CONFIRM</span><span class="p">:</span>
-</span><span id="SayEvent-54"><a href="#SayEvent-54"><span class="linenos">54</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">)</span>
-</span><span id="SayEvent-55"><a href="#SayEvent-55"><span class="linenos">55</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="SayEvent-56"><a href="#SayEvent-56"><span class="linenos">56</span></a>
-</span><span id="SayEvent-57"><a href="#SayEvent-57"><span class="linenos">57</span></a>    <span class="nd">@cached_property</span>
-</span><span id="SayEvent-58"><a href="#SayEvent-58"><span class="linenos">58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
-</span><span id="SayEvent-59"><a href="#SayEvent-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="n">Text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
-</span><span id="SayEvent-60"><a href="#SayEvent-60"><span class="linenos">60</span></a>
-</span><span id="SayEvent-61"><a href="#SayEvent-61"><span class="linenos">61</span></a>    <span class="nd">@cached_property</span>
-</span><span id="SayEvent-62"><a href="#SayEvent-62"><span class="linenos">62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_text_top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="SayEvent-63"><a href="#SayEvent-63"><span class="linenos">63</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">character_or_scene</span><span class="p">,</span> <span class="n">Scene</span><span class="p">):</span>
-</span><span id="SayEvent-64"><a href="#SayEvent-64"><span class="linenos">64</span></a>            <span class="n">center</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="SayEvent-65"><a href="#SayEvent-65"><span class="linenos">65</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">arg</span>
-</span><span id="SayEvent-66"><a href="#SayEvent-66"><span class="linenos">66</span></a>                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">Coordinate</span><span class="p">)</span>
-</span><span id="SayEvent-67"><a href="#SayEvent-67"><span class="linenos">67</span></a>                <span class="k">else</span> <span class="n">screen</span><span class="p">()</span><span class="o">.</span><span class="n">center</span>
-</span><span id="SayEvent-68"><a href="#SayEvent-68"><span class="linenos">68</span></a>            <span class="p">)</span>
-</span><span id="SayEvent-69"><a href="#SayEvent-69"><span class="linenos">69</span></a>            <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">size</span>
-</span><span id="SayEvent-70"><a href="#SayEvent-70"><span class="linenos">70</span></a>            <span class="k">return</span> <span class="n">center</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">negate</span><span class="p">)</span>
+</span><span id="SayEvent-53"><a href="#SayEvent-53"><span class="linenos">53</span></a>    <span class="nd">@cached_property</span>
+</span><span id="SayEvent-54"><a href="#SayEvent-54"><span class="linenos">54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_text_popup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="SayEvent-55"><a href="#SayEvent-55"><span class="linenos">55</span></a>        <span class="n">background</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_background</span><span class="p">,)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_tail</span>
+</span><span id="SayEvent-56"><a href="#SayEvent-56"><span class="linenos">56</span></a>        <span class="n">text</span> <span class="o">=</span> <span class="n">TextOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_top_left</span><span class="p">)</span><span class="o">.</span><span class="n">draw_on_screen</span>
+</span><span id="SayEvent-57"><a href="#SayEvent-57"><span class="linenos">57</span></a>        <span class="k">return</span> <span class="n">background</span> <span class="o">+</span> <span class="n">text</span>
+</span><span id="SayEvent-58"><a href="#SayEvent-58"><span class="linenos">58</span></a>
+</span><span id="SayEvent-59"><a href="#SayEvent-59"><span class="linenos">59</span></a>    <span class="nd">@cached_property</span>
+</span><span id="SayEvent-60"><a href="#SayEvent-60"><span class="linenos">60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_text_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="SayEvent-61"><a href="#SayEvent-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="p">()</span>
+</span><span id="SayEvent-62"><a href="#SayEvent-62"><span class="linenos">62</span></a>
+</span><span id="SayEvent-63"><a href="#SayEvent-63"><span class="linenos">63</span></a>    <span class="nd">@cached_property</span>
+</span><span id="SayEvent-64"><a href="#SayEvent-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
+</span><span id="SayEvent-65"><a href="#SayEvent-65"><span class="linenos">65</span></a>        <span class="k">return</span> <span class="n">Text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span><span id="SayEvent-66"><a href="#SayEvent-66"><span class="linenos">66</span></a>
+</span><span id="SayEvent-67"><a href="#SayEvent-67"><span class="linenos">67</span></a>    <span class="nd">@cached_property</span>
+</span><span id="SayEvent-68"><a href="#SayEvent-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_text_top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="SayEvent-69"><a href="#SayEvent-69"><span class="linenos">69</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">character_or_scene</span><span class="p">,</span> <span class="n">Scene</span><span class="p">):</span>
+</span><span id="SayEvent-70"><a href="#SayEvent-70"><span class="linenos">70</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene_top_left</span>
 </span><span id="SayEvent-71"><a href="#SayEvent-71"><span class="linenos">71</span></a>
 </span><span id="SayEvent-72"><a href="#SayEvent-72"><span class="linenos">72</span></a>        <span class="n">coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character_or_scene</span><span class="o">.</span><span class="n">coordinate</span>
 </span><span id="SayEvent-73"><a href="#SayEvent-73"><span class="linenos">73</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">:</span>
@@ -241,16 +249,24 @@
 </span><span id="SayEvent-75"><a href="#SayEvent-75"><span class="linenos">75</span></a>        <span class="k">return</span> <span class="n">coord</span>
 </span><span id="SayEvent-76"><a href="#SayEvent-76"><span class="linenos">76</span></a>
 </span><span id="SayEvent-77"><a href="#SayEvent-77"><span class="linenos">77</span></a>    <span class="nd">@cached_property</span>
-</span><span id="SayEvent-78"><a href="#SayEvent-78"><span class="linenos">78</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
-</span><span id="SayEvent-79"><a href="#SayEvent-79"><span class="linenos">79</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">size</span>
-</span><span id="SayEvent-80"><a href="#SayEvent-80"><span class="linenos">80</span></a>        <span class="n">top_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_top_left</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span>
-</span><span id="SayEvent-81"><a href="#SayEvent-81"><span class="linenos">81</span></a>            <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">negate</span>
-</span><span id="SayEvent-82"><a href="#SayEvent-82"><span class="linenos">82</span></a>        <span class="p">)</span>
-</span><span id="SayEvent-83"><a href="#SayEvent-83"><span class="linenos">83</span></a>        <span class="n">padding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span> <span class="o">*</span> <span class="mi">2</span>
-</span><span id="SayEvent-84"><a href="#SayEvent-84"><span class="linenos">84</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span> <span class="o">+</span> <span class="n">padding</span><span class="p">,</span> <span class="n">height</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span>
-</span><span id="SayEvent-85"><a href="#SayEvent-85"><span class="linenos">85</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">top_left</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span>
-</span><span id="SayEvent-86"><a href="#SayEvent-86"><span class="linenos">86</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">background</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">border_radius</span>
-</span><span id="SayEvent-87"><a href="#SayEvent-87"><span class="linenos">87</span></a>        <span class="p">)</span>
+</span><span id="SayEvent-78"><a href="#SayEvent-78"><span class="linenos">78</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_scene_top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="SayEvent-79"><a href="#SayEvent-79"><span class="linenos">79</span></a>        <span class="n">center</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="SayEvent-80"><a href="#SayEvent-80"><span class="linenos">80</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">arg</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="k">else</span> <span class="n">screen</span><span class="p">()</span><span class="o">.</span><span class="n">center</span>
+</span><span id="SayEvent-81"><a href="#SayEvent-81"><span class="linenos">81</span></a>        <span class="p">)</span>
+</span><span id="SayEvent-82"><a href="#SayEvent-82"><span class="linenos">82</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">size</span>
+</span><span id="SayEvent-83"><a href="#SayEvent-83"><span class="linenos">83</span></a>        <span class="k">return</span> <span class="n">center</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">negate</span><span class="p">)</span>
+</span><span id="SayEvent-84"><a href="#SayEvent-84"><span class="linenos">84</span></a>
+</span><span id="SayEvent-85"><a href="#SayEvent-85"><span class="linenos">85</span></a>    <span class="nd">@cached_property</span>
+</span><span id="SayEvent-86"><a href="#SayEvent-86"><span class="linenos">86</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="SayEvent-87"><a href="#SayEvent-87"><span class="linenos">87</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">size</span>
+</span><span id="SayEvent-88"><a href="#SayEvent-88"><span class="linenos">88</span></a>        <span class="n">top_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_top_left</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span>
+</span><span id="SayEvent-89"><a href="#SayEvent-89"><span class="linenos">89</span></a>            <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">negate</span>
+</span><span id="SayEvent-90"><a href="#SayEvent-90"><span class="linenos">90</span></a>        <span class="p">)</span>
+</span><span id="SayEvent-91"><a href="#SayEvent-91"><span class="linenos">91</span></a>        <span class="n">padding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span id="SayEvent-92"><a href="#SayEvent-92"><span class="linenos">92</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span> <span class="o">+</span> <span class="n">padding</span><span class="p">,</span> <span class="n">height</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span>
+</span><span id="SayEvent-93"><a href="#SayEvent-93"><span class="linenos">93</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="n">top_left</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span>
+</span><span id="SayEvent-94"><a href="#SayEvent-94"><span class="linenos">94</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">background</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">border_radius</span>
+</span><span id="SayEvent-95"><a href="#SayEvent-95"><span class="linenos">95</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -333,21 +349,31 @@
             <div class="pdoc-code codehilite"><pre><span></span><span id="SayEvent.draw_on_screens-34"><a href="#SayEvent.draw_on_screens-34"><span class="linenos">34</span></a>    <span class="nd">@cached_property</span>
 </span><span id="SayEvent.draw_on_screens-35"><a href="#SayEvent.draw_on_screens-35"><span class="linenos">35</span></a>    <span class="nd">@override</span>
 </span><span id="SayEvent.draw_on_screens-36"><a href="#SayEvent.draw_on_screens-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="SayEvent.draw_on_screens-37"><a href="#SayEvent.draw_on_screens-37"><span class="linenos">37</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="SayEvent.draw_on_screens-38"><a href="#SayEvent.draw_on_screens-38"><span class="linenos">38</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screens</span>
-</span><span id="SayEvent.draw_on_screens-39"><a href="#SayEvent.draw_on_screens-39"><span class="linenos">39</span></a>            <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_background</span><span class="p">,)</span>
-</span><span id="SayEvent.draw_on_screens-40"><a href="#SayEvent.draw_on_screens-40"><span class="linenos">40</span></a>            <span class="o">+</span> <span class="n">TextOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_top_left</span><span class="p">)</span><span class="o">.</span><span class="n">draw_on_screen</span>
-</span><span id="SayEvent.draw_on_screens-41"><a href="#SayEvent.draw_on_screens-41"><span class="linenos">41</span></a>        <span class="p">)</span>
+</span><span id="SayEvent.draw_on_screens-37"><a href="#SayEvent.draw_on_screens-37"><span class="linenos">37</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_popup</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Get the tuple of drawables to be rendered on the screen, shifted by
-<code>self.draw_on_screen_shift</code>.</p>
+            <div class="docstring"><p>Get the drawables to be rendered on screen with shift applied.</p>
+
+<p>This property returns all drawable objects for the scene,
+with the <code><a href="#SayEvent.draw_on_screen_shift">draw_on_screen_shift</a></code> applied if specified.
+The shift is applied before GUI scaling to ensure proper
+positioning.</p>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>tuple[DrawOnScreen, ...]</code>: The tuple of drawables to be rendered.</p>
+  <p><code>tuple[DrawOnScreen, ...]</code>: The drawables to be rendered.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">player_sprite</span><span class="p">,</span> <span class="n">background</span><span class="p">,</span> <span class="n">ui_elements</span><span class="p">)</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -365,29 +391,45 @@
 
     </div>
     <a class="headerlink" href="#SayEvent.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SayEvent.tick-43"><a href="#SayEvent.tick-43"><span class="linenos">43</span></a>    <span class="nd">@override</span>
-</span><span id="SayEvent.tick-44"><a href="#SayEvent.tick-44"><span class="linenos">44</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="SayEvent.tick-45"><a href="#SayEvent.tick-45"><span class="linenos">45</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">tick_without_event</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SayEvent.tick-39"><a href="#SayEvent.tick-39"><span class="linenos">39</span></a>    <span class="nd">@override</span>
+</span><span id="SayEvent.tick-40"><a href="#SayEvent.tick-40"><span class="linenos">40</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="SayEvent.tick-41"><a href="#SayEvent.tick-41"><span class="linenos">41</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">tick_without_event</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Update the scene state for a single game step/frame.</p>
+            <div class="docstring"><p>Update the scene state for a single game frame.</p>
 
-<p>Progresses the scene state based on the elapsed time since the
-last update, handling animations, movements,
+<p>This method is called each frame to update the scene state
+based on elapsed time. It handles animations, movements,
 and other time-dependent changes.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code>time_delta</code>:</strong>  The time that has passed since the last update,
-used for calculating time-based changes.</li>
+<li><strong><code>time_delta</code>:</strong>  The time elapsed since the last update
+in milliseconds.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p><code>Scene</code>: The updated scene state after the time step.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+    <span class="c1"># Update character animations</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+
+    <span class="c1"># Update timers</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="bp">self</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -405,53 +447,60 @@ used for calculating time-based changes.</li>
 
     </div>
     <a class="headerlink" href="#SayEvent.event"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SayEvent.event-47"><a href="#SayEvent.event-47"><span class="linenos">47</span></a>    <span class="nd">@override</span>
-</span><span id="SayEvent.event-48"><a href="#SayEvent.event-48"><span class="linenos">48</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="SayEvent.event-49"><a href="#SayEvent.event-49"><span class="linenos">49</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">KeyPressDown</span><span class="p">):</span>
-</span><span id="SayEvent.event-50"><a href="#SayEvent.event-50"><span class="linenos">50</span></a>            <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">event_without_npc_trigger</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-</span><span id="SayEvent.event-51"><a href="#SayEvent.event-51"><span class="linenos">51</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="o">=</span><span class="n">scene</span><span class="p">)</span>
-</span><span id="SayEvent.event-52"><a href="#SayEvent.event-52"><span class="linenos">52</span></a>
-</span><span id="SayEvent.event-53"><a href="#SayEvent.event-53"><span class="linenos">53</span></a>        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">CONFIRM</span><span class="p">:</span>
-</span><span id="SayEvent.event-54"><a href="#SayEvent.event-54"><span class="linenos">54</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">)</span>
-</span><span id="SayEvent.event-55"><a href="#SayEvent.event-55"><span class="linenos">55</span></a>        <span class="k">return</span> <span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SayEvent.event-43"><a href="#SayEvent.event-43"><span class="linenos">43</span></a>    <span class="nd">@override</span>
+</span><span id="SayEvent.event-44"><a href="#SayEvent.event-44"><span class="linenos">44</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="SayEvent.event-45"><a href="#SayEvent.event-45"><span class="linenos">45</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">KeyPressDown</span><span class="p">):</span>
+</span><span id="SayEvent.event-46"><a href="#SayEvent.event-46"><span class="linenos">46</span></a>            <span class="n">scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">event_without_npc_trigger</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</span><span id="SayEvent.event-47"><a href="#SayEvent.event-47"><span class="linenos">47</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="o">=</span><span class="n">scene</span><span class="p">)</span>
+</span><span id="SayEvent.event-48"><a href="#SayEvent.event-48"><span class="linenos">48</span></a>
+</span><span id="SayEvent.event-49"><a href="#SayEvent.event-49"><span class="linenos">49</span></a>        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">CONFIRM</span><span class="p">:</span>
+</span><span id="SayEvent.event-50"><a href="#SayEvent.event-50"><span class="linenos">50</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">)</span>
+</span><span id="SayEvent.event-51"><a href="#SayEvent.event-51"><span class="linenos">51</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Handles events for the scene.</p>
+            <div class="docstring"><p>Handle events for the scene.</p>
 
-<p>The recommended implementation is via <code>@singledispatchmethod</code>.
-And implement events of interesting <code><a href="pygame_event.html">nextrpg.event.pygame_event</a></code> types.</p>
-
-<div class="pdoc-code codehilite">
-<pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MyScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
-    <span class="nd">@singledispatchmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-        <span class="k">pass</span>
-
-    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">GuiResize</span> <span class="o">|</span> <span class="n">Quit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-        <span class="o">...</span>
-</code></pre>
-</div>
+<p>This method processes pygame events and returns an updated
+scene state. The recommended implementation uses
+<code>@singledispatchmethod</code> to handle different event types
+efficiently.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code><a href="#SayEvent.event">event</a></code>:</strong>  The pygame event to process</li>
+<li><strong><code><a href="#SayEvent.event">event</a></code>:</strong>  The pygame event to process.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p><code>Scene</code>: The updated scene state after processing the event.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">singledispatchmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="pygame_event.html">nextrpg.event.pygame_event</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">KeyPressDown</span><span class="p">,</span> <span class="n">KeyPressUp</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
+    <span class="nd">@singledispatchmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="c1"># Handle key press</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="c1"># Handle key release</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 

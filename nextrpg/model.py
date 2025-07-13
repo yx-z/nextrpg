@@ -1,5 +1,28 @@
 """
-Model definition.
+Model utilities and decorators for NextRPG.
+
+This module provides utility functions and decorators for creating
+dataclasses with instance initialization capabilities and caching
+mechanisms. These utilities are used throughout the NextRPG framework
+to create efficient, immutable data structures.
+
+The module includes:
+- `instance_init`: Function to mark fields for instance initialization
+- `dataclass_with_instance_init`: Decorator for dataclasses with instance init
+- `cached`: Decorator for creating cached class instances
+
+These utilities help create efficient data structures that can be
+safely shared and cached across the game framework.
+
+Example:
+    ```python
+    from nextrpg.model import dataclass_with_instance_init, instance_init
+
+    @dataclass_with_instance_init
+    class MyClass:
+        value: int
+        computed: str = instance_init(lambda self: f"Value: {self.value}")
+    ```
 """
 
 from collections import OrderedDict
@@ -10,14 +33,28 @@ from typing import Any, dataclass_transform
 
 def instance_init(init: Callable[[Any], Any]) -> Any:
     """
-    Used to mark a field for instance initialization.
+    Mark a field for instance initialization in dataclasses.
+
+    This function creates a special field that will be initialized
+    after the dataclass instance is created, allowing access to
+    other instance attributes during initialization.
 
     Arguments:
         `init`: Function that takes `self` as an argument and returns
-            the initial value.
+            the initial value for the field.
 
     Returns:
-        `Any`: Internal field with the given initialization function.
+        `Any`: Internal field marker with the given initialization function.
+
+    Example:
+        ```python
+        from nextrpg.model import dataclass_with_instance_init, instance_init
+
+        @dataclass_with_instance_init
+        class MyClass:
+            value: int
+            computed: str = instance_init(lambda self: f"Value: {self.value}")
+        ```
     """
     return field(repr=False, default_factory=lambda: _Init(init))
 
@@ -27,14 +64,37 @@ def dataclass_with_instance_init[T](cls: type[T]) -> type[T]:
     """
     Class decorator to allow the use of `instance_init` in dataclasses.
 
+    This decorator enhances dataclasses with the ability to use
+    `instance_init` fields. It automatically handles the post-initialization
+    process for fields marked with `instance_init`.
+
     Arguments:
         `cls`: The class to decorate.
 
     Returns:
-        `type`: The decorated class.
+        `type`: The decorated class with instance initialization support.
+
+    Example:
+        ```python
+        from nextrpg.model import dataclass_with_instance_init, instance_init
+
+        @dataclass_with_instance_init
+        class Character:
+            name: str
+            level: int
+            display_name: str = instance_init(
+                lambda self: f"{self.name} (Lv.{self.level})"
+            )
+        ```
     """
 
     def post_init(self) -> None:
+        """
+        Post-initialization hook for instance init fields.
+
+        Processes all fields marked with `instance_init` and calls
+        their initialization functions with the instance as argument.
+        """
         if getattr(self, _NEXTRPG_INSTANCE_INIT, None):
             return
 
@@ -51,30 +111,86 @@ _NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"
 
 
 def _key(*args: Any, **kwargs: Any) -> tuple:
+    """
+    Create a cache key from arguments and keyword arguments.
+
+    This function creates a tuple that can be used as a cache key
+    for the `cached` decorator. It combines positional and keyword
+    arguments into a hashable format.
+
+    Arguments:
+        `*args`: Positional arguments to include in the key.
+
+        `**kwargs`: Keyword arguments to include in the key.
+
+    Returns:
+        `tuple`: A tuple containing the args and a frozenset of kwargs.
+    """
     return args, frozenset(kwargs.items())
 
 
 @dataclass(frozen=True)
 class cached[T, K, **P]:
     """
-    Class decorator to `T` that caches instances of `T` by a certain size
-    and a key function that takes `**P` and returns `K`.
+    Class decorator that caches instances of `T` by a key function.
+
+    This decorator provides automatic caching for class instances based
+    on a key function. It's useful for creating singleton-like behavior
+    or reducing memory usage for frequently created objects.
 
     Arguments:
         `size_fun`: Function that returns the maximum size of the cache.
 
-        `key_fun`: Function that takes the same arguments as the class, to
-            be used as the cache key. Defaults to a function that takes all
-            args and kwargs.
+        `key_fun`: Function that takes the same arguments as the class
+            and returns a cache key. Defaults to a function that takes
+            all args and kwargs.
+
+    Example:
+        ```python
+        from nextrpg.model import cached
+
+        @cached(size_fun=lambda: 100, key_fun=lambda x, y: (x, y))
+        class ExpensiveObject:
+            def __init__(self, x: int, y: int):
+                self.x = x
+                self.y = y
+        ```
     """
 
     size_fun: Callable[[], int]
     key_fun: Callable[P, K | None] = _key
 
     def __call__(self, cls: type[T]) -> type[T]:
+        """
+        Apply the caching decorator to the class.
+
+        Sets up the caching mechanism by overriding the `__new__` method
+        to check the cache before creating new instances.
+
+        Arguments:
+            `cls`: The class to apply caching to.
+
+        Returns:
+            `type[T]`: The modified class with caching behavior.
+        """
         cls._instances = OrderedDict[K, T]()
 
         def __new__(klass: type[T], *args: P.args, **kwargs: P.kwargs) -> T:
+            """
+            Create or retrieve a cached instance.
+
+            Checks the cache for an existing instance with the same key.
+            If found, returns the cached instance. Otherwise, creates
+            a new instance and adds it to the cache.
+
+            Arguments:
+                `*args`: Positional arguments for the class constructor.
+
+                `**kwargs`: Keyword arguments for the class constructor.
+
+            Returns:
+                `T`: Either a cached instance or a newly created one.
+            """
             if (key := self.key_fun(*args, **kwargs)) is None:
                 return super(klass, klass).__new__(klass)
 
@@ -95,4 +211,15 @@ class cached[T, K, **P]:
 
 @dataclass(frozen=True)
 class _Init:
+    """
+    Internal class for instance initialization markers.
+
+    This class is used internally by the `instance_init` function
+    to mark fields that should be initialized after the dataclass
+    instance is created.
+
+    Arguments:
+        `init`: The initialization function to call with the instance.
+    """
+
     init: Callable[[Any], Any]

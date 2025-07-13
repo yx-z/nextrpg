@@ -380,14 +380,14 @@
 </span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>
 </span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">*</span><span class="n">RpgEventSpecParams</span><span class="p">],</span> <span class="n">RpgEventGenerator</span><span class="p">]:</span>
-</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">yield_event</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RpgEventGenerator</span><span class="p">:</span>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">yield_event</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RpgEventGenerator</span><span class="p">:</span>
 </span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>            <span class="n">fun</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span>
 </span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>            <span class="n">ctx</span> <span class="o">=</span> <span class="n">fun</span><span class="o">.</span><span class="vm">__globals__</span> <span class="o">|</span> <span class="p">{</span>
 </span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>                <span class="n">v</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">cell_contents</span>
 </span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>                <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fun</span><span class="o">.</span><span class="vm">__code__</span><span class="o">.</span><span class="n">co_freevars</span><span class="p">,</span> <span class="n">fun</span><span class="o">.</span><span class="vm">__closure__</span> <span class="ow">or</span> <span class="p">())</span>
 </span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>            <span class="p">}</span>
 </span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>            <span class="n">exec</span><span class="p">(</span><span class="n">transform_and_compile</span><span class="p">(</span><span class="n">fun</span><span class="p">),</span> <span class="n">ctx</span><span class="p">)</span>
-</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>            <span class="k">return</span> <span class="n">ctx</span><span class="p">[</span><span class="n">fun</span><span class="o">.</span><span class="vm">__name__</span><span class="p">](</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>            <span class="k">return</span> <span class="n">ctx</span><span class="p">[</span><span class="n">fun</span><span class="o">.</span><span class="vm">__name__</span><span class="p">](</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>
 </span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>        <span class="k">return</span> <span class="n">yield_event</span>
 </span></pre></div>
@@ -727,41 +727,48 @@
 </span></pre></div>
 
 
-            <div class="docstring"><p>Handles events for the scene.</p>
+            <div class="docstring"><p>Handle events for the scene.</p>
 
-<p>The recommended implementation is via <code>@singledispatchmethod</code>.
-And implement events of interesting <code><a href="../event/pygame_event.html">nextrpg.event.pygame_event</a></code> types.</p>
-
-<div class="pdoc-code codehilite">
-<pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MyScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
-    <span class="nd">@singledispatchmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-        <span class="k">pass</span>
-
-    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-        <span class="o">...</span>
-
-    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">GuiResize</span> <span class="o">|</span> <span class="n">Quit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-        <span class="o">...</span>
-</code></pre>
-</div>
+<p>This method processes pygame events and returns an updated
+scene state. The recommended implementation uses
+<code>@singledispatchmethod</code> to handle different event types
+efficiently.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code><a href="#EventfulScene.event">event</a></code>:</strong>  The pygame event to process</li>
+<li><strong><code><a href="#EventfulScene.event">event</a></code>:</strong>  The pygame event to process.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p><code>Scene</code>: The updated scene state after processing the event.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">singledispatchmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="../event/pygame_event.html">nextrpg.event.pygame_event</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">KeyPressDown</span><span class="p">,</span> <span class="n">KeyPressUp</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
+    <span class="nd">@singledispatchmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="c1"># Handle key press</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="nd">@event</span><span class="o">.</span><span class="n">register</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_on_key_press_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="c1"># Handle key release</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -804,23 +811,39 @@ And implement events of interesting <code><a href="../event/pygame_event.html">n
 </span></pre></div>
 
 
-            <div class="docstring"><p>Update the scene state for a single game step/frame.</p>
+            <div class="docstring"><p>Update the scene state for a single game frame.</p>
 
-<p>Progresses the scene state based on the elapsed time since the
-last update, handling animations, movements,
+<p>This method is called each frame to update the scene state
+based on elapsed time. It handles animations, movements,
 and other time-dependent changes.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code>time_delta</code>:</strong>  The time that has passed since the last update,
-used for calculating time-based changes.</li>
+<li><strong><code>time_delta</code>:</strong>  The time elapsed since the last update
+in milliseconds.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p><code>Scene</code>: The updated scene state after the time step.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+    <span class="c1"># Update character animations</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+
+    <span class="c1"># Update timers</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="bp">self</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -1090,14 +1113,14 @@ the current event.</p>
 </span><span id="NpcSpec-220"><a href="#NpcSpec-220"><span class="linenos">220</span></a>
 </span><span id="NpcSpec-221"><a href="#NpcSpec-221"><span class="linenos">221</span></a>    <span class="nd">@cached_property</span>
 </span><span id="NpcSpec-222"><a href="#NpcSpec-222"><span class="linenos">222</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">*</span><span class="n">RpgEventSpecParams</span><span class="p">],</span> <span class="n">RpgEventGenerator</span><span class="p">]:</span>
-</span><span id="NpcSpec-223"><a href="#NpcSpec-223"><span class="linenos">223</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">yield_event</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RpgEventGenerator</span><span class="p">:</span>
+</span><span id="NpcSpec-223"><a href="#NpcSpec-223"><span class="linenos">223</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">yield_event</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RpgEventGenerator</span><span class="p">:</span>
 </span><span id="NpcSpec-224"><a href="#NpcSpec-224"><span class="linenos">224</span></a>            <span class="n">fun</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span>
 </span><span id="NpcSpec-225"><a href="#NpcSpec-225"><span class="linenos">225</span></a>            <span class="n">ctx</span> <span class="o">=</span> <span class="n">fun</span><span class="o">.</span><span class="vm">__globals__</span> <span class="o">|</span> <span class="p">{</span>
 </span><span id="NpcSpec-226"><a href="#NpcSpec-226"><span class="linenos">226</span></a>                <span class="n">v</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">cell_contents</span>
 </span><span id="NpcSpec-227"><a href="#NpcSpec-227"><span class="linenos">227</span></a>                <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fun</span><span class="o">.</span><span class="vm">__code__</span><span class="o">.</span><span class="n">co_freevars</span><span class="p">,</span> <span class="n">fun</span><span class="o">.</span><span class="vm">__closure__</span> <span class="ow">or</span> <span class="p">())</span>
 </span><span id="NpcSpec-228"><a href="#NpcSpec-228"><span class="linenos">228</span></a>            <span class="p">}</span>
 </span><span id="NpcSpec-229"><a href="#NpcSpec-229"><span class="linenos">229</span></a>            <span class="n">exec</span><span class="p">(</span><span class="n">transform_and_compile</span><span class="p">(</span><span class="n">fun</span><span class="p">),</span> <span class="n">ctx</span><span class="p">)</span>
-</span><span id="NpcSpec-230"><a href="#NpcSpec-230"><span class="linenos">230</span></a>            <span class="k">return</span> <span class="n">ctx</span><span class="p">[</span><span class="n">fun</span><span class="o">.</span><span class="vm">__name__</span><span class="p">](</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</span><span id="NpcSpec-230"><a href="#NpcSpec-230"><span class="linenos">230</span></a>            <span class="k">return</span> <span class="n">ctx</span><span class="p">[</span><span class="n">fun</span><span class="o">.</span><span class="vm">__name__</span><span class="p">](</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span><span id="NpcSpec-231"><a href="#NpcSpec-231"><span class="linenos">231</span></a>
 </span><span id="NpcSpec-232"><a href="#NpcSpec-232"><span class="linenos">232</span></a>        <span class="k">return</span> <span class="n">yield_event</span>
 </span></pre></div>
@@ -1194,14 +1217,14 @@ the current event.</p>
     <a class="headerlink" href="#NpcSpec.generator"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="NpcSpec.generator-221"><a href="#NpcSpec.generator-221"><span class="linenos">221</span></a>    <span class="nd">@cached_property</span>
 </span><span id="NpcSpec.generator-222"><a href="#NpcSpec.generator-222"><span class="linenos">222</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">*</span><span class="n">RpgEventSpecParams</span><span class="p">],</span> <span class="n">RpgEventGenerator</span><span class="p">]:</span>
-</span><span id="NpcSpec.generator-223"><a href="#NpcSpec.generator-223"><span class="linenos">223</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">yield_event</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RpgEventGenerator</span><span class="p">:</span>
+</span><span id="NpcSpec.generator-223"><a href="#NpcSpec.generator-223"><span class="linenos">223</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">yield_event</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RpgEventGenerator</span><span class="p">:</span>
 </span><span id="NpcSpec.generator-224"><a href="#NpcSpec.generator-224"><span class="linenos">224</span></a>            <span class="n">fun</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span>
 </span><span id="NpcSpec.generator-225"><a href="#NpcSpec.generator-225"><span class="linenos">225</span></a>            <span class="n">ctx</span> <span class="o">=</span> <span class="n">fun</span><span class="o">.</span><span class="vm">__globals__</span> <span class="o">|</span> <span class="p">{</span>
 </span><span id="NpcSpec.generator-226"><a href="#NpcSpec.generator-226"><span class="linenos">226</span></a>                <span class="n">v</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">cell_contents</span>
 </span><span id="NpcSpec.generator-227"><a href="#NpcSpec.generator-227"><span class="linenos">227</span></a>                <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fun</span><span class="o">.</span><span class="vm">__code__</span><span class="o">.</span><span class="n">co_freevars</span><span class="p">,</span> <span class="n">fun</span><span class="o">.</span><span class="vm">__closure__</span> <span class="ow">or</span> <span class="p">())</span>
 </span><span id="NpcSpec.generator-228"><a href="#NpcSpec.generator-228"><span class="linenos">228</span></a>            <span class="p">}</span>
 </span><span id="NpcSpec.generator-229"><a href="#NpcSpec.generator-229"><span class="linenos">229</span></a>            <span class="n">exec</span><span class="p">(</span><span class="n">transform_and_compile</span><span class="p">(</span><span class="n">fun</span><span class="p">),</span> <span class="n">ctx</span><span class="p">)</span>
-</span><span id="NpcSpec.generator-230"><a href="#NpcSpec.generator-230"><span class="linenos">230</span></a>            <span class="k">return</span> <span class="n">ctx</span><span class="p">[</span><span class="n">fun</span><span class="o">.</span><span class="vm">__name__</span><span class="p">](</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</span><span id="NpcSpec.generator-230"><a href="#NpcSpec.generator-230"><span class="linenos">230</span></a>            <span class="k">return</span> <span class="n">ctx</span><span class="p">[</span><span class="n">fun</span><span class="o">.</span><span class="vm">__name__</span><span class="p">](</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span><span id="NpcSpec.generator-231"><a href="#NpcSpec.generator-231"><span class="linenos">231</span></a>
 </span><span id="NpcSpec.generator-232"><a href="#NpcSpec.generator-232"><span class="linenos">232</span></a>        <span class="k">return</span> <span class="n">yield_event</span>
 </span></pre></div>

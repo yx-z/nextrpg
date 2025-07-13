@@ -52,16 +52,89 @@
                     <h1 class="modulename">
 <a href="./../nextrpg.html">nextrpg</a><wbr>.event    </h1>
 
-                        <div class="docstring"><p>Package for event.</p>
+                        <div class="docstring"><p>Event handling system for NextRPG.</p>
+
+<p>This module provides a comprehensive event handling system for NextRPG
+games. It includes pygame event processing, RPG-specific events,
+dialog events, and event transformation utilities.</p>
+
+<p>The event system includes:</p>
+
+<ul>
+<li><code>pygame_event</code>: Pygame event processing and type conversion</li>
+<li><code>rpg_event</code>: RPG-specific event types and handling</li>
+<li><code>say_event</code>: Dialog and text event system</li>
+<li><code>code_transformers</code>: Event code transformation utilities</li>
+<li><code>event_as_attr</code>: Attribute-based event handling</li>
+<li><code>event_transformer</code>: Event transformation utilities</li>
+<li><code>plugins</code>: Event plugin system for extensibility</li>
+</ul>
+
+<p>The event system is designed to provide a unified interface for
+handling all types of game events, from user input to game-specific
+events like dialog and RPG mechanics.</p>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.event</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">pygame_event</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="event/rpg_event.html">nextrpg.event.rpg_event</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">RpgEvent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="event/say_event.html">nextrpg.event.say_event</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">SayEvent</span>
+
+<span class="c1"># Handle pygame events</span>
+<span class="n">event</span> <span class="o">=</span> <span class="n">pygame_event</span><span class="o">.</span><span class="n">to_typed_event</span><span class="p">(</span><span class="n">pygame_event</span><span class="p">)</span>
+
+<span class="c1"># Create RPG events</span>
+<span class="n">rpg_event</span> <span class="o">=</span> <span class="n">RpgEvent</span><span class="p">(</span><span class="s2">&quot;move&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="s2">&quot;up&quot;</span><span class="p">})</span>
+
+<span class="c1"># Handle dialog events</span>
+<span class="n">say_event</span> <span class="o">=</span> <span class="n">SayEvent</span><span class="p">(</span><span class="s2">&quot;Hello, world!&quot;</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
 </div>
 
                         <input id="mod-event-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-event-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a><span class="sd">Package for event.</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="sd">&quot;&quot;&quot;</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">Event handling system for NextRPG.</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">This module provides a comprehensive event handling system for NextRPG</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">games. It includes pygame event processing, RPG-specific events,</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">dialog events, and event transformation utilities.</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">The event system includes:</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">- `pygame_event`: Pygame event processing and type conversion</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">- `rpg_event`: RPG-specific event types and handling</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">- `say_event`: Dialog and text event system</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">- `code_transformers`: Event code transformation utilities</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">- `event_as_attr`: Attribute-based event handling</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">- `event_transformer`: Event transformation utilities</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">- `plugins`: Event plugin system for extensibility</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">The event system is designed to provide a unified interface for</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">handling all types of game events, from user input to game-specific</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">events like dialog and RPG mechanics.</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">Example:</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">    ```python</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">    from nextrpg.event import pygame_event</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    from nextrpg.event.rpg_event import RpgEvent</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">    from nextrpg.event.say_event import SayEvent</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">    # Handle pygame events</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">    event = pygame_event.to_typed_event(pygame_event)</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">    # Create RPG events</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">    rpg_event = RpgEvent(&quot;move&quot;, {&quot;direction&quot;: &quot;up&quot;})</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">    # Handle dialog events</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">    say_event = SayEvent(&quot;Hello, world!&quot;)</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">    ```</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span></pre></div>
 
 

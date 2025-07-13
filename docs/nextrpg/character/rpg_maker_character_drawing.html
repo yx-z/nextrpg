@@ -1041,12 +1041,26 @@ If not specified, the default direction from <code>Config</code> is used.</li>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Get the character drawing.</p>
+            <div class="docstring"><p>Get the character's current drawing representation.</p>
+
+<p>This method should return the appropriate drawing based on
+the character's current state, direction, and animation frame.</p>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>nextrpg.draw_on_screen.Drawing</code>: The character drawing.</p>
+  <p><code><a href="../draw/draw_on_screen.html#Drawing">nextrpg.draw.draw_on_screen.Drawing</a></code>: The character's
+      current drawing representation.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="n">drawing</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">drawing</span>
+<span class="c1"># Use drawing for rendering</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -1079,16 +1093,31 @@ If not specified, the default direction from <code>Config</code> is used.</li>
 
             <div class="docstring"><p>Turn the character to face a specified direction.</p>
 
+<p>This method should handle direction changes and return a new
+character instance with the updated direction. The method
+may also trigger direction-specific animations or state changes.</p>
+
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code><a href="#RpgMakerCharacterDrawing.direction">direction</a></code>:</strong>  Turn the character facing to this direction.</li>
+<li><strong><code><a href="#RpgMakerCharacterDrawing.direction">direction</a></code>:</strong>  The new direction the character should face.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>CharacterDrawing</code>: The updated drawing.</p>
+  <p><code>CharacterDrawing</code>: A new character instance with the
+      updated direction.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="c1"># Turn character to face up</span>
+<span class="n">character</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">)</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -1118,20 +1147,34 @@ If not specified, the default direction from <code>Config</code> is used.</li>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Update the character's position based on movement over
-the given time delta.</p>
+            <div class="docstring"><p>Update the character's movement animation state.</p>
+
+<p>This method should advance the character's movement animation
+based on the elapsed time. It's called when the character
+is actively moving.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
 <li><strong><code>time_delta</code>:</strong>  The amount of time that has passed since the
-last update.</li>
+last update in milliseconds.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>CharacterDrawing</code>: The updated drawing with a new position.</p>
+  <p><code>CharacterDrawing</code>: A new character instance with updated
+      movement animation state.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="c1"># Update movement animation</span>
+<span class="n">character</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">tick_move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -1160,20 +1203,34 @@ last update.</li>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Update the character's idle animation state over the given time delta.</p>
+            <div class="docstring"><p>Update the character's idle animation state.</p>
+
+<p>This method should advance the character's idle animation
+based on the elapsed time. It's called when the character
+is not moving.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
 <li><strong><code>time_delta</code>:</strong>  The amount of time that has passed since the
-last update.</li>
+last update in milliseconds.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>CharacterDrawing</code>: The updated drawing with
-      a new idle animation state.</p>
+  <p><code>CharacterDrawing</code>: A new character instance with updated
+      idle animation state.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="c1"># Update idle animation</span>
+<span class="n">character</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 

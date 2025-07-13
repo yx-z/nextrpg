@@ -1,12 +1,44 @@
 """
-Scene is an interface of all game interactions like exploration, menu, etc.
+Base scene interface and management for NextRPG.
+
+This module provides the foundational scene system for NextRPG games.
+It defines the `Scene` base class that all game scenes must inherit
+from, providing a consistent interface for scene management, event
+handling, and rendering.
+
+The scene system provides:
+- Abstract base class for all game scenes
+- Event handling interface for user input
+- Time-based scene updates for animations
+- Drawing management with screen shifting
+- Scene state management and transitions
+
+This module establishes the contract that all scene implementations
+must follow, ensuring consistent behavior across different types
+of game scenes.
+
+Example:
+    ```python
+    from nextrpg.scene import Scene
+    from nextrpg.event.pygame_event import PygameEvent, KeyPressDown
+    from nextrpg.core import Millisecond
+
+    class MyScene(Scene):
+        def event(self, event: PygameEvent) -> Scene:
+            # Handle events
+            return self
+
+        def tick(self, time_delta: Millisecond) -> Scene:
+            # Update scene state
+            return self
+    ```
 """
 
 from functools import cached_property
 
 from nextrpg.core import Millisecond
-from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.draw.coordinate import Coordinate
+from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.event.pygame_event import PygameEvent
 
 
@@ -14,32 +46,80 @@ class Scene:
     """
     Base class representing a game scene.
 
-    This class defines the interface for game scenes, providing methods for
-    handling events and drawing content on the screen. All game scenes must
-    implement these methods.
+    This abstract base class defines the interface that all game scenes
+    must implement. It provides methods for event handling, time-based
+    updates, and drawing management.
+
+    The scene system is designed to be immutable, with all methods
+    returning new scene instances rather than modifying the current
+    state. This ensures thread safety and predictable behavior.
+
+    Scenes can represent various game states such as:
+    - Game world exploration
+    - Menu systems
+    - Dialog sequences
+    - Battle scenes
+    - Transition effects
+
+    Example:
+        ```python
+        from nextrpg.scene import Scene
+        from nextrpg.event.pygame_event import PygameEvent
+        from nextrpg.core import Millisecond
+
+        class MenuScene(Scene):
+            def event(self, event: PygameEvent) -> Scene:
+                # Handle menu navigation
+                return self
+
+            def tick(self, time_delta: Millisecond) -> Scene:
+                # Update menu animations
+                return self
+        ```
     """
 
     @cached_property
     def draw_on_screen_shift(self) -> Coordinate | None:
         """
-        The offset of all drawings applied after `draw_on_screens` (before GUI
-        scaling), so that the drawings are shifted correctly on screen.
+        Get the offset applied to all drawings before GUI scaling.
 
-        This is useful for e.g., map to center the player on screen.
+        This property provides a coordinate offset that is applied to
+        all drawings in the scene. It's commonly used for camera
+        positioning, such as centering the player on screen in map
+        scenes.
 
         Returns:
-            `Coordinate`: The shift offset of all drawings.
+            `Coordinate | None`: The shift offset for all drawings,
+                or `None` if no shift is applied.
+
+        Example:
+            ```python
+            # Center the scene on the player
+            def draw_on_screen_shift(self):
+                return Coordinate(-player.x + screen_width/2,
+                                -player.y + screen_height/2)
+            ```
         """
         return None
 
     @cached_property
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         """
-        Get the tuple of drawables to be rendered on the screen, shifted by
-        `self.draw_on_screen_shift`.
+        Get the drawables to be rendered on screen with shift applied.
+
+        This property returns all drawable objects for the scene,
+        with the `draw_on_screen_shift` applied if specified.
+        The shift is applied before GUI scaling to ensure proper
+        positioning.
 
         Returns:
-            `tuple[DrawOnScreen, ...]`: The tuple of drawables to be rendered.
+            `tuple[DrawOnScreen, ...]`: The drawables to be rendered.
+
+        Example:
+            ```python
+            def draw_on_screens_before_shift(self):
+                return (player_sprite, background, ui_elements)
+            ```
         """
         if self.draw_on_screen_shift:
             return tuple(
@@ -50,55 +130,81 @@ class Scene:
 
     @cached_property
     def draw_on_screens_before_shift(self) -> tuple[DrawOnScreen, ...]:
+        """
+        Get the drawables before shift is applied.
+
+        This method should be overridden by subclasses to provide
+        the actual drawable objects for the scene. The shift will
+        be applied automatically by `draw_on_screens`.
+
+        Returns:
+            `tuple[DrawOnScreen, ...]`: The drawables before shift.
+        """
         return ()
 
     def event(self, event: PygameEvent) -> Scene:
         """
-        Handles events for the scene.
+        Handle events for the scene.
 
-        The recommended implementation is via `@singledispatchmethod`.
-        And implement events of interesting `nextrpg.event.pygame_event` types.
-
-        ```python
-        class MyScene(Scene):
-            @singledispatchmethod
-            def event(self, event: PygameEvent) -> Scene:
-                pass
-
-            @event.register
-            def _on_key_press_down(self, event: KeyPressDown) -> Scene:
-                ...
-
-            @event.register
-            def _on_key_press_up(self, event: KeyPressUp) -> Scene:
-                ...
-
-            @event.register
-            def _on_key_press_up(self, event: GuiResize | Quit) -> Scene:
-                ...
-        ```
+        This method processes pygame events and returns an updated
+        scene state. The recommended implementation uses
+        `@singledispatchmethod` to handle different event types
+        efficiently.
 
         Arguments:
-            `event`: The pygame event to process
+            `event`: The pygame event to process.
 
         Returns:
             `Scene`: The updated scene state after processing the event.
+
+        Example:
+            ```python
+            from functools import singledispatchmethod
+            from nextrpg.event.pygame_event import KeyPressDown, KeyPressUp
+
+            class MyScene(Scene):
+                @singledispatchmethod
+                def event(self, event: PygameEvent) -> Scene:
+                    return self
+
+                @event.register
+                def _on_key_press_down(self, event: KeyPressDown) -> Scene:
+                    # Handle key press
+                    return self
+
+                @event.register
+                def _on_key_press_up(self, event: KeyPressUp) -> Scene:
+                    # Handle key release
+                    return self
+            ```
         """
         return self
 
     def tick(self, time_delta: Millisecond) -> Scene:
         """
-        Update the scene state for a single game step/frame.
+        Update the scene state for a single game frame.
 
-        Progresses the scene state based on the elapsed time since the
-        last update, handling animations, movements,
+        This method is called each frame to update the scene state
+        based on elapsed time. It handles animations, movements,
         and other time-dependent changes.
 
         Arguments:
-            `time_delta`: The time that has passed since the last update,
-                used for calculating time-based changes.
+            `time_delta`: The time elapsed since the last update
+                in milliseconds.
 
         Returns:
             `Scene`: The updated scene state after the time step.
+
+        Example:
+            ```python
+            def tick(self, time_delta: Millisecond) -> Scene:
+                # Update character animations
+                self.player = self.player.tick_idle(time_delta)
+
+                # Update timers
+                self.timer = self.timer.tick(time_delta)
+
+                return self
+            ```
         """
         return self

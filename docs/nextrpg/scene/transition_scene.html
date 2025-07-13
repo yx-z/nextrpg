@@ -31,6 +31,15 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
+                    <a class="class" href="#TransitioningScene">TransitioningScene</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#TransitioningScene.tick_without_transition">tick_without_transition</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
                     <a class="class" href="#TransitionScene">TransitionScene</a>
                             <ul class="memberlist">
                         <li>
@@ -77,70 +86,151 @@
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">override</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Alpha</span><span class="p">,</span> <span class="n">Millisecond</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">alpha_from_percentage</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TransitionScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">    Transition from one scene to another.</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TransitioningScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_without_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">        `from_scene`: The scene to transition from.</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">        `to_scene`: The scene to transition to.</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="n">from_scene</span><span class="p">:</span> <span class="n">Scene</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="n">to_scene</span><span class="p">:</span> <span class="n">Scene</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="p">)</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">_elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="n">tick_to_scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_scene</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">total_elapsed</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>            <span class="k">return</span> <span class="n">tick_to_scene</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>            <span class="bp">self</span><span class="p">,</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>            <span class="n">_elapsed</span><span class="o">=</span><span class="n">total_elapsed</span><span class="p">,</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>            <span class="n">from_scene</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">),</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>            <span class="n">to_scene</span><span class="o">=</span><span class="n">tick_to_scene</span><span class="p">,</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>        <span class="p">)</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_to_scene_drawings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>            <span class="n">DrawOnScreen</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span><span class="p">))</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_scene</span><span class="o">.</span><span class="n">draw_on_screens</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>        <span class="p">)</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alpha</span><span class="p">:</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="k">return</span> <span class="n">_scale</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_alpha_percentage</span><span class="p">)</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_alpha_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="nd">@override</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_scene_drawings</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_scale</span><span class="p">(</span><span class="n">alpha_percentage</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alpha</span><span class="p">:</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">alpha_percentage</span><span class="p">)</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TransitionScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">    Transition from one scene to another.</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">    Attributes:</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">        `from_scene`: The scene to transition from.</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">        `to_scene`: The scene to transition to.</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">from_scene</span><span class="p">:</span> <span class="n">TransitioningScene</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">to_scene</span><span class="p">:</span> <span class="n">Scene</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="p">)</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="n">_elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>        <span class="n">to_scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_scene</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">elapsed</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>            <span class="k">return</span> <span class="n">to_scene</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>        <span class="n">from_scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">tick_without_transition</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">_elapsed</span><span class="o">=</span><span class="n">elapsed</span><span class="p">,</span> <span class="n">from_scene</span><span class="o">=</span><span class="n">from_scene</span><span class="p">,</span> <span class="n">to_scene</span><span class="o">=</span><span class="n">to_scene</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>        <span class="p">)</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="nd">@override</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha_from_percentage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="n">to_scene_draws</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>            <span class="n">d</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_scene</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="p">)</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="n">to_scene_draws</span>
 </span></pre></div>
 
 
             </section>
+                <section id="TransitioningScene">
+                            <input id="TransitioningScene-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+            
+    <span class="def">class</span>
+    <span class="name">TransitioningScene</span><wbr>(<span class="base"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>):
+
+                <label class="view-source-button" for="TransitioningScene-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#TransitioningScene"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TransitioningScene-12"><a href="#TransitioningScene-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TransitioningScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
+</span><span id="TransitioningScene-13"><a href="#TransitioningScene-13"><span class="linenos">13</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_without_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="TransitioningScene-14"><a href="#TransitioningScene-14"><span class="linenos">14</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Base class representing a game scene.</p>
+
+<p>This abstract base class defines the interface that all game scenes
+must implement. It provides methods for event handling, time-based
+updates, and drawing management.</p>
+
+<p>The scene system is designed to be immutable, with all methods
+returning new scene instances rather than modifying the current
+state. This ensures thread safety and predictable behavior.</p>
+
+<p>Scenes can represent various game states such as:</p>
+
+<ul>
+<li>Game world exploration</li>
+<li>Menu systems</li>
+<li>Dialog sequences</li>
+<li>Battle scenes</li>
+<li>Transition effects</li>
+</ul>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="../scene.html">nextrpg.scene</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="../event/pygame_event.html">nextrpg.event.pygame_event</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">PygameEvent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="../core.html">nextrpg.core</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MenuScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="c1"># Handle menu navigation</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+        <span class="c1"># Update menu animations</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</code></pre>
+  </div>
+</blockquote>
+</div>
+
+
+                            <div id="TransitioningScene.tick_without_transition" class="classattr">
+                                        <input id="TransitioningScene.tick_without_transition-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">tick_without_transition</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
+
+                <label class="view-source-button" for="TransitioningScene.tick_without_transition-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#TransitioningScene.tick_without_transition"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TransitioningScene.tick_without_transition-13"><a href="#TransitioningScene.tick_without_transition-13"><span class="linenos">13</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_without_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="TransitioningScene.tick_without_transition-14"><a href="#TransitioningScene.tick_without_transition-14"><span class="linenos">14</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></dt>
+                                <dd id="TransitioningScene.draw_on_screen_shift" class="variable"><a href="scene.html#Scene.draw_on_screen_shift">draw_on_screen_shift</a></dd>
+                <dd id="TransitioningScene.draw_on_screens" class="variable"><a href="scene.html#Scene.draw_on_screens">draw_on_screens</a></dd>
+                <dd id="TransitioningScene.draw_on_screens_before_shift" class="variable"><a href="scene.html#Scene.draw_on_screens_before_shift">draw_on_screens_before_shift</a></dd>
+                <dd id="TransitioningScene.event" class="function"><a href="scene.html#Scene.event">event</a></dd>
+                <dd id="TransitioningScene.tick" class="function"><a href="scene.html#Scene.tick">tick</a></dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
                 <section id="TransitionScene">
                             <input id="TransitionScene-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
@@ -153,54 +243,42 @@
 
     </div>
     <a class="headerlink" href="#TransitionScene"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TransitionScene-12"><a href="#TransitionScene-12"><span class="linenos">12</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="TransitionScene-13"><a href="#TransitionScene-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TransitionScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
-</span><span id="TransitionScene-14"><a href="#TransitionScene-14"><span class="linenos">14</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="TransitionScene-15"><a href="#TransitionScene-15"><span class="linenos">15</span></a><span class="sd">    Transition from one scene to another.</span>
-</span><span id="TransitionScene-16"><a href="#TransitionScene-16"><span class="linenos">16</span></a>
-</span><span id="TransitionScene-17"><a href="#TransitionScene-17"><span class="linenos">17</span></a><span class="sd">    Attributes:</span>
-</span><span id="TransitionScene-18"><a href="#TransitionScene-18"><span class="linenos">18</span></a><span class="sd">        `from_scene`: The scene to transition from.</span>
-</span><span id="TransitionScene-19"><a href="#TransitionScene-19"><span class="linenos">19</span></a>
-</span><span id="TransitionScene-20"><a href="#TransitionScene-20"><span class="linenos">20</span></a><span class="sd">        `to_scene`: The scene to transition to.</span>
-</span><span id="TransitionScene-21"><a href="#TransitionScene-21"><span class="linenos">21</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="TransitionScene-22"><a href="#TransitionScene-22"><span class="linenos">22</span></a>
-</span><span id="TransitionScene-23"><a href="#TransitionScene-23"><span class="linenos">23</span></a>    <span class="n">from_scene</span><span class="p">:</span> <span class="n">Scene</span>
-</span><span id="TransitionScene-24"><a href="#TransitionScene-24"><span class="linenos">24</span></a>    <span class="n">to_scene</span><span class="p">:</span> <span class="n">Scene</span>
-</span><span id="TransitionScene-25"><a href="#TransitionScene-25"><span class="linenos">25</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
-</span><span id="TransitionScene-26"><a href="#TransitionScene-26"><span class="linenos">26</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
-</span><span id="TransitionScene-27"><a href="#TransitionScene-27"><span class="linenos">27</span></a>    <span class="p">)</span>
-</span><span id="TransitionScene-28"><a href="#TransitionScene-28"><span class="linenos">28</span></a>    <span class="n">_elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="TransitionScene-29"><a href="#TransitionScene-29"><span class="linenos">29</span></a>
-</span><span id="TransitionScene-30"><a href="#TransitionScene-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="TransitionScene-31"><a href="#TransitionScene-31"><span class="linenos">31</span></a>        <span class="n">tick_to_scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_scene</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="TransitionScene-32"><a href="#TransitionScene-32"><span class="linenos">32</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">total_elapsed</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span>
-</span><span id="TransitionScene-33"><a href="#TransitionScene-33"><span class="linenos">33</span></a>            <span class="k">return</span> <span class="n">tick_to_scene</span>
-</span><span id="TransitionScene-34"><a href="#TransitionScene-34"><span class="linenos">34</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-</span><span id="TransitionScene-35"><a href="#TransitionScene-35"><span class="linenos">35</span></a>            <span class="bp">self</span><span class="p">,</span>
-</span><span id="TransitionScene-36"><a href="#TransitionScene-36"><span class="linenos">36</span></a>            <span class="n">_elapsed</span><span class="o">=</span><span class="n">total_elapsed</span><span class="p">,</span>
-</span><span id="TransitionScene-37"><a href="#TransitionScene-37"><span class="linenos">37</span></a>            <span class="n">from_scene</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">),</span>
-</span><span id="TransitionScene-38"><a href="#TransitionScene-38"><span class="linenos">38</span></a>            <span class="n">to_scene</span><span class="o">=</span><span class="n">tick_to_scene</span><span class="p">,</span>
-</span><span id="TransitionScene-39"><a href="#TransitionScene-39"><span class="linenos">39</span></a>        <span class="p">)</span>
-</span><span id="TransitionScene-40"><a href="#TransitionScene-40"><span class="linenos">40</span></a>
-</span><span id="TransitionScene-41"><a href="#TransitionScene-41"><span class="linenos">41</span></a>    <span class="nd">@cached_property</span>
-</span><span id="TransitionScene-42"><a href="#TransitionScene-42"><span class="linenos">42</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_to_scene_drawings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="TransitionScene-43"><a href="#TransitionScene-43"><span class="linenos">43</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
-</span><span id="TransitionScene-44"><a href="#TransitionScene-44"><span class="linenos">44</span></a>            <span class="n">DrawOnScreen</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span><span class="p">))</span>
-</span><span id="TransitionScene-45"><a href="#TransitionScene-45"><span class="linenos">45</span></a>            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_scene</span><span class="o">.</span><span class="n">draw_on_screens</span>
-</span><span id="TransitionScene-46"><a href="#TransitionScene-46"><span class="linenos">46</span></a>        <span class="p">)</span>
-</span><span id="TransitionScene-47"><a href="#TransitionScene-47"><span class="linenos">47</span></a>
-</span><span id="TransitionScene-48"><a href="#TransitionScene-48"><span class="linenos">48</span></a>    <span class="nd">@cached_property</span>
-</span><span id="TransitionScene-49"><a href="#TransitionScene-49"><span class="linenos">49</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alpha</span><span class="p">:</span>
-</span><span id="TransitionScene-50"><a href="#TransitionScene-50"><span class="linenos">50</span></a>        <span class="k">return</span> <span class="n">_scale</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_alpha_percentage</span><span class="p">)</span>
-</span><span id="TransitionScene-51"><a href="#TransitionScene-51"><span class="linenos">51</span></a>
-</span><span id="TransitionScene-52"><a href="#TransitionScene-52"><span class="linenos">52</span></a>    <span class="nd">@cached_property</span>
-</span><span id="TransitionScene-53"><a href="#TransitionScene-53"><span class="linenos">53</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_alpha_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="TransitionScene-54"><a href="#TransitionScene-54"><span class="linenos">54</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
-</span><span id="TransitionScene-55"><a href="#TransitionScene-55"><span class="linenos">55</span></a>
-</span><span id="TransitionScene-56"><a href="#TransitionScene-56"><span class="linenos">56</span></a>    <span class="nd">@cached_property</span>
-</span><span id="TransitionScene-57"><a href="#TransitionScene-57"><span class="linenos">57</span></a>    <span class="nd">@override</span>
-</span><span id="TransitionScene-58"><a href="#TransitionScene-58"><span class="linenos">58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="TransitionScene-59"><a href="#TransitionScene-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_scene_drawings</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TransitionScene-17"><a href="#TransitionScene-17"><span class="linenos">17</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="TransitionScene-18"><a href="#TransitionScene-18"><span class="linenos">18</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TransitionScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
+</span><span id="TransitionScene-19"><a href="#TransitionScene-19"><span class="linenos">19</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="TransitionScene-20"><a href="#TransitionScene-20"><span class="linenos">20</span></a><span class="sd">    Transition from one scene to another.</span>
+</span><span id="TransitionScene-21"><a href="#TransitionScene-21"><span class="linenos">21</span></a>
+</span><span id="TransitionScene-22"><a href="#TransitionScene-22"><span class="linenos">22</span></a><span class="sd">    Attributes:</span>
+</span><span id="TransitionScene-23"><a href="#TransitionScene-23"><span class="linenos">23</span></a><span class="sd">        `from_scene`: The scene to transition from.</span>
+</span><span id="TransitionScene-24"><a href="#TransitionScene-24"><span class="linenos">24</span></a>
+</span><span id="TransitionScene-25"><a href="#TransitionScene-25"><span class="linenos">25</span></a><span class="sd">        `to_scene`: The scene to transition to.</span>
+</span><span id="TransitionScene-26"><a href="#TransitionScene-26"><span class="linenos">26</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="TransitionScene-27"><a href="#TransitionScene-27"><span class="linenos">27</span></a>
+</span><span id="TransitionScene-28"><a href="#TransitionScene-28"><span class="linenos">28</span></a>    <span class="n">from_scene</span><span class="p">:</span> <span class="n">TransitioningScene</span>
+</span><span id="TransitionScene-29"><a href="#TransitionScene-29"><span class="linenos">29</span></a>    <span class="n">to_scene</span><span class="p">:</span> <span class="n">Scene</span>
+</span><span id="TransitionScene-30"><a href="#TransitionScene-30"><span class="linenos">30</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+</span><span id="TransitionScene-31"><a href="#TransitionScene-31"><span class="linenos">31</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="TransitionScene-32"><a href="#TransitionScene-32"><span class="linenos">32</span></a>    <span class="p">)</span>
+</span><span id="TransitionScene-33"><a href="#TransitionScene-33"><span class="linenos">33</span></a>    <span class="n">_elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="TransitionScene-34"><a href="#TransitionScene-34"><span class="linenos">34</span></a>
+</span><span id="TransitionScene-35"><a href="#TransitionScene-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="TransitionScene-36"><a href="#TransitionScene-36"><span class="linenos">36</span></a>        <span class="n">to_scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_scene</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="TransitionScene-37"><a href="#TransitionScene-37"><span class="linenos">37</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">elapsed</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span>
+</span><span id="TransitionScene-38"><a href="#TransitionScene-38"><span class="linenos">38</span></a>            <span class="k">return</span> <span class="n">to_scene</span>
+</span><span id="TransitionScene-39"><a href="#TransitionScene-39"><span class="linenos">39</span></a>
+</span><span id="TransitionScene-40"><a href="#TransitionScene-40"><span class="linenos">40</span></a>        <span class="n">from_scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">tick_without_transition</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="TransitionScene-41"><a href="#TransitionScene-41"><span class="linenos">41</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="TransitionScene-42"><a href="#TransitionScene-42"><span class="linenos">42</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">_elapsed</span><span class="o">=</span><span class="n">elapsed</span><span class="p">,</span> <span class="n">from_scene</span><span class="o">=</span><span class="n">from_scene</span><span class="p">,</span> <span class="n">to_scene</span><span class="o">=</span><span class="n">to_scene</span>
+</span><span id="TransitionScene-43"><a href="#TransitionScene-43"><span class="linenos">43</span></a>        <span class="p">)</span>
+</span><span id="TransitionScene-44"><a href="#TransitionScene-44"><span class="linenos">44</span></a>
+</span><span id="TransitionScene-45"><a href="#TransitionScene-45"><span class="linenos">45</span></a>    <span class="nd">@cached_property</span>
+</span><span id="TransitionScene-46"><a href="#TransitionScene-46"><span class="linenos">46</span></a>    <span class="nd">@override</span>
+</span><span id="TransitionScene-47"><a href="#TransitionScene-47"><span class="linenos">47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="TransitionScene-48"><a href="#TransitionScene-48"><span class="linenos">48</span></a>        <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha_from_percentage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
+</span><span id="TransitionScene-49"><a href="#TransitionScene-49"><span class="linenos">49</span></a>        <span class="n">to_scene_draws</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="TransitionScene-50"><a href="#TransitionScene-50"><span class="linenos">50</span></a>            <span class="n">d</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_scene</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="TransitionScene-51"><a href="#TransitionScene-51"><span class="linenos">51</span></a>        <span class="p">)</span>
+</span><span id="TransitionScene-52"><a href="#TransitionScene-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="n">to_scene_draws</span>
 </span></pre></div>
 
 
@@ -218,7 +296,7 @@
                             <div id="TransitionScene.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">TransitionScene</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">from_scene</span><span class="p">:</span> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>,</span><span class="param">	<span class="n">to_scene</span><span class="p">:</span> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>,</span><span class="param">	<span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span></span>)</span>
+        <span class="name">TransitionScene</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">from_scene</span><span class="p">:</span> <span class="n"><a href="#TransitioningScene">TransitioningScene</a></span>,</span><span class="param">	<span class="n">to_scene</span><span class="p">:</span> <span class="n"><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>,</span><span class="param">	<span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span></span>)</span>
 
         
     </div>
@@ -229,7 +307,7 @@
                             </div>
                             <div id="TransitionScene.from_scene" class="classattr">
                                 <div class="attr variable">
-            <span class="name">from_scene</span><span class="annotation">: <a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></span>
+            <span class="name">from_scene</span><span class="annotation">: <a href="#TransitioningScene">TransitioningScene</a></span>
 
         
     </div>
@@ -271,36 +349,51 @@
 
     </div>
     <a class="headerlink" href="#TransitionScene.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TransitionScene.tick-30"><a href="#TransitionScene.tick-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="TransitionScene.tick-31"><a href="#TransitionScene.tick-31"><span class="linenos">31</span></a>        <span class="n">tick_to_scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_scene</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="TransitionScene.tick-32"><a href="#TransitionScene.tick-32"><span class="linenos">32</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">total_elapsed</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span>
-</span><span id="TransitionScene.tick-33"><a href="#TransitionScene.tick-33"><span class="linenos">33</span></a>            <span class="k">return</span> <span class="n">tick_to_scene</span>
-</span><span id="TransitionScene.tick-34"><a href="#TransitionScene.tick-34"><span class="linenos">34</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-</span><span id="TransitionScene.tick-35"><a href="#TransitionScene.tick-35"><span class="linenos">35</span></a>            <span class="bp">self</span><span class="p">,</span>
-</span><span id="TransitionScene.tick-36"><a href="#TransitionScene.tick-36"><span class="linenos">36</span></a>            <span class="n">_elapsed</span><span class="o">=</span><span class="n">total_elapsed</span><span class="p">,</span>
-</span><span id="TransitionScene.tick-37"><a href="#TransitionScene.tick-37"><span class="linenos">37</span></a>            <span class="n">from_scene</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">),</span>
-</span><span id="TransitionScene.tick-38"><a href="#TransitionScene.tick-38"><span class="linenos">38</span></a>            <span class="n">to_scene</span><span class="o">=</span><span class="n">tick_to_scene</span><span class="p">,</span>
-</span><span id="TransitionScene.tick-39"><a href="#TransitionScene.tick-39"><span class="linenos">39</span></a>        <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TransitionScene.tick-35"><a href="#TransitionScene.tick-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="TransitionScene.tick-36"><a href="#TransitionScene.tick-36"><span class="linenos">36</span></a>        <span class="n">to_scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_scene</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="TransitionScene.tick-37"><a href="#TransitionScene.tick-37"><span class="linenos">37</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">elapsed</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span>
+</span><span id="TransitionScene.tick-38"><a href="#TransitionScene.tick-38"><span class="linenos">38</span></a>            <span class="k">return</span> <span class="n">to_scene</span>
+</span><span id="TransitionScene.tick-39"><a href="#TransitionScene.tick-39"><span class="linenos">39</span></a>
+</span><span id="TransitionScene.tick-40"><a href="#TransitionScene.tick-40"><span class="linenos">40</span></a>        <span class="n">from_scene</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">tick_without_transition</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="TransitionScene.tick-41"><a href="#TransitionScene.tick-41"><span class="linenos">41</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="TransitionScene.tick-42"><a href="#TransitionScene.tick-42"><span class="linenos">42</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">_elapsed</span><span class="o">=</span><span class="n">elapsed</span><span class="p">,</span> <span class="n">from_scene</span><span class="o">=</span><span class="n">from_scene</span><span class="p">,</span> <span class="n">to_scene</span><span class="o">=</span><span class="n">to_scene</span>
+</span><span id="TransitionScene.tick-43"><a href="#TransitionScene.tick-43"><span class="linenos">43</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Update the scene state for a single game step/frame.</p>
+            <div class="docstring"><p>Update the scene state for a single game frame.</p>
 
-<p>Progresses the scene state based on the elapsed time since the
-last update, handling animations, movements,
+<p>This method is called each frame to update the scene state
+based on elapsed time. It handles animations, movements,
 and other time-dependent changes.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code>time_delta</code>:</strong>  The time that has passed since the last update,
-used for calculating time-based changes.</li>
+<li><strong><code>time_delta</code>:</strong>  The time elapsed since the last update
+in milliseconds.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p><code>Scene</code>: The updated scene state after the time step.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+    <span class="c1"># Update character animations</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+
+    <span class="c1"># Update timers</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="bp">self</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -315,20 +408,38 @@ used for calculating time-based changes.</li>
 
     </div>
     <a class="headerlink" href="#TransitionScene.draw_on_screens"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TransitionScene.draw_on_screens-56"><a href="#TransitionScene.draw_on_screens-56"><span class="linenos">56</span></a>    <span class="nd">@cached_property</span>
-</span><span id="TransitionScene.draw_on_screens-57"><a href="#TransitionScene.draw_on_screens-57"><span class="linenos">57</span></a>    <span class="nd">@override</span>
-</span><span id="TransitionScene.draw_on_screens-58"><a href="#TransitionScene.draw_on_screens-58"><span class="linenos">58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="TransitionScene.draw_on_screens-59"><a href="#TransitionScene.draw_on_screens-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_scene_drawings</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TransitionScene.draw_on_screens-45"><a href="#TransitionScene.draw_on_screens-45"><span class="linenos">45</span></a>    <span class="nd">@cached_property</span>
+</span><span id="TransitionScene.draw_on_screens-46"><a href="#TransitionScene.draw_on_screens-46"><span class="linenos">46</span></a>    <span class="nd">@override</span>
+</span><span id="TransitionScene.draw_on_screens-47"><a href="#TransitionScene.draw_on_screens-47"><span class="linenos">47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="TransitionScene.draw_on_screens-48"><a href="#TransitionScene.draw_on_screens-48"><span class="linenos">48</span></a>        <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha_from_percentage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
+</span><span id="TransitionScene.draw_on_screens-49"><a href="#TransitionScene.draw_on_screens-49"><span class="linenos">49</span></a>        <span class="n">to_scene_draws</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="TransitionScene.draw_on_screens-50"><a href="#TransitionScene.draw_on_screens-50"><span class="linenos">50</span></a>            <span class="n">d</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_scene</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="TransitionScene.draw_on_screens-51"><a href="#TransitionScene.draw_on_screens-51"><span class="linenos">51</span></a>        <span class="p">)</span>
+</span><span id="TransitionScene.draw_on_screens-52"><a href="#TransitionScene.draw_on_screens-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_scene</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="n">to_scene_draws</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Get the tuple of drawables to be rendered on the screen, shifted by
-<code>self.draw_on_screen_shift</code>.</p>
+            <div class="docstring"><p>Get the drawables to be rendered on screen with shift applied.</p>
+
+<p>This property returns all drawable objects for the scene,
+with the <code><a href="#TransitionScene.draw_on_screen_shift">draw_on_screen_shift</a></code> applied if specified.
+The shift is applied before GUI scaling to ensure proper
+positioning.</p>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>tuple[DrawOnScreen, ...]</code>: The tuple of drawables to be rendered.</p>
+  <p><code>tuple[DrawOnScreen, ...]</code>: The drawables to be rendered.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">player_sprite</span><span class="p">,</span> <span class="n">background</span><span class="p">,</span> <span class="n">ui_elements</span><span class="p">)</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 

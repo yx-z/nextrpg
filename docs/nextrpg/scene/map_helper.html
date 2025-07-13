@@ -318,10 +318,10 @@
 </span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>
 </span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">collision_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>        <span class="k">if</span> <span class="n">debug</span> <span class="o">:=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
-</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>                <span class="n">c</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">debug</span><span class="o">.</span><span class="n">collision_rectangle_color</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collisions</span>
-</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>            <span class="p">)</span>
+</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">debug</span> <span class="o">:=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>            <span class="n">color</span> <span class="o">:=</span> <span class="n">debug</span><span class="o">.</span><span class="n">collision_rectangle_color</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>        <span class="p">):</span>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">color</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collisions</span><span class="p">)</span>
 </span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>        <span class="k">return</span> <span class="p">()</span>
 </span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TiledObject</span><span class="p">:</span>
@@ -946,10 +946,10 @@ into multiple tiles in a Tiled tmx map.</p>
 </span><span id="MapHelper-186"><a href="#MapHelper-186"><span class="linenos">186</span></a>
 </span><span id="MapHelper-187"><a href="#MapHelper-187"><span class="linenos">187</span></a>    <span class="nd">@cached_property</span>
 </span><span id="MapHelper-188"><a href="#MapHelper-188"><span class="linenos">188</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">collision_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="MapHelper-189"><a href="#MapHelper-189"><span class="linenos">189</span></a>        <span class="k">if</span> <span class="n">debug</span> <span class="o">:=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-</span><span id="MapHelper-190"><a href="#MapHelper-190"><span class="linenos">190</span></a>            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
-</span><span id="MapHelper-191"><a href="#MapHelper-191"><span class="linenos">191</span></a>                <span class="n">c</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">debug</span><span class="o">.</span><span class="n">collision_rectangle_color</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collisions</span>
-</span><span id="MapHelper-192"><a href="#MapHelper-192"><span class="linenos">192</span></a>            <span class="p">)</span>
+</span><span id="MapHelper-189"><a href="#MapHelper-189"><span class="linenos">189</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">debug</span> <span class="o">:=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+</span><span id="MapHelper-190"><a href="#MapHelper-190"><span class="linenos">190</span></a>            <span class="n">color</span> <span class="o">:=</span> <span class="n">debug</span><span class="o">.</span><span class="n">collision_rectangle_color</span>
+</span><span id="MapHelper-191"><a href="#MapHelper-191"><span class="linenos">191</span></a>        <span class="p">):</span>
+</span><span id="MapHelper-192"><a href="#MapHelper-192"><span class="linenos">192</span></a>            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">color</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collisions</span><span class="p">)</span>
 </span><span id="MapHelper-193"><a href="#MapHelper-193"><span class="linenos">193</span></a>        <span class="k">return</span> <span class="p">()</span>
 </span><span id="MapHelper-194"><a href="#MapHelper-194"><span class="linenos">194</span></a>
 </span><span id="MapHelper-195"><a href="#MapHelper-195"><span class="linenos">195</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TiledObject</span><span class="p">:</span>
@@ -1183,15 +1183,67 @@ into multiple tiles in a Tiled tmx map.</p>
 
 
                             <div id="MapHelper.__init__" class="classattr">
-                                <div class="attr function">
+                                        <input id="MapHelper.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
             
-        <span class="name">MapHelper</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">tmx_file</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span></span>)</span>
+        <span class="name">MapHelper</span><span class="signature pdoc-code condensed">(<span class="param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span></span>)</span>
 
-        
+                <label class="view-source-button" for="MapHelper.__init__-view-source"><span>View Source</span></label>
+
     </div>
     <a class="headerlink" href="#MapHelper.__init__"></a>
-    
-    
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MapHelper.__init__-179"><a href="#MapHelper.__init__-179"><span class="linenos">179</span></a>        <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="n">klass</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+</span><span id="MapHelper.__init__-180"><a href="#MapHelper.__init__-180"><span class="linenos">180</span></a><span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="MapHelper.__init__-181"><a href="#MapHelper.__init__-181"><span class="linenos">181</span></a><span class="sd">            Create or retrieve a cached instance.</span>
+</span><span id="MapHelper.__init__-182"><a href="#MapHelper.__init__-182"><span class="linenos">182</span></a>
+</span><span id="MapHelper.__init__-183"><a href="#MapHelper.__init__-183"><span class="linenos">183</span></a><span class="sd">            Checks the cache for an existing instance with the same key.</span>
+</span><span id="MapHelper.__init__-184"><a href="#MapHelper.__init__-184"><span class="linenos">184</span></a><span class="sd">            If found, returns the cached instance. Otherwise, creates</span>
+</span><span id="MapHelper.__init__-185"><a href="#MapHelper.__init__-185"><span class="linenos">185</span></a><span class="sd">            a new instance and adds it to the cache.</span>
+</span><span id="MapHelper.__init__-186"><a href="#MapHelper.__init__-186"><span class="linenos">186</span></a>
+</span><span id="MapHelper.__init__-187"><a href="#MapHelper.__init__-187"><span class="linenos">187</span></a><span class="sd">            Arguments:</span>
+</span><span id="MapHelper.__init__-188"><a href="#MapHelper.__init__-188"><span class="linenos">188</span></a><span class="sd">                `*args`: Positional arguments for the class constructor.</span>
+</span><span id="MapHelper.__init__-189"><a href="#MapHelper.__init__-189"><span class="linenos">189</span></a>
+</span><span id="MapHelper.__init__-190"><a href="#MapHelper.__init__-190"><span class="linenos">190</span></a><span class="sd">                `**kwargs`: Keyword arguments for the class constructor.</span>
+</span><span id="MapHelper.__init__-191"><a href="#MapHelper.__init__-191"><span class="linenos">191</span></a>
+</span><span id="MapHelper.__init__-192"><a href="#MapHelper.__init__-192"><span class="linenos">192</span></a><span class="sd">            Returns:</span>
+</span><span id="MapHelper.__init__-193"><a href="#MapHelper.__init__-193"><span class="linenos">193</span></a><span class="sd">                `T`: Either a cached instance or a newly created one.</span>
+</span><span id="MapHelper.__init__-194"><a href="#MapHelper.__init__-194"><span class="linenos">194</span></a><span class="sd">            &quot;&quot;&quot;</span>
+</span><span id="MapHelper.__init__-195"><a href="#MapHelper.__init__-195"><span class="linenos">195</span></a>            <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_fun</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="MapHelper.__init__-196"><a href="#MapHelper.__init__-196"><span class="linenos">196</span></a>                <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">klass</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">klass</span><span class="p">)</span>
+</span><span id="MapHelper.__init__-197"><a href="#MapHelper.__init__-197"><span class="linenos">197</span></a>
+</span><span id="MapHelper.__init__-198"><a href="#MapHelper.__init__-198"><span class="linenos">198</span></a>            <span class="k">if</span> <span class="p">(</span><span class="n">instance</span> <span class="o">:=</span> <span class="n">klass</span><span class="o">.</span><span class="n">_instances</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="MapHelper.__init__-199"><a href="#MapHelper.__init__-199"><span class="linenos">199</span></a>                <span class="n">klass</span><span class="o">.</span><span class="n">_instances</span><span class="o">.</span><span class="n">move_to_end</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span id="MapHelper.__init__-200"><a href="#MapHelper.__init__-200"><span class="linenos">200</span></a>                <span class="k">return</span> <span class="n">instance</span>
+</span><span id="MapHelper.__init__-201"><a href="#MapHelper.__init__-201"><span class="linenos">201</span></a>
+</span><span id="MapHelper.__init__-202"><a href="#MapHelper.__init__-202"><span class="linenos">202</span></a>            <span class="k">while</span> <span class="n">klass</span><span class="o">.</span><span class="n">_instances</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">klass</span><span class="o">.</span><span class="n">_instances</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size_fun</span><span class="p">():</span>
+</span><span id="MapHelper.__init__-203"><a href="#MapHelper.__init__-203"><span class="linenos">203</span></a>                <span class="n">klass</span><span class="o">.</span><span class="n">_instances</span><span class="o">.</span><span class="n">popitem</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span id="MapHelper.__init__-204"><a href="#MapHelper.__init__-204"><span class="linenos">204</span></a>
+</span><span id="MapHelper.__init__-205"><a href="#MapHelper.__init__-205"><span class="linenos">205</span></a>            <span class="n">instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">klass</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">klass</span><span class="p">)</span>
+</span><span id="MapHelper.__init__-206"><a href="#MapHelper.__init__-206"><span class="linenos">206</span></a>            <span class="n">klass</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance</span>
+</span><span id="MapHelper.__init__-207"><a href="#MapHelper.__init__-207"><span class="linenos">207</span></a>            <span class="k">return</span> <span class="n">instance</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Create or retrieve a cached instance.</p>
+
+<p>Checks the cache for an existing instance with the same key.
+If found, returns the cached instance. Otherwise, creates
+a new instance and adds it to the cache.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong><code>*args</code>:</strong>  Positional arguments for the class constructor.</li>
+<li><strong><code>**kwargs</code>:</strong>  Keyword arguments for the class constructor.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code>T</code>: Either a cached instance or a newly created one.</p>
+</blockquote>
+</div>
+
 
                             </div>
                             <div id="MapHelper.tmx_file" class="classattr">
@@ -1426,10 +1478,10 @@ with the class name <code>config().map.above_character</code>.</p>
     <a class="headerlink" href="#MapHelper.collision_visuals"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="MapHelper.collision_visuals-187"><a href="#MapHelper.collision_visuals-187"><span class="linenos">187</span></a>    <span class="nd">@cached_property</span>
 </span><span id="MapHelper.collision_visuals-188"><a href="#MapHelper.collision_visuals-188"><span class="linenos">188</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">collision_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="MapHelper.collision_visuals-189"><a href="#MapHelper.collision_visuals-189"><span class="linenos">189</span></a>        <span class="k">if</span> <span class="n">debug</span> <span class="o">:=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-</span><span id="MapHelper.collision_visuals-190"><a href="#MapHelper.collision_visuals-190"><span class="linenos">190</span></a>            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
-</span><span id="MapHelper.collision_visuals-191"><a href="#MapHelper.collision_visuals-191"><span class="linenos">191</span></a>                <span class="n">c</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">debug</span><span class="o">.</span><span class="n">collision_rectangle_color</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collisions</span>
-</span><span id="MapHelper.collision_visuals-192"><a href="#MapHelper.collision_visuals-192"><span class="linenos">192</span></a>            <span class="p">)</span>
+</span><span id="MapHelper.collision_visuals-189"><a href="#MapHelper.collision_visuals-189"><span class="linenos">189</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">debug</span> <span class="o">:=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+</span><span id="MapHelper.collision_visuals-190"><a href="#MapHelper.collision_visuals-190"><span class="linenos">190</span></a>            <span class="n">color</span> <span class="o">:=</span> <span class="n">debug</span><span class="o">.</span><span class="n">collision_rectangle_color</span>
+</span><span id="MapHelper.collision_visuals-191"><a href="#MapHelper.collision_visuals-191"><span class="linenos">191</span></a>        <span class="p">):</span>
+</span><span id="MapHelper.collision_visuals-192"><a href="#MapHelper.collision_visuals-192"><span class="linenos">192</span></a>            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">color</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collisions</span><span class="p">)</span>
 </span><span id="MapHelper.collision_visuals-193"><a href="#MapHelper.collision_visuals-193"><span class="linenos">193</span></a>        <span class="k">return</span> <span class="p">()</span>
 </span></pre></div>
 
