@@ -204,8 +204,10 @@ def _add(
         )
 
 
-def _format(x: Interpolation | str) -> str:
-    return format(x.value, x.format_spec) if isinstance(x, Interpolation) else x
+def _format(s: Interpolation | str) -> str:
+    if isinstance(s, Interpolation):
+        return format(s.value, s.format_spec)
+    return s
 
 
 _instances: set[str] = set()

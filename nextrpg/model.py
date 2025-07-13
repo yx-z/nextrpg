@@ -35,19 +35,19 @@ def dataclass_with_instance_init[T](cls: type[T]) -> type[T]:
     """
 
     def post_init(self) -> None:
-        if getattr(self, NEXTRPG_INSTANCE_INIT, None):
+        if getattr(self, _NEXTRPG_INSTANCE_INIT, None):
             return
 
         for f in fields(self):
-            if isinstance(attr := getattr(self, f.name), _Init):
+            if isinstance(attr := getattr(self, f.name, None), _Init):
                 object.__setattr__(self, f.name, attr.init(self))
-        object.__setattr__(self, NEXTRPG_INSTANCE_INIT, True)
+        object.__setattr__(self, _NEXTRPG_INSTANCE_INIT, True)
 
     cls.__post_init__ = post_init
     return dataclass(cls, kw_only=True, frozen=True)
 
 
-NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"
+_NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"
 
 
 def _key(*args: Any, **kwargs: Any) -> tuple:

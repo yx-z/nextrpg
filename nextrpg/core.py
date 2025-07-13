@@ -21,6 +21,10 @@ Alpha channel that defines the transparency between [0, 255] for images.
 """
 
 
+def alpha_from_percentage(percentage: float) -> Alpha:
+    return int(255 * percentage)
+
+
 class Rgba(namedtuple("Rgba", "red green blue alpha")):
     """
     Represents an RGBA color with red, green, blue and alpha components.

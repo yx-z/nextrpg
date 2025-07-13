@@ -104,7 +104,7 @@ class Drawing:
         """
         left, top = top_left
         width, height = size
-        return Drawing(self._surface.subsurface((left, top, width, height)))
+        return Drawing(self.pygame.subsurface((left, top, width, height)))
 
     def set_alpha(self, alpha: Alpha) -> Self:
         """
@@ -116,9 +116,13 @@ class Drawing:
         Returns:
             `Drawing`: A new `Drawing` with the specified alpha value.
         """
-        surface = self._surface.copy()
-        surface.set_alpha(alpha)
-        return Drawing(surface)
+        surf = self._surface.copy()
+        surf.set_alpha(alpha)
+        return Drawing(surf)
+
+    def set_alpha_in_place(self, alpha: Alpha) -> Self:
+        self._surface.set_alpha(alpha)
+        return self
 
     @cached_property
     def visible_rectangle(self) -> Rectangle:
@@ -141,9 +145,11 @@ class Drawing:
 
     @cached_property
     def _debug_surface(self) -> Surface | None:
-        if debug := config().debug:
+        if (debug := config().debug) and (
+            color := debug.drawing_background_color
+        ):
             surface = Surface(self.size, SRCALPHA)
-            surface.fill(debug.drawing_background_color)
+            surface.fill(color)
             surface.blit(self._surface, (0, 0))
             return surface
         return None
@@ -220,6 +226,13 @@ class DrawOnScreen:
             `DrawOnScreen`: A new `DrawOnScreen` shifted by the coordinate.
         """
         return DrawOnScreen(self.top_left.shift(coord), self.drawing)
+
+    def set_alpha(self, alpha: Alpha) -> Self:
+        return DrawOnScreen(self.top_left, self.drawing.set_alpha(alpha))
+
+    def set_alpha_in_place(self, alpha: Alpha) -> Self:
+        self.drawing.set_alpha_inplace(alpha)
+        return self
 
 
 @dataclass(frozen=True)
@@ -323,11 +336,13 @@ class Polygon:
     def _draw(
         self, surf_and_points: Callable[[Surface, tuple[Coordinate, ...]], None]
     ) -> DrawOnScreen:
-        rect = self.bounding_rectangle
-        surf = Surface(rect.size, SRCALPHA)
-        negated = tuple((p.shift(rect.top_left.negate)) for p in self.points)
+        rectangle = self.bounding_rectangle
+        surf = Surface(rectangle.size, SRCALPHA)
+        negated = tuple(
+            (p.shift(rectangle.top_left.negate)) for p in self.points
+        )
         surf_and_points(surf, negated)
-        return DrawOnScreen(rect.top_left, Drawing(surf))
+        return DrawOnScreen(rectangle.top_left, Drawing(surf))
 
 
 class Rectangle(Polygon):

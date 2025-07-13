@@ -185,10 +185,10 @@ class MapHelper:
 
     @cached_property
     def collision_visuals(self) -> tuple[DrawOnScreen, ...]:
-        if debug := config().debug:
-            return tuple(
-                c.fill(debug.collision_rectangle_color) for c in self.collisions
-            )
+        if (debug := config().debug) and (
+            color := debug.collision_rectangle_color
+        ):
+            return tuple(c.fill(color) for c in self.collisions)
         return ()
 
     def get_object(self, name: str) -> TiledObject:

@@ -33,11 +33,7 @@ class SayEvent(RpgEventScene):
     @cached_property
     @override
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return (
-            self.scene.draw_on_screens
-            + (self._background,)
-            + TextOnScreen(self._text, self._text_top_left).draw_on_screen
-        )
+        return self.scene.draw_on_screens + self._text_popup
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
@@ -54,24 +50,36 @@ class SayEvent(RpgEventScene):
         return self
 
     @cached_property
+    def _text_popup(self) -> tuple[DrawOnScreen, ...]:
+        background = (self._background,) + self._text_tail
+        text = TextOnScreen(self._text, self._text_top_left).draw_on_screen
+        return background + text
+
+    @cached_property
+    def _text_tail(self) -> tuple[DrawOnScreen, ...]:
+        return ()
+
+    @cached_property
     def _text(self) -> Text:
         return Text(self.message, self.config.text)
 
     @cached_property
     def _text_top_left(self) -> Coordinate:
         if isinstance(self.character_or_scene, Scene):
-            center = (
-                self.arg
-                if isinstance(self.arg, Coordinate)
-                else screen().center
-            )
-            width, height = self._text.size
-            return center.shift(Coordinate(width / 2, height / 2).negate)
+            return self._scene_top_left
 
         coord = self.character_or_scene.coordinate
         if self.scene.draw_on_screen_shift:
             return coord.shift(self.scene.draw_on_screen_shift)
         return coord
+
+    @cached_property
+    def _scene_top_left(self) -> Coordinate:
+        center = (
+            self.arg if isinstance(self.arg, Coordinate) else screen().center
+        )
+        width, height = self._text.size
+        return center.shift(Coordinate(width / 2, height / 2).negate)
 
     @cached_property
     def _background(self) -> DrawOnScreen:

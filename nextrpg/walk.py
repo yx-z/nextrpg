@@ -118,7 +118,10 @@ class Walk:
         return index >= len(self.path.points) - 1
 
     def _next_index(self, i: int) -> int:
-        return i + 1 if i + 1 < len(self.path.points) else 0
+        stepped = i + 1
+        if stepped < len(self.path.points):
+            return stepped
+        return 0
 
     @cached_property
     def _source(self) -> Coordinate:

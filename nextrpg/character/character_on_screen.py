@@ -14,7 +14,7 @@ from nextrpg.draw.coordinate import Coordinate
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.event.rpg_event import registered_events
 from nextrpg.model import (
-    NEXTRPG_INSTANCE_INIT,
+    _NEXTRPG_INSTANCE_INIT,
     dataclass_with_instance_init,
     instance_init,
 )

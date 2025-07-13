@@ -56,13 +56,13 @@ class CyclicFrames:
         Returns:
             `CyclicFrames`: A new instance with an updated animation state.
         """
-        t = self._timer.tick(time_delta)
-        frames_to_step = t.elapsed // self.duration_per_frame
-        return replace(
-            self,
-            _index=(self._index + frames_to_step) % len(self.frames),
-            _timer=replace(t, elapsed=t.elapsed % self.duration_per_frame),
+        timer = self._timer.tick(time_delta)
+        frames_to_step = timer.elapsed // self.duration_per_frame
+        index = (self._index + frames_to_step) % len(self.frames)
+        timer_mod = replace(
+            timer, elapsed=timer.elapsed % self.duration_per_frame
         )
+        return replace(self, _index=index, _timer=timer_mod)
 
     @cached_property
     def reset(self) -> Self:

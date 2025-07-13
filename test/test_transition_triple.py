@@ -1,14 +1,15 @@
 from nextrpg.draw.coordinate import Coordinate
 from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing
-from nextrpg.scene.scene import Scene
+from nextrpg.scene.static_scene import StaticScene
+from nextrpg.scene.transition_scene import TransitioningScene
 from nextrpg.scene.transition_triple import TransitionTriple
 from test.util import MockSurface
 
 
 def test_transition_triple():
-    scene1 = Scene()
-    scene2 = Scene()
-    scene3 = Scene()
+    scene1 = TransitioningScene()
+    scene2 = StaticScene()
+    scene3 = TransitioningScene()
     object.__setattr__(
         scene1,
         "draw_on_screens",
@@ -28,9 +29,8 @@ def test_transition_triple():
         from_scene=scene1,
         intermediary=scene2,
         to_scene=scene3,
-        total_duration=10,
+        duration=10,
     )
-    assert transition.tick(0)._from_and_intermediary is not scene2
     assert transition.draw_on_screens
     assert transition.tick(1).tick(2).tick(3).draw_on_screens
     assert transition.tick(1).tick(2).tick(3).tick(4).tick(5).tick(60000)

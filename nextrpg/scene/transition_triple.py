@@ -1,61 +1,55 @@
-from dataclasses import field, replace
+from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import override
 
 from nextrpg.config.config import config
-from nextrpg.core import Millisecond
+from nextrpg.core import Alpha, Millisecond, alpha_from_percentage
 from nextrpg.draw.draw_on_screen import DrawOnScreen
-from nextrpg.model import instance_init, dataclass_with_instance_init
 from nextrpg.scene.scene import Scene
-from nextrpg.scene.transition_scene import TransitionScene
+from nextrpg.scene.static_scene import StaticScene
+from nextrpg.scene.transition_scene import TransitioningScene
 
 
-@dataclass_with_instance_init
+@dataclass(frozen=True)
 class TransitionTriple(Scene):
-    from_scene: Scene
-    intermediary: Scene
+    from_scene: TransitioningScene
+    intermediary: StaticScene
     to_scene: Scene
-    total_duration: Millisecond = field(
+    duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
-    )
-    _from_and_intermediary: Scene = instance_init(
-        lambda self: TransitionScene(
-            self.from_scene, self.intermediary, self._half_duration
-        )
-    )
-    _intermediary_and_to: TransitionScene = instance_init(
-        lambda self: TransitionScene(
-            self.intermediary, self.to_scene, self._half_duration
-        )
     )
     _elapsed: Millisecond = 0
 
     def tick(self, time_delta: Millisecond) -> Scene:
-        total_elapsed = self._elapsed + time_delta
-        if total_elapsed < self._half_duration:
-            from_and_intermediary = self._from_and_intermediary.tick(time_delta)
-            return replace(
-                self,
-                _from_and_intermediary=from_and_intermediary,
-                _elapsed=total_elapsed,
-            )
+        if (elapsed := self._elapsed + time_delta) < self._half_duration:
+            from_scene = self.from_scene.tick_without_transition(time_delta)
+            return replace(self, from_scene=from_scene, _elapsed=elapsed)
 
-        intermediary_and_to = self._intermediary_and_to.tick(time_delta)
-        if isinstance(intermediary_and_to, TransitionScene):
-            return replace(
-                self,
-                _intermediary_and_to=intermediary_and_to,
-                _elapsed=total_elapsed,
-            )
-        return intermediary_and_to
+        to_scene = self.to_scene.tick(time_delta)
+        if elapsed < self.duration:
+            return replace(self, to_scene=to_scene, _elapsed=elapsed)
+        return to_scene
 
     @cached_property
     @override
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         if self._elapsed < self._half_duration:
-            return self._from_and_intermediary.draw_on_screens
-        return self._intermediary_and_to.draw_on_screens
+            alpha = alpha_from_percentage(self._elapsed / self._half_duration)
+            intermediary_draws = self._intermediary_draw_on_screens(alpha)
+            return self.from_scene.draw_on_screens + intermediary_draws
+
+        remaining = self.duration - self._elapsed
+        alpha = alpha_from_percentage(remaining / self._half_duration)
+        intermediary_draws = self._intermediary_draw_on_screens(alpha)
+        return self.to_scene.draw_on_screens + intermediary_draws
+
+    def _intermediary_draw_on_screens(
+        self, alpha: Alpha
+    ) -> tuple[DrawOnScreen, ...]:
+        return tuple(
+            d.set_alpha(alpha) for d in self.intermediary.draw_on_screens
+        )
 
     @cached_property
     def _half_duration(self) -> Millisecond:
-        return self.total_duration / 2
+        return self.duration / 2

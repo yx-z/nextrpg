@@ -219,13 +219,13 @@ class NpcSpec(CharacterSpec):
 
     @cached_property
     def generator(self) -> Callable[[*RpgEventSpecParams], RpgEventGenerator]:
-        def yield_event(*args: Any) -> RpgEventGenerator:
+        def yield_event(*args: Any, **kwargs: Any) -> RpgEventGenerator:
             fun = self.event
             ctx = fun.__globals__ | {
                 v: c.cell_contents
                 for v, c in zip(fun.__code__.co_freevars, fun.__closure__ or ())
             }
             exec(transform_and_compile(fun), ctx)
-            return ctx[fun.__name__](*args)
+            return ctx[fun.__name__](*args, **kwargs)
 
         return yield_event

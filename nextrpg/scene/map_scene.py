@@ -7,28 +7,29 @@ from functools import cached_property
 from os import PathLike
 from typing import Callable, NamedTuple, OrderedDict, override
 
-from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.moving_npc import MovingNpcOnScreen
 from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config.config import config
+from nextrpg.core import Millisecond, Timepoint, get_timepoint
 from nextrpg.draw.coordinate import Coordinate
-from nextrpg.core import Millisecond, Pixel, Timepoint, get_timepoint
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.gui.area import gui_size
 from nextrpg.logger import Logger
 from nextrpg.model import dataclass_with_instance_init, instance_init
 from nextrpg.scene.map_helper import MapHelper, get_polygon
+from nextrpg.scene.map_util import _shift
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.static_scene import StaticScene
+from nextrpg.scene.transition_scene import TransitioningScene
 from nextrpg.scene.transition_triple import TransitionTriple
 
 logger = Logger("MapScene")
 
 
 @dataclass_with_instance_init
-class MapScene(EventfulScene):
+class MapScene(EventfulScene, TransitioningScene):
     """
     A scene implementation that represents a game map loaded from Tiled TMX.
 
@@ -48,8 +49,8 @@ class MapScene(EventfulScene):
     player_spec: CharacterSpec
     moves: tuple[Move, ...] = field(default_factory=tuple)
     npc_specs: tuple[NpcSpec, ...] = field(default_factory=tuple)
-    collision_visuals: tuple[DrawOnScreen, ...] = instance_init(
-        lambda self: self._collision_visuals
+    debug_visuals: tuple[DrawOnScreen, ...] = instance_init(
+        lambda self: self._debug_visuals
     )
     npcs: tuple[NpcOnScreen, ...] = instance_init(
         lambda self: tuple(self._init_npc(n) for n in self.npc_specs)
@@ -75,17 +76,9 @@ class MapScene(EventfulScene):
     def tick(self, time_delta: Millisecond) -> Scene:
         return self._move_to_scene or super().tick(time_delta)
 
-    @cached_property
-    def _foreground_and_characters(self) -> tuple[DrawOnScreen, ...]:
-        characters = (self.player,) + self.npcs
-        layer_bottom_draws = sorted(
-            draw
-            for character in characters
-            for draw in self.map_helper.layer_bottom_and_draw(character)
-        )
-        foregrounds = [t for layer in self.map_helper.foreground for t in layer]
-        layers = sorted(foregrounds + layer_bottom_draws, key=lambda x: x[:2])
-        return tuple(draw for _, _, draw in layers)
+    @override
+    def tick_without_transition(self, time_delta: Millisecond) -> Scene:
+        return replace(self, npcs=tuple(n.tick(time_delta) for n in self.npcs))
 
     @cached_property
     @override
@@ -102,6 +95,28 @@ class MapScene(EventfulScene):
         return shift
 
     @cached_property
+    @override
+    def draw_on_screens_before_shift(self) -> tuple[DrawOnScreen, ...]:
+        return (
+            self.map_helper.background
+            + self._foreground_and_characters
+            + self.map_helper.above_character
+            + self.debug_visuals
+        )
+
+    @cached_property
+    def _foreground_and_characters(self) -> tuple[DrawOnScreen, ...]:
+        characters = (self.player,) + self.npcs
+        layer_bottom_draws = sorted(
+            draw
+            for character in characters
+            for draw in self.map_helper.layer_bottom_and_draw(character)
+        )
+        foregrounds = [t for layer in self.map_helper.foreground for t in layer]
+        layers = sorted(foregrounds + layer_bottom_draws, key=lambda x: x[:2])
+        return tuple(draw for _, _, draw in layers)
+
+    @cached_property
     def _move_to_scene(self) -> TransitionTriple | None:
         for move in self.moves:
             if m := self._move(move):
@@ -111,19 +126,22 @@ class MapScene(EventfulScene):
     def _move(self, move: Move) -> TransitionTriple | None:
         move_poly = get_polygon(self.map_helper.get_object(move.trigger_object))
         if self.player.draw_on_screen.rectangle.collide(move_poly):
-            return move.to_scene(self, self.player.spec)
+            return move.to_scene(self, self.player)
         return None
 
     @cached_property
-    def _collision_visuals(self) -> tuple[DrawOnScreen, ...]:
-        if not (debug := config().debug):
-            return ()
-        npc_paths = tuple(
-            n.path.line(debug.npc_path_color)
-            for n in self.npcs
-            if isinstance(n, MovingNpcOnScreen)
-        )
-        return self.map_helper.collision_visuals + npc_paths
+    def _debug_visuals(self) -> tuple[DrawOnScreen, ...]:
+        return self.map_helper.collision_visuals + self._npc_paths
+
+    @cached_property
+    def _npc_paths(self) -> tuple[DrawOnScreen, ...]:
+        if (debug := config().debug) and (color := debug.npc_path_color):
+            return tuple(
+                n.path.line(color)
+                for n in self.npcs
+                if isinstance(n, MovingNpcOnScreen)
+            )
+        return ()
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
         obj = self.map_helper.get_object(spec.object_name)
@@ -131,16 +149,6 @@ class MapScene(EventfulScene):
         if poly := get_polygon(obj):
             return MovingNpcOnScreen(coordinate=coord, path=poly, spec=spec)
         return NpcOnScreen(coordinate=coord, spec=spec)
-
-    @cached_property
-    @override
-    def draw_on_screens_before_shift(self) -> tuple[DrawOnScreen, ...]:
-        return (
-            self.map_helper.background
-            + self._foreground_and_characters
-            + self.map_helper.above_character
-            + self.collision_visuals
-        )
 
 
 @dataclass(frozen=True)
@@ -164,7 +172,7 @@ class Move:
     )
 
     def to_scene(
-        self, from_scene: MapScene, player_spec: CharacterSpec
+        self, from_scene: MapScene, player: PlayerOnScreen
     ) -> TransitionTriple:
         """
         Move to another scene.
@@ -173,9 +181,11 @@ class Move:
             `from_scene`: The current scene.
 
         Returns:
-            `TransitionScene`: The transition to the next scene.
+            `TransitionTriple`: The transition to the next scene.
         """
-        spec = replace(player_spec, object_name=self.to_object)
+        spec = replace(
+            player.spec, object_name=self.to_object, character=player.character
+        )
         now = get_timepoint()
 
         if not (tmx := _tmxs.get(self.next_scene)):
@@ -200,22 +210,12 @@ class Move:
             _tmxs.popitem(last=False)
         _tmxs[self.next_scene] = tmx
 
-        return TransitionTriple(
-            from_scene=from_scene, intermediary=StaticScene(), to_scene=to_scene
-        )
+        return TransitionTriple(from_scene, StaticScene(), to_scene)
 
 
 class _TimedScene(NamedTuple):
     time: Timepoint
     scene: MapScene
-
-
-def _shift(player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel) -> Pixel:
-    if player_axis < gui_axis / 2:
-        return 0
-    if player_axis > map_axis - gui_axis / 2:
-        return gui_axis - map_axis
-    return gui_axis / 2 - player_axis
 
 
 _tmxs = OrderedDict[Callable[..., MapScene], str]()

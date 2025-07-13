@@ -5,11 +5,11 @@ from nextrpg.config.config import config
 from nextrpg.core import Rgba
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.gui.area import screen
-from nextrpg.scene.scene import Scene
+from nextrpg.scene.transition_scene import TransitioningScene
 
 
 @dataclass(frozen=True)
-class StaticScene(Scene):
+class StaticScene(TransitioningScene):
     resource: Rgba | DrawOnScreen = field(
         default_factory=lambda: config().gui.background_color
     )

@@ -63,6 +63,7 @@ def test_npcs(mocker: MockerFixture) -> None:
     map_helper.foreground = ()
     map_helper.background = ()
     map_helper.above_character = ()
+    map_helper.collision_visuals = ()
     map_helper.map_size = Size(100, 100)
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=map_helper)
     mocker.patch(

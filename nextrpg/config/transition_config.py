@@ -15,4 +15,4 @@ class TransitionConfig:
             in milliseconds.
     """
 
-    duration: Millisecond = 1000
+    duration: Millisecond = 500

@@ -6,7 +6,8 @@ from nextrpg.event.rpg_event import register_rpg_event
 def say(
     character_or_scene: CharacterOnScreen | Scene,
     message: str,
-    arg: Coordinate | Drawing | None = None,
+    arg: Coordinate | None = None,
+    **kwargs: Any
 ) -> None:
     """
     Character says a message.
@@ -23,5 +24,5 @@ def say(
     from nextrpg.event.say_event import SayEvent
 
     return lambda generator, scene: SayEvent(
-        generator, scene, character_or_scene, message, arg
+        generator, scene, character_or_scene, message, arg, **kwargs
     )

@@ -4,7 +4,8 @@ Start the game window and game loop.
 
 from asyncio import sleep
 from dataclasses import field, replace
-from typing import Callable
+from functools import cached_property
+from typing import Callable, Self
 
 import pygame
 from pygame.time import Clock
@@ -16,7 +17,7 @@ from nextrpg.logger import Logger
 from nextrpg.model import dataclass_with_instance_init, instance_init
 from nextrpg.scene.scene import Scene
 
-logger = Logger("GameLoop")
+logger = Logger("Game")
 
 
 @dataclass_with_instance_init
@@ -62,31 +63,34 @@ class _GameLoop:
     _gui: Gui = field(default_factory=Gui)
     _scene: Scene = instance_init(lambda self: self.entry_scene())
 
-    def event(self, e: PygameEvent) -> _GameLoop:
-        if isinstance(e, Quit):
-            return replace(self, _scene=self._scene.event(e), running=False)
-        return replace(
-            self, _scene=self._scene.event(e), _gui=self._gui.event(e)
-        )
-
-    def tick(self) -> _GameLoop:
+    def tick(self) -> Self:
         logger.debug(t"FPS: {self._clock.get_fps():.0f}", duration=None)
         self._clock.tick(config().gui.frames_per_second)
         time_delta = self._clock.get_time()
 
-        self._update_gui()
         self._gui.draw(self._scene.draw_on_screens, time_delta)
 
-        loop = replace(self, _scene=self._scene.tick(time_delta))
+        loop = replace(
+            self, _scene=self._scene.tick(time_delta), _gui=self._update_gui
+        )
         for e in pygame.event.get():
-            loop = loop.event(to_typed_event(e))
+            loop = loop._event(to_typed_event(e))
         return loop
 
-    def _update_gui(self) -> None:
-        if config().gui is not self._gui.current_config:
-            new_gui = replace(
-                self._gui,
-                current_config=config().gui,
-                last_config=self._gui.current_config,
-            )
-            object.__setattr__(self, "_gui", new_gui)
+    def _event(self, e: PygameEvent) -> Self:
+        return replace(
+            self,
+            _scene=self._scene.event(e),
+            _gui=self._gui.event(e),
+            running=not isinstance(e, Quit),
+        )
+
+    @cached_property
+    def _update_gui(self) -> Gui:
+        if config().gui is self._gui.current_config:
+            return self._gui
+        return replace(
+            self._gui,
+            current_config=config().gui,
+            last_config=self._gui.current_config,
+        )
