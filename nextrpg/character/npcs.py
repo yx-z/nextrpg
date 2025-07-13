@@ -8,7 +8,7 @@ from nextrpg.character.character_on_screen import (
     CharacterSpec,
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.config import config
+from nextrpg.config.config import config
 from nextrpg.core import Millisecond, PixelPerMillisecond
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.event.event_transformer import transform_and_compile

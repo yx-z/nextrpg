@@ -4,7 +4,7 @@ from textwrap import dedent
 from types import CodeType
 from typing import Callable
 
-from nextrpg.config import config
+from nextrpg.config.config import config
 
 
 def transform_and_compile[R, **P](fun: Callable[P, R]) -> CodeType:

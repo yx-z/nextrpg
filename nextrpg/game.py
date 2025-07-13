@@ -9,7 +9,7 @@ from typing import Callable
 import pygame
 from pygame.time import Clock
 
-from nextrpg.config import config
+from nextrpg.config.config import config
 from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
 from nextrpg.gui.window import Gui
 from nextrpg.logger import Logger

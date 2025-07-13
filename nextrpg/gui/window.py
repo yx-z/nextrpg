@@ -11,13 +11,8 @@ from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
-from nextrpg.config import (
-    GuiConfig,
-    GuiMode,
-    ResizeMode,
-    config,
-    set_config,
-)
+from nextrpg.config.config import config, set_config
+from nextrpg.config.gui_config import GuiConfig, GuiMode, ResizeMode
 from nextrpg.core import Millisecond, Pixel, Size
 from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing
 from nextrpg.draw.coordinate import Coordinate

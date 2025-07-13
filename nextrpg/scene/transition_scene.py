@@ -2,7 +2,7 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import override
 
-from nextrpg.config import config
+from nextrpg.config.config import config
 from nextrpg.core import Alpha, Millisecond
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.scene.scene import Scene

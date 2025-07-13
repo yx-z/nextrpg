@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 from functools import cached_property
 
-from nextrpg.config import TextConfig, config
+from nextrpg.config.text_config import TextConfig
+from nextrpg.config.config import config
 from nextrpg.core import Pixel, Size
 
 

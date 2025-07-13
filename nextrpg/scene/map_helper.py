@@ -17,7 +17,7 @@ from pytmx import (
 )
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.config import config
+from nextrpg.config.config import config
 from nextrpg.core import Pixel, Size
 from nextrpg.draw.draw_on_screen import (
     DrawOnScreen,

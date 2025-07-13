@@ -6,7 +6,8 @@ from pytest_mock import MockerFixture
 
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.config import Config, ResourceConfig
+from nextrpg.config.config import Config
+from nextrpg.config.resource_config import ResourceConfig
 from nextrpg.core import Size
 from nextrpg.draw.coordinate import Coordinate
 from nextrpg.scene.map_helper import MapHelper, get_polygon

@@ -4,14 +4,14 @@ from typing import Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npcs import RpgEventScene
-from nextrpg.config import SayEventConfig, config
+from nextrpg.config.say_event_config import SayEventConfig
+from nextrpg.config.config import config
 from nextrpg.draw.coordinate import Coordinate
 from nextrpg.core import Millisecond, Size
 from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing, Rectangle
 from nextrpg.draw.text import Text
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.gui.area import screen
-from nextrpg.logger import Logger
 from nextrpg.scene.scene import Scene
 from nextrpg.draw.text_on_screen import TextOnScreen
 
@@ -33,11 +33,10 @@ class SayEvent(RpgEventScene):
     @cached_property
     @override
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        text = TextOnScreen(self._text, self._text_top_left)
         return (
             self.scene.draw_on_screens
             + (self._background,)
-            + text.draw_on_screen
+            + TextOnScreen(self._text, self._text_top_left).draw_on_screen
         )
 
     @override

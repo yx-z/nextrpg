@@ -1,4 +1,5 @@
-from nextrpg.config import ResizeMode, config, initial_config
+from nextrpg.config.gui_config import ResizeMode
+from nextrpg.config.config import config, initial_config
 from nextrpg.core import Size
 from nextrpg.draw.coordinate import Coordinate
 from nextrpg.draw.draw_on_screen import Rectangle

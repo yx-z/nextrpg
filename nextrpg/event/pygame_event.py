@@ -9,7 +9,8 @@ from functools import cached_property
 from pygame.event import Event
 from pygame.locals import KEYDOWN, KEYUP, QUIT, VIDEORESIZE
 
-from nextrpg.config import KeyCode, config
+from nextrpg.config.key_mapping_config import KeyCode
+from nextrpg.config.config import config
 from nextrpg.draw.draw_on_screen import Size
 
 

@@ -3,7 +3,8 @@ from pathlib import Path
 from pygame import Color, SRCALPHA, Surface
 from pytest_mock import MockerFixture
 
-from nextrpg.config import Config, DebugConfig
+from nextrpg.config.config import Config
+from nextrpg.config.debug_config import DebugConfig
 from nextrpg.core import Rgba, Size
 from nextrpg.draw.draw_on_screen import (
     DrawOnScreen,

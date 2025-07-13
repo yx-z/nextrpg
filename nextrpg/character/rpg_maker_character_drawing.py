@@ -18,7 +18,7 @@ from enum import IntEnum
 from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.config import config
+from nextrpg.config.config import config
 from nextrpg.core import Direction, Millisecond, Pixel
 from nextrpg.draw.draw_on_screen import Drawing, Size
 from nextrpg.draw.coordinate import Coordinate

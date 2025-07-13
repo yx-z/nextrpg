@@ -2,7 +2,9 @@ from _pytest.raises import raises
 from pygame import Event, KEYDOWN, K_F1, K_LEFT, VIDEORESIZE
 from pytest_mock import MockerFixture
 
-from nextrpg.config import Config, DebugConfig, GuiConfig, GuiMode, ResizeMode
+from nextrpg.config.config import Config
+from nextrpg.config.debug_config import DebugConfig
+from nextrpg.config.gui_config import GuiConfig, GuiMode, ResizeMode
 from nextrpg.core import Size
 from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing
 from nextrpg.draw.coordinate import Coordinate

@@ -14,7 +14,7 @@ from pygame.draw import lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
 
-from nextrpg.config import config
+from nextrpg.config.config import config
 from nextrpg.draw.coordinate import Coordinate
 from nextrpg.core import Alpha, BLACK, Pixel, Rgba, Size
 from nextrpg.logger import Logger

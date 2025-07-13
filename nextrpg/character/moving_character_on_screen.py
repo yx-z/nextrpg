@@ -4,7 +4,7 @@ from functools import cached_property
 from typing import NamedTuple, Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.config import config
+from nextrpg.config.config import config
 from nextrpg.core import Direction, Millisecond, PixelPerMillisecond
 from nextrpg.draw.coordinate import Coordinate
 from nextrpg.draw.draw_on_screen import DrawOnScreen, Polygon
