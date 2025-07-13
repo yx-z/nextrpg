@@ -47,7 +47,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        if self._event_triggered or self._walk.completed:
+        if self._event_triggered or self._walk.complete:
             return super().tick(time_delta)
 
         move_timer, idle_timer, moving = self._timers_and_moving(time_delta)
@@ -75,7 +75,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
         return (
             self._moving
             and not self._event_triggered
-            and not self._walk.completed
+            and not self._walk.complete
         )
 
     @override

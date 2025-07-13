@@ -24,5 +24,10 @@ def say(
     from nextrpg.event.say_event import SayEvent
 
     return lambda generator, scene: SayEvent(
-        generator, scene, character_or_scene, message, arg, **kwargs
+        generator=generator,
+        scene=scene,
+        character_or_scene=character_or_scene,
+        message=message,
+        arg=arg,
+        **kwargs
     )

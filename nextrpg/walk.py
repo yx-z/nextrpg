@@ -183,7 +183,7 @@ class Walk:
             walk = walk.tick(time_delta)
             ```
         """
-        if self.completed:
+        if self.complete:
             return self
 
         current_coord = self.coordinate
@@ -223,7 +223,7 @@ class Walk:
         )
 
     @cached_property
-    def completed(self) -> bool:
+    def complete(self) -> bool:
         """
         Check if the walk has completed.
 

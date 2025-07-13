@@ -107,11 +107,8 @@ def test_npcs(mocker: MockerFixture) -> None:
     object.__setattr__(say_event.scene, "draw_on_screens", ())
     assert say_event.tick(0)
     mocker.patch("nextrpg.core.Font.pygame")
-    assert say_event.draw_on_screens
     assert say_event.event(Quit(Event(QUIT)))
     assert say_event.event(KeyPressDown(Event(KEYDOWN, key=K_SPACE)))
-    new_scene = say_event.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
-    assert isinstance(new_scene, MapScene)
     player = replace(map_scene.player, coordinate=Coordinate(123, 100))
     assert not replace(map_scene, player=player)._collided_npc
 

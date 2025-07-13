@@ -1,22 +1,21 @@
-from dataclasses import dataclass, field, replace
-from typing import Self
+from functools import cached_property
+from typing import override
 
-from nextrpg.config.config import config
-from nextrpg.core import Millisecond, alpha_from_percentage
 from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.draw.fade import Fade
+from nextrpg.model import dataclass_with_instance_init, instance_init
 
 
-@dataclass(frozen=True)
-class FadeIn:
-    draw_on_screen: DrawOnScreen
-    duration: Millisecond = field(
-        default_factory=lambda: config().transition.duration
-    )
-    _elapsed: Millisecond = 0
+@dataclass_with_instance_init
+class FadeIn(Fade):
+    _complete: tuple[DrawOnScreen] = instance_init(lambda self: self.resource)
 
-    def tick(self, time_delta: Millisecond) -> Self:
-        if (elapsed := self._elapsed + time_delta) < self.duration:
-            alpha = alpha_from_percentage(elapsed / self.duration)
-            draw_on_screen = self.draw_on_screen.set_alpha(alpha)
-            return replace(self, draw_on_screen=draw_on_screen)
-        return self
+    @override
+    @cached_property
+    def _start(self) -> tuple[DrawOnScreen, ...]:
+        return ()
+
+    @override
+    @cached_property
+    def _percentage(self) -> float:
+        return self._elapsed / self.duration

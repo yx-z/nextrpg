@@ -16,10 +16,10 @@ Example:
     ```python
     from nextrpg.game import Game
     from nextrpg.scene import StaticScene
-    
+
     def create_entry_scene():
         return StaticScene()
-    
+
     game = Game(entry_scene=create_entry_scene)
     game.start()  # Synchronous game loop
     # or
@@ -63,10 +63,10 @@ class Game:
         ```python
         from nextrpg.game import Game
         from nextrpg.scene import MapScene
-        
+
         def create_scene():
             return MapScene("maps/town.tmx")
-        
+
         game = Game(entry_scene=create_scene)
         game.start()
         ```

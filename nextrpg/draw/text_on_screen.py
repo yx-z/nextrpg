@@ -17,11 +17,11 @@ class TextOnScreen:
         `top_left`: The top-left coordinate of the text.
     """
 
-    text: Text
     top_left: Coordinate
+    text: Text
 
     @cached_property
-    def draw_on_screen(self) -> tuple[DrawOnScreen, ...]:
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         """
         The text rendered on screen.
 

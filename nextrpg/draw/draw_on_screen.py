@@ -120,10 +120,6 @@ class Drawing:
         surf.set_alpha(alpha)
         return Drawing(surf)
 
-    def set_alpha_in_place(self, alpha: Alpha) -> Self:
-        self._surface.set_alpha(alpha)
-        return self
-
     @cached_property
     def visible_rectangle(self) -> Rectangle:
         visible = [
@@ -230,9 +226,6 @@ class DrawOnScreen:
     def set_alpha(self, alpha: Alpha) -> Self:
         return DrawOnScreen(self.top_left, self.drawing.set_alpha(alpha))
 
-    def set_alpha_in_place(self, alpha: Alpha) -> Self:
-        self.drawing.set_alpha_inplace(alpha)
-        return self
 
 
 @dataclass(frozen=True)

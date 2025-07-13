@@ -103,7 +103,7 @@ class Gui:
     def _draw_log(self, time_delta: Millisecond) -> None:
         if msgs := pop_messages(time_delta):
             self._screen.blits(
-                d.pygame for t in _log_text(msgs) for d in t.draw_on_screen
+                d.pygame for t in _log_text(msgs) for d in t.draw_on_screens
             )
 
     def _scale(self, draws: tuple[DrawOnScreen, ...]) -> DrawOnScreen:
@@ -198,8 +198,8 @@ def _log_text(
         text
         for i, (component, msg) in enumerate(msgs)
         for text in (
-            TextOnScreen(Text(component), Coordinate(spacing, _line_height(i))),
-            TextOnScreen(Text(msg), Coordinate(msg_spacing, _line_height(i))),
+            TextOnScreen( Coordinate(spacing, _line_height(i)), Text(component)),
+            TextOnScreen( Coordinate(msg_spacing, _line_height(i)), Text(msg)),
         )
     )
 
