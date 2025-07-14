@@ -124,10 +124,10 @@ components while maintaining a consistent frame rate.</p>
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="sd">    ```python</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="sd">    from nextrpg.game import Game</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="sd">    from nextrpg.scene import StaticScene</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="sd">    </span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="sd">    def create_entry_scene():</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="sd">        return StaticScene()</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="sd">    </span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="sd">    game = Game(entry_scene=create_entry_scene)</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="sd">    game.start()  # Synchronous game loop</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="sd">    # or</span>
@@ -171,10 +171,10 @@ components while maintaining a consistent frame rate.</p>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">        ```python</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">        from nextrpg.game import Game</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">        from nextrpg.scene import MapScene</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">        </span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">        def create_scene():</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">            return MapScene(&quot;maps/town.tmx&quot;)</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">        </span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">        game = Game(entry_scene=create_scene)</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">        game.start()</span>
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">        ```</span>
@@ -375,10 +375,10 @@ components while maintaining a consistent frame rate.</p>
 </span><span id="Game-64"><a href="#Game-64"><span class="linenos"> 64</span></a><span class="sd">        ```python</span>
 </span><span id="Game-65"><a href="#Game-65"><span class="linenos"> 65</span></a><span class="sd">        from nextrpg.game import Game</span>
 </span><span id="Game-66"><a href="#Game-66"><span class="linenos"> 66</span></a><span class="sd">        from nextrpg.scene import MapScene</span>
-</span><span id="Game-67"><a href="#Game-67"><span class="linenos"> 67</span></a><span class="sd">        </span>
+</span><span id="Game-67"><a href="#Game-67"><span class="linenos"> 67</span></a>
 </span><span id="Game-68"><a href="#Game-68"><span class="linenos"> 68</span></a><span class="sd">        def create_scene():</span>
 </span><span id="Game-69"><a href="#Game-69"><span class="linenos"> 69</span></a><span class="sd">            return MapScene(&quot;maps/town.tmx&quot;)</span>
-</span><span id="Game-70"><a href="#Game-70"><span class="linenos"> 70</span></a><span class="sd">        </span>
+</span><span id="Game-70"><a href="#Game-70"><span class="linenos"> 70</span></a>
 </span><span id="Game-71"><a href="#Game-71"><span class="linenos"> 71</span></a><span class="sd">        game = Game(entry_scene=create_scene)</span>
 </span><span id="Game-72"><a href="#Game-72"><span class="linenos"> 72</span></a><span class="sd">        game.start()</span>
 </span><span id="Game-73"><a href="#Game-73"><span class="linenos"> 73</span></a><span class="sd">        ```</span>

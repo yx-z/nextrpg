@@ -227,7 +227,6 @@ class DrawOnScreen:
         return DrawOnScreen(self.top_left, self.drawing.set_alpha(alpha))
 
 
-
 @dataclass(frozen=True)
 class Polygon:
     """

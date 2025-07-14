@@ -46,6 +46,9 @@
                                 <a class="variable" href="#SayEventConfig.padding">padding</a>
                         </li>
                         <li>
+                                <a class="variable" href="#SayEventConfig.fade_duration">fade_duration</a>
+                        </li>
+                        <li>
                                 <a class="variable" href="#SayEventConfig.text">text</a>
                         </li>
                 </ul>
@@ -76,7 +79,7 @@
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config.text_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextConfig</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">,</span> <span class="n">Rgba</span><span class="p">,</span> <span class="n">WHITE</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">,</span> <span class="n">Rgba</span><span class="p">,</span> <span class="n">WHITE</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -84,12 +87,13 @@
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">background</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">WHITE</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">20</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextConfig</span><span class="p">:</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">)</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">fade_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextConfig</span><span class="p">:</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -111,12 +115,13 @@
 </span><span id="SayEventConfig-11"><a href="#SayEventConfig-11"><span class="linenos">11</span></a>    <span class="n">background</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">WHITE</span>
 </span><span id="SayEventConfig-12"><a href="#SayEventConfig-12"><span class="linenos">12</span></a>    <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">20</span>
 </span><span id="SayEventConfig-13"><a href="#SayEventConfig-13"><span class="linenos">13</span></a>    <span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>
-</span><span id="SayEventConfig-14"><a href="#SayEventConfig-14"><span class="linenos">14</span></a>
-</span><span id="SayEventConfig-15"><a href="#SayEventConfig-15"><span class="linenos">15</span></a>    <span class="nd">@cached_property</span>
-</span><span id="SayEventConfig-16"><a href="#SayEventConfig-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextConfig</span><span class="p">:</span>
-</span><span id="SayEventConfig-17"><a href="#SayEventConfig-17"><span class="linenos">17</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="SayEventConfig-18"><a href="#SayEventConfig-18"><span class="linenos">18</span></a>
-</span><span id="SayEventConfig-19"><a href="#SayEventConfig-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">)</span>
+</span><span id="SayEventConfig-14"><a href="#SayEventConfig-14"><span class="linenos">14</span></a>    <span class="n">fade_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>
+</span><span id="SayEventConfig-15"><a href="#SayEventConfig-15"><span class="linenos">15</span></a>
+</span><span id="SayEventConfig-16"><a href="#SayEventConfig-16"><span class="linenos">16</span></a>    <span class="nd">@cached_property</span>
+</span><span id="SayEventConfig-17"><a href="#SayEventConfig-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextConfig</span><span class="p">:</span>
+</span><span id="SayEventConfig-18"><a href="#SayEventConfig-18"><span class="linenos">18</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="SayEventConfig-19"><a href="#SayEventConfig-19"><span class="linenos">19</span></a>
+</span><span id="SayEventConfig-20"><a href="#SayEventConfig-20"><span class="linenos">20</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -125,7 +130,7 @@
                             <div id="SayEventConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">SayEventConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">background</span><span class="p">:</span> <span class="n"><a href="../core.html#Rgba">nextrpg.core.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">20</span>,</span><span class="param">	<span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span></span>)</span>
+        <span class="name">SayEventConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">background</span><span class="p">:</span> <span class="n"><a href="../core.html#Rgba">nextrpg.core.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">20</span>,</span><span class="param">	<span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>,</span><span class="param">	<span class="n">fade_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span></span>)</span>
 
         
     </div>
@@ -170,6 +175,18 @@
     
 
                             </div>
+                            <div id="SayEventConfig.fade_duration" class="classattr">
+                                <div class="attr variable">
+            <span class="name">fade_duration</span><span class="annotation">: <a href="../core.html#Millisecond">nextrpg.core.Millisecond</a></span>        =
+<span class="default_value">200</span>
+
+        
+    </div>
+    <a class="headerlink" href="#SayEventConfig.fade_duration"></a>
+    
+    
+
+                            </div>
                             <div id="SayEventConfig.text" class="classattr">
                                         <input id="SayEventConfig.text-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
@@ -179,11 +196,11 @@
 
     </div>
     <a class="headerlink" href="#SayEventConfig.text"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SayEventConfig.text-15"><a href="#SayEventConfig.text-15"><span class="linenos">15</span></a>    <span class="nd">@cached_property</span>
-</span><span id="SayEventConfig.text-16"><a href="#SayEventConfig.text-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextConfig</span><span class="p">:</span>
-</span><span id="SayEventConfig.text-17"><a href="#SayEventConfig.text-17"><span class="linenos">17</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="SayEventConfig.text-18"><a href="#SayEventConfig.text-18"><span class="linenos">18</span></a>
-</span><span id="SayEventConfig.text-19"><a href="#SayEventConfig.text-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SayEventConfig.text-16"><a href="#SayEventConfig.text-16"><span class="linenos">16</span></a>    <span class="nd">@cached_property</span>
+</span><span id="SayEventConfig.text-17"><a href="#SayEventConfig.text-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextConfig</span><span class="p">:</span>
+</span><span id="SayEventConfig.text-18"><a href="#SayEventConfig.text-18"><span class="linenos">18</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="SayEventConfig.text-19"><a href="#SayEventConfig.text-19"><span class="linenos">19</span></a>
+</span><span id="SayEventConfig.text-20"><a href="#SayEventConfig.text-20"><span class="linenos">20</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">)</span>
 </span></pre></div>
 
 

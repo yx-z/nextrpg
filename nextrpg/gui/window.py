@@ -198,8 +198,8 @@ def _log_text(
         text
         for i, (component, msg) in enumerate(msgs)
         for text in (
-            TextOnScreen( Coordinate(spacing, _line_height(i)), Text(component)),
-            TextOnScreen( Coordinate(msg_spacing, _line_height(i)), Text(msg)),
+            TextOnScreen(Coordinate(spacing, _line_height(i)), Text(component)),
+            TextOnScreen(Coordinate(msg_spacing, _line_height(i)), Text(msg)),
         )
     )
 

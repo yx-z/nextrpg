@@ -58,7 +58,7 @@
                                 <a class="function" href="#Walk.tick">tick</a>
                         </li>
                         <li>
-                                <a class="variable" href="#Walk.completed">completed</a>
+                                <a class="variable" href="#Walk.complete">complete</a>
                         </li>
                 </ul>
 
@@ -315,7 +315,7 @@ and animation systems, providing realistic path-following behavior.</p>
 </span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a><span class="sd">            walk = walk.tick(time_delta)</span>
 </span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="sd">            ```</span>
 </span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">completed</span><span class="p">:</span>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
 </span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a>            <span class="k">return</span> <span class="bp">self</span>
 </span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>
 </span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>        <span class="n">current_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span>
@@ -355,7 +355,7 @@ and animation systems, providing realistic path-following behavior.</p>
 </span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>        <span class="p">)</span>
 </span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>
 </span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">completed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a><span class="sd">        Check if the walk has completed.</span>
 </span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>
@@ -663,7 +663,7 @@ and animation systems, providing realistic path-following behavior.</p>
 </span><span id="Walk-184"><a href="#Walk-184"><span class="linenos">184</span></a><span class="sd">            walk = walk.tick(time_delta)</span>
 </span><span id="Walk-185"><a href="#Walk-185"><span class="linenos">185</span></a><span class="sd">            ```</span>
 </span><span id="Walk-186"><a href="#Walk-186"><span class="linenos">186</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Walk-187"><a href="#Walk-187"><span class="linenos">187</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">completed</span><span class="p">:</span>
+</span><span id="Walk-187"><a href="#Walk-187"><span class="linenos">187</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
 </span><span id="Walk-188"><a href="#Walk-188"><span class="linenos">188</span></a>            <span class="k">return</span> <span class="bp">self</span>
 </span><span id="Walk-189"><a href="#Walk-189"><span class="linenos">189</span></a>
 </span><span id="Walk-190"><a href="#Walk-190"><span class="linenos">190</span></a>        <span class="n">current_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span>
@@ -703,7 +703,7 @@ and animation systems, providing realistic path-following behavior.</p>
 </span><span id="Walk-224"><a href="#Walk-224"><span class="linenos">224</span></a>        <span class="p">)</span>
 </span><span id="Walk-225"><a href="#Walk-225"><span class="linenos">225</span></a>
 </span><span id="Walk-226"><a href="#Walk-226"><span class="linenos">226</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Walk-227"><a href="#Walk-227"><span class="linenos">227</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">completed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Walk-227"><a href="#Walk-227"><span class="linenos">227</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="Walk-228"><a href="#Walk-228"><span class="linenos">228</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Walk-229"><a href="#Walk-229"><span class="linenos">229</span></a><span class="sd">        Check if the walk has completed.</span>
 </span><span id="Walk-230"><a href="#Walk-230"><span class="linenos">230</span></a>
@@ -1098,7 +1098,7 @@ reset to the beginning of the path.</p>
 </span><span id="Walk.tick-184"><a href="#Walk.tick-184"><span class="linenos">184</span></a><span class="sd">            walk = walk.tick(time_delta)</span>
 </span><span id="Walk.tick-185"><a href="#Walk.tick-185"><span class="linenos">185</span></a><span class="sd">            ```</span>
 </span><span id="Walk.tick-186"><a href="#Walk.tick-186"><span class="linenos">186</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Walk.tick-187"><a href="#Walk.tick-187"><span class="linenos">187</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">completed</span><span class="p">:</span>
+</span><span id="Walk.tick-187"><a href="#Walk.tick-187"><span class="linenos">187</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
 </span><span id="Walk.tick-188"><a href="#Walk.tick-188"><span class="linenos">188</span></a>            <span class="k">return</span> <span class="bp">self</span>
 </span><span id="Walk.tick-189"><a href="#Walk.tick-189"><span class="linenos">189</span></a>
 </span><span id="Walk.tick-190"><a href="#Walk.tick-190"><span class="linenos">190</span></a>        <span class="n">current_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span>
@@ -1170,39 +1170,39 @@ beginning when reaching the end.</p>
 
 
                             </div>
-                            <div id="Walk.completed" class="classattr">
-                                        <input id="Walk.completed-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="Walk.complete" class="classattr">
+                                        <input id="Walk.complete-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">completed</span><span class="annotation">: bool</span>
+            <span class="name">complete</span><span class="annotation">: bool</span>
 
-                <label class="view-source-button" for="Walk.completed-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="Walk.complete-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Walk.completed"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Walk.completed-226"><a href="#Walk.completed-226"><span class="linenos">226</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Walk.completed-227"><a href="#Walk.completed-227"><span class="linenos">227</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">completed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Walk.completed-228"><a href="#Walk.completed-228"><span class="linenos">228</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Walk.completed-229"><a href="#Walk.completed-229"><span class="linenos">229</span></a><span class="sd">        Check if the walk has completed.</span>
-</span><span id="Walk.completed-230"><a href="#Walk.completed-230"><span class="linenos">230</span></a>
-</span><span id="Walk.completed-231"><a href="#Walk.completed-231"><span class="linenos">231</span></a><span class="sd">        For linear paths, returns `True` when the walk has reached</span>
-</span><span id="Walk.completed-232"><a href="#Walk.completed-232"><span class="linenos">232</span></a><span class="sd">        the end of the path. For cyclic paths, always returns `False`</span>
-</span><span id="Walk.completed-233"><a href="#Walk.completed-233"><span class="linenos">233</span></a><span class="sd">        since they loop indefinitely.</span>
-</span><span id="Walk.completed-234"><a href="#Walk.completed-234"><span class="linenos">234</span></a>
-</span><span id="Walk.completed-235"><a href="#Walk.completed-235"><span class="linenos">235</span></a><span class="sd">        Returns:</span>
-</span><span id="Walk.completed-236"><a href="#Walk.completed-236"><span class="linenos">236</span></a><span class="sd">            `bool`: Whether the walk has completed.</span>
-</span><span id="Walk.completed-237"><a href="#Walk.completed-237"><span class="linenos">237</span></a>
-</span><span id="Walk.completed-238"><a href="#Walk.completed-238"><span class="linenos">238</span></a><span class="sd">        Example:</span>
-</span><span id="Walk.completed-239"><a href="#Walk.completed-239"><span class="linenos">239</span></a><span class="sd">            ```python</span>
-</span><span id="Walk.completed-240"><a href="#Walk.completed-240"><span class="linenos">240</span></a><span class="sd">            if walk.completed:</span>
-</span><span id="Walk.completed-241"><a href="#Walk.completed-241"><span class="linenos">241</span></a><span class="sd">                print(&quot;Walk finished!&quot;)</span>
-</span><span id="Walk.completed-242"><a href="#Walk.completed-242"><span class="linenos">242</span></a><span class="sd">                # Handle completion logic</span>
-</span><span id="Walk.completed-243"><a href="#Walk.completed-243"><span class="linenos">243</span></a><span class="sd">            ```</span>
-</span><span id="Walk.completed-244"><a href="#Walk.completed-244"><span class="linenos">244</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Walk.completed-245"><a href="#Walk.completed-245"><span class="linenos">245</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cyclic</span><span class="p">:</span>
-</span><span id="Walk.completed-246"><a href="#Walk.completed-246"><span class="linenos">246</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="Walk.completed-247"><a href="#Walk.completed-247"><span class="linenos">247</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
-</span><span id="Walk.completed-248"><a href="#Walk.completed-248"><span class="linenos">248</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_index</span> <span class="o">!=</span> <span class="mi">0</span>
-</span><span id="Walk.completed-249"><a href="#Walk.completed-249"><span class="linenos">249</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <a class="headerlink" href="#Walk.complete"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Walk.complete-226"><a href="#Walk.complete-226"><span class="linenos">226</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Walk.complete-227"><a href="#Walk.complete-227"><span class="linenos">227</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Walk.complete-228"><a href="#Walk.complete-228"><span class="linenos">228</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Walk.complete-229"><a href="#Walk.complete-229"><span class="linenos">229</span></a><span class="sd">        Check if the walk has completed.</span>
+</span><span id="Walk.complete-230"><a href="#Walk.complete-230"><span class="linenos">230</span></a>
+</span><span id="Walk.complete-231"><a href="#Walk.complete-231"><span class="linenos">231</span></a><span class="sd">        For linear paths, returns `True` when the walk has reached</span>
+</span><span id="Walk.complete-232"><a href="#Walk.complete-232"><span class="linenos">232</span></a><span class="sd">        the end of the path. For cyclic paths, always returns `False`</span>
+</span><span id="Walk.complete-233"><a href="#Walk.complete-233"><span class="linenos">233</span></a><span class="sd">        since they loop indefinitely.</span>
+</span><span id="Walk.complete-234"><a href="#Walk.complete-234"><span class="linenos">234</span></a>
+</span><span id="Walk.complete-235"><a href="#Walk.complete-235"><span class="linenos">235</span></a><span class="sd">        Returns:</span>
+</span><span id="Walk.complete-236"><a href="#Walk.complete-236"><span class="linenos">236</span></a><span class="sd">            `bool`: Whether the walk has completed.</span>
+</span><span id="Walk.complete-237"><a href="#Walk.complete-237"><span class="linenos">237</span></a>
+</span><span id="Walk.complete-238"><a href="#Walk.complete-238"><span class="linenos">238</span></a><span class="sd">        Example:</span>
+</span><span id="Walk.complete-239"><a href="#Walk.complete-239"><span class="linenos">239</span></a><span class="sd">            ```python</span>
+</span><span id="Walk.complete-240"><a href="#Walk.complete-240"><span class="linenos">240</span></a><span class="sd">            if walk.completed:</span>
+</span><span id="Walk.complete-241"><a href="#Walk.complete-241"><span class="linenos">241</span></a><span class="sd">                print(&quot;Walk finished!&quot;)</span>
+</span><span id="Walk.complete-242"><a href="#Walk.complete-242"><span class="linenos">242</span></a><span class="sd">                # Handle completion logic</span>
+</span><span id="Walk.complete-243"><a href="#Walk.complete-243"><span class="linenos">243</span></a><span class="sd">            ```</span>
+</span><span id="Walk.complete-244"><a href="#Walk.complete-244"><span class="linenos">244</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Walk.complete-245"><a href="#Walk.complete-245"><span class="linenos">245</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cyclic</span><span class="p">:</span>
+</span><span id="Walk.complete-246"><a href="#Walk.complete-246"><span class="linenos">246</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="Walk.complete-247"><a href="#Walk.complete-247"><span class="linenos">247</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
+</span><span id="Walk.complete-248"><a href="#Walk.complete-248"><span class="linenos">248</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_index</span> <span class="o">!=</span> <span class="mi">0</span>
+</span><span id="Walk.complete-249"><a href="#Walk.complete-249"><span class="linenos">249</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
 </span></pre></div>
 
 

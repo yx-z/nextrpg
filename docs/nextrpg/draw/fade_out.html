@@ -36,15 +36,6 @@
                         <li>
                                 <a class="function" href="#FadeOut.__init__">FadeOut</a>
                         </li>
-                        <li>
-                                <a class="variable" href="#FadeOut.draw_on_screen">draw_on_screen</a>
-                        </li>
-                        <li>
-                                <a class="variable" href="#FadeOut.duration">duration</a>
-                        </li>
-                        <li>
-                                <a class="function" href="#FadeOut.tick">tick</a>
-                        </li>
                 </ul>
 
             </li>
@@ -69,29 +60,28 @@
 
                         <label class="view-source-button" for="mod-fade_out-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.config.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">alpha_from_percentage</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.fade</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fade</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass_with_instance_init</span><span class="p">,</span> <span class="n">instance_init</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FadeOut</span><span class="p">:</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">draw_on_screen</span><span class="p">:</span> <span class="n">DrawOnScreen</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="p">)</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">_elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">elapsed</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>            <span class="n">remaining</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="n">elapsed</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>            <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha_from_percentage</span><span class="p">(</span><span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>            <span class="n">draw_on_screen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">draw_on_screen</span><span class="o">=</span><span class="n">draw_on_screen</span><span class="p">)</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="nd">@dataclass_with_instance_init</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FadeOut</span><span class="p">(</span><span class="n">Fade</span><span class="p">):</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">_start</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">)</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="nd">@override</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>        <span class="n">remaining</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>        <span class="k">return</span> <span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="nd">@override</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="p">()</span>
 </span></pre></div>
 
 
@@ -99,30 +89,29 @@
                 <section id="FadeOut">
                             <input id="FadeOut-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
+                    <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init</div>
 
     <span class="def">class</span>
-    <span class="name">FadeOut</span>:
+    <span class="name">FadeOut</span><wbr>(<span class="base"><a href="fade.html#Fade">nextrpg.draw.fade.Fade</a></span>):
 
                 <label class="view-source-button" for="FadeOut-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#FadeOut"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FadeOut-10"><a href="#FadeOut-10"><span class="linenos">10</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="FadeOut-11"><a href="#FadeOut-11"><span class="linenos">11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FadeOut</span><span class="p">:</span>
-</span><span id="FadeOut-12"><a href="#FadeOut-12"><span class="linenos">12</span></a>    <span class="n">draw_on_screen</span><span class="p">:</span> <span class="n">DrawOnScreen</span>
-</span><span id="FadeOut-13"><a href="#FadeOut-13"><span class="linenos">13</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
-</span><span id="FadeOut-14"><a href="#FadeOut-14"><span class="linenos">14</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
-</span><span id="FadeOut-15"><a href="#FadeOut-15"><span class="linenos">15</span></a>    <span class="p">)</span>
-</span><span id="FadeOut-16"><a href="#FadeOut-16"><span class="linenos">16</span></a>    <span class="n">_elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="FadeOut-17"><a href="#FadeOut-17"><span class="linenos">17</span></a>
-</span><span id="FadeOut-18"><a href="#FadeOut-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="FadeOut-19"><a href="#FadeOut-19"><span class="linenos">19</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">elapsed</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span>
-</span><span id="FadeOut-20"><a href="#FadeOut-20"><span class="linenos">20</span></a>            <span class="n">remaining</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="n">elapsed</span>
-</span><span id="FadeOut-21"><a href="#FadeOut-21"><span class="linenos">21</span></a>            <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha_from_percentage</span><span class="p">(</span><span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
-</span><span id="FadeOut-22"><a href="#FadeOut-22"><span class="linenos">22</span></a>            <span class="n">draw_on_screen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
-</span><span id="FadeOut-23"><a href="#FadeOut-23"><span class="linenos">23</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">draw_on_screen</span><span class="o">=</span><span class="n">draw_on_screen</span><span class="p">)</span>
-</span><span id="FadeOut-24"><a href="#FadeOut-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FadeOut-10"><a href="#FadeOut-10"><span class="linenos">10</span></a><span class="nd">@dataclass_with_instance_init</span>
+</span><span id="FadeOut-11"><a href="#FadeOut-11"><span class="linenos">11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FadeOut</span><span class="p">(</span><span class="n">Fade</span><span class="p">):</span>
+</span><span id="FadeOut-12"><a href="#FadeOut-12"><span class="linenos">12</span></a>    <span class="n">_start</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">)</span>
+</span><span id="FadeOut-13"><a href="#FadeOut-13"><span class="linenos">13</span></a>
+</span><span id="FadeOut-14"><a href="#FadeOut-14"><span class="linenos">14</span></a>    <span class="nd">@override</span>
+</span><span id="FadeOut-15"><a href="#FadeOut-15"><span class="linenos">15</span></a>    <span class="nd">@cached_property</span>
+</span><span id="FadeOut-16"><a href="#FadeOut-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="FadeOut-17"><a href="#FadeOut-17"><span class="linenos">17</span></a>        <span class="n">remaining</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span>
+</span><span id="FadeOut-18"><a href="#FadeOut-18"><span class="linenos">18</span></a>        <span class="k">return</span> <span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="FadeOut-19"><a href="#FadeOut-19"><span class="linenos">19</span></a>
+</span><span id="FadeOut-20"><a href="#FadeOut-20"><span class="linenos">20</span></a>    <span class="nd">@override</span>
+</span><span id="FadeOut-21"><a href="#FadeOut-21"><span class="linenos">21</span></a>    <span class="nd">@cached_property</span>
+</span><span id="FadeOut-22"><a href="#FadeOut-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="FadeOut-23"><a href="#FadeOut-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="p">()</span>
 </span></pre></div>
 
 
@@ -131,7 +120,7 @@
                             <div id="FadeOut.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">FadeOut</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">draw_on_screen</span><span class="p">:</span> <span class="n"><a href="draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span>,</span><span class="param">	<span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span></span>)</span>
+        <span class="name">FadeOut</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">resource</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>,</span><span class="param">	<span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">_start</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -140,51 +129,18 @@
     
 
                             </div>
-                            <div id="FadeOut.draw_on_screen" class="classattr">
-                                <div class="attr variable">
-            <span class="name">draw_on_screen</span><span class="annotation">: <a href="draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="fade.html#Fade">nextrpg.draw.fade.Fade</a></dt>
+                                <dd id="FadeOut.resource" class="variable"><a href="fade.html#Fade.resource">resource</a></dd>
+                <dd id="FadeOut.duration" class="variable"><a href="fade.html#Fade.duration">duration</a></dd>
+                <dd id="FadeOut.draw_on_screens" class="variable"><a href="fade.html#Fade.draw_on_screens">draw_on_screens</a></dd>
+                <dd id="FadeOut.tick" class="function"><a href="fade.html#Fade.tick">tick</a></dd>
+                <dd id="FadeOut.complete" class="variable"><a href="fade.html#Fade.complete">complete</a></dd>
 
-        
-    </div>
-    <a class="headerlink" href="#FadeOut.draw_on_screen"></a>
-    
-    
-
-                            </div>
-                            <div id="FadeOut.duration" class="classattr">
-                                <div class="attr variable">
-            <span class="name">duration</span><span class="annotation">: <a href="../core.html#Millisecond">nextrpg.core.Millisecond</a></span>
-
-        
-    </div>
-    <a class="headerlink" href="#FadeOut.duration"></a>
-    
-    
-
-                            </div>
-                            <div id="FadeOut.tick" class="classattr">
-                                        <input id="FadeOut.tick-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">tick</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
-
-                <label class="view-source-button" for="FadeOut.tick-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#FadeOut.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FadeOut.tick-18"><a href="#FadeOut.tick-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="FadeOut.tick-19"><a href="#FadeOut.tick-19"><span class="linenos">19</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">elapsed</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">:</span>
-</span><span id="FadeOut.tick-20"><a href="#FadeOut.tick-20"><span class="linenos">20</span></a>            <span class="n">remaining</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="n">elapsed</span>
-</span><span id="FadeOut.tick-21"><a href="#FadeOut.tick-21"><span class="linenos">21</span></a>            <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha_from_percentage</span><span class="p">(</span><span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
-</span><span id="FadeOut.tick-22"><a href="#FadeOut.tick-22"><span class="linenos">22</span></a>            <span class="n">draw_on_screen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
-</span><span id="FadeOut.tick-23"><a href="#FadeOut.tick-23"><span class="linenos">23</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">draw_on_screen</span><span class="o">=</span><span class="n">draw_on_screen</span><span class="p">)</span>
-</span><span id="FadeOut.tick-24"><a href="#FadeOut.tick-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span></pre></div>
-
-
-    
-
+            </div>
+                                </dl>
                             </div>
                 </section>
     </main>
