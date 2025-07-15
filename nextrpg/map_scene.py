@@ -116,7 +116,7 @@ class MapScene(EventfulScene, TransitioningScene):
 
     tmx_file: PathLike | str
     player_spec: CharacterSpec
-    moves: tuple[Move, ...] = field(default_factory=tuple)
+    moves: Move | tuple[Move, ...] = field(default_factory=tuple)
     npc_specs: tuple[NpcSpec, ...] = field(default_factory=tuple)
     debug_visuals: tuple[DrawOnScreen, ...] = instance_init(
         lambda self: self._debug_visuals
@@ -318,7 +318,8 @@ class MapScene(EventfulScene, TransitioningScene):
                 pass
             ```
         """
-        for move in self.moves:
+        moves = self.moves if isinstance(self.moves, tuple) else (self.moves,)
+        for move in moves:
             if m := self._move(move):
                 return m
         return None

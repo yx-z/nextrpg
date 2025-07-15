@@ -1,5 +1,6 @@
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Any
 from unittest.mock import MagicMock, Mock
 
 from pygame import Event, QUIT
@@ -7,18 +8,23 @@ from pytest_mock import MockerFixture
 
 from nextrpg import (
     CharacterSpec,
-    NpcSpec,
+    Config,
     Coordinate,
-    Size,
+    DebugConfig,
     DrawOnScreen,
     Drawing,
-    Rectangle,
-    Quit,
-    TileBottomAndDrawOnScreen,
     MapScene,
+    Move,
+    NpcSpec,
+    Quit,
+    Rectangle,
+    ResourceConfig,
+    Size,
+    TileBottomAndDrawOnScreen,
     center_player,
 )
 from test.util import MockCharacterDrawing, MockSurface
+from test.util import override_config
 
 
 def test_map_scene(mocker: MockerFixture) -> None:
@@ -54,6 +60,62 @@ def test_map_scene(mocker: MockerFixture) -> None:
     )
     assert map.draw_on_screens_before_shift
     assert map.event(Quit(Event(QUIT)))
+    assert map.tick(0)
+    assert map.tick_without_transition(0)
+    assert map.tick_without_event(0)
+
+
+def test_move(mocker: MockerFixture) -> None:
+    mocker.patch("nextrpg.map_scene.MapHelper")
+    mocker.patch("nextrpg.map_scene.MapHelper.get_object")
+    mocker.patch("nextrpg.map_scene.get_polygon")
+    i = 0
+
+    def _increment(*_: Any) -> bool:
+        nonlocal i
+        i += 1
+        return i % 2 == 0
+
+    mocker.patch("nextrpg.draw_on_screen.Rectangle.collide", _increment)
+
+    def to_scene(*_: Any) -> MapScene:
+        return MapScene(
+            tmx_file="test2",
+            player_spec=CharacterSpec(
+                character=MockCharacterDrawing(), object_name=""
+            ),
+        )
+
+    map = MapScene(
+        tmx_file="test2",
+        player_spec=CharacterSpec(
+            character=MockCharacterDrawing(), object_name=""
+        ),
+        moves=(Move("from", "to", to_scene), Move("from2", "to2", to_scene)),
+    )
+    assert map._move_to_scene
+    assert MapScene(
+        tmx_file="test2",
+        player_spec=CharacterSpec(
+            character=MockCharacterDrawing(), object_name=""
+        ),
+        moves=(
+            Move("from", "test2", to_scene),
+            Move("from2", "test2", to_scene),
+        ),
+    )._move_to_scene
+
+    with override_config(Config(resource=ResourceConfig(map_cache_size=1))):
+        assert MapScene(
+            tmx_file="test2",
+            player_spec=CharacterSpec(
+                character=MockCharacterDrawing(), object_name=""
+            ),
+            moves=(
+                Move("from", "test2", to_scene),
+                Move("from2", "test2", to_scene),
+            ),
+        )._move_to_scene
 
 
 def test_init_npc(mocker: MockerFixture) -> None:
@@ -111,6 +173,9 @@ def test_init_moving_npc(mocker: MockerFixture) -> None:
         debug_visuals=(),
     )
     assert map_scene.npcs
+
+    with override_config(Config(debug=DebugConfig())):
+        assert not map_scene._npc_paths
 
 
 def test_shift() -> None:
