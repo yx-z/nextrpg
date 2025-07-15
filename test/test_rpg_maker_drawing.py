@@ -1,14 +1,15 @@
 from pygame import Surface
 
-from nextrpg.character.rpg_maker_character_drawing import (
+from nextrpg import (
     DefaultFrameType,
     RpgMakerCharacterDrawing,
     SpriteSheet,
     SpriteSheetSelection,
     XpFrameType,
+    Direction,
+    Size,
+    Drawing,
 )
-from nextrpg.core import Direction, Size
-from nextrpg.draw.draw_on_screen import Drawing
 
 
 def test_rpg_maker_drawing():

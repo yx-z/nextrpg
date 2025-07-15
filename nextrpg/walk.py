@@ -45,11 +45,16 @@ from math import hypot
 from typing import NamedTuple, Self
 
 from nextrpg.core import Direction, Millisecond, Pixel, PixelPerMillisecond
-from nextrpg.draw.coordinate import Coordinate
-from nextrpg.draw.draw_on_screen import Polygon
-from nextrpg.model import dataclass_with_instance_init, instance_init
+from nextrpg.coordinate import Coordinate
+from nextrpg.draw_on_screen import Polygon
+from nextrpg.model import (
+    dataclass_with_instance_init,
+    export,
+    instance_init,
+)
 
 
+@export
 @dataclass_with_instance_init
 class Walk:
     """

@@ -2,21 +2,23 @@
 Sample interior scene.
 """
 
-from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.character.character_on_screen import CharacterSpec
-from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
-from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.character.rpg_maker_character_drawing import (
-    RpgMakerCharacterDrawing,
+from nextrpg import (
+    CharacterSpec,
+    Scene,
+    MapScene,
+    Move,
+    NpcSpec,
+    CharacterDrawing,
+    PlayerOnScreen,
+    NpcOnScreen,
+    EventfulScene,
     SpriteSheet,
-    SpriteSheetSelection,
+    Drawing,
     Trim,
+    RpgMakerCharacterDrawing,
+    Direction,
+    SpriteSheetSelection,
 )
-from nextrpg.core import Direction
-from nextrpg.draw.draw_on_screen import Drawing
-from nextrpg.gui.area import top_screen
-from nextrpg.scene.map_scene import MapScene, Move
-from nextrpg.scene.scene import Scene
 
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> Scene:

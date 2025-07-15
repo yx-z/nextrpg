@@ -1,6 +1,10 @@
 from dataclasses import dataclass, field, replace
 
-from nextrpg.model import cached, instance_init, dataclass_with_instance_init
+from nextrpg import (
+    cached,
+    instance_init,
+    dataclass_with_instance_init,
+)
 
 
 def test_instance_init():

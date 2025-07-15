@@ -2,27 +2,34 @@ from _pytest.raises import raises
 from pygame import Event, KEYDOWN, K_F1, K_LEFT, VIDEORESIZE
 from pytest_mock import MockerFixture
 
-from nextrpg.config.config import Config
-from nextrpg.config.debug_config import DebugConfig
-from nextrpg.config.gui_config import GuiConfig, GuiMode, ResizeMode
-from nextrpg.core import Size
-from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing
-from nextrpg.draw.coordinate import Coordinate
-from nextrpg.event.pygame_event import GuiResize, KeyPressDown, KeyPressUp
-from nextrpg.gui.window import Gui
-from nextrpg.gui.area import gui_size
-from nextrpg.logger import Logger
+from nextrpg import (
+    Config,
+    DebugConfig,
+    GuiConfig,
+    GuiMode,
+    ResizeMode,
+    Size,
+    DrawOnScreen,
+    Drawing,
+    Coordinate,
+    GuiResize,
+    KeyPressDown,
+    KeyPressUp,
+    Gui,
+    gui_size,
+    Logger,
+)
 from test.util import MockSurface, override_config
 
 
 @override_config(Config(GuiConfig(size=Size(10, 10))))
 def test_gui(mocker: MockerFixture) -> None:
-    mocker.patch("nextrpg.gui.window.init")
-    mocker.patch("nextrpg.gui.window.set_caption")
-    mocker.patch("nextrpg.gui.window.set_mode")
-    mocker.patch("nextrpg.gui.window.Surface", MockSurface)
-    mocker.patch("nextrpg.gui.window.flip")
-    mocker.patch("nextrpg.gui.window.smoothscale", lambda surf, _: surf)
+    mocker.patch("nextrpg.window.init")
+    mocker.patch("nextrpg.window.set_caption")
+    mocker.patch("nextrpg.window.set_mode")
+    mocker.patch("nextrpg.window.Surface", MockSurface)
+    mocker.patch("nextrpg.window.flip")
+    mocker.patch("nextrpg.window.smoothscale", lambda surf, _: surf)
     gui = Gui(
         current_config=GuiConfig(Size(10, 20)),
         last_config=GuiConfig(Size(10, 10)),

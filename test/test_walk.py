@@ -1,6 +1,4 @@
-from nextrpg.draw.coordinate import Coordinate
-from nextrpg.draw.draw_on_screen import Polygon
-from nextrpg.walk import Walk
+from nextrpg import Coordinate, Polygon, Walk
 
 
 def test_walk() -> None:

@@ -1,5 +1,4 @@
-from nextrpg.draw.draw_on_screen import Drawing
-from nextrpg.draw.frames import CyclicFrames
+from nextrpg import Drawing, CyclicFrames
 from test.util import MockSurface
 
 

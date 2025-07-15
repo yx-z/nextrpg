@@ -35,8 +35,8 @@ from functools import cached_property
 from string.templatelib import Interpolation, Template
 from typing import NamedTuple
 
-from nextrpg.config.config import config
-from nextrpg.config.debug_config import LogLevel
+from nextrpg.global_config import config
+from nextrpg.debug_config import LogLevel
 from nextrpg.core import Millisecond, Timer
 
 

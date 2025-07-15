@@ -1,7 +1,6 @@
-from _pytest.python_api import approx
+from pytest import approx
 
-from nextrpg.draw.coordinate import Coordinate
-from nextrpg.core import Direction, DirectionalOffset
+from nextrpg import Coordinate, Direction, DirectionalOffset
 
 
 def test_coordinate() -> None:

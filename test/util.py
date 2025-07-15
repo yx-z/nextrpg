@@ -5,11 +5,16 @@ from typing import Any, Generator, NamedTuple, Self
 
 from pygame import Surface
 
-from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.config.config import Config, config, set_config
-from nextrpg.draw.coordinate import Coordinate
-from nextrpg.core import Direction, Millisecond
-from nextrpg.draw.draw_on_screen import Drawing
+from nextrpg import (
+    CharacterDrawing,
+    Config,
+    config,
+    set_config,
+    Coordinate,
+    Millisecond,
+    Drawing,
+    Direction,
+)
 
 
 class MockColor(NamedTuple):

@@ -30,21 +30,28 @@ Example:
 from asyncio import sleep
 from dataclasses import field, replace
 from functools import cached_property
+from types import ModuleType
 from typing import Callable, Self
 
 import pygame
 from pygame.time import Clock
 
-from nextrpg.config.config import config
-from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
-from nextrpg.gui.window import Gui
+from nextrpg.global_config import config
+from nextrpg import plugins
+from nextrpg.pygame_event import PygameEvent, Quit, to_typed_event
+from nextrpg.window import Gui
 from nextrpg.logger import Logger
-from nextrpg.model import dataclass_with_instance_init, instance_init
-from nextrpg.scene.scene import Scene
+from nextrpg.model import (
+    dataclass_with_instance_init,
+    export,
+    instance_init,
+)
+from nextrpg.scene import Scene
 
 logger = Logger("Game")
 
 
+@export
 @dataclass_with_instance_init
 class Game:
     """
@@ -73,6 +80,7 @@ class Game:
     """
 
     entry_scene: Callable[[], Scene]
+    event_modules: tuple[ModuleType] = (plugins,)
     _loop: _GameLoop = instance_init(
         lambda self: _GameLoop(entry_scene=self.entry_scene)
     )

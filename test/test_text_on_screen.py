@@ -1,8 +1,6 @@
 from pytest_mock import MockerFixture
 
-from nextrpg.draw.coordinate import Coordinate
-from nextrpg.draw.text import Text
-from nextrpg.draw.text_on_screen import TextOnScreen
+from nextrpg import Coordinate, Text, TextOnScreen
 
 
 def test_text_on_screen(mocker: MockerFixture) -> None:

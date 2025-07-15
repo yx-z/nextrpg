@@ -7,7 +7,7 @@ from pygame.event import Event
 from pygame.locals import KEYDOWN, K_LEFT, QUIT, VIDEORESIZE
 from pytest_mock import MockerFixture
 
-from nextrpg.game import Game
+from nextrpg import Game
 
 
 def test_game(mocker: MockerFixture) -> None:

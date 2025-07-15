@@ -1,5 +1,4 @@
-from nextrpg.event.say_event import SayEvent
-from nextrpg.scene.scene import Scene
+from nextrpg import SayEvent, Scene
 from test.util import MockCharacterDrawing
 
 

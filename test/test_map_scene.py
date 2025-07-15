@@ -5,20 +5,20 @@ from unittest.mock import MagicMock, Mock
 from pygame import Event, QUIT
 from pytest_mock import MockerFixture
 
-from nextrpg.character.character_on_screen import CharacterSpec
-from nextrpg.character.npcs import NpcSpec
-from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.config.config import Config
-from nextrpg.config.debug_config import DebugConfig
-from nextrpg.config.resource_config import ResourceConfig
-from nextrpg.draw.coordinate import Coordinate
-from nextrpg.core import Size
-from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing, Rectangle
-from nextrpg.event.pygame_event import Quit
-from nextrpg.scene.map_helper import TileBottomAndDrawOnScreen
-from nextrpg.scene.map_scene import MapScene, Move
-from nextrpg.scene.map_util import _shift
-from test.util import MockCharacterDrawing, MockSurface, override_config
+from nextrpg import (
+    CharacterSpec,
+    NpcSpec,
+    Coordinate,
+    Size,
+    DrawOnScreen,
+    Drawing,
+    Rectangle,
+    Quit,
+    TileBottomAndDrawOnScreen,
+    MapScene,
+    center_player,
+)
+from test.util import MockCharacterDrawing, MockSurface
 
 
 def test_map_scene(mocker: MockerFixture) -> None:
@@ -35,7 +35,7 @@ def test_map_scene(mocker: MockerFixture) -> None:
     )
     helper.collisions = (Rectangle(Coordinate(0, 0), Size(0, 0)),)
     helper.collision_visuals = ()
-    mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=helper)
+    mocker.patch("nextrpg.map_scene.MapHelper", return_value=helper)
     map = MapScene(
         tmx_file=Path("test"),
         player_spec=CharacterSpec(
@@ -43,7 +43,7 @@ def test_map_scene(mocker: MockerFixture) -> None:
         ),
     )
     mocker.patch(
-        "nextrpg.scene.map_scene.sorted",
+        "nextrpg.map_scene.sorted",
         return_value=[
             (
                 None,
@@ -63,8 +63,8 @@ def test_init_npc(mocker: MockerFixture) -> None:
     )
     map_helper.collisions = ()
     map_helper.collision_visuals = ()
-    mocker.patch("nextrpg.scene.map_scene.MapHelper", map_helper)
-    mocker.patch("nextrpg.scene.map_scene.get_polygon")
+    mocker.patch("nextrpg.map_scene.MapHelper", map_helper)
+    mocker.patch("nextrpg.map_scene.get_polygon")
     map_scene = MapScene(
         tmx_file="",
         player_spec=CharacterSpec(
@@ -94,8 +94,8 @@ def test_init_moving_npc(mocker: MockerFixture) -> None:
     )
     map_helper.collisions = ()
     map_helper.collision_visuals = ()
-    mocker.patch("nextrpg.scene.map_scene.MapHelper", map_helper)
-    mocker.patch("nextrpg.scene.map_scene.get_polygon", return_value=None)
+    mocker.patch("nextrpg.map_scene.MapHelper", map_helper)
+    mocker.patch("nextrpg.map_scene.get_polygon", return_value=None)
     map_scene = MapScene(
         tmx_file="",
         player_spec=CharacterSpec(
@@ -114,7 +114,7 @@ def test_init_moving_npc(mocker: MockerFixture) -> None:
 
 
 def test_shift() -> None:
-    assert _shift(1, 2, 3) == 0
-    assert _shift(12, 3, 2) == 1
-    assert _shift(12, 10, 100) == -7
-    assert _shift(0, 10, 10) == 0
+    assert center_player(1, 2, 3) == 0
+    assert center_player(12, 3, 2) == 1
+    assert center_player(12, 10, 100) == -7
+    assert center_player(0, 10, 10) == 0

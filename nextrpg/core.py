@@ -40,6 +40,9 @@ import pygame
 from pygame.font import SysFont
 from pygame.time import get_ticks
 
+from nextrpg.model import export
+
+
 type Alpha = int
 """
 Alpha channel that defines the transparency between [0, 255] for images.
@@ -47,6 +50,7 @@ Alpha channel that defines the transparency between [0, 255] for images.
 """
 
 
+@export
 def alpha_from_percentage(percentage: float) -> Alpha:
     """
     Convert a percentage value to an alpha channel value.
@@ -70,6 +74,7 @@ def alpha_from_percentage(percentage: float) -> Alpha:
     return int(255 * percentage)
 
 
+@export
 class Rgba(namedtuple("Rgba", "red green blue alpha")):
     """
     Represents an RGBA color with red, green, blue and alpha components.
@@ -114,6 +119,7 @@ Millisecond elapsed between game loops.
 """
 
 
+@export
 class Direction(Enum):
     """
     Represents eight directional movements for character and object positioning.
@@ -194,6 +200,7 @@ Used as a unit for speed.
 """
 
 
+@export
 @dataclass(frozen=True)
 class DirectionalOffset:
     """
@@ -225,6 +232,7 @@ class DirectionalOffset:
     offset: Pixel
 
 
+@export
 class Size(namedtuple("Size", "width height")):
     """
     Represents the dimensions of a two-dimensional space.
@@ -277,6 +285,7 @@ class Size(namedtuple("Size", "width height")):
         return f"({self.width}, {self.height})"
 
 
+@export
 @dataclass(frozen=True)
 class Font:
     """
@@ -353,6 +362,7 @@ class Font:
         return self.pygame.get_linesize()
 
 
+@export
 @dataclass(frozen=True)
 class Timer:
     """
@@ -446,6 +456,7 @@ class Timer:
 type Timepoint = int | float
 
 
+@export
 def get_timepoint() -> Timepoint:
     """
     Get the current time point in milliseconds.

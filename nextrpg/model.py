@@ -28,9 +28,24 @@ Example:
 from collections import OrderedDict
 from collections.abc import Callable
 from dataclasses import dataclass, field, fields
+from sys import modules
 from typing import Any, dataclass_transform
 
 
+def export[T](o: T) -> T:
+    mod = modules[o.__module__]
+    if hasattr(mod, "__all__"):
+        if o.__name__ not in mod.__all__:
+            mod.__all__.append(o.__name__)
+    else:
+        mod.__all__ = [o.__name__]
+    return o
+
+
+export = export(export)
+
+
+@export
 def instance_init(init: Callable[[Any], Any]) -> Any:
     """
     Mark a field for instance initialization in dataclasses.
@@ -59,6 +74,7 @@ def instance_init(init: Callable[[Any], Any]) -> Any:
     return field(repr=False, default_factory=lambda: _Init(init))
 
 
+@export
 @dataclass_transform(kw_only_default=True, frozen_default=True)
 def dataclass_with_instance_init[T](cls: type[T]) -> type[T]:
     """
@@ -107,28 +123,7 @@ def dataclass_with_instance_init[T](cls: type[T]) -> type[T]:
     return dataclass(cls, kw_only=True, frozen=True)
 
 
-_NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"
-
-
-def _key(*args: Any, **kwargs: Any) -> tuple:
-    """
-    Create a cache key from arguments and keyword arguments.
-
-    This function creates a tuple that can be used as a cache key
-    for the `cached` decorator. It combines positional and keyword
-    arguments into a hashable format.
-
-    Arguments:
-        `*args`: Positional arguments to include in the key.
-
-        `**kwargs`: Keyword arguments to include in the key.
-
-    Returns:
-        `tuple`: A tuple containing the args and a frozenset of kwargs.
-    """
-    return args, frozenset(kwargs.items())
-
-
+@export
 @dataclass(frozen=True)
 class cached[T, K, **P]:
     """
@@ -158,7 +153,10 @@ class cached[T, K, **P]:
     """
 
     size_fun: Callable[[], int]
-    key_fun: Callable[P, K | None] = _key
+    key_fun: Callable[P, K | None] = lambda *args, **kwargs: (
+        args,
+        frozenset(kwargs.items()),
+    )
 
     def __call__(self, cls: type[T]) -> type[T]:
         """
@@ -223,3 +221,6 @@ class _Init:
     """
 
     init: Callable[[Any], Any]
+
+
+_NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"

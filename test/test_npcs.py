@@ -7,22 +7,24 @@ from pygame import Event, K_SPACE
 from pygame.locals import KEYDOWN, K_RETURN, QUIT
 from pytest_mock import MockerFixture
 
-from nextrpg.character.character_on_screen import CharacterSpec
-from nextrpg.character.moving_npc import MovingNpcOnScreen
-from nextrpg.character.npcs import (
+from nextrpg import (
+    CharacterSpec,
     EventfulScene,
+    MovingNpcOnScreen,
     NpcOnScreen,
     NpcSpec,
     RpgEventGenerator,
     RpgEventScene,
+    PlayerOnScreen,
+    Direction,
+    Size,
+    Rectangle,
+    Coordinate,
+    KeyPressDown,
+    Quit,
+    say,
+    MapScene,
 )
-from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.core import Direction, Size
-from nextrpg.draw.draw_on_screen import Rectangle
-from nextrpg.draw.coordinate import Coordinate
-from nextrpg.event.pygame_event import KeyPressDown, Quit
-from nextrpg.event.plugins import say
-from nextrpg.scene.map_scene import MapScene
 from test.util import MockCharacterDrawing
 
 
@@ -65,9 +67,9 @@ def test_npcs(mocker: MockerFixture) -> None:
     map_helper.above_character = ()
     map_helper.collision_visuals = ()
     map_helper.map_size = Size(100, 100)
-    mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=map_helper)
+    mocker.patch("nextrpg.map_scene.MapHelper", return_value=map_helper)
     mocker.patch(
-        "nextrpg.scene.map_scene.MapScene.draw_on_screens_before_shift",
+        "nextrpg.map_scene.MapScene.draw_on_screens_before_shift",
         return_value=(),
     )
     player = PlayerOnScreen(
@@ -118,7 +120,7 @@ def test_eventful_scene() -> None:
         yield lambda generator, scene: RpgEventScene(generator, scene)
 
     gen = event()
-    from nextrpg.character.character_on_screen import CharacterSpec
+    from nextrpg.character_on_screen import CharacterSpec
 
     eventful = EventfulScene(
         player=PlayerOnScreen(

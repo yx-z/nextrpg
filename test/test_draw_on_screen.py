@@ -3,16 +3,17 @@ from pathlib import Path
 from pygame import Color, SRCALPHA, Surface
 from pytest_mock import MockerFixture
 
-from nextrpg.config.config import Config
-from nextrpg.config.debug_config import DebugConfig
-from nextrpg.core import Rgba, Size
-from nextrpg.draw.draw_on_screen import (
+from nextrpg import (
+    Config,
+    DebugConfig,
+    Rgba,
+    Size,
     DrawOnScreen,
     Drawing,
     Polygon,
     Rectangle,
+    Coordinate,
 )
-from nextrpg.draw.coordinate import Coordinate
 from test.util import MockSurface, override_config
 
 
@@ -20,7 +21,7 @@ def test_drawing(mocker: MockerFixture) -> None:
     surf = MockSurface()
     assert Drawing(surf)._surface
 
-    mocker.patch("nextrpg.draw.draw_on_screen.load")
+    mocker.patch("nextrpg.draw_on_screen.load")
     assert Drawing(Path("abc"))._surface
     drawing = Drawing(Surface((1, 2), SRCALPHA))
     assert drawing.width == 1

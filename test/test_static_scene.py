@@ -1,6 +1,4 @@
-from nextrpg.draw.coordinate import Coordinate
-from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing
-from nextrpg.scene.static_scene import StaticScene
+from nextrpg import Coordinate, Drawing, DrawOnScreen, StaticScene
 from test.util import MockSurface
 
 

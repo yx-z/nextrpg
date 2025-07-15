@@ -2,9 +2,7 @@
 Sample exterior scene.
 """
 
-from nextrpg.character.character_on_screen import CharacterSpec
-from nextrpg.scene.map_scene import MapScene, Move
-from nextrpg.scene.scene import Scene
+from nextrpg import CharacterSpec, MapScene, Move, Scene
 
 
 def exterior_scene(player_spec: CharacterSpec) -> Scene:
