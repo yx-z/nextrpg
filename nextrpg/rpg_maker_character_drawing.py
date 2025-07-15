@@ -47,10 +47,11 @@ Example:
     ```
 """
 
-from dataclasses import dataclass, field, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from enum import IntEnum
 from typing import Self, override
 
+from nextrpg.model import not_constructor_below
 from nextrpg.character_drawing import CharacterDrawing
 from nextrpg.coordinate import Coordinate
 from nextrpg.core import Direction, Millisecond, Pixel
@@ -359,6 +360,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     duration_per_frame: Millisecond = field(
         default_factory=lambda: config().rpg_maker_character.duration_per_frame
     )
+    _: KW_ONLY = not_constructor_below()
     _frames: dict[Direction, CyclicFrames] = instance_init(_init_frames)
 
     @property
@@ -399,14 +401,11 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             character = character.turn(Direction.UP)
             ```
         """
-        return replace(
-            self,
-            direction=direction,
-            _frames={
-                d: frames if d == _adjust(direction) else frames.reset
-                for d, frames in self._frames.items()
-            },
-        )
+        frames = {
+            d: frames if d == _adjust(direction) else frames.reset
+            for d, frames in self._frames.items()
+        }
+        return replace(self, direction=direction, _frames=frames)
 
     @override
     def tick_move(self, time_delta: Millisecond) -> Self:
@@ -430,13 +429,11 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             character = character.tick_move(time_delta)
             ```
         """
-        return replace(
-            self,
-            _frames={
-                direction: self._tick_frames(time_delta, direction)
-                for direction, frames in self._frames.items()
-            },
-        )
+        frames = {
+            direction: self._tick_frames(time_delta, direction)
+            for direction, frames in self._frames.items()
+        }
+        return replace(self, _frames=frames)
 
     def _tick_frames(
         self, time_delta: Millisecond, adjusted_direction: Direction
@@ -486,10 +483,8 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         """
         if self.animate_on_idle:
             return self.tick_move(time_delta)
-        return replace(
-            self,
-            _frames={d: frames.reset for d, frames in self._frames.items()},
-        )
+        frames = {d: frames.reset for d, frames in self._frames.items()}
+        return replace(self, _frames=frames)
 
     def _crop_by_selection(self, selection: SpriteSheetSelection) -> Drawing:
         """
@@ -509,10 +504,9 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         drawing = self.sprite_sheet.drawing
         width = drawing.width / selection.max_columns
         height = drawing.height / selection.max_rows
-        return drawing.crop(
-            Coordinate(width * selection.column, height * selection.row),
-            Size(width, height),
-        )
+        top_left = Coordinate(width * selection.column, height * selection.row)
+        size = Size(width, height)
+        return drawing.crop(top_left, size)
 
     def _load_frames_row(self, drawing: Drawing, row: int) -> CyclicFrames:
         """
@@ -531,9 +525,9 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             frames = character._load_frames_row(sprite_sheet, 0)
             ```
         """
-        frames = [
+        frames = tuple(
             self._trim(d) for d in self._crop_into_frames_at_row(drawing, row)
-        ]
+        )
         return CyclicFrames(
             frames=tuple(
                 frames[i] for i in self.sprite_sheet.style._frame_indices()

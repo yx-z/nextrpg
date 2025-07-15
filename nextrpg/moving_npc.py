@@ -1,7 +1,8 @@
-from dataclasses import field, replace
+from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import NamedTuple, Self, override
 
+from nextrpg.model import not_constructor_below
 from nextrpg.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.npcs import NpcOnScreen, NpcSpec
 from nextrpg.coordinate import Coordinate
@@ -35,6 +36,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     move_speed: PixelPerMillisecond = instance_init(
         lambda self: self.spec.move_speed
     )
+    _: KW_ONLY = not_constructor_below()
     _walk: Walk = instance_init(
         lambda self: Walk(
             path=self.path,

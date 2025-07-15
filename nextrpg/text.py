@@ -96,14 +96,16 @@ class Text:
         """
         if not self.message:
             return Size(0, 0)
-        text_sizes = [self.config.font.text_size(line) for line in self.lines]
+        text_sizes = tuple(
+            self.config.font.text_size(line) for line in self.lines
+        )
         width = max(s.width for s in text_sizes)
         height = sum(s.height for s in text_sizes)
         spacings = self.config.line_spacing * (len(self.lines) - 1)
         return Size(width, height + spacings)
 
     @cached_property
-    def line_heights(self) -> list[Pixel]:
+    def line_heights(self) -> tuple[Pixel, ...]:
         """
         Get the vertical position of each line in the text.
 
@@ -119,13 +121,13 @@ class Text:
             heights = text.line_heights  # [0, 20, 40] (example)
             ```
         """
-        return [
+        return tuple(
             (self.config.font.text_height + self.config.line_spacing) * i
             for i in range(len(self.lines))
-        ]
+        )
 
     @cached_property
-    def lines(self) -> list[str]:
+    def lines(self) -> tuple[str, ...]:
         """
         Get the individual lines of the text message.
 
@@ -141,4 +143,4 @@ class Text:
             lines = text.lines  # ["First line", "Second line", "Third line"]
             ```
         """
-        return self.message.splitlines()
+        return tuple(self.message.splitlines())

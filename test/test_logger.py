@@ -1,6 +1,6 @@
 from pytest import raises
 
-from nextrpg import Config, DebugConfig, FROM_CONFIG, Logger
+from nextrpg import Config, DebugConfig, Logger
 from test.util import override_config
 
 
@@ -8,8 +8,8 @@ from test.util import override_config
 def test_logger():
     logger = Logger("TestLogger")
     i = 1
-    logger.info(t"Info {i}")
-    logger.warning(t"Warning {i}", duration=FROM_CONFIG)
+    logger.info(t"Info {i}", duration=None)
+    logger.warning(t"Warning {i}")
     logger.error(t"Error {i}", duration=123)
     logger.error(t"Error {i}", duration=123)
 

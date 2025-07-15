@@ -32,7 +32,7 @@ Example:
 """
 
 from collections.abc import Callable, Generator
-from dataclasses import dataclass, field, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Any, Self
 
@@ -42,7 +42,12 @@ from nextrpg.event_as_attr import EventAsAttr
 from nextrpg.event_transformer import transform_and_compile
 from nextrpg.global_config import config
 from nextrpg.logger import Logger
-from nextrpg.model import dataclass_with_instance_init, export, instance_init
+from nextrpg.model import (
+    dataclass_with_instance_init,
+    export,
+    instance_init,
+    not_constructor_below,
+)
 from nextrpg.player_on_screen import PlayerOnScreen
 from nextrpg.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.scene import Scene
@@ -112,6 +117,7 @@ class NpcOnScreen(CharacterOnScreen):
     """
 
     spec: NpcSpec
+    _: KW_ONLY = not_constructor_below()
     generator: Callable[[*RpgEventSpecParams], RpgEventGenerator] = (
         instance_init(lambda self: self.spec.generator)
     )
@@ -150,6 +156,7 @@ class EventfulScene(Scene, EventAsAttr):
 
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...] = field(default_factory=tuple)
+    _: KW_ONLY = not_constructor_below()
     npc: NpcOnScreen | None = None
     _event_generator: RpgEventGenerator | None = None
     _event_result: Any = None

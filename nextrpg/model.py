@@ -216,9 +216,9 @@ class cached[T, K, **P]:
         Returns:
             `type[T]`: The modified class with caching behavior.
         """
-        cls._instances = OrderedDict[K, T]()
+        cls._nextrpg_instances = OrderedDict[K, T]()
 
-        def __new__(klass: type[T], *args: P.args, **kwargs: P.kwargs) -> T:
+        def new(klass: type[T], *args: P.args, **kwargs: P.kwargs) -> T:
             """
             Create or retrieve a cached instance.
 
@@ -237,18 +237,21 @@ class cached[T, K, **P]:
             if (key := self.key_fun(*args, **kwargs)) is None:
                 return super(klass, klass).__new__(klass)
 
-            if (instance := klass._instances.get(key)) is not None:
-                klass._instances.move_to_end(key)
+            if (instance := klass._nextrpg_instances.get(key)) is not None:
+                klass._nextrpg_instances.move_to_end(key)
                 return instance
 
-            while klass._instances and len(klass._instances) >= self.size_fun():
-                klass._instances.popitem(last=False)
+            while (
+                klass._nextrpg_instances
+                and len(klass._nextrpg_instances) >= self.size_fun()
+            ):
+                klass._nextrpg_instances.popitem(last=False)
 
             instance = super(klass, klass).__new__(klass)
-            klass._instances[key] = instance
+            klass._nextrpg_instances[key] = instance
             return instance
 
-        cls.__new__ = __new__
+        cls.__new__ = new
         return cls
 
 

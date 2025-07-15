@@ -33,14 +33,14 @@ Example:
 from dataclasses import dataclass, replace
 from functools import cached_property
 from string.templatelib import Interpolation, Template
-from typing import NamedTuple
+from typing import NamedTuple, Self
 
 from nextrpg.core import Millisecond, Timer
 from nextrpg.debug_config import LogLevel
 from nextrpg.global_config import config
 
 
-class DurationFromConfig:
+class _DurationFromConfig:
     """
     Sentinel class to indicate that the log duration is taken from config.
 
@@ -50,7 +50,7 @@ class DurationFromConfig:
     """
 
 
-FROM_CONFIG = DurationFromConfig()
+_FROM_CONFIG = _DurationFromConfig()
 """Sentinel object to indicate that the log duration is taken from config."""
 
 
@@ -91,7 +91,7 @@ class Logger:
         self,
         message: Template | str,
         *,
-        duration: Millisecond | DurationFromConfig | None = FROM_CONFIG,
+        duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
     ) -> None:
         """
         Log a debug message.
@@ -120,7 +120,7 @@ class Logger:
         self,
         message: Template | str,
         *,
-        duration: Millisecond | DurationFromConfig | None = None,
+        duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
     ) -> None:
         """
         Log an info message.
@@ -146,7 +146,7 @@ class Logger:
         self,
         message: Template | str,
         *,
-        duration: Millisecond | DurationFromConfig | None = None,
+        duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
     ) -> None:
         """
         Log a warning message.
@@ -172,7 +172,7 @@ class Logger:
         self,
         message: Template | str,
         *,
-        duration: Millisecond | DurationFromConfig | None = None,
+        duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
     ) -> None:
         """
         Log an error message.
@@ -194,7 +194,7 @@ class Logger:
         """
         _add(self.component, LogLevel.ERROR, message, duration)
 
-    def __new__(cls, component: str) -> Logger:
+    def __new__(cls, component: str) -> Self:
         """
         Create a new logger instance with component name validation.
 
@@ -264,6 +264,7 @@ def pop_messages(time_delta: Millisecond) -> tuple[ComponentAndMessage, ...]:
     if not (debug := config().debug):
         _pop(time_delta)
         return ()
+
     msgs = tuple(
         ComponentAndMessage(e.component, e.formatted)
         for e in _entries + list(_timed_entries.values())
@@ -356,7 +357,7 @@ def _add(
     component: str,
     level: LogLevel,
     message: Template | str,
-    duration: Millisecond | DurationFromConfig | None,
+    duration: Millisecond | _DurationFromConfig | None,
 ) -> None:
     """
     Add a log entry to the internal log system.
@@ -380,7 +381,7 @@ def _add(
     if duration is None:
         _entries.append(_LogEntry(component, level, message))
         return
-    duration = debug.log_duration if duration is FROM_CONFIG else duration
+    duration = debug.log_duration if duration is _FROM_CONFIG else duration
     if (k := _Key(component, message.strings)) not in _timed_entries:
         _timed_entries[k] = _TimedLogEntry(
             component, level, message, Timer(duration)

@@ -114,9 +114,9 @@ class MapHelper:
             `Size`: The map size.
         """
         tile_width, tile_height = self._tile_size
-        return Size(
-            self._tmx.width * tile_width, self._tmx.height * tile_height
-        )
+        width = self._tmx.width * tile_width
+        height = self._tmx.height * tile_height
+        return Size(width, height)
 
     @cached_property
     def background(self) -> tuple[DrawOnScreen, ...]:
@@ -263,8 +263,8 @@ class MapHelper:
     def _all_objects(self) -> tuple[TiledObject, ...]:
         return tuple(
             obj
-            for layer in map(self._layer, self._tmx.visible_object_groups)
-            for obj in layer
+            for i in self._tmx.visible_object_groups
+            for obj in self._layer(i)
         )
 
     @cached_property
@@ -278,7 +278,7 @@ class MapHelper:
 
     def _collider(self, gid: _Gid) -> tuple[TiledObject, ...]:
         return tuple(
-            self._tmx.tile_properties.get(gid, {}).get("colliders", [])
+            self._tmx.tile_properties.get(gid, {}).get("colliders", ())
         )
 
     def _polygon(self, coord: _TileCoordinate, obj: TiledObject) -> Polygon:
@@ -297,10 +297,9 @@ class MapHelper:
         if _is_rect(obj):
             w, h = self._tile_size
             cx, cy = coord
-            return Rectangle(
-                Coordinate(cx * w + obj.x, cy * h + obj.y),
-                Size(obj.width, obj.height),
-            )
+            map_coord = Coordinate(cx * w + obj.x, cy * h + obj.y)
+            size = Size(obj.width, obj.height)
+            return Rectangle(map_coord, size)
         return None
 
     def _tile_layers(self, class_name: str) -> tuple[TiledTileLayer, ...]:
@@ -312,7 +311,7 @@ class MapHelper:
 
     @cached_property
     def _all_tile_layers(self) -> tuple[TiledTileLayer, ...]:
-        return tuple(map(self._layer, self._tmx.visible_tile_layers))
+        return tuple(self._layer(i) for i in self._tmx.visible_tile_layers)
 
     def _draw_layers(self, class_name: str) -> tuple[DrawOnScreen, ...]:
         return tuple(
@@ -400,7 +399,7 @@ class MapHelper:
         x, y = coord
         return {
             c
-            for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]
+            for dx, dy in ((0, 1), (1, 0), (0, -1), (-1, 0))
             if self._class(layer, c := _TileCoordinate(x + dx, y + dy)) == cls
         }
 

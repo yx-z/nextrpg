@@ -193,18 +193,14 @@ class Walk:
         last_index = self._index
 
         remaining_distance = self.move_speed * time_delta
-        if self.cyclic:
-            # Handle cyclic path logic
-            pass
-        else:
-            if remaining_distance > self._remaining_length:
-                return replace(
-                    self,
-                    coordinate=self.path.points[-1],
-                    _last_coordinate=current_coord,
-                    _index=len(self.path.points) - 1,
-                    _last_index=index,
-                )
+        if not self.cyclic and remaining_distance > self._remaining_length:
+            return replace(
+                self,
+                coordinate=self.path.points[-1],
+                _last_coordinate=current_coord,
+                _index=len(self.path.points) - 1,
+                _last_index=index,
+            )
 
         while remaining_distance > 0 and not self._is_final_index(index):
             step = self._tick_segment(current_coord, index, remaining_distance)

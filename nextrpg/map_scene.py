@@ -37,11 +37,12 @@ Example:
     ```
 """
 
-from dataclasses import dataclass, field, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from os import PathLike
 from typing import Callable, NamedTuple, OrderedDict, override
 
+from nextrpg.model import not_constructor_below
 from nextrpg.area import gui_size
 from nextrpg.character_on_screen import CharacterSpec
 from nextrpg.coordinate import Coordinate
@@ -118,14 +119,15 @@ class MapScene(EventfulScene, TransitioningScene):
     player_spec: CharacterSpec
     moves: Move | tuple[Move, ...] = field(default_factory=tuple)
     npc_specs: tuple[NpcSpec, ...] = field(default_factory=tuple)
-    debug_visuals: tuple[DrawOnScreen, ...] = instance_init(
-        lambda self: self._debug_visuals
-    )
+    _: KW_ONLY = not_constructor_below()
     npcs: tuple[NpcOnScreen, ...] = instance_init(
         lambda self: tuple(self._init_npc(n) for n in self.npc_specs)
     )
     player: PlayerOnScreen = instance_init(
         lambda self: self.init_player(self.player_spec)
+    )
+    _debug_visuals: tuple[DrawOnScreen, ...] = instance_init(
+        lambda self: self._init_debug_visuals
     )
 
     @cached_property
@@ -238,14 +240,10 @@ class MapScene(EventfulScene, TransitioningScene):
             shift = map_scene.draw_on_screen_shift
             ```
         """
-        player = self.player.draw_on_screen.rectangle.center
-        map_width, map_height = self.map_helper.map_size
-        gui_width, gui_height = gui_size()
-        left_shift = center_player(player.left, gui_width, map_width)
-        top_shift = center_player(player.top, gui_height, map_height)
-        shift = Coordinate(left_shift, top_shift)
+        player_coord = self.player.draw_on_screen.rectangle.center
+        shift = center_player(player_coord, self.map_helper.map_size)
         logger.debug(
-            t"Player {self.player.coordinate} Shift {shift}", duration=None
+            t"Player center coord {player_coord}. Shift {shift}", duration=None
         )
         return shift
 
@@ -270,7 +268,7 @@ class MapScene(EventfulScene, TransitioningScene):
             self.map_helper.background
             + self._foreground_and_characters
             + self.map_helper.above_character
-            + self.debug_visuals
+            + self._debug_visuals
         )
 
     @cached_property
@@ -345,7 +343,7 @@ class MapScene(EventfulScene, TransitioningScene):
         return None
 
     @cached_property
-    def _debug_visuals(self) -> tuple[DrawOnScreen, ...]:
+    def _init_debug_visuals(self) -> tuple[DrawOnScreen, ...]:
         """
         Get debug visualization elements.
 
@@ -380,9 +378,9 @@ class MapScene(EventfulScene, TransitioningScene):
         """
         if (debug := config().debug) and (color := debug.npc_path_color):
             return tuple(
-                n.path.line(color)
-                for n in self.npcs
-                if isinstance(n, MovingNpcOnScreen)
+                npc.path.line(color)
+                for npc in self.npcs
+                if isinstance(npc, MovingNpcOnScreen)
             )
         return ()
 

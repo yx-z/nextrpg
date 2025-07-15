@@ -78,6 +78,7 @@ class GuiConfig:
     size: Size = Size(1280, 720)
     frames_per_second: int = 60
     background_color: Rgba = BLACK
+    double_buffer: bool = True
     gui_mode: GuiMode = GuiMode.WINDOWED
     resize_mode: ResizeMode = ResizeMode.SCALE
     allow_window_resize: bool = True

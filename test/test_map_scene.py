@@ -21,7 +21,6 @@ from nextrpg import (
     ResourceConfig,
     Size,
     TileBottomAndDrawOnScreen,
-    center_player,
 )
 from test.util import MockCharacterDrawing, MockSurface
 from test.util import override_config
@@ -144,7 +143,7 @@ def test_init_npc(mocker: MockerFixture) -> None:
                 event=lambda *_: None,
             ),
         ),
-        debug_visuals=(),
+        _debug_visuals=(),
     )
     assert map_scene.npcs
 
@@ -170,16 +169,9 @@ def test_init_moving_npc(mocker: MockerFixture) -> None:
                 event=lambda *_: None,
             ),
         ),
-        debug_visuals=(),
+        _debug_visuals=(),
     )
     assert map_scene.npcs
 
     with override_config(Config(debug=DebugConfig())):
         assert not map_scene._npc_paths
-
-
-def test_shift() -> None:
-    assert center_player(1, 2, 3) == 0
-    assert center_player(12, 3, 2) == 1
-    assert center_player(12, 10, 100) == -7
-    assert center_player(0, 10, 10) == 0

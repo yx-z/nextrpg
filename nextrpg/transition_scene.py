@@ -30,10 +30,11 @@ Example:
     ```
 """
 
-from dataclasses import dataclass, field, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self, override
 
+from nextrpg.model import not_constructor_below
 from nextrpg.core import Alpha, Millisecond, alpha_from_percentage
 from nextrpg.draw_on_screen import DrawOnScreen
 from nextrpg.global_config import config
@@ -119,6 +120,7 @@ class TransitionScene(Scene):
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
     )
+    _: KW_ONLY = not_constructor_below()
     _elapsed: Millisecond = 0
 
     def tick(self, time_delta: Millisecond) -> Scene:

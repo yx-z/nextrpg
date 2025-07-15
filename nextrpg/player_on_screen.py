@@ -36,10 +36,11 @@ Example:
     ```
 """
 
-from dataclasses import dataclass, field, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self, override
 
+from nextrpg.model import not_constructor_below
 from nextrpg.character_on_screen import CharacterOnScreen
 from nextrpg.coordinate import Coordinate
 from nextrpg.core import Direction, DirectionalOffset, Millisecond
@@ -90,6 +91,7 @@ class PlayerOnScreen(MovingCharacterOnScreen):
         ```
     """
 
+    _: KW_ONLY = not_constructor_below()
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
     @override
@@ -113,9 +115,8 @@ class PlayerOnScreen(MovingCharacterOnScreen):
             player = player.start_event(npc)
             ```
         """
-        return replace(
-            super().start_event(character), _movement_keys=frozenset()
-        )
+        start_event = super().start_event(character)
+        return replace(start_event, _movement_keys=frozenset())
 
     def event(self, event: PygameEvent) -> Self:
         """
@@ -137,9 +138,8 @@ class PlayerOnScreen(MovingCharacterOnScreen):
             player = player.event(key_press_event)
             ```
         """
-        if self._event_triggered or not isinstance(
-            event, (KeyPressDown, KeyPressUp)
-        ):
+        is_key_press = isinstance(event, (KeyPressDown, KeyPressUp))
+        if self._event_triggered or not is_key_press:
             return self
 
         updated_keys = self._updated_movement_key(event)
@@ -220,11 +220,10 @@ class PlayerOnScreen(MovingCharacterOnScreen):
                 player = player.move_to(new_pos)
             ```
         """
-        return self.coordinate.shift(
-            DirectionalOffset(
-                self.character.direction, self.move_speed * time_delta
-            )
+        directional_offset = DirectionalOffset(
+            self.character.direction, self.move_speed * time_delta
         )
+        return self.coordinate.shift(directional_offset)
 
 
 # Movement key configuration

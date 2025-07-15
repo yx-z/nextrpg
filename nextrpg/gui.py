@@ -241,14 +241,10 @@ class Gui:
         """
         screen = Surface(self.initial_config.size)
         screen.blits(d.pygame for d in draws)
-        return DrawOnScreen(
-            self._center_shift,
-            Drawing(
-                smoothscale(
-                    screen, self.initial_config.size.scale(self._scaling)
-                )
-            ),
+        scaled_drawing = Drawing(
+            smoothscale(screen, self.initial_config.size.scale(self._scaling))
         )
+        return DrawOnScreen(self._center_shift, scaled_drawing)
 
     @cached_property
     def _scaling(self) -> float:
@@ -263,9 +259,9 @@ class Gui:
         """
         current_width, current_height = self.current_config.size
         initial_width, initial_height = self.initial_config.size
-        return min(
-            current_width / initial_width, current_height / initial_height
-        )
+        width_ratio = current_width / initial_width
+        height_ratio = current_height / initial_height
+        return min(width_ratio, height_ratio)
 
     @cached_property
     def _center_shift(self) -> Coordinate:
@@ -280,10 +276,9 @@ class Gui:
         """
         current_width, current_height = self.current_config.size
         initial_width, initial_height = self.initial_config.size
-        return Coordinate(
-            (current_width - self._scaling * initial_width) / 2,
-            (current_height - self._scaling * initial_height) / 2,
-        )
+        width_shift = (current_width - self._scaling * initial_width) / 2
+        height_shift = (current_height - self._scaling * initial_height) / 2
+        return Coordinate(width_shift, height_shift)
 
     @cached_property
     def _current_gui_flag(self) -> _GuiFlag:
@@ -293,7 +288,7 @@ class Gui:
         Returns:
             `_GuiFlag`: Pygame display flags for window configuration.
         """
-        flag = DOUBLEBUF
+        flag = DOUBLEBUF if self.current_config.double_buffer else 0
         if self.current_config.gui_mode is GuiMode.FULL_SCREEN:
             flag |= FULLSCREEN
         if self.current_config.allow_window_resize:
@@ -321,12 +316,11 @@ class Gui:
             or self.last_config.gui_mode != self.current_config.gui_mode
             or self.last_config.allow_window_resize
             != self.current_config.allow_window_resize
+            or self.last_config.double_buffer
+            != self.current_config.double_buffer
         ):
-            object.__setattr__(
-                self,
-                "_screen",
-                set_mode(self.current_config.size, self._current_gui_flag),
-            )
+            screen = set_mode(self.current_config.size, self._current_gui_flag)
+            object.__setattr__(self, "_screen", screen)
 
     @cached_property
     def _toggle_gui_mode(self) -> Self:
@@ -336,12 +330,11 @@ class Gui:
         Returns:
             `Gui`: Updated GUI instance with toggled mode.
         """
-        current_config = replace(
-            self.current_config, gui_mode=self.current_config.gui_mode.opposite
-        )
-        set_config(replace(config(), gui=current_config))
+        updated_gui_mode = self.current_config.gui_mode.opposite
+        updated_config = replace(self.current_config, gui_mode=updated_gui_mode)
+        set_config(replace(config(), gui=updated_config))
         return replace(
-            self, current_config=current_config, last_config=self.current_config
+            self, current_config=updated_config, last_config=self.current_config
         )
 
     def _resize(self, size: Size) -> Self:
@@ -356,21 +349,20 @@ class Gui:
         """
         if size == self.current_config.size:
             return self
-        current_config = replace(self.current_config, size=size)
-        set_config(replace(config(), gui=current_config))
+        updated_config = replace(self.current_config, size=size)
+        set_config(replace(config(), gui=updated_config))
         return replace(
-            self, current_config=current_config, last_config=self.current_config
+            self, current_config=updated_config, last_config=self.current_config
         )
 
 
 def _log_text(
     msgs: tuple[ComponentAndMessage, ...],
 ) -> tuple[TextOnScreen, ...]:
-    spacing = config().text.line_spacing
-    msg_spacing = (
-        max(config().text.font.text_size(m.component).width for m in msgs)
-        + 2 * spacing
-    )
+    text_config = config().text
+    spacing = text_config.line_spacing
+    max_width = max(text_config.font.text_size(m.component).width for m in msgs)
+    msg_spacing = max_width + 2 * spacing
     return tuple(
         text
         for i, (component, msg) in enumerate(msgs)
@@ -382,9 +374,8 @@ def _log_text(
 
 
 def _line_height(line_index: int) -> Pixel:
-    return config().text.line_spacing + line_index * (
-        config().text.line_spacing + config().text.font.text_height
-    )
+    spacing = config().text.line_spacing
+    return spacing + line_index * (spacing + config().text.font.text_height)
 
 
 type _GuiFlag = int
