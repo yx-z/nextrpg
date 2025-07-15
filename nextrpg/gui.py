@@ -130,7 +130,7 @@ class Gui:
             self, current_config=config().gui, last_config=self.current_config
         )
 
-    def event(self, e: PygameEvent) -> Gui:
+    def event(self, e: PygameEvent) -> Self:
         """
         Handle GUI-related events.
 
@@ -182,7 +182,7 @@ class Gui:
 
         Example:
             ```python
-            from nextrpg.draw_on_screen import DrawOnScreen
+            from nextrpg import DrawOnScreen
 
             # Draw game elements
             drawings = (player_sprite, background, ui_elements)
@@ -329,7 +329,7 @@ class Gui:
             )
 
     @cached_property
-    def _toggle_gui_mode(self) -> Gui:
+    def _toggle_gui_mode(self) -> Self:
         """
         Toggle between windowed and fullscreen modes.
 
@@ -344,7 +344,7 @@ class Gui:
             self, current_config=current_config, last_config=self.current_config
         )
 
-    def _resize(self, size: Size) -> Gui:
+    def _resize(self, size: Size) -> Self:
         """
         Handle window resize events.
 
