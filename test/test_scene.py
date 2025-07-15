@@ -1,3 +1,5 @@
+from functools import cached_property
+
 from pygame import Event
 from pygame.locals import QUIT
 
@@ -16,3 +18,14 @@ def test_scene() -> None:
         DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),
     )
     assert scene.draw_on_screens
+
+    class MyScene(Scene):
+        @cached_property
+        def draw_on_screen_shift(self) -> Coordinate | None:
+            return None
+
+        @cached_property
+        def draw_on_screens_before_shift(self) -> tuple[DrawOnScreen, ...]:
+            return (DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),)
+
+    assert MyScene().draw_on_screens

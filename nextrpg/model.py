@@ -68,8 +68,7 @@ def export[T](o: T) -> T:
     """
     mod = modules[o.__module__]
     if hasattr(mod, "__all__"):
-        if o.__name__ not in mod.__all__:
-            mod.__all__.append(o.__name__)
+        mod.__all__.append(o.__name__)
     else:
         mod.__all__ = [o.__name__]
     return o

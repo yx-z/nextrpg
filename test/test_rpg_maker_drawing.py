@@ -10,9 +10,10 @@ from nextrpg import (
     Size,
     Drawing,
 )
+from nextrpg.rpg_maker_character_drawing import _adjust
 
 
-def test_rpg_maker_drawing():
+def test_rpg_maker_drawing() -> None:
     assert len(DefaultFrameType._frame_indices()) == 4
     assert len(DefaultFrameType) == 3
     assert len(XpFrameType._frame_indices()) == 4
@@ -39,3 +40,7 @@ def test_rpg_maker_drawing():
         animate_on_idle=False,
     )
     assert character.tick_idle(2).drawing.size == Size(2, 2)
+
+
+def test_adjust() -> None:
+    assert _adjust(Direction.DOWN_LEFT) is Direction.DOWN

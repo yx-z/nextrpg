@@ -7,7 +7,7 @@ from nextrpg import (
 )
 
 
-def test_instance_init():
+def test_instance_init() -> None:
     @dataclass_with_instance_init
     class MyModel:
         user_input: str

@@ -6,8 +6,10 @@ from pytest_mock import MockerFixture
 
 from nextrpg import (
     CharacterSpec,
+    DebugConfig,
     PlayerOnScreen,
     Config,
+    Rectangle,
     ResourceConfig,
     Size,
     Coordinate,
@@ -116,6 +118,16 @@ def test_map_helper(mocker: MockerFixture) -> None:
     with raises(RuntimeError):
         efg.get_object("abc")
 
+    assert not efg.collision_visuals
+
+    with override_config(Config(debug=DebugConfig())):
+        ghi = MapHelper(Path("ghi"))
+        object.__setattr__(
+            ghi, "collisions", (Rectangle(Coordinate(0, 0), Size(1, 1)),)
+        )
+        assert ghi.collision_visuals
+
 
 def test_get_polygon() -> None:
     assert not get_polygon(SimpleNamespace(x=1, y=1, width=1, height=0))
+    assert get_polygon(SimpleNamespace(x=1, y=1, width=1, height=1))

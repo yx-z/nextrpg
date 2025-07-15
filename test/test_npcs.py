@@ -150,6 +150,7 @@ def test_eventful_scene() -> None:
             ),
         ),
     )
+    assert eventful.send(gen)
     assert eventful.tick(0)
     assert eventful._next_event
 

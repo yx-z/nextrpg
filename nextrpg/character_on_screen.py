@@ -246,23 +246,3 @@ class CharacterOnScreen(EventAsAttr):
             ```
         """
         return replace(self, _event_triggered=False)
-
-    def _visuals(self, visuals: tuple) -> tuple[DrawOnScreen, ...]:
-        """
-        Get additional visual elements for the character.
-
-        Processes a list of visual functions and returns their
-        drawable representations.
-
-        Arguments:
-            `visuals`: Tuple of visual functions to process.
-
-        Returns:
-            `tuple[DrawOnScreen, ...]`: Additional visual elements.
-
-        Example:
-            ```python
-            extra_visuals = character._visuals(visual_functions)
-            ```
-        """
-        return tuple(d for f in visuals for d in f(self))
