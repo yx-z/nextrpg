@@ -28,7 +28,7 @@ Example:
 """
 
 from asyncio import sleep
-from dataclasses import field, replace
+from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from types import ModuleType
 from typing import Callable, Self
@@ -39,12 +39,13 @@ from pygame.time import Clock
 from nextrpg.global_config import config
 from nextrpg import plugins
 from nextrpg.pygame_event import PygameEvent, Quit, to_typed_event
-from nextrpg.window import Gui
+from nextrpg.gui import Gui
 from nextrpg.logger import Logger
 from nextrpg.model import (
     dataclass_with_instance_init,
     export,
     instance_init,
+    not_constructor_below,
 )
 from nextrpg.scene import Scene
 
@@ -81,6 +82,7 @@ class Game:
 
     entry_scene: Callable[[], Scene]
     event_modules: tuple[ModuleType] = (plugins,)
+    _: KW_ONLY = not_constructor_below()
     _loop: _GameLoop = instance_init(
         lambda self: _GameLoop(entry_scene=self.entry_scene)
     )
@@ -127,7 +129,7 @@ class Game:
         Updates the internal game loop state by calling the tick method
         on the current loop instance.
         """
-        object.__setattr__(self, "_loop", self._loop.tick())
+        object.__setattr__(self, "_loop", self._loop.tick)
 
 
 @dataclass_with_instance_init
@@ -152,11 +154,13 @@ class _GameLoop:
     """
 
     entry_scene: Callable[[], Scene]
+    _: KW_ONLY = not_constructor_below()
     running: bool = True
     _clock: Clock = field(default_factory=Clock)
     _gui: Gui = field(default_factory=Gui)
     _scene: Scene = instance_init(lambda self: self.entry_scene())
 
+    @cached_property
     def tick(self) -> Self:
         """
         Execute one tick of the game loop.
@@ -180,11 +184,10 @@ class _GameLoop:
         self._clock.tick(config().gui.frames_per_second)
         time_delta = self._clock.get_time()
 
-        self._gui.draw(self._scene.draw_on_screens, time_delta)
+        gui = self._gui.update
+        gui.draw(self._scene.draw_on_screens, time_delta)
 
-        loop = replace(
-            self, _scene=self._scene.tick(time_delta), _gui=self._update_gui
-        )
+        loop = replace(self, _scene=self._scene.tick(time_delta), _gui=gui)
         for e in pygame.event.get():
             loop = loop._event(to_typed_event(e))
         return loop
@@ -208,24 +211,4 @@ class _GameLoop:
             _scene=self._scene.event(e),
             _gui=self._gui.event(e),
             running=not isinstance(e, Quit),
-        )
-
-    @cached_property
-    def _update_gui(self) -> Gui:
-        """
-        Update GUI configuration if needed.
-
-        Checks if the current GUI configuration matches the global config
-        and updates it if necessary. This ensures GUI settings are
-        synchronized with configuration changes.
-
-        Returns:
-            `Gui`: Updated GUI instance with current configuration.
-        """
-        if config().gui is self._gui.current_config:
-            return self._gui
-        return replace(
-            self._gui,
-            current_config=config().gui,
-            last_config=self._gui.current_config,
         )

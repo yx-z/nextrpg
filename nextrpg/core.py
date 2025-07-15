@@ -30,7 +30,7 @@ Example:
 """
 
 from collections import namedtuple
-from dataclasses import dataclass, replace
+from dataclasses import KW_ONLY, dataclass, replace
 from enum import Enum, auto
 from functools import cached_property
 from math import ceil
@@ -40,8 +40,7 @@ import pygame
 from pygame.font import SysFont
 from pygame.time import get_ticks
 
-from nextrpg.model import export
-
+from nextrpg.model import export, not_constructor_below
 
 type Alpha = int
 """
@@ -113,7 +112,7 @@ class Rgba(namedtuple("Rgba", "red green blue alpha")):
 BLACK = Rgba(0, 0, 0, 255)
 WHITE = Rgba(255, 255, 255, 255)
 
-type Millisecond = int | float
+type Millisecond = int
 """
 Millisecond elapsed between game loops.
 """
@@ -392,6 +391,7 @@ class Timer:
     """
 
     duration: Millisecond
+    _: KW_ONLY = not_constructor_below()
     elapsed: Millisecond = 0
 
     def tick(self, time_delta: Millisecond) -> Self:
@@ -453,11 +453,8 @@ class Timer:
         return self.elapsed > self.duration
 
 
-type Timepoint = int | float
-
-
 @export
-def get_timepoint() -> Timepoint:
+def get_timepoint() -> Millisecond:
     """
     Get the current time point in milliseconds.
 
@@ -465,7 +462,7 @@ def get_timepoint() -> Timepoint:
     used for calculating time deltas in game loops.
 
     Returns:
-        `Timepoint`: Current time in milliseconds.
+        `Millisecond`: Current time in milliseconds.
 
     Example:
         ```python

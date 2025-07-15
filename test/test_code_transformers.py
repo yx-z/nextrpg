@@ -1,10 +1,11 @@
+from ast import fix_missing_locations, parse
+from inspect import getsource
 from textwrap import dedent
 from typing import Any
-from ast import fix_missing_locations, parse, unparse
-from inspect import getsource
 from unittest.mock import MagicMock
 
 from pytest import raises
+
 from nextrpg import ANNOTATE_SAY
 
 

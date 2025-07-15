@@ -1,5 +1,6 @@
 from asyncio import run
 from dataclasses import dataclass, replace
+from functools import cached_property
 from typing import Any, Self
 from unittest.mock import AsyncMock, MagicMock, Mock
 
@@ -30,6 +31,10 @@ def test_game(mocker: MockerFixture) -> None:
         last_config: Mock = Mock()
         initial_config: Mock = Mock()
         draw: Mock = Mock()
+
+        @cached_property
+        def update(self) -> Self:
+            return self
 
         def event(self, _: Any) -> Self:
             return self

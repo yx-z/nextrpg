@@ -1,4 +1,5 @@
 from dataclasses import replace
+from functools import cached_property
 from types import SimpleNamespace
 from typing import Any
 from unittest.mock import Mock
@@ -53,6 +54,14 @@ def test_npc_on_screen() -> None:
 
 
 def test_npcs(mocker: MockerFixture) -> None:
+    class MockFont:
+        @cached_property
+        def size(self) -> Size:
+            return Size(1, 1)
+
+    assert MockFont().size == Size(1, 1)
+    mocker.patch("nextrpg.core.Font.pygame", MockFont)
+
     def event(p: PlayerOnScreen, *args: Any) -> None:
         res = say(p, "hi")
         assert res
@@ -120,7 +129,6 @@ def test_eventful_scene() -> None:
         yield lambda generator, scene: RpgEventScene(generator, scene)
 
     gen = event()
-    from nextrpg.character_on_screen import CharacterSpec
 
     eventful = EventfulScene(
         player=PlayerOnScreen(

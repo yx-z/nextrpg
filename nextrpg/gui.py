@@ -33,6 +33,7 @@ Example:
 
 from dataclasses import dataclass, field, replace
 from functools import cached_property
+from typing import Self
 
 from pygame import DOUBLEBUF, font
 from pygame.display import flip, init, set_caption, set_mode
@@ -42,7 +43,8 @@ from pygame.transform import smoothscale
 
 from nextrpg.coordinate import Coordinate
 from nextrpg.core import Millisecond, Pixel, Size
-from nextrpg.draw_on_screen import Drawing, DrawOnScreen
+from nextrpg.draw_on_screen import DrawOnScreen
+from nextrpg.draw_on_screen import Drawing
 from nextrpg.global_config import config, set_config
 from nextrpg.gui_config import GuiConfig, GuiMode, ResizeMode
 from nextrpg.logger import ComponentAndMessage, Logger, pop_messages
@@ -108,20 +110,23 @@ class Gui:
     _screen: Surface | None = None
     _title: str | None = None
 
-    def __post_init__(self) -> None:
+    @cached_property
+    def update(self) -> Self:
         """
-        Initialize pygame systems and update window state.
+        Update GUI configuration if needed.
 
-        Called automatically after object initialization to set up
-        pygame display and font systems, and update the window
-        title and screen configuration.
+        Checks if the current GUI configuration matches the global config
+        and updates it if necessary. This ensures GUI settings are
+        synchronized with configuration changes.
+
+        Returns:
+            `Gui`: Updated GUI instance with current configuration.
         """
-        if not self._screen:
-            init()
-            font.init()
-
-        self._update_title()
-        self._update_screen()
+        if config().gui is self.current_config:
+            return self
+        return replace(
+            self, current_config=config().gui, last_config=self.current_config
+        )
 
     def event(self, e: PygameEvent) -> Gui:
         """
@@ -194,6 +199,21 @@ class Gui:
                 self._screen.blits(d.pygame for d in draw_on_screens)
         self._draw_log(time_delta)
         flip()
+
+    def __post_init__(self) -> None:
+        """
+        Initialize pygame systems and update window state.
+
+        Called automatically after object initialization to set up
+        pygame display and font systems, and update the window
+        title and screen configuration.
+        """
+        if not self._screen:
+            init()
+            font.init()
+
+        self._update_title()
+        self._update_screen()
 
     def _draw_log(self, time_delta: Millisecond) -> None:
         """

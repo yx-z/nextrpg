@@ -45,7 +45,7 @@ from typing import Callable, NamedTuple, OrderedDict, override
 from nextrpg.area import gui_size
 from nextrpg.character_on_screen import CharacterSpec
 from nextrpg.coordinate import Coordinate
-from nextrpg.core import Millisecond, Timepoint, get_timepoint
+from nextrpg.core import Millisecond, get_timepoint
 from nextrpg.draw_on_screen import DrawOnScreen
 from nextrpg.global_config import config
 from nextrpg.logger import Logger
@@ -518,5 +518,5 @@ class _TimedScene(NamedTuple):
         `scene`: The cached scene instance.
     """
 
-    time: Timepoint
+    time: Millisecond
     scene: MapScene

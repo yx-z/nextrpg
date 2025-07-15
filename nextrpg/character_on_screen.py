@@ -38,7 +38,7 @@ Example:
     ```
 """
 
-from dataclasses import replace
+from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Self
 
@@ -47,7 +47,12 @@ from nextrpg.coordinate import Coordinate
 from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import DrawOnScreen
 from nextrpg.event_as_attr import EventAsAttr
-from nextrpg.model import dataclass_with_instance_init, export, instance_init
+from nextrpg.model import (
+    dataclass_with_instance_init,
+    export,
+    instance_init,
+    not_constructor_below,
+)
 
 
 @export
@@ -136,11 +141,15 @@ class CharacterOnScreen(EventAsAttr):
 
     spec: CharacterSpec
     coordinate: Coordinate
-    name: str = instance_init(lambda self: self.spec.display_name)
+    _: KW_ONLY = not_constructor_below()
     character: CharacterDrawing = instance_init(
         lambda self: self.spec.character
     )
     _event_triggered: bool = False
+
+    @cached_property
+    def name(self) -> str:
+        return self.spec.display_name
 
     @cached_property
     def character_and_visuals(self) -> tuple[DrawOnScreen, ...]:
@@ -160,6 +169,7 @@ class CharacterOnScreen(EventAsAttr):
                 screen.draw(visual)
             ```
         """
+        # TODO: add visuals.
         return (self.draw_on_screen,)
 
     @cached_property

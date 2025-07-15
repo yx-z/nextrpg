@@ -120,7 +120,7 @@ which applies AST transformers to event functions and compiles them.</p>
 </span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
 </span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="nd">@export</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="k">def</span><span class="w"> </span><span class="nf">transform_and_compile</span><span class="p">[</span><span class="n">R</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">](</span><span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">CodeType</span><span class="p">:</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="k">def</span><span class="w"> </span><span class="nf">transform_and_compile</span><span class="p">(</span><span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CodeType</span><span class="p">:</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">    Transform and compile an event function.</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
@@ -161,14 +161,14 @@ which applies AST transformers to event functions and compiles them.</p>
                     <div class="decorator decorator-export">@export</div>
 
         <span class="def">def</span>
-        <span class="name">transform_and_compile</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">]</span></span><span class="return-annotation">) -> <span class="n">code</span>:</span></span>
+        <span class="name">transform_and_compile</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span></span><span class="return-annotation">) -> <span class="n">code</span>:</span></span>
 
                 <label class="view-source-button" for="transform_and_compile-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#transform_and_compile"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="transform_and_compile-37"><a href="#transform_and_compile-37"><span class="linenos">37</span></a><span class="nd">@export</span>
-</span><span id="transform_and_compile-38"><a href="#transform_and_compile-38"><span class="linenos">38</span></a><span class="k">def</span><span class="w"> </span><span class="nf">transform_and_compile</span><span class="p">[</span><span class="n">R</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">](</span><span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">R</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">CodeType</span><span class="p">:</span>
+</span><span id="transform_and_compile-38"><a href="#transform_and_compile-38"><span class="linenos">38</span></a><span class="k">def</span><span class="w"> </span><span class="nf">transform_and_compile</span><span class="p">(</span><span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CodeType</span><span class="p">:</span>
 </span><span id="transform_and_compile-39"><a href="#transform_and_compile-39"><span class="linenos">39</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="transform_and_compile-40"><a href="#transform_and_compile-40"><span class="linenos">40</span></a><span class="sd">    Transform and compile an event function.</span>
 </span><span id="transform_and_compile-41"><a href="#transform_and_compile-41"><span class="linenos">41</span></a>

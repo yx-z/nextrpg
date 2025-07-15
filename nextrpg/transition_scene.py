@@ -189,4 +189,4 @@ class TransitionScene(Scene):
         Returns:
             `Millisecond`: Half of the total transition duration.
         """
-        return self.duration / 2
+        return self.duration // 2

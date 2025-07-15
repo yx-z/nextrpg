@@ -34,7 +34,7 @@ from nextrpg.model import export
 
 
 @export
-def transform_and_compile[R, **P](fun: Callable[P, R]) -> CodeType:
+def transform_and_compile(fun: Callable) -> CodeType:
     """
     Transform and compile an event function.
 

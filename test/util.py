@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 from dataclasses import dataclass, replace
 from functools import cached_property
+from types import SimpleNamespace
 from typing import Any, Generator, NamedTuple, Self
 
 from pygame import Surface
@@ -34,14 +35,16 @@ class MockSurface(Surface):
     def copy(self) -> Self:
         return self
 
-    def get_width(self) -> int:
+    def get_bounding_rect(self) -> SimpleNamespace:
+        return SimpleNamespace(x=0, y=0, width=self.width, height=self.height)
+
+    @property
+    def width(self) -> int:
         return 2
 
-    def get_height(self) -> int:
+    @property
+    def height(self) -> int:
         return 2
-
-    def get_at(self, _: tuple[int, int]) -> MockColor:
-        return MockColor(0, 0, 0, 1)
 
     def blits(self, iterable: Any) -> None:
         pass

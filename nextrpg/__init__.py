@@ -143,4 +143,4 @@ from nextrpg.tile_map_config import *
 from nextrpg.transition_config import *
 from nextrpg.transition_scene import *
 from nextrpg.walk import *
-from nextrpg.window import *
+from nextrpg.gui import *

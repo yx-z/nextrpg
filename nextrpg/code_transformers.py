@@ -23,6 +23,7 @@ Example:
     ```
 """
 
+from typing import Any
 from ast import (
     AST,
     AnnAssign,
@@ -31,13 +32,14 @@ from ast import (
     Expr,
     Load,
     Name,
+    expr,
     NodeTransformer,
     Subscript,
     Yield,
     iter_child_nodes,
     unparse,
 )
-from typing import NoReturn
+from typing import NamedTuple, NoReturn
 
 from nextrpg.rpg_event import registered_events
 
@@ -112,12 +114,9 @@ class AddYield(NodeTransformer):
                 or the original call node.
         """
         self.generic_visit(node)
-        func_event = (
-            isinstance(node.func, Name) and node.func.id in registered_events
-        )
-        attr_event = (
-            isinstance(node.func, Attribute)
-            and node.func.attr in registered_events
+        func_event = isinstance(node.func, Name) and _is_event(node.func.id)
+        attr_event = isinstance(node.func, Attribute) and _is_event(
+            node.func.attr
         )
         no_outer_yield = not isinstance(
             getattr(node, _NEXTRPG_PARENT, None), Yield
@@ -166,25 +165,41 @@ class AnnotateSay(NodeTransformer):
         """
         if node.value is not None:
             return node
-
-        match target_node := node.target:
-            case Name():
-                target = target_node.id
-                arg = []
-            case Subscript():
-                if isinstance(target_node.value, Name):
-                    target = target_node.value.id
-                    arg = [target_node.slice]
-                else:
-                    _raise_annotate_say(node)
-            case _:
-                _raise_annotate_say(node)
-
+        target, arg = _get_target_and_arg(node.target)
         say = Attribute(Name(target, Load()), "say", Load())
         return Expr(Call(say, [node.annotation] + arg))
 
 
-def _raise_annotate_say(node: AnnAssign) -> NoReturn:
+ANNOTATE_SAY = AnnotateSay()
+"""Global instance of the AnnotateSay transformer."""
+
+
+_NEXTRPG_PARENT = "_nextrpg_parent"
+"""Internal attribute name for parent references."""
+
+
+def _is_event(name: str) -> bool:
+    return name in registered_events
+
+
+class _TargetAndArg(NamedTuple):
+    target: str
+    arg: list[expr]
+
+
+def _get_target_and_arg(node: Name | Attribute | Subscript) -> _TargetAndArg:
+    match node:
+        case Name():
+            return _TargetAndArg(node.id, [])
+        case Subscript():
+            if isinstance(node.value, Name):
+                return _TargetAndArg(node.value.id, [node.slice])
+            _raise_annotate_say(node)
+        case _:
+            _raise_annotate_say(node)
+
+
+def _raise_annotate_say(node: Subscript | Attribute) -> NoReturn:
     """
     Raise an error for invalid say annotation format.
 
@@ -197,11 +212,3 @@ def _raise_annotate_say(node: AnnAssign) -> NoReturn:
     raise ValueError(
         f'Expect var[arg]: "...", where var is player/npc and arg is the ad-hoc config. Got complex expression {unparse(node)}'
     )
-
-
-ANNOTATE_SAY = AnnotateSay()
-"""Global instance of the AnnotateSay transformer."""
-
-
-_NEXTRPG_PARENT = "_nextrpg_parent"
-"""Internal attribute name for parent references."""

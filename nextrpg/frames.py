@@ -30,13 +30,18 @@ Example:
     ```
 """
 
-from dataclasses import replace
+from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Self
 
 from nextrpg.core import Millisecond, Timer
 from nextrpg.draw_on_screen import Drawing
-from nextrpg.model import dataclass_with_instance_init, export, instance_init
+from nextrpg.model import (
+    dataclass_with_instance_init,
+    export,
+    instance_init,
+    not_constructor_below,
+)
 
 
 @export
@@ -77,6 +82,7 @@ class CyclicFrames:
 
     frames: tuple[Drawing, ...]
     duration_per_frame: Millisecond
+    _: KW_ONLY = not_constructor_below()
     _index: int = 0
     _timer: Timer = instance_init(lambda self: Timer(self.duration_per_frame))
 

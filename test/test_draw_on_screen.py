@@ -1,6 +1,7 @@
 from pathlib import Path
 
-from pygame import Color, SRCALPHA, Surface
+from pygame import Color, Surface
+from pygame.locals import SRCALPHA
 from pytest_mock import MockerFixture
 
 from nextrpg import (
@@ -14,7 +15,7 @@ from nextrpg import (
     Rectangle,
     Coordinate,
 )
-from test.util import MockSurface, override_config
+from test.util import override_config, MockSurface
 
 
 def test_drawing(mocker: MockerFixture) -> None:
@@ -31,6 +32,7 @@ def test_drawing(mocker: MockerFixture) -> None:
     assert isinstance(drawing.pygame, Surface)
 
     assert drawing.set_alpha(0) is not drawing
+    assert drawing.visible_rectangle
 
     with override_config(
         Config(debug=DebugConfig(drawing_background_color=Rgba(0, 0, 255, 32)))
@@ -43,9 +45,7 @@ def test_drawing(mocker: MockerFixture) -> None:
 def test_draw_on_screen() -> None:
     draw_on_screen = DrawOnScreen(Coordinate(10, 20), Drawing(Surface((1, 2))))
     assert draw_on_screen.rectangle == Rectangle(Coordinate(10, 20), Size(1, 2))
-    assert draw_on_screen.visible_rectangle == Rectangle(
-        Coordinate(10, 20), Size(0, 1)
-    )
+    assert draw_on_screen.visible_rectangle
     surface, coord = draw_on_screen.pygame
     assert isinstance(surface, Surface)
     assert coord == (10, 20)

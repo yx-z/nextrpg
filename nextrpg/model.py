@@ -156,6 +156,19 @@ def dataclass_with_instance_init[T](cls: type[T]) -> type[T]:
 
 
 @export
+def not_constructor_below() -> Any:
+    """
+    Sentinel value for marking fields below are not constructor arguments.
+
+    However fields below can still be public member if not prefixed with `_`.
+
+    Returns:
+        `Any`: No real return value.
+    """
+    return field()
+
+
+@export
 @dataclass(frozen=True)
 class cached[T, K, **P]:
     """

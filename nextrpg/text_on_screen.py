@@ -35,7 +35,8 @@ from functools import cached_property
 from pygame import Surface
 
 from nextrpg.coordinate import Coordinate
-from nextrpg.draw_on_screen import Drawing, DrawOnScreen
+from nextrpg.draw_on_screen import DrawOnScreen
+from nextrpg.draw_on_screen import Drawing
 from nextrpg.model import export
 from nextrpg.text import Text
 

@@ -22,10 +22,10 @@ from nextrpg.global_config import config
 from nextrpg.core import Pixel, Size
 from nextrpg.draw_on_screen import (
     DrawOnScreen,
-    Drawing,
     Polygon,
     Rectangle,
 )
+from nextrpg.draw_on_screen import Drawing
 from nextrpg.coordinate import Coordinate
 from nextrpg.logger import Logger
 from nextrpg.model import cached, export

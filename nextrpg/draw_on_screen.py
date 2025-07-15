@@ -36,20 +36,20 @@ Example:
 from collections.abc import Callable
 from dataclasses import dataclass
 from functools import cached_property
-from math import ceil
 from os import PathLike
 from typing import Self, override
 
-from pygame import SRCALPHA, Mask, Rect, Surface
+from pygame import Mask, Rect, SRCALPHA, Surface
 from pygame.draw import lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
 
+from nextrpg.model import cached
 from nextrpg.coordinate import Coordinate
-from nextrpg.core import BLACK, Alpha, Pixel, Rgba, Size
+from nextrpg.core import Alpha, BLACK, Pixel, Rgba, Size
 from nextrpg.global_config import config
 from nextrpg.logger import Logger
-from nextrpg.model import cached, export
+from nextrpg.model import export
 
 logger = Logger("Draw")
 
@@ -98,7 +98,7 @@ class Drawing:
         Returns:
             `Pixel`: The width of the surface in pixel measurement.
         """
-        return self._surface.get_width()
+        return self._surface.width
 
     @property
     def height(self) -> Pixel:
@@ -108,7 +108,7 @@ class Drawing:
         Returns:
             `Pixel`: The height of the surface in pixel measurement.
         """
-        return self._surface.get_height()
+        return self._surface.height
 
     @property
     def size(self) -> Size:
@@ -180,38 +180,10 @@ class Drawing:
 
     @cached_property
     def visible_rectangle(self) -> Rectangle:
-        """
-        Get the bounding rectangle of visible (non-transparent) pixels.
-
-        Calculates the smallest rectangle that contains all non-transparent
-        pixels in the drawing. This is useful for collision detection
-        and optimizing drawing operations.
-
-        Returns:
-            `Rectangle`: The bounding rectangle of visible pixels.
-
-        Example:
-            ```python
-            drawing = Drawing("sprite.png")
-            visible_bounds = drawing.visible_rectangle
-            # Use for collision detection
-            ```
-        """
-        visible = [
-            Coordinate(x, y)
-            for x in range(ceil(self.width))
-            for y in range(ceil(self.height))
-            if self._surface.get_at((x, y)).a
-        ]
-        if not visible:
-            return Rectangle(Coordinate(0, 0), Size(0, 0))
-
-        min_x = min(c.left for c in visible)
-        min_y = min(c.top for c in visible)
-        max_x = max(c.left for c in visible)
-        max_y = max(c.top for c in visible)
+        rectangle = self._surface.get_bounding_rect()
         return Rectangle(
-            Coordinate(min_x, min_y), Size(max_x - min_x, max_y - min_y)
+            Coordinate(rectangle.x, rectangle.y),
+            Size(rectangle.width, rectangle.height),
         )
 
     @cached_property
