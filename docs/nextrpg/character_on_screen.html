@@ -400,26 +400,6 @@ management, and event interaction capabilities.</p>
 </span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a><span class="sd">            ```</span>
 </span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>
-</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a><span class="sd">        Get additional visual elements for the character.</span>
-</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>
-</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a><span class="sd">        Processes a list of visual functions and returns their</span>
-</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a><span class="sd">        drawable representations.</span>
-</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>
-</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a><span class="sd">            `visuals`: Tuple of visual functions to process.</span>
-</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>
-</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a><span class="sd">        Returns:</span>
-</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: Additional visual elements.</span>
-</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a>
-</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a><span class="sd">        Example:</span>
-</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a><span class="sd">            ```python</span>
-</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a><span class="sd">            extra_visuals = character._visuals(visual_functions)</span>
-</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a><span class="sd">            ```</span>
-</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">d</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">visuals</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -728,26 +708,6 @@ representation and animation of the character.</li>
 </span><span id="CharacterOnScreen-247"><a href="#CharacterOnScreen-247"><span class="linenos">247</span></a><span class="sd">            ```</span>
 </span><span id="CharacterOnScreen-248"><a href="#CharacterOnScreen-248"><span class="linenos">248</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen-249"><a href="#CharacterOnScreen-249"><span class="linenos">249</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</span><span id="CharacterOnScreen-250"><a href="#CharacterOnScreen-250"><span class="linenos">250</span></a>
-</span><span id="CharacterOnScreen-251"><a href="#CharacterOnScreen-251"><span class="linenos">251</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visuals</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="CharacterOnScreen-252"><a href="#CharacterOnScreen-252"><span class="linenos">252</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-253"><a href="#CharacterOnScreen-253"><span class="linenos">253</span></a><span class="sd">        Get additional visual elements for the character.</span>
-</span><span id="CharacterOnScreen-254"><a href="#CharacterOnScreen-254"><span class="linenos">254</span></a>
-</span><span id="CharacterOnScreen-255"><a href="#CharacterOnScreen-255"><span class="linenos">255</span></a><span class="sd">        Processes a list of visual functions and returns their</span>
-</span><span id="CharacterOnScreen-256"><a href="#CharacterOnScreen-256"><span class="linenos">256</span></a><span class="sd">        drawable representations.</span>
-</span><span id="CharacterOnScreen-257"><a href="#CharacterOnScreen-257"><span class="linenos">257</span></a>
-</span><span id="CharacterOnScreen-258"><a href="#CharacterOnScreen-258"><span class="linenos">258</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterOnScreen-259"><a href="#CharacterOnScreen-259"><span class="linenos">259</span></a><span class="sd">            `visuals`: Tuple of visual functions to process.</span>
-</span><span id="CharacterOnScreen-260"><a href="#CharacterOnScreen-260"><span class="linenos">260</span></a>
-</span><span id="CharacterOnScreen-261"><a href="#CharacterOnScreen-261"><span class="linenos">261</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen-262"><a href="#CharacterOnScreen-262"><span class="linenos">262</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: Additional visual elements.</span>
-</span><span id="CharacterOnScreen-263"><a href="#CharacterOnScreen-263"><span class="linenos">263</span></a>
-</span><span id="CharacterOnScreen-264"><a href="#CharacterOnScreen-264"><span class="linenos">264</span></a><span class="sd">        Example:</span>
-</span><span id="CharacterOnScreen-265"><a href="#CharacterOnScreen-265"><span class="linenos">265</span></a><span class="sd">            ```python</span>
-</span><span id="CharacterOnScreen-266"><a href="#CharacterOnScreen-266"><span class="linenos">266</span></a><span class="sd">            extra_visuals = character._visuals(visual_functions)</span>
-</span><span id="CharacterOnScreen-267"><a href="#CharacterOnScreen-267"><span class="linenos">267</span></a><span class="sd">            ```</span>
-</span><span id="CharacterOnScreen-268"><a href="#CharacterOnScreen-268"><span class="linenos">268</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-269"><a href="#CharacterOnScreen-269"><span class="linenos">269</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">d</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">visuals</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
 </span></pre></div>
 
 

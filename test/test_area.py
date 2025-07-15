@@ -1,5 +1,14 @@
-from nextrpg import bottom_left_screen, bottom_right_screen, bottom_screen, left_screen, right_screen, screen, top_left_screen, \
-    top_right_screen, top_screen
+from nextrpg import (
+    bottom_left_screen,
+    bottom_right_screen,
+    bottom_screen,
+    left_screen,
+    right_screen,
+    screen,
+    top_left_screen,
+    top_right_screen,
+    top_screen,
+)
 
 
 def test_area() -> None:
