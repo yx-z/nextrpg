@@ -17,14 +17,31 @@ concerns into distinct modules:
 - `.config`: Configuration management
 - `.game`: Main game loop and initialization
 
+Key Features:
+    - TMX map loading and rendering
+    - Character movement with collision detection
+    - Event-driven dialogue and interaction systems
+    - Scene transitions and animations
+    - Configurable input mapping
+    - Debug visualization tools
+    - RPG Maker sprite sheet compatibility
+
 Example:
     ```python
-    from .game import Game
-    from .scene import StaticScene
+    from nextrpg.game import Game
+    from nextrpg.scene import StaticScene
+    from nextrpg.character_drawing import CharacterDrawing
+    from nextrpg.coordinate import Coordinate
 
     def create_entry_scene():
+        # Create a simple scene with a character
+        character = CharacterDrawing(
+            drawing=load_sprite("player.png"),
+            direction=Direction.DOWN
+        )
         return StaticScene()
 
+    # Initialize and start the game
     game = Game(entry_scene=create_entry_scene)
     game.start()
     ```
@@ -40,7 +57,6 @@ from nextrpg.character_config import *
 from nextrpg.character_drawing import *
 from nextrpg.character_on_screen import *
 from nextrpg.code_transformers import *
-from nextrpg.global_config import *
 from nextrpg.coordinate import *
 from nextrpg.core import *
 from nextrpg.debug_config import *
@@ -54,6 +70,7 @@ from nextrpg.fade_in import *
 from nextrpg.fade_out import *
 from nextrpg.frames import *
 from nextrpg.game import *
+from nextrpg.global_config import *
 from nextrpg.gui_config import *
 from nextrpg.key_mapping_config import *
 from nextrpg.logger import *
@@ -80,7 +97,6 @@ from nextrpg.text_config import *
 from nextrpg.text_on_screen import *
 from nextrpg.tile_map_config import *
 from nextrpg.transition_config import *
-from nextrpg.transition_scene import *
 from nextrpg.transition_scene import *
 from nextrpg.walk import *
 from nextrpg.window import *

@@ -287,7 +287,7 @@ class DrawOnScreen:
 
         Returns:
             `Rectangle`: A rectangle defining the drawing's position and size
-                on screen.
+            on screen.
         """
         return Rectangle(self.top_left, self.drawing.size)
 

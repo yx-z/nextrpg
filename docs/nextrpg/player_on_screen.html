@@ -67,108 +67,330 @@
                     <h1 class="modulename">
 <a href="./../nextrpg.html">nextrpg</a><wbr>.player_on_screen    </h1>
 
-                        <div class="docstring"><p>Handles character movement and collision detection.</p>
+                        <div class="docstring"><p>Player character implementation for NextRPG.</p>
+
+<p>This module provides the <code><a href="#PlayerOnScreen">PlayerOnScreen</a></code> class that handles player
+character movement, input processing, and interaction with the game
+world. It extends the base moving character functionality with
+keyboard input handling and player-specific behaviors.</p>
+
+<p>The player character responds to keyboard input for movement in all
+eight directions (orthogonal and diagonal), handles key press and
+release events, and manages movement state based on currently
+pressed keys.</p>
+
+<h6 id="key-features">Key Features:</h6>
+
+<blockquote>
+  <ul>
+  <li>Keyboard input processing for movement</li>
+  <li>Eight-directional movement support</li>
+  <li>Key press and release event handling</li>
+  <li>Movement state management</li>
+  <li>Collision detection integration</li>
+  </ul>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.player_on_screen</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerOnScreen</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="character_drawing.html">nextrpg.character_drawing</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="coordinate.html">nextrpg.coordinate</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
+
+<span class="c1"># Create a player character</span>
+<span class="n">player</span> <span class="o">=</span> <span class="n">PlayerOnScreen</span><span class="p">(</span>
+    <span class="n">character</span><span class="o">=</span><span class="n">CharacterDrawing</span><span class="p">(</span><span class="n">drawing</span><span class="o">=</span><span class="n">player_sprite</span><span class="p">),</span>
+    <span class="n">coordinate</span><span class="o">=</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+    <span class="n">collisions</span><span class="o">=</span><span class="n">map_collisions</span>
+<span class="p">)</span>
+
+<span class="c1"># Handle input events</span>
+<span class="n">player</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">key_press_event</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
 </div>
 
                         <input id="mod-player_on_screen-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-player_on_screen-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">Handles character movement and collision detection.</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">override</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterOnScreen</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.moving_character_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">MovingCharacterOnScreen</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">DirectionalOffset</span><span class="p">,</span> <span class="n">Millisecond</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">KeyPressDown</span><span class="p">,</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">KeyPressUp</span><span class="p">,</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">KeyboardKey</span><span class="p">,</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">PygameEvent</span><span class="p">,</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="p">)</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="nd">@export</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PlayerOnScreen</span><span class="p">(</span><span class="n">MovingCharacterOnScreen</span><span class="p">):</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">_movement_keys</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">)</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="nd">@override</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start_event</span><span class="p">(</span><span class="n">character</span><span class="p">),</span> <span class="n">_movement_keys</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">()</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>        <span class="p">)</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>            <span class="n">event</span><span class="p">,</span> <span class="p">(</span><span class="n">KeyPressDown</span><span class="p">,</span> <span class="n">KeyPressUp</span><span class="p">)</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>        <span class="p">):</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>            <span class="k">return</span> <span class="bp">self</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>        <span class="n">updated_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updated_movement_key</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">_key_to_dir</span><span class="p">(</span><span class="n">updated_keys</span><span class="p">)</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>        <span class="n">character</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>            <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">directions</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>        <span class="p">)</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">character</span><span class="p">,</span> <span class="n">_movement_keys</span><span class="o">=</span><span class="n">updated_keys</span><span class="p">)</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_updated_movement_key</span><span class="p">(</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressDown</span> <span class="o">|</span> <span class="n">KeyPressUp</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">]:</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_MOVEMENT_KEYS</span><span class="p">:</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">KeyPressDown</span><span class="p">):</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span> <span class="o">|</span> <span class="p">{</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">}</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span> <span class="o">-</span> <span class="p">{</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">}</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="nd">@override</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span><span class="p">)</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="nd">@override</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>            <span class="n">DirectionalOffset</span><span class="p">(</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span> <span class="o">*</span> <span class="n">time_delta</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>            <span class="p">)</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>        <span class="p">)</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="n">_MOVEMENT_KEYS</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>    <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>    <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>    <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="p">}</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a><span class="n">_KEY_TO_DIR</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">UP</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">DOWN</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">UP</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">DOWN</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">LEFT</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">UP</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">DOWN</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a><span class="p">}</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>
-</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>
-</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_key_to_dir</span><span class="p">(</span><span class="n">current_keys</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Direction</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a>    <span class="k">for</span> <span class="n">keys</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">_KEY_TO_DIR</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a>        <span class="k">if</span> <span class="n">keys</span> <span class="o">&lt;=</span> <span class="n">current_keys</span><span class="p">:</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a>            <span class="k">return</span> <span class="n">d</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos">95</span></a>    <span class="k">return</span> <span class="kc">None</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="sd">Player character implementation for NextRPG.</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="sd">This module provides the `PlayerOnScreen` class that handles player</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="sd">character movement, input processing, and interaction with the game</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="sd">world. It extends the base moving character functionality with</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="sd">keyboard input handling and player-specific behaviors.</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="sd">The player character responds to keyboard input for movement in all</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="sd">eight directions (orthogonal and diagonal), handles key press and</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="sd">release events, and manages movement state based on currently</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="sd">pressed keys.</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="sd">Key Features:</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="sd">    - Keyboard input processing for movement</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="sd">    - Eight-directional movement support</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="sd">    - Key press and release event handling</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="sd">    - Movement state management</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="sd">    - Collision detection integration</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="sd">Example:</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="sd">    ```python</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="sd">    from nextrpg.player_on_screen import PlayerOnScreen</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="sd">    from nextrpg.character_drawing import CharacterDrawing</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="sd">    from nextrpg.coordinate import Coordinate</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="sd">    # Create a player character</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="sd">    player = PlayerOnScreen(</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="sd">        character=CharacterDrawing(drawing=player_sprite),</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="sd">        coordinate=Coordinate(100, 100),</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="sd">        collisions=map_collisions</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="sd">    )</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="sd">    # Handle input events</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">    player = player.event(key_press_event)</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">    ```</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">override</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterOnScreen</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">DirectionalOffset</span><span class="p">,</span> <span class="n">Millisecond</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.moving_character_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">MovingCharacterOnScreen</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>    <span class="n">KeyboardKey</span><span class="p">,</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>    <span class="n">KeyPressDown</span><span class="p">,</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>    <span class="n">KeyPressUp</span><span class="p">,</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>    <span class="n">PygameEvent</span><span class="p">,</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="p">)</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="nd">@export</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PlayerOnScreen</span><span class="p">(</span><span class="n">MovingCharacterOnScreen</span><span class="p">):</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">    Player character that responds to keyboard input for movement.</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">    This class extends `MovingCharacterOnScreen` to provide player-specific</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">    functionality including keyboard input processing, movement state</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">    management, and proper character direction handling based on</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">    currently pressed movement keys.</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">    The player supports movement in all eight directions (orthogonal</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">    and diagonal) with proper key combination handling. Movement</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">    keys are tracked and the character&#39;s direction is updated</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">    accordingly.</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">    Arguments:</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">        `_movement_keys`: Internal set of currently pressed movement keys.</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">            This is managed automatically by the event system.</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">    Example:</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">        ```python</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">        from nextrpg.player_on_screen import PlayerOnScreen</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">        from nextrpg.character_drawing import CharacterDrawing</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">        player = PlayerOnScreen(</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">            character=CharacterDrawing(drawing=player_sprite),</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">            coordinate=Coordinate(100, 100),</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">            collisions=map_collisions</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">        )</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">        # Handle keyboard events</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">        player = player.event(key_press_event)</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">        ```</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>    <span class="n">_movement_keys</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">)</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>    <span class="nd">@override</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">        Start an event interaction with another character.</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">        When starting an event, the player stops all movement and</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">        turns to face the other character. This ensures proper</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">        interaction positioning.</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">            `character`: The character to start an event with.</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="sd">        Returns:</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="sd">            `PlayerOnScreen`: The updated player state with movement stopped.</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">        Example:</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="sd">            ```python</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">            # Start interaction with NPC</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">            player = player.start_event(npc)</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a><span class="sd">            ```</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start_event</span><span class="p">(</span><span class="n">character</span><span class="p">),</span> <span class="n">_movement_keys</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">()</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>        <span class="p">)</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">        Process pygame events for player input.</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">        Handles key press and release events for movement keys,</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">        updates the internal movement key state, and adjusts</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="sd">        the character&#39;s direction based on currently pressed keys.</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="sd">            `event`: The pygame event to process.</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">        Returns:</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">            `PlayerOnScreen`: The updated player state after processing the event.</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">        Example:</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">            ```python</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">            # Handle keyboard input</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">            player = player.event(key_press_event)</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">            ```</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>            <span class="n">event</span><span class="p">,</span> <span class="p">(</span><span class="n">KeyPressDown</span><span class="p">,</span> <span class="n">KeyPressUp</span><span class="p">)</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>        <span class="p">):</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>            <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>        <span class="n">updated_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updated_movement_key</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">_key_to_dir</span><span class="p">(</span><span class="n">updated_keys</span><span class="p">)</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>        <span class="n">character</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>            <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">directions</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>        <span class="p">)</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">character</span><span class="p">,</span> <span class="n">_movement_keys</span><span class="o">=</span><span class="n">updated_keys</span><span class="p">)</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_updated_movement_key</span><span class="p">(</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressDown</span> <span class="o">|</span> <span class="n">KeyPressUp</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">]:</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">        Update the set of currently pressed movement keys.</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">        Adds keys on press events and removes them on release events.</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">        Only processes keys that are defined as movement keys.</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="sd">            `event`: The key press or release event to process.</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a><span class="sd">        Returns:</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">            `frozenset[KeyboardKey]`: The updated set of pressed movement keys.</span>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">        Example:</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">            ```python</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">            keys = player._updated_movement_key(key_event)</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">            ```</span>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_MOVEMENT_KEYS</span><span class="p">:</span>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span>
+</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">KeyPressDown</span><span class="p">):</span>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span> <span class="o">|</span> <span class="p">{</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">}</span>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span> <span class="o">-</span> <span class="p">{</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">}</span>
+</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>
+</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>    <span class="nd">@override</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="sd">        Get whether the player is currently moving.</span>
+</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="sd">        Determines movement state based on whether any movement</span>
+</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="sd">        keys are currently pressed.</span>
+</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>
+</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a><span class="sd">        Returns:</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="sd">            `bool`: Whether the player is currently moving.</span>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>
+</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a><span class="sd">        Example:</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">            ```python</span>
+</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">            if player.moving:</span>
+</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a><span class="sd">                # Handle movement animation</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="sd">                pass</span>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="sd">            ```</span>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span><span class="p">)</span>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>    <span class="nd">@override</span>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="sd">        Calculate the player&#39;s new position based on movement.</span>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">        Uses the character&#39;s current direction and movement speed</span>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">        to calculate the new position after the time delta.</span>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>
+</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">            `time_delta`: The time elapsed since the last update</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a><span class="sd">                in milliseconds.</span>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>
+</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a><span class="sd">        Returns:</span>
+</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a><span class="sd">            `Coordinate | None`: The new position, or None if not moving.</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a><span class="sd">        Example:</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a><span class="sd">            ```python</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a><span class="sd">            new_pos = player.move(time_delta)</span>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a><span class="sd">            if new_pos and player._can_move(new_pos):</span>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a><span class="sd">                player = player.move_to(new_pos)</span>
+</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a><span class="sd">            ```</span>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span>
+</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a>            <span class="n">DirectionalOffset</span><span class="p">(</span>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span> <span class="o">*</span> <span class="n">time_delta</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a>            <span class="p">)</span>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>        <span class="p">)</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a><span class="c1"># Movement key configuration</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a><span class="n">_MOVEMENT_KEYS</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>    <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>    <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>    <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>    <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a><span class="p">}</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a><span class="c1"># Key combination to direction mapping</span>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a><span class="n">_KEY_TO_DIR</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">UP</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">DOWN</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">UP</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">DOWN</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">LEFT</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">UP</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>    <span class="nb">frozenset</span><span class="p">({</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">DOWN</span><span class="p">}):</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a><span class="p">}</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_key_to_dir</span><span class="p">(</span><span class="n">current_keys</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Direction</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a><span class="sd">    Convert a set of pressed keys to a movement direction.</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a><span class="sd">    Maps key combinations to the appropriate movement direction,</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a><span class="sd">    supporting both single key and diagonal movement combinations.</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a><span class="sd">    Arguments:</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="sd">        `current_keys`: The set of currently pressed movement keys.</span>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a><span class="sd">    Returns:</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a><span class="sd">        `Direction | None`: The movement direction, or None if no</span>
+</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a><span class="sd">            valid combination is pressed.</span>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>
+</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a><span class="sd">    Example:</span>
+</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a><span class="sd">        ```python</span>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a><span class="sd">        direction = _key_to_dir({KeyboardKey.UP, KeyboardKey.RIGHT})</span>
+</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a><span class="sd">        # Returns Direction.UP_RIGHT</span>
+</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a><span class="sd">        ```</span>
+</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>    <span class="k">for</span> <span class="n">keys</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">_KEY_TO_DIR</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a>        <span class="k">if</span> <span class="n">keys</span> <span class="o">&lt;=</span> <span class="n">current_keys</span><span class="p">:</span>
+</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a>            <span class="k">return</span> <span class="n">d</span>
+</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>    <span class="k">return</span> <span class="kc">None</span>
 </span></pre></div>
 
 
@@ -186,57 +408,219 @@
 
     </div>
     <a class="headerlink" href="#PlayerOnScreen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen-24"><a href="#PlayerOnScreen-24"><span class="linenos">24</span></a><span class="nd">@export</span>
-</span><span id="PlayerOnScreen-25"><a href="#PlayerOnScreen-25"><span class="linenos">25</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="PlayerOnScreen-26"><a href="#PlayerOnScreen-26"><span class="linenos">26</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PlayerOnScreen</span><span class="p">(</span><span class="n">MovingCharacterOnScreen</span><span class="p">):</span>
-</span><span id="PlayerOnScreen-27"><a href="#PlayerOnScreen-27"><span class="linenos">27</span></a>    <span class="n">_movement_keys</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">)</span>
-</span><span id="PlayerOnScreen-28"><a href="#PlayerOnScreen-28"><span class="linenos">28</span></a>
-</span><span id="PlayerOnScreen-29"><a href="#PlayerOnScreen-29"><span class="linenos">29</span></a>    <span class="nd">@override</span>
-</span><span id="PlayerOnScreen-30"><a href="#PlayerOnScreen-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="PlayerOnScreen-31"><a href="#PlayerOnScreen-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-</span><span id="PlayerOnScreen-32"><a href="#PlayerOnScreen-32"><span class="linenos">32</span></a>            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start_event</span><span class="p">(</span><span class="n">character</span><span class="p">),</span> <span class="n">_movement_keys</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">()</span>
-</span><span id="PlayerOnScreen-33"><a href="#PlayerOnScreen-33"><span class="linenos">33</span></a>        <span class="p">)</span>
-</span><span id="PlayerOnScreen-34"><a href="#PlayerOnScreen-34"><span class="linenos">34</span></a>
-</span><span id="PlayerOnScreen-35"><a href="#PlayerOnScreen-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="PlayerOnScreen-36"><a href="#PlayerOnScreen-36"><span class="linenos">36</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
-</span><span id="PlayerOnScreen-37"><a href="#PlayerOnScreen-37"><span class="linenos">37</span></a>            <span class="n">event</span><span class="p">,</span> <span class="p">(</span><span class="n">KeyPressDown</span><span class="p">,</span> <span class="n">KeyPressUp</span><span class="p">)</span>
-</span><span id="PlayerOnScreen-38"><a href="#PlayerOnScreen-38"><span class="linenos">38</span></a>        <span class="p">):</span>
-</span><span id="PlayerOnScreen-39"><a href="#PlayerOnScreen-39"><span class="linenos">39</span></a>            <span class="k">return</span> <span class="bp">self</span>
-</span><span id="PlayerOnScreen-40"><a href="#PlayerOnScreen-40"><span class="linenos">40</span></a>
-</span><span id="PlayerOnScreen-41"><a href="#PlayerOnScreen-41"><span class="linenos">41</span></a>        <span class="n">updated_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updated_movement_key</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-</span><span id="PlayerOnScreen-42"><a href="#PlayerOnScreen-42"><span class="linenos">42</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">_key_to_dir</span><span class="p">(</span><span class="n">updated_keys</span><span class="p">)</span>
-</span><span id="PlayerOnScreen-43"><a href="#PlayerOnScreen-43"><span class="linenos">43</span></a>        <span class="n">character</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="PlayerOnScreen-44"><a href="#PlayerOnScreen-44"><span class="linenos">44</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
-</span><span id="PlayerOnScreen-45"><a href="#PlayerOnScreen-45"><span class="linenos">45</span></a>            <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">directions</span>
-</span><span id="PlayerOnScreen-46"><a href="#PlayerOnScreen-46"><span class="linenos">46</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span>
-</span><span id="PlayerOnScreen-47"><a href="#PlayerOnScreen-47"><span class="linenos">47</span></a>        <span class="p">)</span>
-</span><span id="PlayerOnScreen-48"><a href="#PlayerOnScreen-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">character</span><span class="p">,</span> <span class="n">_movement_keys</span><span class="o">=</span><span class="n">updated_keys</span><span class="p">)</span>
-</span><span id="PlayerOnScreen-49"><a href="#PlayerOnScreen-49"><span class="linenos">49</span></a>
-</span><span id="PlayerOnScreen-50"><a href="#PlayerOnScreen-50"><span class="linenos">50</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_updated_movement_key</span><span class="p">(</span>
-</span><span id="PlayerOnScreen-51"><a href="#PlayerOnScreen-51"><span class="linenos">51</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressDown</span> <span class="o">|</span> <span class="n">KeyPressUp</span>
-</span><span id="PlayerOnScreen-52"><a href="#PlayerOnScreen-52"><span class="linenos">52</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">]:</span>
-</span><span id="PlayerOnScreen-53"><a href="#PlayerOnScreen-53"><span class="linenos">53</span></a>        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_MOVEMENT_KEYS</span><span class="p">:</span>
-</span><span id="PlayerOnScreen-54"><a href="#PlayerOnScreen-54"><span class="linenos">54</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span>
-</span><span id="PlayerOnScreen-55"><a href="#PlayerOnScreen-55"><span class="linenos">55</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">KeyPressDown</span><span class="p">):</span>
-</span><span id="PlayerOnScreen-56"><a href="#PlayerOnScreen-56"><span class="linenos">56</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span> <span class="o">|</span> <span class="p">{</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">}</span>
-</span><span id="PlayerOnScreen-57"><a href="#PlayerOnScreen-57"><span class="linenos">57</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span> <span class="o">-</span> <span class="p">{</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">}</span>
-</span><span id="PlayerOnScreen-58"><a href="#PlayerOnScreen-58"><span class="linenos">58</span></a>
-</span><span id="PlayerOnScreen-59"><a href="#PlayerOnScreen-59"><span class="linenos">59</span></a>    <span class="nd">@cached_property</span>
-</span><span id="PlayerOnScreen-60"><a href="#PlayerOnScreen-60"><span class="linenos">60</span></a>    <span class="nd">@override</span>
-</span><span id="PlayerOnScreen-61"><a href="#PlayerOnScreen-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="PlayerOnScreen-62"><a href="#PlayerOnScreen-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span><span class="p">)</span>
-</span><span id="PlayerOnScreen-63"><a href="#PlayerOnScreen-63"><span class="linenos">63</span></a>
-</span><span id="PlayerOnScreen-64"><a href="#PlayerOnScreen-64"><span class="linenos">64</span></a>    <span class="nd">@override</span>
-</span><span id="PlayerOnScreen-65"><a href="#PlayerOnScreen-65"><span class="linenos">65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="PlayerOnScreen-66"><a href="#PlayerOnScreen-66"><span class="linenos">66</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span>
-</span><span id="PlayerOnScreen-67"><a href="#PlayerOnScreen-67"><span class="linenos">67</span></a>            <span class="n">DirectionalOffset</span><span class="p">(</span>
-</span><span id="PlayerOnScreen-68"><a href="#PlayerOnScreen-68"><span class="linenos">68</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span> <span class="o">*</span> <span class="n">time_delta</span>
-</span><span id="PlayerOnScreen-69"><a href="#PlayerOnScreen-69"><span class="linenos">69</span></a>            <span class="p">)</span>
-</span><span id="PlayerOnScreen-70"><a href="#PlayerOnScreen-70"><span class="linenos">70</span></a>        <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen-58"><a href="#PlayerOnScreen-58"><span class="linenos"> 58</span></a><span class="nd">@export</span>
+</span><span id="PlayerOnScreen-59"><a href="#PlayerOnScreen-59"><span class="linenos"> 59</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="PlayerOnScreen-60"><a href="#PlayerOnScreen-60"><span class="linenos"> 60</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PlayerOnScreen</span><span class="p">(</span><span class="n">MovingCharacterOnScreen</span><span class="p">):</span>
+</span><span id="PlayerOnScreen-61"><a href="#PlayerOnScreen-61"><span class="linenos"> 61</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen-62"><a href="#PlayerOnScreen-62"><span class="linenos"> 62</span></a><span class="sd">    Player character that responds to keyboard input for movement.</span>
+</span><span id="PlayerOnScreen-63"><a href="#PlayerOnScreen-63"><span class="linenos"> 63</span></a>
+</span><span id="PlayerOnScreen-64"><a href="#PlayerOnScreen-64"><span class="linenos"> 64</span></a><span class="sd">    This class extends `MovingCharacterOnScreen` to provide player-specific</span>
+</span><span id="PlayerOnScreen-65"><a href="#PlayerOnScreen-65"><span class="linenos"> 65</span></a><span class="sd">    functionality including keyboard input processing, movement state</span>
+</span><span id="PlayerOnScreen-66"><a href="#PlayerOnScreen-66"><span class="linenos"> 66</span></a><span class="sd">    management, and proper character direction handling based on</span>
+</span><span id="PlayerOnScreen-67"><a href="#PlayerOnScreen-67"><span class="linenos"> 67</span></a><span class="sd">    currently pressed movement keys.</span>
+</span><span id="PlayerOnScreen-68"><a href="#PlayerOnScreen-68"><span class="linenos"> 68</span></a>
+</span><span id="PlayerOnScreen-69"><a href="#PlayerOnScreen-69"><span class="linenos"> 69</span></a><span class="sd">    The player supports movement in all eight directions (orthogonal</span>
+</span><span id="PlayerOnScreen-70"><a href="#PlayerOnScreen-70"><span class="linenos"> 70</span></a><span class="sd">    and diagonal) with proper key combination handling. Movement</span>
+</span><span id="PlayerOnScreen-71"><a href="#PlayerOnScreen-71"><span class="linenos"> 71</span></a><span class="sd">    keys are tracked and the character&#39;s direction is updated</span>
+</span><span id="PlayerOnScreen-72"><a href="#PlayerOnScreen-72"><span class="linenos"> 72</span></a><span class="sd">    accordingly.</span>
+</span><span id="PlayerOnScreen-73"><a href="#PlayerOnScreen-73"><span class="linenos"> 73</span></a>
+</span><span id="PlayerOnScreen-74"><a href="#PlayerOnScreen-74"><span class="linenos"> 74</span></a><span class="sd">    Arguments:</span>
+</span><span id="PlayerOnScreen-75"><a href="#PlayerOnScreen-75"><span class="linenos"> 75</span></a><span class="sd">        `_movement_keys`: Internal set of currently pressed movement keys.</span>
+</span><span id="PlayerOnScreen-76"><a href="#PlayerOnScreen-76"><span class="linenos"> 76</span></a><span class="sd">            This is managed automatically by the event system.</span>
+</span><span id="PlayerOnScreen-77"><a href="#PlayerOnScreen-77"><span class="linenos"> 77</span></a>
+</span><span id="PlayerOnScreen-78"><a href="#PlayerOnScreen-78"><span class="linenos"> 78</span></a><span class="sd">    Example:</span>
+</span><span id="PlayerOnScreen-79"><a href="#PlayerOnScreen-79"><span class="linenos"> 79</span></a><span class="sd">        ```python</span>
+</span><span id="PlayerOnScreen-80"><a href="#PlayerOnScreen-80"><span class="linenos"> 80</span></a><span class="sd">        from nextrpg.player_on_screen import PlayerOnScreen</span>
+</span><span id="PlayerOnScreen-81"><a href="#PlayerOnScreen-81"><span class="linenos"> 81</span></a><span class="sd">        from nextrpg.character_drawing import CharacterDrawing</span>
+</span><span id="PlayerOnScreen-82"><a href="#PlayerOnScreen-82"><span class="linenos"> 82</span></a>
+</span><span id="PlayerOnScreen-83"><a href="#PlayerOnScreen-83"><span class="linenos"> 83</span></a><span class="sd">        player = PlayerOnScreen(</span>
+</span><span id="PlayerOnScreen-84"><a href="#PlayerOnScreen-84"><span class="linenos"> 84</span></a><span class="sd">            character=CharacterDrawing(drawing=player_sprite),</span>
+</span><span id="PlayerOnScreen-85"><a href="#PlayerOnScreen-85"><span class="linenos"> 85</span></a><span class="sd">            coordinate=Coordinate(100, 100),</span>
+</span><span id="PlayerOnScreen-86"><a href="#PlayerOnScreen-86"><span class="linenos"> 86</span></a><span class="sd">            collisions=map_collisions</span>
+</span><span id="PlayerOnScreen-87"><a href="#PlayerOnScreen-87"><span class="linenos"> 87</span></a><span class="sd">        )</span>
+</span><span id="PlayerOnScreen-88"><a href="#PlayerOnScreen-88"><span class="linenos"> 88</span></a>
+</span><span id="PlayerOnScreen-89"><a href="#PlayerOnScreen-89"><span class="linenos"> 89</span></a><span class="sd">        # Handle keyboard events</span>
+</span><span id="PlayerOnScreen-90"><a href="#PlayerOnScreen-90"><span class="linenos"> 90</span></a><span class="sd">        player = player.event(key_press_event)</span>
+</span><span id="PlayerOnScreen-91"><a href="#PlayerOnScreen-91"><span class="linenos"> 91</span></a><span class="sd">        ```</span>
+</span><span id="PlayerOnScreen-92"><a href="#PlayerOnScreen-92"><span class="linenos"> 92</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen-93"><a href="#PlayerOnScreen-93"><span class="linenos"> 93</span></a>
+</span><span id="PlayerOnScreen-94"><a href="#PlayerOnScreen-94"><span class="linenos"> 94</span></a>    <span class="n">_movement_keys</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">)</span>
+</span><span id="PlayerOnScreen-95"><a href="#PlayerOnScreen-95"><span class="linenos"> 95</span></a>
+</span><span id="PlayerOnScreen-96"><a href="#PlayerOnScreen-96"><span class="linenos"> 96</span></a>    <span class="nd">@override</span>
+</span><span id="PlayerOnScreen-97"><a href="#PlayerOnScreen-97"><span class="linenos"> 97</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="PlayerOnScreen-98"><a href="#PlayerOnScreen-98"><span class="linenos"> 98</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen-99"><a href="#PlayerOnScreen-99"><span class="linenos"> 99</span></a><span class="sd">        Start an event interaction with another character.</span>
+</span><span id="PlayerOnScreen-100"><a href="#PlayerOnScreen-100"><span class="linenos">100</span></a>
+</span><span id="PlayerOnScreen-101"><a href="#PlayerOnScreen-101"><span class="linenos">101</span></a><span class="sd">        When starting an event, the player stops all movement and</span>
+</span><span id="PlayerOnScreen-102"><a href="#PlayerOnScreen-102"><span class="linenos">102</span></a><span class="sd">        turns to face the other character. This ensures proper</span>
+</span><span id="PlayerOnScreen-103"><a href="#PlayerOnScreen-103"><span class="linenos">103</span></a><span class="sd">        interaction positioning.</span>
+</span><span id="PlayerOnScreen-104"><a href="#PlayerOnScreen-104"><span class="linenos">104</span></a>
+</span><span id="PlayerOnScreen-105"><a href="#PlayerOnScreen-105"><span class="linenos">105</span></a><span class="sd">        Arguments:</span>
+</span><span id="PlayerOnScreen-106"><a href="#PlayerOnScreen-106"><span class="linenos">106</span></a><span class="sd">            `character`: The character to start an event with.</span>
+</span><span id="PlayerOnScreen-107"><a href="#PlayerOnScreen-107"><span class="linenos">107</span></a>
+</span><span id="PlayerOnScreen-108"><a href="#PlayerOnScreen-108"><span class="linenos">108</span></a><span class="sd">        Returns:</span>
+</span><span id="PlayerOnScreen-109"><a href="#PlayerOnScreen-109"><span class="linenos">109</span></a><span class="sd">            `PlayerOnScreen`: The updated player state with movement stopped.</span>
+</span><span id="PlayerOnScreen-110"><a href="#PlayerOnScreen-110"><span class="linenos">110</span></a>
+</span><span id="PlayerOnScreen-111"><a href="#PlayerOnScreen-111"><span class="linenos">111</span></a><span class="sd">        Example:</span>
+</span><span id="PlayerOnScreen-112"><a href="#PlayerOnScreen-112"><span class="linenos">112</span></a><span class="sd">            ```python</span>
+</span><span id="PlayerOnScreen-113"><a href="#PlayerOnScreen-113"><span class="linenos">113</span></a><span class="sd">            # Start interaction with NPC</span>
+</span><span id="PlayerOnScreen-114"><a href="#PlayerOnScreen-114"><span class="linenos">114</span></a><span class="sd">            player = player.start_event(npc)</span>
+</span><span id="PlayerOnScreen-115"><a href="#PlayerOnScreen-115"><span class="linenos">115</span></a><span class="sd">            ```</span>
+</span><span id="PlayerOnScreen-116"><a href="#PlayerOnScreen-116"><span class="linenos">116</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen-117"><a href="#PlayerOnScreen-117"><span class="linenos">117</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="PlayerOnScreen-118"><a href="#PlayerOnScreen-118"><span class="linenos">118</span></a>            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start_event</span><span class="p">(</span><span class="n">character</span><span class="p">),</span> <span class="n">_movement_keys</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">()</span>
+</span><span id="PlayerOnScreen-119"><a href="#PlayerOnScreen-119"><span class="linenos">119</span></a>        <span class="p">)</span>
+</span><span id="PlayerOnScreen-120"><a href="#PlayerOnScreen-120"><span class="linenos">120</span></a>
+</span><span id="PlayerOnScreen-121"><a href="#PlayerOnScreen-121"><span class="linenos">121</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="PlayerOnScreen-122"><a href="#PlayerOnScreen-122"><span class="linenos">122</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen-123"><a href="#PlayerOnScreen-123"><span class="linenos">123</span></a><span class="sd">        Process pygame events for player input.</span>
+</span><span id="PlayerOnScreen-124"><a href="#PlayerOnScreen-124"><span class="linenos">124</span></a>
+</span><span id="PlayerOnScreen-125"><a href="#PlayerOnScreen-125"><span class="linenos">125</span></a><span class="sd">        Handles key press and release events for movement keys,</span>
+</span><span id="PlayerOnScreen-126"><a href="#PlayerOnScreen-126"><span class="linenos">126</span></a><span class="sd">        updates the internal movement key state, and adjusts</span>
+</span><span id="PlayerOnScreen-127"><a href="#PlayerOnScreen-127"><span class="linenos">127</span></a><span class="sd">        the character&#39;s direction based on currently pressed keys.</span>
+</span><span id="PlayerOnScreen-128"><a href="#PlayerOnScreen-128"><span class="linenos">128</span></a>
+</span><span id="PlayerOnScreen-129"><a href="#PlayerOnScreen-129"><span class="linenos">129</span></a><span class="sd">        Arguments:</span>
+</span><span id="PlayerOnScreen-130"><a href="#PlayerOnScreen-130"><span class="linenos">130</span></a><span class="sd">            `event`: The pygame event to process.</span>
+</span><span id="PlayerOnScreen-131"><a href="#PlayerOnScreen-131"><span class="linenos">131</span></a>
+</span><span id="PlayerOnScreen-132"><a href="#PlayerOnScreen-132"><span class="linenos">132</span></a><span class="sd">        Returns:</span>
+</span><span id="PlayerOnScreen-133"><a href="#PlayerOnScreen-133"><span class="linenos">133</span></a><span class="sd">            `PlayerOnScreen`: The updated player state after processing the event.</span>
+</span><span id="PlayerOnScreen-134"><a href="#PlayerOnScreen-134"><span class="linenos">134</span></a>
+</span><span id="PlayerOnScreen-135"><a href="#PlayerOnScreen-135"><span class="linenos">135</span></a><span class="sd">        Example:</span>
+</span><span id="PlayerOnScreen-136"><a href="#PlayerOnScreen-136"><span class="linenos">136</span></a><span class="sd">            ```python</span>
+</span><span id="PlayerOnScreen-137"><a href="#PlayerOnScreen-137"><span class="linenos">137</span></a><span class="sd">            # Handle keyboard input</span>
+</span><span id="PlayerOnScreen-138"><a href="#PlayerOnScreen-138"><span class="linenos">138</span></a><span class="sd">            player = player.event(key_press_event)</span>
+</span><span id="PlayerOnScreen-139"><a href="#PlayerOnScreen-139"><span class="linenos">139</span></a><span class="sd">            ```</span>
+</span><span id="PlayerOnScreen-140"><a href="#PlayerOnScreen-140"><span class="linenos">140</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen-141"><a href="#PlayerOnScreen-141"><span class="linenos">141</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+</span><span id="PlayerOnScreen-142"><a href="#PlayerOnScreen-142"><span class="linenos">142</span></a>            <span class="n">event</span><span class="p">,</span> <span class="p">(</span><span class="n">KeyPressDown</span><span class="p">,</span> <span class="n">KeyPressUp</span><span class="p">)</span>
+</span><span id="PlayerOnScreen-143"><a href="#PlayerOnScreen-143"><span class="linenos">143</span></a>        <span class="p">):</span>
+</span><span id="PlayerOnScreen-144"><a href="#PlayerOnScreen-144"><span class="linenos">144</span></a>            <span class="k">return</span> <span class="bp">self</span>
+</span><span id="PlayerOnScreen-145"><a href="#PlayerOnScreen-145"><span class="linenos">145</span></a>
+</span><span id="PlayerOnScreen-146"><a href="#PlayerOnScreen-146"><span class="linenos">146</span></a>        <span class="n">updated_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updated_movement_key</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+</span><span id="PlayerOnScreen-147"><a href="#PlayerOnScreen-147"><span class="linenos">147</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">_key_to_dir</span><span class="p">(</span><span class="n">updated_keys</span><span class="p">)</span>
+</span><span id="PlayerOnScreen-148"><a href="#PlayerOnScreen-148"><span class="linenos">148</span></a>        <span class="n">character</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="PlayerOnScreen-149"><a href="#PlayerOnScreen-149"><span class="linenos">149</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+</span><span id="PlayerOnScreen-150"><a href="#PlayerOnScreen-150"><span class="linenos">150</span></a>            <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">directions</span>
+</span><span id="PlayerOnScreen-151"><a href="#PlayerOnScreen-151"><span class="linenos">151</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span>
+</span><span id="PlayerOnScreen-152"><a href="#PlayerOnScreen-152"><span class="linenos">152</span></a>        <span class="p">)</span>
+</span><span id="PlayerOnScreen-153"><a href="#PlayerOnScreen-153"><span class="linenos">153</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">character</span><span class="p">,</span> <span class="n">_movement_keys</span><span class="o">=</span><span class="n">updated_keys</span><span class="p">)</span>
+</span><span id="PlayerOnScreen-154"><a href="#PlayerOnScreen-154"><span class="linenos">154</span></a>
+</span><span id="PlayerOnScreen-155"><a href="#PlayerOnScreen-155"><span class="linenos">155</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_updated_movement_key</span><span class="p">(</span>
+</span><span id="PlayerOnScreen-156"><a href="#PlayerOnScreen-156"><span class="linenos">156</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">KeyPressDown</span> <span class="o">|</span> <span class="n">KeyPressUp</span>
+</span><span id="PlayerOnScreen-157"><a href="#PlayerOnScreen-157"><span class="linenos">157</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">KeyboardKey</span><span class="p">]:</span>
+</span><span id="PlayerOnScreen-158"><a href="#PlayerOnScreen-158"><span class="linenos">158</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen-159"><a href="#PlayerOnScreen-159"><span class="linenos">159</span></a><span class="sd">        Update the set of currently pressed movement keys.</span>
+</span><span id="PlayerOnScreen-160"><a href="#PlayerOnScreen-160"><span class="linenos">160</span></a>
+</span><span id="PlayerOnScreen-161"><a href="#PlayerOnScreen-161"><span class="linenos">161</span></a><span class="sd">        Adds keys on press events and removes them on release events.</span>
+</span><span id="PlayerOnScreen-162"><a href="#PlayerOnScreen-162"><span class="linenos">162</span></a><span class="sd">        Only processes keys that are defined as movement keys.</span>
+</span><span id="PlayerOnScreen-163"><a href="#PlayerOnScreen-163"><span class="linenos">163</span></a>
+</span><span id="PlayerOnScreen-164"><a href="#PlayerOnScreen-164"><span class="linenos">164</span></a><span class="sd">        Arguments:</span>
+</span><span id="PlayerOnScreen-165"><a href="#PlayerOnScreen-165"><span class="linenos">165</span></a><span class="sd">            `event`: The key press or release event to process.</span>
+</span><span id="PlayerOnScreen-166"><a href="#PlayerOnScreen-166"><span class="linenos">166</span></a>
+</span><span id="PlayerOnScreen-167"><a href="#PlayerOnScreen-167"><span class="linenos">167</span></a><span class="sd">        Returns:</span>
+</span><span id="PlayerOnScreen-168"><a href="#PlayerOnScreen-168"><span class="linenos">168</span></a><span class="sd">            `frozenset[KeyboardKey]`: The updated set of pressed movement keys.</span>
+</span><span id="PlayerOnScreen-169"><a href="#PlayerOnScreen-169"><span class="linenos">169</span></a>
+</span><span id="PlayerOnScreen-170"><a href="#PlayerOnScreen-170"><span class="linenos">170</span></a><span class="sd">        Example:</span>
+</span><span id="PlayerOnScreen-171"><a href="#PlayerOnScreen-171"><span class="linenos">171</span></a><span class="sd">            ```python</span>
+</span><span id="PlayerOnScreen-172"><a href="#PlayerOnScreen-172"><span class="linenos">172</span></a><span class="sd">            keys = player._updated_movement_key(key_event)</span>
+</span><span id="PlayerOnScreen-173"><a href="#PlayerOnScreen-173"><span class="linenos">173</span></a><span class="sd">            ```</span>
+</span><span id="PlayerOnScreen-174"><a href="#PlayerOnScreen-174"><span class="linenos">174</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen-175"><a href="#PlayerOnScreen-175"><span class="linenos">175</span></a>        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_MOVEMENT_KEYS</span><span class="p">:</span>
+</span><span id="PlayerOnScreen-176"><a href="#PlayerOnScreen-176"><span class="linenos">176</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span>
+</span><span id="PlayerOnScreen-177"><a href="#PlayerOnScreen-177"><span class="linenos">177</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">KeyPressDown</span><span class="p">):</span>
+</span><span id="PlayerOnScreen-178"><a href="#PlayerOnScreen-178"><span class="linenos">178</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span> <span class="o">|</span> <span class="p">{</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">}</span>
+</span><span id="PlayerOnScreen-179"><a href="#PlayerOnScreen-179"><span class="linenos">179</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span> <span class="o">-</span> <span class="p">{</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">}</span>
+</span><span id="PlayerOnScreen-180"><a href="#PlayerOnScreen-180"><span class="linenos">180</span></a>
+</span><span id="PlayerOnScreen-181"><a href="#PlayerOnScreen-181"><span class="linenos">181</span></a>    <span class="nd">@cached_property</span>
+</span><span id="PlayerOnScreen-182"><a href="#PlayerOnScreen-182"><span class="linenos">182</span></a>    <span class="nd">@override</span>
+</span><span id="PlayerOnScreen-183"><a href="#PlayerOnScreen-183"><span class="linenos">183</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="PlayerOnScreen-184"><a href="#PlayerOnScreen-184"><span class="linenos">184</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen-185"><a href="#PlayerOnScreen-185"><span class="linenos">185</span></a><span class="sd">        Get whether the player is currently moving.</span>
+</span><span id="PlayerOnScreen-186"><a href="#PlayerOnScreen-186"><span class="linenos">186</span></a>
+</span><span id="PlayerOnScreen-187"><a href="#PlayerOnScreen-187"><span class="linenos">187</span></a><span class="sd">        Determines movement state based on whether any movement</span>
+</span><span id="PlayerOnScreen-188"><a href="#PlayerOnScreen-188"><span class="linenos">188</span></a><span class="sd">        keys are currently pressed.</span>
+</span><span id="PlayerOnScreen-189"><a href="#PlayerOnScreen-189"><span class="linenos">189</span></a>
+</span><span id="PlayerOnScreen-190"><a href="#PlayerOnScreen-190"><span class="linenos">190</span></a><span class="sd">        Returns:</span>
+</span><span id="PlayerOnScreen-191"><a href="#PlayerOnScreen-191"><span class="linenos">191</span></a><span class="sd">            `bool`: Whether the player is currently moving.</span>
+</span><span id="PlayerOnScreen-192"><a href="#PlayerOnScreen-192"><span class="linenos">192</span></a>
+</span><span id="PlayerOnScreen-193"><a href="#PlayerOnScreen-193"><span class="linenos">193</span></a><span class="sd">        Example:</span>
+</span><span id="PlayerOnScreen-194"><a href="#PlayerOnScreen-194"><span class="linenos">194</span></a><span class="sd">            ```python</span>
+</span><span id="PlayerOnScreen-195"><a href="#PlayerOnScreen-195"><span class="linenos">195</span></a><span class="sd">            if player.moving:</span>
+</span><span id="PlayerOnScreen-196"><a href="#PlayerOnScreen-196"><span class="linenos">196</span></a><span class="sd">                # Handle movement animation</span>
+</span><span id="PlayerOnScreen-197"><a href="#PlayerOnScreen-197"><span class="linenos">197</span></a><span class="sd">                pass</span>
+</span><span id="PlayerOnScreen-198"><a href="#PlayerOnScreen-198"><span class="linenos">198</span></a><span class="sd">            ```</span>
+</span><span id="PlayerOnScreen-199"><a href="#PlayerOnScreen-199"><span class="linenos">199</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen-200"><a href="#PlayerOnScreen-200"><span class="linenos">200</span></a>        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span><span class="p">)</span>
+</span><span id="PlayerOnScreen-201"><a href="#PlayerOnScreen-201"><span class="linenos">201</span></a>
+</span><span id="PlayerOnScreen-202"><a href="#PlayerOnScreen-202"><span class="linenos">202</span></a>    <span class="nd">@override</span>
+</span><span id="PlayerOnScreen-203"><a href="#PlayerOnScreen-203"><span class="linenos">203</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="PlayerOnScreen-204"><a href="#PlayerOnScreen-204"><span class="linenos">204</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen-205"><a href="#PlayerOnScreen-205"><span class="linenos">205</span></a><span class="sd">        Calculate the player&#39;s new position based on movement.</span>
+</span><span id="PlayerOnScreen-206"><a href="#PlayerOnScreen-206"><span class="linenos">206</span></a>
+</span><span id="PlayerOnScreen-207"><a href="#PlayerOnScreen-207"><span class="linenos">207</span></a><span class="sd">        Uses the character&#39;s current direction and movement speed</span>
+</span><span id="PlayerOnScreen-208"><a href="#PlayerOnScreen-208"><span class="linenos">208</span></a><span class="sd">        to calculate the new position after the time delta.</span>
+</span><span id="PlayerOnScreen-209"><a href="#PlayerOnScreen-209"><span class="linenos">209</span></a>
+</span><span id="PlayerOnScreen-210"><a href="#PlayerOnScreen-210"><span class="linenos">210</span></a><span class="sd">        Arguments:</span>
+</span><span id="PlayerOnScreen-211"><a href="#PlayerOnScreen-211"><span class="linenos">211</span></a><span class="sd">            `time_delta`: The time elapsed since the last update</span>
+</span><span id="PlayerOnScreen-212"><a href="#PlayerOnScreen-212"><span class="linenos">212</span></a><span class="sd">                in milliseconds.</span>
+</span><span id="PlayerOnScreen-213"><a href="#PlayerOnScreen-213"><span class="linenos">213</span></a>
+</span><span id="PlayerOnScreen-214"><a href="#PlayerOnScreen-214"><span class="linenos">214</span></a><span class="sd">        Returns:</span>
+</span><span id="PlayerOnScreen-215"><a href="#PlayerOnScreen-215"><span class="linenos">215</span></a><span class="sd">            `Coordinate | None`: The new position, or None if not moving.</span>
+</span><span id="PlayerOnScreen-216"><a href="#PlayerOnScreen-216"><span class="linenos">216</span></a>
+</span><span id="PlayerOnScreen-217"><a href="#PlayerOnScreen-217"><span class="linenos">217</span></a><span class="sd">        Example:</span>
+</span><span id="PlayerOnScreen-218"><a href="#PlayerOnScreen-218"><span class="linenos">218</span></a><span class="sd">            ```python</span>
+</span><span id="PlayerOnScreen-219"><a href="#PlayerOnScreen-219"><span class="linenos">219</span></a><span class="sd">            new_pos = player.move(time_delta)</span>
+</span><span id="PlayerOnScreen-220"><a href="#PlayerOnScreen-220"><span class="linenos">220</span></a><span class="sd">            if new_pos and player._can_move(new_pos):</span>
+</span><span id="PlayerOnScreen-221"><a href="#PlayerOnScreen-221"><span class="linenos">221</span></a><span class="sd">                player = player.move_to(new_pos)</span>
+</span><span id="PlayerOnScreen-222"><a href="#PlayerOnScreen-222"><span class="linenos">222</span></a><span class="sd">            ```</span>
+</span><span id="PlayerOnScreen-223"><a href="#PlayerOnScreen-223"><span class="linenos">223</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen-224"><a href="#PlayerOnScreen-224"><span class="linenos">224</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span>
+</span><span id="PlayerOnScreen-225"><a href="#PlayerOnScreen-225"><span class="linenos">225</span></a>            <span class="n">DirectionalOffset</span><span class="p">(</span>
+</span><span id="PlayerOnScreen-226"><a href="#PlayerOnScreen-226"><span class="linenos">226</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span> <span class="o">*</span> <span class="n">time_delta</span>
+</span><span id="PlayerOnScreen-227"><a href="#PlayerOnScreen-227"><span class="linenos">227</span></a>            <span class="p">)</span>
+</span><span id="PlayerOnScreen-228"><a href="#PlayerOnScreen-228"><span class="linenos">228</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
-    
+            <div class="docstring"><p>Player character that responds to keyboard input for movement.</p>
+
+<p>This class extends <code>MovingCharacterOnScreen</code> to provide player-specific
+functionality including keyboard input processing, movement state
+management, and proper character direction handling based on
+currently pressed movement keys.</p>
+
+<p>The player supports movement in all eight directions (orthogonal
+and diagonal) with proper key combination handling. Movement
+keys are tracked and the character's direction is updated
+accordingly.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong><code>_movement_keys</code>:</strong>  Internal set of currently pressed movement keys.
+This is managed automatically by the event system.</li>
+</ul>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.player_on_screen</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerOnScreen</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="character_drawing.html">nextrpg.character_drawing</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
+
+<span class="n">player</span> <span class="o">=</span> <span class="n">PlayerOnScreen</span><span class="p">(</span>
+    <span class="n">character</span><span class="o">=</span><span class="n">CharacterDrawing</span><span class="p">(</span><span class="n">drawing</span><span class="o">=</span><span class="n">player_sprite</span><span class="p">),</span>
+    <span class="n">coordinate</span><span class="o">=</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+    <span class="n">collisions</span><span class="o">=</span><span class="n">map_collisions</span>
+<span class="p">)</span>
+
+<span class="c1"># Handle keyboard events</span>
+<span class="n">player</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">key_press_event</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+</div>
+
 
                             <div id="PlayerOnScreen.__init__" class="classattr">
                                 <div class="attr function">
@@ -262,15 +646,62 @@
 
     </div>
     <a class="headerlink" href="#PlayerOnScreen.start_event"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen.start_event-29"><a href="#PlayerOnScreen.start_event-29"><span class="linenos">29</span></a>    <span class="nd">@override</span>
-</span><span id="PlayerOnScreen.start_event-30"><a href="#PlayerOnScreen.start_event-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="PlayerOnScreen.start_event-31"><a href="#PlayerOnScreen.start_event-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-</span><span id="PlayerOnScreen.start_event-32"><a href="#PlayerOnScreen.start_event-32"><span class="linenos">32</span></a>            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start_event</span><span class="p">(</span><span class="n">character</span><span class="p">),</span> <span class="n">_movement_keys</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">()</span>
-</span><span id="PlayerOnScreen.start_event-33"><a href="#PlayerOnScreen.start_event-33"><span class="linenos">33</span></a>        <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen.start_event-96"><a href="#PlayerOnScreen.start_event-96"><span class="linenos"> 96</span></a>    <span class="nd">@override</span>
+</span><span id="PlayerOnScreen.start_event-97"><a href="#PlayerOnScreen.start_event-97"><span class="linenos"> 97</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="PlayerOnScreen.start_event-98"><a href="#PlayerOnScreen.start_event-98"><span class="linenos"> 98</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen.start_event-99"><a href="#PlayerOnScreen.start_event-99"><span class="linenos"> 99</span></a><span class="sd">        Start an event interaction with another character.</span>
+</span><span id="PlayerOnScreen.start_event-100"><a href="#PlayerOnScreen.start_event-100"><span class="linenos">100</span></a>
+</span><span id="PlayerOnScreen.start_event-101"><a href="#PlayerOnScreen.start_event-101"><span class="linenos">101</span></a><span class="sd">        When starting an event, the player stops all movement and</span>
+</span><span id="PlayerOnScreen.start_event-102"><a href="#PlayerOnScreen.start_event-102"><span class="linenos">102</span></a><span class="sd">        turns to face the other character. This ensures proper</span>
+</span><span id="PlayerOnScreen.start_event-103"><a href="#PlayerOnScreen.start_event-103"><span class="linenos">103</span></a><span class="sd">        interaction positioning.</span>
+</span><span id="PlayerOnScreen.start_event-104"><a href="#PlayerOnScreen.start_event-104"><span class="linenos">104</span></a>
+</span><span id="PlayerOnScreen.start_event-105"><a href="#PlayerOnScreen.start_event-105"><span class="linenos">105</span></a><span class="sd">        Arguments:</span>
+</span><span id="PlayerOnScreen.start_event-106"><a href="#PlayerOnScreen.start_event-106"><span class="linenos">106</span></a><span class="sd">            `character`: The character to start an event with.</span>
+</span><span id="PlayerOnScreen.start_event-107"><a href="#PlayerOnScreen.start_event-107"><span class="linenos">107</span></a>
+</span><span id="PlayerOnScreen.start_event-108"><a href="#PlayerOnScreen.start_event-108"><span class="linenos">108</span></a><span class="sd">        Returns:</span>
+</span><span id="PlayerOnScreen.start_event-109"><a href="#PlayerOnScreen.start_event-109"><span class="linenos">109</span></a><span class="sd">            `PlayerOnScreen`: The updated player state with movement stopped.</span>
+</span><span id="PlayerOnScreen.start_event-110"><a href="#PlayerOnScreen.start_event-110"><span class="linenos">110</span></a>
+</span><span id="PlayerOnScreen.start_event-111"><a href="#PlayerOnScreen.start_event-111"><span class="linenos">111</span></a><span class="sd">        Example:</span>
+</span><span id="PlayerOnScreen.start_event-112"><a href="#PlayerOnScreen.start_event-112"><span class="linenos">112</span></a><span class="sd">            ```python</span>
+</span><span id="PlayerOnScreen.start_event-113"><a href="#PlayerOnScreen.start_event-113"><span class="linenos">113</span></a><span class="sd">            # Start interaction with NPC</span>
+</span><span id="PlayerOnScreen.start_event-114"><a href="#PlayerOnScreen.start_event-114"><span class="linenos">114</span></a><span class="sd">            player = player.start_event(npc)</span>
+</span><span id="PlayerOnScreen.start_event-115"><a href="#PlayerOnScreen.start_event-115"><span class="linenos">115</span></a><span class="sd">            ```</span>
+</span><span id="PlayerOnScreen.start_event-116"><a href="#PlayerOnScreen.start_event-116"><span class="linenos">116</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen.start_event-117"><a href="#PlayerOnScreen.start_event-117"><span class="linenos">117</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="PlayerOnScreen.start_event-118"><a href="#PlayerOnScreen.start_event-118"><span class="linenos">118</span></a>            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start_event</span><span class="p">(</span><span class="n">character</span><span class="p">),</span> <span class="n">_movement_keys</span><span class="o">=</span><span class="nb">frozenset</span><span class="p">()</span>
+</span><span id="PlayerOnScreen.start_event-119"><a href="#PlayerOnScreen.start_event-119"><span class="linenos">119</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
-    
+            <div class="docstring"><p>Start an event interaction with another character.</p>
+
+<p>When starting an event, the player stops all movement and
+turns to face the other character. This ensures proper
+interaction positioning.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong><code><a href="#PlayerOnScreen.character">character</a></code>:</strong>  The character to start an event with.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code><a href="#PlayerOnScreen">PlayerOnScreen</a></code>: The updated player state with movement stopped.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="c1"># Start interaction with NPC</span>
+<span class="n">player</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">start_event</span><span class="p">(</span><span class="n">npc</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+</div>
+
 
                             </div>
                             <div id="PlayerOnScreen.event" class="classattr">
@@ -284,24 +715,71 @@
 
     </div>
     <a class="headerlink" href="#PlayerOnScreen.event"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen.event-35"><a href="#PlayerOnScreen.event-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="PlayerOnScreen.event-36"><a href="#PlayerOnScreen.event-36"><span class="linenos">36</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
-</span><span id="PlayerOnScreen.event-37"><a href="#PlayerOnScreen.event-37"><span class="linenos">37</span></a>            <span class="n">event</span><span class="p">,</span> <span class="p">(</span><span class="n">KeyPressDown</span><span class="p">,</span> <span class="n">KeyPressUp</span><span class="p">)</span>
-</span><span id="PlayerOnScreen.event-38"><a href="#PlayerOnScreen.event-38"><span class="linenos">38</span></a>        <span class="p">):</span>
-</span><span id="PlayerOnScreen.event-39"><a href="#PlayerOnScreen.event-39"><span class="linenos">39</span></a>            <span class="k">return</span> <span class="bp">self</span>
-</span><span id="PlayerOnScreen.event-40"><a href="#PlayerOnScreen.event-40"><span class="linenos">40</span></a>
-</span><span id="PlayerOnScreen.event-41"><a href="#PlayerOnScreen.event-41"><span class="linenos">41</span></a>        <span class="n">updated_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updated_movement_key</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-</span><span id="PlayerOnScreen.event-42"><a href="#PlayerOnScreen.event-42"><span class="linenos">42</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">_key_to_dir</span><span class="p">(</span><span class="n">updated_keys</span><span class="p">)</span>
-</span><span id="PlayerOnScreen.event-43"><a href="#PlayerOnScreen.event-43"><span class="linenos">43</span></a>        <span class="n">character</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="PlayerOnScreen.event-44"><a href="#PlayerOnScreen.event-44"><span class="linenos">44</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
-</span><span id="PlayerOnScreen.event-45"><a href="#PlayerOnScreen.event-45"><span class="linenos">45</span></a>            <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">directions</span>
-</span><span id="PlayerOnScreen.event-46"><a href="#PlayerOnScreen.event-46"><span class="linenos">46</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span>
-</span><span id="PlayerOnScreen.event-47"><a href="#PlayerOnScreen.event-47"><span class="linenos">47</span></a>        <span class="p">)</span>
-</span><span id="PlayerOnScreen.event-48"><a href="#PlayerOnScreen.event-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">character</span><span class="p">,</span> <span class="n">_movement_keys</span><span class="o">=</span><span class="n">updated_keys</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen.event-121"><a href="#PlayerOnScreen.event-121"><span class="linenos">121</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="PlayerOnScreen.event-122"><a href="#PlayerOnScreen.event-122"><span class="linenos">122</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen.event-123"><a href="#PlayerOnScreen.event-123"><span class="linenos">123</span></a><span class="sd">        Process pygame events for player input.</span>
+</span><span id="PlayerOnScreen.event-124"><a href="#PlayerOnScreen.event-124"><span class="linenos">124</span></a>
+</span><span id="PlayerOnScreen.event-125"><a href="#PlayerOnScreen.event-125"><span class="linenos">125</span></a><span class="sd">        Handles key press and release events for movement keys,</span>
+</span><span id="PlayerOnScreen.event-126"><a href="#PlayerOnScreen.event-126"><span class="linenos">126</span></a><span class="sd">        updates the internal movement key state, and adjusts</span>
+</span><span id="PlayerOnScreen.event-127"><a href="#PlayerOnScreen.event-127"><span class="linenos">127</span></a><span class="sd">        the character&#39;s direction based on currently pressed keys.</span>
+</span><span id="PlayerOnScreen.event-128"><a href="#PlayerOnScreen.event-128"><span class="linenos">128</span></a>
+</span><span id="PlayerOnScreen.event-129"><a href="#PlayerOnScreen.event-129"><span class="linenos">129</span></a><span class="sd">        Arguments:</span>
+</span><span id="PlayerOnScreen.event-130"><a href="#PlayerOnScreen.event-130"><span class="linenos">130</span></a><span class="sd">            `event`: The pygame event to process.</span>
+</span><span id="PlayerOnScreen.event-131"><a href="#PlayerOnScreen.event-131"><span class="linenos">131</span></a>
+</span><span id="PlayerOnScreen.event-132"><a href="#PlayerOnScreen.event-132"><span class="linenos">132</span></a><span class="sd">        Returns:</span>
+</span><span id="PlayerOnScreen.event-133"><a href="#PlayerOnScreen.event-133"><span class="linenos">133</span></a><span class="sd">            `PlayerOnScreen`: The updated player state after processing the event.</span>
+</span><span id="PlayerOnScreen.event-134"><a href="#PlayerOnScreen.event-134"><span class="linenos">134</span></a>
+</span><span id="PlayerOnScreen.event-135"><a href="#PlayerOnScreen.event-135"><span class="linenos">135</span></a><span class="sd">        Example:</span>
+</span><span id="PlayerOnScreen.event-136"><a href="#PlayerOnScreen.event-136"><span class="linenos">136</span></a><span class="sd">            ```python</span>
+</span><span id="PlayerOnScreen.event-137"><a href="#PlayerOnScreen.event-137"><span class="linenos">137</span></a><span class="sd">            # Handle keyboard input</span>
+</span><span id="PlayerOnScreen.event-138"><a href="#PlayerOnScreen.event-138"><span class="linenos">138</span></a><span class="sd">            player = player.event(key_press_event)</span>
+</span><span id="PlayerOnScreen.event-139"><a href="#PlayerOnScreen.event-139"><span class="linenos">139</span></a><span class="sd">            ```</span>
+</span><span id="PlayerOnScreen.event-140"><a href="#PlayerOnScreen.event-140"><span class="linenos">140</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen.event-141"><a href="#PlayerOnScreen.event-141"><span class="linenos">141</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+</span><span id="PlayerOnScreen.event-142"><a href="#PlayerOnScreen.event-142"><span class="linenos">142</span></a>            <span class="n">event</span><span class="p">,</span> <span class="p">(</span><span class="n">KeyPressDown</span><span class="p">,</span> <span class="n">KeyPressUp</span><span class="p">)</span>
+</span><span id="PlayerOnScreen.event-143"><a href="#PlayerOnScreen.event-143"><span class="linenos">143</span></a>        <span class="p">):</span>
+</span><span id="PlayerOnScreen.event-144"><a href="#PlayerOnScreen.event-144"><span class="linenos">144</span></a>            <span class="k">return</span> <span class="bp">self</span>
+</span><span id="PlayerOnScreen.event-145"><a href="#PlayerOnScreen.event-145"><span class="linenos">145</span></a>
+</span><span id="PlayerOnScreen.event-146"><a href="#PlayerOnScreen.event-146"><span class="linenos">146</span></a>        <span class="n">updated_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updated_movement_key</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+</span><span id="PlayerOnScreen.event-147"><a href="#PlayerOnScreen.event-147"><span class="linenos">147</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">_key_to_dir</span><span class="p">(</span><span class="n">updated_keys</span><span class="p">)</span>
+</span><span id="PlayerOnScreen.event-148"><a href="#PlayerOnScreen.event-148"><span class="linenos">148</span></a>        <span class="n">character</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="PlayerOnScreen.event-149"><a href="#PlayerOnScreen.event-149"><span class="linenos">149</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+</span><span id="PlayerOnScreen.event-150"><a href="#PlayerOnScreen.event-150"><span class="linenos">150</span></a>            <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">directions</span>
+</span><span id="PlayerOnScreen.event-151"><a href="#PlayerOnScreen.event-151"><span class="linenos">151</span></a>            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span>
+</span><span id="PlayerOnScreen.event-152"><a href="#PlayerOnScreen.event-152"><span class="linenos">152</span></a>        <span class="p">)</span>
+</span><span id="PlayerOnScreen.event-153"><a href="#PlayerOnScreen.event-153"><span class="linenos">153</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">character</span><span class="p">,</span> <span class="n">_movement_keys</span><span class="o">=</span><span class="n">updated_keys</span><span class="p">)</span>
 </span></pre></div>
 
 
-    
+            <div class="docstring"><p>Process pygame events for player input.</p>
+
+<p>Handles key press and release events for movement keys,
+updates the internal movement key state, and adjusts
+the character's direction based on currently pressed keys.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong><code><a href="#PlayerOnScreen.event">event</a></code>:</strong>  The pygame event to process.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code><a href="#PlayerOnScreen">PlayerOnScreen</a></code>: The updated player state after processing the event.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="c1"># Handle keyboard input</span>
+<span class="n">player</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">key_press_event</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+</div>
+
 
                             </div>
                             <div id="PlayerOnScreen.moving" class="classattr">
@@ -313,19 +791,49 @@
 
     </div>
     <a class="headerlink" href="#PlayerOnScreen.moving"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen.moving-59"><a href="#PlayerOnScreen.moving-59"><span class="linenos">59</span></a>    <span class="nd">@cached_property</span>
-</span><span id="PlayerOnScreen.moving-60"><a href="#PlayerOnScreen.moving-60"><span class="linenos">60</span></a>    <span class="nd">@override</span>
-</span><span id="PlayerOnScreen.moving-61"><a href="#PlayerOnScreen.moving-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="PlayerOnScreen.moving-62"><a href="#PlayerOnScreen.moving-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen.moving-181"><a href="#PlayerOnScreen.moving-181"><span class="linenos">181</span></a>    <span class="nd">@cached_property</span>
+</span><span id="PlayerOnScreen.moving-182"><a href="#PlayerOnScreen.moving-182"><span class="linenos">182</span></a>    <span class="nd">@override</span>
+</span><span id="PlayerOnScreen.moving-183"><a href="#PlayerOnScreen.moving-183"><span class="linenos">183</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="PlayerOnScreen.moving-184"><a href="#PlayerOnScreen.moving-184"><span class="linenos">184</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen.moving-185"><a href="#PlayerOnScreen.moving-185"><span class="linenos">185</span></a><span class="sd">        Get whether the player is currently moving.</span>
+</span><span id="PlayerOnScreen.moving-186"><a href="#PlayerOnScreen.moving-186"><span class="linenos">186</span></a>
+</span><span id="PlayerOnScreen.moving-187"><a href="#PlayerOnScreen.moving-187"><span class="linenos">187</span></a><span class="sd">        Determines movement state based on whether any movement</span>
+</span><span id="PlayerOnScreen.moving-188"><a href="#PlayerOnScreen.moving-188"><span class="linenos">188</span></a><span class="sd">        keys are currently pressed.</span>
+</span><span id="PlayerOnScreen.moving-189"><a href="#PlayerOnScreen.moving-189"><span class="linenos">189</span></a>
+</span><span id="PlayerOnScreen.moving-190"><a href="#PlayerOnScreen.moving-190"><span class="linenos">190</span></a><span class="sd">        Returns:</span>
+</span><span id="PlayerOnScreen.moving-191"><a href="#PlayerOnScreen.moving-191"><span class="linenos">191</span></a><span class="sd">            `bool`: Whether the player is currently moving.</span>
+</span><span id="PlayerOnScreen.moving-192"><a href="#PlayerOnScreen.moving-192"><span class="linenos">192</span></a>
+</span><span id="PlayerOnScreen.moving-193"><a href="#PlayerOnScreen.moving-193"><span class="linenos">193</span></a><span class="sd">        Example:</span>
+</span><span id="PlayerOnScreen.moving-194"><a href="#PlayerOnScreen.moving-194"><span class="linenos">194</span></a><span class="sd">            ```python</span>
+</span><span id="PlayerOnScreen.moving-195"><a href="#PlayerOnScreen.moving-195"><span class="linenos">195</span></a><span class="sd">            if player.moving:</span>
+</span><span id="PlayerOnScreen.moving-196"><a href="#PlayerOnScreen.moving-196"><span class="linenos">196</span></a><span class="sd">                # Handle movement animation</span>
+</span><span id="PlayerOnScreen.moving-197"><a href="#PlayerOnScreen.moving-197"><span class="linenos">197</span></a><span class="sd">                pass</span>
+</span><span id="PlayerOnScreen.moving-198"><a href="#PlayerOnScreen.moving-198"><span class="linenos">198</span></a><span class="sd">            ```</span>
+</span><span id="PlayerOnScreen.moving-199"><a href="#PlayerOnScreen.moving-199"><span class="linenos">199</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen.moving-200"><a href="#PlayerOnScreen.moving-200"><span class="linenos">200</span></a>        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Get whether the character is currently moving.</p>
+            <div class="docstring"><p>Get whether the player is currently moving.</p>
+
+<p>Determines movement state based on whether any movement
+keys are currently pressed.</p>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>bool</code>: Whether the character is currently moving.</p>
+  <p><code>bool</code>: Whether the player is currently moving.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="k">if</span> <span class="n">player</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
+    <span class="c1"># Handle movement animation</span>
+    <span class="k">pass</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -343,28 +851,63 @@
 
     </div>
     <a class="headerlink" href="#PlayerOnScreen.move"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen.move-64"><a href="#PlayerOnScreen.move-64"><span class="linenos">64</span></a>    <span class="nd">@override</span>
-</span><span id="PlayerOnScreen.move-65"><a href="#PlayerOnScreen.move-65"><span class="linenos">65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="PlayerOnScreen.move-66"><a href="#PlayerOnScreen.move-66"><span class="linenos">66</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span>
-</span><span id="PlayerOnScreen.move-67"><a href="#PlayerOnScreen.move-67"><span class="linenos">67</span></a>            <span class="n">DirectionalOffset</span><span class="p">(</span>
-</span><span id="PlayerOnScreen.move-68"><a href="#PlayerOnScreen.move-68"><span class="linenos">68</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span> <span class="o">*</span> <span class="n">time_delta</span>
-</span><span id="PlayerOnScreen.move-69"><a href="#PlayerOnScreen.move-69"><span class="linenos">69</span></a>            <span class="p">)</span>
-</span><span id="PlayerOnScreen.move-70"><a href="#PlayerOnScreen.move-70"><span class="linenos">70</span></a>        <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen.move-202"><a href="#PlayerOnScreen.move-202"><span class="linenos">202</span></a>    <span class="nd">@override</span>
+</span><span id="PlayerOnScreen.move-203"><a href="#PlayerOnScreen.move-203"><span class="linenos">203</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="PlayerOnScreen.move-204"><a href="#PlayerOnScreen.move-204"><span class="linenos">204</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen.move-205"><a href="#PlayerOnScreen.move-205"><span class="linenos">205</span></a><span class="sd">        Calculate the player&#39;s new position based on movement.</span>
+</span><span id="PlayerOnScreen.move-206"><a href="#PlayerOnScreen.move-206"><span class="linenos">206</span></a>
+</span><span id="PlayerOnScreen.move-207"><a href="#PlayerOnScreen.move-207"><span class="linenos">207</span></a><span class="sd">        Uses the character&#39;s current direction and movement speed</span>
+</span><span id="PlayerOnScreen.move-208"><a href="#PlayerOnScreen.move-208"><span class="linenos">208</span></a><span class="sd">        to calculate the new position after the time delta.</span>
+</span><span id="PlayerOnScreen.move-209"><a href="#PlayerOnScreen.move-209"><span class="linenos">209</span></a>
+</span><span id="PlayerOnScreen.move-210"><a href="#PlayerOnScreen.move-210"><span class="linenos">210</span></a><span class="sd">        Arguments:</span>
+</span><span id="PlayerOnScreen.move-211"><a href="#PlayerOnScreen.move-211"><span class="linenos">211</span></a><span class="sd">            `time_delta`: The time elapsed since the last update</span>
+</span><span id="PlayerOnScreen.move-212"><a href="#PlayerOnScreen.move-212"><span class="linenos">212</span></a><span class="sd">                in milliseconds.</span>
+</span><span id="PlayerOnScreen.move-213"><a href="#PlayerOnScreen.move-213"><span class="linenos">213</span></a>
+</span><span id="PlayerOnScreen.move-214"><a href="#PlayerOnScreen.move-214"><span class="linenos">214</span></a><span class="sd">        Returns:</span>
+</span><span id="PlayerOnScreen.move-215"><a href="#PlayerOnScreen.move-215"><span class="linenos">215</span></a><span class="sd">            `Coordinate | None`: The new position, or None if not moving.</span>
+</span><span id="PlayerOnScreen.move-216"><a href="#PlayerOnScreen.move-216"><span class="linenos">216</span></a>
+</span><span id="PlayerOnScreen.move-217"><a href="#PlayerOnScreen.move-217"><span class="linenos">217</span></a><span class="sd">        Example:</span>
+</span><span id="PlayerOnScreen.move-218"><a href="#PlayerOnScreen.move-218"><span class="linenos">218</span></a><span class="sd">            ```python</span>
+</span><span id="PlayerOnScreen.move-219"><a href="#PlayerOnScreen.move-219"><span class="linenos">219</span></a><span class="sd">            new_pos = player.move(time_delta)</span>
+</span><span id="PlayerOnScreen.move-220"><a href="#PlayerOnScreen.move-220"><span class="linenos">220</span></a><span class="sd">            if new_pos and player._can_move(new_pos):</span>
+</span><span id="PlayerOnScreen.move-221"><a href="#PlayerOnScreen.move-221"><span class="linenos">221</span></a><span class="sd">                player = player.move_to(new_pos)</span>
+</span><span id="PlayerOnScreen.move-222"><a href="#PlayerOnScreen.move-222"><span class="linenos">222</span></a><span class="sd">            ```</span>
+</span><span id="PlayerOnScreen.move-223"><a href="#PlayerOnScreen.move-223"><span class="linenos">223</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PlayerOnScreen.move-224"><a href="#PlayerOnScreen.move-224"><span class="linenos">224</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span>
+</span><span id="PlayerOnScreen.move-225"><a href="#PlayerOnScreen.move-225"><span class="linenos">225</span></a>            <span class="n">DirectionalOffset</span><span class="p">(</span>
+</span><span id="PlayerOnScreen.move-226"><a href="#PlayerOnScreen.move-226"><span class="linenos">226</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span> <span class="o">*</span> <span class="n">time_delta</span>
+</span><span id="PlayerOnScreen.move-227"><a href="#PlayerOnScreen.move-227"><span class="linenos">227</span></a>            <span class="p">)</span>
+</span><span id="PlayerOnScreen.move-228"><a href="#PlayerOnScreen.move-228"><span class="linenos">228</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Move the character based on the current speed and time delta.</p>
+            <div class="docstring"><p>Calculate the player's new position based on movement.</p>
+
+<p>Uses the character's current direction and movement speed
+to calculate the new position after the time delta.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code>time_delta</code>:</strong>  The time that has passed since the last update.</li>
+<li><strong><code>time_delta</code>:</strong>  The time elapsed since the last update
+in milliseconds.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>Coordinate</code>: The updated character position after the move step.</p>
+  <p><code>Coordinate | None</code>: The new position, or None if not moving.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="n">new_pos</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">new_pos</span> <span class="ow">and</span> <span class="n">player</span><span class="o">.</span><span class="n">_can_move</span><span class="p">(</span><span class="n">new_pos</span><span class="p">):</span>
+    <span class="n">player</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">move_to</span><span class="p">(</span><span class="n">new_pos</span><span class="p">)</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 

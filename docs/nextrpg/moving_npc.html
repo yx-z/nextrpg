@@ -406,18 +406,33 @@
 </span></pre></div>
 
 
-            <div class="docstring"><p>Update the character's state for a single game loop.</p>
+            <div class="docstring"><p>Update the character's state for a single game loop iteration.</p>
+
+<p>Updates the character's animation and internal state based
+on the elapsed time. This is called each frame to keep
+the character's visual state current.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code>time_delta</code>:</strong>  The elapsed time since the last update.</li>
+<li><strong><code>time_delta</code>:</strong>  The elapsed time since the last update
+in milliseconds.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>CharacterOnScreen</code>: The updated character state after the step.</p>
+  <p><code>CharacterOnScreen</code>: The updated character state after the tick.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="c1"># Update character in game loop</span>
+<span class="n">character</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -445,10 +460,25 @@
 
             <div class="docstring"><p>Get whether the character is currently moving.</p>
 
+<p>This property should be implemented by subclasses to determine
+if the character should be in a moving state. This affects
+both animation and movement calculations.</p>
+
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p><code>bool</code>: Whether the character is currently moving.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="nd">@cached_property</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pressed_movement_keys</span><span class="p">)</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -472,18 +502,37 @@
 </span></pre></div>
 
 
-            <div class="docstring"><p>Move the character based on the current speed and time delta.</p>
+            <div class="docstring"><p>Calculate the new position after movement.</p>
+
+<p>This method should be implemented by subclasses to calculate
+the character's new position based on current movement state,
+speed, and time delta. The returned coordinate will be used
+if no collision is detected.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code>time_delta</code>:</strong>  The time that has passed since the last update.</li>
+<li><strong><code>time_delta</code>:</strong>  The time that has passed since the last update
+in milliseconds.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
   <p><code>Coordinate</code>: The updated character position after the move step.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+    <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span> <span class="o">*</span> <span class="n">time_delta</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span>
+        <span class="n">DirectionalOffset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="n">distance</span><span class="p">)</span>
+    <span class="p">)</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 

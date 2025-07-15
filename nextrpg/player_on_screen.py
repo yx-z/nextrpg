@@ -1,5 +1,39 @@
 """
-Handles character movement and collision detection.
+Player character implementation for NextRPG.
+
+This module provides the `PlayerOnScreen` class that handles player
+character movement, input processing, and interaction with the game
+world. It extends the base moving character functionality with
+keyboard input handling and player-specific behaviors.
+
+The player character responds to keyboard input for movement in all
+eight directions (orthogonal and diagonal), handles key press and
+release events, and manages movement state based on currently
+pressed keys.
+
+Key Features:
+    - Keyboard input processing for movement
+    - Eight-directional movement support
+    - Key press and release event handling
+    - Movement state management
+    - Collision detection integration
+
+Example:
+    ```python
+    from nextrpg.player_on_screen import PlayerOnScreen
+    from nextrpg.character_drawing import CharacterDrawing
+    from nextrpg.coordinate import Coordinate
+
+    # Create a player character
+    player = PlayerOnScreen(
+        character=CharacterDrawing(drawing=player_sprite),
+        coordinate=Coordinate(100, 100),
+        collisions=map_collisions
+    )
+
+    # Handle input events
+    player = player.event(key_press_event)
+    ```
 """
 
 from dataclasses import dataclass, field, replace
@@ -7,31 +41,102 @@ from functools import cached_property
 from typing import Self, override
 
 from nextrpg.character_on_screen import CharacterOnScreen
-from nextrpg.moving_character_on_screen import MovingCharacterOnScreen
-from nextrpg.global_config import config
 from nextrpg.coordinate import Coordinate
 from nextrpg.core import Direction, DirectionalOffset, Millisecond
+from nextrpg.global_config import config
+from nextrpg.model import export
+from nextrpg.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.pygame_event import (
+    KeyboardKey,
     KeyPressDown,
     KeyPressUp,
-    KeyboardKey,
     PygameEvent,
 )
-from nextrpg.model import export
 
 
 @export
 @dataclass(kw_only=True, frozen=True)
 class PlayerOnScreen(MovingCharacterOnScreen):
+    """
+    Player character that responds to keyboard input for movement.
+
+    This class extends `MovingCharacterOnScreen` to provide player-specific
+    functionality including keyboard input processing, movement state
+    management, and proper character direction handling based on
+    currently pressed movement keys.
+
+    The player supports movement in all eight directions (orthogonal
+    and diagonal) with proper key combination handling. Movement
+    keys are tracked and the character's direction is updated
+    accordingly.
+
+    Arguments:
+        `_movement_keys`: Internal set of currently pressed movement keys.
+            This is managed automatically by the event system.
+
+    Example:
+        ```python
+        from nextrpg.player_on_screen import PlayerOnScreen
+        from nextrpg.character_drawing import CharacterDrawing
+
+        player = PlayerOnScreen(
+            character=CharacterDrawing(drawing=player_sprite),
+            coordinate=Coordinate(100, 100),
+            collisions=map_collisions
+        )
+
+        # Handle keyboard events
+        player = player.event(key_press_event)
+        ```
+    """
+
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
     @override
     def start_event(self, character: CharacterOnScreen) -> Self:
+        """
+        Start an event interaction with another character.
+
+        When starting an event, the player stops all movement and
+        turns to face the other character. This ensures proper
+        interaction positioning.
+
+        Arguments:
+            `character`: The character to start an event with.
+
+        Returns:
+            `PlayerOnScreen`: The updated player state with movement stopped.
+
+        Example:
+            ```python
+            # Start interaction with NPC
+            player = player.start_event(npc)
+            ```
+        """
         return replace(
             super().start_event(character), _movement_keys=frozenset()
         )
 
     def event(self, event: PygameEvent) -> Self:
+        """
+        Process pygame events for player input.
+
+        Handles key press and release events for movement keys,
+        updates the internal movement key state, and adjusts
+        the character's direction based on currently pressed keys.
+
+        Arguments:
+            `event`: The pygame event to process.
+
+        Returns:
+            `PlayerOnScreen`: The updated player state after processing the event.
+
+        Example:
+            ```python
+            # Handle keyboard input
+            player = player.event(key_press_event)
+            ```
+        """
         if self._event_triggered or not isinstance(
             event, (KeyPressDown, KeyPressUp)
         ):
@@ -49,6 +154,23 @@ class PlayerOnScreen(MovingCharacterOnScreen):
     def _updated_movement_key(
         self, event: KeyPressDown | KeyPressUp
     ) -> frozenset[KeyboardKey]:
+        """
+        Update the set of currently pressed movement keys.
+
+        Adds keys on press events and removes them on release events.
+        Only processes keys that are defined as movement keys.
+
+        Arguments:
+            `event`: The key press or release event to process.
+
+        Returns:
+            `frozenset[KeyboardKey]`: The updated set of pressed movement keys.
+
+        Example:
+            ```python
+            keys = player._updated_movement_key(key_event)
+            ```
+        """
         if event.key not in _MOVEMENT_KEYS:
             return self._movement_keys
         if isinstance(event, KeyPressDown):
@@ -58,10 +180,46 @@ class PlayerOnScreen(MovingCharacterOnScreen):
     @cached_property
     @override
     def moving(self) -> bool:
+        """
+        Get whether the player is currently moving.
+
+        Determines movement state based on whether any movement
+        keys are currently pressed.
+
+        Returns:
+            `bool`: Whether the player is currently moving.
+
+        Example:
+            ```python
+            if player.moving:
+                # Handle movement animation
+                pass
+            ```
+        """
         return bool(self._movement_keys)
 
     @override
     def move(self, time_delta: Millisecond) -> Coordinate | None:
+        """
+        Calculate the player's new position based on movement.
+
+        Uses the character's current direction and movement speed
+        to calculate the new position after the time delta.
+
+        Arguments:
+            `time_delta`: The time elapsed since the last update
+                in milliseconds.
+
+        Returns:
+            `Coordinate | None`: The new position, or None if not moving.
+
+        Example:
+            ```python
+            new_pos = player.move(time_delta)
+            if new_pos and player._can_move(new_pos):
+                player = player.move_to(new_pos)
+            ```
+        """
         return self.coordinate.shift(
             DirectionalOffset(
                 self.character.direction, self.move_speed * time_delta
@@ -69,6 +227,7 @@ class PlayerOnScreen(MovingCharacterOnScreen):
         )
 
 
+# Movement key configuration
 _MOVEMENT_KEYS = {
     KeyboardKey.LEFT,
     KeyboardKey.RIGHT,
@@ -76,6 +235,7 @@ _MOVEMENT_KEYS = {
     KeyboardKey.DOWN,
 }
 
+# Key combination to direction mapping
 _KEY_TO_DIR = {
     frozenset({KeyboardKey.LEFT, KeyboardKey.UP}): Direction.UP_LEFT,
     frozenset({KeyboardKey.LEFT, KeyboardKey.DOWN}): Direction.DOWN_LEFT,
@@ -89,6 +249,25 @@ _KEY_TO_DIR = {
 
 
 def _key_to_dir(current_keys: frozenset[KeyboardKey]) -> Direction | None:
+    """
+    Convert a set of pressed keys to a movement direction.
+
+    Maps key combinations to the appropriate movement direction,
+    supporting both single key and diagonal movement combinations.
+
+    Arguments:
+        `current_keys`: The set of currently pressed movement keys.
+
+    Returns:
+        `Direction | None`: The movement direction, or None if no
+            valid combination is pressed.
+
+    Example:
+        ```python
+        direction = _key_to_dir({KeyboardKey.UP, KeyboardKey.RIGHT})
+        # Returns Direction.UP_RIGHT
+        ```
+    """
     for keys, d in _KEY_TO_DIR.items():
         if keys <= current_keys:
             return d
