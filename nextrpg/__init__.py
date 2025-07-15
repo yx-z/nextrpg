@@ -1,5 +1,4 @@
-"""
-NextRPG - A Python framework for building 2D role-playing games.
+"""NextRPG - A Python framework for building 2D role-playing games.
 
 NextRPG provides a comprehensive toolkit for creating 2D RPG games with
 Pygame. It includes character management, scene handling, event systems,
@@ -8,30 +7,43 @@ drawing utilities, and game loop management.
 The framework is designed with a modular architecture that separates
 concerns into distinct modules:
 
-- `.core`: Core types and utilities used throughout the framework
-- `.character`: Character drawing and movement systems
-- `.scene`: Scene management and transitions
-- `.event`: Event handling and processing
-- `.draw`: Drawing utilities and screen rendering
-- `.gui`: GUI components and window management
-- `.config`: Configuration management
-- `.game`: Main game loop and initialization
+Core Components:
+    - `.core`: Core types and utilities used throughout the framework
+    - `.character`: Character drawing and movement systems
+    - `.scene`: Scene management and transitions
+    - `.event`: Event handling and processing
+    - `.draw`: Drawing utilities and screen rendering
+    - `.gui`: GUI components and window management
+    - `.config`: Configuration management
+    - `.game`: Main game loop and initialization
 
 Key Features:
-    - TMX map loading and rendering
-    - Character movement with collision detection
+    - TMX map loading and rendering with Tiled support
+    - Character movement with collision detection and pathfinding
     - Event-driven dialogue and interaction systems
-    - Scene transitions and animations
-    - Configurable input mapping
-    - Debug visualization tools
+    - Scene transitions and animations (fade in/out, etc.)
+    - Configurable input mapping and key bindings
+    - Debug visualization tools and logging
     - RPG Maker sprite sheet compatibility
+    - NPC management and AI behaviors
+    - Text rendering and dialogue systems
+    - Resource management and asset loading
 
-Example:
+Architecture:
+    The framework follows a component-based architecture where:
+    - Scenes manage the game state and coordinate between components
+    - Characters handle movement, drawing, and interaction logic
+    - Events provide a flexible system for game interactions
+    - Drawing utilities abstract pygame rendering operations
+    - Configuration system allows easy customization
+
+Example Usage:
     ```python
     from nextrpg.game import Game
     from nextrpg.scene import StaticScene
     from nextrpg.character_drawing import CharacterDrawing
     from nextrpg.coordinate import Coordinate
+    from nextrpg.direction import Direction
 
     def create_entry_scene():
         # Create a simple scene with a character
@@ -46,8 +58,40 @@ Example:
     game.start()
     ```
 
+Advanced Example:
+    ```python
+    from nextrpg.map_scene import MapScene
+    from nextrpg.npcs import NpcSpec, EventfulScene
+    from nextrpg.say_event import say_event
+
+    def create_town_scene():
+        # Create NPCs with events
+        shopkeeper = NpcSpec(
+            name="Shopkeeper",
+            drawing=load_character("shopkeeper.png"),
+            event=shop_dialog_event
+        )
+
+        # Create map scene with NPCs
+        return EventfulScene(
+            player=player,
+            npcs=(shopkeeper,)
+        )
+
+    def shop_dialog_event(player, npc, scene):
+        yield say_event("Welcome to my shop!")
+        yield say_event("What would you like to buy?")
+    ```
+
 Version:
     Current version: 0.1.9
+
+Dependencies:
+    - pygame: For graphics and input handling
+    - tmx: For map loading and rendering
+    - typing: For type annotations
+    - dataclasses: For data structures
+    - functools: For utility functions
 """
 
 __version__ = "0.1.9"
