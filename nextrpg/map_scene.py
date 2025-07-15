@@ -165,6 +165,7 @@ class MapScene(EventfulScene, TransitioningScene):
             player = map_scene.init_player(player_spec)
             ```
         """
+        logger.debug(t"Spawn player at {player_spec.object_name}.")
         player = self.map_helper.get_object(player_spec.object_name)
         return PlayerOnScreen(
             character=player_spec.character,
@@ -485,9 +486,8 @@ class Move:
         if timed_scene := _scenes.get(tmx):
             timepoint, scene = timed_scene
             time_delta = now - timepoint
-            to_scene = replace(scene, player=player).tick_without_event(
-                time_delta
-            )
+            scene_with_player = replace(scene, player=scene.init_player(spec))
+            to_scene = scene_with_player.tick_without_transition(time_delta)
         else:
             to_scene = self.next_scene(spec)
 

@@ -19,10 +19,10 @@ Example:
         drawing=character_drawing,
         event=shop_dialog_event
     )
-    
+
     # Create an NPC on screen
     npc = NpcOnScreen(spec=npc_spec)
-    
+
     # Create an eventful scene with NPCs
     scene = EventfulScene(
         player=player,
@@ -139,10 +139,10 @@ class EventfulScene(Scene, EventAsAttr):
             player=player,
             npcs=(npc1, npc2)
         )
-        
+
         # Handle events
         scene = scene.event(key_press_event)
-        
+
         # Update scene over time
         scene = scene.tick(time_delta)
         ```
@@ -420,6 +420,7 @@ class NpcSpec(CharacterSpec):
         Returns:
             A callable that creates an event generator from the specification.
         """
+
         def yield_event(*args: Any, **kwargs: Any) -> RpgEventGenerator:
             fun = self.event
             ctx = fun.__globals__ | {

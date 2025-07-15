@@ -4,6 +4,7 @@ Map helper class for loading the TMX tiles.
 
 from dataclasses import dataclass
 from functools import cached_property
+from os import PathLike
 from pathlib import Path
 from typing import NamedTuple
 
@@ -102,7 +103,7 @@ class MapHelper:
     Tiled tmx map helper class for loading the tiles.
     """
 
-    tmx_file: Path
+    tmx_file: PathLike | str
 
     @cached_property
     def map_size(self) -> Size:
@@ -417,7 +418,7 @@ class MapHelper:
     @cached_property
     def _tmx(self) -> TiledMap:
         logger.debug(t"Loading {self.tmx_file}")
-        return load_pygame(self.tmx_file)
+        return load_pygame(str(self.tmx_file))
 
 
 def _below_character_layer(
