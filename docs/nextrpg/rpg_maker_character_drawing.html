@@ -1048,13 +1048,14 @@ If not specified, the default direction from <code>Config</code> is used.</li>
             <div class="docstring"><p>Get the character's current drawing representation.</p>
 
 <p>This method should return the appropriate drawing based on
-the character's current state, direction, and animation frame.</p>
+the character's current state, direction, and animation frame.
+The drawing should reflect the character's current appearance
+including any active animations.</p>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>nextrpg.draw.draw_on_screen.Drawing</code>: The character's
-      current drawing representation.</p>
+  <p><code>Drawing</code>: The character's current drawing representation.</p>
 </blockquote>
 
 <h6 id="example">Example:</h6>

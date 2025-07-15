@@ -1,5 +1,34 @@
 """
-Game window / Graphical User Interface (GUI).
+Game window and Graphical User Interface (GUI) management for NextRPG.
+
+This module provides the core GUI system for NextRPG games, handling
+window management, screen rendering, and user interface interactions.
+It includes the `Gui` class which manages the game window, screen
+scaling, and drawing operations.
+
+The GUI system features:
+- Window management with fullscreen and windowed modes
+- Automatic screen scaling and centering
+- Event handling for window resizing and mode switching
+- Drawing surface management and rendering
+- Integration with the logging system for debug output
+
+Example:
+    ```python
+    from nextrpg.window import Gui
+    from nextrpg.draw_on_screen import DrawOnScreen
+    from nextrpg.core import Millisecond
+
+    # Create GUI instance
+    gui = Gui()
+
+    # Draw elements to screen
+    drawings = (sprite1, sprite2, background)
+    gui.draw(drawings, time_delta)
+
+    # Handle GUI events
+    gui = gui.event(resize_event)
+    ```
 """
 
 from dataclasses import dataclass, field, replace
@@ -11,21 +40,21 @@ from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
+from nextrpg.coordinate import Coordinate
+from nextrpg.core import Millisecond, Pixel, Size
+from nextrpg.draw_on_screen import Drawing, DrawOnScreen
 from nextrpg.global_config import config, set_config
 from nextrpg.gui_config import GuiConfig, GuiMode, ResizeMode
-from nextrpg.core import Millisecond, Pixel, Size
-from nextrpg.draw_on_screen import DrawOnScreen, Drawing
-from nextrpg.coordinate import Coordinate
-from nextrpg.text import Text
+from nextrpg.logger import ComponentAndMessage, Logger, pop_messages
+from nextrpg.model import export
 from nextrpg.pygame_event import (
     GuiResize,
-    KeyPressDown,
     KeyboardKey,
+    KeyPressDown,
     PygameEvent,
 )
-from nextrpg.logger import ComponentAndMessage, Logger, pop_messages
+from nextrpg.text import Text
 from nextrpg.text_on_screen import TextOnScreen
-from nextrpg.model import export
 
 logger = Logger("GUI")
 
@@ -34,7 +63,43 @@ logger = Logger("GUI")
 @dataclass(frozen=True)
 class Gui:
     """
-    Initialize a `Gui` instance that scales and centers drawings.
+    Game window and GUI management system.
+
+    This class handles the game window, screen rendering, and user
+    interface interactions. It manages window modes (fullscreen/windowed),
+    screen scaling, and drawing operations.
+
+    The GUI system automatically initializes pygame display and font
+    systems, manages window configuration, and provides methods for
+    drawing and event handling.
+
+    Arguments:
+        `current_config`: The current GUI configuration settings.
+            Defaults to the global GUI configuration.
+
+        `last_config`: The previous GUI configuration for change detection.
+            Defaults to the global GUI configuration.
+
+        `initial_config`: The initial GUI configuration for scaling.
+            Defaults to the global GUI configuration.
+
+        `_screen`: Internal pygame surface for the game window.
+            Initialized automatically if not provided.
+
+        `_title`: Internal window title cache for optimization.
+
+    Example:
+        ```python
+        from nextrpg.window import Gui
+        from nextrpg.gui_config import GuiConfig, GuiMode
+
+        # Create GUI with custom config
+        config = GuiConfig(size=Size(800, 600), gui_mode=GuiMode.WINDOWED)
+        gui = Gui(current_config=config)
+
+        # Draw game elements
+        gui.draw(drawings, time_delta)
+        ```
     """
 
     current_config: GuiConfig = field(default_factory=lambda: config().gui)
@@ -44,6 +109,13 @@ class Gui:
     _title: str | None = None
 
     def __post_init__(self) -> None:
+        """
+        Initialize pygame systems and update window state.
+
+        Called automatically after object initialization to set up
+        pygame display and font systems, and update the window
+        title and screen configuration.
+        """
         if not self._screen:
             init()
             font.init()
@@ -53,17 +125,29 @@ class Gui:
 
     def event(self, e: PygameEvent) -> Gui:
         """
-        `Gui` will action on `KeyPressDown` and `GuiResize` events.
-            `KeyPressDown` will toggle between windowed and fullscreen GUI mode,
-                upon `KeyboardKey.GUI_MODE_TOGGLE`.
+        Handle GUI-related events.
 
-            `GuiResize` will scale the screen appropriately based on config.
+        Processes events that affect the GUI system, including:
+        - `GuiResize`: Handles window resize events and updates scaling
+        - `KeyPressDown`: Toggles between windowed and fullscreen modes
+            when `KeyboardKey.GUI_MODE_TOGGLE` is pressed
 
         Arguments:
-            `e`: The event to process.
+            `e`: The pygame event to process.
 
         Returns:
-            `Gui`: An updated `Gui` instance.
+            `Gui`: An updated GUI instance reflecting any changes.
+
+        Example:
+            ```python
+            from nextrpg.pygame_event import GuiResize, KeyPressDown
+
+            # Handle window resize
+            gui = gui.event(GuiResize(Size(1024, 768)))
+
+            # Handle mode toggle
+            gui = gui.event(KeyPressDown(KeyboardKey.GUI_MODE_TOGGLE))
+            ```
         """
         match e:
             case GuiResize():
@@ -79,13 +163,24 @@ class Gui:
         """
         Draw the given drawings to the screen.
 
+        Renders all provided drawings to the game window, handling
+        screen scaling and centering based on the current GUI
+        configuration. Also renders debug log messages if available.
+
         Arguments:
-            `draw_on_screens`: The drawings to draw to the screen.
+            `draw_on_screens`: The drawings to render to the screen.
 
-            `time_delta`: The time that has passed since the last update.
+            `time_delta`: The time elapsed since the last update
+                in milliseconds.
 
-        Returns:
-            `None`.
+        Example:
+            ```python
+            from nextrpg.draw_on_screen import DrawOnScreen
+
+            # Draw game elements
+            drawings = (player_sprite, background, ui_elements)
+            gui.draw(drawings, time_delta)
+            ```
         """
         logger.debug(
             t"Size {self.current_config.size} Shift {self._center_shift}",
@@ -101,12 +196,27 @@ class Gui:
         flip()
 
     def _draw_log(self, time_delta: Millisecond) -> None:
+        """
+        Draw debug log messages to the screen.
+
+        Arguments:
+            `time_delta`: The time elapsed since the last update.
+        """
         if msgs := pop_messages(time_delta):
             self._screen.blits(
                 d.pygame for t in _log_text(msgs) for d in t.draw_on_screens
             )
 
     def _scale(self, draws: tuple[DrawOnScreen, ...]) -> DrawOnScreen:
+        """
+        Scale drawings to fit the current screen size.
+
+        Arguments:
+            `draws`: The drawings to scale.
+
+        Returns:
+            `DrawOnScreen`: A single scaled drawing containing all elements.
+        """
         screen = Surface(self.initial_config.size)
         screen.blits(d.pygame for d in draws)
         return DrawOnScreen(
@@ -120,6 +230,15 @@ class Gui:
 
     @cached_property
     def _scaling(self) -> float:
+        """
+        Get the current scaling factor for screen rendering.
+
+        Calculates the scaling factor based on the ratio of current
+        screen size to initial screen size, maintaining aspect ratio.
+
+        Returns:
+            `float`: The scaling factor (1.0 = no scaling).
+        """
         current_width, current_height = self.current_config.size
         initial_width, initial_height = self.initial_config.size
         return min(
@@ -128,6 +247,15 @@ class Gui:
 
     @cached_property
     def _center_shift(self) -> Coordinate:
+        """
+        Get the coordinate shift needed to center scaled content.
+
+        Calculates the offset needed to center the scaled game content
+        within the current window size.
+
+        Returns:
+            `Coordinate`: The shift offset for centering.
+        """
         current_width, current_height = self.current_config.size
         initial_width, initial_height = self.initial_config.size
         return Coordinate(
@@ -137,6 +265,12 @@ class Gui:
 
     @cached_property
     def _current_gui_flag(self) -> _GuiFlag:
+        """
+        Get the pygame display flags for the current GUI mode.
+
+        Returns:
+            `_GuiFlag`: Pygame display flags for window configuration.
+        """
         flag = DOUBLEBUF
         if self.current_config.gui_mode is GuiMode.FULL_SCREEN:
             flag |= FULLSCREEN
@@ -145,6 +279,9 @@ class Gui:
         return flag
 
     def _update_title(self) -> None:
+        """
+        Update the window title if it has changed.
+        """
         if (
             self._title is None
             or self.current_config.title != self.last_config.title
@@ -153,6 +290,9 @@ class Gui:
             set_caption(self._title)
 
     def _update_screen(self) -> None:
+        """
+        Update the screen surface if configuration has changed.
+        """
         if (
             self._screen is None
             or self.last_config.size != self.current_config.size
@@ -168,6 +308,12 @@ class Gui:
 
     @cached_property
     def _toggle_gui_mode(self) -> Gui:
+        """
+        Toggle between windowed and fullscreen modes.
+
+        Returns:
+            `Gui`: Updated GUI instance with toggled mode.
+        """
         current_config = replace(
             self.current_config, gui_mode=self.current_config.gui_mode.opposite
         )
@@ -177,6 +323,15 @@ class Gui:
         )
 
     def _resize(self, size: Size) -> Gui:
+        """
+        Handle window resize events.
+
+        Arguments:
+            `size`: The new window size.
+
+        Returns:
+            `Gui`: Updated GUI instance with new size.
+        """
         if size == self.current_config.size:
             return self
         current_config = replace(self.current_config, size=size)

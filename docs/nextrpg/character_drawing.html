@@ -90,7 +90,7 @@ implementations while allowing for specialized rendering techniques.</p>
 
 <blockquote>
   <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.character_drawing</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn"><a href="core.html">nextrpg.core</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Millisecond</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyCharacterDrawing</span><span class="p">(</span><span class="n">CharacterDrawing</span><span class="p">):</span>
@@ -137,7 +137,7 @@ implementations while allowing for specialized rendering techniques.</p>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="sd">Example:</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="sd">    ```python</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="sd">    from nextrpg.character.character_drawing import CharacterDrawing</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="sd">    from nextrpg.character_drawing import CharacterDrawing</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="sd">    from nextrpg.core import Direction, Millisecond</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="sd">    class MyCharacterDrawing(CharacterDrawing):</span>
@@ -164,9 +164,9 @@ implementations while allowing for specialized rendering techniques.</p>
 </span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
 </span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>
-</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Millisecond</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Millisecond</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="nd">@export</span>
@@ -189,7 +189,7 @@ implementations while allowing for specialized rendering techniques.</p>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">    Example:</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">        ```python</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">        from nextrpg.character.character_drawing import CharacterDrawing</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">        from nextrpg.character_drawing import CharacterDrawing</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">        from nextrpg.core import Direction</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">        class MyCharacter(CharacterDrawing):</span>
@@ -211,88 +211,89 @@ implementations while allowing for specialized rendering techniques.</p>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">        This method should return the appropriate drawing based on</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="sd">        the character&#39;s current state, direction, and animation frame.</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">        Returns:</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">            `nextrpg.draw.draw_on_screen.Drawing`: The character&#39;s</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">                current drawing representation.</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">        Example:</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">            ```python</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">            drawing = character.drawing</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">            # Use drawing for rendering</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">            ```</span>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="sd">        Turn the character to face a specified direction.</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="sd">        This method should handle direction changes and return a new</span>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">        character instance with the updated direction. The method</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        may also trigger direction-specific animations or state changes.</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">            `direction`: The new direction the character should face.</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">        Returns:</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="sd">            `CharacterDrawing`: A new character instance with the</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">                updated direction.</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">        Example:</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">            ```python</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">            # Turn character to face up</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">            character = character.turn(Direction.UP)</span>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="sd">            ```</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">        Update the character&#39;s movement animation state.</span>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">        This method should advance the character&#39;s movement animation</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">        based on the elapsed time. It&#39;s called when the character</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">        is actively moving.</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">                last update in milliseconds.</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">        Returns:</span>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">            `CharacterDrawing`: A new character instance with updated</span>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">                movement animation state.</span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">        Example:</span>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="sd">            ```python</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="sd">            # Update movement animation</span>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">            character = character.tick_move(time_delta)</span>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="sd">            ```</span>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">        Update the character&#39;s idle animation state.</span>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">        This method should advance the character&#39;s idle animation</span>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">        based on the elapsed time. It&#39;s called when the character</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">        is not moving.</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="sd">                last update in milliseconds.</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>
-</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a><span class="sd">        Returns:</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">            `CharacterDrawing`: A new character instance with updated</span>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="sd">                idle animation state.</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">        Example:</span>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">            ```python</span>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">            # Update idle animation</span>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">            character = character.tick_idle(time_delta)</span>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">            ```</span>
-</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">        The drawing should reflect the character&#39;s current appearance</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">        including any active animations.</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">        Returns:</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">            `Drawing`: The character&#39;s current drawing representation.</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">        Example:</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">            ```python</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">            drawing = character.drawing</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">            # Use drawing for rendering</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">            ```</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">        Turn the character to face a specified direction.</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">        This method should handle direction changes and return a new</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        character instance with the updated direction. The method</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a><span class="sd">        may also trigger direction-specific animations or state changes.</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="sd">            `direction`: The new direction the character should face.</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="sd">        Returns:</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">            `CharacterDrawing`: A new character instance with the</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">                updated direction.</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">        Example:</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">            ```python</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">            # Turn character to face up</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="sd">            character = character.turn(Direction.UP)</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">            ```</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">        Update the character&#39;s movement animation state.</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">        This method should advance the character&#39;s movement animation</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">        based on the elapsed time. It&#39;s called when the character</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">        is actively moving.</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">                last update in milliseconds.</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">        Returns:</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">            `CharacterDrawing`: A new character instance with updated</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">                movement animation state.</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="sd">        Example:</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="sd">            ```python</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">            # Update movement animation</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="sd">            character = character.tick_move(time_delta)</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">            ```</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">        Update the character&#39;s idle animation state.</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">        This method should advance the character&#39;s idle animation</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">        based on the elapsed time. It&#39;s called when the character</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">        is not moving.</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">                last update in milliseconds.</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">        Returns:</span>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="sd">            `CharacterDrawing`: A new character instance with updated</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">                idle animation state.</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">        Example:</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">            ```python</span>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">            # Update idle animation</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">            character = character.tick_idle(time_delta)</span>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">            ```</span>
+</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -330,7 +331,7 @@ implementations while allowing for specialized rendering techniques.</p>
 </span><span id="CharacterDrawing-70"><a href="#CharacterDrawing-70"><span class="linenos"> 70</span></a>
 </span><span id="CharacterDrawing-71"><a href="#CharacterDrawing-71"><span class="linenos"> 71</span></a><span class="sd">    Example:</span>
 </span><span id="CharacterDrawing-72"><a href="#CharacterDrawing-72"><span class="linenos"> 72</span></a><span class="sd">        ```python</span>
-</span><span id="CharacterDrawing-73"><a href="#CharacterDrawing-73"><span class="linenos"> 73</span></a><span class="sd">        from nextrpg.character.character_drawing import CharacterDrawing</span>
+</span><span id="CharacterDrawing-73"><a href="#CharacterDrawing-73"><span class="linenos"> 73</span></a><span class="sd">        from nextrpg.character_drawing import CharacterDrawing</span>
 </span><span id="CharacterDrawing-74"><a href="#CharacterDrawing-74"><span class="linenos"> 74</span></a><span class="sd">        from nextrpg.core import Direction</span>
 </span><span id="CharacterDrawing-75"><a href="#CharacterDrawing-75"><span class="linenos"> 75</span></a>
 </span><span id="CharacterDrawing-76"><a href="#CharacterDrawing-76"><span class="linenos"> 76</span></a><span class="sd">        class MyCharacter(CharacterDrawing):</span>
@@ -352,88 +353,89 @@ implementations while allowing for specialized rendering techniques.</p>
 </span><span id="CharacterDrawing-92"><a href="#CharacterDrawing-92"><span class="linenos"> 92</span></a>
 </span><span id="CharacterDrawing-93"><a href="#CharacterDrawing-93"><span class="linenos"> 93</span></a><span class="sd">        This method should return the appropriate drawing based on</span>
 </span><span id="CharacterDrawing-94"><a href="#CharacterDrawing-94"><span class="linenos"> 94</span></a><span class="sd">        the character&#39;s current state, direction, and animation frame.</span>
-</span><span id="CharacterDrawing-95"><a href="#CharacterDrawing-95"><span class="linenos"> 95</span></a>
-</span><span id="CharacterDrawing-96"><a href="#CharacterDrawing-96"><span class="linenos"> 96</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterDrawing-97"><a href="#CharacterDrawing-97"><span class="linenos"> 97</span></a><span class="sd">            `nextrpg.draw.draw_on_screen.Drawing`: The character&#39;s</span>
-</span><span id="CharacterDrawing-98"><a href="#CharacterDrawing-98"><span class="linenos"> 98</span></a><span class="sd">                current drawing representation.</span>
-</span><span id="CharacterDrawing-99"><a href="#CharacterDrawing-99"><span class="linenos"> 99</span></a>
-</span><span id="CharacterDrawing-100"><a href="#CharacterDrawing-100"><span class="linenos">100</span></a><span class="sd">        Example:</span>
-</span><span id="CharacterDrawing-101"><a href="#CharacterDrawing-101"><span class="linenos">101</span></a><span class="sd">            ```python</span>
-</span><span id="CharacterDrawing-102"><a href="#CharacterDrawing-102"><span class="linenos">102</span></a><span class="sd">            drawing = character.drawing</span>
-</span><span id="CharacterDrawing-103"><a href="#CharacterDrawing-103"><span class="linenos">103</span></a><span class="sd">            # Use drawing for rendering</span>
-</span><span id="CharacterDrawing-104"><a href="#CharacterDrawing-104"><span class="linenos">104</span></a><span class="sd">            ```</span>
-</span><span id="CharacterDrawing-105"><a href="#CharacterDrawing-105"><span class="linenos">105</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterDrawing-106"><a href="#CharacterDrawing-106"><span class="linenos">106</span></a>
-</span><span id="CharacterDrawing-107"><a href="#CharacterDrawing-107"><span class="linenos">107</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing-108"><a href="#CharacterDrawing-108"><span class="linenos">108</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterDrawing-109"><a href="#CharacterDrawing-109"><span class="linenos">109</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterDrawing-110"><a href="#CharacterDrawing-110"><span class="linenos">110</span></a><span class="sd">        Turn the character to face a specified direction.</span>
-</span><span id="CharacterDrawing-111"><a href="#CharacterDrawing-111"><span class="linenos">111</span></a>
-</span><span id="CharacterDrawing-112"><a href="#CharacterDrawing-112"><span class="linenos">112</span></a><span class="sd">        This method should handle direction changes and return a new</span>
-</span><span id="CharacterDrawing-113"><a href="#CharacterDrawing-113"><span class="linenos">113</span></a><span class="sd">        character instance with the updated direction. The method</span>
-</span><span id="CharacterDrawing-114"><a href="#CharacterDrawing-114"><span class="linenos">114</span></a><span class="sd">        may also trigger direction-specific animations or state changes.</span>
-</span><span id="CharacterDrawing-115"><a href="#CharacterDrawing-115"><span class="linenos">115</span></a>
-</span><span id="CharacterDrawing-116"><a href="#CharacterDrawing-116"><span class="linenos">116</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterDrawing-117"><a href="#CharacterDrawing-117"><span class="linenos">117</span></a><span class="sd">            `direction`: The new direction the character should face.</span>
-</span><span id="CharacterDrawing-118"><a href="#CharacterDrawing-118"><span class="linenos">118</span></a>
-</span><span id="CharacterDrawing-119"><a href="#CharacterDrawing-119"><span class="linenos">119</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterDrawing-120"><a href="#CharacterDrawing-120"><span class="linenos">120</span></a><span class="sd">            `CharacterDrawing`: A new character instance with the</span>
-</span><span id="CharacterDrawing-121"><a href="#CharacterDrawing-121"><span class="linenos">121</span></a><span class="sd">                updated direction.</span>
-</span><span id="CharacterDrawing-122"><a href="#CharacterDrawing-122"><span class="linenos">122</span></a>
-</span><span id="CharacterDrawing-123"><a href="#CharacterDrawing-123"><span class="linenos">123</span></a><span class="sd">        Example:</span>
-</span><span id="CharacterDrawing-124"><a href="#CharacterDrawing-124"><span class="linenos">124</span></a><span class="sd">            ```python</span>
-</span><span id="CharacterDrawing-125"><a href="#CharacterDrawing-125"><span class="linenos">125</span></a><span class="sd">            # Turn character to face up</span>
-</span><span id="CharacterDrawing-126"><a href="#CharacterDrawing-126"><span class="linenos">126</span></a><span class="sd">            character = character.turn(Direction.UP)</span>
-</span><span id="CharacterDrawing-127"><a href="#CharacterDrawing-127"><span class="linenos">127</span></a><span class="sd">            ```</span>
-</span><span id="CharacterDrawing-128"><a href="#CharacterDrawing-128"><span class="linenos">128</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterDrawing-129"><a href="#CharacterDrawing-129"><span class="linenos">129</span></a>
-</span><span id="CharacterDrawing-130"><a href="#CharacterDrawing-130"><span class="linenos">130</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing-131"><a href="#CharacterDrawing-131"><span class="linenos">131</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterDrawing-132"><a href="#CharacterDrawing-132"><span class="linenos">132</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterDrawing-133"><a href="#CharacterDrawing-133"><span class="linenos">133</span></a><span class="sd">        Update the character&#39;s movement animation state.</span>
-</span><span id="CharacterDrawing-134"><a href="#CharacterDrawing-134"><span class="linenos">134</span></a>
-</span><span id="CharacterDrawing-135"><a href="#CharacterDrawing-135"><span class="linenos">135</span></a><span class="sd">        This method should advance the character&#39;s movement animation</span>
-</span><span id="CharacterDrawing-136"><a href="#CharacterDrawing-136"><span class="linenos">136</span></a><span class="sd">        based on the elapsed time. It&#39;s called when the character</span>
-</span><span id="CharacterDrawing-137"><a href="#CharacterDrawing-137"><span class="linenos">137</span></a><span class="sd">        is actively moving.</span>
-</span><span id="CharacterDrawing-138"><a href="#CharacterDrawing-138"><span class="linenos">138</span></a>
-</span><span id="CharacterDrawing-139"><a href="#CharacterDrawing-139"><span class="linenos">139</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterDrawing-140"><a href="#CharacterDrawing-140"><span class="linenos">140</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
-</span><span id="CharacterDrawing-141"><a href="#CharacterDrawing-141"><span class="linenos">141</span></a><span class="sd">                last update in milliseconds.</span>
-</span><span id="CharacterDrawing-142"><a href="#CharacterDrawing-142"><span class="linenos">142</span></a>
-</span><span id="CharacterDrawing-143"><a href="#CharacterDrawing-143"><span class="linenos">143</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterDrawing-144"><a href="#CharacterDrawing-144"><span class="linenos">144</span></a><span class="sd">            `CharacterDrawing`: A new character instance with updated</span>
-</span><span id="CharacterDrawing-145"><a href="#CharacterDrawing-145"><span class="linenos">145</span></a><span class="sd">                movement animation state.</span>
-</span><span id="CharacterDrawing-146"><a href="#CharacterDrawing-146"><span class="linenos">146</span></a>
-</span><span id="CharacterDrawing-147"><a href="#CharacterDrawing-147"><span class="linenos">147</span></a><span class="sd">        Example:</span>
-</span><span id="CharacterDrawing-148"><a href="#CharacterDrawing-148"><span class="linenos">148</span></a><span class="sd">            ```python</span>
-</span><span id="CharacterDrawing-149"><a href="#CharacterDrawing-149"><span class="linenos">149</span></a><span class="sd">            # Update movement animation</span>
-</span><span id="CharacterDrawing-150"><a href="#CharacterDrawing-150"><span class="linenos">150</span></a><span class="sd">            character = character.tick_move(time_delta)</span>
-</span><span id="CharacterDrawing-151"><a href="#CharacterDrawing-151"><span class="linenos">151</span></a><span class="sd">            ```</span>
-</span><span id="CharacterDrawing-152"><a href="#CharacterDrawing-152"><span class="linenos">152</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterDrawing-153"><a href="#CharacterDrawing-153"><span class="linenos">153</span></a>
-</span><span id="CharacterDrawing-154"><a href="#CharacterDrawing-154"><span class="linenos">154</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing-155"><a href="#CharacterDrawing-155"><span class="linenos">155</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterDrawing-156"><a href="#CharacterDrawing-156"><span class="linenos">156</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterDrawing-157"><a href="#CharacterDrawing-157"><span class="linenos">157</span></a><span class="sd">        Update the character&#39;s idle animation state.</span>
-</span><span id="CharacterDrawing-158"><a href="#CharacterDrawing-158"><span class="linenos">158</span></a>
-</span><span id="CharacterDrawing-159"><a href="#CharacterDrawing-159"><span class="linenos">159</span></a><span class="sd">        This method should advance the character&#39;s idle animation</span>
-</span><span id="CharacterDrawing-160"><a href="#CharacterDrawing-160"><span class="linenos">160</span></a><span class="sd">        based on the elapsed time. It&#39;s called when the character</span>
-</span><span id="CharacterDrawing-161"><a href="#CharacterDrawing-161"><span class="linenos">161</span></a><span class="sd">        is not moving.</span>
-</span><span id="CharacterDrawing-162"><a href="#CharacterDrawing-162"><span class="linenos">162</span></a>
-</span><span id="CharacterDrawing-163"><a href="#CharacterDrawing-163"><span class="linenos">163</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterDrawing-164"><a href="#CharacterDrawing-164"><span class="linenos">164</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
-</span><span id="CharacterDrawing-165"><a href="#CharacterDrawing-165"><span class="linenos">165</span></a><span class="sd">                last update in milliseconds.</span>
-</span><span id="CharacterDrawing-166"><a href="#CharacterDrawing-166"><span class="linenos">166</span></a>
-</span><span id="CharacterDrawing-167"><a href="#CharacterDrawing-167"><span class="linenos">167</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterDrawing-168"><a href="#CharacterDrawing-168"><span class="linenos">168</span></a><span class="sd">            `CharacterDrawing`: A new character instance with updated</span>
-</span><span id="CharacterDrawing-169"><a href="#CharacterDrawing-169"><span class="linenos">169</span></a><span class="sd">                idle animation state.</span>
-</span><span id="CharacterDrawing-170"><a href="#CharacterDrawing-170"><span class="linenos">170</span></a>
-</span><span id="CharacterDrawing-171"><a href="#CharacterDrawing-171"><span class="linenos">171</span></a><span class="sd">        Example:</span>
-</span><span id="CharacterDrawing-172"><a href="#CharacterDrawing-172"><span class="linenos">172</span></a><span class="sd">            ```python</span>
-</span><span id="CharacterDrawing-173"><a href="#CharacterDrawing-173"><span class="linenos">173</span></a><span class="sd">            # Update idle animation</span>
-</span><span id="CharacterDrawing-174"><a href="#CharacterDrawing-174"><span class="linenos">174</span></a><span class="sd">            character = character.tick_idle(time_delta)</span>
-</span><span id="CharacterDrawing-175"><a href="#CharacterDrawing-175"><span class="linenos">175</span></a><span class="sd">            ```</span>
-</span><span id="CharacterDrawing-176"><a href="#CharacterDrawing-176"><span class="linenos">176</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-95"><a href="#CharacterDrawing-95"><span class="linenos"> 95</span></a><span class="sd">        The drawing should reflect the character&#39;s current appearance</span>
+</span><span id="CharacterDrawing-96"><a href="#CharacterDrawing-96"><span class="linenos"> 96</span></a><span class="sd">        including any active animations.</span>
+</span><span id="CharacterDrawing-97"><a href="#CharacterDrawing-97"><span class="linenos"> 97</span></a>
+</span><span id="CharacterDrawing-98"><a href="#CharacterDrawing-98"><span class="linenos"> 98</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing-99"><a href="#CharacterDrawing-99"><span class="linenos"> 99</span></a><span class="sd">            `Drawing`: The character&#39;s current drawing representation.</span>
+</span><span id="CharacterDrawing-100"><a href="#CharacterDrawing-100"><span class="linenos">100</span></a>
+</span><span id="CharacterDrawing-101"><a href="#CharacterDrawing-101"><span class="linenos">101</span></a><span class="sd">        Example:</span>
+</span><span id="CharacterDrawing-102"><a href="#CharacterDrawing-102"><span class="linenos">102</span></a><span class="sd">            ```python</span>
+</span><span id="CharacterDrawing-103"><a href="#CharacterDrawing-103"><span class="linenos">103</span></a><span class="sd">            drawing = character.drawing</span>
+</span><span id="CharacterDrawing-104"><a href="#CharacterDrawing-104"><span class="linenos">104</span></a><span class="sd">            # Use drawing for rendering</span>
+</span><span id="CharacterDrawing-105"><a href="#CharacterDrawing-105"><span class="linenos">105</span></a><span class="sd">            ```</span>
+</span><span id="CharacterDrawing-106"><a href="#CharacterDrawing-106"><span class="linenos">106</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-107"><a href="#CharacterDrawing-107"><span class="linenos">107</span></a>
+</span><span id="CharacterDrawing-108"><a href="#CharacterDrawing-108"><span class="linenos">108</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing-109"><a href="#CharacterDrawing-109"><span class="linenos">109</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterDrawing-110"><a href="#CharacterDrawing-110"><span class="linenos">110</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-111"><a href="#CharacterDrawing-111"><span class="linenos">111</span></a><span class="sd">        Turn the character to face a specified direction.</span>
+</span><span id="CharacterDrawing-112"><a href="#CharacterDrawing-112"><span class="linenos">112</span></a>
+</span><span id="CharacterDrawing-113"><a href="#CharacterDrawing-113"><span class="linenos">113</span></a><span class="sd">        This method should handle direction changes and return a new</span>
+</span><span id="CharacterDrawing-114"><a href="#CharacterDrawing-114"><span class="linenos">114</span></a><span class="sd">        character instance with the updated direction. The method</span>
+</span><span id="CharacterDrawing-115"><a href="#CharacterDrawing-115"><span class="linenos">115</span></a><span class="sd">        may also trigger direction-specific animations or state changes.</span>
+</span><span id="CharacterDrawing-116"><a href="#CharacterDrawing-116"><span class="linenos">116</span></a>
+</span><span id="CharacterDrawing-117"><a href="#CharacterDrawing-117"><span class="linenos">117</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterDrawing-118"><a href="#CharacterDrawing-118"><span class="linenos">118</span></a><span class="sd">            `direction`: The new direction the character should face.</span>
+</span><span id="CharacterDrawing-119"><a href="#CharacterDrawing-119"><span class="linenos">119</span></a>
+</span><span id="CharacterDrawing-120"><a href="#CharacterDrawing-120"><span class="linenos">120</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing-121"><a href="#CharacterDrawing-121"><span class="linenos">121</span></a><span class="sd">            `CharacterDrawing`: A new character instance with the</span>
+</span><span id="CharacterDrawing-122"><a href="#CharacterDrawing-122"><span class="linenos">122</span></a><span class="sd">                updated direction.</span>
+</span><span id="CharacterDrawing-123"><a href="#CharacterDrawing-123"><span class="linenos">123</span></a>
+</span><span id="CharacterDrawing-124"><a href="#CharacterDrawing-124"><span class="linenos">124</span></a><span class="sd">        Example:</span>
+</span><span id="CharacterDrawing-125"><a href="#CharacterDrawing-125"><span class="linenos">125</span></a><span class="sd">            ```python</span>
+</span><span id="CharacterDrawing-126"><a href="#CharacterDrawing-126"><span class="linenos">126</span></a><span class="sd">            # Turn character to face up</span>
+</span><span id="CharacterDrawing-127"><a href="#CharacterDrawing-127"><span class="linenos">127</span></a><span class="sd">            character = character.turn(Direction.UP)</span>
+</span><span id="CharacterDrawing-128"><a href="#CharacterDrawing-128"><span class="linenos">128</span></a><span class="sd">            ```</span>
+</span><span id="CharacterDrawing-129"><a href="#CharacterDrawing-129"><span class="linenos">129</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-130"><a href="#CharacterDrawing-130"><span class="linenos">130</span></a>
+</span><span id="CharacterDrawing-131"><a href="#CharacterDrawing-131"><span class="linenos">131</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing-132"><a href="#CharacterDrawing-132"><span class="linenos">132</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterDrawing-133"><a href="#CharacterDrawing-133"><span class="linenos">133</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-134"><a href="#CharacterDrawing-134"><span class="linenos">134</span></a><span class="sd">        Update the character&#39;s movement animation state.</span>
+</span><span id="CharacterDrawing-135"><a href="#CharacterDrawing-135"><span class="linenos">135</span></a>
+</span><span id="CharacterDrawing-136"><a href="#CharacterDrawing-136"><span class="linenos">136</span></a><span class="sd">        This method should advance the character&#39;s movement animation</span>
+</span><span id="CharacterDrawing-137"><a href="#CharacterDrawing-137"><span class="linenos">137</span></a><span class="sd">        based on the elapsed time. It&#39;s called when the character</span>
+</span><span id="CharacterDrawing-138"><a href="#CharacterDrawing-138"><span class="linenos">138</span></a><span class="sd">        is actively moving.</span>
+</span><span id="CharacterDrawing-139"><a href="#CharacterDrawing-139"><span class="linenos">139</span></a>
+</span><span id="CharacterDrawing-140"><a href="#CharacterDrawing-140"><span class="linenos">140</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterDrawing-141"><a href="#CharacterDrawing-141"><span class="linenos">141</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
+</span><span id="CharacterDrawing-142"><a href="#CharacterDrawing-142"><span class="linenos">142</span></a><span class="sd">                last update in milliseconds.</span>
+</span><span id="CharacterDrawing-143"><a href="#CharacterDrawing-143"><span class="linenos">143</span></a>
+</span><span id="CharacterDrawing-144"><a href="#CharacterDrawing-144"><span class="linenos">144</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing-145"><a href="#CharacterDrawing-145"><span class="linenos">145</span></a><span class="sd">            `CharacterDrawing`: A new character instance with updated</span>
+</span><span id="CharacterDrawing-146"><a href="#CharacterDrawing-146"><span class="linenos">146</span></a><span class="sd">                movement animation state.</span>
+</span><span id="CharacterDrawing-147"><a href="#CharacterDrawing-147"><span class="linenos">147</span></a>
+</span><span id="CharacterDrawing-148"><a href="#CharacterDrawing-148"><span class="linenos">148</span></a><span class="sd">        Example:</span>
+</span><span id="CharacterDrawing-149"><a href="#CharacterDrawing-149"><span class="linenos">149</span></a><span class="sd">            ```python</span>
+</span><span id="CharacterDrawing-150"><a href="#CharacterDrawing-150"><span class="linenos">150</span></a><span class="sd">            # Update movement animation</span>
+</span><span id="CharacterDrawing-151"><a href="#CharacterDrawing-151"><span class="linenos">151</span></a><span class="sd">            character = character.tick_move(time_delta)</span>
+</span><span id="CharacterDrawing-152"><a href="#CharacterDrawing-152"><span class="linenos">152</span></a><span class="sd">            ```</span>
+</span><span id="CharacterDrawing-153"><a href="#CharacterDrawing-153"><span class="linenos">153</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-154"><a href="#CharacterDrawing-154"><span class="linenos">154</span></a>
+</span><span id="CharacterDrawing-155"><a href="#CharacterDrawing-155"><span class="linenos">155</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing-156"><a href="#CharacterDrawing-156"><span class="linenos">156</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterDrawing-157"><a href="#CharacterDrawing-157"><span class="linenos">157</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing-158"><a href="#CharacterDrawing-158"><span class="linenos">158</span></a><span class="sd">        Update the character&#39;s idle animation state.</span>
+</span><span id="CharacterDrawing-159"><a href="#CharacterDrawing-159"><span class="linenos">159</span></a>
+</span><span id="CharacterDrawing-160"><a href="#CharacterDrawing-160"><span class="linenos">160</span></a><span class="sd">        This method should advance the character&#39;s idle animation</span>
+</span><span id="CharacterDrawing-161"><a href="#CharacterDrawing-161"><span class="linenos">161</span></a><span class="sd">        based on the elapsed time. It&#39;s called when the character</span>
+</span><span id="CharacterDrawing-162"><a href="#CharacterDrawing-162"><span class="linenos">162</span></a><span class="sd">        is not moving.</span>
+</span><span id="CharacterDrawing-163"><a href="#CharacterDrawing-163"><span class="linenos">163</span></a>
+</span><span id="CharacterDrawing-164"><a href="#CharacterDrawing-164"><span class="linenos">164</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterDrawing-165"><a href="#CharacterDrawing-165"><span class="linenos">165</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
+</span><span id="CharacterDrawing-166"><a href="#CharacterDrawing-166"><span class="linenos">166</span></a><span class="sd">                last update in milliseconds.</span>
+</span><span id="CharacterDrawing-167"><a href="#CharacterDrawing-167"><span class="linenos">167</span></a>
+</span><span id="CharacterDrawing-168"><a href="#CharacterDrawing-168"><span class="linenos">168</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing-169"><a href="#CharacterDrawing-169"><span class="linenos">169</span></a><span class="sd">            `CharacterDrawing`: A new character instance with updated</span>
+</span><span id="CharacterDrawing-170"><a href="#CharacterDrawing-170"><span class="linenos">170</span></a><span class="sd">                idle animation state.</span>
+</span><span id="CharacterDrawing-171"><a href="#CharacterDrawing-171"><span class="linenos">171</span></a>
+</span><span id="CharacterDrawing-172"><a href="#CharacterDrawing-172"><span class="linenos">172</span></a><span class="sd">        Example:</span>
+</span><span id="CharacterDrawing-173"><a href="#CharacterDrawing-173"><span class="linenos">173</span></a><span class="sd">            ```python</span>
+</span><span id="CharacterDrawing-174"><a href="#CharacterDrawing-174"><span class="linenos">174</span></a><span class="sd">            # Update idle animation</span>
+</span><span id="CharacterDrawing-175"><a href="#CharacterDrawing-175"><span class="linenos">175</span></a><span class="sd">            character = character.tick_idle(time_delta)</span>
+</span><span id="CharacterDrawing-176"><a href="#CharacterDrawing-176"><span class="linenos">176</span></a><span class="sd">            ```</span>
+</span><span id="CharacterDrawing-177"><a href="#CharacterDrawing-177"><span class="linenos">177</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -458,7 +460,7 @@ thread safety and predictable behavior in the game loop.</p>
 
 <blockquote>
   <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.character_drawing</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn"><a href="core.html">nextrpg.core</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyCharacter</span><span class="p">(</span><span class="n">CharacterDrawing</span><span class="p">):</span>
@@ -501,30 +503,32 @@ thread safety and predictable behavior in the game loop.</p>
 </span><span id="CharacterDrawing.drawing-92"><a href="#CharacterDrawing.drawing-92"><span class="linenos"> 92</span></a>
 </span><span id="CharacterDrawing.drawing-93"><a href="#CharacterDrawing.drawing-93"><span class="linenos"> 93</span></a><span class="sd">        This method should return the appropriate drawing based on</span>
 </span><span id="CharacterDrawing.drawing-94"><a href="#CharacterDrawing.drawing-94"><span class="linenos"> 94</span></a><span class="sd">        the character&#39;s current state, direction, and animation frame.</span>
-</span><span id="CharacterDrawing.drawing-95"><a href="#CharacterDrawing.drawing-95"><span class="linenos"> 95</span></a>
-</span><span id="CharacterDrawing.drawing-96"><a href="#CharacterDrawing.drawing-96"><span class="linenos"> 96</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterDrawing.drawing-97"><a href="#CharacterDrawing.drawing-97"><span class="linenos"> 97</span></a><span class="sd">            `nextrpg.draw.draw_on_screen.Drawing`: The character&#39;s</span>
-</span><span id="CharacterDrawing.drawing-98"><a href="#CharacterDrawing.drawing-98"><span class="linenos"> 98</span></a><span class="sd">                current drawing representation.</span>
-</span><span id="CharacterDrawing.drawing-99"><a href="#CharacterDrawing.drawing-99"><span class="linenos"> 99</span></a>
-</span><span id="CharacterDrawing.drawing-100"><a href="#CharacterDrawing.drawing-100"><span class="linenos">100</span></a><span class="sd">        Example:</span>
-</span><span id="CharacterDrawing.drawing-101"><a href="#CharacterDrawing.drawing-101"><span class="linenos">101</span></a><span class="sd">            ```python</span>
-</span><span id="CharacterDrawing.drawing-102"><a href="#CharacterDrawing.drawing-102"><span class="linenos">102</span></a><span class="sd">            drawing = character.drawing</span>
-</span><span id="CharacterDrawing.drawing-103"><a href="#CharacterDrawing.drawing-103"><span class="linenos">103</span></a><span class="sd">            # Use drawing for rendering</span>
-</span><span id="CharacterDrawing.drawing-104"><a href="#CharacterDrawing.drawing-104"><span class="linenos">104</span></a><span class="sd">            ```</span>
-</span><span id="CharacterDrawing.drawing-105"><a href="#CharacterDrawing.drawing-105"><span class="linenos">105</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing.drawing-95"><a href="#CharacterDrawing.drawing-95"><span class="linenos"> 95</span></a><span class="sd">        The drawing should reflect the character&#39;s current appearance</span>
+</span><span id="CharacterDrawing.drawing-96"><a href="#CharacterDrawing.drawing-96"><span class="linenos"> 96</span></a><span class="sd">        including any active animations.</span>
+</span><span id="CharacterDrawing.drawing-97"><a href="#CharacterDrawing.drawing-97"><span class="linenos"> 97</span></a>
+</span><span id="CharacterDrawing.drawing-98"><a href="#CharacterDrawing.drawing-98"><span class="linenos"> 98</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing.drawing-99"><a href="#CharacterDrawing.drawing-99"><span class="linenos"> 99</span></a><span class="sd">            `Drawing`: The character&#39;s current drawing representation.</span>
+</span><span id="CharacterDrawing.drawing-100"><a href="#CharacterDrawing.drawing-100"><span class="linenos">100</span></a>
+</span><span id="CharacterDrawing.drawing-101"><a href="#CharacterDrawing.drawing-101"><span class="linenos">101</span></a><span class="sd">        Example:</span>
+</span><span id="CharacterDrawing.drawing-102"><a href="#CharacterDrawing.drawing-102"><span class="linenos">102</span></a><span class="sd">            ```python</span>
+</span><span id="CharacterDrawing.drawing-103"><a href="#CharacterDrawing.drawing-103"><span class="linenos">103</span></a><span class="sd">            drawing = character.drawing</span>
+</span><span id="CharacterDrawing.drawing-104"><a href="#CharacterDrawing.drawing-104"><span class="linenos">104</span></a><span class="sd">            # Use drawing for rendering</span>
+</span><span id="CharacterDrawing.drawing-105"><a href="#CharacterDrawing.drawing-105"><span class="linenos">105</span></a><span class="sd">            ```</span>
+</span><span id="CharacterDrawing.drawing-106"><a href="#CharacterDrawing.drawing-106"><span class="linenos">106</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Get the character's current drawing representation.</p>
 
 <p>This method should return the appropriate drawing based on
-the character's current state, direction, and animation frame.</p>
+the character's current state, direction, and animation frame.
+The drawing should reflect the character's current appearance
+including any active animations.</p>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>nextrpg.draw.draw_on_screen.Drawing</code>: The character's
-      current drawing representation.</p>
+  <p><code>Drawing</code>: The character's current drawing representation.</p>
 </blockquote>
 
 <h6 id="example">Example:</h6>
@@ -552,28 +556,28 @@ the character's current state, direction, and animation frame.</p>
 
     </div>
     <a class="headerlink" href="#CharacterDrawing.turn"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.turn-107"><a href="#CharacterDrawing.turn-107"><span class="linenos">107</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing.turn-108"><a href="#CharacterDrawing.turn-108"><span class="linenos">108</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterDrawing.turn-109"><a href="#CharacterDrawing.turn-109"><span class="linenos">109</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterDrawing.turn-110"><a href="#CharacterDrawing.turn-110"><span class="linenos">110</span></a><span class="sd">        Turn the character to face a specified direction.</span>
-</span><span id="CharacterDrawing.turn-111"><a href="#CharacterDrawing.turn-111"><span class="linenos">111</span></a>
-</span><span id="CharacterDrawing.turn-112"><a href="#CharacterDrawing.turn-112"><span class="linenos">112</span></a><span class="sd">        This method should handle direction changes and return a new</span>
-</span><span id="CharacterDrawing.turn-113"><a href="#CharacterDrawing.turn-113"><span class="linenos">113</span></a><span class="sd">        character instance with the updated direction. The method</span>
-</span><span id="CharacterDrawing.turn-114"><a href="#CharacterDrawing.turn-114"><span class="linenos">114</span></a><span class="sd">        may also trigger direction-specific animations or state changes.</span>
-</span><span id="CharacterDrawing.turn-115"><a href="#CharacterDrawing.turn-115"><span class="linenos">115</span></a>
-</span><span id="CharacterDrawing.turn-116"><a href="#CharacterDrawing.turn-116"><span class="linenos">116</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterDrawing.turn-117"><a href="#CharacterDrawing.turn-117"><span class="linenos">117</span></a><span class="sd">            `direction`: The new direction the character should face.</span>
-</span><span id="CharacterDrawing.turn-118"><a href="#CharacterDrawing.turn-118"><span class="linenos">118</span></a>
-</span><span id="CharacterDrawing.turn-119"><a href="#CharacterDrawing.turn-119"><span class="linenos">119</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterDrawing.turn-120"><a href="#CharacterDrawing.turn-120"><span class="linenos">120</span></a><span class="sd">            `CharacterDrawing`: A new character instance with the</span>
-</span><span id="CharacterDrawing.turn-121"><a href="#CharacterDrawing.turn-121"><span class="linenos">121</span></a><span class="sd">                updated direction.</span>
-</span><span id="CharacterDrawing.turn-122"><a href="#CharacterDrawing.turn-122"><span class="linenos">122</span></a>
-</span><span id="CharacterDrawing.turn-123"><a href="#CharacterDrawing.turn-123"><span class="linenos">123</span></a><span class="sd">        Example:</span>
-</span><span id="CharacterDrawing.turn-124"><a href="#CharacterDrawing.turn-124"><span class="linenos">124</span></a><span class="sd">            ```python</span>
-</span><span id="CharacterDrawing.turn-125"><a href="#CharacterDrawing.turn-125"><span class="linenos">125</span></a><span class="sd">            # Turn character to face up</span>
-</span><span id="CharacterDrawing.turn-126"><a href="#CharacterDrawing.turn-126"><span class="linenos">126</span></a><span class="sd">            character = character.turn(Direction.UP)</span>
-</span><span id="CharacterDrawing.turn-127"><a href="#CharacterDrawing.turn-127"><span class="linenos">127</span></a><span class="sd">            ```</span>
-</span><span id="CharacterDrawing.turn-128"><a href="#CharacterDrawing.turn-128"><span class="linenos">128</span></a><span class="sd">        &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.turn-108"><a href="#CharacterDrawing.turn-108"><span class="linenos">108</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing.turn-109"><a href="#CharacterDrawing.turn-109"><span class="linenos">109</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterDrawing.turn-110"><a href="#CharacterDrawing.turn-110"><span class="linenos">110</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing.turn-111"><a href="#CharacterDrawing.turn-111"><span class="linenos">111</span></a><span class="sd">        Turn the character to face a specified direction.</span>
+</span><span id="CharacterDrawing.turn-112"><a href="#CharacterDrawing.turn-112"><span class="linenos">112</span></a>
+</span><span id="CharacterDrawing.turn-113"><a href="#CharacterDrawing.turn-113"><span class="linenos">113</span></a><span class="sd">        This method should handle direction changes and return a new</span>
+</span><span id="CharacterDrawing.turn-114"><a href="#CharacterDrawing.turn-114"><span class="linenos">114</span></a><span class="sd">        character instance with the updated direction. The method</span>
+</span><span id="CharacterDrawing.turn-115"><a href="#CharacterDrawing.turn-115"><span class="linenos">115</span></a><span class="sd">        may also trigger direction-specific animations or state changes.</span>
+</span><span id="CharacterDrawing.turn-116"><a href="#CharacterDrawing.turn-116"><span class="linenos">116</span></a>
+</span><span id="CharacterDrawing.turn-117"><a href="#CharacterDrawing.turn-117"><span class="linenos">117</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterDrawing.turn-118"><a href="#CharacterDrawing.turn-118"><span class="linenos">118</span></a><span class="sd">            `direction`: The new direction the character should face.</span>
+</span><span id="CharacterDrawing.turn-119"><a href="#CharacterDrawing.turn-119"><span class="linenos">119</span></a>
+</span><span id="CharacterDrawing.turn-120"><a href="#CharacterDrawing.turn-120"><span class="linenos">120</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing.turn-121"><a href="#CharacterDrawing.turn-121"><span class="linenos">121</span></a><span class="sd">            `CharacterDrawing`: A new character instance with the</span>
+</span><span id="CharacterDrawing.turn-122"><a href="#CharacterDrawing.turn-122"><span class="linenos">122</span></a><span class="sd">                updated direction.</span>
+</span><span id="CharacterDrawing.turn-123"><a href="#CharacterDrawing.turn-123"><span class="linenos">123</span></a>
+</span><span id="CharacterDrawing.turn-124"><a href="#CharacterDrawing.turn-124"><span class="linenos">124</span></a><span class="sd">        Example:</span>
+</span><span id="CharacterDrawing.turn-125"><a href="#CharacterDrawing.turn-125"><span class="linenos">125</span></a><span class="sd">            ```python</span>
+</span><span id="CharacterDrawing.turn-126"><a href="#CharacterDrawing.turn-126"><span class="linenos">126</span></a><span class="sd">            # Turn character to face up</span>
+</span><span id="CharacterDrawing.turn-127"><a href="#CharacterDrawing.turn-127"><span class="linenos">127</span></a><span class="sd">            character = character.turn(Direction.UP)</span>
+</span><span id="CharacterDrawing.turn-128"><a href="#CharacterDrawing.turn-128"><span class="linenos">128</span></a><span class="sd">            ```</span>
+</span><span id="CharacterDrawing.turn-129"><a href="#CharacterDrawing.turn-129"><span class="linenos">129</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -621,29 +625,29 @@ may also trigger direction-specific animations or state changes.</p>
 
     </div>
     <a class="headerlink" href="#CharacterDrawing.tick_move"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.tick_move-130"><a href="#CharacterDrawing.tick_move-130"><span class="linenos">130</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing.tick_move-131"><a href="#CharacterDrawing.tick_move-131"><span class="linenos">131</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterDrawing.tick_move-132"><a href="#CharacterDrawing.tick_move-132"><span class="linenos">132</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterDrawing.tick_move-133"><a href="#CharacterDrawing.tick_move-133"><span class="linenos">133</span></a><span class="sd">        Update the character&#39;s movement animation state.</span>
-</span><span id="CharacterDrawing.tick_move-134"><a href="#CharacterDrawing.tick_move-134"><span class="linenos">134</span></a>
-</span><span id="CharacterDrawing.tick_move-135"><a href="#CharacterDrawing.tick_move-135"><span class="linenos">135</span></a><span class="sd">        This method should advance the character&#39;s movement animation</span>
-</span><span id="CharacterDrawing.tick_move-136"><a href="#CharacterDrawing.tick_move-136"><span class="linenos">136</span></a><span class="sd">        based on the elapsed time. It&#39;s called when the character</span>
-</span><span id="CharacterDrawing.tick_move-137"><a href="#CharacterDrawing.tick_move-137"><span class="linenos">137</span></a><span class="sd">        is actively moving.</span>
-</span><span id="CharacterDrawing.tick_move-138"><a href="#CharacterDrawing.tick_move-138"><span class="linenos">138</span></a>
-</span><span id="CharacterDrawing.tick_move-139"><a href="#CharacterDrawing.tick_move-139"><span class="linenos">139</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterDrawing.tick_move-140"><a href="#CharacterDrawing.tick_move-140"><span class="linenos">140</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
-</span><span id="CharacterDrawing.tick_move-141"><a href="#CharacterDrawing.tick_move-141"><span class="linenos">141</span></a><span class="sd">                last update in milliseconds.</span>
-</span><span id="CharacterDrawing.tick_move-142"><a href="#CharacterDrawing.tick_move-142"><span class="linenos">142</span></a>
-</span><span id="CharacterDrawing.tick_move-143"><a href="#CharacterDrawing.tick_move-143"><span class="linenos">143</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterDrawing.tick_move-144"><a href="#CharacterDrawing.tick_move-144"><span class="linenos">144</span></a><span class="sd">            `CharacterDrawing`: A new character instance with updated</span>
-</span><span id="CharacterDrawing.tick_move-145"><a href="#CharacterDrawing.tick_move-145"><span class="linenos">145</span></a><span class="sd">                movement animation state.</span>
-</span><span id="CharacterDrawing.tick_move-146"><a href="#CharacterDrawing.tick_move-146"><span class="linenos">146</span></a>
-</span><span id="CharacterDrawing.tick_move-147"><a href="#CharacterDrawing.tick_move-147"><span class="linenos">147</span></a><span class="sd">        Example:</span>
-</span><span id="CharacterDrawing.tick_move-148"><a href="#CharacterDrawing.tick_move-148"><span class="linenos">148</span></a><span class="sd">            ```python</span>
-</span><span id="CharacterDrawing.tick_move-149"><a href="#CharacterDrawing.tick_move-149"><span class="linenos">149</span></a><span class="sd">            # Update movement animation</span>
-</span><span id="CharacterDrawing.tick_move-150"><a href="#CharacterDrawing.tick_move-150"><span class="linenos">150</span></a><span class="sd">            character = character.tick_move(time_delta)</span>
-</span><span id="CharacterDrawing.tick_move-151"><a href="#CharacterDrawing.tick_move-151"><span class="linenos">151</span></a><span class="sd">            ```</span>
-</span><span id="CharacterDrawing.tick_move-152"><a href="#CharacterDrawing.tick_move-152"><span class="linenos">152</span></a><span class="sd">        &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.tick_move-131"><a href="#CharacterDrawing.tick_move-131"><span class="linenos">131</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing.tick_move-132"><a href="#CharacterDrawing.tick_move-132"><span class="linenos">132</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterDrawing.tick_move-133"><a href="#CharacterDrawing.tick_move-133"><span class="linenos">133</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing.tick_move-134"><a href="#CharacterDrawing.tick_move-134"><span class="linenos">134</span></a><span class="sd">        Update the character&#39;s movement animation state.</span>
+</span><span id="CharacterDrawing.tick_move-135"><a href="#CharacterDrawing.tick_move-135"><span class="linenos">135</span></a>
+</span><span id="CharacterDrawing.tick_move-136"><a href="#CharacterDrawing.tick_move-136"><span class="linenos">136</span></a><span class="sd">        This method should advance the character&#39;s movement animation</span>
+</span><span id="CharacterDrawing.tick_move-137"><a href="#CharacterDrawing.tick_move-137"><span class="linenos">137</span></a><span class="sd">        based on the elapsed time. It&#39;s called when the character</span>
+</span><span id="CharacterDrawing.tick_move-138"><a href="#CharacterDrawing.tick_move-138"><span class="linenos">138</span></a><span class="sd">        is actively moving.</span>
+</span><span id="CharacterDrawing.tick_move-139"><a href="#CharacterDrawing.tick_move-139"><span class="linenos">139</span></a>
+</span><span id="CharacterDrawing.tick_move-140"><a href="#CharacterDrawing.tick_move-140"><span class="linenos">140</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterDrawing.tick_move-141"><a href="#CharacterDrawing.tick_move-141"><span class="linenos">141</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
+</span><span id="CharacterDrawing.tick_move-142"><a href="#CharacterDrawing.tick_move-142"><span class="linenos">142</span></a><span class="sd">                last update in milliseconds.</span>
+</span><span id="CharacterDrawing.tick_move-143"><a href="#CharacterDrawing.tick_move-143"><span class="linenos">143</span></a>
+</span><span id="CharacterDrawing.tick_move-144"><a href="#CharacterDrawing.tick_move-144"><span class="linenos">144</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing.tick_move-145"><a href="#CharacterDrawing.tick_move-145"><span class="linenos">145</span></a><span class="sd">            `CharacterDrawing`: A new character instance with updated</span>
+</span><span id="CharacterDrawing.tick_move-146"><a href="#CharacterDrawing.tick_move-146"><span class="linenos">146</span></a><span class="sd">                movement animation state.</span>
+</span><span id="CharacterDrawing.tick_move-147"><a href="#CharacterDrawing.tick_move-147"><span class="linenos">147</span></a>
+</span><span id="CharacterDrawing.tick_move-148"><a href="#CharacterDrawing.tick_move-148"><span class="linenos">148</span></a><span class="sd">        Example:</span>
+</span><span id="CharacterDrawing.tick_move-149"><a href="#CharacterDrawing.tick_move-149"><span class="linenos">149</span></a><span class="sd">            ```python</span>
+</span><span id="CharacterDrawing.tick_move-150"><a href="#CharacterDrawing.tick_move-150"><span class="linenos">150</span></a><span class="sd">            # Update movement animation</span>
+</span><span id="CharacterDrawing.tick_move-151"><a href="#CharacterDrawing.tick_move-151"><span class="linenos">151</span></a><span class="sd">            character = character.tick_move(time_delta)</span>
+</span><span id="CharacterDrawing.tick_move-152"><a href="#CharacterDrawing.tick_move-152"><span class="linenos">152</span></a><span class="sd">            ```</span>
+</span><span id="CharacterDrawing.tick_move-153"><a href="#CharacterDrawing.tick_move-153"><span class="linenos">153</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -692,29 +696,29 @@ last update in milliseconds.</li>
 
     </div>
     <a class="headerlink" href="#CharacterDrawing.tick_idle"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.tick_idle-154"><a href="#CharacterDrawing.tick_idle-154"><span class="linenos">154</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing.tick_idle-155"><a href="#CharacterDrawing.tick_idle-155"><span class="linenos">155</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterDrawing.tick_idle-156"><a href="#CharacterDrawing.tick_idle-156"><span class="linenos">156</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterDrawing.tick_idle-157"><a href="#CharacterDrawing.tick_idle-157"><span class="linenos">157</span></a><span class="sd">        Update the character&#39;s idle animation state.</span>
-</span><span id="CharacterDrawing.tick_idle-158"><a href="#CharacterDrawing.tick_idle-158"><span class="linenos">158</span></a>
-</span><span id="CharacterDrawing.tick_idle-159"><a href="#CharacterDrawing.tick_idle-159"><span class="linenos">159</span></a><span class="sd">        This method should advance the character&#39;s idle animation</span>
-</span><span id="CharacterDrawing.tick_idle-160"><a href="#CharacterDrawing.tick_idle-160"><span class="linenos">160</span></a><span class="sd">        based on the elapsed time. It&#39;s called when the character</span>
-</span><span id="CharacterDrawing.tick_idle-161"><a href="#CharacterDrawing.tick_idle-161"><span class="linenos">161</span></a><span class="sd">        is not moving.</span>
-</span><span id="CharacterDrawing.tick_idle-162"><a href="#CharacterDrawing.tick_idle-162"><span class="linenos">162</span></a>
-</span><span id="CharacterDrawing.tick_idle-163"><a href="#CharacterDrawing.tick_idle-163"><span class="linenos">163</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterDrawing.tick_idle-164"><a href="#CharacterDrawing.tick_idle-164"><span class="linenos">164</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
-</span><span id="CharacterDrawing.tick_idle-165"><a href="#CharacterDrawing.tick_idle-165"><span class="linenos">165</span></a><span class="sd">                last update in milliseconds.</span>
-</span><span id="CharacterDrawing.tick_idle-166"><a href="#CharacterDrawing.tick_idle-166"><span class="linenos">166</span></a>
-</span><span id="CharacterDrawing.tick_idle-167"><a href="#CharacterDrawing.tick_idle-167"><span class="linenos">167</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterDrawing.tick_idle-168"><a href="#CharacterDrawing.tick_idle-168"><span class="linenos">168</span></a><span class="sd">            `CharacterDrawing`: A new character instance with updated</span>
-</span><span id="CharacterDrawing.tick_idle-169"><a href="#CharacterDrawing.tick_idle-169"><span class="linenos">169</span></a><span class="sd">                idle animation state.</span>
-</span><span id="CharacterDrawing.tick_idle-170"><a href="#CharacterDrawing.tick_idle-170"><span class="linenos">170</span></a>
-</span><span id="CharacterDrawing.tick_idle-171"><a href="#CharacterDrawing.tick_idle-171"><span class="linenos">171</span></a><span class="sd">        Example:</span>
-</span><span id="CharacterDrawing.tick_idle-172"><a href="#CharacterDrawing.tick_idle-172"><span class="linenos">172</span></a><span class="sd">            ```python</span>
-</span><span id="CharacterDrawing.tick_idle-173"><a href="#CharacterDrawing.tick_idle-173"><span class="linenos">173</span></a><span class="sd">            # Update idle animation</span>
-</span><span id="CharacterDrawing.tick_idle-174"><a href="#CharacterDrawing.tick_idle-174"><span class="linenos">174</span></a><span class="sd">            character = character.tick_idle(time_delta)</span>
-</span><span id="CharacterDrawing.tick_idle-175"><a href="#CharacterDrawing.tick_idle-175"><span class="linenos">175</span></a><span class="sd">            ```</span>
-</span><span id="CharacterDrawing.tick_idle-176"><a href="#CharacterDrawing.tick_idle-176"><span class="linenos">176</span></a><span class="sd">        &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.tick_idle-155"><a href="#CharacterDrawing.tick_idle-155"><span class="linenos">155</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="CharacterDrawing.tick_idle-156"><a href="#CharacterDrawing.tick_idle-156"><span class="linenos">156</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterDrawing.tick_idle-157"><a href="#CharacterDrawing.tick_idle-157"><span class="linenos">157</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterDrawing.tick_idle-158"><a href="#CharacterDrawing.tick_idle-158"><span class="linenos">158</span></a><span class="sd">        Update the character&#39;s idle animation state.</span>
+</span><span id="CharacterDrawing.tick_idle-159"><a href="#CharacterDrawing.tick_idle-159"><span class="linenos">159</span></a>
+</span><span id="CharacterDrawing.tick_idle-160"><a href="#CharacterDrawing.tick_idle-160"><span class="linenos">160</span></a><span class="sd">        This method should advance the character&#39;s idle animation</span>
+</span><span id="CharacterDrawing.tick_idle-161"><a href="#CharacterDrawing.tick_idle-161"><span class="linenos">161</span></a><span class="sd">        based on the elapsed time. It&#39;s called when the character</span>
+</span><span id="CharacterDrawing.tick_idle-162"><a href="#CharacterDrawing.tick_idle-162"><span class="linenos">162</span></a><span class="sd">        is not moving.</span>
+</span><span id="CharacterDrawing.tick_idle-163"><a href="#CharacterDrawing.tick_idle-163"><span class="linenos">163</span></a>
+</span><span id="CharacterDrawing.tick_idle-164"><a href="#CharacterDrawing.tick_idle-164"><span class="linenos">164</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterDrawing.tick_idle-165"><a href="#CharacterDrawing.tick_idle-165"><span class="linenos">165</span></a><span class="sd">            `time_delta`: The amount of time that has passed since the</span>
+</span><span id="CharacterDrawing.tick_idle-166"><a href="#CharacterDrawing.tick_idle-166"><span class="linenos">166</span></a><span class="sd">                last update in milliseconds.</span>
+</span><span id="CharacterDrawing.tick_idle-167"><a href="#CharacterDrawing.tick_idle-167"><span class="linenos">167</span></a>
+</span><span id="CharacterDrawing.tick_idle-168"><a href="#CharacterDrawing.tick_idle-168"><span class="linenos">168</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterDrawing.tick_idle-169"><a href="#CharacterDrawing.tick_idle-169"><span class="linenos">169</span></a><span class="sd">            `CharacterDrawing`: A new character instance with updated</span>
+</span><span id="CharacterDrawing.tick_idle-170"><a href="#CharacterDrawing.tick_idle-170"><span class="linenos">170</span></a><span class="sd">                idle animation state.</span>
+</span><span id="CharacterDrawing.tick_idle-171"><a href="#CharacterDrawing.tick_idle-171"><span class="linenos">171</span></a>
+</span><span id="CharacterDrawing.tick_idle-172"><a href="#CharacterDrawing.tick_idle-172"><span class="linenos">172</span></a><span class="sd">        Example:</span>
+</span><span id="CharacterDrawing.tick_idle-173"><a href="#CharacterDrawing.tick_idle-173"><span class="linenos">173</span></a><span class="sd">            ```python</span>
+</span><span id="CharacterDrawing.tick_idle-174"><a href="#CharacterDrawing.tick_idle-174"><span class="linenos">174</span></a><span class="sd">            # Update idle animation</span>
+</span><span id="CharacterDrawing.tick_idle-175"><a href="#CharacterDrawing.tick_idle-175"><span class="linenos">175</span></a><span class="sd">            character = character.tick_idle(time_delta)</span>
+</span><span id="CharacterDrawing.tick_idle-176"><a href="#CharacterDrawing.tick_idle-176"><span class="linenos">176</span></a><span class="sd">            ```</span>
+</span><span id="CharacterDrawing.tick_idle-177"><a href="#CharacterDrawing.tick_idle-177"><span class="linenos">177</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span></pre></div>
 
 

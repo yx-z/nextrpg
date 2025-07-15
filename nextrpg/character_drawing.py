@@ -17,7 +17,7 @@ implementations while allowing for specialized rendering techniques.
 
 Example:
     ```python
-    from nextrpg.character.character_drawing import CharacterDrawing
+    from nextrpg.character_drawing import CharacterDrawing
     from nextrpg.core import Direction, Millisecond
 
     class MyCharacterDrawing(CharacterDrawing):
@@ -44,9 +44,9 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import Self
 
-from nextrpg.model import export
 from nextrpg.core import Direction, Millisecond
 from nextrpg.draw_on_screen import Drawing
+from nextrpg.model import export
 
 
 @export
@@ -69,7 +69,7 @@ class CharacterDrawing(ABC):
 
     Example:
         ```python
-        from nextrpg.character.character_drawing import CharacterDrawing
+        from nextrpg.character_drawing import CharacterDrawing
         from nextrpg.core import Direction
 
         class MyCharacter(CharacterDrawing):
@@ -91,10 +91,11 @@ class CharacterDrawing(ABC):
 
         This method should return the appropriate drawing based on
         the character's current state, direction, and animation frame.
+        The drawing should reflect the character's current appearance
+        including any active animations.
 
         Returns:
-            `nextrpg.draw.draw_on_screen.Drawing`: The character's
-                current drawing representation.
+            `Drawing`: The character's current drawing representation.
 
         Example:
             ```python

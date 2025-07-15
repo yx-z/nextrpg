@@ -7,6 +7,7 @@ mechanisms. These utilities are used throughout the NextRPG framework
 to create efficient, immutable data structures.
 
 The module includes:
+- `export`: Decorator for marking public API elements
 - `instance_init`: Function to mark fields for instance initialization
 - `dataclass_with_instance_init`: Decorator for dataclasses with instance init
 - `cached`: Decorator for creating cached class instances
@@ -16,12 +17,18 @@ safely shared and cached across the game framework.
 
 Example:
     ```python
-    from nextrpg.model import dataclass_with_instance_init, instance_init
+    from nextrpg.model import dataclass_with_instance_init, instance_init, cached
 
     @dataclass_with_instance_init
     class MyClass:
         value: int
         computed: str = instance_init(lambda self: f"Value: {self.value}")
+
+    @cached(size_fun=lambda: 100)
+    class ExpensiveObject:
+        def __init__(self, x: int, y: int):
+            self.x = x
+            self.y = y
     ```
 """
 
@@ -33,6 +40,32 @@ from typing import Any, dataclass_transform
 
 
 def export[T](o: T) -> T:
+    """
+    Mark an object as part of the public API.
+
+    This decorator adds the decorated object to the module's `__all__`
+    list, making it part of the public API that should be imported
+    when using `from module import *`.
+
+    Arguments:
+        `o`: The object to mark as exported.
+
+    Returns:
+        `T`: The original object, unchanged.
+
+    Example:
+        ```python
+        from nextrpg.model import export
+
+        @export
+        def my_function():
+            pass
+
+        @export
+        class MyClass:
+            pass
+        ```
+    """
     mod = modules[o.__module__]
     if hasattr(mod, "__all__"):
         if o.__name__ not in mod.__all__:
@@ -207,6 +240,9 @@ class cached[T, K, **P]:
         return cls
 
 
+_NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"
+
+
 @dataclass(frozen=True)
 class _Init:
     """
@@ -221,6 +257,3 @@ class _Init:
     """
 
     init: Callable[[Any], Any]
-
-
-_NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"

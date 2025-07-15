@@ -1,20 +1,99 @@
+"""
+Text rendering and layout utilities for NextRPG.
+
+This module provides text rendering capabilities for NextRPG games.
+It includes the `Text` class which handles text layout, sizing,
+and line management for multi-line text rendering.
+
+The text system features:
+- Multi-line text support with automatic line wrapping
+- Configurable font and styling options
+- Automatic text sizing and layout calculations
+- Line height and spacing management
+- Integration with the global configuration system
+
+Example:
+    ```python
+    from nextrpg.text import Text
+    from nextrpg.text_config import TextConfig
+
+    # Create text with default config
+    text = Text("Hello, World!")
+
+    # Create text with custom config
+    config = TextConfig(font=Font(16), line_spacing=5)
+    custom_text = Text("Multi-line\ntext message", config=config)
+
+    # Get text dimensions
+    size = text.size  # Returns Size(width, height)
+    ```
+"""
+
 from dataclasses import dataclass, field
 from functools import cached_property
 
-from nextrpg.text_config import TextConfig
-from nextrpg.global_config import config
 from nextrpg.core import Pixel, Size
+from nextrpg.global_config import config
 from nextrpg.model import export
+from nextrpg.text_config import TextConfig
 
 
 @export
 @dataclass(frozen=True)
 class Text:
+    """
+    Represents a text message with layout and sizing capabilities.
+
+    This class provides text rendering functionality with support for
+    multi-line text, automatic sizing, and configurable styling.
+    It handles text layout calculations and provides properties for
+    accessing text dimensions and line information.
+
+    Arguments:
+        `message`: The text message to be rendered. Can contain
+            newline characters for multi-line text.
+
+        `config`: The text configuration including font and styling
+            options. Defaults to the global text configuration.
+
+    Example:
+        ```python
+        from nextrpg.text import Text
+        from nextrpg.text_config import TextConfig
+
+        # Simple text
+        text = Text("Hello, World!")
+
+        # Multi-line text
+        multi_text = Text("Line 1\nLine 2\nLine 3")
+
+        # Custom styling
+        config = TextConfig(font=Font(24), line_spacing=10)
+        styled_text = Text("Styled text", config=config)
+        ```
+    """
+
     message: str
     config: TextConfig = field(default_factory=lambda: config().text)
 
     @cached_property
     def size(self) -> Size:
+        """
+        Get the total size required to render the text.
+
+        Calculates the dimensions needed to display the text,
+        including line spacing between multi-line text.
+        Returns a zero size for empty messages.
+
+        Returns:
+            `Size`: The width and height required to render the text.
+
+        Example:
+            ```python
+            text = Text("Hello\nWorld!")
+            size = text.size  # Returns Size(width, height)
+            ```
+        """
         if not self.message:
             return Size(0, 0)
         text_sizes = [self.config.font.text_size(line) for line in self.lines]
@@ -25,6 +104,21 @@ class Text:
 
     @cached_property
     def line_heights(self) -> list[Pixel]:
+        """
+        Get the vertical position of each line in the text.
+
+        Returns a list of pixel positions where each line should
+        be rendered, taking into account line spacing.
+
+        Returns:
+            `list[Pixel]`: List of vertical positions for each line.
+
+        Example:
+            ```python
+            text = Text("Line 1\nLine 2\nLine 3")
+            heights = text.line_heights  # [0, 20, 40] (example)
+            ```
+        """
         return [
             (self.config.font.text_height + self.config.line_spacing) * i
             for i in range(len(self.lines))
@@ -32,4 +126,19 @@ class Text:
 
     @cached_property
     def lines(self) -> list[str]:
+        """
+        Get the individual lines of the text message.
+
+        Splits the message on newline characters to create a list
+        of individual lines for rendering.
+
+        Returns:
+            `list[str]`: List of text lines.
+
+        Example:
+            ```python
+            text = Text("First line\nSecond line\nThird line")
+            lines = text.lines  # ["First line", "Second line", "Third line"]
+            ```
+        """
         return self.message.splitlines()

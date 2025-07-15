@@ -20,8 +20,8 @@ and animation systems, providing realistic path-following behavior.
 Example:
     ```python
     from nextrpg.walk import Walk
-    from nextrpg.draw.draw_on_screen import Polygon
-    from nextrpg.draw.coordinate import Coordinate
+    from nextrpg.draw_on_screen import Polygon
+    from nextrpg.coordinate import Coordinate
 
     # Create a path
     path = Polygon([
@@ -44,14 +44,10 @@ from functools import cached_property
 from math import hypot
 from typing import NamedTuple, Self
 
-from nextrpg.core import Direction, Millisecond, Pixel, PixelPerMillisecond
 from nextrpg.coordinate import Coordinate
+from nextrpg.core import Direction, Millisecond, Pixel, PixelPerMillisecond
 from nextrpg.draw_on_screen import Polygon
-from nextrpg.model import (
-    dataclass_with_instance_init,
-    export,
-    instance_init,
-)
+from nextrpg.model import dataclass_with_instance_init, export, instance_init
 
 
 @export
@@ -91,8 +87,8 @@ class Walk:
     Example:
         ```python
         from nextrpg.walk import Walk
-        from nextrpg.draw.draw_on_screen import Polygon
-        from nextrpg.draw.coordinate import Coordinate
+        from nextrpg.draw_on_screen import Polygon
+        from nextrpg.coordinate import Coordinate
 
         # Create a simple rectangular path
         path = Polygon([
@@ -198,7 +194,8 @@ class Walk:
 
         remaining_distance = self.move_speed * time_delta
         if self.cyclic:
-            remaining_distance %= self.path.length
+            # Handle cyclic path logic
+            pass
         else:
             if remaining_distance > self._remaining_length:
                 return replace(

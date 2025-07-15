@@ -23,9 +23,11 @@ from nextrpg.scene import Scene
 
 logger = Logger("Npcs")
 
-__all__ =  [
-    "RpgEventSpecParams", "RpgEventSpec", "RpgEventGenerator",
-    "RpgEventCallable"
+__all__ = [
+    "RpgEventSpecParams",
+    "RpgEventSpec",
+    "RpgEventGenerator",
+    "RpgEventCallable",
 ]
 type RpgEventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, EventfulScene]
 
@@ -45,6 +47,7 @@ type RpgEventCallable = Callable[
 """
 The event callable type that can be used to generate a scene for certain event.
 """
+
 
 @export
 @dataclass_with_instance_init
@@ -185,7 +188,6 @@ class EventfulScene(Scene, EventAsAttr):
         return tuple(n.complete_event for n in self.npcs)
 
 
-
 @export
 @dataclass(frozen=True)
 class RpgEventScene(Scene):
@@ -240,4 +242,3 @@ class NpcSpec(CharacterSpec):
             return ctx[fun.__name__](*args, **kwargs)
 
         return yield_event
-

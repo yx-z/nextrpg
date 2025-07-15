@@ -35,9 +35,9 @@ from functools import cached_property
 from string.templatelib import Interpolation, Template
 from typing import NamedTuple
 
-from nextrpg.global_config import config
-from nextrpg.debug_config import LogLevel
 from nextrpg.core import Millisecond, Timer
+from nextrpg.debug_config import LogLevel
+from nextrpg.global_config import config
 
 
 class DurationFromConfig:
@@ -108,9 +108,6 @@ class Logger:
                 If `FROM_CONFIG`, the duration is taken from
                 `config().debug.log_duration`.
 
-        Returns:
-            `None`
-
         Example:
             ```python
             logger.debug("Player position: (100, 200)")
@@ -136,9 +133,6 @@ class Logger:
 
             `duration`: The duration of the log message in milliseconds.
                 If `None`, the message will be flushed in the next game loop.
-
-        Returns:
-            `None`
 
         Example:
             ```python
@@ -166,9 +160,6 @@ class Logger:
             `duration`: The duration of the log message in milliseconds.
                 If `None`, the message will be flushed in the next game loop.
 
-        Returns:
-            `None`
-
         Example:
             ```python
             logger.warning("Your health is low!")
@@ -195,13 +186,10 @@ class Logger:
             `duration`: The duration of the log message in milliseconds.
                 If `None`, the message will be flushed in the next game loop.
 
-        Returns:
-            `None`
-
         Example:
             ```python
             logger.error("Failed to load save file")
-            logger.error("Connection lost", duration=10000)
+            logger.error("Network connection lost", duration=10000)
             ```
         """
         _add(self.component, LogLevel.ERROR, message, duration)

@@ -67,39 +67,129 @@
                     <h1 class="modulename">
 <a href="./../nextrpg.html">nextrpg</a><wbr>.tile_map_config    </h1>
 
-                
+                        <div class="docstring"><p>Tile map configuration system for NextRPG.</p>
+
+<p>This module provides configuration options for tile map layers and
+properties that are created from Tiled Map Editor (TMX) files.
+It includes the <code><a href="#TileMapConfig">TileMapConfig</a></code> class which defines layer names
+and object types for different rendering and collision purposes.</p>
+
+<p>The tile map configuration features:</p>
+
+<ul>
+<li>Background layer identification</li>
+<li>Foreground layer identification</li>
+<li>Above-character layer identification</li>
+<li>Collision object identification</li>
+<li>Integration with Tiled Map Editor</li>
+</ul>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.tile_map_config</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">TileMapConfig</span>
+
+<span class="c1"># Create default tile map config</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">TileMapConfig</span><span class="p">()</span>
+
+<span class="c1"># Create custom tile map config</span>
+<span class="n">custom_config</span> <span class="o">=</span> <span class="n">TileMapConfig</span><span class="p">(</span>
+    <span class="n">background</span><span class="o">=</span><span class="s2">&quot;bg&quot;</span><span class="p">,</span>
+    <span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;fg&quot;</span><span class="p">,</span>
+    <span class="n">above_character</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">,</span>
+    <span class="n">collision</span><span class="o">=</span><span class="s2">&quot;solid&quot;</span>
+<span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+</div>
+
                         <input id="mod-tile_map_config-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-tile_map_config-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">Tile map configuration system for NextRPG.</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="nd">@export</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TileMapConfig</span><span class="p">:</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">    Configuration class for managing tile map layers and properties,</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">    that is created from tmx files [Tiled](https://www.mapeditor.org/).</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">    This config is used by `nextrpg.scene.map_scene.MapScene`.</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">        `background`:</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">            Class name of the layer to be identified as background layer.</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">        `foreground`:</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">            Class name of the layer to be identified as foreground layer.</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">        `collision`:</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">            Class name of the objects to be identified as collision objects.</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">background</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;background&quot;</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">foreground</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foreground&quot;</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">above_character</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;above_character&quot;</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">collision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;collision&quot;</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">This module provides configuration options for tile map layers and</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">properties that are created from Tiled Map Editor (TMX) files.</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">It includes the `TileMapConfig` class which defines layer names</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="sd">and object types for different rendering and collision purposes.</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">The tile map configuration features:</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">- Background layer identification</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">- Foreground layer identification</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">- Above-character layer identification</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">- Collision object identification</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">- Integration with Tiled Map Editor</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">Example:</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">    ```python</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">    from nextrpg.tile_map_config import TileMapConfig</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">    # Create default tile map config</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">    config = TileMapConfig()</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">    # Create custom tile map config</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    custom_config = TileMapConfig(</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">        background=&quot;bg&quot;,</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">        foreground=&quot;fg&quot;,</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">        above_character=&quot;above&quot;,</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">        collision=&quot;solid&quot;</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">    )</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">    ```</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="nd">@export</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TileMapConfig</span><span class="p">:</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">    Configuration class for managing tile map layers and properties.</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">    This config is used by `nextrpg.scene.map_scene.MapScene` to</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">    identify different types of layers and objects in tile maps</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">    created from Tiled Map Editor (TMX) files.</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">    Arguments:</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">        `background`: Class name of the layer to be identified as</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">            background layer. Defaults to &quot;background&quot;.</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">        `foreground`: Class name of the layer to be identified as</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">            foreground layer. Defaults to &quot;foreground&quot;.</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">        `above_character`: Class name of the layer to be rendered</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">            above characters. Defaults to &quot;above_character&quot;.</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">        `collision`: Class name of the objects to be identified as</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">            collision objects. Defaults to &quot;collision&quot;.</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">    Example:</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">        ```python</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">        from nextrpg.tile_map_config import TileMapConfig</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">        # Default configuration</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">        config = TileMapConfig()</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="sd">        # Custom configuration for specific map</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">        custom_config = TileMapConfig(</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">            background=&quot;Background&quot;,</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">            foreground=&quot;Foreground&quot;,</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="sd">            above_character=&quot;AbovePlayer&quot;,</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="sd">            collision=&quot;Solid&quot;</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="sd">        )</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="sd">        ```</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>    <span class="n">background</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;background&quot;</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>    <span class="n">foreground</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foreground&quot;</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="n">above_character</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;above_character&quot;</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>    <span class="n">collision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;collision&quot;</span>
 </span></pre></div>
 
 
@@ -117,45 +207,91 @@
 
     </div>
     <a class="headerlink" href="#TileMapConfig"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TileMapConfig-6"><a href="#TileMapConfig-6"><span class="linenos"> 6</span></a><span class="nd">@export</span>
-</span><span id="TileMapConfig-7"><a href="#TileMapConfig-7"><span class="linenos"> 7</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="TileMapConfig-8"><a href="#TileMapConfig-8"><span class="linenos"> 8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TileMapConfig</span><span class="p">:</span>
-</span><span id="TileMapConfig-9"><a href="#TileMapConfig-9"><span class="linenos"> 9</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="TileMapConfig-10"><a href="#TileMapConfig-10"><span class="linenos">10</span></a><span class="sd">    Configuration class for managing tile map layers and properties,</span>
-</span><span id="TileMapConfig-11"><a href="#TileMapConfig-11"><span class="linenos">11</span></a><span class="sd">    that is created from tmx files [Tiled](https://www.mapeditor.org/).</span>
-</span><span id="TileMapConfig-12"><a href="#TileMapConfig-12"><span class="linenos">12</span></a>
-</span><span id="TileMapConfig-13"><a href="#TileMapConfig-13"><span class="linenos">13</span></a><span class="sd">    This config is used by `nextrpg.scene.map_scene.MapScene`.</span>
-</span><span id="TileMapConfig-14"><a href="#TileMapConfig-14"><span class="linenos">14</span></a>
-</span><span id="TileMapConfig-15"><a href="#TileMapConfig-15"><span class="linenos">15</span></a><span class="sd">    Attributes:</span>
-</span><span id="TileMapConfig-16"><a href="#TileMapConfig-16"><span class="linenos">16</span></a><span class="sd">        `background`:</span>
-</span><span id="TileMapConfig-17"><a href="#TileMapConfig-17"><span class="linenos">17</span></a><span class="sd">            Class name of the layer to be identified as background layer.</span>
-</span><span id="TileMapConfig-18"><a href="#TileMapConfig-18"><span class="linenos">18</span></a>
-</span><span id="TileMapConfig-19"><a href="#TileMapConfig-19"><span class="linenos">19</span></a><span class="sd">        `foreground`:</span>
-</span><span id="TileMapConfig-20"><a href="#TileMapConfig-20"><span class="linenos">20</span></a><span class="sd">            Class name of the layer to be identified as foreground layer.</span>
-</span><span id="TileMapConfig-21"><a href="#TileMapConfig-21"><span class="linenos">21</span></a>
-</span><span id="TileMapConfig-22"><a href="#TileMapConfig-22"><span class="linenos">22</span></a><span class="sd">        `collision`:</span>
-</span><span id="TileMapConfig-23"><a href="#TileMapConfig-23"><span class="linenos">23</span></a><span class="sd">            Class name of the objects to be identified as collision objects.</span>
-</span><span id="TileMapConfig-24"><a href="#TileMapConfig-24"><span class="linenos">24</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="TileMapConfig-25"><a href="#TileMapConfig-25"><span class="linenos">25</span></a>
-</span><span id="TileMapConfig-26"><a href="#TileMapConfig-26"><span class="linenos">26</span></a>    <span class="n">background</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;background&quot;</span>
-</span><span id="TileMapConfig-27"><a href="#TileMapConfig-27"><span class="linenos">27</span></a>    <span class="n">foreground</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foreground&quot;</span>
-</span><span id="TileMapConfig-28"><a href="#TileMapConfig-28"><span class="linenos">28</span></a>    <span class="n">above_character</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;above_character&quot;</span>
-</span><span id="TileMapConfig-29"><a href="#TileMapConfig-29"><span class="linenos">29</span></a>    <span class="n">collision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;collision&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TileMapConfig-39"><a href="#TileMapConfig-39"><span class="linenos">39</span></a><span class="nd">@export</span>
+</span><span id="TileMapConfig-40"><a href="#TileMapConfig-40"><span class="linenos">40</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="TileMapConfig-41"><a href="#TileMapConfig-41"><span class="linenos">41</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TileMapConfig</span><span class="p">:</span>
+</span><span id="TileMapConfig-42"><a href="#TileMapConfig-42"><span class="linenos">42</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="TileMapConfig-43"><a href="#TileMapConfig-43"><span class="linenos">43</span></a><span class="sd">    Configuration class for managing tile map layers and properties.</span>
+</span><span id="TileMapConfig-44"><a href="#TileMapConfig-44"><span class="linenos">44</span></a>
+</span><span id="TileMapConfig-45"><a href="#TileMapConfig-45"><span class="linenos">45</span></a><span class="sd">    This config is used by `nextrpg.scene.map_scene.MapScene` to</span>
+</span><span id="TileMapConfig-46"><a href="#TileMapConfig-46"><span class="linenos">46</span></a><span class="sd">    identify different types of layers and objects in tile maps</span>
+</span><span id="TileMapConfig-47"><a href="#TileMapConfig-47"><span class="linenos">47</span></a><span class="sd">    created from Tiled Map Editor (TMX) files.</span>
+</span><span id="TileMapConfig-48"><a href="#TileMapConfig-48"><span class="linenos">48</span></a>
+</span><span id="TileMapConfig-49"><a href="#TileMapConfig-49"><span class="linenos">49</span></a><span class="sd">    Arguments:</span>
+</span><span id="TileMapConfig-50"><a href="#TileMapConfig-50"><span class="linenos">50</span></a><span class="sd">        `background`: Class name of the layer to be identified as</span>
+</span><span id="TileMapConfig-51"><a href="#TileMapConfig-51"><span class="linenos">51</span></a><span class="sd">            background layer. Defaults to &quot;background&quot;.</span>
+</span><span id="TileMapConfig-52"><a href="#TileMapConfig-52"><span class="linenos">52</span></a>
+</span><span id="TileMapConfig-53"><a href="#TileMapConfig-53"><span class="linenos">53</span></a><span class="sd">        `foreground`: Class name of the layer to be identified as</span>
+</span><span id="TileMapConfig-54"><a href="#TileMapConfig-54"><span class="linenos">54</span></a><span class="sd">            foreground layer. Defaults to &quot;foreground&quot;.</span>
+</span><span id="TileMapConfig-55"><a href="#TileMapConfig-55"><span class="linenos">55</span></a>
+</span><span id="TileMapConfig-56"><a href="#TileMapConfig-56"><span class="linenos">56</span></a><span class="sd">        `above_character`: Class name of the layer to be rendered</span>
+</span><span id="TileMapConfig-57"><a href="#TileMapConfig-57"><span class="linenos">57</span></a><span class="sd">            above characters. Defaults to &quot;above_character&quot;.</span>
+</span><span id="TileMapConfig-58"><a href="#TileMapConfig-58"><span class="linenos">58</span></a>
+</span><span id="TileMapConfig-59"><a href="#TileMapConfig-59"><span class="linenos">59</span></a><span class="sd">        `collision`: Class name of the objects to be identified as</span>
+</span><span id="TileMapConfig-60"><a href="#TileMapConfig-60"><span class="linenos">60</span></a><span class="sd">            collision objects. Defaults to &quot;collision&quot;.</span>
+</span><span id="TileMapConfig-61"><a href="#TileMapConfig-61"><span class="linenos">61</span></a>
+</span><span id="TileMapConfig-62"><a href="#TileMapConfig-62"><span class="linenos">62</span></a><span class="sd">    Example:</span>
+</span><span id="TileMapConfig-63"><a href="#TileMapConfig-63"><span class="linenos">63</span></a><span class="sd">        ```python</span>
+</span><span id="TileMapConfig-64"><a href="#TileMapConfig-64"><span class="linenos">64</span></a><span class="sd">        from nextrpg.tile_map_config import TileMapConfig</span>
+</span><span id="TileMapConfig-65"><a href="#TileMapConfig-65"><span class="linenos">65</span></a>
+</span><span id="TileMapConfig-66"><a href="#TileMapConfig-66"><span class="linenos">66</span></a><span class="sd">        # Default configuration</span>
+</span><span id="TileMapConfig-67"><a href="#TileMapConfig-67"><span class="linenos">67</span></a><span class="sd">        config = TileMapConfig()</span>
+</span><span id="TileMapConfig-68"><a href="#TileMapConfig-68"><span class="linenos">68</span></a>
+</span><span id="TileMapConfig-69"><a href="#TileMapConfig-69"><span class="linenos">69</span></a><span class="sd">        # Custom configuration for specific map</span>
+</span><span id="TileMapConfig-70"><a href="#TileMapConfig-70"><span class="linenos">70</span></a><span class="sd">        custom_config = TileMapConfig(</span>
+</span><span id="TileMapConfig-71"><a href="#TileMapConfig-71"><span class="linenos">71</span></a><span class="sd">            background=&quot;Background&quot;,</span>
+</span><span id="TileMapConfig-72"><a href="#TileMapConfig-72"><span class="linenos">72</span></a><span class="sd">            foreground=&quot;Foreground&quot;,</span>
+</span><span id="TileMapConfig-73"><a href="#TileMapConfig-73"><span class="linenos">73</span></a><span class="sd">            above_character=&quot;AbovePlayer&quot;,</span>
+</span><span id="TileMapConfig-74"><a href="#TileMapConfig-74"><span class="linenos">74</span></a><span class="sd">            collision=&quot;Solid&quot;</span>
+</span><span id="TileMapConfig-75"><a href="#TileMapConfig-75"><span class="linenos">75</span></a><span class="sd">        )</span>
+</span><span id="TileMapConfig-76"><a href="#TileMapConfig-76"><span class="linenos">76</span></a><span class="sd">        ```</span>
+</span><span id="TileMapConfig-77"><a href="#TileMapConfig-77"><span class="linenos">77</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="TileMapConfig-78"><a href="#TileMapConfig-78"><span class="linenos">78</span></a>
+</span><span id="TileMapConfig-79"><a href="#TileMapConfig-79"><span class="linenos">79</span></a>    <span class="n">background</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;background&quot;</span>
+</span><span id="TileMapConfig-80"><a href="#TileMapConfig-80"><span class="linenos">80</span></a>    <span class="n">foreground</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;foreground&quot;</span>
+</span><span id="TileMapConfig-81"><a href="#TileMapConfig-81"><span class="linenos">81</span></a>    <span class="n">above_character</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;above_character&quot;</span>
+</span><span id="TileMapConfig-82"><a href="#TileMapConfig-82"><span class="linenos">82</span></a>    <span class="n">collision</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;collision&quot;</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Configuration class for managing tile map layers and properties,
-that is created from tmx files <a href="https://www.mapeditor.org/">Tiled</a>.</p>
+            <div class="docstring"><p>Configuration class for managing tile map layers and properties.</p>
 
-<p>This config is used by <code>nextrpg.scene.map_scene.MapScene</code>.</p>
+<p>This config is used by <code>nextrpg.scene.map_scene.MapScene</code> to
+identify different types of layers and objects in tile maps
+created from Tiled Map Editor (TMX) files.</p>
 
-<h6 id="attributes">Attributes:</h6>
+<h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code><a href="#TileMapConfig.background">background</a></code>:</strong>  Class name of the layer to be identified as background layer.</li>
-<li><strong><code><a href="#TileMapConfig.foreground">foreground</a></code>:</strong>  Class name of the layer to be identified as foreground layer.</li>
-<li><strong><code><a href="#TileMapConfig.collision">collision</a></code>:</strong>  Class name of the objects to be identified as collision objects.</li>
+<li><strong><code><a href="#TileMapConfig.background">background</a></code>:</strong>  Class name of the layer to be identified as
+background layer. Defaults to "background".</li>
+<li><strong><code><a href="#TileMapConfig.foreground">foreground</a></code>:</strong>  Class name of the layer to be identified as
+foreground layer. Defaults to "foreground".</li>
+<li><strong><code><a href="#TileMapConfig.above_character">above_character</a></code>:</strong>  Class name of the layer to be rendered
+above characters. Defaults to "above_character".</li>
+<li><strong><code><a href="#TileMapConfig.collision">collision</a></code>:</strong>  Class name of the objects to be identified as
+collision objects. Defaults to "collision".</li>
 </ul>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.tile_map_config</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">TileMapConfig</span>
+
+<span class="c1"># Default configuration</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">TileMapConfig</span><span class="p">()</span>
+
+<span class="c1"># Custom configuration for specific map</span>
+<span class="n">custom_config</span> <span class="o">=</span> <span class="n">TileMapConfig</span><span class="p">(</span>
+    <span class="n">background</span><span class="o">=</span><span class="s2">&quot;Background&quot;</span><span class="p">,</span>
+    <span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;Foreground&quot;</span><span class="p">,</span>
+    <span class="n">above_character</span><span class="o">=</span><span class="s2">&quot;AbovePlayer&quot;</span><span class="p">,</span>
+    <span class="n">collision</span><span class="o">=</span><span class="s2">&quot;Solid&quot;</span>
+<span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
 </div>
 
 

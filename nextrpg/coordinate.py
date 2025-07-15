@@ -19,7 +19,7 @@ movement systems, providing precise positioning for all game elements.
 
 Example:
     ```python
-    from nextrpg.draw.coordinate import Coordinate
+    from nextrpg.coordinate import Coordinate
     from nextrpg.core import Direction, DirectionalOffset
 
     # Create coordinates
@@ -70,7 +70,7 @@ class Coordinate(namedtuple("Coordinate", "left top")):
 
     Example:
         ```python
-        from nextrpg.draw.coordinate import Coordinate
+        from nextrpg.coordinate import Coordinate
         from nextrpg.core import Direction, DirectionalOffset
 
         # Create a coordinate

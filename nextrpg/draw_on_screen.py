@@ -1,5 +1,36 @@
 """
-Drawable on screen.
+Drawable elements and rendering utilities for NextRPG.
+
+This module provides the core drawing system for NextRPG games. It
+defines classes for representing drawable elements, managing their
+positioning on screen, and handling various drawing operations.
+
+The module includes:
+- `Drawing`: Represents a drawable element with size and surface access
+- `DrawOnScreen`: Combines a drawing with its position on screen
+- `Polygon`: Represents polygon shapes with collision detection
+- `Rectangle`: Specialized rectangle with optimized collision detection
+
+These classes provide the foundation for all visual elements in
+NextRPG games, from sprites and backgrounds to UI elements and
+geometric shapes.
+
+Example:
+    ```python
+    from nextrpg.draw_on_screen import Drawing, DrawOnScreen, Rectangle
+    from nextrpg.coordinate import Coordinate
+    from nextrpg.core import Size, Rgba
+
+    # Load a sprite
+    sprite = Drawing("assets/player.png")
+
+    # Position it on screen
+    player = DrawOnScreen(Coordinate(100, 100), sprite)
+
+    # Create a colored rectangle
+    rect = Rectangle(Coordinate(0, 0), Size(50, 50))
+    colored_rect = rect.fill(Rgba(255, 0, 0, 255))
+    ```
 """
 
 from collections.abc import Callable
@@ -9,17 +40,16 @@ from math import ceil
 from os import PathLike
 from typing import Self, override
 
-from pygame import Mask, Rect, SRCALPHA, Surface
+from pygame import SRCALPHA, Mask, Rect, Surface
 from pygame.draw import lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
 
-from nextrpg.global_config import config
 from nextrpg.coordinate import Coordinate
-from nextrpg.core import Alpha, BLACK, Pixel, Rgba, Size
-from nextrpg.model import export
+from nextrpg.core import BLACK, Alpha, Pixel, Rgba, Size
+from nextrpg.global_config import config
 from nextrpg.logger import Logger
-from nextrpg.model import cached
+from nextrpg.model import cached, export
 
 logger = Logger("Draw")
 
@@ -36,13 +66,26 @@ class Drawing:
     and dimensions.
 
     This class loads a surface from a file or directly accepts a
-    `pygame.Surface` as input.
-    It provides properties to access surface dimensions and size and methods to
-    crop and scale the surface.
+    `pygame.Surface` as input. It provides properties to access surface
+    dimensions and size and methods to crop and scale the surface.
 
     Arguments:
         `resource`: A path to a file containing the drawing resource,
             or a `pygame.Surface` object.
+
+    Example:
+        ```python
+        # Load from file
+        sprite = Drawing("assets/player.png")
+
+        # Use existing surface
+        surface = pygame.Surface((32, 32))
+        drawing = Drawing(surface)
+
+        # Get dimensions
+        size = drawing.size  # Returns Size(width, height)
+        width = drawing.width  # Returns int
+        ```
     """
 
     resource: str | PathLike | Surface
@@ -70,7 +113,7 @@ class Drawing:
     @property
     def size(self) -> Size:
         """
-        Gets the size of an object as a combination of its width and height
+        Gets the size of an object as a combination of its width and height.
 
         Returns:
             `Size`: A Size object containing the width and height of the object.
@@ -103,6 +146,13 @@ class Drawing:
 
         Returns:
             `Drawing`: A new `Drawing` instance representing the cropped area.
+
+        Example:
+            ```python
+            drawing = Drawing("spritesheet.png")
+            # Crop a 32x32 sprite from position (64, 0)
+            sprite = drawing.crop(Coordinate(64, 0), Size(32, 32))
+            ```
         """
         left, top = top_left
         width, height = size
@@ -117,6 +167,12 @@ class Drawing:
 
         Returns:
             `Drawing`: A new `Drawing` with the specified alpha value.
+
+        Example:
+            ```python
+            drawing = Drawing("sprite.png")
+            transparent = drawing.set_alpha(128)  # 50% transparency
+            ```
         """
         surf = self._surface.copy()
         surf.set_alpha(alpha)
@@ -124,6 +180,23 @@ class Drawing:
 
     @cached_property
     def visible_rectangle(self) -> Rectangle:
+        """
+        Get the bounding rectangle of visible (non-transparent) pixels.
+
+        Calculates the smallest rectangle that contains all non-transparent
+        pixels in the drawing. This is useful for collision detection
+        and optimizing drawing operations.
+
+        Returns:
+            `Rectangle`: The bounding rectangle of visible pixels.
+
+        Example:
+            ```python
+            drawing = Drawing("sprite.png")
+            visible_bounds = drawing.visible_rectangle
+            # Use for collision detection
+            ```
+        """
         visible = [
             Coordinate(x, y)
             for x in range(ceil(self.width))
@@ -143,6 +216,12 @@ class Drawing:
 
     @cached_property
     def _debug_surface(self) -> Surface | None:
+        """
+        Get debug surface with background color if debug mode is enabled.
+
+        Returns:
+            `Surface | None`: Debug surface or None if debug mode is disabled.
+        """
         if (debug := config().debug) and (
             color := debug.drawing_background_color
         ):
@@ -154,6 +233,16 @@ class Drawing:
 
     @cached_property
     def _surface(self) -> Surface:
+        """
+        Get the pygame surface for this drawing.
+
+        Loads the surface from file if needed, or returns the existing
+        surface. The surface is converted to alpha format for proper
+        transparency support.
+
+        Returns:
+            `Surface`: The pygame surface for this drawing.
+        """
         if isinstance(self.resource, Surface):
             return self.resource
         logger.debug(t"Loading {self.resource}")
@@ -170,10 +259,22 @@ class DrawOnScreen:
     properties to access various coordinates and dimensions of the drawing
     on the screen.
 
-    Attributes:
+    Arguments:
         `top_left`: The top-left position of the drawing on the screen.
 
         `drawing`: The drawable element to be displayed on the screen.
+
+    Example:
+        ```python
+        sprite = Drawing("player.png")
+        player = DrawOnScreen(Coordinate(100, 100), sprite)
+
+        # Get the rectangle bounds
+        bounds = player.rectangle
+
+        # Check if point is inside
+        is_inside = bounds.contain(Coordinate(120, 120))
+        ```
     """
 
     top_left: Coordinate
@@ -186,7 +287,7 @@ class DrawOnScreen:
 
         Returns:
             `Rectangle`: A rectangle defining the drawing's position and size
-            on screen.
+                on screen.
         """
         return Rectangle(self.top_left, self.drawing.size)
 
@@ -198,7 +299,7 @@ class DrawOnScreen:
 
         Returns:
             `Rectangle`: A rectangle defining only the visible (non-transparent)
-            portion of the drawing on screen.
+                area of the drawing on screen.
         """
         return self.drawing.visible_rectangle.shift(self.top_left)
 
@@ -223,10 +324,33 @@ class DrawOnScreen:
 
         Returns:
             `DrawOnScreen`: A new `DrawOnScreen` shifted by the coordinate.
+
+        Example:
+            ```python
+            player = DrawOnScreen(Coordinate(100, 100), sprite)
+            # Move player 10 pixels to the right
+            moved = player.shift(Coordinate(10, 0))
+            ```
         """
         return DrawOnScreen(self.top_left.shift(coord), self.drawing)
 
     def set_alpha(self, alpha: Alpha) -> Self:
+        """
+        Set the alpha transparency of the drawing.
+
+        Arguments:
+            `alpha`: The alpha value (0-255).
+
+        Returns:
+            `DrawOnScreen`: A new `DrawOnScreen` with the specified alpha.
+
+        Example:
+            ```python
+            player = DrawOnScreen(Coordinate(100, 100), sprite)
+            # Make player semi-transparent
+            transparent = player.set_alpha(128)
+            ```
+        """
         return DrawOnScreen(self.top_left, self.drawing.set_alpha(alpha))
 
 
@@ -234,7 +358,33 @@ class DrawOnScreen:
 @dataclass(frozen=True)
 class Polygon:
     """
-    Polygon is a sequence of points.
+    Represents a polygon shape defined by a sequence of points.
+
+    This class provides polygon functionality including collision detection,
+    drawing operations, and geometric calculations. Polygons can be either
+    closed (default) or open shapes.
+
+    Arguments:
+        `points`: A tuple of coordinates defining the polygon vertices.
+
+        `closed`: Whether the polygon is closed (last point connects to first).
+            Defaults to `True`.
+
+    Example:
+        ```python
+        # Create a triangle
+        triangle = Polygon((
+            Coordinate(0, 0),
+            Coordinate(50, 0),
+            Coordinate(25, 50)
+        ))
+
+        # Create an open line
+        line = Polygon((
+            Coordinate(0, 0),
+            Coordinate(100, 100)
+        ), closed=False)
+        ```
     """
 
     points: tuple[Coordinate, ...]
@@ -245,8 +395,17 @@ class Polygon:
         """
         Get a rectangle bounding the polygon.
 
+        Calculates the smallest rectangle that completely contains
+        all points of the polygon.
+
         Returns:
             `Rectangle`: A rectangle bounding the polygon.
+
+        Example:
+            ```python
+            polygon = Polygon((Coordinate(0, 0), Coordinate(50, 50)))
+            bounds = polygon.bounding_rectangle
+            ```
         """
         min_x = min(c.left for c in self.points)
         min_y = min(c.top for c in self.points)
@@ -258,23 +417,58 @@ class Polygon:
 
     @cached_property
     def _mask(self) -> Mask:
+        """
+        Get the collision mask for this polygon.
+
+        Creates a pygame mask from the filled polygon for precise
+        collision detection.
+
+        Returns:
+            `Mask`: The collision mask for this polygon.
+        """
         return from_surface(self.fill(BLACK).drawing.pygame)
 
     def fill(self, color: Rgba) -> DrawOnScreen:
         """
-        Creates a colored `DrawOnScreen` with the provided color.
+        Creates a filled polygon drawing with the provided color.
 
         Arguments:
-            `Color`: The color to fill the rectangle.
+            `color`: The color to fill the polygon with.
 
         Returns:
-            `DrawOnScreen`: A transparent surface matching rectangle dimensions.
+            `DrawOnScreen`: A drawing of the filled polygon.
+
+        Example:
+            ```python
+            triangle = Polygon((Coordinate(0, 0), Coordinate(50, 0),
+                              Coordinate(25, 50)))
+            filled = triangle.fill(Rgba(255, 0, 0, 255))  # Red triangle
+            ```
         """
         return self._draw(lambda surf, points: polygon(surf, color, points))
 
     def line(
         self, color: Rgba, stroke_width: Pixel | None = None
     ) -> DrawOnScreen:
+        """
+        Creates a line drawing of the polygon with the provided color.
+
+        Arguments:
+            `color`: The color of the line.
+
+            `stroke_width`: The width of the line in pixels.
+                If `None`, uses the default stroke width from config.
+
+        Returns:
+            `DrawOnScreen`: A drawing of the polygon outline.
+
+        Example:
+            ```python
+            triangle = Polygon((Coordinate(0, 0), Coordinate(50, 0),
+                              Coordinate(25, 50)))
+            outline = triangle.line(Rgba(0, 0, 255, 255), stroke_width=2)
+            ```
+        """
         stroke = (
             config().draw_on_screen.stroke_width
             if stroke_width is None
@@ -286,13 +480,24 @@ class Polygon:
 
     def collide(self, poly: Self) -> bool:
         """
-        Checks if this rectangle overlaps with another polygon.
+        Checks if this polygon overlaps with another polygon.
+
+        Performs precise collision detection using pygame masks.
+        First checks bounding rectangles for efficiency, then
+        performs pixel-perfect collision detection.
 
         Arguments:
             `poly`: The polygon to check for collision with.
 
         Returns:
-            `bool`: True if two polygons overlap, False otherwise.
+            `bool`: `True` if the polygons overlap, `False` otherwise.
+
+        Example:
+            ```python
+            poly1 = Polygon((Coordinate(0, 0), Coordinate(50, 50)))
+            poly2 = Polygon((Coordinate(25, 25), Coordinate(75, 75)))
+            is_colliding = poly1.collide(poly2)  # True
+            ```
         """
         if not self.bounding_rectangle.collide(poly.bounding_rectangle):
             return False
@@ -305,14 +510,21 @@ class Polygon:
         """
         Checks if a coordinate point lies within this polygon.
 
-        The point is considered inside if it falls in the polygon's bounds,
-        including points on the edges.
+        The point is considered inside if it falls within the polygon's
+        bounds, including points on the edges.
 
         Arguments:
-            `coordinate`: The coordinate point to check
+            `coordinate`: The coordinate point to check.
 
         Returns:
-            `bool`: Whether the coordinate lies within the rectangle.
+            `bool`: Whether the coordinate lies within the polygon.
+
+        Example:
+            ```python
+            triangle = Polygon((Coordinate(0, 0), Coordinate(50, 0),
+                              Coordinate(25, 50)))
+            is_inside = triangle.contain(Coordinate(25, 25))  # True
+            ```
         """
         x, y = coordinate.shift(self.bounding_rectangle.top_left.negate)
         width, height = self._mask.get_size()
@@ -322,6 +534,23 @@ class Polygon:
 
     @cached_property
     def length(self) -> Pixel:
+        """
+        Get the perimeter length of the polygon.
+
+        Calculates the total length of all edges in the polygon.
+        For closed polygons, includes the edge from the last point
+        back to the first point.
+
+        Returns:
+            `Pixel`: The perimeter length in pixels.
+
+        Example:
+            ```python
+            triangle = Polygon((Coordinate(0, 0), Coordinate(50, 0),
+                              Coordinate(25, 50)))
+            perimeter = triangle.length  # Total edge length
+            ```
+        """
         length = sum(
             p.distance(np) for p, np in zip(self.points, self.points[1:])
         )
@@ -332,6 +561,15 @@ class Polygon:
     def _draw(
         self, surf_and_points: Callable[[Surface, tuple[Coordinate, ...]], None]
     ) -> DrawOnScreen:
+        """
+        Internal method to create a drawing from the polygon.
+
+        Arguments:
+            `surf_and_points`: Function that draws on a surface with points.
+
+        Returns:
+            `DrawOnScreen`: The polygon drawing.
+        """
         rectangle = self.bounding_rectangle
         surf = Surface(rectangle.size, SRCALPHA)
         negated = tuple(
@@ -344,11 +582,34 @@ class Polygon:
 @export
 class Rectangle(Polygon):
     """
-    A rectangle polygon defined by its top left corner and size.
+    A specialized rectangle polygon defined by its top-left corner and size.
+
+    This class provides optimized rectangle operations with efficient
+    collision detection and convenient property access for rectangle
+    edges and corners.
+
+    Arguments:
+        `top_left`: The top-left corner of the rectangle.
+
+        `size`: The dimensions of the rectangle (width and height).
+
+    Example:
+        ```python
+        # Create a 100x50 rectangle at position (10, 20)
+        rect = Rectangle(Coordinate(10, 20), Size(100, 50))
+
+        # Get the center point
+        center = rect.center
+
+        # Check if a point is inside
+        is_inside = rect.contain(Coordinate(50, 40))
+        ```
     """
 
     def __init__(self, top_left: Coordinate, size: Size) -> None:
         """
+        Initialize a rectangle with top-left corner and size.
+
         Arguments:
             `top_left`: The top-left corner of the rectangle.
 
@@ -361,7 +622,7 @@ class Rectangle(Polygon):
     @property
     def left(self) -> Pixel:
         """
-        Gets the leftmost x-coordinate of the drawing on the screen.
+        Gets the leftmost x-coordinate of the rectangle.
 
         Returns:
             `Pixel`: The leftmost x-coordinate.
@@ -371,7 +632,7 @@ class Rectangle(Polygon):
     @property
     def right(self) -> Pixel:
         """
-        Gets the rightmost x-coordinate of the drawing on the screen.
+        Gets the rightmost x-coordinate of the rectangle.
 
         Returns:
             `Pixel`: The rightmost x-coordinate (left + width).
@@ -381,7 +642,7 @@ class Rectangle(Polygon):
     @property
     def top(self) -> Pixel:
         """
-        Gets the topmost y-coordinate of the drawing on the screen.
+        Gets the topmost y-coordinate of the rectangle.
 
         Returns:
             `Pixel`: The topmost y-coordinate.
@@ -391,7 +652,7 @@ class Rectangle(Polygon):
     @cached_property
     def bottom(self) -> Pixel:
         """
-        Gets the bottommost y-coordinate of the drawing on the screen.
+        Gets the bottommost y-coordinate of the rectangle.
 
         Returns:
             `Pixel`: The bottommost y-coordinate (top + height).
@@ -401,7 +662,7 @@ class Rectangle(Polygon):
     @property
     def top_right(self) -> Coordinate:
         """
-        Gets the top-right coordinate of the drawing on the screen.
+        Gets the top-right coordinate of the rectangle.
 
         Returns:
             `Coordinate`: The top-right coordinate.
@@ -411,7 +672,7 @@ class Rectangle(Polygon):
     @property
     def bottom_left(self) -> Coordinate:
         """
-        Gets the bottom-left coordinate of the drawing on the screen.
+        Gets the bottom-left coordinate of the rectangle.
 
         Returns:
             `Coordinate`: The bottom-left coordinate.
@@ -421,7 +682,7 @@ class Rectangle(Polygon):
     @property
     def bottom_right(self) -> Coordinate:
         """
-        Gets the bottom-right coordinate of the drawing on the screen.
+        Gets the bottom-right coordinate of the rectangle.
 
         Returns:
             `Coordinate`: The bottom-right coordinate.
@@ -431,7 +692,7 @@ class Rectangle(Polygon):
     @property
     def top_center(self) -> Coordinate:
         """
-        Gets the center point of the top edge of the drawing on the screen.
+        Gets the center point of the top edge of the rectangle.
 
         Returns:
             `Coordinate`: The top-center coordinate.
@@ -441,7 +702,7 @@ class Rectangle(Polygon):
     @property
     def bottom_center(self) -> Coordinate:
         """
-        Gets the center point of the bottom edge of the drawing on the screen.
+        Gets the center point of the bottom edge of the rectangle.
 
         Returns:
             `Coordinate`: The bottom-center coordinate.
@@ -451,7 +712,7 @@ class Rectangle(Polygon):
     @property
     def center_left(self) -> Coordinate:
         """
-        Gets the center point of the left edge of the drawing on the screen.
+        Gets the center point of the left edge of the rectangle.
 
         Returns:
             `Coordinate`: The left-center coordinate.
@@ -461,7 +722,7 @@ class Rectangle(Polygon):
     @property
     def center_right(self) -> Coordinate:
         """
-        Gets the center point of the right edge of the drawing on the screen.
+        Gets the center point of the right edge of the rectangle.
 
         Returns:
             `Coordinate`: The right-center coordinate.
@@ -471,10 +732,10 @@ class Rectangle(Polygon):
     @property
     def center(self) -> Coordinate:
         """
-        Gets the center point of the drawing on the screen.
+        Gets the center point of the rectangle.
 
         Returns:
-            `Coordinate`: The center coordinate of the drawing.
+            `Coordinate`: The center coordinate of the rectangle.
         """
         width, height = self.size
         return Coordinate(self.left + width / 2, self.top + height / 2)
@@ -483,6 +744,9 @@ class Rectangle(Polygon):
     def points(self) -> tuple[Coordinate, ...]:
         """
         Get the coordinates of the corners of the rectangle.
+
+        Returns the four corner points in clockwise order starting
+        from the top-left corner.
 
         Returns:
             `tuple[Coordinate, ...]`: The coordinates of the corners
@@ -497,6 +761,19 @@ class Rectangle(Polygon):
 
     @override
     def collide(self, poly: Polygon) -> bool:
+        """
+        Optimized collision detection for rectangles.
+
+        For rectangle-to-rectangle collisions, uses fast axis-aligned
+        bounding box intersection. For other polygon types, falls back
+        to the parent class implementation.
+
+        Arguments:
+            `poly`: The polygon to check for collision with.
+
+        Returns:
+            `bool`: `True` if the rectangles overlap, `False` otherwise.
+        """
         if isinstance(poly, Rectangle):
             return (
                 self.top_left.left < poly.top_right.left
@@ -508,17 +785,57 @@ class Rectangle(Polygon):
 
     @override
     def contain(self, coordinate: Coordinate) -> bool:
+        """
+        Check if a coordinate point lies within this rectangle.
+
+        Uses simple bounds checking for efficient rectangle containment
+        testing.
+
+        Arguments:
+            `coordinate`: The coordinate point to check.
+
+        Returns:
+            `bool`: Whether the coordinate lies within the rectangle.
+        """
         return (
             self.left < coordinate.left < self.right
             and self.top < coordinate.top < self.bottom
         )
 
     def shift(self, coordinate: Coordinate) -> Self:
+        """
+        Shift the rectangle by the specified coordinate.
+
+        Arguments:
+            `coordinate`: The coordinate to shift the rectangle by.
+
+        Returns:
+            `Rectangle`: A new rectangle shifted by the coordinate.
+        """
         return Rectangle(self.top_left.shift(coordinate), self.size)
 
     def fill(
         self, color: Rgba, border_radius: Pixel | None = None
     ) -> DrawOnScreen:
+        """
+        Creates a filled rectangle drawing with the provided color.
+
+        Arguments:
+            `color`: The color to fill the rectangle with.
+
+            `border_radius`: Optional border radius for rounded corners.
+                If `None`, creates a rectangle with sharp corners.
+
+        Returns:
+            `DrawOnScreen`: A drawing of the filled rectangle.
+
+        Example:
+            ```python
+            rect = Rectangle(Coordinate(0, 0), Size(100, 50))
+            filled = rect.fill(Rgba(255, 0, 0, 255))  # Red rectangle
+            rounded = rect.fill(Rgba(0, 255, 0, 255), border_radius=10)
+            ```
+        """
         surf = Surface(self.size, SRCALPHA)
         rectangle = Rect(Coordinate(0, 0), self.size)
         if border_radius:
