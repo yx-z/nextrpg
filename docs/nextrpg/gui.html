@@ -27,11 +27,37 @@
                    pattern=".+" required>
 
 
-            <h2>Submodules</h2>
-            <ul>
-                    <li><a href="gui/area.html">area</a></li>
-                    <li><a href="gui/window.html">window</a></li>
-            </ul>
+
+            <h2>API Documentation</h2>
+                <ul class="memberlist">
+            <li>
+                    <a class="class" href="#Gui">Gui</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Gui.__init__">Gui</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Gui.current_config">current_config</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Gui.last_config">last_config</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Gui.initial_config">initial_config</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Gui.update">update</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Gui.event">event</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Gui.draw">draw</a>
+                        </li>
+                </ul>
+
+            </li>
+    </ul>
 
 
 
@@ -47,46 +73,40 @@
                     <h1 class="modulename">
 <a href="./../nextrpg.html">nextrpg</a><wbr>.gui    </h1>
 
-                        <div class="docstring"><p>GUI and window management system for NextRPG.</p>
+                        <div class="docstring"><p>Game window and Graphical User Interface (GUI) management for NextRPG.</p>
 
-<p>This module provides the graphical user interface and window management
-system for NextRPG games. It includes window creation, area management,
-and GUI component handling.</p>
+<p>This module provides the core GUI system for NextRPG games, handling
+window management, screen rendering, and user interface interactions.
+It includes the <code><a href="#Gui">Gui</a></code> class which manages the game window, screen
+scaling, and drawing operations.</p>
 
-<p>The GUI system includes:</p>
-
-<ul>
-<li><code>window</code>: Main window management and pygame window handling</li>
-<li><code>area</code>: GUI area management and layout utilities</li>
-</ul>
-
-<p>The GUI system is responsible for:</p>
+<p>The GUI system features:</p>
 
 <ul>
-<li>Creating and managing the game window</li>
-<li>Handling window events and resizing</li>
-<li>Managing GUI areas and layouts</li>
-<li>Coordinating with the drawing system</li>
-<li>Providing consistent GUI behavior across platforms</li>
+<li>Window management with fullscreen and windowed modes</li>
+<li>Automatic screen scaling and centering</li>
+<li>Event handling for window resizing and mode switching</li>
+<li>Drawing surface management and rendering</li>
+<li>Integration with the logging system for debug output</li>
 </ul>
-
-<p>The system is designed to work seamlessly with pygame and provides
-a clean abstraction for window management and GUI operations.</p>
 
 <h6 id="example">Example:</h6>
 
 <blockquote>
   <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.gui</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">window</span><span class="p">,</span> <span class="n">area</span>
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.window</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gui</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="draw_on_screen.html">nextrpg.draw_on_screen</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="core.html">nextrpg.core</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
 
-<span class="c1"># Create a window</span>
-<span class="n">gui</span> <span class="o">=</span> <span class="n">window</span><span class="o">.</span><span class="n">Gui</span><span class="p">()</span>
+<span class="c1"># Create GUI instance</span>
+<span class="n">gui</span> <span class="o">=</span> <span class="n">Gui</span><span class="p">()</span>
 
-<span class="c1"># Handle window events</span>
-<span class="n">gui</span> <span class="o">=</span> <span class="n">gui</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">pygame_event</span><span class="p">)</span>
+<span class="c1"># Draw elements to screen</span>
+<span class="n">drawings</span> <span class="o">=</span> <span class="p">(</span><span class="n">sprite1</span><span class="p">,</span> <span class="n">sprite2</span><span class="p">,</span> <span class="n">background</span><span class="p">)</span>
+<span class="n">gui</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">drawings</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">)</span>
 
-<span class="c1"># Draw content</span>
-<span class="n">gui</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">drawables</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">)</span>
+<span class="c1"># Handle GUI events</span>
+<span class="n">gui</span> <span class="o">=</span> <span class="n">gui</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">resize_event</span><span class="p">)</span>
 </code></pre>
   </div>
 </blockquote>
@@ -96,45 +116,1016 @@ a clean abstraction for window management and GUI operations.</p>
 
                         <label class="view-source-button" for="mod-gui-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">GUI and window management system for NextRPG.</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">This module provides the graphical user interface and window management</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">system for NextRPG games. It includes window creation, area management,</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">and GUI component handling.</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">The GUI system includes:</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">- `window`: Main window management and pygame window handling</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">- `area`: GUI area management and layout utilities</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">The GUI system is responsible for:</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">- Creating and managing the game window</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">- Handling window events and resizing</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">- Managing GUI areas and layouts</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">- Coordinating with the drawing system</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">- Providing consistent GUI behavior across platforms</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">The system is designed to work seamlessly with pygame and provides</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">a clean abstraction for window management and GUI operations.</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">Example:</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">    ```python</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    from nextrpg.gui import window, area</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">    # Create a window</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">    gui = window.Gui()</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">    # Handle window events</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">    gui = gui.event(pygame_event)</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">    # Draw content</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">    gui.draw(drawables, time_delta)</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">    ```</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">&quot;&quot;&quot;</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="sd">Game window and Graphical User Interface (GUI) management for NextRPG.</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="sd">This module provides the core GUI system for NextRPG games, handling</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="sd">window management, screen rendering, and user interface interactions.</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="sd">It includes the `Gui` class which manages the game window, screen</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="sd">scaling, and drawing operations.</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="sd">The GUI system features:</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="sd">- Window management with fullscreen and windowed modes</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="sd">- Automatic screen scaling and centering</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="sd">- Event handling for window resizing and mode switching</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="sd">- Drawing surface management and rendering</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="sd">- Integration with the logging system for debug output</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="sd">Example:</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="sd">    ```python</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="sd">    from nextrpg.window import Gui</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="sd">    from nextrpg.draw_on_screen import DrawOnScreen</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="sd">    from nextrpg.core import Millisecond</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="sd">    # Create GUI instance</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="sd">    gui = Gui()</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="sd">    # Draw elements to screen</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="sd">    drawings = (sprite1, sprite2, background)</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="sd">    gui.draw(drawings, time_delta)</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="sd">    # Handle GUI events</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="sd">    gui = gui.event(resize_event)</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="sd">    ```</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">KW_ONLY</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame</span><span class="w"> </span><span class="kn">import</span> <span class="n">DOUBLEBUF</span><span class="p">,</span> <span class="n">font</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">flip</span><span class="p">,</span> <span class="n">init</span><span class="p">,</span> <span class="n">set_caption</span><span class="p">,</span> <span class="n">set_mode</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.locals</span><span class="w"> </span><span class="kn">import</span> <span class="n">FULLSCREEN</span><span class="p">,</span> <span class="n">RESIZABLE</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.surface</span><span class="w"> </span><span class="kn">import</span> <span class="n">Surface</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.transform</span><span class="w"> </span><span class="kn">import</span> <span class="n">smoothscale</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">not_constructor_below</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">,</span> <span class="n">Size</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">set_config</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.gui_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">GuiConfig</span><span class="p">,</span> <span class="n">GuiMode</span><span class="p">,</span> <span class="n">ResizeMode</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">ComponentAndMessage</span><span class="p">,</span> <span class="n">Logger</span><span class="p">,</span> <span class="n">pop_messages</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>    <span class="n">GuiResize</span><span class="p">,</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>    <span class="n">KeyboardKey</span><span class="p">,</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>    <span class="n">KeyPressDown</span><span class="p">,</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>    <span class="n">PygameEvent</span><span class="p">,</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="p">)</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">Text</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.text_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextOnScreen</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">(</span><span class="s2">&quot;GUI&quot;</span><span class="p">)</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="nd">@export</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Gui</span><span class="p">:</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">    Game window and GUI management system.</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">    This class handles the game window, screen rendering, and user</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">    interface interactions. It manages window modes (fullscreen/windowed),</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">    screen scaling, and drawing operations.</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">    The GUI system automatically initializes pygame display and font</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">    systems, manages window configuration, and provides methods for</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">    drawing and event handling.</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">    Arguments:</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">        `current_config`: The current GUI configuration settings.</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">            Defaults to the global GUI configuration.</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">        `last_config`: The previous GUI configuration for change detection.</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">            Defaults to the global GUI configuration.</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">        `initial_config`: The initial GUI configuration for scaling.</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">            Defaults to the global GUI configuration.</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">        `_screen`: Internal pygame surface for the game window.</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">            Initialized automatically if not provided.</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">        `_title`: Internal window title cache for optimization.</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">    Example:</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">        ```python</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">        from nextrpg.window import Gui</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">        from nextrpg.gui_config import GuiConfig, GuiMode</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">        # Create GUI with custom config</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">        config = GuiConfig(size=Size(800, 600), gui_mode=GuiMode.WINDOWED)</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">        gui = Gui(current_config=config)</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">        # Draw game elements</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">        gui.draw(drawings, time_delta)</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">        ```</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>    <span class="n">current_config</span><span class="p">:</span> <span class="n">GuiConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="p">)</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>    <span class="n">last_config</span><span class="p">:</span> <span class="n">GuiConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="p">)</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>    <span class="n">initial_config</span><span class="p">:</span> <span class="n">GuiConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="p">)</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="n">_screen</span><span class="p">:</span> <span class="n">Surface</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="n">_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">        Update GUI configuration if needed.</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">        Checks if the current GUI configuration matches the global config</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">        and updates it if necessary. This ensures GUI settings are</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">        synchronized with configuration changes.</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">        Returns:</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">            `Gui`: Updated GUI instance with current configuration.</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>        <span class="k">if</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="p">:</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>            <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">current_config</span><span class="o">=</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="p">,</span> <span class="n">last_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="p">)</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gui</span><span class="p">:</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">        Handle GUI-related events.</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">        Processes events that affect the GUI system, including:</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">        - `GuiResize`: Handles window resize events and updates scaling</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">        - `KeyPressDown`: Toggles between windowed and fullscreen modes</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">            when `KeyboardKey.GUI_MODE_TOGGLE` is pressed</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">            `e`: The pygame event to process.</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">        Returns:</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">            `Gui`: An updated GUI instance reflecting any changes.</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="sd">        Example:</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">            ```python</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="sd">            from nextrpg.pygame_event import GuiResize, KeyPressDown</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">            # Handle window resize</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">            gui = gui.event(GuiResize(Size(1024, 768)))</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">            # Handle mode toggle</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">            gui = gui.event(KeyPressDown(KeyboardKey.GUI_MODE_TOGGLE))</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">            ```</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>        <span class="k">match</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>            <span class="k">case</span> <span class="n">GuiResize</span><span class="p">():</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resize</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>            <span class="k">case</span> <span class="n">KeyPressDown</span><span class="p">():</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">GUI_MODE_TOGGLE</span><span class="p">:</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_toggle_gui_mode</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">draw_on_screens</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">        Draw the given drawings to the screen.</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">        Renders all provided drawings to the game window, handling</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">        screen scaling and centering based on the current GUI</span>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">        configuration. Also renders debug log messages if available.</span>
+</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a><span class="sd">            `draw_on_screens`: The drawings to render to the screen.</span>
+</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>
+</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a><span class="sd">            `time_delta`: The time elapsed since the last update</span>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a><span class="sd">                in milliseconds.</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>
+</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a><span class="sd">        Example:</span>
+</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a><span class="sd">            ```python</span>
+</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a><span class="sd">            from nextrpg.draw_on_screen import DrawOnScreen</span>
+</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>
+</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="sd">            # Draw game elements</span>
+</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a><span class="sd">            drawings = (player_sprite, background, ui_elements)</span>
+</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a><span class="sd">            gui.draw(drawings, time_delta)</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="sd">            ```</span>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>            <span class="n">t</span><span class="s2">&quot;Size </span><span class="si">{self.current_config.size}</span><span class="s2"> Shift </span><span class="si">{self._center_shift}</span><span class="s2">&quot;</span><span class="p">,</span>
+</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>            <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>        <span class="p">)</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">background_color</span><span class="p">)</span>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>        <span class="k">match</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">resize_mode</span><span class="p">:</span>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>            <span class="k">case</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">SCALE</span><span class="p">:</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">(</span><span class="n">draw_on_screens</span><span class="p">)</span><span class="o">.</span><span class="n">pygame</span><span class="p">)</span>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>            <span class="k">case</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">KEEP_NATIVE_SIZE</span><span class="p">:</span>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draw_on_screens</span><span class="p">)</span>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_log</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>        <span class="n">flip</span><span class="p">()</span>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">        Initialize pygame systems and update window state.</span>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>
+</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="sd">        Called automatically after object initialization to set up</span>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">        pygame display and font systems, and update the window</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a><span class="sd">        title and screen configuration.</span>
+</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span><span class="p">:</span>
+</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>            <span class="n">init</span><span class="p">()</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>            <span class="n">font</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_update_title</span><span class="p">()</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_update_screen</span><span class="p">()</span>
+</span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>
+</span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-222"><a href="#L-222"><span class="linenos">222</span></a><span class="sd">        Draw debug log messages to the screen.</span>
+</span><span id="L-223"><a href="#L-223"><span class="linenos">223</span></a>
+</span><span id="L-224"><a href="#L-224"><span class="linenos">224</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-225"><a href="#L-225"><span class="linenos">225</span></a><span class="sd">            `time_delta`: The time elapsed since the last update.</span>
+</span><span id="L-226"><a href="#L-226"><span class="linenos">226</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-227"><a href="#L-227"><span class="linenos">227</span></a>        <span class="k">if</span> <span class="n">msgs</span> <span class="o">:=</span> <span class="n">pop_messages</span><span class="p">(</span><span class="n">time_delta</span><span class="p">):</span>
+</span><span id="L-228"><a href="#L-228"><span class="linenos">228</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span>
+</span><span id="L-229"><a href="#L-229"><span class="linenos">229</span></a>                <span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">_log_text</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="L-230"><a href="#L-230"><span class="linenos">230</span></a>            <span class="p">)</span>
+</span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>
+</span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">draws</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a><span class="sd">        Scale drawings to fit the current screen size.</span>
+</span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>
+</span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a><span class="sd">            `draws`: The drawings to scale.</span>
+</span><span id="L-238"><a href="#L-238"><span class="linenos">238</span></a>
+</span><span id="L-239"><a href="#L-239"><span class="linenos">239</span></a><span class="sd">        Returns:</span>
+</span><span id="L-240"><a href="#L-240"><span class="linenos">240</span></a><span class="sd">            `DrawOnScreen`: A single scaled drawing containing all elements.</span>
+</span><span id="L-241"><a href="#L-241"><span class="linenos">241</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-242"><a href="#L-242"><span class="linenos">242</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_config</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="L-243"><a href="#L-243"><span class="linenos">243</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
+</span><span id="L-244"><a href="#L-244"><span class="linenos">244</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span>
+</span><span id="L-245"><a href="#L-245"><span class="linenos">245</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="p">,</span>
+</span><span id="L-246"><a href="#L-246"><span class="linenos">246</span></a>            <span class="n">Drawing</span><span class="p">(</span>
+</span><span id="L-247"><a href="#L-247"><span class="linenos">247</span></a>                <span class="n">smoothscale</span><span class="p">(</span>
+</span><span id="L-248"><a href="#L-248"><span class="linenos">248</span></a>                    <span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_config</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scaling</span><span class="p">)</span>
+</span><span id="L-249"><a href="#L-249"><span class="linenos">249</span></a>                <span class="p">)</span>
+</span><span id="L-250"><a href="#L-250"><span class="linenos">250</span></a>            <span class="p">),</span>
+</span><span id="L-251"><a href="#L-251"><span class="linenos">251</span></a>        <span class="p">)</span>
+</span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>
+</span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_scaling</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a><span class="sd">        Get the current scaling factor for screen rendering.</span>
+</span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>
+</span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a><span class="sd">        Calculates the scaling factor based on the ratio of current</span>
+</span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a><span class="sd">        screen size to initial screen size, maintaining aspect ratio.</span>
+</span><span id="L-260"><a href="#L-260"><span class="linenos">260</span></a>
+</span><span id="L-261"><a href="#L-261"><span class="linenos">261</span></a><span class="sd">        Returns:</span>
+</span><span id="L-262"><a href="#L-262"><span class="linenos">262</span></a><span class="sd">            `float`: The scaling factor (1.0 = no scaling).</span>
+</span><span id="L-263"><a href="#L-263"><span class="linenos">263</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>        <span class="n">current_width</span><span class="p">,</span> <span class="n">current_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>        <span class="n">initial_width</span><span class="p">,</span> <span class="n">initial_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_config</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>            <span class="n">current_width</span> <span class="o">/</span> <span class="n">initial_width</span><span class="p">,</span> <span class="n">current_height</span> <span class="o">/</span> <span class="n">initial_height</span>
+</span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>        <span class="p">)</span>
+</span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>
+</span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-271"><a href="#L-271"><span class="linenos">271</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_center_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-272"><a href="#L-272"><span class="linenos">272</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-273"><a href="#L-273"><span class="linenos">273</span></a><span class="sd">        Get the coordinate shift needed to center scaled content.</span>
+</span><span id="L-274"><a href="#L-274"><span class="linenos">274</span></a>
+</span><span id="L-275"><a href="#L-275"><span class="linenos">275</span></a><span class="sd">        Calculates the offset needed to center the scaled game content</span>
+</span><span id="L-276"><a href="#L-276"><span class="linenos">276</span></a><span class="sd">        within the current window size.</span>
+</span><span id="L-277"><a href="#L-277"><span class="linenos">277</span></a>
+</span><span id="L-278"><a href="#L-278"><span class="linenos">278</span></a><span class="sd">        Returns:</span>
+</span><span id="L-279"><a href="#L-279"><span class="linenos">279</span></a><span class="sd">            `Coordinate`: The shift offset for centering.</span>
+</span><span id="L-280"><a href="#L-280"><span class="linenos">280</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-281"><a href="#L-281"><span class="linenos">281</span></a>        <span class="n">current_width</span><span class="p">,</span> <span class="n">current_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-282"><a href="#L-282"><span class="linenos">282</span></a>        <span class="n">initial_width</span><span class="p">,</span> <span class="n">initial_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_config</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-283"><a href="#L-283"><span class="linenos">283</span></a>        <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span>
+</span><span id="L-284"><a href="#L-284"><span class="linenos">284</span></a>            <span class="p">(</span><span class="n">current_width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scaling</span> <span class="o">*</span> <span class="n">initial_width</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+</span><span id="L-285"><a href="#L-285"><span class="linenos">285</span></a>            <span class="p">(</span><span class="n">current_height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scaling</span> <span class="o">*</span> <span class="n">initial_height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+</span><span id="L-286"><a href="#L-286"><span class="linenos">286</span></a>        <span class="p">)</span>
+</span><span id="L-287"><a href="#L-287"><span class="linenos">287</span></a>
+</span><span id="L-288"><a href="#L-288"><span class="linenos">288</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-289"><a href="#L-289"><span class="linenos">289</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_current_gui_flag</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_GuiFlag</span><span class="p">:</span>
+</span><span id="L-290"><a href="#L-290"><span class="linenos">290</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-291"><a href="#L-291"><span class="linenos">291</span></a><span class="sd">        Get the pygame display flags for the current GUI mode.</span>
+</span><span id="L-292"><a href="#L-292"><span class="linenos">292</span></a>
+</span><span id="L-293"><a href="#L-293"><span class="linenos">293</span></a><span class="sd">        Returns:</span>
+</span><span id="L-294"><a href="#L-294"><span class="linenos">294</span></a><span class="sd">            `_GuiFlag`: Pygame display flags for window configuration.</span>
+</span><span id="L-295"><a href="#L-295"><span class="linenos">295</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-296"><a href="#L-296"><span class="linenos">296</span></a>        <span class="n">flag</span> <span class="o">=</span> <span class="n">DOUBLEBUF</span>
+</span><span id="L-297"><a href="#L-297"><span class="linenos">297</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">gui_mode</span> <span class="ow">is</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">:</span>
+</span><span id="L-298"><a href="#L-298"><span class="linenos">298</span></a>            <span class="n">flag</span> <span class="o">|=</span> <span class="n">FULLSCREEN</span>
+</span><span id="L-299"><a href="#L-299"><span class="linenos">299</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">allow_window_resize</span><span class="p">:</span>
+</span><span id="L-300"><a href="#L-300"><span class="linenos">300</span></a>            <span class="n">flag</span> <span class="o">|=</span> <span class="n">RESIZABLE</span>
+</span><span id="L-301"><a href="#L-301"><span class="linenos">301</span></a>        <span class="k">return</span> <span class="n">flag</span>
+</span><span id="L-302"><a href="#L-302"><span class="linenos">302</span></a>
+</span><span id="L-303"><a href="#L-303"><span class="linenos">303</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_update_title</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-304"><a href="#L-304"><span class="linenos">304</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a><span class="sd">        Update the window title if it has changed.</span>
+</span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a>        <span class="k">if</span> <span class="p">(</span>
+</span><span id="L-308"><a href="#L-308"><span class="linenos">308</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_title</span> <span class="ow">is</span> <span class="kc">None</span>
+</span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a>            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">title</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_config</span><span class="o">.</span><span class="n">title</span>
+</span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a>        <span class="p">):</span>
+</span><span id="L-311"><a href="#L-311"><span class="linenos">311</span></a>            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_title&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+</span><span id="L-312"><a href="#L-312"><span class="linenos">312</span></a>            <span class="n">set_caption</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_title</span><span class="p">)</span>
+</span><span id="L-313"><a href="#L-313"><span class="linenos">313</span></a>
+</span><span id="L-314"><a href="#L-314"><span class="linenos">314</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_update_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-315"><a href="#L-315"><span class="linenos">315</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-316"><a href="#L-316"><span class="linenos">316</span></a><span class="sd">        Update the screen surface if configuration has changed.</span>
+</span><span id="L-317"><a href="#L-317"><span class="linenos">317</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-318"><a href="#L-318"><span class="linenos">318</span></a>        <span class="k">if</span> <span class="p">(</span>
+</span><span id="L-319"><a href="#L-319"><span class="linenos">319</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span> <span class="ow">is</span> <span class="kc">None</span>
+</span><span id="L-320"><a href="#L-320"><span class="linenos">320</span></a>            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_config</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-321"><a href="#L-321"><span class="linenos">321</span></a>            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_config</span><span class="o">.</span><span class="n">gui_mode</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">gui_mode</span>
+</span><span id="L-322"><a href="#L-322"><span class="linenos">322</span></a>            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_config</span><span class="o">.</span><span class="n">allow_window_resize</span>
+</span><span id="L-323"><a href="#L-323"><span class="linenos">323</span></a>            <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">allow_window_resize</span>
+</span><span id="L-324"><a href="#L-324"><span class="linenos">324</span></a>        <span class="p">):</span>
+</span><span id="L-325"><a href="#L-325"><span class="linenos">325</span></a>            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span>
+</span><span id="L-326"><a href="#L-326"><span class="linenos">326</span></a>                <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-327"><a href="#L-327"><span class="linenos">327</span></a>                <span class="s2">&quot;_screen&quot;</span><span class="p">,</span>
+</span><span id="L-328"><a href="#L-328"><span class="linenos">328</span></a>                <span class="n">set_mode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_gui_flag</span><span class="p">),</span>
+</span><span id="L-329"><a href="#L-329"><span class="linenos">329</span></a>            <span class="p">)</span>
+</span><span id="L-330"><a href="#L-330"><span class="linenos">330</span></a>
+</span><span id="L-331"><a href="#L-331"><span class="linenos">331</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-332"><a href="#L-332"><span class="linenos">332</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_toggle_gui_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gui</span><span class="p">:</span>
+</span><span id="L-333"><a href="#L-333"><span class="linenos">333</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-334"><a href="#L-334"><span class="linenos">334</span></a><span class="sd">        Toggle between windowed and fullscreen modes.</span>
+</span><span id="L-335"><a href="#L-335"><span class="linenos">335</span></a>
+</span><span id="L-336"><a href="#L-336"><span class="linenos">336</span></a><span class="sd">        Returns:</span>
+</span><span id="L-337"><a href="#L-337"><span class="linenos">337</span></a><span class="sd">            `Gui`: Updated GUI instance with toggled mode.</span>
+</span><span id="L-338"><a href="#L-338"><span class="linenos">338</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-339"><a href="#L-339"><span class="linenos">339</span></a>        <span class="n">current_config</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="L-340"><a href="#L-340"><span class="linenos">340</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="p">,</span> <span class="n">gui_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">gui_mode</span><span class="o">.</span><span class="n">opposite</span>
+</span><span id="L-341"><a href="#L-341"><span class="linenos">341</span></a>        <span class="p">)</span>
+</span><span id="L-342"><a href="#L-342"><span class="linenos">342</span></a>        <span class="n">set_config</span><span class="p">(</span><span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">(),</span> <span class="n">gui</span><span class="o">=</span><span class="n">current_config</span><span class="p">))</span>
+</span><span id="L-343"><a href="#L-343"><span class="linenos">343</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="L-344"><a href="#L-344"><span class="linenos">344</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">current_config</span><span class="o">=</span><span class="n">current_config</span><span class="p">,</span> <span class="n">last_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span>
+</span><span id="L-345"><a href="#L-345"><span class="linenos">345</span></a>        <span class="p">)</span>
+</span><span id="L-346"><a href="#L-346"><span class="linenos">346</span></a>
+</span><span id="L-347"><a href="#L-347"><span class="linenos">347</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_resize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="n">Size</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gui</span><span class="p">:</span>
+</span><span id="L-348"><a href="#L-348"><span class="linenos">348</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-349"><a href="#L-349"><span class="linenos">349</span></a><span class="sd">        Handle window resize events.</span>
+</span><span id="L-350"><a href="#L-350"><span class="linenos">350</span></a>
+</span><span id="L-351"><a href="#L-351"><span class="linenos">351</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-352"><a href="#L-352"><span class="linenos">352</span></a><span class="sd">            `size`: The new window size.</span>
+</span><span id="L-353"><a href="#L-353"><span class="linenos">353</span></a>
+</span><span id="L-354"><a href="#L-354"><span class="linenos">354</span></a><span class="sd">        Returns:</span>
+</span><span id="L-355"><a href="#L-355"><span class="linenos">355</span></a><span class="sd">            `Gui`: Updated GUI instance with new size.</span>
+</span><span id="L-356"><a href="#L-356"><span class="linenos">356</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-357"><a href="#L-357"><span class="linenos">357</span></a>        <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+</span><span id="L-358"><a href="#L-358"><span class="linenos">358</span></a>            <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-359"><a href="#L-359"><span class="linenos">359</span></a>        <span class="n">current_config</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+</span><span id="L-360"><a href="#L-360"><span class="linenos">360</span></a>        <span class="n">set_config</span><span class="p">(</span><span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">(),</span> <span class="n">gui</span><span class="o">=</span><span class="n">current_config</span><span class="p">))</span>
+</span><span id="L-361"><a href="#L-361"><span class="linenos">361</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="L-362"><a href="#L-362"><span class="linenos">362</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">current_config</span><span class="o">=</span><span class="n">current_config</span><span class="p">,</span> <span class="n">last_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span>
+</span><span id="L-363"><a href="#L-363"><span class="linenos">363</span></a>        <span class="p">)</span>
+</span><span id="L-364"><a href="#L-364"><span class="linenos">364</span></a>
+</span><span id="L-365"><a href="#L-365"><span class="linenos">365</span></a>
+</span><span id="L-366"><a href="#L-366"><span class="linenos">366</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_log_text</span><span class="p">(</span>
+</span><span id="L-367"><a href="#L-367"><span class="linenos">367</span></a>    <span class="n">msgs</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ComponentAndMessage</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+</span><span id="L-368"><a href="#L-368"><span class="linenos">368</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">TextOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-369"><a href="#L-369"><span class="linenos">369</span></a>    <span class="n">spacing</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">line_spacing</span>
+</span><span id="L-370"><a href="#L-370"><span class="linenos">370</span></a>    <span class="n">msg_spacing</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="L-371"><a href="#L-371"><span class="linenos">371</span></a>        <span class="nb">max</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">text_size</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">component</span><span class="p">)</span><span class="o">.</span><span class="n">width</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">msgs</span><span class="p">)</span>
+</span><span id="L-372"><a href="#L-372"><span class="linenos">372</span></a>        <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">spacing</span>
+</span><span id="L-373"><a href="#L-373"><span class="linenos">373</span></a>    <span class="p">)</span>
+</span><span id="L-374"><a href="#L-374"><span class="linenos">374</span></a>    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="L-375"><a href="#L-375"><span class="linenos">375</span></a>        <span class="n">text</span>
+</span><span id="L-376"><a href="#L-376"><span class="linenos">376</span></a>        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span>
+</span><span id="L-377"><a href="#L-377"><span class="linenos">377</span></a>        <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="p">(</span>
+</span><span id="L-378"><a href="#L-378"><span class="linenos">378</span></a>            <span class="n">TextOnScreen</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="n">spacing</span><span class="p">,</span> <span class="n">_line_height</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span> <span class="n">Text</span><span class="p">(</span><span class="n">component</span><span class="p">)),</span>
+</span><span id="L-379"><a href="#L-379"><span class="linenos">379</span></a>            <span class="n">TextOnScreen</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="n">msg_spacing</span><span class="p">,</span> <span class="n">_line_height</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span> <span class="n">Text</span><span class="p">(</span><span class="n">msg</span><span class="p">)),</span>
+</span><span id="L-380"><a href="#L-380"><span class="linenos">380</span></a>        <span class="p">)</span>
+</span><span id="L-381"><a href="#L-381"><span class="linenos">381</span></a>    <span class="p">)</span>
+</span><span id="L-382"><a href="#L-382"><span class="linenos">382</span></a>
+</span><span id="L-383"><a href="#L-383"><span class="linenos">383</span></a>
+</span><span id="L-384"><a href="#L-384"><span class="linenos">384</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_line_height</span><span class="p">(</span><span class="n">line_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
+</span><span id="L-385"><a href="#L-385"><span class="linenos">385</span></a>    <span class="k">return</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">line_spacing</span> <span class="o">+</span> <span class="n">line_index</span> <span class="o">*</span> <span class="p">(</span>
+</span><span id="L-386"><a href="#L-386"><span class="linenos">386</span></a>        <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">line_spacing</span> <span class="o">+</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">text_height</span>
+</span><span id="L-387"><a href="#L-387"><span class="linenos">387</span></a>    <span class="p">)</span>
+</span><span id="L-388"><a href="#L-388"><span class="linenos">388</span></a>
+</span><span id="L-389"><a href="#L-389"><span class="linenos">389</span></a>
+</span><span id="L-390"><a href="#L-390"><span class="linenos">390</span></a><span class="nb">type</span> <span class="n">_GuiFlag</span> <span class="o">=</span> <span class="nb">int</span>
 </span></pre></div>
 
 
             </section>
+                <section id="Gui">
+                            <input id="Gui-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr class">
+                    <div class="decorator decorator-export">@export</div>
+        <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
+
+    <span class="def">class</span>
+    <span class="name">Gui</span>:
+
+                <label class="view-source-button" for="Gui-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Gui"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Gui-66"><a href="#Gui-66"><span class="linenos"> 66</span></a><span class="nd">@export</span>
+</span><span id="Gui-67"><a href="#Gui-67"><span class="linenos"> 67</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="Gui-68"><a href="#Gui-68"><span class="linenos"> 68</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Gui</span><span class="p">:</span>
+</span><span id="Gui-69"><a href="#Gui-69"><span class="linenos"> 69</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-70"><a href="#Gui-70"><span class="linenos"> 70</span></a><span class="sd">    Game window and GUI management system.</span>
+</span><span id="Gui-71"><a href="#Gui-71"><span class="linenos"> 71</span></a>
+</span><span id="Gui-72"><a href="#Gui-72"><span class="linenos"> 72</span></a><span class="sd">    This class handles the game window, screen rendering, and user</span>
+</span><span id="Gui-73"><a href="#Gui-73"><span class="linenos"> 73</span></a><span class="sd">    interface interactions. It manages window modes (fullscreen/windowed),</span>
+</span><span id="Gui-74"><a href="#Gui-74"><span class="linenos"> 74</span></a><span class="sd">    screen scaling, and drawing operations.</span>
+</span><span id="Gui-75"><a href="#Gui-75"><span class="linenos"> 75</span></a>
+</span><span id="Gui-76"><a href="#Gui-76"><span class="linenos"> 76</span></a><span class="sd">    The GUI system automatically initializes pygame display and font</span>
+</span><span id="Gui-77"><a href="#Gui-77"><span class="linenos"> 77</span></a><span class="sd">    systems, manages window configuration, and provides methods for</span>
+</span><span id="Gui-78"><a href="#Gui-78"><span class="linenos"> 78</span></a><span class="sd">    drawing and event handling.</span>
+</span><span id="Gui-79"><a href="#Gui-79"><span class="linenos"> 79</span></a>
+</span><span id="Gui-80"><a href="#Gui-80"><span class="linenos"> 80</span></a><span class="sd">    Arguments:</span>
+</span><span id="Gui-81"><a href="#Gui-81"><span class="linenos"> 81</span></a><span class="sd">        `current_config`: The current GUI configuration settings.</span>
+</span><span id="Gui-82"><a href="#Gui-82"><span class="linenos"> 82</span></a><span class="sd">            Defaults to the global GUI configuration.</span>
+</span><span id="Gui-83"><a href="#Gui-83"><span class="linenos"> 83</span></a>
+</span><span id="Gui-84"><a href="#Gui-84"><span class="linenos"> 84</span></a><span class="sd">        `last_config`: The previous GUI configuration for change detection.</span>
+</span><span id="Gui-85"><a href="#Gui-85"><span class="linenos"> 85</span></a><span class="sd">            Defaults to the global GUI configuration.</span>
+</span><span id="Gui-86"><a href="#Gui-86"><span class="linenos"> 86</span></a>
+</span><span id="Gui-87"><a href="#Gui-87"><span class="linenos"> 87</span></a><span class="sd">        `initial_config`: The initial GUI configuration for scaling.</span>
+</span><span id="Gui-88"><a href="#Gui-88"><span class="linenos"> 88</span></a><span class="sd">            Defaults to the global GUI configuration.</span>
+</span><span id="Gui-89"><a href="#Gui-89"><span class="linenos"> 89</span></a>
+</span><span id="Gui-90"><a href="#Gui-90"><span class="linenos"> 90</span></a><span class="sd">        `_screen`: Internal pygame surface for the game window.</span>
+</span><span id="Gui-91"><a href="#Gui-91"><span class="linenos"> 91</span></a><span class="sd">            Initialized automatically if not provided.</span>
+</span><span id="Gui-92"><a href="#Gui-92"><span class="linenos"> 92</span></a>
+</span><span id="Gui-93"><a href="#Gui-93"><span class="linenos"> 93</span></a><span class="sd">        `_title`: Internal window title cache for optimization.</span>
+</span><span id="Gui-94"><a href="#Gui-94"><span class="linenos"> 94</span></a>
+</span><span id="Gui-95"><a href="#Gui-95"><span class="linenos"> 95</span></a><span class="sd">    Example:</span>
+</span><span id="Gui-96"><a href="#Gui-96"><span class="linenos"> 96</span></a><span class="sd">        ```python</span>
+</span><span id="Gui-97"><a href="#Gui-97"><span class="linenos"> 97</span></a><span class="sd">        from nextrpg.window import Gui</span>
+</span><span id="Gui-98"><a href="#Gui-98"><span class="linenos"> 98</span></a><span class="sd">        from nextrpg.gui_config import GuiConfig, GuiMode</span>
+</span><span id="Gui-99"><a href="#Gui-99"><span class="linenos"> 99</span></a>
+</span><span id="Gui-100"><a href="#Gui-100"><span class="linenos">100</span></a><span class="sd">        # Create GUI with custom config</span>
+</span><span id="Gui-101"><a href="#Gui-101"><span class="linenos">101</span></a><span class="sd">        config = GuiConfig(size=Size(800, 600), gui_mode=GuiMode.WINDOWED)</span>
+</span><span id="Gui-102"><a href="#Gui-102"><span class="linenos">102</span></a><span class="sd">        gui = Gui(current_config=config)</span>
+</span><span id="Gui-103"><a href="#Gui-103"><span class="linenos">103</span></a>
+</span><span id="Gui-104"><a href="#Gui-104"><span class="linenos">104</span></a><span class="sd">        # Draw game elements</span>
+</span><span id="Gui-105"><a href="#Gui-105"><span class="linenos">105</span></a><span class="sd">        gui.draw(drawings, time_delta)</span>
+</span><span id="Gui-106"><a href="#Gui-106"><span class="linenos">106</span></a><span class="sd">        ```</span>
+</span><span id="Gui-107"><a href="#Gui-107"><span class="linenos">107</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Gui-108"><a href="#Gui-108"><span class="linenos">108</span></a>
+</span><span id="Gui-109"><a href="#Gui-109"><span class="linenos">109</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
+</span><span id="Gui-110"><a href="#Gui-110"><span class="linenos">110</span></a>    <span class="n">current_config</span><span class="p">:</span> <span class="n">GuiConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="p">)</span>
+</span><span id="Gui-111"><a href="#Gui-111"><span class="linenos">111</span></a>    <span class="n">last_config</span><span class="p">:</span> <span class="n">GuiConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="p">)</span>
+</span><span id="Gui-112"><a href="#Gui-112"><span class="linenos">112</span></a>    <span class="n">initial_config</span><span class="p">:</span> <span class="n">GuiConfig</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="p">)</span>
+</span><span id="Gui-113"><a href="#Gui-113"><span class="linenos">113</span></a>    <span class="n">_screen</span><span class="p">:</span> <span class="n">Surface</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Gui-114"><a href="#Gui-114"><span class="linenos">114</span></a>    <span class="n">_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Gui-115"><a href="#Gui-115"><span class="linenos">115</span></a>
+</span><span id="Gui-116"><a href="#Gui-116"><span class="linenos">116</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Gui-117"><a href="#Gui-117"><span class="linenos">117</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Gui-118"><a href="#Gui-118"><span class="linenos">118</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-119"><a href="#Gui-119"><span class="linenos">119</span></a><span class="sd">        Update GUI configuration if needed.</span>
+</span><span id="Gui-120"><a href="#Gui-120"><span class="linenos">120</span></a>
+</span><span id="Gui-121"><a href="#Gui-121"><span class="linenos">121</span></a><span class="sd">        Checks if the current GUI configuration matches the global config</span>
+</span><span id="Gui-122"><a href="#Gui-122"><span class="linenos">122</span></a><span class="sd">        and updates it if necessary. This ensures GUI settings are</span>
+</span><span id="Gui-123"><a href="#Gui-123"><span class="linenos">123</span></a><span class="sd">        synchronized with configuration changes.</span>
+</span><span id="Gui-124"><a href="#Gui-124"><span class="linenos">124</span></a>
+</span><span id="Gui-125"><a href="#Gui-125"><span class="linenos">125</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui-126"><a href="#Gui-126"><span class="linenos">126</span></a><span class="sd">            `Gui`: Updated GUI instance with current configuration.</span>
+</span><span id="Gui-127"><a href="#Gui-127"><span class="linenos">127</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-128"><a href="#Gui-128"><span class="linenos">128</span></a>        <span class="k">if</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="p">:</span>
+</span><span id="Gui-129"><a href="#Gui-129"><span class="linenos">129</span></a>            <span class="k">return</span> <span class="bp">self</span>
+</span><span id="Gui-130"><a href="#Gui-130"><span class="linenos">130</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="Gui-131"><a href="#Gui-131"><span class="linenos">131</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">current_config</span><span class="o">=</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="p">,</span> <span class="n">last_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span>
+</span><span id="Gui-132"><a href="#Gui-132"><span class="linenos">132</span></a>        <span class="p">)</span>
+</span><span id="Gui-133"><a href="#Gui-133"><span class="linenos">133</span></a>
+</span><span id="Gui-134"><a href="#Gui-134"><span class="linenos">134</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gui</span><span class="p">:</span>
+</span><span id="Gui-135"><a href="#Gui-135"><span class="linenos">135</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-136"><a href="#Gui-136"><span class="linenos">136</span></a><span class="sd">        Handle GUI-related events.</span>
+</span><span id="Gui-137"><a href="#Gui-137"><span class="linenos">137</span></a>
+</span><span id="Gui-138"><a href="#Gui-138"><span class="linenos">138</span></a><span class="sd">        Processes events that affect the GUI system, including:</span>
+</span><span id="Gui-139"><a href="#Gui-139"><span class="linenos">139</span></a><span class="sd">        - `GuiResize`: Handles window resize events and updates scaling</span>
+</span><span id="Gui-140"><a href="#Gui-140"><span class="linenos">140</span></a><span class="sd">        - `KeyPressDown`: Toggles between windowed and fullscreen modes</span>
+</span><span id="Gui-141"><a href="#Gui-141"><span class="linenos">141</span></a><span class="sd">            when `KeyboardKey.GUI_MODE_TOGGLE` is pressed</span>
+</span><span id="Gui-142"><a href="#Gui-142"><span class="linenos">142</span></a>
+</span><span id="Gui-143"><a href="#Gui-143"><span class="linenos">143</span></a><span class="sd">        Arguments:</span>
+</span><span id="Gui-144"><a href="#Gui-144"><span class="linenos">144</span></a><span class="sd">            `e`: The pygame event to process.</span>
+</span><span id="Gui-145"><a href="#Gui-145"><span class="linenos">145</span></a>
+</span><span id="Gui-146"><a href="#Gui-146"><span class="linenos">146</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui-147"><a href="#Gui-147"><span class="linenos">147</span></a><span class="sd">            `Gui`: An updated GUI instance reflecting any changes.</span>
+</span><span id="Gui-148"><a href="#Gui-148"><span class="linenos">148</span></a>
+</span><span id="Gui-149"><a href="#Gui-149"><span class="linenos">149</span></a><span class="sd">        Example:</span>
+</span><span id="Gui-150"><a href="#Gui-150"><span class="linenos">150</span></a><span class="sd">            ```python</span>
+</span><span id="Gui-151"><a href="#Gui-151"><span class="linenos">151</span></a><span class="sd">            from nextrpg.pygame_event import GuiResize, KeyPressDown</span>
+</span><span id="Gui-152"><a href="#Gui-152"><span class="linenos">152</span></a>
+</span><span id="Gui-153"><a href="#Gui-153"><span class="linenos">153</span></a><span class="sd">            # Handle window resize</span>
+</span><span id="Gui-154"><a href="#Gui-154"><span class="linenos">154</span></a><span class="sd">            gui = gui.event(GuiResize(Size(1024, 768)))</span>
+</span><span id="Gui-155"><a href="#Gui-155"><span class="linenos">155</span></a>
+</span><span id="Gui-156"><a href="#Gui-156"><span class="linenos">156</span></a><span class="sd">            # Handle mode toggle</span>
+</span><span id="Gui-157"><a href="#Gui-157"><span class="linenos">157</span></a><span class="sd">            gui = gui.event(KeyPressDown(KeyboardKey.GUI_MODE_TOGGLE))</span>
+</span><span id="Gui-158"><a href="#Gui-158"><span class="linenos">158</span></a><span class="sd">            ```</span>
+</span><span id="Gui-159"><a href="#Gui-159"><span class="linenos">159</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-160"><a href="#Gui-160"><span class="linenos">160</span></a>        <span class="k">match</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="Gui-161"><a href="#Gui-161"><span class="linenos">161</span></a>            <span class="k">case</span> <span class="n">GuiResize</span><span class="p">():</span>
+</span><span id="Gui-162"><a href="#Gui-162"><span class="linenos">162</span></a>                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resize</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="Gui-163"><a href="#Gui-163"><span class="linenos">163</span></a>            <span class="k">case</span> <span class="n">KeyPressDown</span><span class="p">():</span>
+</span><span id="Gui-164"><a href="#Gui-164"><span class="linenos">164</span></a>                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">GUI_MODE_TOGGLE</span><span class="p">:</span>
+</span><span id="Gui-165"><a href="#Gui-165"><span class="linenos">165</span></a>                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_toggle_gui_mode</span>
+</span><span id="Gui-166"><a href="#Gui-166"><span class="linenos">166</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="Gui-167"><a href="#Gui-167"><span class="linenos">167</span></a>
+</span><span id="Gui-168"><a href="#Gui-168"><span class="linenos">168</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span>
+</span><span id="Gui-169"><a href="#Gui-169"><span class="linenos">169</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">draw_on_screens</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span>
+</span><span id="Gui-170"><a href="#Gui-170"><span class="linenos">170</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Gui-171"><a href="#Gui-171"><span class="linenos">171</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-172"><a href="#Gui-172"><span class="linenos">172</span></a><span class="sd">        Draw the given drawings to the screen.</span>
+</span><span id="Gui-173"><a href="#Gui-173"><span class="linenos">173</span></a>
+</span><span id="Gui-174"><a href="#Gui-174"><span class="linenos">174</span></a><span class="sd">        Renders all provided drawings to the game window, handling</span>
+</span><span id="Gui-175"><a href="#Gui-175"><span class="linenos">175</span></a><span class="sd">        screen scaling and centering based on the current GUI</span>
+</span><span id="Gui-176"><a href="#Gui-176"><span class="linenos">176</span></a><span class="sd">        configuration. Also renders debug log messages if available.</span>
+</span><span id="Gui-177"><a href="#Gui-177"><span class="linenos">177</span></a>
+</span><span id="Gui-178"><a href="#Gui-178"><span class="linenos">178</span></a><span class="sd">        Arguments:</span>
+</span><span id="Gui-179"><a href="#Gui-179"><span class="linenos">179</span></a><span class="sd">            `draw_on_screens`: The drawings to render to the screen.</span>
+</span><span id="Gui-180"><a href="#Gui-180"><span class="linenos">180</span></a>
+</span><span id="Gui-181"><a href="#Gui-181"><span class="linenos">181</span></a><span class="sd">            `time_delta`: The time elapsed since the last update</span>
+</span><span id="Gui-182"><a href="#Gui-182"><span class="linenos">182</span></a><span class="sd">                in milliseconds.</span>
+</span><span id="Gui-183"><a href="#Gui-183"><span class="linenos">183</span></a>
+</span><span id="Gui-184"><a href="#Gui-184"><span class="linenos">184</span></a><span class="sd">        Example:</span>
+</span><span id="Gui-185"><a href="#Gui-185"><span class="linenos">185</span></a><span class="sd">            ```python</span>
+</span><span id="Gui-186"><a href="#Gui-186"><span class="linenos">186</span></a><span class="sd">            from nextrpg.draw_on_screen import DrawOnScreen</span>
+</span><span id="Gui-187"><a href="#Gui-187"><span class="linenos">187</span></a>
+</span><span id="Gui-188"><a href="#Gui-188"><span class="linenos">188</span></a><span class="sd">            # Draw game elements</span>
+</span><span id="Gui-189"><a href="#Gui-189"><span class="linenos">189</span></a><span class="sd">            drawings = (player_sprite, background, ui_elements)</span>
+</span><span id="Gui-190"><a href="#Gui-190"><span class="linenos">190</span></a><span class="sd">            gui.draw(drawings, time_delta)</span>
+</span><span id="Gui-191"><a href="#Gui-191"><span class="linenos">191</span></a><span class="sd">            ```</span>
+</span><span id="Gui-192"><a href="#Gui-192"><span class="linenos">192</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-193"><a href="#Gui-193"><span class="linenos">193</span></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+</span><span id="Gui-194"><a href="#Gui-194"><span class="linenos">194</span></a>            <span class="n">t</span><span class="s2">&quot;Size </span><span class="si">{self.current_config.size}</span><span class="s2"> Shift </span><span class="si">{self._center_shift}</span><span class="s2">&quot;</span><span class="p">,</span>
+</span><span id="Gui-195"><a href="#Gui-195"><span class="linenos">195</span></a>            <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="Gui-196"><a href="#Gui-196"><span class="linenos">196</span></a>        <span class="p">)</span>
+</span><span id="Gui-197"><a href="#Gui-197"><span class="linenos">197</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">background_color</span><span class="p">)</span>
+</span><span id="Gui-198"><a href="#Gui-198"><span class="linenos">198</span></a>        <span class="k">match</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">resize_mode</span><span class="p">:</span>
+</span><span id="Gui-199"><a href="#Gui-199"><span class="linenos">199</span></a>            <span class="k">case</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">SCALE</span><span class="p">:</span>
+</span><span id="Gui-200"><a href="#Gui-200"><span class="linenos">200</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">(</span><span class="n">draw_on_screens</span><span class="p">)</span><span class="o">.</span><span class="n">pygame</span><span class="p">)</span>
+</span><span id="Gui-201"><a href="#Gui-201"><span class="linenos">201</span></a>            <span class="k">case</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">KEEP_NATIVE_SIZE</span><span class="p">:</span>
+</span><span id="Gui-202"><a href="#Gui-202"><span class="linenos">202</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draw_on_screens</span><span class="p">)</span>
+</span><span id="Gui-203"><a href="#Gui-203"><span class="linenos">203</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_log</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="Gui-204"><a href="#Gui-204"><span class="linenos">204</span></a>        <span class="n">flip</span><span class="p">()</span>
+</span><span id="Gui-205"><a href="#Gui-205"><span class="linenos">205</span></a>
+</span><span id="Gui-206"><a href="#Gui-206"><span class="linenos">206</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Gui-207"><a href="#Gui-207"><span class="linenos">207</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-208"><a href="#Gui-208"><span class="linenos">208</span></a><span class="sd">        Initialize pygame systems and update window state.</span>
+</span><span id="Gui-209"><a href="#Gui-209"><span class="linenos">209</span></a>
+</span><span id="Gui-210"><a href="#Gui-210"><span class="linenos">210</span></a><span class="sd">        Called automatically after object initialization to set up</span>
+</span><span id="Gui-211"><a href="#Gui-211"><span class="linenos">211</span></a><span class="sd">        pygame display and font systems, and update the window</span>
+</span><span id="Gui-212"><a href="#Gui-212"><span class="linenos">212</span></a><span class="sd">        title and screen configuration.</span>
+</span><span id="Gui-213"><a href="#Gui-213"><span class="linenos">213</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-214"><a href="#Gui-214"><span class="linenos">214</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span><span class="p">:</span>
+</span><span id="Gui-215"><a href="#Gui-215"><span class="linenos">215</span></a>            <span class="n">init</span><span class="p">()</span>
+</span><span id="Gui-216"><a href="#Gui-216"><span class="linenos">216</span></a>            <span class="n">font</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+</span><span id="Gui-217"><a href="#Gui-217"><span class="linenos">217</span></a>
+</span><span id="Gui-218"><a href="#Gui-218"><span class="linenos">218</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_update_title</span><span class="p">()</span>
+</span><span id="Gui-219"><a href="#Gui-219"><span class="linenos">219</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_update_screen</span><span class="p">()</span>
+</span><span id="Gui-220"><a href="#Gui-220"><span class="linenos">220</span></a>
+</span><span id="Gui-221"><a href="#Gui-221"><span class="linenos">221</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Gui-222"><a href="#Gui-222"><span class="linenos">222</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-223"><a href="#Gui-223"><span class="linenos">223</span></a><span class="sd">        Draw debug log messages to the screen.</span>
+</span><span id="Gui-224"><a href="#Gui-224"><span class="linenos">224</span></a>
+</span><span id="Gui-225"><a href="#Gui-225"><span class="linenos">225</span></a><span class="sd">        Arguments:</span>
+</span><span id="Gui-226"><a href="#Gui-226"><span class="linenos">226</span></a><span class="sd">            `time_delta`: The time elapsed since the last update.</span>
+</span><span id="Gui-227"><a href="#Gui-227"><span class="linenos">227</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-228"><a href="#Gui-228"><span class="linenos">228</span></a>        <span class="k">if</span> <span class="n">msgs</span> <span class="o">:=</span> <span class="n">pop_messages</span><span class="p">(</span><span class="n">time_delta</span><span class="p">):</span>
+</span><span id="Gui-229"><a href="#Gui-229"><span class="linenos">229</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span>
+</span><span id="Gui-230"><a href="#Gui-230"><span class="linenos">230</span></a>                <span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">_log_text</span><span class="p">(</span><span class="n">msgs</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="Gui-231"><a href="#Gui-231"><span class="linenos">231</span></a>            <span class="p">)</span>
+</span><span id="Gui-232"><a href="#Gui-232"><span class="linenos">232</span></a>
+</span><span id="Gui-233"><a href="#Gui-233"><span class="linenos">233</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">draws</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="Gui-234"><a href="#Gui-234"><span class="linenos">234</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-235"><a href="#Gui-235"><span class="linenos">235</span></a><span class="sd">        Scale drawings to fit the current screen size.</span>
+</span><span id="Gui-236"><a href="#Gui-236"><span class="linenos">236</span></a>
+</span><span id="Gui-237"><a href="#Gui-237"><span class="linenos">237</span></a><span class="sd">        Arguments:</span>
+</span><span id="Gui-238"><a href="#Gui-238"><span class="linenos">238</span></a><span class="sd">            `draws`: The drawings to scale.</span>
+</span><span id="Gui-239"><a href="#Gui-239"><span class="linenos">239</span></a>
+</span><span id="Gui-240"><a href="#Gui-240"><span class="linenos">240</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui-241"><a href="#Gui-241"><span class="linenos">241</span></a><span class="sd">            `DrawOnScreen`: A single scaled drawing containing all elements.</span>
+</span><span id="Gui-242"><a href="#Gui-242"><span class="linenos">242</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-243"><a href="#Gui-243"><span class="linenos">243</span></a>        <span class="n">screen</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_config</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="Gui-244"><a href="#Gui-244"><span class="linenos">244</span></a>        <span class="n">screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draws</span><span class="p">)</span>
+</span><span id="Gui-245"><a href="#Gui-245"><span class="linenos">245</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span>
+</span><span id="Gui-246"><a href="#Gui-246"><span class="linenos">246</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_center_shift</span><span class="p">,</span>
+</span><span id="Gui-247"><a href="#Gui-247"><span class="linenos">247</span></a>            <span class="n">Drawing</span><span class="p">(</span>
+</span><span id="Gui-248"><a href="#Gui-248"><span class="linenos">248</span></a>                <span class="n">smoothscale</span><span class="p">(</span>
+</span><span id="Gui-249"><a href="#Gui-249"><span class="linenos">249</span></a>                    <span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_config</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scaling</span><span class="p">)</span>
+</span><span id="Gui-250"><a href="#Gui-250"><span class="linenos">250</span></a>                <span class="p">)</span>
+</span><span id="Gui-251"><a href="#Gui-251"><span class="linenos">251</span></a>            <span class="p">),</span>
+</span><span id="Gui-252"><a href="#Gui-252"><span class="linenos">252</span></a>        <span class="p">)</span>
+</span><span id="Gui-253"><a href="#Gui-253"><span class="linenos">253</span></a>
+</span><span id="Gui-254"><a href="#Gui-254"><span class="linenos">254</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Gui-255"><a href="#Gui-255"><span class="linenos">255</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_scaling</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="Gui-256"><a href="#Gui-256"><span class="linenos">256</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-257"><a href="#Gui-257"><span class="linenos">257</span></a><span class="sd">        Get the current scaling factor for screen rendering.</span>
+</span><span id="Gui-258"><a href="#Gui-258"><span class="linenos">258</span></a>
+</span><span id="Gui-259"><a href="#Gui-259"><span class="linenos">259</span></a><span class="sd">        Calculates the scaling factor based on the ratio of current</span>
+</span><span id="Gui-260"><a href="#Gui-260"><span class="linenos">260</span></a><span class="sd">        screen size to initial screen size, maintaining aspect ratio.</span>
+</span><span id="Gui-261"><a href="#Gui-261"><span class="linenos">261</span></a>
+</span><span id="Gui-262"><a href="#Gui-262"><span class="linenos">262</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui-263"><a href="#Gui-263"><span class="linenos">263</span></a><span class="sd">            `float`: The scaling factor (1.0 = no scaling).</span>
+</span><span id="Gui-264"><a href="#Gui-264"><span class="linenos">264</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-265"><a href="#Gui-265"><span class="linenos">265</span></a>        <span class="n">current_width</span><span class="p">,</span> <span class="n">current_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">size</span>
+</span><span id="Gui-266"><a href="#Gui-266"><span class="linenos">266</span></a>        <span class="n">initial_width</span><span class="p">,</span> <span class="n">initial_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_config</span><span class="o">.</span><span class="n">size</span>
+</span><span id="Gui-267"><a href="#Gui-267"><span class="linenos">267</span></a>        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span>
+</span><span id="Gui-268"><a href="#Gui-268"><span class="linenos">268</span></a>            <span class="n">current_width</span> <span class="o">/</span> <span class="n">initial_width</span><span class="p">,</span> <span class="n">current_height</span> <span class="o">/</span> <span class="n">initial_height</span>
+</span><span id="Gui-269"><a href="#Gui-269"><span class="linenos">269</span></a>        <span class="p">)</span>
+</span><span id="Gui-270"><a href="#Gui-270"><span class="linenos">270</span></a>
+</span><span id="Gui-271"><a href="#Gui-271"><span class="linenos">271</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Gui-272"><a href="#Gui-272"><span class="linenos">272</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_center_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Gui-273"><a href="#Gui-273"><span class="linenos">273</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-274"><a href="#Gui-274"><span class="linenos">274</span></a><span class="sd">        Get the coordinate shift needed to center scaled content.</span>
+</span><span id="Gui-275"><a href="#Gui-275"><span class="linenos">275</span></a>
+</span><span id="Gui-276"><a href="#Gui-276"><span class="linenos">276</span></a><span class="sd">        Calculates the offset needed to center the scaled game content</span>
+</span><span id="Gui-277"><a href="#Gui-277"><span class="linenos">277</span></a><span class="sd">        within the current window size.</span>
+</span><span id="Gui-278"><a href="#Gui-278"><span class="linenos">278</span></a>
+</span><span id="Gui-279"><a href="#Gui-279"><span class="linenos">279</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui-280"><a href="#Gui-280"><span class="linenos">280</span></a><span class="sd">            `Coordinate`: The shift offset for centering.</span>
+</span><span id="Gui-281"><a href="#Gui-281"><span class="linenos">281</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-282"><a href="#Gui-282"><span class="linenos">282</span></a>        <span class="n">current_width</span><span class="p">,</span> <span class="n">current_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">size</span>
+</span><span id="Gui-283"><a href="#Gui-283"><span class="linenos">283</span></a>        <span class="n">initial_width</span><span class="p">,</span> <span class="n">initial_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_config</span><span class="o">.</span><span class="n">size</span>
+</span><span id="Gui-284"><a href="#Gui-284"><span class="linenos">284</span></a>        <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span>
+</span><span id="Gui-285"><a href="#Gui-285"><span class="linenos">285</span></a>            <span class="p">(</span><span class="n">current_width</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scaling</span> <span class="o">*</span> <span class="n">initial_width</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+</span><span id="Gui-286"><a href="#Gui-286"><span class="linenos">286</span></a>            <span class="p">(</span><span class="n">current_height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scaling</span> <span class="o">*</span> <span class="n">initial_height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+</span><span id="Gui-287"><a href="#Gui-287"><span class="linenos">287</span></a>        <span class="p">)</span>
+</span><span id="Gui-288"><a href="#Gui-288"><span class="linenos">288</span></a>
+</span><span id="Gui-289"><a href="#Gui-289"><span class="linenos">289</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Gui-290"><a href="#Gui-290"><span class="linenos">290</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_current_gui_flag</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_GuiFlag</span><span class="p">:</span>
+</span><span id="Gui-291"><a href="#Gui-291"><span class="linenos">291</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-292"><a href="#Gui-292"><span class="linenos">292</span></a><span class="sd">        Get the pygame display flags for the current GUI mode.</span>
+</span><span id="Gui-293"><a href="#Gui-293"><span class="linenos">293</span></a>
+</span><span id="Gui-294"><a href="#Gui-294"><span class="linenos">294</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui-295"><a href="#Gui-295"><span class="linenos">295</span></a><span class="sd">            `_GuiFlag`: Pygame display flags for window configuration.</span>
+</span><span id="Gui-296"><a href="#Gui-296"><span class="linenos">296</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-297"><a href="#Gui-297"><span class="linenos">297</span></a>        <span class="n">flag</span> <span class="o">=</span> <span class="n">DOUBLEBUF</span>
+</span><span id="Gui-298"><a href="#Gui-298"><span class="linenos">298</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">gui_mode</span> <span class="ow">is</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">:</span>
+</span><span id="Gui-299"><a href="#Gui-299"><span class="linenos">299</span></a>            <span class="n">flag</span> <span class="o">|=</span> <span class="n">FULLSCREEN</span>
+</span><span id="Gui-300"><a href="#Gui-300"><span class="linenos">300</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">allow_window_resize</span><span class="p">:</span>
+</span><span id="Gui-301"><a href="#Gui-301"><span class="linenos">301</span></a>            <span class="n">flag</span> <span class="o">|=</span> <span class="n">RESIZABLE</span>
+</span><span id="Gui-302"><a href="#Gui-302"><span class="linenos">302</span></a>        <span class="k">return</span> <span class="n">flag</span>
+</span><span id="Gui-303"><a href="#Gui-303"><span class="linenos">303</span></a>
+</span><span id="Gui-304"><a href="#Gui-304"><span class="linenos">304</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_update_title</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Gui-305"><a href="#Gui-305"><span class="linenos">305</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-306"><a href="#Gui-306"><span class="linenos">306</span></a><span class="sd">        Update the window title if it has changed.</span>
+</span><span id="Gui-307"><a href="#Gui-307"><span class="linenos">307</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-308"><a href="#Gui-308"><span class="linenos">308</span></a>        <span class="k">if</span> <span class="p">(</span>
+</span><span id="Gui-309"><a href="#Gui-309"><span class="linenos">309</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_title</span> <span class="ow">is</span> <span class="kc">None</span>
+</span><span id="Gui-310"><a href="#Gui-310"><span class="linenos">310</span></a>            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">title</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_config</span><span class="o">.</span><span class="n">title</span>
+</span><span id="Gui-311"><a href="#Gui-311"><span class="linenos">311</span></a>        <span class="p">):</span>
+</span><span id="Gui-312"><a href="#Gui-312"><span class="linenos">312</span></a>            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_title&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+</span><span id="Gui-313"><a href="#Gui-313"><span class="linenos">313</span></a>            <span class="n">set_caption</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_title</span><span class="p">)</span>
+</span><span id="Gui-314"><a href="#Gui-314"><span class="linenos">314</span></a>
+</span><span id="Gui-315"><a href="#Gui-315"><span class="linenos">315</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_update_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Gui-316"><a href="#Gui-316"><span class="linenos">316</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-317"><a href="#Gui-317"><span class="linenos">317</span></a><span class="sd">        Update the screen surface if configuration has changed.</span>
+</span><span id="Gui-318"><a href="#Gui-318"><span class="linenos">318</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-319"><a href="#Gui-319"><span class="linenos">319</span></a>        <span class="k">if</span> <span class="p">(</span>
+</span><span id="Gui-320"><a href="#Gui-320"><span class="linenos">320</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span> <span class="ow">is</span> <span class="kc">None</span>
+</span><span id="Gui-321"><a href="#Gui-321"><span class="linenos">321</span></a>            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_config</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">size</span>
+</span><span id="Gui-322"><a href="#Gui-322"><span class="linenos">322</span></a>            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_config</span><span class="o">.</span><span class="n">gui_mode</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">gui_mode</span>
+</span><span id="Gui-323"><a href="#Gui-323"><span class="linenos">323</span></a>            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_config</span><span class="o">.</span><span class="n">allow_window_resize</span>
+</span><span id="Gui-324"><a href="#Gui-324"><span class="linenos">324</span></a>            <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">allow_window_resize</span>
+</span><span id="Gui-325"><a href="#Gui-325"><span class="linenos">325</span></a>        <span class="p">):</span>
+</span><span id="Gui-326"><a href="#Gui-326"><span class="linenos">326</span></a>            <span class="nb">object</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span>
+</span><span id="Gui-327"><a href="#Gui-327"><span class="linenos">327</span></a>                <span class="bp">self</span><span class="p">,</span>
+</span><span id="Gui-328"><a href="#Gui-328"><span class="linenos">328</span></a>                <span class="s2">&quot;_screen&quot;</span><span class="p">,</span>
+</span><span id="Gui-329"><a href="#Gui-329"><span class="linenos">329</span></a>                <span class="n">set_mode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_current_gui_flag</span><span class="p">),</span>
+</span><span id="Gui-330"><a href="#Gui-330"><span class="linenos">330</span></a>            <span class="p">)</span>
+</span><span id="Gui-331"><a href="#Gui-331"><span class="linenos">331</span></a>
+</span><span id="Gui-332"><a href="#Gui-332"><span class="linenos">332</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Gui-333"><a href="#Gui-333"><span class="linenos">333</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_toggle_gui_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gui</span><span class="p">:</span>
+</span><span id="Gui-334"><a href="#Gui-334"><span class="linenos">334</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-335"><a href="#Gui-335"><span class="linenos">335</span></a><span class="sd">        Toggle between windowed and fullscreen modes.</span>
+</span><span id="Gui-336"><a href="#Gui-336"><span class="linenos">336</span></a>
+</span><span id="Gui-337"><a href="#Gui-337"><span class="linenos">337</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui-338"><a href="#Gui-338"><span class="linenos">338</span></a><span class="sd">            `Gui`: Updated GUI instance with toggled mode.</span>
+</span><span id="Gui-339"><a href="#Gui-339"><span class="linenos">339</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-340"><a href="#Gui-340"><span class="linenos">340</span></a>        <span class="n">current_config</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="Gui-341"><a href="#Gui-341"><span class="linenos">341</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="p">,</span> <span class="n">gui_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">gui_mode</span><span class="o">.</span><span class="n">opposite</span>
+</span><span id="Gui-342"><a href="#Gui-342"><span class="linenos">342</span></a>        <span class="p">)</span>
+</span><span id="Gui-343"><a href="#Gui-343"><span class="linenos">343</span></a>        <span class="n">set_config</span><span class="p">(</span><span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">(),</span> <span class="n">gui</span><span class="o">=</span><span class="n">current_config</span><span class="p">))</span>
+</span><span id="Gui-344"><a href="#Gui-344"><span class="linenos">344</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="Gui-345"><a href="#Gui-345"><span class="linenos">345</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">current_config</span><span class="o">=</span><span class="n">current_config</span><span class="p">,</span> <span class="n">last_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span>
+</span><span id="Gui-346"><a href="#Gui-346"><span class="linenos">346</span></a>        <span class="p">)</span>
+</span><span id="Gui-347"><a href="#Gui-347"><span class="linenos">347</span></a>
+</span><span id="Gui-348"><a href="#Gui-348"><span class="linenos">348</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_resize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="n">Size</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gui</span><span class="p">:</span>
+</span><span id="Gui-349"><a href="#Gui-349"><span class="linenos">349</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui-350"><a href="#Gui-350"><span class="linenos">350</span></a><span class="sd">        Handle window resize events.</span>
+</span><span id="Gui-351"><a href="#Gui-351"><span class="linenos">351</span></a>
+</span><span id="Gui-352"><a href="#Gui-352"><span class="linenos">352</span></a><span class="sd">        Arguments:</span>
+</span><span id="Gui-353"><a href="#Gui-353"><span class="linenos">353</span></a><span class="sd">            `size`: The new window size.</span>
+</span><span id="Gui-354"><a href="#Gui-354"><span class="linenos">354</span></a>
+</span><span id="Gui-355"><a href="#Gui-355"><span class="linenos">355</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui-356"><a href="#Gui-356"><span class="linenos">356</span></a><span class="sd">            `Gui`: Updated GUI instance with new size.</span>
+</span><span id="Gui-357"><a href="#Gui-357"><span class="linenos">357</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui-358"><a href="#Gui-358"><span class="linenos">358</span></a>        <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+</span><span id="Gui-359"><a href="#Gui-359"><span class="linenos">359</span></a>            <span class="k">return</span> <span class="bp">self</span>
+</span><span id="Gui-360"><a href="#Gui-360"><span class="linenos">360</span></a>        <span class="n">current_config</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+</span><span id="Gui-361"><a href="#Gui-361"><span class="linenos">361</span></a>        <span class="n">set_config</span><span class="p">(</span><span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">(),</span> <span class="n">gui</span><span class="o">=</span><span class="n">current_config</span><span class="p">))</span>
+</span><span id="Gui-362"><a href="#Gui-362"><span class="linenos">362</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="Gui-363"><a href="#Gui-363"><span class="linenos">363</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">current_config</span><span class="o">=</span><span class="n">current_config</span><span class="p">,</span> <span class="n">last_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span>
+</span><span id="Gui-364"><a href="#Gui-364"><span class="linenos">364</span></a>        <span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Game window and GUI management system.</p>
+
+<p>This class handles the game window, screen rendering, and user
+interface interactions. It manages window modes (fullscreen/windowed),
+screen scaling, and drawing operations.</p>
+
+<p>The GUI system automatically initializes pygame display and font
+systems, manages window configuration, and provides methods for
+drawing and event handling.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong><code><a href="#Gui.current_config">current_config</a></code>:</strong>  The current GUI configuration settings.
+Defaults to the global GUI configuration.</li>
+<li><strong><code><a href="#Gui.last_config">last_config</a></code>:</strong>  The previous GUI configuration for change detection.
+Defaults to the global GUI configuration.</li>
+<li><strong><code><a href="#Gui.initial_config">initial_config</a></code>:</strong>  The initial GUI configuration for scaling.
+Defaults to the global GUI configuration.</li>
+<li><strong><code>_screen</code>:</strong>  Internal pygame surface for the game window.
+Initialized automatically if not provided.</li>
+<li><strong><code>_title</code>:</strong>  Internal window title cache for optimization.</li>
+</ul>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.window</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gui</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="gui_config.html">nextrpg.gui_config</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">GuiConfig</span><span class="p">,</span> <span class="n">GuiMode</span>
+
+<span class="c1"># Create GUI with custom config</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">GuiConfig</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">Size</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">),</span> <span class="n">gui_mode</span><span class="o">=</span><span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span><span class="p">)</span>
+<span class="n">gui</span> <span class="o">=</span> <span class="n">Gui</span><span class="p">(</span><span class="n">current_config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+
+<span class="c1"># Draw game elements</span>
+<span class="n">gui</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">drawings</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+</div>
+
+
+                            <div id="Gui.__init__" class="classattr">
+                                <div class="attr function">
+            
+        <span class="name">Gui</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">current_config</span><span class="p">:</span> <span class="n"><a href="gui_config.html#GuiConfig">nextrpg.gui_config.GuiConfig</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">last_config</span><span class="p">:</span> <span class="n"><a href="gui_config.html#GuiConfig">nextrpg.gui_config.GuiConfig</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">initial_config</span><span class="p">:</span> <span class="n"><a href="gui_config.html#GuiConfig">nextrpg.gui_config.GuiConfig</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_screen</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">Surface</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Gui.__init__"></a>
+    
+    
+
+                            </div>
+                            <div id="Gui.current_config" class="classattr">
+                                <div class="attr variable">
+            <span class="name">current_config</span><span class="annotation">: <a href="gui_config.html#GuiConfig">nextrpg.gui_config.GuiConfig</a></span>
+
+        
+    </div>
+    <a class="headerlink" href="#Gui.current_config"></a>
+    
+    
+
+                            </div>
+                            <div id="Gui.last_config" class="classattr">
+                                <div class="attr variable">
+            <span class="name">last_config</span><span class="annotation">: <a href="gui_config.html#GuiConfig">nextrpg.gui_config.GuiConfig</a></span>
+
+        
+    </div>
+    <a class="headerlink" href="#Gui.last_config"></a>
+    
+    
+
+                            </div>
+                            <div id="Gui.initial_config" class="classattr">
+                                <div class="attr variable">
+            <span class="name">initial_config</span><span class="annotation">: <a href="gui_config.html#GuiConfig">nextrpg.gui_config.GuiConfig</a></span>
+
+        
+    </div>
+    <a class="headerlink" href="#Gui.initial_config"></a>
+    
+    
+
+                            </div>
+                            <div id="Gui.update" class="classattr">
+                                        <input id="Gui.update-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">update</span><span class="annotation">: Self</span>
+
+                <label class="view-source-button" for="Gui.update-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Gui.update"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Gui.update-116"><a href="#Gui.update-116"><span class="linenos">116</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Gui.update-117"><a href="#Gui.update-117"><span class="linenos">117</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Gui.update-118"><a href="#Gui.update-118"><span class="linenos">118</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui.update-119"><a href="#Gui.update-119"><span class="linenos">119</span></a><span class="sd">        Update GUI configuration if needed.</span>
+</span><span id="Gui.update-120"><a href="#Gui.update-120"><span class="linenos">120</span></a>
+</span><span id="Gui.update-121"><a href="#Gui.update-121"><span class="linenos">121</span></a><span class="sd">        Checks if the current GUI configuration matches the global config</span>
+</span><span id="Gui.update-122"><a href="#Gui.update-122"><span class="linenos">122</span></a><span class="sd">        and updates it if necessary. This ensures GUI settings are</span>
+</span><span id="Gui.update-123"><a href="#Gui.update-123"><span class="linenos">123</span></a><span class="sd">        synchronized with configuration changes.</span>
+</span><span id="Gui.update-124"><a href="#Gui.update-124"><span class="linenos">124</span></a>
+</span><span id="Gui.update-125"><a href="#Gui.update-125"><span class="linenos">125</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui.update-126"><a href="#Gui.update-126"><span class="linenos">126</span></a><span class="sd">            `Gui`: Updated GUI instance with current configuration.</span>
+</span><span id="Gui.update-127"><a href="#Gui.update-127"><span class="linenos">127</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui.update-128"><a href="#Gui.update-128"><span class="linenos">128</span></a>        <span class="k">if</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span> <span class="ow">is</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="p">:</span>
+</span><span id="Gui.update-129"><a href="#Gui.update-129"><span class="linenos">129</span></a>            <span class="k">return</span> <span class="bp">self</span>
+</span><span id="Gui.update-130"><a href="#Gui.update-130"><span class="linenos">130</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="Gui.update-131"><a href="#Gui.update-131"><span class="linenos">131</span></a>            <span class="bp">self</span><span class="p">,</span> <span class="n">current_config</span><span class="o">=</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="p">,</span> <span class="n">last_config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span>
+</span><span id="Gui.update-132"><a href="#Gui.update-132"><span class="linenos">132</span></a>        <span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Update GUI configuration if needed.</p>
+
+<p>Checks if the current GUI configuration matches the global config
+and updates it if necessary. This ensures GUI settings are
+synchronized with configuration changes.</p>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code><a href="#Gui">Gui</a></code>: Updated GUI instance with current configuration.</p>
+</blockquote>
+</div>
+
+
+                            </div>
+                            <div id="Gui.event" class="classattr">
+                                        <input id="Gui.event-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">event</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">e</span><span class="p">:</span> <span class="n"><a href="pygame_event.html#PygameEvent">nextrpg.pygame_event.PygameEvent</a></span></span><span class="return-annotation">) -> <span class="n"><a href="#Gui">Gui</a></span>:</span></span>
+
+                <label class="view-source-button" for="Gui.event-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Gui.event"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Gui.event-134"><a href="#Gui.event-134"><span class="linenos">134</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gui</span><span class="p">:</span>
+</span><span id="Gui.event-135"><a href="#Gui.event-135"><span class="linenos">135</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui.event-136"><a href="#Gui.event-136"><span class="linenos">136</span></a><span class="sd">        Handle GUI-related events.</span>
+</span><span id="Gui.event-137"><a href="#Gui.event-137"><span class="linenos">137</span></a>
+</span><span id="Gui.event-138"><a href="#Gui.event-138"><span class="linenos">138</span></a><span class="sd">        Processes events that affect the GUI system, including:</span>
+</span><span id="Gui.event-139"><a href="#Gui.event-139"><span class="linenos">139</span></a><span class="sd">        - `GuiResize`: Handles window resize events and updates scaling</span>
+</span><span id="Gui.event-140"><a href="#Gui.event-140"><span class="linenos">140</span></a><span class="sd">        - `KeyPressDown`: Toggles between windowed and fullscreen modes</span>
+</span><span id="Gui.event-141"><a href="#Gui.event-141"><span class="linenos">141</span></a><span class="sd">            when `KeyboardKey.GUI_MODE_TOGGLE` is pressed</span>
+</span><span id="Gui.event-142"><a href="#Gui.event-142"><span class="linenos">142</span></a>
+</span><span id="Gui.event-143"><a href="#Gui.event-143"><span class="linenos">143</span></a><span class="sd">        Arguments:</span>
+</span><span id="Gui.event-144"><a href="#Gui.event-144"><span class="linenos">144</span></a><span class="sd">            `e`: The pygame event to process.</span>
+</span><span id="Gui.event-145"><a href="#Gui.event-145"><span class="linenos">145</span></a>
+</span><span id="Gui.event-146"><a href="#Gui.event-146"><span class="linenos">146</span></a><span class="sd">        Returns:</span>
+</span><span id="Gui.event-147"><a href="#Gui.event-147"><span class="linenos">147</span></a><span class="sd">            `Gui`: An updated GUI instance reflecting any changes.</span>
+</span><span id="Gui.event-148"><a href="#Gui.event-148"><span class="linenos">148</span></a>
+</span><span id="Gui.event-149"><a href="#Gui.event-149"><span class="linenos">149</span></a><span class="sd">        Example:</span>
+</span><span id="Gui.event-150"><a href="#Gui.event-150"><span class="linenos">150</span></a><span class="sd">            ```python</span>
+</span><span id="Gui.event-151"><a href="#Gui.event-151"><span class="linenos">151</span></a><span class="sd">            from nextrpg.pygame_event import GuiResize, KeyPressDown</span>
+</span><span id="Gui.event-152"><a href="#Gui.event-152"><span class="linenos">152</span></a>
+</span><span id="Gui.event-153"><a href="#Gui.event-153"><span class="linenos">153</span></a><span class="sd">            # Handle window resize</span>
+</span><span id="Gui.event-154"><a href="#Gui.event-154"><span class="linenos">154</span></a><span class="sd">            gui = gui.event(GuiResize(Size(1024, 768)))</span>
+</span><span id="Gui.event-155"><a href="#Gui.event-155"><span class="linenos">155</span></a>
+</span><span id="Gui.event-156"><a href="#Gui.event-156"><span class="linenos">156</span></a><span class="sd">            # Handle mode toggle</span>
+</span><span id="Gui.event-157"><a href="#Gui.event-157"><span class="linenos">157</span></a><span class="sd">            gui = gui.event(KeyPressDown(KeyboardKey.GUI_MODE_TOGGLE))</span>
+</span><span id="Gui.event-158"><a href="#Gui.event-158"><span class="linenos">158</span></a><span class="sd">            ```</span>
+</span><span id="Gui.event-159"><a href="#Gui.event-159"><span class="linenos">159</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui.event-160"><a href="#Gui.event-160"><span class="linenos">160</span></a>        <span class="k">match</span> <span class="n">e</span><span class="p">:</span>
+</span><span id="Gui.event-161"><a href="#Gui.event-161"><span class="linenos">161</span></a>            <span class="k">case</span> <span class="n">GuiResize</span><span class="p">():</span>
+</span><span id="Gui.event-162"><a href="#Gui.event-162"><span class="linenos">162</span></a>                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resize</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="Gui.event-163"><a href="#Gui.event-163"><span class="linenos">163</span></a>            <span class="k">case</span> <span class="n">KeyPressDown</span><span class="p">():</span>
+</span><span id="Gui.event-164"><a href="#Gui.event-164"><span class="linenos">164</span></a>                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">key</span> <span class="ow">is</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">GUI_MODE_TOGGLE</span><span class="p">:</span>
+</span><span id="Gui.event-165"><a href="#Gui.event-165"><span class="linenos">165</span></a>                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_toggle_gui_mode</span>
+</span><span id="Gui.event-166"><a href="#Gui.event-166"><span class="linenos">166</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Handle GUI-related events.</p>
+
+<p>Processes events that affect the GUI system, including:</p>
+
+<ul>
+<li><code>GuiResize</code>: Handles window resize events and updates scaling</li>
+<li><code>KeyPressDown</code>: Toggles between windowed and fullscreen modes
+when <code>KeyboardKey.GUI_MODE_TOGGLE</code> is pressed</li>
+</ul>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong><code>e</code>:</strong>  The pygame event to process.</li>
+</ul>
+
+<h6 id="returns">Returns:</h6>
+
+<blockquote>
+  <p><code><a href="#Gui">Gui</a></code>: An updated GUI instance reflecting any changes.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="pygame_event.html">nextrpg.pygame_event</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">GuiResize</span><span class="p">,</span> <span class="n">KeyPressDown</span>
+
+<span class="c1"># Handle window resize</span>
+<span class="n">gui</span> <span class="o">=</span> <span class="n">gui</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">GuiResize</span><span class="p">(</span><span class="n">Size</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">768</span><span class="p">)))</span>
+
+<span class="c1"># Handle mode toggle</span>
+<span class="n">gui</span> <span class="o">=</span> <span class="n">gui</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">KeyPressDown</span><span class="p">(</span><span class="n">KeyboardKey</span><span class="o">.</span><span class="n">GUI_MODE_TOGGLE</span><span class="p">))</span>
+</code></pre>
+  </div>
+</blockquote>
+</div>
+
+
+                            </div>
+                            <div id="Gui.draw" class="classattr">
+                                        <input id="Gui.draw-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">draw</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">draw_on_screens</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="draw_on_screen.html#DrawOnScreen">nextrpg.draw_on_screen.DrawOnScreen</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>,</span><span class="param">	<span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
+
+                <label class="view-source-button" for="Gui.draw-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Gui.draw"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Gui.draw-168"><a href="#Gui.draw-168"><span class="linenos">168</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span>
+</span><span id="Gui.draw-169"><a href="#Gui.draw-169"><span class="linenos">169</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">draw_on_screens</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span>
+</span><span id="Gui.draw-170"><a href="#Gui.draw-170"><span class="linenos">170</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Gui.draw-171"><a href="#Gui.draw-171"><span class="linenos">171</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Gui.draw-172"><a href="#Gui.draw-172"><span class="linenos">172</span></a><span class="sd">        Draw the given drawings to the screen.</span>
+</span><span id="Gui.draw-173"><a href="#Gui.draw-173"><span class="linenos">173</span></a>
+</span><span id="Gui.draw-174"><a href="#Gui.draw-174"><span class="linenos">174</span></a><span class="sd">        Renders all provided drawings to the game window, handling</span>
+</span><span id="Gui.draw-175"><a href="#Gui.draw-175"><span class="linenos">175</span></a><span class="sd">        screen scaling and centering based on the current GUI</span>
+</span><span id="Gui.draw-176"><a href="#Gui.draw-176"><span class="linenos">176</span></a><span class="sd">        configuration. Also renders debug log messages if available.</span>
+</span><span id="Gui.draw-177"><a href="#Gui.draw-177"><span class="linenos">177</span></a>
+</span><span id="Gui.draw-178"><a href="#Gui.draw-178"><span class="linenos">178</span></a><span class="sd">        Arguments:</span>
+</span><span id="Gui.draw-179"><a href="#Gui.draw-179"><span class="linenos">179</span></a><span class="sd">            `draw_on_screens`: The drawings to render to the screen.</span>
+</span><span id="Gui.draw-180"><a href="#Gui.draw-180"><span class="linenos">180</span></a>
+</span><span id="Gui.draw-181"><a href="#Gui.draw-181"><span class="linenos">181</span></a><span class="sd">            `time_delta`: The time elapsed since the last update</span>
+</span><span id="Gui.draw-182"><a href="#Gui.draw-182"><span class="linenos">182</span></a><span class="sd">                in milliseconds.</span>
+</span><span id="Gui.draw-183"><a href="#Gui.draw-183"><span class="linenos">183</span></a>
+</span><span id="Gui.draw-184"><a href="#Gui.draw-184"><span class="linenos">184</span></a><span class="sd">        Example:</span>
+</span><span id="Gui.draw-185"><a href="#Gui.draw-185"><span class="linenos">185</span></a><span class="sd">            ```python</span>
+</span><span id="Gui.draw-186"><a href="#Gui.draw-186"><span class="linenos">186</span></a><span class="sd">            from nextrpg.draw_on_screen import DrawOnScreen</span>
+</span><span id="Gui.draw-187"><a href="#Gui.draw-187"><span class="linenos">187</span></a>
+</span><span id="Gui.draw-188"><a href="#Gui.draw-188"><span class="linenos">188</span></a><span class="sd">            # Draw game elements</span>
+</span><span id="Gui.draw-189"><a href="#Gui.draw-189"><span class="linenos">189</span></a><span class="sd">            drawings = (player_sprite, background, ui_elements)</span>
+</span><span id="Gui.draw-190"><a href="#Gui.draw-190"><span class="linenos">190</span></a><span class="sd">            gui.draw(drawings, time_delta)</span>
+</span><span id="Gui.draw-191"><a href="#Gui.draw-191"><span class="linenos">191</span></a><span class="sd">            ```</span>
+</span><span id="Gui.draw-192"><a href="#Gui.draw-192"><span class="linenos">192</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Gui.draw-193"><a href="#Gui.draw-193"><span class="linenos">193</span></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+</span><span id="Gui.draw-194"><a href="#Gui.draw-194"><span class="linenos">194</span></a>            <span class="n">t</span><span class="s2">&quot;Size </span><span class="si">{self.current_config.size}</span><span class="s2"> Shift </span><span class="si">{self._center_shift}</span><span class="s2">&quot;</span><span class="p">,</span>
+</span><span id="Gui.draw-195"><a href="#Gui.draw-195"><span class="linenos">195</span></a>            <span class="n">duration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+</span><span id="Gui.draw-196"><a href="#Gui.draw-196"><span class="linenos">196</span></a>        <span class="p">)</span>
+</span><span id="Gui.draw-197"><a href="#Gui.draw-197"><span class="linenos">197</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">background_color</span><span class="p">)</span>
+</span><span id="Gui.draw-198"><a href="#Gui.draw-198"><span class="linenos">198</span></a>        <span class="k">match</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_config</span><span class="o">.</span><span class="n">resize_mode</span><span class="p">:</span>
+</span><span id="Gui.draw-199"><a href="#Gui.draw-199"><span class="linenos">199</span></a>            <span class="k">case</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">SCALE</span><span class="p">:</span>
+</span><span id="Gui.draw-200"><a href="#Gui.draw-200"><span class="linenos">200</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">(</span><span class="n">draw_on_screens</span><span class="p">)</span><span class="o">.</span><span class="n">pygame</span><span class="p">)</span>
+</span><span id="Gui.draw-201"><a href="#Gui.draw-201"><span class="linenos">201</span></a>            <span class="k">case</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">KEEP_NATIVE_SIZE</span><span class="p">:</span>
+</span><span id="Gui.draw-202"><a href="#Gui.draw-202"><span class="linenos">202</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_screen</span><span class="o">.</span><span class="n">blits</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">pygame</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">draw_on_screens</span><span class="p">)</span>
+</span><span id="Gui.draw-203"><a href="#Gui.draw-203"><span class="linenos">203</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_log</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="Gui.draw-204"><a href="#Gui.draw-204"><span class="linenos">204</span></a>        <span class="n">flip</span><span class="p">()</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Draw the given drawings to the screen.</p>
+
+<p>Renders all provided drawings to the game window, handling
+screen scaling and centering based on the current GUI
+configuration. Also renders debug log messages if available.</p>
+
+<h6 id="arguments">Arguments:</h6>
+
+<ul>
+<li><strong><code>draw_on_screens</code>:</strong>  The drawings to render to the screen.</li>
+<li><strong><code>time_delta</code>:</strong>  The time elapsed since the last update
+in milliseconds.</li>
+</ul>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="draw_on_screen.html">nextrpg.draw_on_screen</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+
+<span class="c1"># Draw game elements</span>
+<span class="n">drawings</span> <span class="o">=</span> <span class="p">(</span><span class="n">player_sprite</span><span class="p">,</span> <span class="n">background</span><span class="p">,</span> <span class="n">ui_elements</span><span class="p">)</span>
+<span class="n">gui</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">drawings</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+</div>
+
+
+                            </div>
+                </section>
     </main>
 <script>
     function escapeHTML(html) {

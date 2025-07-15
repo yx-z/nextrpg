@@ -49,14 +49,24 @@ def test_gui(mocker: MockerFixture) -> None:
     gui._screen.blits.assert_not_called()
     object.__setattr__(gui, "_draw_log", draw_debug)
 
-    gui2 = Gui(GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE_SIZE))
+    gui2 = Gui(
+        current_config=GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE_SIZE)
+    )
     gui2.draw((), 0)
     gui2._screen.blit.assert_called()
 
-    assert Gui(GuiConfig(allow_window_resize=False))._current_gui_flag
+    assert Gui(
+        current_config=GuiConfig(allow_window_resize=False)
+    )._current_gui_flag
 
-    Gui(GuiConfig(resize_mode="Invalid resize mode")).draw((), 0)
-    Gui(gui.current_config, gui.current_config, gui.current_config, "screen")
+    Gui(current_config=GuiConfig(resize_mode="Invalid resize mode")).draw((), 0)
+    Gui(
+        current_config=gui.current_config,
+        last_config=gui.current_config,
+        initial_config=gui.current_config,
+        _title="screen",
+        _screen=MockSurface(),
+    )
 
     assert gui.event(KeyPressUp(Event(KEYDOWN, key=K_LEFT))) is gui
     assert gui.event(KeyPressDown(Event(KEYDOWN, key=K_LEFT))) is gui
@@ -76,8 +86,8 @@ def test_gui(mocker: MockerFixture) -> None:
 
     assert gui.update
     with override_config(Config(gui=GuiConfig(allow_window_resize=True))):
-        assert Gui(GuiConfig(allow_window_resize=False)).update
-        assert Gui(config().gui).update
+        assert Gui(current_config=GuiConfig(allow_window_resize=False)).update
+        assert Gui(current_config=config().gui).update
 
 
 def test_gui_size() -> None:

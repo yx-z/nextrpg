@@ -194,9 +194,7 @@ def _get_target_and_arg(node: Name | Attribute | Subscript) -> _TargetAndArg:
         case Subscript():
             if isinstance(node.value, Name):
                 return _TargetAndArg(node.value.id, [node.slice])
-            _raise_annotate_say(node)
-        case _:
-            _raise_annotate_say(node)
+    _raise_annotate_say(node)
 
 
 def _raise_annotate_say(node: Subscript | Attribute) -> NoReturn:

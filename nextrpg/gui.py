@@ -31,7 +31,7 @@ Example:
     ```
 """
 
-from dataclasses import dataclass, field, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self
 
@@ -41,6 +41,7 @@ from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
+from nextrpg.model import not_constructor_below
 from nextrpg.coordinate import Coordinate
 from nextrpg.core import Millisecond, Pixel, Size
 from nextrpg.draw_on_screen import DrawOnScreen
@@ -104,6 +105,7 @@ class Gui:
         ```
     """
 
+    _: KW_ONLY = not_constructor_below()
     current_config: GuiConfig = field(default_factory=lambda: config().gui)
     last_config: GuiConfig = field(default_factory=lambda: config().gui)
     initial_config: GuiConfig = field(default_factory=lambda: config().gui)
