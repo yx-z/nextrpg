@@ -39,15 +39,19 @@ Example:
     ```
 """
 
-from dataclasses import replace
+from dataclasses import KW_ONLY, replace
 from functools import cached_property
-from math import hypot
-from typing import NamedTuple, Self
+from typing import Self
 
 from nextrpg.coordinate import Coordinate
 from nextrpg.core import Direction, Millisecond, Pixel, PixelPerMillisecond
 from nextrpg.draw_on_screen import Polygon
-from nextrpg.model import dataclass_with_instance_init, export, instance_init
+from nextrpg.model import (
+    dataclass_with_instance_init,
+    export,
+    instance_init,
+    not_constructor_below,
+)
 
 
 @export
@@ -113,10 +117,9 @@ class Walk:
     path: Polygon
     move_speed: PixelPerMillisecond
     cyclic: bool
-    coordinate: Coordinate = instance_init(lambda self: self._source)
-    _last_coordinate: Coordinate = instance_init(lambda self: self._source)
-    _index: int = 0
-    _last_index: int = 0
+    _: KW_ONLY = not_constructor_below()
+    coordinate: Coordinate = instance_init(lambda self: self.path.points[0])
+    _target_index: int | None = 1
 
     @cached_property
     def direction(self) -> Direction:
@@ -137,7 +140,18 @@ class Walk:
                 pass
             ```
         """
-        return self.coordinate.relative_to(self._last_coordinate)
+        if self._target_index is None:
+            if self.path.closed:
+                last = self.path.points[0]
+                penultimate = self.path.points[-1]
+            else:
+                last = self.path.points[-1]
+                penultimate = self.path.points[-2]
+            return last.relative_to(penultimate)
+
+        target = self.path.points[self._target_index]
+        current = self.path.points[self._target_index - 1]
+        return target.relative_to(current)
 
     @cached_property
     def reset(self) -> Self:
@@ -156,69 +170,50 @@ class Walk:
             walk = walk.reset
             ```
         """
-        return replace(
-            self,
-            coordinate=self._source,
-            _last_coordinate=self._source,
-            _index=0,
-            _last_index=0,
-        )
+        return replace(self, coordinate=self.path.points[0], _target_index=1)
 
     def tick(self, time_delta: Millisecond) -> Self:
         """
         Update the walk state based on elapsed time.
 
-        Advances the walk along the path based on the movement speed
-        and elapsed time. For cyclic paths, it will loop back to the
-        beginning when reaching the end.
+        Optimized to:
+        - Immediately jump to the final position if a non-cyclic walk exceeds total distance.
+        - Use modulo on distance if a cyclic walk exceeds one full path length.
 
         Arguments:
             `time_delta`: The elapsed time in milliseconds.
 
         Returns:
             `Walk`: A new walk instance with updated position.
-
-        Example:
-            ```python
-            # Update walk in game loop
-            walk = walk.tick(time_delta)
-            ```
         """
         if self.complete:
             return self
 
-        current_coord = self.coordinate
-        last_coord = self.coordinate
-        index = self._index
-        last_index = self._index
-
-        remaining_distance = self.move_speed * time_delta
-        if not self.cyclic and remaining_distance > self._remaining_length:
+        total_dist = self.move_speed * time_delta
+        if not self.cyclic and total_dist >= self._remaining_dist:
             return replace(
-                self,
-                coordinate=self.path.points[-1],
-                _last_coordinate=current_coord,
-                _index=len(self.path.points) - 1,
-                _last_index=index,
+                self, coordinate=self._final_target, _target_index=None
             )
 
-        while remaining_distance > 0 and not self._is_final_index(index):
-            step = self._tick_segment(current_coord, index, remaining_distance)
-            remaining_distance -= step.distance_used
-            current_coord = step.coordinate
-            last_coord = step.last_coordinate
-            index = step.index
-            last_index = step.last_index
-            if not step.stepped:
+        remaining_dist = total_dist % self.path.length
+        coordinate = self.coordinate
+        index = self._target_index
+
+        while remaining_dist:
+            target = self.path.points[index]
+            dist_to_target = coordinate.distance(target)
+            if remaining_dist < dist_to_target:
+                factor = remaining_dist / dist_to_target
+                x = coordinate.left + (target.left - coordinate.left) * factor
+                y = coordinate.top + (target.top - coordinate.top) * factor
+                coordinate = Coordinate(x, y)
                 break
 
-        return replace(
-            self,
-            coordinate=current_coord,
-            _last_coordinate=last_coord,
-            _index=index,
-            _last_index=last_index,
-        )
+            remaining_dist -= dist_to_target
+            coordinate = target
+            index = self._next_index(index)
+
+        return replace(self, coordinate=coordinate, _target_index=index)
 
     @cached_property
     def complete(self) -> bool:
@@ -239,144 +234,25 @@ class Walk:
                 # Handle completion logic
             ```
         """
-        if self.cyclic:
-            return False
-        if self.path.closed:
-            return self._index == 0 and self._last_index != 0
-        return self._next_index(self._index) == 0
+        return self._target_index is None
 
-    def _tick_segment(
-        self, current_coord: Coordinate, index: int, max_distance: float
-    ) -> _StepResult:
-        """
-        Update movement along a single path segment.
+    def _next_index(self, index: int) -> int:
+        stepped = index + 1
+        if stepped == len(self.path.points):
+            return 0
+        return stepped
 
-        Calculates movement within the current path segment, handling
-        both complete segment traversal and partial movement.
-
-        Arguments:
-            `current_coord`: Current position on the path.
-
-            `index`: Current path point index.
-
-            `max_distance`: Maximum distance to move in this step.
-
-        Returns:
-            `_StepResult`: Result of the segment movement.
-        """
-        next_index = self._next_index(index)
-        end = self.path.points[next_index]
-        dx = end.left - current_coord.left
-        dy = end.top - current_coord.top
-        segment_distance = hypot(dx, dy)
-
-        if segment_distance <= max_distance:
-            return _StepResult(
-                stepped=True,
-                coordinate=end,
-                last_coordinate=current_coord,
-                index=next_index,
-                last_index=index,
-                distance_used=segment_distance,
-            )
-
-        ratio = max_distance / segment_distance
-        new_x = current_coord.left + dx * ratio
-        new_y = current_coord.top + dy * ratio
-        return _StepResult(
-            stepped=False,
-            coordinate=Coordinate(new_x, new_y),
-            last_coordinate=current_coord,
-            index=index,
-            last_index=index,
-            distance_used=max_distance,
+    @cached_property
+    def _remaining_dist(self) -> Pixel:
+        points = self.path.points
+        reaming_poly = replace(self.path, points=points[self._target_index :])
+        return (
+            points[self._target_index].distance(self.coordinate)
+            + reaming_poly.length
         )
 
-    def _is_final_index(self, index: int) -> bool:
-        """
-        Check if the given index is the final path point.
-
-        Arguments:
-            `index`: The path point index to check.
-
-        Returns:
-            `bool`: Whether the index is the final point.
-        """
-        if self.cyclic:
-            return False
-        return index >= len(self.path.points) - 1
-
-    def _next_index(self, i: int) -> int:
-        """
-        Get the next path point index.
-
-        Handles wrapping for cyclic paths by returning 0 when
-        reaching the end of the path.
-
-        Arguments:
-            `i`: Current path point index.
-
-        Returns:
-            `int`: Next path point index.
-        """
-        stepped = i + 1
-        if stepped < len(self.path.points):
-            return stepped
-        return 0
-
     @cached_property
-    def _source(self) -> Coordinate:
-        """
-        Get the starting coordinate of the path.
-
-        Returns:
-            `Coordinate`: The first point of the path.
-        """
-        return self.path.points[0]
-
-    @cached_property
-    def _remaining_length(self) -> Pixel:
-        """
-        Calculate the remaining path length from current position.
-
-        Returns:
-            `Pixel`: The remaining distance to the end of the path.
-        """
-        points = self.path.points
-        total = 0.0
-        start = self.coordinate
-        for i in range(self._index, len(points) - 1):
-            end = points[i + 1]
-            total += hypot(end.left - start.left, end.top - start.top)
-            start = end
-        return total
-
-
-class _StepResult(NamedTuple):
-    """
-    Result of a single step in path movement.
-
-    This named tuple contains the results of moving along a path
-    segment, including whether a step was taken, new coordinates,
-    and distance information.
-
-    Arguments:
-        `stepped`: Whether a complete step to the next point was taken.
-
-        `coordinate`: The new coordinate after movement.
-
-        `last_coordinate`: The previous coordinate before movement.
-
-        `index`: The new path point index.
-
-        `last_index`: The previous path point index.
-
-        `distance_used`: The distance actually moved in this step.
-    """
-
-    stepped: bool
-    coordinate: Coordinate
-    last_coordinate: Coordinate
-    index: int
-    last_index: int
-    distance_used: float
+    def _final_target(self) -> Coordinate:
+        if self.path.closed:
+            return self.path.points[0]
+        return self.path.points[-1]

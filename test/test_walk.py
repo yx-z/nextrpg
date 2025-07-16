@@ -13,11 +13,13 @@ def test_walk() -> None:
     assert w.tick(100).tick(2000).tick(20000)
     assert w.tick(0).tick(1).tick(10).tick(100)
 
-    assert not Walk(
+    ww = Walk(
         path=Polygon((Coordinate(0, 0), Coordinate(1, 0), Coordinate(0, 1))),
         move_speed=1,
         cyclic=False,
-    ).complete
+    )
+    assert not ww.complete
+    assert ww.tick(99999).direction
 
     w2 = Walk(
         path=Polygon(
@@ -26,3 +28,19 @@ def test_walk() -> None:
         move_speed=1,
         cyclic=False,
     )
+    assert w2.tick(99999).direction
+    assert w2.tick(100000).complete
+
+    w3 = Walk(
+        path=Polygon(
+            (
+                Coordinate(0, 0),
+                Coordinate(1, 0),
+                Coordinate(1, 1),
+                Coordinate(0, 1),
+            )
+        ),
+        move_speed=1,
+        cyclic=True,
+    )
+    assert w3.tick(1).tick(1).tick(1)
