@@ -146,7 +146,7 @@ character management, and event handling for character interactions.</p>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event_as_attr</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventAsAttr</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event_as_attr</span><span class="w"> </span><span class="kn">import</span> <span class="n">event_as_attr</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="n">dataclass_with_instance_init</span><span class="p">,</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>    <span class="n">export</span><span class="p">,</span>
@@ -181,115 +181,116 @@ character management, and event handling for character interactions.</p>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="nd">@export</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="nd">@dataclass_with_instance_init</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">(</span><span class="n">EventAsAttr</span><span class="p">):</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">    Represents a character that can be displayed and interacted with on screen.</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">    This class provides the foundation for all on-screen characters, including</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">    positioning, drawing management, event handling, and state management. It</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">    serves as the base class for both player characters and NPCs.</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">    The character maintains its position, visual representation, and event</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">    interaction capabilities. It can be updated over time and can participate</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">    in event-driven interactions with other characters or game elements.</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">        spec: The character specification defining the character&#39;s properties</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">            and visual representation.</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">        coordinate: The current position of the character on screen.</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">        name: The display name of the character. Defaults to the specification&#39;s</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">            display name.</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">        character: The character drawing that defines the visual representation.</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">            Defaults to the specification&#39;s character.</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">        _event_triggered: Internal flag indicating if the character is currently</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">            participating in an event.</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">CharacterSpec</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">character</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>    <span class="p">)</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">        Get all visual elements associated with this character.</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">        Returns the character&#39;s main drawing and any additional visual elements</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">        that should be rendered with the character.</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">        Returns:</span>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">            All visual elements for the character.</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="c1"># TODO: add visuals.</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">        Get the character&#39;s main drawing representation.</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a><span class="sd">        Creates a drawable representation of the character at its current</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">        position with its current visual state.</span>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="sd">        Returns:</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">            The character&#39;s drawing at its current position.</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">        Update the character&#39;s state for a single game loop iteration.</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="sd">        Updates the character&#39;s animation and internal state based on the</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">        elapsed time. This is called each frame to keep the character&#39;s visual</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">        state current.</span>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">            time_delta: The elapsed time since the last update in milliseconds.</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">        Returns:</span>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">            The updated character state after the tick.</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">        Start an event interaction with another character.</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">        When starting an event, the character turns to face the other character</span>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">        and enters an event-triggered state. This ensures proper positioning</span>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">        for dialogue or interactions.</span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="sd">            character: The character to start an event with.</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">        Returns:</span>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="sd">            The updated character state for the event.</span>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">        Complete the current event and return to normal state.</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">        Resets the event-triggered flag and returns the character to its normal</span>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">        interaction state.</span>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="sd">        Returns:</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">            The character state after completing the event.</span>
-</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="nd">@event_as_attr</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">:</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">    Represents a character that can be displayed and interacted with on screen.</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">    This class provides the foundation for all on-screen characters, including</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">    positioning, drawing management, event handling, and state management. It</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">    serves as the base class for both player characters and NPCs.</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">    The character maintains its position, visual representation, and event</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">    interaction capabilities. It can be updated over time and can participate</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">    in event-driven interactions with other characters or game elements.</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">    Arguments:</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">        spec: The character specification defining the character&#39;s properties</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">            and visual representation.</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">        coordinate: The current position of the character on screen.</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">        name: The display name of the character. Defaults to the specification&#39;s</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">            display name.</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">        character: The character drawing that defines the visual representation.</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">            Defaults to the specification&#39;s character.</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">        _event_triggered: Internal flag indicating if the character is currently</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">            participating in an event.</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">CharacterSpec</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">character</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="p">)</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>    <span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">        Get all visual elements associated with this character.</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">        Returns the character&#39;s main drawing and any additional visual elements</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">        that should be rendered with the character.</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">        Returns:</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">            All visual elements for the character.</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>        <span class="c1"># TODO: add visuals.</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        Get the character&#39;s main drawing representation.</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">        Creates a drawable representation of the character at its current</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">        position with its current visual state.</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">        Returns:</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="sd">            The character&#39;s drawing at its current position.</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">        Update the character&#39;s state for a single game loop iteration.</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">        Updates the character&#39;s animation and internal state based on the</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">        elapsed time. This is called each frame to keep the character&#39;s visual</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="sd">        state current.</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">            time_delta: The elapsed time since the last update in milliseconds.</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">        Returns:</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">            The updated character state after the tick.</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">        Start an event interaction with another character.</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">        When starting an event, the character turns to face the other character</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">        and enters an event-triggered state. This ensures proper positioning</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">        for dialogue or interactions.</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="sd">            character: The character to start an event with.</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="sd">        Returns:</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">            The updated character state for the event.</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">        Complete the current event and return to normal state.</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">        Resets the event-triggered flag and returns the character to its normal</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">        interaction state.</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">        Returns:</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a><span class="sd">            The character state after completing the event.</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -402,9 +403,10 @@ and animation of the character.</li>
 <div class="attr class">
                     <div class="decorator decorator-export">@export</div>
         <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init</div>
+        <div class="decorator decorator-event_as_attr">@event_as_attr</div>
 
     <span class="def">class</span>
-    <span class="name">CharacterOnScreen</span><wbr>(<span class="base"><a href="event_as_attr.html#EventAsAttr">nextrpg.event_as_attr.EventAsAttr</a></span>):
+    <span class="name">CharacterOnScreen</span>:
 
                 <label class="view-source-button" for="CharacterOnScreen-view-source"><span>View Source</span></label>
 
@@ -412,115 +414,116 @@ and animation of the character.</li>
     <a class="headerlink" href="#CharacterOnScreen"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen-58"><a href="#CharacterOnScreen-58"><span class="linenos"> 58</span></a><span class="nd">@export</span>
 </span><span id="CharacterOnScreen-59"><a href="#CharacterOnScreen-59"><span class="linenos"> 59</span></a><span class="nd">@dataclass_with_instance_init</span>
-</span><span id="CharacterOnScreen-60"><a href="#CharacterOnScreen-60"><span class="linenos"> 60</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">(</span><span class="n">EventAsAttr</span><span class="p">):</span>
-</span><span id="CharacterOnScreen-61"><a href="#CharacterOnScreen-61"><span class="linenos"> 61</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-62"><a href="#CharacterOnScreen-62"><span class="linenos"> 62</span></a><span class="sd">    Represents a character that can be displayed and interacted with on screen.</span>
-</span><span id="CharacterOnScreen-63"><a href="#CharacterOnScreen-63"><span class="linenos"> 63</span></a>
-</span><span id="CharacterOnScreen-64"><a href="#CharacterOnScreen-64"><span class="linenos"> 64</span></a><span class="sd">    This class provides the foundation for all on-screen characters, including</span>
-</span><span id="CharacterOnScreen-65"><a href="#CharacterOnScreen-65"><span class="linenos"> 65</span></a><span class="sd">    positioning, drawing management, event handling, and state management. It</span>
-</span><span id="CharacterOnScreen-66"><a href="#CharacterOnScreen-66"><span class="linenos"> 66</span></a><span class="sd">    serves as the base class for both player characters and NPCs.</span>
-</span><span id="CharacterOnScreen-67"><a href="#CharacterOnScreen-67"><span class="linenos"> 67</span></a>
-</span><span id="CharacterOnScreen-68"><a href="#CharacterOnScreen-68"><span class="linenos"> 68</span></a><span class="sd">    The character maintains its position, visual representation, and event</span>
-</span><span id="CharacterOnScreen-69"><a href="#CharacterOnScreen-69"><span class="linenos"> 69</span></a><span class="sd">    interaction capabilities. It can be updated over time and can participate</span>
-</span><span id="CharacterOnScreen-70"><a href="#CharacterOnScreen-70"><span class="linenos"> 70</span></a><span class="sd">    in event-driven interactions with other characters or game elements.</span>
-</span><span id="CharacterOnScreen-71"><a href="#CharacterOnScreen-71"><span class="linenos"> 71</span></a>
-</span><span id="CharacterOnScreen-72"><a href="#CharacterOnScreen-72"><span class="linenos"> 72</span></a><span class="sd">    Arguments:</span>
-</span><span id="CharacterOnScreen-73"><a href="#CharacterOnScreen-73"><span class="linenos"> 73</span></a><span class="sd">        spec: The character specification defining the character&#39;s properties</span>
-</span><span id="CharacterOnScreen-74"><a href="#CharacterOnScreen-74"><span class="linenos"> 74</span></a><span class="sd">            and visual representation.</span>
-</span><span id="CharacterOnScreen-75"><a href="#CharacterOnScreen-75"><span class="linenos"> 75</span></a><span class="sd">        coordinate: The current position of the character on screen.</span>
-</span><span id="CharacterOnScreen-76"><a href="#CharacterOnScreen-76"><span class="linenos"> 76</span></a><span class="sd">        name: The display name of the character. Defaults to the specification&#39;s</span>
-</span><span id="CharacterOnScreen-77"><a href="#CharacterOnScreen-77"><span class="linenos"> 77</span></a><span class="sd">            display name.</span>
-</span><span id="CharacterOnScreen-78"><a href="#CharacterOnScreen-78"><span class="linenos"> 78</span></a><span class="sd">        character: The character drawing that defines the visual representation.</span>
-</span><span id="CharacterOnScreen-79"><a href="#CharacterOnScreen-79"><span class="linenos"> 79</span></a><span class="sd">            Defaults to the specification&#39;s character.</span>
-</span><span id="CharacterOnScreen-80"><a href="#CharacterOnScreen-80"><span class="linenos"> 80</span></a><span class="sd">        _event_triggered: Internal flag indicating if the character is currently</span>
-</span><span id="CharacterOnScreen-81"><a href="#CharacterOnScreen-81"><span class="linenos"> 81</span></a><span class="sd">            participating in an event.</span>
-</span><span id="CharacterOnScreen-82"><a href="#CharacterOnScreen-82"><span class="linenos"> 82</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-83"><a href="#CharacterOnScreen-83"><span class="linenos"> 83</span></a>
-</span><span id="CharacterOnScreen-84"><a href="#CharacterOnScreen-84"><span class="linenos"> 84</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">CharacterSpec</span>
-</span><span id="CharacterOnScreen-85"><a href="#CharacterOnScreen-85"><span class="linenos"> 85</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="CharacterOnScreen-86"><a href="#CharacterOnScreen-86"><span class="linenos"> 86</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
-</span><span id="CharacterOnScreen-87"><a href="#CharacterOnScreen-87"><span class="linenos"> 87</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
-</span><span id="CharacterOnScreen-88"><a href="#CharacterOnScreen-88"><span class="linenos"> 88</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">character</span>
-</span><span id="CharacterOnScreen-89"><a href="#CharacterOnScreen-89"><span class="linenos"> 89</span></a>    <span class="p">)</span>
-</span><span id="CharacterOnScreen-90"><a href="#CharacterOnScreen-90"><span class="linenos"> 90</span></a>    <span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="CharacterOnScreen-91"><a href="#CharacterOnScreen-91"><span class="linenos"> 91</span></a>
-</span><span id="CharacterOnScreen-92"><a href="#CharacterOnScreen-92"><span class="linenos"> 92</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen-93"><a href="#CharacterOnScreen-93"><span class="linenos"> 93</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="CharacterOnScreen-94"><a href="#CharacterOnScreen-94"><span class="linenos"> 94</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span>
-</span><span id="CharacterOnScreen-95"><a href="#CharacterOnScreen-95"><span class="linenos"> 95</span></a>
-</span><span id="CharacterOnScreen-96"><a href="#CharacterOnScreen-96"><span class="linenos"> 96</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen-97"><a href="#CharacterOnScreen-97"><span class="linenos"> 97</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="CharacterOnScreen-98"><a href="#CharacterOnScreen-98"><span class="linenos"> 98</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-99"><a href="#CharacterOnScreen-99"><span class="linenos"> 99</span></a><span class="sd">        Get all visual elements associated with this character.</span>
-</span><span id="CharacterOnScreen-100"><a href="#CharacterOnScreen-100"><span class="linenos">100</span></a>
-</span><span id="CharacterOnScreen-101"><a href="#CharacterOnScreen-101"><span class="linenos">101</span></a><span class="sd">        Returns the character&#39;s main drawing and any additional visual elements</span>
-</span><span id="CharacterOnScreen-102"><a href="#CharacterOnScreen-102"><span class="linenos">102</span></a><span class="sd">        that should be rendered with the character.</span>
-</span><span id="CharacterOnScreen-103"><a href="#CharacterOnScreen-103"><span class="linenos">103</span></a>
-</span><span id="CharacterOnScreen-104"><a href="#CharacterOnScreen-104"><span class="linenos">104</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen-105"><a href="#CharacterOnScreen-105"><span class="linenos">105</span></a><span class="sd">            All visual elements for the character.</span>
-</span><span id="CharacterOnScreen-106"><a href="#CharacterOnScreen-106"><span class="linenos">106</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-107"><a href="#CharacterOnScreen-107"><span class="linenos">107</span></a>        <span class="c1"># TODO: add visuals.</span>
-</span><span id="CharacterOnScreen-108"><a href="#CharacterOnScreen-108"><span class="linenos">108</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span>
-</span><span id="CharacterOnScreen-109"><a href="#CharacterOnScreen-109"><span class="linenos">109</span></a>
-</span><span id="CharacterOnScreen-110"><a href="#CharacterOnScreen-110"><span class="linenos">110</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen-111"><a href="#CharacterOnScreen-111"><span class="linenos">111</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
-</span><span id="CharacterOnScreen-112"><a href="#CharacterOnScreen-112"><span class="linenos">112</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-113"><a href="#CharacterOnScreen-113"><span class="linenos">113</span></a><span class="sd">        Get the character&#39;s main drawing representation.</span>
-</span><span id="CharacterOnScreen-114"><a href="#CharacterOnScreen-114"><span class="linenos">114</span></a>
-</span><span id="CharacterOnScreen-115"><a href="#CharacterOnScreen-115"><span class="linenos">115</span></a><span class="sd">        Creates a drawable representation of the character at its current</span>
-</span><span id="CharacterOnScreen-116"><a href="#CharacterOnScreen-116"><span class="linenos">116</span></a><span class="sd">        position with its current visual state.</span>
-</span><span id="CharacterOnScreen-117"><a href="#CharacterOnScreen-117"><span class="linenos">117</span></a>
-</span><span id="CharacterOnScreen-118"><a href="#CharacterOnScreen-118"><span class="linenos">118</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen-119"><a href="#CharacterOnScreen-119"><span class="linenos">119</span></a><span class="sd">            The character&#39;s drawing at its current position.</span>
-</span><span id="CharacterOnScreen-120"><a href="#CharacterOnScreen-120"><span class="linenos">120</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-121"><a href="#CharacterOnScreen-121"><span class="linenos">121</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
-</span><span id="CharacterOnScreen-122"><a href="#CharacterOnScreen-122"><span class="linenos">122</span></a>
-</span><span id="CharacterOnScreen-123"><a href="#CharacterOnScreen-123"><span class="linenos">123</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen-124"><a href="#CharacterOnScreen-124"><span class="linenos">124</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-125"><a href="#CharacterOnScreen-125"><span class="linenos">125</span></a><span class="sd">        Update the character&#39;s state for a single game loop iteration.</span>
-</span><span id="CharacterOnScreen-126"><a href="#CharacterOnScreen-126"><span class="linenos">126</span></a>
-</span><span id="CharacterOnScreen-127"><a href="#CharacterOnScreen-127"><span class="linenos">127</span></a><span class="sd">        Updates the character&#39;s animation and internal state based on the</span>
-</span><span id="CharacterOnScreen-128"><a href="#CharacterOnScreen-128"><span class="linenos">128</span></a><span class="sd">        elapsed time. This is called each frame to keep the character&#39;s visual</span>
-</span><span id="CharacterOnScreen-129"><a href="#CharacterOnScreen-129"><span class="linenos">129</span></a><span class="sd">        state current.</span>
-</span><span id="CharacterOnScreen-130"><a href="#CharacterOnScreen-130"><span class="linenos">130</span></a>
-</span><span id="CharacterOnScreen-131"><a href="#CharacterOnScreen-131"><span class="linenos">131</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterOnScreen-132"><a href="#CharacterOnScreen-132"><span class="linenos">132</span></a><span class="sd">            time_delta: The elapsed time since the last update in milliseconds.</span>
-</span><span id="CharacterOnScreen-133"><a href="#CharacterOnScreen-133"><span class="linenos">133</span></a>
-</span><span id="CharacterOnScreen-134"><a href="#CharacterOnScreen-134"><span class="linenos">134</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen-135"><a href="#CharacterOnScreen-135"><span class="linenos">135</span></a><span class="sd">            The updated character state after the tick.</span>
-</span><span id="CharacterOnScreen-136"><a href="#CharacterOnScreen-136"><span class="linenos">136</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-137"><a href="#CharacterOnScreen-137"><span class="linenos">137</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
-</span><span id="CharacterOnScreen-138"><a href="#CharacterOnScreen-138"><span class="linenos">138</span></a>
-</span><span id="CharacterOnScreen-139"><a href="#CharacterOnScreen-139"><span class="linenos">139</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen-140"><a href="#CharacterOnScreen-140"><span class="linenos">140</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-141"><a href="#CharacterOnScreen-141"><span class="linenos">141</span></a><span class="sd">        Start an event interaction with another character.</span>
-</span><span id="CharacterOnScreen-142"><a href="#CharacterOnScreen-142"><span class="linenos">142</span></a>
-</span><span id="CharacterOnScreen-143"><a href="#CharacterOnScreen-143"><span class="linenos">143</span></a><span class="sd">        When starting an event, the character turns to face the other character</span>
-</span><span id="CharacterOnScreen-144"><a href="#CharacterOnScreen-144"><span class="linenos">144</span></a><span class="sd">        and enters an event-triggered state. This ensures proper positioning</span>
-</span><span id="CharacterOnScreen-145"><a href="#CharacterOnScreen-145"><span class="linenos">145</span></a><span class="sd">        for dialogue or interactions.</span>
-</span><span id="CharacterOnScreen-146"><a href="#CharacterOnScreen-146"><span class="linenos">146</span></a>
-</span><span id="CharacterOnScreen-147"><a href="#CharacterOnScreen-147"><span class="linenos">147</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterOnScreen-148"><a href="#CharacterOnScreen-148"><span class="linenos">148</span></a><span class="sd">            character: The character to start an event with.</span>
-</span><span id="CharacterOnScreen-149"><a href="#CharacterOnScreen-149"><span class="linenos">149</span></a>
-</span><span id="CharacterOnScreen-150"><a href="#CharacterOnScreen-150"><span class="linenos">150</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen-151"><a href="#CharacterOnScreen-151"><span class="linenos">151</span></a><span class="sd">            The updated character state for the event.</span>
-</span><span id="CharacterOnScreen-152"><a href="#CharacterOnScreen-152"><span class="linenos">152</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-153"><a href="#CharacterOnScreen-153"><span class="linenos">153</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
-</span><span id="CharacterOnScreen-154"><a href="#CharacterOnScreen-154"><span class="linenos">154</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
-</span><span id="CharacterOnScreen-155"><a href="#CharacterOnScreen-155"><span class="linenos">155</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="CharacterOnScreen-156"><a href="#CharacterOnScreen-156"><span class="linenos">156</span></a>
-</span><span id="CharacterOnScreen-157"><a href="#CharacterOnScreen-157"><span class="linenos">157</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen-158"><a href="#CharacterOnScreen-158"><span class="linenos">158</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen-159"><a href="#CharacterOnScreen-159"><span class="linenos">159</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-160"><a href="#CharacterOnScreen-160"><span class="linenos">160</span></a><span class="sd">        Complete the current event and return to normal state.</span>
-</span><span id="CharacterOnScreen-161"><a href="#CharacterOnScreen-161"><span class="linenos">161</span></a>
-</span><span id="CharacterOnScreen-162"><a href="#CharacterOnScreen-162"><span class="linenos">162</span></a><span class="sd">        Resets the event-triggered flag and returns the character to its normal</span>
-</span><span id="CharacterOnScreen-163"><a href="#CharacterOnScreen-163"><span class="linenos">163</span></a><span class="sd">        interaction state.</span>
-</span><span id="CharacterOnScreen-164"><a href="#CharacterOnScreen-164"><span class="linenos">164</span></a>
-</span><span id="CharacterOnScreen-165"><a href="#CharacterOnScreen-165"><span class="linenos">165</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen-166"><a href="#CharacterOnScreen-166"><span class="linenos">166</span></a><span class="sd">            The character state after completing the event.</span>
-</span><span id="CharacterOnScreen-167"><a href="#CharacterOnScreen-167"><span class="linenos">167</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen-168"><a href="#CharacterOnScreen-168"><span class="linenos">168</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span id="CharacterOnScreen-60"><a href="#CharacterOnScreen-60"><span class="linenos"> 60</span></a><span class="nd">@event_as_attr</span>
+</span><span id="CharacterOnScreen-61"><a href="#CharacterOnScreen-61"><span class="linenos"> 61</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-62"><a href="#CharacterOnScreen-62"><span class="linenos"> 62</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-63"><a href="#CharacterOnScreen-63"><span class="linenos"> 63</span></a><span class="sd">    Represents a character that can be displayed and interacted with on screen.</span>
+</span><span id="CharacterOnScreen-64"><a href="#CharacterOnScreen-64"><span class="linenos"> 64</span></a>
+</span><span id="CharacterOnScreen-65"><a href="#CharacterOnScreen-65"><span class="linenos"> 65</span></a><span class="sd">    This class provides the foundation for all on-screen characters, including</span>
+</span><span id="CharacterOnScreen-66"><a href="#CharacterOnScreen-66"><span class="linenos"> 66</span></a><span class="sd">    positioning, drawing management, event handling, and state management. It</span>
+</span><span id="CharacterOnScreen-67"><a href="#CharacterOnScreen-67"><span class="linenos"> 67</span></a><span class="sd">    serves as the base class for both player characters and NPCs.</span>
+</span><span id="CharacterOnScreen-68"><a href="#CharacterOnScreen-68"><span class="linenos"> 68</span></a>
+</span><span id="CharacterOnScreen-69"><a href="#CharacterOnScreen-69"><span class="linenos"> 69</span></a><span class="sd">    The character maintains its position, visual representation, and event</span>
+</span><span id="CharacterOnScreen-70"><a href="#CharacterOnScreen-70"><span class="linenos"> 70</span></a><span class="sd">    interaction capabilities. It can be updated over time and can participate</span>
+</span><span id="CharacterOnScreen-71"><a href="#CharacterOnScreen-71"><span class="linenos"> 71</span></a><span class="sd">    in event-driven interactions with other characters or game elements.</span>
+</span><span id="CharacterOnScreen-72"><a href="#CharacterOnScreen-72"><span class="linenos"> 72</span></a>
+</span><span id="CharacterOnScreen-73"><a href="#CharacterOnScreen-73"><span class="linenos"> 73</span></a><span class="sd">    Arguments:</span>
+</span><span id="CharacterOnScreen-74"><a href="#CharacterOnScreen-74"><span class="linenos"> 74</span></a><span class="sd">        spec: The character specification defining the character&#39;s properties</span>
+</span><span id="CharacterOnScreen-75"><a href="#CharacterOnScreen-75"><span class="linenos"> 75</span></a><span class="sd">            and visual representation.</span>
+</span><span id="CharacterOnScreen-76"><a href="#CharacterOnScreen-76"><span class="linenos"> 76</span></a><span class="sd">        coordinate: The current position of the character on screen.</span>
+</span><span id="CharacterOnScreen-77"><a href="#CharacterOnScreen-77"><span class="linenos"> 77</span></a><span class="sd">        name: The display name of the character. Defaults to the specification&#39;s</span>
+</span><span id="CharacterOnScreen-78"><a href="#CharacterOnScreen-78"><span class="linenos"> 78</span></a><span class="sd">            display name.</span>
+</span><span id="CharacterOnScreen-79"><a href="#CharacterOnScreen-79"><span class="linenos"> 79</span></a><span class="sd">        character: The character drawing that defines the visual representation.</span>
+</span><span id="CharacterOnScreen-80"><a href="#CharacterOnScreen-80"><span class="linenos"> 80</span></a><span class="sd">            Defaults to the specification&#39;s character.</span>
+</span><span id="CharacterOnScreen-81"><a href="#CharacterOnScreen-81"><span class="linenos"> 81</span></a><span class="sd">        _event_triggered: Internal flag indicating if the character is currently</span>
+</span><span id="CharacterOnScreen-82"><a href="#CharacterOnScreen-82"><span class="linenos"> 82</span></a><span class="sd">            participating in an event.</span>
+</span><span id="CharacterOnScreen-83"><a href="#CharacterOnScreen-83"><span class="linenos"> 83</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-84"><a href="#CharacterOnScreen-84"><span class="linenos"> 84</span></a>
+</span><span id="CharacterOnScreen-85"><a href="#CharacterOnScreen-85"><span class="linenos"> 85</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">CharacterSpec</span>
+</span><span id="CharacterOnScreen-86"><a href="#CharacterOnScreen-86"><span class="linenos"> 86</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="CharacterOnScreen-87"><a href="#CharacterOnScreen-87"><span class="linenos"> 87</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
+</span><span id="CharacterOnScreen-88"><a href="#CharacterOnScreen-88"><span class="linenos"> 88</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="CharacterOnScreen-89"><a href="#CharacterOnScreen-89"><span class="linenos"> 89</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">character</span>
+</span><span id="CharacterOnScreen-90"><a href="#CharacterOnScreen-90"><span class="linenos"> 90</span></a>    <span class="p">)</span>
+</span><span id="CharacterOnScreen-91"><a href="#CharacterOnScreen-91"><span class="linenos"> 91</span></a>    <span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="CharacterOnScreen-92"><a href="#CharacterOnScreen-92"><span class="linenos"> 92</span></a>
+</span><span id="CharacterOnScreen-93"><a href="#CharacterOnScreen-93"><span class="linenos"> 93</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen-94"><a href="#CharacterOnScreen-94"><span class="linenos"> 94</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-95"><a href="#CharacterOnScreen-95"><span class="linenos"> 95</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span>
+</span><span id="CharacterOnScreen-96"><a href="#CharacterOnScreen-96"><span class="linenos"> 96</span></a>
+</span><span id="CharacterOnScreen-97"><a href="#CharacterOnScreen-97"><span class="linenos"> 97</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen-98"><a href="#CharacterOnScreen-98"><span class="linenos"> 98</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="CharacterOnScreen-99"><a href="#CharacterOnScreen-99"><span class="linenos"> 99</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-100"><a href="#CharacterOnScreen-100"><span class="linenos">100</span></a><span class="sd">        Get all visual elements associated with this character.</span>
+</span><span id="CharacterOnScreen-101"><a href="#CharacterOnScreen-101"><span class="linenos">101</span></a>
+</span><span id="CharacterOnScreen-102"><a href="#CharacterOnScreen-102"><span class="linenos">102</span></a><span class="sd">        Returns the character&#39;s main drawing and any additional visual elements</span>
+</span><span id="CharacterOnScreen-103"><a href="#CharacterOnScreen-103"><span class="linenos">103</span></a><span class="sd">        that should be rendered with the character.</span>
+</span><span id="CharacterOnScreen-104"><a href="#CharacterOnScreen-104"><span class="linenos">104</span></a>
+</span><span id="CharacterOnScreen-105"><a href="#CharacterOnScreen-105"><span class="linenos">105</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen-106"><a href="#CharacterOnScreen-106"><span class="linenos">106</span></a><span class="sd">            All visual elements for the character.</span>
+</span><span id="CharacterOnScreen-107"><a href="#CharacterOnScreen-107"><span class="linenos">107</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-108"><a href="#CharacterOnScreen-108"><span class="linenos">108</span></a>        <span class="c1"># TODO: add visuals.</span>
+</span><span id="CharacterOnScreen-109"><a href="#CharacterOnScreen-109"><span class="linenos">109</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span>
+</span><span id="CharacterOnScreen-110"><a href="#CharacterOnScreen-110"><span class="linenos">110</span></a>
+</span><span id="CharacterOnScreen-111"><a href="#CharacterOnScreen-111"><span class="linenos">111</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen-112"><a href="#CharacterOnScreen-112"><span class="linenos">112</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-113"><a href="#CharacterOnScreen-113"><span class="linenos">113</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-114"><a href="#CharacterOnScreen-114"><span class="linenos">114</span></a><span class="sd">        Get the character&#39;s main drawing representation.</span>
+</span><span id="CharacterOnScreen-115"><a href="#CharacterOnScreen-115"><span class="linenos">115</span></a>
+</span><span id="CharacterOnScreen-116"><a href="#CharacterOnScreen-116"><span class="linenos">116</span></a><span class="sd">        Creates a drawable representation of the character at its current</span>
+</span><span id="CharacterOnScreen-117"><a href="#CharacterOnScreen-117"><span class="linenos">117</span></a><span class="sd">        position with its current visual state.</span>
+</span><span id="CharacterOnScreen-118"><a href="#CharacterOnScreen-118"><span class="linenos">118</span></a>
+</span><span id="CharacterOnScreen-119"><a href="#CharacterOnScreen-119"><span class="linenos">119</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen-120"><a href="#CharacterOnScreen-120"><span class="linenos">120</span></a><span class="sd">            The character&#39;s drawing at its current position.</span>
+</span><span id="CharacterOnScreen-121"><a href="#CharacterOnScreen-121"><span class="linenos">121</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-122"><a href="#CharacterOnScreen-122"><span class="linenos">122</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
+</span><span id="CharacterOnScreen-123"><a href="#CharacterOnScreen-123"><span class="linenos">123</span></a>
+</span><span id="CharacterOnScreen-124"><a href="#CharacterOnScreen-124"><span class="linenos">124</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-125"><a href="#CharacterOnScreen-125"><span class="linenos">125</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-126"><a href="#CharacterOnScreen-126"><span class="linenos">126</span></a><span class="sd">        Update the character&#39;s state for a single game loop iteration.</span>
+</span><span id="CharacterOnScreen-127"><a href="#CharacterOnScreen-127"><span class="linenos">127</span></a>
+</span><span id="CharacterOnScreen-128"><a href="#CharacterOnScreen-128"><span class="linenos">128</span></a><span class="sd">        Updates the character&#39;s animation and internal state based on the</span>
+</span><span id="CharacterOnScreen-129"><a href="#CharacterOnScreen-129"><span class="linenos">129</span></a><span class="sd">        elapsed time. This is called each frame to keep the character&#39;s visual</span>
+</span><span id="CharacterOnScreen-130"><a href="#CharacterOnScreen-130"><span class="linenos">130</span></a><span class="sd">        state current.</span>
+</span><span id="CharacterOnScreen-131"><a href="#CharacterOnScreen-131"><span class="linenos">131</span></a>
+</span><span id="CharacterOnScreen-132"><a href="#CharacterOnScreen-132"><span class="linenos">132</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterOnScreen-133"><a href="#CharacterOnScreen-133"><span class="linenos">133</span></a><span class="sd">            time_delta: The elapsed time since the last update in milliseconds.</span>
+</span><span id="CharacterOnScreen-134"><a href="#CharacterOnScreen-134"><span class="linenos">134</span></a>
+</span><span id="CharacterOnScreen-135"><a href="#CharacterOnScreen-135"><span class="linenos">135</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen-136"><a href="#CharacterOnScreen-136"><span class="linenos">136</span></a><span class="sd">            The updated character state after the tick.</span>
+</span><span id="CharacterOnScreen-137"><a href="#CharacterOnScreen-137"><span class="linenos">137</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-138"><a href="#CharacterOnScreen-138"><span class="linenos">138</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
+</span><span id="CharacterOnScreen-139"><a href="#CharacterOnScreen-139"><span class="linenos">139</span></a>
+</span><span id="CharacterOnScreen-140"><a href="#CharacterOnScreen-140"><span class="linenos">140</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-141"><a href="#CharacterOnScreen-141"><span class="linenos">141</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-142"><a href="#CharacterOnScreen-142"><span class="linenos">142</span></a><span class="sd">        Start an event interaction with another character.</span>
+</span><span id="CharacterOnScreen-143"><a href="#CharacterOnScreen-143"><span class="linenos">143</span></a>
+</span><span id="CharacterOnScreen-144"><a href="#CharacterOnScreen-144"><span class="linenos">144</span></a><span class="sd">        When starting an event, the character turns to face the other character</span>
+</span><span id="CharacterOnScreen-145"><a href="#CharacterOnScreen-145"><span class="linenos">145</span></a><span class="sd">        and enters an event-triggered state. This ensures proper positioning</span>
+</span><span id="CharacterOnScreen-146"><a href="#CharacterOnScreen-146"><span class="linenos">146</span></a><span class="sd">        for dialogue or interactions.</span>
+</span><span id="CharacterOnScreen-147"><a href="#CharacterOnScreen-147"><span class="linenos">147</span></a>
+</span><span id="CharacterOnScreen-148"><a href="#CharacterOnScreen-148"><span class="linenos">148</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterOnScreen-149"><a href="#CharacterOnScreen-149"><span class="linenos">149</span></a><span class="sd">            character: The character to start an event with.</span>
+</span><span id="CharacterOnScreen-150"><a href="#CharacterOnScreen-150"><span class="linenos">150</span></a>
+</span><span id="CharacterOnScreen-151"><a href="#CharacterOnScreen-151"><span class="linenos">151</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen-152"><a href="#CharacterOnScreen-152"><span class="linenos">152</span></a><span class="sd">            The updated character state for the event.</span>
+</span><span id="CharacterOnScreen-153"><a href="#CharacterOnScreen-153"><span class="linenos">153</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-154"><a href="#CharacterOnScreen-154"><span class="linenos">154</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
+</span><span id="CharacterOnScreen-155"><a href="#CharacterOnScreen-155"><span class="linenos">155</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+</span><span id="CharacterOnScreen-156"><a href="#CharacterOnScreen-156"><span class="linenos">156</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="CharacterOnScreen-157"><a href="#CharacterOnScreen-157"><span class="linenos">157</span></a>
+</span><span id="CharacterOnScreen-158"><a href="#CharacterOnScreen-158"><span class="linenos">158</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen-159"><a href="#CharacterOnScreen-159"><span class="linenos">159</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-160"><a href="#CharacterOnScreen-160"><span class="linenos">160</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-161"><a href="#CharacterOnScreen-161"><span class="linenos">161</span></a><span class="sd">        Complete the current event and return to normal state.</span>
+</span><span id="CharacterOnScreen-162"><a href="#CharacterOnScreen-162"><span class="linenos">162</span></a>
+</span><span id="CharacterOnScreen-163"><a href="#CharacterOnScreen-163"><span class="linenos">163</span></a><span class="sd">        Resets the event-triggered flag and returns the character to its normal</span>
+</span><span id="CharacterOnScreen-164"><a href="#CharacterOnScreen-164"><span class="linenos">164</span></a><span class="sd">        interaction state.</span>
+</span><span id="CharacterOnScreen-165"><a href="#CharacterOnScreen-165"><span class="linenos">165</span></a>
+</span><span id="CharacterOnScreen-166"><a href="#CharacterOnScreen-166"><span class="linenos">166</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen-167"><a href="#CharacterOnScreen-167"><span class="linenos">167</span></a><span class="sd">            The character state after completing the event.</span>
+</span><span id="CharacterOnScreen-168"><a href="#CharacterOnScreen-168"><span class="linenos">168</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen-169"><a href="#CharacterOnScreen-169"><span class="linenos">169</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -604,9 +607,9 @@ participating in an event.</li>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.name"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.name-92"><a href="#CharacterOnScreen.name-92"><span class="linenos">92</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen.name-93"><a href="#CharacterOnScreen.name-93"><span class="linenos">93</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="CharacterOnScreen.name-94"><a href="#CharacterOnScreen.name-94"><span class="linenos">94</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.name-93"><a href="#CharacterOnScreen.name-93"><span class="linenos">93</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen.name-94"><a href="#CharacterOnScreen.name-94"><span class="linenos">94</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="CharacterOnScreen.name-95"><a href="#CharacterOnScreen.name-95"><span class="linenos">95</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span>
 </span></pre></div>
 
 
@@ -622,19 +625,19 @@ participating in an event.</li>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.character_and_visuals"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.character_and_visuals-96"><a href="#CharacterOnScreen.character_and_visuals-96"><span class="linenos"> 96</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen.character_and_visuals-97"><a href="#CharacterOnScreen.character_and_visuals-97"><span class="linenos"> 97</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="CharacterOnScreen.character_and_visuals-98"><a href="#CharacterOnScreen.character_and_visuals-98"><span class="linenos"> 98</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.character_and_visuals-99"><a href="#CharacterOnScreen.character_and_visuals-99"><span class="linenos"> 99</span></a><span class="sd">        Get all visual elements associated with this character.</span>
-</span><span id="CharacterOnScreen.character_and_visuals-100"><a href="#CharacterOnScreen.character_and_visuals-100"><span class="linenos">100</span></a>
-</span><span id="CharacterOnScreen.character_and_visuals-101"><a href="#CharacterOnScreen.character_and_visuals-101"><span class="linenos">101</span></a><span class="sd">        Returns the character&#39;s main drawing and any additional visual elements</span>
-</span><span id="CharacterOnScreen.character_and_visuals-102"><a href="#CharacterOnScreen.character_and_visuals-102"><span class="linenos">102</span></a><span class="sd">        that should be rendered with the character.</span>
-</span><span id="CharacterOnScreen.character_and_visuals-103"><a href="#CharacterOnScreen.character_and_visuals-103"><span class="linenos">103</span></a>
-</span><span id="CharacterOnScreen.character_and_visuals-104"><a href="#CharacterOnScreen.character_and_visuals-104"><span class="linenos">104</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen.character_and_visuals-105"><a href="#CharacterOnScreen.character_and_visuals-105"><span class="linenos">105</span></a><span class="sd">            All visual elements for the character.</span>
-</span><span id="CharacterOnScreen.character_and_visuals-106"><a href="#CharacterOnScreen.character_and_visuals-106"><span class="linenos">106</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.character_and_visuals-107"><a href="#CharacterOnScreen.character_and_visuals-107"><span class="linenos">107</span></a>        <span class="c1"># TODO: add visuals.</span>
-</span><span id="CharacterOnScreen.character_and_visuals-108"><a href="#CharacterOnScreen.character_and_visuals-108"><span class="linenos">108</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.character_and_visuals-97"><a href="#CharacterOnScreen.character_and_visuals-97"><span class="linenos"> 97</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen.character_and_visuals-98"><a href="#CharacterOnScreen.character_and_visuals-98"><span class="linenos"> 98</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="CharacterOnScreen.character_and_visuals-99"><a href="#CharacterOnScreen.character_and_visuals-99"><span class="linenos"> 99</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.character_and_visuals-100"><a href="#CharacterOnScreen.character_and_visuals-100"><span class="linenos">100</span></a><span class="sd">        Get all visual elements associated with this character.</span>
+</span><span id="CharacterOnScreen.character_and_visuals-101"><a href="#CharacterOnScreen.character_and_visuals-101"><span class="linenos">101</span></a>
+</span><span id="CharacterOnScreen.character_and_visuals-102"><a href="#CharacterOnScreen.character_and_visuals-102"><span class="linenos">102</span></a><span class="sd">        Returns the character&#39;s main drawing and any additional visual elements</span>
+</span><span id="CharacterOnScreen.character_and_visuals-103"><a href="#CharacterOnScreen.character_and_visuals-103"><span class="linenos">103</span></a><span class="sd">        that should be rendered with the character.</span>
+</span><span id="CharacterOnScreen.character_and_visuals-104"><a href="#CharacterOnScreen.character_and_visuals-104"><span class="linenos">104</span></a>
+</span><span id="CharacterOnScreen.character_and_visuals-105"><a href="#CharacterOnScreen.character_and_visuals-105"><span class="linenos">105</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen.character_and_visuals-106"><a href="#CharacterOnScreen.character_and_visuals-106"><span class="linenos">106</span></a><span class="sd">            All visual elements for the character.</span>
+</span><span id="CharacterOnScreen.character_and_visuals-107"><a href="#CharacterOnScreen.character_and_visuals-107"><span class="linenos">107</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.character_and_visuals-108"><a href="#CharacterOnScreen.character_and_visuals-108"><span class="linenos">108</span></a>        <span class="c1"># TODO: add visuals.</span>
+</span><span id="CharacterOnScreen.character_and_visuals-109"><a href="#CharacterOnScreen.character_and_visuals-109"><span class="linenos">109</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span>
 </span></pre></div>
 
 
@@ -661,18 +664,18 @@ that should be rendered with the character.</p>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.draw_on_screen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.draw_on_screen-110"><a href="#CharacterOnScreen.draw_on_screen-110"><span class="linenos">110</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen.draw_on_screen-111"><a href="#CharacterOnScreen.draw_on_screen-111"><span class="linenos">111</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
-</span><span id="CharacterOnScreen.draw_on_screen-112"><a href="#CharacterOnScreen.draw_on_screen-112"><span class="linenos">112</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.draw_on_screen-113"><a href="#CharacterOnScreen.draw_on_screen-113"><span class="linenos">113</span></a><span class="sd">        Get the character&#39;s main drawing representation.</span>
-</span><span id="CharacterOnScreen.draw_on_screen-114"><a href="#CharacterOnScreen.draw_on_screen-114"><span class="linenos">114</span></a>
-</span><span id="CharacterOnScreen.draw_on_screen-115"><a href="#CharacterOnScreen.draw_on_screen-115"><span class="linenos">115</span></a><span class="sd">        Creates a drawable representation of the character at its current</span>
-</span><span id="CharacterOnScreen.draw_on_screen-116"><a href="#CharacterOnScreen.draw_on_screen-116"><span class="linenos">116</span></a><span class="sd">        position with its current visual state.</span>
-</span><span id="CharacterOnScreen.draw_on_screen-117"><a href="#CharacterOnScreen.draw_on_screen-117"><span class="linenos">117</span></a>
-</span><span id="CharacterOnScreen.draw_on_screen-118"><a href="#CharacterOnScreen.draw_on_screen-118"><span class="linenos">118</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen.draw_on_screen-119"><a href="#CharacterOnScreen.draw_on_screen-119"><span class="linenos">119</span></a><span class="sd">            The character&#39;s drawing at its current position.</span>
-</span><span id="CharacterOnScreen.draw_on_screen-120"><a href="#CharacterOnScreen.draw_on_screen-120"><span class="linenos">120</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.draw_on_screen-121"><a href="#CharacterOnScreen.draw_on_screen-121"><span class="linenos">121</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.draw_on_screen-111"><a href="#CharacterOnScreen.draw_on_screen-111"><span class="linenos">111</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen.draw_on_screen-112"><a href="#CharacterOnScreen.draw_on_screen-112"><span class="linenos">112</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="CharacterOnScreen.draw_on_screen-113"><a href="#CharacterOnScreen.draw_on_screen-113"><span class="linenos">113</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.draw_on_screen-114"><a href="#CharacterOnScreen.draw_on_screen-114"><span class="linenos">114</span></a><span class="sd">        Get the character&#39;s main drawing representation.</span>
+</span><span id="CharacterOnScreen.draw_on_screen-115"><a href="#CharacterOnScreen.draw_on_screen-115"><span class="linenos">115</span></a>
+</span><span id="CharacterOnScreen.draw_on_screen-116"><a href="#CharacterOnScreen.draw_on_screen-116"><span class="linenos">116</span></a><span class="sd">        Creates a drawable representation of the character at its current</span>
+</span><span id="CharacterOnScreen.draw_on_screen-117"><a href="#CharacterOnScreen.draw_on_screen-117"><span class="linenos">117</span></a><span class="sd">        position with its current visual state.</span>
+</span><span id="CharacterOnScreen.draw_on_screen-118"><a href="#CharacterOnScreen.draw_on_screen-118"><span class="linenos">118</span></a>
+</span><span id="CharacterOnScreen.draw_on_screen-119"><a href="#CharacterOnScreen.draw_on_screen-119"><span class="linenos">119</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen.draw_on_screen-120"><a href="#CharacterOnScreen.draw_on_screen-120"><span class="linenos">120</span></a><span class="sd">            The character&#39;s drawing at its current position.</span>
+</span><span id="CharacterOnScreen.draw_on_screen-121"><a href="#CharacterOnScreen.draw_on_screen-121"><span class="linenos">121</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.draw_on_screen-122"><a href="#CharacterOnScreen.draw_on_screen-122"><span class="linenos">122</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">drawing</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -701,21 +704,21 @@ position with its current visual state.</p>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.tick-123"><a href="#CharacterOnScreen.tick-123"><span class="linenos">123</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen.tick-124"><a href="#CharacterOnScreen.tick-124"><span class="linenos">124</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.tick-125"><a href="#CharacterOnScreen.tick-125"><span class="linenos">125</span></a><span class="sd">        Update the character&#39;s state for a single game loop iteration.</span>
-</span><span id="CharacterOnScreen.tick-126"><a href="#CharacterOnScreen.tick-126"><span class="linenos">126</span></a>
-</span><span id="CharacterOnScreen.tick-127"><a href="#CharacterOnScreen.tick-127"><span class="linenos">127</span></a><span class="sd">        Updates the character&#39;s animation and internal state based on the</span>
-</span><span id="CharacterOnScreen.tick-128"><a href="#CharacterOnScreen.tick-128"><span class="linenos">128</span></a><span class="sd">        elapsed time. This is called each frame to keep the character&#39;s visual</span>
-</span><span id="CharacterOnScreen.tick-129"><a href="#CharacterOnScreen.tick-129"><span class="linenos">129</span></a><span class="sd">        state current.</span>
-</span><span id="CharacterOnScreen.tick-130"><a href="#CharacterOnScreen.tick-130"><span class="linenos">130</span></a>
-</span><span id="CharacterOnScreen.tick-131"><a href="#CharacterOnScreen.tick-131"><span class="linenos">131</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterOnScreen.tick-132"><a href="#CharacterOnScreen.tick-132"><span class="linenos">132</span></a><span class="sd">            time_delta: The elapsed time since the last update in milliseconds.</span>
-</span><span id="CharacterOnScreen.tick-133"><a href="#CharacterOnScreen.tick-133"><span class="linenos">133</span></a>
-</span><span id="CharacterOnScreen.tick-134"><a href="#CharacterOnScreen.tick-134"><span class="linenos">134</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen.tick-135"><a href="#CharacterOnScreen.tick-135"><span class="linenos">135</span></a><span class="sd">            The updated character state after the tick.</span>
-</span><span id="CharacterOnScreen.tick-136"><a href="#CharacterOnScreen.tick-136"><span class="linenos">136</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.tick-137"><a href="#CharacterOnScreen.tick-137"><span class="linenos">137</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.tick-124"><a href="#CharacterOnScreen.tick-124"><span class="linenos">124</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen.tick-125"><a href="#CharacterOnScreen.tick-125"><span class="linenos">125</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.tick-126"><a href="#CharacterOnScreen.tick-126"><span class="linenos">126</span></a><span class="sd">        Update the character&#39;s state for a single game loop iteration.</span>
+</span><span id="CharacterOnScreen.tick-127"><a href="#CharacterOnScreen.tick-127"><span class="linenos">127</span></a>
+</span><span id="CharacterOnScreen.tick-128"><a href="#CharacterOnScreen.tick-128"><span class="linenos">128</span></a><span class="sd">        Updates the character&#39;s animation and internal state based on the</span>
+</span><span id="CharacterOnScreen.tick-129"><a href="#CharacterOnScreen.tick-129"><span class="linenos">129</span></a><span class="sd">        elapsed time. This is called each frame to keep the character&#39;s visual</span>
+</span><span id="CharacterOnScreen.tick-130"><a href="#CharacterOnScreen.tick-130"><span class="linenos">130</span></a><span class="sd">        state current.</span>
+</span><span id="CharacterOnScreen.tick-131"><a href="#CharacterOnScreen.tick-131"><span class="linenos">131</span></a>
+</span><span id="CharacterOnScreen.tick-132"><a href="#CharacterOnScreen.tick-132"><span class="linenos">132</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterOnScreen.tick-133"><a href="#CharacterOnScreen.tick-133"><span class="linenos">133</span></a><span class="sd">            time_delta: The elapsed time since the last update in milliseconds.</span>
+</span><span id="CharacterOnScreen.tick-134"><a href="#CharacterOnScreen.tick-134"><span class="linenos">134</span></a>
+</span><span id="CharacterOnScreen.tick-135"><a href="#CharacterOnScreen.tick-135"><span class="linenos">135</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen.tick-136"><a href="#CharacterOnScreen.tick-136"><span class="linenos">136</span></a><span class="sd">            The updated character state after the tick.</span>
+</span><span id="CharacterOnScreen.tick-137"><a href="#CharacterOnScreen.tick-137"><span class="linenos">137</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.tick-138"><a href="#CharacterOnScreen.tick-138"><span class="linenos">138</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -751,23 +754,23 @@ state current.</p>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.start_event"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.start_event-139"><a href="#CharacterOnScreen.start_event-139"><span class="linenos">139</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen.start_event-140"><a href="#CharacterOnScreen.start_event-140"><span class="linenos">140</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.start_event-141"><a href="#CharacterOnScreen.start_event-141"><span class="linenos">141</span></a><span class="sd">        Start an event interaction with another character.</span>
-</span><span id="CharacterOnScreen.start_event-142"><a href="#CharacterOnScreen.start_event-142"><span class="linenos">142</span></a>
-</span><span id="CharacterOnScreen.start_event-143"><a href="#CharacterOnScreen.start_event-143"><span class="linenos">143</span></a><span class="sd">        When starting an event, the character turns to face the other character</span>
-</span><span id="CharacterOnScreen.start_event-144"><a href="#CharacterOnScreen.start_event-144"><span class="linenos">144</span></a><span class="sd">        and enters an event-triggered state. This ensures proper positioning</span>
-</span><span id="CharacterOnScreen.start_event-145"><a href="#CharacterOnScreen.start_event-145"><span class="linenos">145</span></a><span class="sd">        for dialogue or interactions.</span>
-</span><span id="CharacterOnScreen.start_event-146"><a href="#CharacterOnScreen.start_event-146"><span class="linenos">146</span></a>
-</span><span id="CharacterOnScreen.start_event-147"><a href="#CharacterOnScreen.start_event-147"><span class="linenos">147</span></a><span class="sd">        Arguments:</span>
-</span><span id="CharacterOnScreen.start_event-148"><a href="#CharacterOnScreen.start_event-148"><span class="linenos">148</span></a><span class="sd">            character: The character to start an event with.</span>
-</span><span id="CharacterOnScreen.start_event-149"><a href="#CharacterOnScreen.start_event-149"><span class="linenos">149</span></a>
-</span><span id="CharacterOnScreen.start_event-150"><a href="#CharacterOnScreen.start_event-150"><span class="linenos">150</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen.start_event-151"><a href="#CharacterOnScreen.start_event-151"><span class="linenos">151</span></a><span class="sd">            The updated character state for the event.</span>
-</span><span id="CharacterOnScreen.start_event-152"><a href="#CharacterOnScreen.start_event-152"><span class="linenos">152</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.start_event-153"><a href="#CharacterOnScreen.start_event-153"><span class="linenos">153</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
-</span><span id="CharacterOnScreen.start_event-154"><a href="#CharacterOnScreen.start_event-154"><span class="linenos">154</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
-</span><span id="CharacterOnScreen.start_event-155"><a href="#CharacterOnScreen.start_event-155"><span class="linenos">155</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.start_event-140"><a href="#CharacterOnScreen.start_event-140"><span class="linenos">140</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">:</span> <span class="n">CharacterOnScreen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen.start_event-141"><a href="#CharacterOnScreen.start_event-141"><span class="linenos">141</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.start_event-142"><a href="#CharacterOnScreen.start_event-142"><span class="linenos">142</span></a><span class="sd">        Start an event interaction with another character.</span>
+</span><span id="CharacterOnScreen.start_event-143"><a href="#CharacterOnScreen.start_event-143"><span class="linenos">143</span></a>
+</span><span id="CharacterOnScreen.start_event-144"><a href="#CharacterOnScreen.start_event-144"><span class="linenos">144</span></a><span class="sd">        When starting an event, the character turns to face the other character</span>
+</span><span id="CharacterOnScreen.start_event-145"><a href="#CharacterOnScreen.start_event-145"><span class="linenos">145</span></a><span class="sd">        and enters an event-triggered state. This ensures proper positioning</span>
+</span><span id="CharacterOnScreen.start_event-146"><a href="#CharacterOnScreen.start_event-146"><span class="linenos">146</span></a><span class="sd">        for dialogue or interactions.</span>
+</span><span id="CharacterOnScreen.start_event-147"><a href="#CharacterOnScreen.start_event-147"><span class="linenos">147</span></a>
+</span><span id="CharacterOnScreen.start_event-148"><a href="#CharacterOnScreen.start_event-148"><span class="linenos">148</span></a><span class="sd">        Arguments:</span>
+</span><span id="CharacterOnScreen.start_event-149"><a href="#CharacterOnScreen.start_event-149"><span class="linenos">149</span></a><span class="sd">            character: The character to start an event with.</span>
+</span><span id="CharacterOnScreen.start_event-150"><a href="#CharacterOnScreen.start_event-150"><span class="linenos">150</span></a>
+</span><span id="CharacterOnScreen.start_event-151"><a href="#CharacterOnScreen.start_event-151"><span class="linenos">151</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen.start_event-152"><a href="#CharacterOnScreen.start_event-152"><span class="linenos">152</span></a><span class="sd">            The updated character state for the event.</span>
+</span><span id="CharacterOnScreen.start_event-153"><a href="#CharacterOnScreen.start_event-153"><span class="linenos">153</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.start_event-154"><a href="#CharacterOnScreen.start_event-154"><span class="linenos">154</span></a>        <span class="n">direction</span> <span class="o">=</span> <span class="n">character</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="p">)</span>
+</span><span id="CharacterOnScreen.start_event-155"><a href="#CharacterOnScreen.start_event-155"><span class="linenos">155</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+</span><span id="CharacterOnScreen.start_event-156"><a href="#CharacterOnScreen.start_event-156"><span class="linenos">156</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -801,18 +804,18 @@ for dialogue or interactions.</p>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.complete_event"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.complete_event-157"><a href="#CharacterOnScreen.complete_event-157"><span class="linenos">157</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterOnScreen.complete_event-158"><a href="#CharacterOnScreen.complete_event-158"><span class="linenos">158</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="CharacterOnScreen.complete_event-159"><a href="#CharacterOnScreen.complete_event-159"><span class="linenos">159</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.complete_event-160"><a href="#CharacterOnScreen.complete_event-160"><span class="linenos">160</span></a><span class="sd">        Complete the current event and return to normal state.</span>
-</span><span id="CharacterOnScreen.complete_event-161"><a href="#CharacterOnScreen.complete_event-161"><span class="linenos">161</span></a>
-</span><span id="CharacterOnScreen.complete_event-162"><a href="#CharacterOnScreen.complete_event-162"><span class="linenos">162</span></a><span class="sd">        Resets the event-triggered flag and returns the character to its normal</span>
-</span><span id="CharacterOnScreen.complete_event-163"><a href="#CharacterOnScreen.complete_event-163"><span class="linenos">163</span></a><span class="sd">        interaction state.</span>
-</span><span id="CharacterOnScreen.complete_event-164"><a href="#CharacterOnScreen.complete_event-164"><span class="linenos">164</span></a>
-</span><span id="CharacterOnScreen.complete_event-165"><a href="#CharacterOnScreen.complete_event-165"><span class="linenos">165</span></a><span class="sd">        Returns:</span>
-</span><span id="CharacterOnScreen.complete_event-166"><a href="#CharacterOnScreen.complete_event-166"><span class="linenos">166</span></a><span class="sd">            The character state after completing the event.</span>
-</span><span id="CharacterOnScreen.complete_event-167"><a href="#CharacterOnScreen.complete_event-167"><span class="linenos">167</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CharacterOnScreen.complete_event-168"><a href="#CharacterOnScreen.complete_event-168"><span class="linenos">168</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.complete_event-158"><a href="#CharacterOnScreen.complete_event-158"><span class="linenos">158</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen.complete_event-159"><a href="#CharacterOnScreen.complete_event-159"><span class="linenos">159</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="CharacterOnScreen.complete_event-160"><a href="#CharacterOnScreen.complete_event-160"><span class="linenos">160</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.complete_event-161"><a href="#CharacterOnScreen.complete_event-161"><span class="linenos">161</span></a><span class="sd">        Complete the current event and return to normal state.</span>
+</span><span id="CharacterOnScreen.complete_event-162"><a href="#CharacterOnScreen.complete_event-162"><span class="linenos">162</span></a>
+</span><span id="CharacterOnScreen.complete_event-163"><a href="#CharacterOnScreen.complete_event-163"><span class="linenos">163</span></a><span class="sd">        Resets the event-triggered flag and returns the character to its normal</span>
+</span><span id="CharacterOnScreen.complete_event-164"><a href="#CharacterOnScreen.complete_event-164"><span class="linenos">164</span></a><span class="sd">        interaction state.</span>
+</span><span id="CharacterOnScreen.complete_event-165"><a href="#CharacterOnScreen.complete_event-165"><span class="linenos">165</span></a>
+</span><span id="CharacterOnScreen.complete_event-166"><a href="#CharacterOnScreen.complete_event-166"><span class="linenos">166</span></a><span class="sd">        Returns:</span>
+</span><span id="CharacterOnScreen.complete_event-167"><a href="#CharacterOnScreen.complete_event-167"><span class="linenos">167</span></a><span class="sd">            The character state after completing the event.</span>
+</span><span id="CharacterOnScreen.complete_event-168"><a href="#CharacterOnScreen.complete_event-168"><span class="linenos">168</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CharacterOnScreen.complete_event-169"><a href="#CharacterOnScreen.complete_event-169"><span class="linenos">169</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span></pre></div>
 
 

@@ -29,8 +29,7 @@ from nextrpg.character_on_screen import CharacterOnScreen
 from nextrpg.coordinate import Coordinate
 from nextrpg.core import Millisecond, Size
 from nextrpg.draw_on_screen import Drawing, DrawOnScreen, Rectangle
-from nextrpg.fade_in import FadeIn
-from nextrpg.fade_out import FadeOut
+from nextrpg.fade import FadeIn, FadeOut
 from nextrpg.global_config import config
 from nextrpg.model import dataclass_with_instance_init, export, instance_init
 from nextrpg.npcs import RpgEventScene

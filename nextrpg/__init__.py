@@ -110,8 +110,6 @@ from nextrpg.event_as_attr import *
 from nextrpg.event_config import *
 from nextrpg.event_transformer import *
 from nextrpg.fade import *
-from nextrpg.fade_in import *
-from nextrpg.fade_out import *
 from nextrpg.frames import *
 from nextrpg.game import *
 from nextrpg.global_config import *
@@ -144,3 +142,4 @@ from nextrpg.transition_config import *
 from nextrpg.transition_scene import *
 from nextrpg.walk import *
 from nextrpg.gui import *
+from nextrpg.cached_decorator import *

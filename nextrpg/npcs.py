@@ -20,7 +20,7 @@ from typing import Any, Self
 
 from nextrpg.character_on_screen import CharacterOnScreen, CharacterSpec
 from nextrpg.core import Millisecond, PixelPerMillisecond
-from nextrpg.event_as_attr import EventAsAttr
+from nextrpg.event_as_attr import event_as_attr
 from nextrpg.event_transformer import transform_and_compile
 from nextrpg.global_config import config
 from nextrpg.logger import Logger
@@ -107,7 +107,8 @@ class NpcOnScreen(CharacterOnScreen):
 
 @export
 @dataclass(frozen=True)
-class EventfulScene(Scene, EventAsAttr):
+@event_as_attr
+class EventfulScene(Scene):
     """Scene that supports event execution via coroutines/generators.
 
     This scene type allows for complex event sequences to be executed

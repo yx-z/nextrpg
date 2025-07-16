@@ -21,7 +21,7 @@ from nextrpg.character_drawing import CharacterDrawing
 from nextrpg.coordinate import Coordinate
 from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import DrawOnScreen
-from nextrpg.event_as_attr import EventAsAttr
+from nextrpg.event_as_attr import event_as_attr
 from nextrpg.model import (
     dataclass_with_instance_init,
     export,
@@ -56,7 +56,8 @@ class CharacterSpec:
 
 @export
 @dataclass_with_instance_init
-class CharacterOnScreen(EventAsAttr):
+@event_as_attr
+class CharacterOnScreen:
     """
     Represents a character that can be displayed and interacted with on screen.
 
