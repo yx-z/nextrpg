@@ -28,6 +28,7 @@ from ast import (
     iter_child_nodes,
     unparse,
 )
+from dataclasses import dataclass
 from typing import Any, NamedTuple, NoReturn
 
 from nextrpg.rpg_event import registered_events
@@ -101,6 +102,7 @@ ADD_YIELD = AddYield()
 """Global instance of the AddYield transformer."""
 
 
+@dataclass(frozen=True)
 class AnnotateSay(NodeTransformer):
     """
     AST transformer that processes say annotations.
@@ -108,6 +110,8 @@ class AnnotateSay(NodeTransformer):
     This transformer converts type annotations with say strings into actual say
     function calls.
     """
+
+    say_event_name: str
 
     def visit_AnnAssign(self, node: AnnAssign) -> Expr | AnnAssign:
         """
@@ -129,11 +133,11 @@ class AnnotateSay(NodeTransformer):
         if node.value is not None:
             return node
         target, arg = _get_target_and_arg(node.target)
-        say = Attribute(Name(target, Load()), "say", Load())
+        say = Attribute(Name(target, Load()), self.say_event_name, Load())
         return Expr(Call(say, [node.annotation] + arg))
 
 
-ANNOTATE_SAY = AnnotateSay()
+ANNOTATE_SAY = AnnotateSay("say")
 """Global instance of the AnnotateSay transformer."""
 
 
