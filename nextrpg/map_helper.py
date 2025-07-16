@@ -20,7 +20,13 @@ from pathlib import Path
 from typing import NamedTuple
 
 from pygame import Surface
-from pytmx import TiledMap, TiledObject, TiledObjectGroup, TiledTileLayer, load_pygame
+from pytmx import (
+    TiledMap,
+    TiledObject,
+    TiledObjectGroup,
+    TiledTileLayer,
+    load_pygame,
+)
 
 from nextrpg.character_on_screen import CharacterOnScreen
 from nextrpg.coordinate import Coordinate
@@ -337,7 +343,7 @@ class MapHelper:
         )
         return tuple(sorted(bottom_and_draw, key=lambda t: t.bottom))
 
-    @cached_property
+    @property
     def _tile_size(self) -> Size:
         return Size(self._tmx.tilewidth, self._tmx.tileheight)
 

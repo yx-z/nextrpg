@@ -85,7 +85,7 @@ class CyclicFrames:
         )
         return replace(self, _index=index, _timer=timer_mod)
 
-    @cached_property
+    @property
     def reset(self) -> Self:
         """
         Reset the animation sequence to its initial state.

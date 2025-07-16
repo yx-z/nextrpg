@@ -47,7 +47,7 @@ class Scene:
     - Transition effects
     """
 
-    @cached_property
+    @property
     def draw_on_screen_shift(self) -> Coordinate | None:
         """
         Get the offset applied to all drawings before GUI scaling.
@@ -97,7 +97,7 @@ class Scene:
             )
         return self.draw_on_screens_before_shift
 
-    @cached_property
+    @property
     def draw_on_screens_before_shift(self) -> tuple[DrawOnScreen, ...]:
         """
         Get the drawables before shift is applied.

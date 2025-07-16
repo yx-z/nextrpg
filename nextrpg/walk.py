@@ -100,7 +100,7 @@ class Walk:
         current = self.path.points[self._target_index - 1]
         return target.relative_to(current)
 
-    @cached_property
+    @property
     def reset(self) -> Self:
         """
         Reset the walk to its starting position.
@@ -162,7 +162,7 @@ class Walk:
 
         return replace(self, coordinate=coordinate, _target_index=index)
 
-    @cached_property
+    @property
     def complete(self) -> bool:
         """
         Check if the walk has completed.

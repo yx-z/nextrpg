@@ -88,7 +88,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
             _moving=moving,
         )
 
-    @cached_property
+    @property
     @override
     def moving(self) -> bool:
         return (

@@ -330,7 +330,7 @@ class Font:
         width, height = self.pygame.size(text)
         return Size(width, height)
 
-    @cached_property
+    @property
     def text_height(self) -> Pixel:
         """
         Get the line height of the font.
@@ -396,7 +396,7 @@ class Timer:
         """
         return replace(self, elapsed=self.elapsed + time_delta)
 
-    @cached_property
+    @property
     def reset(self) -> Self:
         """
         Get a reset timer.
@@ -415,7 +415,7 @@ class Timer:
         """
         return replace(self, elapsed=0)
 
-    @cached_property
+    @property
     def complete(self) -> bool:
         """
         Get whether the timer has completed.

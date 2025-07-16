@@ -31,7 +31,12 @@ from nextrpg.global_config import config, set_config
 from nextrpg.gui_config import GuiConfig, GuiMode, ResizeMode
 from nextrpg.logger import ComponentAndMessage, Logger, pop_messages
 from nextrpg.model import export, not_constructor_below
-from nextrpg.pygame_event import GuiResize, KeyboardKey, KeyPressDown, PygameEvent
+from nextrpg.pygame_event import (
+    GuiResize,
+    KeyboardKey,
+    KeyPressDown,
+    PygameEvent,
+)
 from nextrpg.text import Text
 from nextrpg.text_on_screen import TextOnScreen
 
@@ -88,7 +93,7 @@ class Gui:
     _screen: Surface | None = None
     _title: str | None = None
 
-    @cached_property
+    @property
     def update(self) -> Self:
         """
         Update GUI configuration if needed.

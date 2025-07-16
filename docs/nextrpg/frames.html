@@ -180,7 +180,7 @@ to be played sequentially to create animated effects. It includes the
 </span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>        <span class="p">)</span>
 </span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer_mod</span><span class="p">)</span>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>    <span class="nd">@property</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">        Reset the animation sequence to its initial state.</span>
@@ -268,7 +268,7 @@ to be played sequentially to create animated effects. It includes the
 </span><span id="CyclicFrames-86"><a href="#CyclicFrames-86"><span class="linenos"> 86</span></a>        <span class="p">)</span>
 </span><span id="CyclicFrames-87"><a href="#CyclicFrames-87"><span class="linenos"> 87</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer_mod</span><span class="p">)</span>
 </span><span id="CyclicFrames-88"><a href="#CyclicFrames-88"><span class="linenos"> 88</span></a>
-</span><span id="CyclicFrames-89"><a href="#CyclicFrames-89"><span class="linenos"> 89</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CyclicFrames-89"><a href="#CyclicFrames-89"><span class="linenos"> 89</span></a>    <span class="nd">@property</span>
 </span><span id="CyclicFrames-90"><a href="#CyclicFrames-90"><span class="linenos"> 90</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="CyclicFrames-91"><a href="#CyclicFrames-91"><span class="linenos"> 91</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CyclicFrames-92"><a href="#CyclicFrames-92"><span class="linenos"> 92</span></a><span class="sd">        Reset the animation sequence to its initial state.</span>
@@ -438,7 +438,7 @@ time.</p>
 
     </div>
     <a class="headerlink" href="#CyclicFrames.reset"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CyclicFrames.reset-89"><a href="#CyclicFrames.reset-89"><span class="linenos"> 89</span></a>    <span class="nd">@cached_property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CyclicFrames.reset-89"><a href="#CyclicFrames.reset-89"><span class="linenos"> 89</span></a>    <span class="nd">@property</span>
 </span><span id="CyclicFrames.reset-90"><a href="#CyclicFrames.reset-90"><span class="linenos"> 90</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="CyclicFrames.reset-91"><a href="#CyclicFrames.reset-91"><span class="linenos"> 91</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CyclicFrames.reset-92"><a href="#CyclicFrames.reset-92"><span class="linenos"> 92</span></a><span class="sd">        Reset the animation sequence to its initial state.</span>

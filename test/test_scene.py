@@ -13,11 +13,12 @@ def test_scene() -> None:
     assert scene.tick(10) is scene
     assert not scene.draw_on_screens_before_shift
 
-    scene.draw_on_screen_shift = Coordinate(1, 2)
-    scene.draw_on_screens_before_shift = (
-        DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),
-    )
-    assert scene.draw_on_screens
+    class MyScene(Scene):
+        @cached_property
+        def draw_on_screen_shift(self) -> Coordinate:
+            return Coordinate(1, 2)
+
+    assert not MyScene().draw_on_screens
 
     class MyScene(Scene):
         @cached_property

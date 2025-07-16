@@ -64,7 +64,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         default_factory=lambda: config().character.move_speed
     )
 
-    @cached_property
+    @property
     @abstractmethod
     def moving(self) -> bool:
         """

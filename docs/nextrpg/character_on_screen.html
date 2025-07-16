@@ -214,11 +214,11 @@ character management, and event handling for character interactions.</p>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="p">)</span>
 </span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>    <span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="nd">@property</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>    <span class="nd">@property</span>
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">        Get all visual elements associated with this character.</span>
@@ -232,7 +232,7 @@ character management, and event handling for character interactions.</p>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>        <span class="c1"># TODO: add visuals.</span>
 </span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span>
 </span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>    <span class="nd">@property</span>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        Get the character&#39;s main drawing representation.</span>
@@ -279,7 +279,7 @@ character management, and event handling for character interactions.</p>
 </span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>    <span class="nd">@property</span>
 </span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">        Complete the current event and return to normal state.</span>
@@ -447,11 +447,11 @@ and animation of the character.</li>
 </span><span id="CharacterOnScreen-90"><a href="#CharacterOnScreen-90"><span class="linenos"> 90</span></a>    <span class="p">)</span>
 </span><span id="CharacterOnScreen-91"><a href="#CharacterOnScreen-91"><span class="linenos"> 91</span></a>    <span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 </span><span id="CharacterOnScreen-92"><a href="#CharacterOnScreen-92"><span class="linenos"> 92</span></a>
-</span><span id="CharacterOnScreen-93"><a href="#CharacterOnScreen-93"><span class="linenos"> 93</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen-93"><a href="#CharacterOnScreen-93"><span class="linenos"> 93</span></a>    <span class="nd">@property</span>
 </span><span id="CharacterOnScreen-94"><a href="#CharacterOnScreen-94"><span class="linenos"> 94</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="CharacterOnScreen-95"><a href="#CharacterOnScreen-95"><span class="linenos"> 95</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span>
 </span><span id="CharacterOnScreen-96"><a href="#CharacterOnScreen-96"><span class="linenos"> 96</span></a>
-</span><span id="CharacterOnScreen-97"><a href="#CharacterOnScreen-97"><span class="linenos"> 97</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen-97"><a href="#CharacterOnScreen-97"><span class="linenos"> 97</span></a>    <span class="nd">@property</span>
 </span><span id="CharacterOnScreen-98"><a href="#CharacterOnScreen-98"><span class="linenos"> 98</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="CharacterOnScreen-99"><a href="#CharacterOnScreen-99"><span class="linenos"> 99</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen-100"><a href="#CharacterOnScreen-100"><span class="linenos">100</span></a><span class="sd">        Get all visual elements associated with this character.</span>
@@ -465,7 +465,7 @@ and animation of the character.</li>
 </span><span id="CharacterOnScreen-108"><a href="#CharacterOnScreen-108"><span class="linenos">108</span></a>        <span class="c1"># TODO: add visuals.</span>
 </span><span id="CharacterOnScreen-109"><a href="#CharacterOnScreen-109"><span class="linenos">109</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="p">,)</span>
 </span><span id="CharacterOnScreen-110"><a href="#CharacterOnScreen-110"><span class="linenos">110</span></a>
-</span><span id="CharacterOnScreen-111"><a href="#CharacterOnScreen-111"><span class="linenos">111</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen-111"><a href="#CharacterOnScreen-111"><span class="linenos">111</span></a>    <span class="nd">@property</span>
 </span><span id="CharacterOnScreen-112"><a href="#CharacterOnScreen-112"><span class="linenos">112</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
 </span><span id="CharacterOnScreen-113"><a href="#CharacterOnScreen-113"><span class="linenos">113</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen-114"><a href="#CharacterOnScreen-114"><span class="linenos">114</span></a><span class="sd">        Get the character&#39;s main drawing representation.</span>
@@ -512,7 +512,7 @@ and animation of the character.</li>
 </span><span id="CharacterOnScreen-155"><a href="#CharacterOnScreen-155"><span class="linenos">155</span></a>        <span class="n">turned_character</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
 </span><span id="CharacterOnScreen-156"><a href="#CharacterOnScreen-156"><span class="linenos">156</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">turned_character</span><span class="p">,</span> <span class="n">_event_triggered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="CharacterOnScreen-157"><a href="#CharacterOnScreen-157"><span class="linenos">157</span></a>
-</span><span id="CharacterOnScreen-158"><a href="#CharacterOnScreen-158"><span class="linenos">158</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterOnScreen-158"><a href="#CharacterOnScreen-158"><span class="linenos">158</span></a>    <span class="nd">@property</span>
 </span><span id="CharacterOnScreen-159"><a href="#CharacterOnScreen-159"><span class="linenos">159</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="CharacterOnScreen-160"><a href="#CharacterOnScreen-160"><span class="linenos">160</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen-161"><a href="#CharacterOnScreen-161"><span class="linenos">161</span></a><span class="sd">        Complete the current event and return to normal state.</span>
@@ -607,7 +607,7 @@ participating in an event.</li>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.name"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.name-93"><a href="#CharacterOnScreen.name-93"><span class="linenos">93</span></a>    <span class="nd">@cached_property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.name-93"><a href="#CharacterOnScreen.name-93"><span class="linenos">93</span></a>    <span class="nd">@property</span>
 </span><span id="CharacterOnScreen.name-94"><a href="#CharacterOnScreen.name-94"><span class="linenos">94</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="CharacterOnScreen.name-95"><a href="#CharacterOnScreen.name-95"><span class="linenos">95</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span>
 </span></pre></div>
@@ -625,7 +625,7 @@ participating in an event.</li>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.character_and_visuals"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.character_and_visuals-97"><a href="#CharacterOnScreen.character_and_visuals-97"><span class="linenos"> 97</span></a>    <span class="nd">@cached_property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.character_and_visuals-97"><a href="#CharacterOnScreen.character_and_visuals-97"><span class="linenos"> 97</span></a>    <span class="nd">@property</span>
 </span><span id="CharacterOnScreen.character_and_visuals-98"><a href="#CharacterOnScreen.character_and_visuals-98"><span class="linenos"> 98</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">character_and_visuals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="CharacterOnScreen.character_and_visuals-99"><a href="#CharacterOnScreen.character_and_visuals-99"><span class="linenos"> 99</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen.character_and_visuals-100"><a href="#CharacterOnScreen.character_and_visuals-100"><span class="linenos">100</span></a><span class="sd">        Get all visual elements associated with this character.</span>
@@ -664,7 +664,7 @@ that should be rendered with the character.</p>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.draw_on_screen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.draw_on_screen-111"><a href="#CharacterOnScreen.draw_on_screen-111"><span class="linenos">111</span></a>    <span class="nd">@cached_property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.draw_on_screen-111"><a href="#CharacterOnScreen.draw_on_screen-111"><span class="linenos">111</span></a>    <span class="nd">@property</span>
 </span><span id="CharacterOnScreen.draw_on_screen-112"><a href="#CharacterOnScreen.draw_on_screen-112"><span class="linenos">112</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
 </span><span id="CharacterOnScreen.draw_on_screen-113"><a href="#CharacterOnScreen.draw_on_screen-113"><span class="linenos">113</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen.draw_on_screen-114"><a href="#CharacterOnScreen.draw_on_screen-114"><span class="linenos">114</span></a><span class="sd">        Get the character&#39;s main drawing representation.</span>
@@ -804,7 +804,7 @@ for dialogue or interactions.</p>
 
     </div>
     <a class="headerlink" href="#CharacterOnScreen.complete_event"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.complete_event-158"><a href="#CharacterOnScreen.complete_event-158"><span class="linenos">158</span></a>    <span class="nd">@cached_property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.complete_event-158"><a href="#CharacterOnScreen.complete_event-158"><span class="linenos">158</span></a>    <span class="nd">@property</span>
 </span><span id="CharacterOnScreen.complete_event-159"><a href="#CharacterOnScreen.complete_event-159"><span class="linenos">159</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="CharacterOnScreen.complete_event-160"><a href="#CharacterOnScreen.complete_event-160"><span class="linenos">160</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen.complete_event-161"><a href="#CharacterOnScreen.complete_event-161"><span class="linenos">161</span></a><span class="sd">        Complete the current event and return to normal state.</span>

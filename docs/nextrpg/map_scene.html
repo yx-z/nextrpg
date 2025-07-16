@@ -251,7 +251,7 @@ detection, NPC management, and scene transitions between different map areas.</p
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_debug_visuals</span>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="p">)</span>
 </span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>    <span class="nd">@property</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">map_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MapHelper</span><span class="p">:</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">        Get the map helper for this scene.</span>
@@ -723,7 +723,7 @@ detection, NPC management, and scene transitions between different map areas.</p
 </span><span id="MapScene-113"><a href="#MapScene-113"><span class="linenos">113</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_debug_visuals</span>
 </span><span id="MapScene-114"><a href="#MapScene-114"><span class="linenos">114</span></a>    <span class="p">)</span>
 </span><span id="MapScene-115"><a href="#MapScene-115"><span class="linenos">115</span></a>
-</span><span id="MapScene-116"><a href="#MapScene-116"><span class="linenos">116</span></a>    <span class="nd">@cached_property</span>
+</span><span id="MapScene-116"><a href="#MapScene-116"><span class="linenos">116</span></a>    <span class="nd">@property</span>
 </span><span id="MapScene-117"><a href="#MapScene-117"><span class="linenos">117</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">map_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MapHelper</span><span class="p">:</span>
 </span><span id="MapScene-118"><a href="#MapScene-118"><span class="linenos">118</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="MapScene-119"><a href="#MapScene-119"><span class="linenos">119</span></a><span class="sd">        Get the map helper for this scene.</span>
@@ -1141,7 +1141,7 @@ specification.</li>
 
     </div>
     <a class="headerlink" href="#MapScene.map_helper"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MapScene.map_helper-116"><a href="#MapScene.map_helper-116"><span class="linenos">116</span></a>    <span class="nd">@cached_property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MapScene.map_helper-116"><a href="#MapScene.map_helper-116"><span class="linenos">116</span></a>    <span class="nd">@property</span>
 </span><span id="MapScene.map_helper-117"><a href="#MapScene.map_helper-117"><span class="linenos">117</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">map_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MapHelper</span><span class="p">:</span>
 </span><span id="MapScene.map_helper-118"><a href="#MapScene.map_helper-118"><span class="linenos">118</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="MapScene.map_helper-119"><a href="#MapScene.map_helper-119"><span class="linenos">119</span></a><span class="sd">        Get the map helper for this scene.</span>

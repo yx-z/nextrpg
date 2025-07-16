@@ -47,7 +47,7 @@ class Coordinate(namedtuple("Coordinate", "left top")):
     left: Pixel
     top: Pixel
 
-    @cached_property
+    @property
     def negate(self) -> Self:
         """
         Get the negated coordinate.

@@ -89,11 +89,11 @@ class CharacterOnScreen:
     )
     _event_triggered: bool = False
 
-    @cached_property
+    @property
     def name(self) -> str:
         return self.spec.display_name
 
-    @cached_property
+    @property
     def character_and_visuals(self) -> tuple[DrawOnScreen, ...]:
         """
         Get all visual elements associated with this character.
@@ -107,7 +107,7 @@ class CharacterOnScreen:
         # TODO: add visuals.
         return (self.draw_on_screen,)
 
-    @cached_property
+    @property
     def draw_on_screen(self) -> DrawOnScreen:
         """
         Get the character's main drawing representation.
@@ -154,7 +154,7 @@ class CharacterOnScreen:
         turned_character = self.character.turn(direction)
         return replace(self, character=turned_character, _event_triggered=True)
 
-    @cached_property
+    @property
     def complete_event(self) -> Self:
         """
         Complete the current event and return to normal state.

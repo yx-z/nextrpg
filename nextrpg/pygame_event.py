@@ -64,7 +64,7 @@ class GuiResize(PygameEvent):
         `size`: The new size of the window.
     """
 
-    @cached_property
+    @property
     def size(self) -> Size:
         """
         Get the new window size from the resize event.
@@ -137,7 +137,7 @@ class _KeyPressEvent(PygameEvent):
     key release events.
     """
 
-    @cached_property
+    @property
     def key(self) -> KeyboardKey | KeyCode:
         """
         Get the key associated with this event.

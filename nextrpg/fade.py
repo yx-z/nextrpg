@@ -12,6 +12,7 @@ Features:
     - Integration with transition system
 """
 
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import Self, override
@@ -28,7 +29,7 @@ from nextrpg.model import export
 
 @export
 @dataclass(frozen=True)
-class Fade:
+class Fade(ABC):
     """
     Fade effect for transitioning drawing resources.
 
@@ -49,7 +50,7 @@ class Fade:
     )
     _elapsed: Millisecond = 0
 
-    @cached_property
+    @property
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         """
         Get the current drawing resources for rendering.
@@ -88,7 +89,7 @@ class Fade:
         resource = tuple(d.set_alpha(alpha) for d in self.resource)
         return replace(self, _elapsed=elapsed, resource=resource)
 
-    @cached_property
+    @property
     def complete(self) -> bool:
         """
         Check if the fade effect has completed.
@@ -98,7 +99,8 @@ class Fade:
         """
         return self._elapsed >= self.duration
 
-    @cached_property
+    @property
+    @abstractmethod
     def _start(self) -> tuple[DrawOnScreen, ...]:
         """
         Get the initial drawing state (empty).
@@ -106,9 +108,9 @@ class Fade:
         Returns:
             Empty drawing tuple.
         """
-        return ()
 
-    @cached_property
+    @property
+    @abstractmethod
     def _complete(self) -> tuple[DrawOnScreen, ...]:
         """
         Get the final drawing state (empty).
@@ -116,9 +118,9 @@ class Fade:
         Returns:
             Empty drawing tuple.
         """
-        return ()
 
-    @cached_property
+    @property
+    @abstractmethod
     def _percentage(self) -> float:
         """
         Get the fade completion percentage.
@@ -126,7 +128,6 @@ class Fade:
         Returns:
             The fade completion percentage (0.0 to 1.0).
         """
-        return 0
 
 
 @export
@@ -138,16 +139,15 @@ class FadeIn(Fade):
     This class provides fade-in effect functionality that gradually increases
     the alpha transparency of drawing resources over time, making them appear
     from transparent to fully opaque.
-
-    Arguments:
-        _complete: The final drawing state (fully opaque resources).
-            Automatically initialized to the input resources.
     """
 
-    _complete: tuple[DrawOnScreen] = instance_init(lambda self: self.resource)
+    @override
+    @property
+    def _complete(self) -> tuple[DrawOnScreen, ...]:
+        return self.resource
 
     @override
-    @cached_property
+    @property
     def _start(self) -> tuple[DrawOnScreen, ...]:
         """
         Get the initial drawing state (empty).
@@ -158,7 +158,7 @@ class FadeIn(Fade):
         return ()
 
     @override
-    @cached_property
+    @property
     def _percentage(self) -> float:
         """
         Get the fade-in completion percentage.
@@ -181,16 +181,10 @@ class FadeOut(Fade):
     This class provides fade-out effect functionality that gradually decreases
     the alpha transparency of drawing resources over time, making them disappear
     from fully opaque to transparent.
-
-    Arguments:
-        _start: The initial drawing state (fully opaque resources).
-            Automatically initialized to the input resources.
     """
 
-    _start: tuple[DrawOnScreen, ...] = instance_init(lambda self: self.resource)
-
     @override
-    @cached_property
+    @property
     def _percentage(self) -> float:
         """
         Get the fade-out completion percentage.
@@ -205,7 +199,7 @@ class FadeOut(Fade):
         return remaining / self.duration
 
     @override
-    @cached_property
+    @property
     def _complete(self) -> tuple[DrawOnScreen, ...]:
         """
         Get the final drawing state (empty).
@@ -214,3 +208,8 @@ class FadeOut(Fade):
             Empty drawing tuple.
         """
         return ()
+
+    @override
+    @property
+    def _start(self) -> tuple[DrawOnScreen, ...]:
+        return self.resource

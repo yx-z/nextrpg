@@ -171,7 +171,7 @@ state management during movement.</p>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_speed</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>    <span class="p">)</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="nd">@property</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="nd">@abstractmethod</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -409,7 +409,7 @@ state management during movement.</p>
 </span><span id="MovingCharacterOnScreen-65"><a href="#MovingCharacterOnScreen-65"><span class="linenos"> 65</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">move_speed</span>
 </span><span id="MovingCharacterOnScreen-66"><a href="#MovingCharacterOnScreen-66"><span class="linenos"> 66</span></a>    <span class="p">)</span>
 </span><span id="MovingCharacterOnScreen-67"><a href="#MovingCharacterOnScreen-67"><span class="linenos"> 67</span></a>
-</span><span id="MovingCharacterOnScreen-68"><a href="#MovingCharacterOnScreen-68"><span class="linenos"> 68</span></a>    <span class="nd">@cached_property</span>
+</span><span id="MovingCharacterOnScreen-68"><a href="#MovingCharacterOnScreen-68"><span class="linenos"> 68</span></a>    <span class="nd">@property</span>
 </span><span id="MovingCharacterOnScreen-69"><a href="#MovingCharacterOnScreen-69"><span class="linenos"> 69</span></a>    <span class="nd">@abstractmethod</span>
 </span><span id="MovingCharacterOnScreen-70"><a href="#MovingCharacterOnScreen-70"><span class="linenos"> 70</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="MovingCharacterOnScreen-71"><a href="#MovingCharacterOnScreen-71"><span class="linenos"> 71</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -644,7 +644,7 @@ Defaults to the global character configuration.</li>
 
     </div>
     <a class="headerlink" href="#MovingCharacterOnScreen.moving"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingCharacterOnScreen.moving-68"><a href="#MovingCharacterOnScreen.moving-68"><span class="linenos">68</span></a>    <span class="nd">@cached_property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingCharacterOnScreen.moving-68"><a href="#MovingCharacterOnScreen.moving-68"><span class="linenos">68</span></a>    <span class="nd">@property</span>
 </span><span id="MovingCharacterOnScreen.moving-69"><a href="#MovingCharacterOnScreen.moving-69"><span class="linenos">69</span></a>    <span class="nd">@abstractmethod</span>
 </span><span id="MovingCharacterOnScreen.moving-70"><a href="#MovingCharacterOnScreen.moving-70"><span class="linenos">70</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="MovingCharacterOnScreen.moving-71"><a href="#MovingCharacterOnScreen.moving-71"><span class="linenos">71</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

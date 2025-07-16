@@ -600,7 +600,7 @@ class Rectangle(Polygon):
         """
         return self.top_left.top
 
-    @cached_property
+    @property
     def bottom(self) -> Pixel:
         """
         Gets the bottommost y-coordinate of the rectangle.
@@ -691,7 +691,7 @@ class Rectangle(Polygon):
         width, height = self.size
         return Coordinate(self.left + width / 2, self.top + height / 2)
 
-    @cached_property
+    @property
     def points(self) -> tuple[Coordinate, ...]:
         """
         Get the coordinates of the corners of the rectangle.

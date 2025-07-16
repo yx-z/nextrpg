@@ -13,7 +13,6 @@ The say event configuration features:
 """
 
 from dataclasses import dataclass, replace
-from functools import cached_property
 
 from nextrpg.core import BLACK, WHITE, Millisecond, Pixel, Rgba
 from nextrpg.model import export
@@ -45,7 +44,7 @@ class SayEventConfig:
     padding: Pixel = 16
     fade_duration: Millisecond = 200
 
-    @cached_property
+    @property
     def text(self) -> TextConfig:
         """
         Get the text configuration for say events.

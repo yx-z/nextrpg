@@ -112,7 +112,7 @@ class MapScene(EventfulScene, TransitioningScene):
         lambda self: self._init_debug_visuals
     )
 
-    @cached_property
+    @property
     def map_helper(self) -> MapHelper:
         """
         Get the map helper for this scene.

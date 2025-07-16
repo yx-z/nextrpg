@@ -133,7 +133,7 @@ class TransitionScene(Scene):
             d.set_alpha(alpha) for d in self.intermediary.draw_on_screens
         )
 
-    @cached_property
+    @property
     def _half_duration(self) -> Millisecond:
         """
         Get half of the transition duration.

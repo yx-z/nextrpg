@@ -248,7 +248,7 @@ player-specific behaviors.</p>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span> <span class="o">|</span> <span class="p">{</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">}</span>
 </span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span> <span class="o">-</span> <span class="p">{</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">}</span>
 </span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="nd">@property</span>
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>    <span class="nd">@override</span>
 </span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -481,7 +481,7 @@ player-specific behaviors.</p>
 </span><span id="PlayerOnScreen-156"><a href="#PlayerOnScreen-156"><span class="linenos">156</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span> <span class="o">|</span> <span class="p">{</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">}</span>
 </span><span id="PlayerOnScreen-157"><a href="#PlayerOnScreen-157"><span class="linenos">157</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_movement_keys</span> <span class="o">-</span> <span class="p">{</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">}</span>
 </span><span id="PlayerOnScreen-158"><a href="#PlayerOnScreen-158"><span class="linenos">158</span></a>
-</span><span id="PlayerOnScreen-159"><a href="#PlayerOnScreen-159"><span class="linenos">159</span></a>    <span class="nd">@cached_property</span>
+</span><span id="PlayerOnScreen-159"><a href="#PlayerOnScreen-159"><span class="linenos">159</span></a>    <span class="nd">@property</span>
 </span><span id="PlayerOnScreen-160"><a href="#PlayerOnScreen-160"><span class="linenos">160</span></a>    <span class="nd">@override</span>
 </span><span id="PlayerOnScreen-161"><a href="#PlayerOnScreen-161"><span class="linenos">161</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="PlayerOnScreen-162"><a href="#PlayerOnScreen-162"><span class="linenos">162</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -738,7 +738,7 @@ the character's direction based on currently pressed keys.</p>
 
     </div>
     <a class="headerlink" href="#PlayerOnScreen.moving"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen.moving-159"><a href="#PlayerOnScreen.moving-159"><span class="linenos">159</span></a>    <span class="nd">@cached_property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PlayerOnScreen.moving-159"><a href="#PlayerOnScreen.moving-159"><span class="linenos">159</span></a>    <span class="nd">@property</span>
 </span><span id="PlayerOnScreen.moving-160"><a href="#PlayerOnScreen.moving-160"><span class="linenos">160</span></a>    <span class="nd">@override</span>
 </span><span id="PlayerOnScreen.moving-161"><a href="#PlayerOnScreen.moving-161"><span class="linenos">161</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="PlayerOnScreen.moving-162"><a href="#PlayerOnScreen.moving-162"><span class="linenos">162</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

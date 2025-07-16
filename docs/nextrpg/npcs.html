@@ -480,7 +480,7 @@ management for player-NPC interactions.</p>
 </span><span id="L-304"><a href="#L-304"><span class="linenos">304</span></a>        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
 </span><span id="L-305"><a href="#L-305"><span class="linenos">305</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clear_event</span>
 </span><span id="L-306"><a href="#L-306"><span class="linenos">306</span></a>
-</span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-307"><a href="#L-307"><span class="linenos">307</span></a>    <span class="nd">@property</span>
 </span><span id="L-308"><a href="#L-308"><span class="linenos">308</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_clear_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-309"><a href="#L-309"><span class="linenos">309</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the current event and return to normal scene state.</span>
 </span><span id="L-310"><a href="#L-310"><span class="linenos">310</span></a>
@@ -1006,7 +1006,7 @@ the interface for player-NPC interactions and event handling.</p>
 </span><span id="EventfulScene-305"><a href="#EventfulScene-305"><span class="linenos">305</span></a>        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
 </span><span id="EventfulScene-306"><a href="#EventfulScene-306"><span class="linenos">306</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clear_event</span>
 </span><span id="EventfulScene-307"><a href="#EventfulScene-307"><span class="linenos">307</span></a>
-</span><span id="EventfulScene-308"><a href="#EventfulScene-308"><span class="linenos">308</span></a>    <span class="nd">@cached_property</span>
+</span><span id="EventfulScene-308"><a href="#EventfulScene-308"><span class="linenos">308</span></a>    <span class="nd">@property</span>
 </span><span id="EventfulScene-309"><a href="#EventfulScene-309"><span class="linenos">309</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_clear_event</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="EventfulScene-310"><a href="#EventfulScene-310"><span class="linenos">310</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear the current event and return to normal scene state.</span>
 </span><span id="EventfulScene-311"><a href="#EventfulScene-311"><span class="linenos">311</span></a>

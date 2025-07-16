@@ -42,7 +42,7 @@ class CharacterDrawing(ABC):
 
     direction: Direction
 
-    @cached_property
+    @property
     @abstractmethod
     def drawing(self) -> Drawing:
         """

@@ -145,7 +145,7 @@ class _GameLoop:
     _gui: Gui = field(default_factory=Gui)
     _scene: Scene = instance_init(lambda self: self.entry_scene())
 
-    @cached_property
+    @property
     def tick(self) -> Self:
         """
         Execute one tick of the game loop.

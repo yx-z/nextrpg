@@ -304,7 +304,7 @@ class EventfulScene(Scene):
         except StopIteration:
             return self._clear_event
 
-    @cached_property
+    @property
     def _clear_event(self) -> Self:
         """Clear the current event and return to normal scene state.
 

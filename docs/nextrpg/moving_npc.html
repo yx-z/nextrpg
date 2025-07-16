@@ -188,7 +188,7 @@ NPC-specific pathing, idle/move timers, and walk cycles.</p>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>            <span class="n">_moving</span><span class="o">=</span><span class="n">moving</span><span class="p">,</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>        <span class="p">)</span>
 </span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>    <span class="nd">@property</span>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="nd">@override</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>        <span class="k">return</span> <span class="p">(</span>
@@ -298,7 +298,7 @@ NPC-specific pathing, idle/move timers, and walk cycles.</p>
 </span><span id="MovingNpcOnScreen-89"><a href="#MovingNpcOnScreen-89"><span class="linenos"> 89</span></a>            <span class="n">_moving</span><span class="o">=</span><span class="n">moving</span><span class="p">,</span>
 </span><span id="MovingNpcOnScreen-90"><a href="#MovingNpcOnScreen-90"><span class="linenos"> 90</span></a>        <span class="p">)</span>
 </span><span id="MovingNpcOnScreen-91"><a href="#MovingNpcOnScreen-91"><span class="linenos"> 91</span></a>
-</span><span id="MovingNpcOnScreen-92"><a href="#MovingNpcOnScreen-92"><span class="linenos"> 92</span></a>    <span class="nd">@cached_property</span>
+</span><span id="MovingNpcOnScreen-92"><a href="#MovingNpcOnScreen-92"><span class="linenos"> 92</span></a>    <span class="nd">@property</span>
 </span><span id="MovingNpcOnScreen-93"><a href="#MovingNpcOnScreen-93"><span class="linenos"> 93</span></a>    <span class="nd">@override</span>
 </span><span id="MovingNpcOnScreen-94"><a href="#MovingNpcOnScreen-94"><span class="linenos"> 94</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="MovingNpcOnScreen-95"><a href="#MovingNpcOnScreen-95"><span class="linenos"> 95</span></a>        <span class="k">return</span> <span class="p">(</span>
@@ -466,7 +466,7 @@ state current.</p>
 
     </div>
     <a class="headerlink" href="#MovingNpcOnScreen.moving"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingNpcOnScreen.moving-92"><a href="#MovingNpcOnScreen.moving-92"><span class="linenos">92</span></a>    <span class="nd">@cached_property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingNpcOnScreen.moving-92"><a href="#MovingNpcOnScreen.moving-92"><span class="linenos">92</span></a>    <span class="nd">@property</span>
 </span><span id="MovingNpcOnScreen.moving-93"><a href="#MovingNpcOnScreen.moving-93"><span class="linenos">93</span></a>    <span class="nd">@override</span>
 </span><span id="MovingNpcOnScreen.moving-94"><a href="#MovingNpcOnScreen.moving-94"><span class="linenos">94</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 </span><span id="MovingNpcOnScreen.moving-95"><a href="#MovingNpcOnScreen.moving-95"><span class="linenos">95</span></a>        <span class="k">return</span> <span class="p">(</span>

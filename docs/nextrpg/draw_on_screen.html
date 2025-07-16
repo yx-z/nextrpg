@@ -832,7 +832,7 @@ screen, and handling various drawing operations.</p>
 </span><span id="L-600"><a href="#L-600"><span class="linenos">600</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-601"><a href="#L-601"><span class="linenos">601</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
 </span><span id="L-602"><a href="#L-602"><span class="linenos">602</span></a>
-</span><span id="L-603"><a href="#L-603"><span class="linenos">603</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-603"><a href="#L-603"><span class="linenos">603</span></a>    <span class="nd">@property</span>
 </span><span id="L-604"><a href="#L-604"><span class="linenos">604</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
 </span><span id="L-605"><a href="#L-605"><span class="linenos">605</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-606"><a href="#L-606"><span class="linenos">606</span></a><span class="sd">        Gets the bottommost y-coordinate of the rectangle.</span>
@@ -923,7 +923,7 @@ screen, and handling various drawing operations.</p>
 </span><span id="L-691"><a href="#L-691"><span class="linenos">691</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
 </span><span id="L-692"><a href="#L-692"><span class="linenos">692</span></a>        <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 </span><span id="L-693"><a href="#L-693"><span class="linenos">693</span></a>
-</span><span id="L-694"><a href="#L-694"><span class="linenos">694</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-694"><a href="#L-694"><span class="linenos">694</span></a>    <span class="nd">@property</span>
 </span><span id="L-695"><a href="#L-695"><span class="linenos">695</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="L-696"><a href="#L-696"><span class="linenos">696</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-697"><a href="#L-697"><span class="linenos">697</span></a><span class="sd">        Get the coordinates of the corners of the rectangle.</span>
@@ -2814,7 +2814,7 @@ back to the first point.</p>
 </span><span id="Rectangle-601"><a href="#Rectangle-601"><span class="linenos">601</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Rectangle-602"><a href="#Rectangle-602"><span class="linenos">602</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
 </span><span id="Rectangle-603"><a href="#Rectangle-603"><span class="linenos">603</span></a>
-</span><span id="Rectangle-604"><a href="#Rectangle-604"><span class="linenos">604</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Rectangle-604"><a href="#Rectangle-604"><span class="linenos">604</span></a>    <span class="nd">@property</span>
 </span><span id="Rectangle-605"><a href="#Rectangle-605"><span class="linenos">605</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
 </span><span id="Rectangle-606"><a href="#Rectangle-606"><span class="linenos">606</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Rectangle-607"><a href="#Rectangle-607"><span class="linenos">607</span></a><span class="sd">        Gets the bottommost y-coordinate of the rectangle.</span>
@@ -2905,7 +2905,7 @@ back to the first point.</p>
 </span><span id="Rectangle-692"><a href="#Rectangle-692"><span class="linenos">692</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
 </span><span id="Rectangle-693"><a href="#Rectangle-693"><span class="linenos">693</span></a>        <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 </span><span id="Rectangle-694"><a href="#Rectangle-694"><span class="linenos">694</span></a>
-</span><span id="Rectangle-695"><a href="#Rectangle-695"><span class="linenos">695</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Rectangle-695"><a href="#Rectangle-695"><span class="linenos">695</span></a>    <span class="nd">@property</span>
 </span><span id="Rectangle-696"><a href="#Rectangle-696"><span class="linenos">696</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="Rectangle-697"><a href="#Rectangle-697"><span class="linenos">697</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Rectangle-698"><a href="#Rectangle-698"><span class="linenos">698</span></a><span class="sd">        Get the coordinates of the corners of the rectangle.</span>
@@ -3207,7 +3207,7 @@ width and height.</li>
 
     </div>
     <a class="headerlink" href="#Rectangle.bottom"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.bottom-604"><a href="#Rectangle.bottom-604"><span class="linenos">604</span></a>    <span class="nd">@cached_property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.bottom-604"><a href="#Rectangle.bottom-604"><span class="linenos">604</span></a>    <span class="nd">@property</span>
 </span><span id="Rectangle.bottom-605"><a href="#Rectangle.bottom-605"><span class="linenos">605</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
 </span><span id="Rectangle.bottom-606"><a href="#Rectangle.bottom-606"><span class="linenos">606</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Rectangle.bottom-607"><a href="#Rectangle.bottom-607"><span class="linenos">607</span></a><span class="sd">        Gets the bottommost y-coordinate of the rectangle.</span>
@@ -3496,7 +3496,7 @@ width and height.</li>
 
     </div>
     <a class="headerlink" href="#Rectangle.points"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.points-695"><a href="#Rectangle.points-695"><span class="linenos">695</span></a>    <span class="nd">@cached_property</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.points-695"><a href="#Rectangle.points-695"><span class="linenos">695</span></a>    <span class="nd">@property</span>
 </span><span id="Rectangle.points-696"><a href="#Rectangle.points-696"><span class="linenos">696</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Coordinate</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="Rectangle.points-697"><a href="#Rectangle.points-697"><span class="linenos">697</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Rectangle.points-698"><a href="#Rectangle.points-698"><span class="linenos">698</span></a><span class="sd">        Get the coordinates of the corners of the rectangle.</span>
