@@ -1,9 +1,9 @@
 """
-Text rendering and layout utilities for NextRPG.
+Text rendering and layout utilities for `NextRPG`.
 
-This module provides text rendering capabilities for NextRPG games.
-It includes the `Text` class which handles text layout, sizing,
-and line management for multi-line text rendering.
+This module provides text rendering capabilities for `NextRPG` games. It
+includes the `Text` class which handles text layout, sizing, and line
+management for multi-line text rendering.
 
 The text system features:
 - Multi-line text support with automatic line wrapping
@@ -11,22 +11,6 @@ The text system features:
 - Automatic text sizing and layout calculations
 - Line height and spacing management
 - Integration with the global configuration system
-
-Example:
-    ```python
-    from nextrpg.text import Text
-    from nextrpg.text_config import TextConfig
-
-    # Create text with default config
-    text = Text("Hello, World!")
-
-    # Create text with custom config
-    config = TextConfig(font=Font(16), line_spacing=5)
-    custom_text = Text("Multi-line\ntext message", config=config)
-
-    # Get text dimensions
-    size = text.size  # Returns Size(width, height)
-    ```
 """
 
 from dataclasses import dataclass, field
@@ -44,33 +28,16 @@ class Text:
     """
     Represents a text message with layout and sizing capabilities.
 
-    This class provides text rendering functionality with support for
-    multi-line text, automatic sizing, and configurable styling.
-    It handles text layout calculations and provides properties for
-    accessing text dimensions and line information.
+    This class provides text rendering functionality with support for multi-line
+    text, automatic sizing, and configurable styling. It handles text layout
+    calculations and provides properties for accessing text dimensions and line
+    information.
 
     Arguments:
-        `message`: The text message to be rendered. Can contain
-            newline characters for multi-line text.
-
-        `config`: The text configuration including font and styling
-            options. Defaults to the global text configuration.
-
-    Example:
-        ```python
-        from nextrpg.text import Text
-        from nextrpg.text_config import TextConfig
-
-        # Simple text
-        text = Text("Hello, World!")
-
-        # Multi-line text
-        multi_text = Text("Line 1\nLine 2\nLine 3")
-
-        # Custom styling
-        config = TextConfig(font=Font(24), line_spacing=10)
-        styled_text = Text("Styled text", config=config)
-        ```
+        `message`: The text message to be rendered. Can contain newline
+            characters for multi-line text.
+        `config`: The text configuration including font and styling options.
+            Defaults to the global text configuration.
     """
 
     message: str

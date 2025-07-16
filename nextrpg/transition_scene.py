@@ -1,44 +1,25 @@
 """
-Transition scene system for NextRPG.
+Transition scene system for `NextRPG`.
 
-This module provides transition scene functionality for smooth
-scene changes in NextRPG games. It includes the `TransitionScene`
-class which handles crossfade transitions between scenes.
+This module provides transition scene functionality for smooth scene changes in
+`NextRPG` games. It includes the `TransitionScene` class which handles
+crossfade transitions between scenes.
 
 The transition scene system features:
 - Crossfade transitions between scenes
 - Configurable transition duration
 - Alpha-based blending
 - Intermediary scene support
-
-Example:
-    ```python
-    from nextrpg.transition_scene import TransitionScene
-    from nextrpg.scene import Scene
-    from nextrpg.core import Millisecond
-
-    # Create transition scene
-    transition = TransitionScene(
-        from_scene=current_scene,
-        intermediary=intermediary_scene,
-        to_scene=next_scene,
-        duration=Millisecond(1000)
-    )
-
-    # Update transition in game loop
-    scene = transition.tick(time_delta)
-    ```
 """
 
 from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.model import not_constructor_below
 from nextrpg.core import Alpha, Millisecond, alpha_from_percentage
 from nextrpg.draw_on_screen import DrawOnScreen
 from nextrpg.global_config import config
-from nextrpg.model import export
+from nextrpg.model import export, not_constructor_below
 from nextrpg.scene import Scene
 
 
@@ -47,17 +28,8 @@ class TransitioningScene(Scene):
     """
     Base class for scenes that support transitions.
 
-    This class provides a base for scenes that can participate
-    in transitions. It includes a method for updating without
-    triggering transition effects.
-
-    Example:
-        ```python
-        class MyScene(TransitioningScene):
-            def tick_without_transition(self, time_delta):
-                # Update scene without transition effects
-                return self
-        ```
+    This class provides a base for scenes that can participate in transitions.
+    It includes a method for updating without triggering transition effects.
     """
 
     def tick_without_transition(self, time_delta: Millisecond) -> Self:
@@ -79,39 +51,17 @@ class TransitionScene(Scene):
     """
     Scene that handles transitions between other scenes.
 
-    This class provides crossfade transition functionality between
-    scenes. It manages the transition timing and alpha blending
-    of drawing resources from multiple scenes.
+    This class provides crossfade transition functionality between scenes. It
+    manages the transition timing and alpha blending of drawing resources from
+    multiple scenes.
 
     Arguments:
         `from_scene`: The scene to transition from.
-
         `intermediary`: The intermediary scene used during transition.
-
         `to_scene`: The scene to transition to.
-
-        `duration`: The duration of the transition in milliseconds.
-            Defaults to the global transition duration.
-
+        `duration`: The duration of the transition in milliseconds. Defaults to
+            the global transition duration.
         `_elapsed`: Internal elapsed time tracking.
-
-    Example:
-        ```python
-        from nextrpg.transition_scene import TransitionScene
-        from nextrpg.scene import Scene
-        from nextrpg.core import Millisecond
-
-        # Create transition scene
-        transition = TransitionScene(
-            from_scene=current_scene,
-            intermediary=intermediary_scene,
-            to_scene=next_scene,
-            duration=Millisecond(2000)
-        )
-
-        # Update in game loop
-        scene = transition.tick(time_delta)
-        ```
     """
 
     from_scene: TransitioningScene

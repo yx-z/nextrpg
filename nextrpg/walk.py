@@ -1,10 +1,10 @@
 """
-Path-based walking system for NextRPG.
+Path-based walking system for `NextRPG`.
 
-This module provides a sophisticated walking system that allows characters
-and objects to follow predefined paths with configurable movement speeds.
-The system supports both linear and cyclic paths, with smooth movement
-interpolation between path points.
+This module provides a sophisticated walking system that allows characters and
+objects to follow predefined paths with configurable movement speeds. The system
+supports both linear and cyclic paths, with smooth movement interpolation
+between path points.
 
 The walking system includes:
 - Path-based movement along polygon paths
@@ -14,29 +14,8 @@ The walking system includes:
 - Direction calculation based on movement
 - Completion detection for linear paths
 
-The system is designed to work seamlessly with the character movement
-and animation systems, providing realistic path-following behavior.
-
-Example:
-    ```python
-    from nextrpg.walk import Walk
-    from nextrpg.draw_on_screen import Polygon
-    from nextrpg.coordinate import Coordinate
-
-    # Create a path
-    path = Polygon([
-        Coordinate(0, 0),
-        Coordinate(100, 0),
-        Coordinate(100, 100),
-        Coordinate(0, 100)
-    ])
-
-    # Create a walk instance
-    walk = Walk(path=path, move_speed=50, cyclic=True)
-
-    # Update movement
-    walk = walk.tick(time_delta)
-    ```
+The system is designed to work seamlessly with the character movement and
+animation systems, providing realistic path-following behavior.
 """
 
 from dataclasses import KW_ONLY, replace
@@ -60,58 +39,26 @@ class Walk:
     """
     Path-based walking system for characters and objects.
 
-    This class provides a complete walking system that allows entities
-    to follow predefined paths with smooth movement. It supports both
-    linear paths (with completion) and cyclic paths (looping).
+    This class provides a complete walking system that allows entities to follow
+    predefined paths with smooth movement. It supports both linear paths (with
+    completion) and cyclic paths (looping).
 
-    The walking system calculates movement based on time deltas and
-    movement speed, providing smooth interpolation between path points.
-    It also tracks direction changes for animation purposes.
+    The walking system calculates movement based on time deltas and movement
+    speed, providing smooth interpolation between path points. It also tracks
+    direction changes for animation purposes.
 
     Arguments:
         `path`: The polygon path to follow.
-
         `move_speed`: Movement speed in pixels per millisecond.
-
-        `cyclic`: Whether the path should loop continuously.
-            If `True`, the walk will restart from the beginning
-            when reaching the end. If `False`, the walk will
-            complete when reaching the end.
-
-        `coordinate`: Current position on the path. Automatically
-            initialized to the path's starting point.
-
+        `cyclic`: Whether the path should loop continuously. If `True`, the walk
+            will restart from the beginning when reaching the end. If `False`,
+            the walk will complete when reaching the end.
+        `coordinate`: Current position on the path. Automatically initialized to
+            the path's starting point.
         `_last_coordinate`: Previous position for direction calculation.
             Automatically initialized to the path's starting point.
-
         `_index`: Current path point index.
-
         `_last_index`: Previous path point index.
-
-    Example:
-        ```python
-        from nextrpg.walk import Walk
-        from nextrpg.draw_on_screen import Polygon
-        from nextrpg.coordinate import Coordinate
-
-        # Create a simple rectangular path
-        path = Polygon([
-            Coordinate(0, 0),
-            Coordinate(100, 0),
-            Coordinate(100, 100),
-            Coordinate(0, 100)
-        ])
-
-        # Create a cyclic walk
-        walk = Walk(path=path, move_speed=50, cyclic=True)
-
-        # Update in game loop
-        walk = walk.tick(time_delta)
-
-        # Check if completed (for non-cyclic paths)
-        if walk.completed:
-            print("Walk finished!")
-        ```
     """
 
     path: Polygon
