@@ -1,8 +1,8 @@
 """
-Core types and utilities used throughout the NextRPG framework.
+Core types and utilities used throughout the `nextrpg` framework.
 
 This module provides fundamental data structures and utilities that are
-referenced across the entire NextRPG framework. It includes:
+referenced across the entire `nextrpg` framework. It includes:
 
 - Color representation (`Rgba`)
 - Directional movement (`Direction`, `DirectionalOffset`)
@@ -11,22 +11,8 @@ referenced across the entire NextRPG framework. It includes:
 - Timer utilities (`Timer`)
 - Type aliases for common concepts
 
-These types form the foundation for character movement, drawing,
-and game mechanics throughout the framework.
-
-Example:
-    ```python
-    from nextrpg.core import Direction, Size, Rgba
-
-    # Create a size for a sprite
-    sprite_size = Size(32, 32)
-
-    # Define a color
-    red_color = Rgba(255, 0, 0, 255)
-
-    # Use directions for movement
-    movement = Direction.UP
-    ```
+These types form the foundation for character movement, drawing, and game
+mechanics throughout the framework.
 """
 
 from collections import namedtuple
@@ -54,21 +40,15 @@ def alpha_from_percentage(percentage: float) -> Alpha:
     """
     Convert a percentage value to an alpha channel value.
 
-    Converts a percentage (0.0 to 1.0) to an alpha channel value
-    (0 to 255) for transparency calculations.
+    Converts a percentage (0.0 to 1.0) to an alpha channel value (0 to 255) for
+    transparency calculations.
 
     Arguments:
-        `percentage`: A float between 0.0 and 1.0 representing
-            the transparency percentage.
+        percentage: A float between 0.0 and 1.0 representing the transparency
+            percentage.
 
     Returns:
-        `Alpha`: An integer between 0 and 255 representing the
-            alpha channel value.
-
-    Example:
-        ```python
-        alpha = alpha_from_percentage(0.5)  # Returns 127
-        ```
+        An integer between 0 and 255 representing the alpha channel value.
     """
     return int(255 * percentage)
 

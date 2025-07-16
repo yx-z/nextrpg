@@ -73,59 +73,83 @@
                     <h1 class="modulename">
 <a href="./../nextrpg.html">nextrpg</a><wbr>.key_mapping_config    </h1>
 
-                
+                        <div class="docstring"><p>Key mapping configuration system for <code><a href="../nextrpg.html">nextrpg</a></code>.</p>
+
+<p>This module provides configuration options for keyboard key mappings in <code><a href="../nextrpg.html">nextrpg</a></code>
+games. It includes the <code><a href="#KeyMappingConfig">KeyMappingConfig</a></code> class for mapping game actions to
+keyboard keys.</p>
+
+<h6 id="features">Features:</h6>
+
+<blockquote>
+  <ul>
+  <li>Type alias for key codes</li>
+  <li>Configurable key mappings for movement and actions</li>
+  <li>Integration with input handling system</li>
+  </ul>
+</blockquote>
+</div>
+
                         <input id="mod-key_mapping_config-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-key_mapping_config-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame</span><span class="w"> </span><span class="kn">import</span> <span class="n">K_RETURN</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.locals</span><span class="w"> </span><span class="kn">import</span> <span class="n">K_DOWN</span><span class="p">,</span> <span class="n">K_F1</span><span class="p">,</span> <span class="n">K_LEFT</span><span class="p">,</span> <span class="n">K_RIGHT</span><span class="p">,</span> <span class="n">K_UP</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">Key mapping configuration system for `nextrpg`.</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">This module provides configuration options for keyboard key mappings in `nextrpg`</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">games. It includes the `KeyMappingConfig` class for mapping game actions to</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">keyboard keys.</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="nb">type</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="nb">int</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">Type alias for keyboard key codes used in pygame.</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">This type alias represents integer constants that identify specific keys</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">on the keyboard (like K_LEFT, K_RIGHT, etc.) as defined by pygame.</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">These codes are used in key mapping configurations and event handling.</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="nd">@export</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KeyMappingConfig</span><span class="p">:</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">    Configuration class for keyboard key mappings.</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    This class defines the mapping between game actions and keyboard keys.</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">    Used by `nextrpg.event.pygame_event.KeyboardKey`,</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">    and the input handling system to translate keyboard input into game actions.</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">        `left`: Key code for moving left. The default is `K_LEFT`.</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">Features:</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">    - Type alias for key codes</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">    - Configurable key mappings for movement and actions</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">    - Integration with input handling system</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame</span><span class="w"> </span><span class="kn">import</span> <span class="n">K_RETURN</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.locals</span><span class="w"> </span><span class="kn">import</span> <span class="n">K_DOWN</span><span class="p">,</span> <span class="n">K_F1</span><span class="p">,</span> <span class="n">K_LEFT</span><span class="p">,</span> <span class="n">K_RIGHT</span><span class="p">,</span> <span class="n">K_UP</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="nb">type</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="nb">int</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">Type alias for keyboard key codes used in pygame.</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">This type alias represents integer constants that identify specific keys on the</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">keyboard (like K_LEFT, K_RIGHT, etc.) as defined by pygame. These codes are used</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">in key mapping configurations and event handling.</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>
 </span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">        `right`: Key code for moving right. The default is `K_RIGHT`.</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">        `up`: Key code for moving up. The default is `K_UP`.</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">        `down`: Key code for moving down. The default is `K_DOWN`.</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="nd">@export</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KeyMappingConfig</span><span class="p">:</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">    Configuration class for keyboard key mappings.</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">        `confirm`: Key code for confirming actions. The default is `K_SPACE`.</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">        `gui_mode_toggle`: Key code for toggling between</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">            windowed and full screen mode. The default is `F1`.</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="n">left</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_LEFT</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">right</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_RIGHT</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">up</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_UP</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">down</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_DOWN</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="n">confirm</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_RETURN</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="n">gui_mode_toggle</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">K_F1</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">    This class defines the mapping between game actions and keyboard keys. Used</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">    by `nextrpg.event.pygame_event.KeyboardKey`, and the input handling system to</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">    translate keyboard input into game actions.</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">    Attributes:</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">        left: Key code for moving left. The default is `K_LEFT`.</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">        right: Key code for moving right. The default is `K_RIGHT`.</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">        up: Key code for moving up. The default is `K_UP`.</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">        down: Key code for moving down. The default is `K_DOWN`.</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">        confirm: Key code for confirming actions. The default is `K_SPACE`.</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">        gui_mode_toggle: Key code for toggling between windowed and full screen</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">            mode. The default is `F1`.</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="n">left</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_LEFT</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="n">right</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_RIGHT</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="n">up</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_UP</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="n">down</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_DOWN</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="n">confirm</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_RETURN</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="n">gui_mode_toggle</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">K_F1</span>
 </span></pre></div>
 
 
@@ -143,56 +167,51 @@
 
     </div>
     <a class="headerlink" href="#KeyMappingConfig"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="KeyMappingConfig-19"><a href="#KeyMappingConfig-19"><span class="linenos">19</span></a><span class="nd">@export</span>
-</span><span id="KeyMappingConfig-20"><a href="#KeyMappingConfig-20"><span class="linenos">20</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="KeyMappingConfig-21"><a href="#KeyMappingConfig-21"><span class="linenos">21</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KeyMappingConfig</span><span class="p">:</span>
-</span><span id="KeyMappingConfig-22"><a href="#KeyMappingConfig-22"><span class="linenos">22</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="KeyMappingConfig-23"><a href="#KeyMappingConfig-23"><span class="linenos">23</span></a><span class="sd">    Configuration class for keyboard key mappings.</span>
-</span><span id="KeyMappingConfig-24"><a href="#KeyMappingConfig-24"><span class="linenos">24</span></a>
-</span><span id="KeyMappingConfig-25"><a href="#KeyMappingConfig-25"><span class="linenos">25</span></a><span class="sd">    This class defines the mapping between game actions and keyboard keys.</span>
-</span><span id="KeyMappingConfig-26"><a href="#KeyMappingConfig-26"><span class="linenos">26</span></a><span class="sd">    Used by `nextrpg.event.pygame_event.KeyboardKey`,</span>
-</span><span id="KeyMappingConfig-27"><a href="#KeyMappingConfig-27"><span class="linenos">27</span></a><span class="sd">    and the input handling system to translate keyboard input into game actions.</span>
-</span><span id="KeyMappingConfig-28"><a href="#KeyMappingConfig-28"><span class="linenos">28</span></a>
-</span><span id="KeyMappingConfig-29"><a href="#KeyMappingConfig-29"><span class="linenos">29</span></a><span class="sd">    Attributes:</span>
-</span><span id="KeyMappingConfig-30"><a href="#KeyMappingConfig-30"><span class="linenos">30</span></a><span class="sd">        `left`: Key code for moving left. The default is `K_LEFT`.</span>
-</span><span id="KeyMappingConfig-31"><a href="#KeyMappingConfig-31"><span class="linenos">31</span></a>
-</span><span id="KeyMappingConfig-32"><a href="#KeyMappingConfig-32"><span class="linenos">32</span></a><span class="sd">        `right`: Key code for moving right. The default is `K_RIGHT`.</span>
-</span><span id="KeyMappingConfig-33"><a href="#KeyMappingConfig-33"><span class="linenos">33</span></a>
-</span><span id="KeyMappingConfig-34"><a href="#KeyMappingConfig-34"><span class="linenos">34</span></a><span class="sd">        `up`: Key code for moving up. The default is `K_UP`.</span>
-</span><span id="KeyMappingConfig-35"><a href="#KeyMappingConfig-35"><span class="linenos">35</span></a>
-</span><span id="KeyMappingConfig-36"><a href="#KeyMappingConfig-36"><span class="linenos">36</span></a><span class="sd">        `down`: Key code for moving down. The default is `K_DOWN`.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="KeyMappingConfig-32"><a href="#KeyMappingConfig-32"><span class="linenos">32</span></a><span class="nd">@export</span>
+</span><span id="KeyMappingConfig-33"><a href="#KeyMappingConfig-33"><span class="linenos">33</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="KeyMappingConfig-34"><a href="#KeyMappingConfig-34"><span class="linenos">34</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KeyMappingConfig</span><span class="p">:</span>
+</span><span id="KeyMappingConfig-35"><a href="#KeyMappingConfig-35"><span class="linenos">35</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="KeyMappingConfig-36"><a href="#KeyMappingConfig-36"><span class="linenos">36</span></a><span class="sd">    Configuration class for keyboard key mappings.</span>
 </span><span id="KeyMappingConfig-37"><a href="#KeyMappingConfig-37"><span class="linenos">37</span></a>
-</span><span id="KeyMappingConfig-38"><a href="#KeyMappingConfig-38"><span class="linenos">38</span></a><span class="sd">        `confirm`: Key code for confirming actions. The default is `K_SPACE`.</span>
-</span><span id="KeyMappingConfig-39"><a href="#KeyMappingConfig-39"><span class="linenos">39</span></a>
-</span><span id="KeyMappingConfig-40"><a href="#KeyMappingConfig-40"><span class="linenos">40</span></a><span class="sd">        `gui_mode_toggle`: Key code for toggling between</span>
-</span><span id="KeyMappingConfig-41"><a href="#KeyMappingConfig-41"><span class="linenos">41</span></a><span class="sd">            windowed and full screen mode. The default is `F1`.</span>
-</span><span id="KeyMappingConfig-42"><a href="#KeyMappingConfig-42"><span class="linenos">42</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="KeyMappingConfig-43"><a href="#KeyMappingConfig-43"><span class="linenos">43</span></a>
-</span><span id="KeyMappingConfig-44"><a href="#KeyMappingConfig-44"><span class="linenos">44</span></a>    <span class="n">left</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_LEFT</span>
-</span><span id="KeyMappingConfig-45"><a href="#KeyMappingConfig-45"><span class="linenos">45</span></a>    <span class="n">right</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_RIGHT</span>
-</span><span id="KeyMappingConfig-46"><a href="#KeyMappingConfig-46"><span class="linenos">46</span></a>    <span class="n">up</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_UP</span>
-</span><span id="KeyMappingConfig-47"><a href="#KeyMappingConfig-47"><span class="linenos">47</span></a>    <span class="n">down</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_DOWN</span>
-</span><span id="KeyMappingConfig-48"><a href="#KeyMappingConfig-48"><span class="linenos">48</span></a>    <span class="n">confirm</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_RETURN</span>
-</span><span id="KeyMappingConfig-49"><a href="#KeyMappingConfig-49"><span class="linenos">49</span></a>    <span class="n">gui_mode_toggle</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">K_F1</span>
+</span><span id="KeyMappingConfig-38"><a href="#KeyMappingConfig-38"><span class="linenos">38</span></a><span class="sd">    This class defines the mapping between game actions and keyboard keys. Used</span>
+</span><span id="KeyMappingConfig-39"><a href="#KeyMappingConfig-39"><span class="linenos">39</span></a><span class="sd">    by `nextrpg.event.pygame_event.KeyboardKey`, and the input handling system to</span>
+</span><span id="KeyMappingConfig-40"><a href="#KeyMappingConfig-40"><span class="linenos">40</span></a><span class="sd">    translate keyboard input into game actions.</span>
+</span><span id="KeyMappingConfig-41"><a href="#KeyMappingConfig-41"><span class="linenos">41</span></a>
+</span><span id="KeyMappingConfig-42"><a href="#KeyMappingConfig-42"><span class="linenos">42</span></a><span class="sd">    Attributes:</span>
+</span><span id="KeyMappingConfig-43"><a href="#KeyMappingConfig-43"><span class="linenos">43</span></a><span class="sd">        left: Key code for moving left. The default is `K_LEFT`.</span>
+</span><span id="KeyMappingConfig-44"><a href="#KeyMappingConfig-44"><span class="linenos">44</span></a><span class="sd">        right: Key code for moving right. The default is `K_RIGHT`.</span>
+</span><span id="KeyMappingConfig-45"><a href="#KeyMappingConfig-45"><span class="linenos">45</span></a><span class="sd">        up: Key code for moving up. The default is `K_UP`.</span>
+</span><span id="KeyMappingConfig-46"><a href="#KeyMappingConfig-46"><span class="linenos">46</span></a><span class="sd">        down: Key code for moving down. The default is `K_DOWN`.</span>
+</span><span id="KeyMappingConfig-47"><a href="#KeyMappingConfig-47"><span class="linenos">47</span></a><span class="sd">        confirm: Key code for confirming actions. The default is `K_SPACE`.</span>
+</span><span id="KeyMappingConfig-48"><a href="#KeyMappingConfig-48"><span class="linenos">48</span></a><span class="sd">        gui_mode_toggle: Key code for toggling between windowed and full screen</span>
+</span><span id="KeyMappingConfig-49"><a href="#KeyMappingConfig-49"><span class="linenos">49</span></a><span class="sd">            mode. The default is `F1`.</span>
+</span><span id="KeyMappingConfig-50"><a href="#KeyMappingConfig-50"><span class="linenos">50</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="KeyMappingConfig-51"><a href="#KeyMappingConfig-51"><span class="linenos">51</span></a>
+</span><span id="KeyMappingConfig-52"><a href="#KeyMappingConfig-52"><span class="linenos">52</span></a>    <span class="n">left</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_LEFT</span>
+</span><span id="KeyMappingConfig-53"><a href="#KeyMappingConfig-53"><span class="linenos">53</span></a>    <span class="n">right</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_RIGHT</span>
+</span><span id="KeyMappingConfig-54"><a href="#KeyMappingConfig-54"><span class="linenos">54</span></a>    <span class="n">up</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_UP</span>
+</span><span id="KeyMappingConfig-55"><a href="#KeyMappingConfig-55"><span class="linenos">55</span></a>    <span class="n">down</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_DOWN</span>
+</span><span id="KeyMappingConfig-56"><a href="#KeyMappingConfig-56"><span class="linenos">56</span></a>    <span class="n">confirm</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">=</span> <span class="n">K_RETURN</span>
+</span><span id="KeyMappingConfig-57"><a href="#KeyMappingConfig-57"><span class="linenos">57</span></a>    <span class="n">gui_mode_toggle</span><span class="p">:</span> <span class="n">KeyCode</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">K_F1</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Configuration class for keyboard key mappings.</p>
 
-<p>This class defines the mapping between game actions and keyboard keys.
-Used by <code>nextrpg.event.pygame_event.KeyboardKey</code>,
-and the input handling system to translate keyboard input into game actions.</p>
+<p>This class defines the mapping between game actions and keyboard keys. Used
+by <code>nextrpg.event.pygame_event.KeyboardKey</code>, and the input handling system to
+translate keyboard input into game actions.</p>
 
 <h6 id="attributes">Attributes:</h6>
 
 <ul>
-<li><strong><code><a href="#KeyMappingConfig.left">left</a></code>:</strong>  Key code for moving left. The default is <code>K_LEFT</code>.</li>
-<li><strong><code><a href="#KeyMappingConfig.right">right</a></code>:</strong>  Key code for moving right. The default is <code>K_RIGHT</code>.</li>
-<li><strong><code><a href="#KeyMappingConfig.up">up</a></code>:</strong>  Key code for moving up. The default is <code>K_UP</code>.</li>
-<li><strong><code><a href="#KeyMappingConfig.down">down</a></code>:</strong>  Key code for moving down. The default is <code>K_DOWN</code>.</li>
-<li><strong><code><a href="#KeyMappingConfig.confirm">confirm</a></code>:</strong>  Key code for confirming actions. The default is <code>K_SPACE</code>.</li>
-<li><strong><code><a href="#KeyMappingConfig.gui_mode_toggle">gui_mode_toggle</a></code>:</strong>  Key code for toggling between
-windowed and full screen mode. The default is <code>F1</code>.</li>
+<li><strong>left:</strong>  Key code for moving left. The default is <code>K_LEFT</code>.</li>
+<li><strong>right:</strong>  Key code for moving right. The default is <code>K_RIGHT</code>.</li>
+<li><strong>up:</strong>  Key code for moving up. The default is <code>K_UP</code>.</li>
+<li><strong>down:</strong>  Key code for moving down. The default is <code>K_DOWN</code>.</li>
+<li><strong>confirm:</strong>  Key code for confirming actions. The default is <code>K_SPACE</code>.</li>
+<li><strong>gui_mode_toggle:</strong>  Key code for toggling between windowed and full screen
+mode. The default is <code>F1</code>.</li>
 </ul>
 </div>
 

@@ -1,30 +1,15 @@
 """
-Main game loop and initialization for NextRPG.
+Main game loop and initialization for `nextrpg`.
 
-This module provides the core game loop functionality and initialization
-for NextRPG games. It handles the main game window setup, event
-processing, scene management, and the primary game loop.
+This module provides the core game loop functionality and initialization for
+`nextrpg` games. It handles the main game window setup, event processing, scene
+management, and the primary game loop.
 
-The module contains two main classes:
-- `Game`: The main game controller that manages the game window and loop
-- `_GameLoop`: Internal class that handles the actual game loop logic
-
-The game loop processes events, updates scenes, and manages the GUI
-components while maintaining a consistent frame rate.
-
-Example:
-    ```python
-    from nextrpg.game import Game
-    from nextrpg.scene import StaticScene
-
-    def create_entry_scene():
-        return StaticScene()
-
-    game = Game(entry_scene=create_entry_scene)
-    game.start()  # Synchronous game loop
-    # or
-    await game.start_async()  # Asynchronous game loop
-    ```
+Features:
+    - Main game controller (`Game`) for window and loop management
+    - Internal game loop logic (`_GameLoop`)
+    - Event processing and scene management
+    - Synchronous and asynchronous game loop options
 """
 
 from asyncio import sleep
@@ -36,9 +21,8 @@ from typing import Callable, Self
 import pygame
 from pygame.time import Clock
 
-from nextrpg.global_config import config
 from nextrpg import plugins
-from nextrpg.pygame_event import PygameEvent, Quit, to_typed_event
+from nextrpg.global_config import config
 from nextrpg.gui import Gui
 from nextrpg.logger import Logger
 from nextrpg.model import (
@@ -47,6 +31,7 @@ from nextrpg.model import (
     instance_init,
     not_constructor_below,
 )
+from nextrpg.pygame_event import PygameEvent, Quit, to_typed_event
 from nextrpg.scene import Scene
 
 logger = Logger("Game")

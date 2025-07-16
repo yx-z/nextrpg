@@ -1,28 +1,15 @@
 """
-Fade effect system for NextRPG.
+Fade effect system for `nextrpg`.
 
-This module provides fade effect functionality for transitions
-in NextRPG games. It includes the `Fade` class which handles
-alpha-based fading of drawing resources over time.
+This module provides fade effect functionality for transitions in `nextrpg`
+games. It includes the `Fade` class which handles alpha-based fading of
+drawing resources over time.
 
-The fade effect system features:
-- Time-based alpha transitions
-- Configurable fade duration
-- Resource alpha manipulation
-- Integration with transition system
-
-Example:
-    ```python
-    from nextrpg.fade import Fade
-    from nextrpg.draw_on_screen import DrawOnScreen
-    from nextrpg.core import Millisecond
-
-    # Create fade effect
-    fade = Fade(resource=drawings, duration=Millisecond(1000))
-
-    # Update fade in game loop
-    fade = fade.tick(time_delta)
-    ```
+Features:
+    - Time-based alpha transitions
+    - Configurable fade duration
+    - Resource alpha manipulation
+    - Integration with transition system
 """
 
 from dataclasses import dataclass, field, replace
@@ -41,35 +28,15 @@ class Fade:
     """
     Fade effect for transitioning drawing resources.
 
-    This class provides fade effect functionality that gradually
-    changes the alpha transparency of drawing resources over time.
-    It's commonly used for scene transitions and visual effects.
+    This class provides fade effect functionality that gradually changes the
+    alpha transparency of drawing resources over time. It's commonly used for
+    scene transitions and visual effects.
 
     Arguments:
-        `resource`: The drawing resources to fade.
-
-        `duration`: The duration of the fade effect in milliseconds.
-            Defaults to the global transition duration.
-
-        `_elapsed`: Internal elapsed time tracking.
-
-    Example:
-        ```python
-        from nextrpg.fade import Fade
-        from nextrpg.draw_on_screen import DrawOnScreen
-        from nextrpg.core import Millisecond
-
-        # Create fade effect
-        fade = Fade(resource=drawings, duration=Millisecond(2000))
-
-        # Update in game loop
-        fade = fade.tick(time_delta)
-
-        # Check if complete
-        if fade.complete:
-            # Handle completion
-            pass
-        ```
+        resource: The drawing resources to fade.
+        duration: The duration of the fade effect in milliseconds. Defaults to
+            the global transition duration.
+        _elapsed: Internal elapsed time tracking.
     """
 
     resource: tuple[DrawOnScreen, ...]
@@ -89,13 +56,7 @@ class Fade:
         - Empty at completion
 
         Returns:
-            `tuple[DrawOnScreen, ...]`: The current drawing resources.
-
-        Example:
-            ```python
-            # Get current drawings for rendering
-            drawings = fade.draw_on_screens
-            ```
+            The current drawing resources.
         """
         if self.complete:
             return self._complete
@@ -107,20 +68,14 @@ class Fade:
         """
         Update the fade effect based on elapsed time.
 
-        Advances the fade effect and updates the alpha values
-        of the drawing resources based on the elapsed time.
+        Advances the fade effect and updates the alpha values of the drawing
+        resources based on the elapsed time.
 
         Arguments:
-            `time_delta`: The elapsed time in milliseconds.
+            time_delta: The elapsed time in milliseconds.
 
         Returns:
-            `Fade`: A new fade instance with updated state.
-
-        Example:
-            ```python
-            # Update fade in game loop
-            fade = fade.tick(time_delta)
-            ```
+            A new fade instance with updated state.
         """
         if self.complete:
             return self
@@ -135,14 +90,7 @@ class Fade:
         Check if the fade effect has completed.
 
         Returns:
-            `bool`: Whether the fade effect has finished.
-
-        Example:
-            ```python
-            if fade.complete:
-                # Handle fade completion
-                pass
-            ```
+            Whether the fade effect has finished.
         """
         return self._elapsed >= self.duration
 
@@ -152,7 +100,7 @@ class Fade:
         Get the initial drawing state (empty).
 
         Returns:
-            `tuple[DrawOnScreen, ...]`: Empty drawing tuple.
+            Empty drawing tuple.
         """
         return ()
 
@@ -162,7 +110,7 @@ class Fade:
         Get the final drawing state (empty).
 
         Returns:
-            `tuple[DrawOnScreen, ...]`: Empty drawing tuple.
+            Empty drawing tuple.
         """
         return ()
 
@@ -172,6 +120,6 @@ class Fade:
         Get the fade completion percentage.
 
         Returns:
-            `float`: The fade completion percentage (0.0 to 1.0).
+            The fade completion percentage (0.0 to 1.0).
         """
         return 0

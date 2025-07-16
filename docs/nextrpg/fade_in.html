@@ -55,36 +55,21 @@
                     <h1 class="modulename">
 <a href="./../nextrpg.html">nextrpg</a><wbr>.fade_in    </h1>
 
-                        <div class="docstring"><p>Fade-in effect system for NextRPG.</p>
+                        <div class="docstring"><p>Fade-in effect system for <code><a href="../nextrpg.html">nextrpg</a></code>.</p>
 
-<p>This module provides fade-in effect functionality for transitions
-in NextRPG games. It includes the <code><a href="#FadeIn">FadeIn</a></code> class which handles
-gradual appearance of drawing resources over time.</p>
+<p>This module provides fade-in effect functionality for transitions in <code><a href="../nextrpg.html">nextrpg</a></code>
+games. It includes the <code><a href="#FadeIn">FadeIn</a></code> class which handles gradual appearance of
+drawing resources over time.</p>
 
-<p>The fade-in effect system features:</p>
-
-<ul>
-<li>Gradual alpha increase over time</li>
-<li>Configurable fade duration</li>
-<li>Resource alpha manipulation</li>
-<li>Integration with fade system</li>
-</ul>
-
-<h6 id="example">Example:</h6>
+<h6 id="features">Features:</h6>
 
 <blockquote>
-  <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.fade_in</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">FadeIn</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="draw_on_screen.html">nextrpg.draw_on_screen</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="core.html">nextrpg.core</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-
-<span class="c1"># Create fade-in effect</span>
-<span class="n">fade_in</span> <span class="o">=</span> <span class="n">FadeIn</span><span class="p">(</span><span class="n">resource</span><span class="o">=</span><span class="n">drawings</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">Millisecond</span><span class="p">(</span><span class="mi">1000</span><span class="p">))</span>
-
-<span class="c1"># Update fade-in in game loop</span>
-<span class="n">fade_in</span> <span class="o">=</span> <span class="n">fade_in</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</code></pre>
-  </div>
+  <ul>
+  <li>Gradual alpha increase over time</li>
+  <li>Configurable fade duration</li>
+  <li>Resource alpha manipulation</li>
+  <li>Integration with fade system</li>
+  </ul>
 </blockquote>
 </div>
 
@@ -93,99 +78,68 @@ gradual appearance of drawing resources over time.</p>
                         <label class="view-source-button" for="mod-fade_in-view-source"><span>View Source</span></label>
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">Fade-in effect system for NextRPG.</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">Fade-in effect system for `nextrpg`.</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">This module provides fade-in effect functionality for transitions</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">in NextRPG games. It includes the `FadeIn` class which handles</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">gradual appearance of drawing resources over time.</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">This module provides fade-in effect functionality for transitions in `nextrpg`</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">games. It includes the `FadeIn` class which handles gradual appearance of</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">drawing resources over time.</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">The fade-in effect system features:</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">- Gradual alpha increase over time</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">- Configurable fade duration</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">- Resource alpha manipulation</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">- Integration with fade system</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">Example:</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">    ```python</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">    from nextrpg.fade_in import FadeIn</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">    from nextrpg.draw_on_screen import DrawOnScreen</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">    from nextrpg.core import Millisecond</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">    # Create fade-in effect</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">    fade_in = FadeIn(resource=drawings, duration=Millisecond(1000))</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">Features:</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">    - Gradual alpha increase over time</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">    - Configurable fade duration</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">    - Resource alpha manipulation</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">    - Integration with fade system</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.fade</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fade</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass_with_instance_init</span><span class="p">,</span> <span class="n">export</span><span class="p">,</span> <span class="n">instance_init</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">    # Update fade-in in game loop</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    fade_in = fade_in.tick(time_delta)</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">    ```</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.fade</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fade</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass_with_instance_init</span><span class="p">,</span> <span class="n">export</span><span class="p">,</span> <span class="n">instance_init</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="nd">@export</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="nd">@dataclass_with_instance_init</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FadeIn</span><span class="p">(</span><span class="n">Fade</span><span class="p">):</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">    Fade-in effect for gradually appearing drawing resources.</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">    This class provides fade-in effect functionality that gradually</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">    increases the alpha transparency of drawing resources over time,</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">    making them appear from transparent to fully opaque.</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="nd">@export</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="nd">@dataclass_with_instance_init</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FadeIn</span><span class="p">(</span><span class="n">Fade</span><span class="p">):</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">    Fade-in effect for gradually appearing drawing resources.</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">    This class provides fade-in effect functionality that gradually increases</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">    the alpha transparency of drawing resources over time, making them appear</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">    from transparent to fully opaque.</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">    Arguments:</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">        _complete: The final drawing state (fully opaque resources).</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">            Automatically initialized to the input resources.</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="n">_complete</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">)</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="nd">@override</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">        Get the initial drawing state (empty).</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">        `_complete`: The final drawing state (fully opaque resources).</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">            Automatically initialized to the input resources.</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">    Example:</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">        ```python</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">        from nextrpg.fade_in import FadeIn</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">        from nextrpg.draw_on_screen import DrawOnScreen</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">        from nextrpg.core import Millisecond</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">        # Create fade-in effect</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">        fade_in = FadeIn(resource=drawings, duration=Millisecond(2000))</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">        # Update in game loop</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">        fade_in = fade_in.tick(time_delta)</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">        # Check if complete</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">        if fade_in.complete:</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">            # Handle completion</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">            pass</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">        ```</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="n">_complete</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">)</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="nd">@override</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="sd">        Get the initial drawing state (empty).</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="sd">        Returns:</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: Empty drawing tuple.</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>        <span class="k">return</span> <span class="p">()</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>    <span class="nd">@override</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a><span class="sd">        Get the fade-in completion percentage.</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>
-</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a><span class="sd">        Calculates the percentage based on elapsed time divided</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a><span class="sd">        by total duration.</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>
-</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a><span class="sd">        Returns:</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a><span class="sd">            `float`: The fade-in completion percentage (0.0 to 1.0).</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">        Returns:</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">            Empty drawing tuple.</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="k">return</span> <span class="p">()</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="nd">@override</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">        Get the fade-in completion percentage.</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">        Calculates the percentage based on elapsed time divided by total</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">        duration.</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">        Returns:</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">            The fade-in completion percentage (0.0 to 1.0).</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
@@ -203,102 +157,62 @@ gradual appearance of drawing resources over time.</p>
 
     </div>
     <a class="headerlink" href="#FadeIn"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FadeIn-37"><a href="#FadeIn-37"><span class="linenos">37</span></a><span class="nd">@export</span>
-</span><span id="FadeIn-38"><a href="#FadeIn-38"><span class="linenos">38</span></a><span class="nd">@dataclass_with_instance_init</span>
-</span><span id="FadeIn-39"><a href="#FadeIn-39"><span class="linenos">39</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FadeIn</span><span class="p">(</span><span class="n">Fade</span><span class="p">):</span>
-</span><span id="FadeIn-40"><a href="#FadeIn-40"><span class="linenos">40</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="FadeIn-41"><a href="#FadeIn-41"><span class="linenos">41</span></a><span class="sd">    Fade-in effect for gradually appearing drawing resources.</span>
-</span><span id="FadeIn-42"><a href="#FadeIn-42"><span class="linenos">42</span></a>
-</span><span id="FadeIn-43"><a href="#FadeIn-43"><span class="linenos">43</span></a><span class="sd">    This class provides fade-in effect functionality that gradually</span>
-</span><span id="FadeIn-44"><a href="#FadeIn-44"><span class="linenos">44</span></a><span class="sd">    increases the alpha transparency of drawing resources over time,</span>
-</span><span id="FadeIn-45"><a href="#FadeIn-45"><span class="linenos">45</span></a><span class="sd">    making them appear from transparent to fully opaque.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FadeIn-24"><a href="#FadeIn-24"><span class="linenos">24</span></a><span class="nd">@export</span>
+</span><span id="FadeIn-25"><a href="#FadeIn-25"><span class="linenos">25</span></a><span class="nd">@dataclass_with_instance_init</span>
+</span><span id="FadeIn-26"><a href="#FadeIn-26"><span class="linenos">26</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FadeIn</span><span class="p">(</span><span class="n">Fade</span><span class="p">):</span>
+</span><span id="FadeIn-27"><a href="#FadeIn-27"><span class="linenos">27</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="FadeIn-28"><a href="#FadeIn-28"><span class="linenos">28</span></a><span class="sd">    Fade-in effect for gradually appearing drawing resources.</span>
+</span><span id="FadeIn-29"><a href="#FadeIn-29"><span class="linenos">29</span></a>
+</span><span id="FadeIn-30"><a href="#FadeIn-30"><span class="linenos">30</span></a><span class="sd">    This class provides fade-in effect functionality that gradually increases</span>
+</span><span id="FadeIn-31"><a href="#FadeIn-31"><span class="linenos">31</span></a><span class="sd">    the alpha transparency of drawing resources over time, making them appear</span>
+</span><span id="FadeIn-32"><a href="#FadeIn-32"><span class="linenos">32</span></a><span class="sd">    from transparent to fully opaque.</span>
+</span><span id="FadeIn-33"><a href="#FadeIn-33"><span class="linenos">33</span></a>
+</span><span id="FadeIn-34"><a href="#FadeIn-34"><span class="linenos">34</span></a><span class="sd">    Arguments:</span>
+</span><span id="FadeIn-35"><a href="#FadeIn-35"><span class="linenos">35</span></a><span class="sd">        _complete: The final drawing state (fully opaque resources).</span>
+</span><span id="FadeIn-36"><a href="#FadeIn-36"><span class="linenos">36</span></a><span class="sd">            Automatically initialized to the input resources.</span>
+</span><span id="FadeIn-37"><a href="#FadeIn-37"><span class="linenos">37</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="FadeIn-38"><a href="#FadeIn-38"><span class="linenos">38</span></a>
+</span><span id="FadeIn-39"><a href="#FadeIn-39"><span class="linenos">39</span></a>    <span class="n">_complete</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">)</span>
+</span><span id="FadeIn-40"><a href="#FadeIn-40"><span class="linenos">40</span></a>
+</span><span id="FadeIn-41"><a href="#FadeIn-41"><span class="linenos">41</span></a>    <span class="nd">@override</span>
+</span><span id="FadeIn-42"><a href="#FadeIn-42"><span class="linenos">42</span></a>    <span class="nd">@cached_property</span>
+</span><span id="FadeIn-43"><a href="#FadeIn-43"><span class="linenos">43</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="FadeIn-44"><a href="#FadeIn-44"><span class="linenos">44</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="FadeIn-45"><a href="#FadeIn-45"><span class="linenos">45</span></a><span class="sd">        Get the initial drawing state (empty).</span>
 </span><span id="FadeIn-46"><a href="#FadeIn-46"><span class="linenos">46</span></a>
-</span><span id="FadeIn-47"><a href="#FadeIn-47"><span class="linenos">47</span></a><span class="sd">    Arguments:</span>
-</span><span id="FadeIn-48"><a href="#FadeIn-48"><span class="linenos">48</span></a><span class="sd">        `_complete`: The final drawing state (fully opaque resources).</span>
-</span><span id="FadeIn-49"><a href="#FadeIn-49"><span class="linenos">49</span></a><span class="sd">            Automatically initialized to the input resources.</span>
-</span><span id="FadeIn-50"><a href="#FadeIn-50"><span class="linenos">50</span></a>
-</span><span id="FadeIn-51"><a href="#FadeIn-51"><span class="linenos">51</span></a><span class="sd">    Example:</span>
-</span><span id="FadeIn-52"><a href="#FadeIn-52"><span class="linenos">52</span></a><span class="sd">        ```python</span>
-</span><span id="FadeIn-53"><a href="#FadeIn-53"><span class="linenos">53</span></a><span class="sd">        from nextrpg.fade_in import FadeIn</span>
-</span><span id="FadeIn-54"><a href="#FadeIn-54"><span class="linenos">54</span></a><span class="sd">        from nextrpg.draw_on_screen import DrawOnScreen</span>
-</span><span id="FadeIn-55"><a href="#FadeIn-55"><span class="linenos">55</span></a><span class="sd">        from nextrpg.core import Millisecond</span>
-</span><span id="FadeIn-56"><a href="#FadeIn-56"><span class="linenos">56</span></a>
-</span><span id="FadeIn-57"><a href="#FadeIn-57"><span class="linenos">57</span></a><span class="sd">        # Create fade-in effect</span>
-</span><span id="FadeIn-58"><a href="#FadeIn-58"><span class="linenos">58</span></a><span class="sd">        fade_in = FadeIn(resource=drawings, duration=Millisecond(2000))</span>
-</span><span id="FadeIn-59"><a href="#FadeIn-59"><span class="linenos">59</span></a>
-</span><span id="FadeIn-60"><a href="#FadeIn-60"><span class="linenos">60</span></a><span class="sd">        # Update in game loop</span>
-</span><span id="FadeIn-61"><a href="#FadeIn-61"><span class="linenos">61</span></a><span class="sd">        fade_in = fade_in.tick(time_delta)</span>
-</span><span id="FadeIn-62"><a href="#FadeIn-62"><span class="linenos">62</span></a>
-</span><span id="FadeIn-63"><a href="#FadeIn-63"><span class="linenos">63</span></a><span class="sd">        # Check if complete</span>
-</span><span id="FadeIn-64"><a href="#FadeIn-64"><span class="linenos">64</span></a><span class="sd">        if fade_in.complete:</span>
-</span><span id="FadeIn-65"><a href="#FadeIn-65"><span class="linenos">65</span></a><span class="sd">            # Handle completion</span>
-</span><span id="FadeIn-66"><a href="#FadeIn-66"><span class="linenos">66</span></a><span class="sd">            pass</span>
-</span><span id="FadeIn-67"><a href="#FadeIn-67"><span class="linenos">67</span></a><span class="sd">        ```</span>
-</span><span id="FadeIn-68"><a href="#FadeIn-68"><span class="linenos">68</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="FadeIn-69"><a href="#FadeIn-69"><span class="linenos">69</span></a>
-</span><span id="FadeIn-70"><a href="#FadeIn-70"><span class="linenos">70</span></a>    <span class="n">_complete</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">)</span>
-</span><span id="FadeIn-71"><a href="#FadeIn-71"><span class="linenos">71</span></a>
-</span><span id="FadeIn-72"><a href="#FadeIn-72"><span class="linenos">72</span></a>    <span class="nd">@override</span>
-</span><span id="FadeIn-73"><a href="#FadeIn-73"><span class="linenos">73</span></a>    <span class="nd">@cached_property</span>
-</span><span id="FadeIn-74"><a href="#FadeIn-74"><span class="linenos">74</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="FadeIn-75"><a href="#FadeIn-75"><span class="linenos">75</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="FadeIn-76"><a href="#FadeIn-76"><span class="linenos">76</span></a><span class="sd">        Get the initial drawing state (empty).</span>
-</span><span id="FadeIn-77"><a href="#FadeIn-77"><span class="linenos">77</span></a>
-</span><span id="FadeIn-78"><a href="#FadeIn-78"><span class="linenos">78</span></a><span class="sd">        Returns:</span>
-</span><span id="FadeIn-79"><a href="#FadeIn-79"><span class="linenos">79</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: Empty drawing tuple.</span>
-</span><span id="FadeIn-80"><a href="#FadeIn-80"><span class="linenos">80</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="FadeIn-81"><a href="#FadeIn-81"><span class="linenos">81</span></a>        <span class="k">return</span> <span class="p">()</span>
-</span><span id="FadeIn-82"><a href="#FadeIn-82"><span class="linenos">82</span></a>
-</span><span id="FadeIn-83"><a href="#FadeIn-83"><span class="linenos">83</span></a>    <span class="nd">@override</span>
-</span><span id="FadeIn-84"><a href="#FadeIn-84"><span class="linenos">84</span></a>    <span class="nd">@cached_property</span>
-</span><span id="FadeIn-85"><a href="#FadeIn-85"><span class="linenos">85</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="FadeIn-86"><a href="#FadeIn-86"><span class="linenos">86</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="FadeIn-87"><a href="#FadeIn-87"><span class="linenos">87</span></a><span class="sd">        Get the fade-in completion percentage.</span>
-</span><span id="FadeIn-88"><a href="#FadeIn-88"><span class="linenos">88</span></a>
-</span><span id="FadeIn-89"><a href="#FadeIn-89"><span class="linenos">89</span></a><span class="sd">        Calculates the percentage based on elapsed time divided</span>
-</span><span id="FadeIn-90"><a href="#FadeIn-90"><span class="linenos">90</span></a><span class="sd">        by total duration.</span>
-</span><span id="FadeIn-91"><a href="#FadeIn-91"><span class="linenos">91</span></a>
-</span><span id="FadeIn-92"><a href="#FadeIn-92"><span class="linenos">92</span></a><span class="sd">        Returns:</span>
-</span><span id="FadeIn-93"><a href="#FadeIn-93"><span class="linenos">93</span></a><span class="sd">            `float`: The fade-in completion percentage (0.0 to 1.0).</span>
-</span><span id="FadeIn-94"><a href="#FadeIn-94"><span class="linenos">94</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="FadeIn-95"><a href="#FadeIn-95"><span class="linenos">95</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="FadeIn-47"><a href="#FadeIn-47"><span class="linenos">47</span></a><span class="sd">        Returns:</span>
+</span><span id="FadeIn-48"><a href="#FadeIn-48"><span class="linenos">48</span></a><span class="sd">            Empty drawing tuple.</span>
+</span><span id="FadeIn-49"><a href="#FadeIn-49"><span class="linenos">49</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="FadeIn-50"><a href="#FadeIn-50"><span class="linenos">50</span></a>        <span class="k">return</span> <span class="p">()</span>
+</span><span id="FadeIn-51"><a href="#FadeIn-51"><span class="linenos">51</span></a>
+</span><span id="FadeIn-52"><a href="#FadeIn-52"><span class="linenos">52</span></a>    <span class="nd">@override</span>
+</span><span id="FadeIn-53"><a href="#FadeIn-53"><span class="linenos">53</span></a>    <span class="nd">@cached_property</span>
+</span><span id="FadeIn-54"><a href="#FadeIn-54"><span class="linenos">54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="FadeIn-55"><a href="#FadeIn-55"><span class="linenos">55</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="FadeIn-56"><a href="#FadeIn-56"><span class="linenos">56</span></a><span class="sd">        Get the fade-in completion percentage.</span>
+</span><span id="FadeIn-57"><a href="#FadeIn-57"><span class="linenos">57</span></a>
+</span><span id="FadeIn-58"><a href="#FadeIn-58"><span class="linenos">58</span></a><span class="sd">        Calculates the percentage based on elapsed time divided by total</span>
+</span><span id="FadeIn-59"><a href="#FadeIn-59"><span class="linenos">59</span></a><span class="sd">        duration.</span>
+</span><span id="FadeIn-60"><a href="#FadeIn-60"><span class="linenos">60</span></a>
+</span><span id="FadeIn-61"><a href="#FadeIn-61"><span class="linenos">61</span></a><span class="sd">        Returns:</span>
+</span><span id="FadeIn-62"><a href="#FadeIn-62"><span class="linenos">62</span></a><span class="sd">            The fade-in completion percentage (0.0 to 1.0).</span>
+</span><span id="FadeIn-63"><a href="#FadeIn-63"><span class="linenos">63</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="FadeIn-64"><a href="#FadeIn-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Fade-in effect for gradually appearing drawing resources.</p>
 
-<p>This class provides fade-in effect functionality that gradually
-increases the alpha transparency of drawing resources over time,
-making them appear from transparent to fully opaque.</p>
+<p>This class provides fade-in effect functionality that gradually increases
+the alpha transparency of drawing resources over time, making them appear
+from transparent to fully opaque.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code>_complete</code>:</strong>  The final drawing state (fully opaque resources).
+<li><strong>_complete:</strong>  The final drawing state (fully opaque resources).
 Automatically initialized to the input resources.</li>
 </ul>
-
-<h6 id="example">Example:</h6>
-
-<blockquote>
-  <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.fade_in</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">FadeIn</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="draw_on_screen.html">nextrpg.draw_on_screen</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="core.html">nextrpg.core</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-
-<span class="c1"># Create fade-in effect</span>
-<span class="n">fade_in</span> <span class="o">=</span> <span class="n">FadeIn</span><span class="p">(</span><span class="n">resource</span><span class="o">=</span><span class="n">drawings</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="n">Millisecond</span><span class="p">(</span><span class="mi">2000</span><span class="p">))</span>
-
-<span class="c1"># Update in game loop</span>
-<span class="n">fade_in</span> <span class="o">=</span> <span class="n">fade_in</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-
-<span class="c1"># Check if complete</span>
-<span class="k">if</span> <span class="n">fade_in</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
-    <span class="c1"># Handle completion</span>
-    <span class="k">pass</span>
-</code></pre>
-  </div>
-</blockquote>
 </div>
 
 

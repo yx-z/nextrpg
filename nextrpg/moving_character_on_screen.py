@@ -1,37 +1,16 @@
 """
-Moving character implementation for NextRPG.
+Moving character implementation for `nextrpg`.
 
-This module provides the base class for characters that can move around
-the game world. It handles movement calculations, collision detection,
-and character state management during movement.
+This module provides the base class for characters that can move around the game
+world. It handles movement calculations, collision detection, and character
+state management during movement.
 
-The module defines the `MovingCharacterOnScreen` abstract base class
-that provides the foundation for both player and NPC movement systems.
-It includes collision detection against map boundaries and objects,
-movement speed calculations, and proper character animation states.
-
-Key Features:
+Features:
     - Abstract movement interface for characters
     - Collision detection against polygon boundaries
     - Movement speed and direction handling
     - Character animation state management
     - Event-driven movement controls
-
-Example:
-    ```python
-    from nextrpg.moving_character_on_screen import MovingCharacterOnScreen
-    from nextrpg.core import Direction, Millisecond
-    from nextrpg.coordinate import Coordinate
-
-    class MyMovingCharacter(MovingCharacterOnScreen):
-        @cached_property
-        def moving(self) -> bool:
-            return self.is_moving
-
-        def move(self, time_delta: Millisecond) -> Coordinate:
-            # Calculate new position based on movement
-            return self.coordinate.shift(movement_vector)
-    ```
 """
 
 from abc import ABC, abstractmethod
@@ -220,7 +199,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
         if collision_and_coord := self._collide(hit_coords):
             collision, coord = collision_and_coord
-            logger.debug(t"Collision {coord} and {collision.points}")
+            logger.debug(f"Collision {coord} and {collision.points}")
             return False
         return True
 

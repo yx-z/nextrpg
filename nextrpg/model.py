@@ -1,35 +1,16 @@
 """
-Model utilities and decorators for NextRPG.
+Model utilities and decorators for `nextrpg`.
 
-This module provides utility functions and decorators for creating
-dataclasses with instance initialization capabilities and caching
-mechanisms. These utilities are used throughout the NextRPG framework
-to create efficient, immutable data structures.
+This module provides utility functions and decorators for creating dataclasses
+with instance initialization capabilities and caching mechanisms. These
+utilities are used throughout the `nextrpg` framework to create efficient,
+immutable data structures.
 
-The module includes:
-- `export`: Decorator for marking public API elements
-- `instance_init`: Function to mark fields for instance initialization
-- `dataclass_with_instance_init`: Decorator for dataclasses with instance init
-- `cached`: Decorator for creating cached class instances
-
-These utilities help create efficient data structures that can be
-safely shared and cached across the game framework.
-
-Example:
-    ```python
-    from nextrpg.model import dataclass_with_instance_init, instance_init, cached
-
-    @dataclass_with_instance_init
-    class MyClass:
-        value: int
-        computed: str = instance_init(lambda self: f"Value: {self.value}")
-
-    @cached(size_fun=lambda: 100)
-    class ExpensiveObject:
-        def __init__(self, x: int, y: int):
-            self.x = x
-            self.y = y
-    ```
+Features:
+    - `export`: Decorator for marking public API elements
+    - `instance_init`: Function to mark fields for instance initialization
+    - `dataclass_with_instance_init`: Decorator for dataclasses with instance init
+    - `cached`: Decorator for creating cached class instances
 """
 
 from collections import OrderedDict

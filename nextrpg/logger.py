@@ -1,33 +1,16 @@
 """
-Logging system for NextRPG games.
+Logging system for `nextrpg` games.
 
-This module provides an on-screen logging system designed specifically
-for NextRPG games. It supports different log levels, timed messages,
-and component-based logging for better organization.
+This module provides an on-screen logging system designed specifically for
+`nextrpg` games. It supports different log levels, timed messages, and
+component-based logging for better organization.
 
-The logging system includes:
-- Component-based loggers for different game systems
-- Multiple log levels (DEBUG, INFO, WARNING, ERROR)
-- Timed log messages that automatically disappear
-- Template-based message formatting
-- Configurable log duration and level filtering
-
-The logger is designed to work seamlessly with the game loop and
-provides both immediate and timed log message display.
-
-Example:
-    ```python
-    from nextrpg.logger import Logger
-
-    # Create a logger for a specific component
-    logger = Logger("Player")
-
-    # Log different types of messages
-    logger.debug("Player moved to position (100, 200)")
-    logger.info("Player collected item: Sword")
-    logger.warning("Player health is low: 20%")
-    logger.error("Failed to load save file")
-    ```
+Features:
+    - Component-based loggers for different game systems
+    - Multiple log levels (DEBUG, INFO, WARNING, ERROR)
+    - Timed log messages that automatically disappear
+    - Template-based message formatting
+    - Configurable log duration and level filtering
 """
 
 from dataclasses import dataclass, replace

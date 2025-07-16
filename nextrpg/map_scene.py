@@ -1,17 +1,11 @@
 """
-Map scene implementation for NextRPG.
+Map scene implementation for `nextrpg`.
 
-This module provides the MapScene class that represents a game map
-loaded from Tiled TMX files. It handles map rendering, character
-movement with collision detection, NPC management, and scene
-transitions between different map areas.
+This module provides the `MapScene` class that represents a game map loaded from
+Tiled TMX files. It handles map rendering, character movement with collision
+detection, NPC management, and scene transitions between different map areas.
 
-The MapScene integrates with the map helper system to load and
-render TMX maps, manages player and NPC positioning, handles
-collision detection, and provides depth-sorted rendering of
-map elements and characters.
-
-Key Features:
+Features:
     - TMX map loading and rendering
     - Player movement with collision detection
     - NPC management and positioning
@@ -19,22 +13,6 @@ Key Features:
     - Depth-sorted rendering
     - Debug visualization support
     - Map object interaction
-
-Example:
-    ```python
-    from nextrpg.map_scene import MapScene, Move
-    from nextrpg.character_on_screen import CharacterSpec
-
-    # Create a map scene
-    map_scene = MapScene(
-        tmx_file="maps/town.tmx",
-        player_spec=player_spec,
-        moves=(move_to_shop, move_to_house)
-    )
-
-    # Handle scene updates
-    scene = map_scene.tick(time_delta)
-    ```
 """
 
 from dataclasses import KW_ONLY, dataclass, field, replace
@@ -42,7 +20,6 @@ from functools import cached_property
 from os import PathLike
 from typing import Callable, NamedTuple, OrderedDict, override
 
-from nextrpg.model import not_constructor_below
 from nextrpg.area import gui_size
 from nextrpg.character_on_screen import CharacterSpec
 from nextrpg.coordinate import Coordinate
@@ -52,7 +29,12 @@ from nextrpg.global_config import config
 from nextrpg.logger import Logger
 from nextrpg.map_helper import MapHelper, get_polygon
 from nextrpg.map_util import center_player
-from nextrpg.model import dataclass_with_instance_init, export, instance_init
+from nextrpg.model import (
+    dataclass_with_instance_init,
+    export,
+    instance_init,
+    not_constructor_below,
+)
 from nextrpg.moving_npc import MovingNpcOnScreen
 from nextrpg.npcs import EventfulScene, NpcOnScreen, NpcSpec
 from nextrpg.player_on_screen import PlayerOnScreen

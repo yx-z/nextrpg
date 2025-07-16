@@ -58,11 +58,11 @@
                     <h1 class="modulename">
 <a href="./../nextrpg.html">nextrpg</a><wbr>.rpg_maker_character_drawing_config    </h1>
 
-                        <div class="docstring"><p>RPG Maker character drawing configuration system for NextRPG.</p>
+                        <div class="docstring"><p>RPG Maker character drawing configuration system for <code>NextRPG</code>.</p>
 
-<p>This module provides configuration options for RPG Maker character
-sprites in NextRPG games. It includes the <code><a href="#RpgMakerCharacterDrawingConfig">RpgMakerCharacterDrawingConfig</a></code>
-class which defines animation timing and behavior for character sprites.</p>
+<p>This module provides configuration options for RPG Maker character sprites in
+<code>NextRPG</code> games. It includes the <code><a href="#RpgMakerCharacterDrawingConfig">RpgMakerCharacterDrawingConfig</a></code> class which
+defines animation timing and behavior for character sprites.</p>
 
 <p>The RPG Maker character drawing configuration features:</p>
 
@@ -73,29 +73,10 @@ class which defines animation timing and behavior for character sprites.</p>
 <li>Character animation behavior</li>
 </ul>
 
-<p>Note: NextRPG is only compatible with the RPG Maker character
-sprite sheet format to be able to re-use existing resources.
-However, using RPG Maker's Runtime Time Package (RTP) in non-RPG
-Maker frameworks violates the license of RPG Maker, even if you
-own a copy of RPG Maker.</p>
-
-<h6 id="example">Example:</h6>
-
-<blockquote>
-  <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.rpg_maker_character_drawing_config</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">RpgMakerCharacterDrawingConfig</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="core.html">nextrpg.core</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-
-<span class="c1"># Create default RPG Maker character config</span>
-<span class="n">config</span> <span class="o">=</span> <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">()</span>
-
-<span class="c1"># Create custom RPG Maker character config</span>
-<span class="n">custom_config</span> <span class="o">=</span> <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">(</span>
-    <span class="n">duration_per_frame</span><span class="o">=</span><span class="n">Millisecond</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
-<span class="p">)</span>
-</code></pre>
-  </div>
-</blockquote>
+<p>Note: <code>NextRPG</code> is only compatible with the RPG Maker character sprite sheet
+format to be able to re-use existing resources. However, using RPG Maker's
+Runtime Time Package (RTP) in non-RPG Maker frameworks violates the license of
+RPG Maker, even if you own a copy of RPG Maker.</p>
 </div>
 
                         <input id="mod-rpg_maker_character_drawing_config-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -103,11 +84,11 @@ own a copy of RPG Maker.</p>
                         <label class="view-source-button" for="mod-rpg_maker_character_drawing_config-view-source"><span>View Source</span></label>
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">RPG Maker character drawing configuration system for NextRPG.</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">RPG Maker character drawing configuration system for `NextRPG`.</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">This module provides configuration options for RPG Maker character</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">sprites in NextRPG games. It includes the `RpgMakerCharacterDrawingConfig`</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">class which defines animation timing and behavior for character sprites.</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">This module provides configuration options for RPG Maker character sprites in</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">`NextRPG` games. It includes the `RpgMakerCharacterDrawingConfig` class which</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">defines animation timing and behavior for character sprites.</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">The RPG Maker character drawing configuration features:</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">- Frame duration configuration</span>
@@ -115,75 +96,39 @@ own a copy of RPG Maker.</p>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">- RPG Maker sprite sheet compatibility</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">- Character animation behavior</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">Note: NextRPG is only compatible with the RPG Maker character</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">sprite sheet format to be able to re-use existing resources.</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">However, using RPG Maker&#39;s Runtime Time Package (RTP) in non-RPG</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">Maker frameworks violates the license of RPG Maker, even if you</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">own a copy of RPG Maker.</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">Note: `NextRPG` is only compatible with the RPG Maker character sprite sheet</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">format to be able to re-use existing resources. However, using RPG Maker&#39;s</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">Runtime Time Package (RTP) in non-RPG Maker frameworks violates the license of</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">RPG Maker, even if you own a copy of RPG Maker.</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">Example:</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">    ```python</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">    from nextrpg.rpg_maker_character_drawing_config import RpgMakerCharacterDrawingConfig</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">    from nextrpg.core import Millisecond</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">    # Create default RPG Maker character config</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">    config = RpgMakerCharacterDrawingConfig()</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">    # Create custom RPG Maker character config</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">    custom_config = RpgMakerCharacterDrawingConfig(</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">        duration_per_frame=Millisecond(150)</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">    )</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">    ```</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="nd">@export</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RpgMakerCharacterDrawingConfig</span><span class="p">:</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">    Configuration class for RPG Maker character drawings.</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">    This config is used by `nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing`</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">    to control how character sprites are animated and displayed. It defines the</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">    animation timing, idle behavior, and default orientation.</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">    Note that `nextrpg` is only compatible with the RPG Maker character sprite</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">    sheet format to be able to re-use existing resources. However, using RPG</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">    Maker&#39;s Runtime Time Package (RTP) in non-RPG Maker frameworks violates the</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">    license of RPG Maker, even if you own a copy of RPG Maker.</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="nd">@export</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RpgMakerCharacterDrawingConfig</span><span class="p">:</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">    Configuration class for RPG Maker character drawings.</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">    This config is used by `nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing`</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">    to control how character sprites are animated and displayed. It defines the</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">    animation timing, idle behavior, and default orientation.</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">    Note that `nextrpg` is only compatible with the RPG Maker character</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">    sprite sheet format to be able to re-use existing resources.</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">    However, using RPG Maker&#39;s Runtime Time Package (RTP) in non-RPG</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">    Maker frameworks violates the license of RPG Maker, even if you</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">    own a copy of RPG Maker.</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">        `duration_per_frame`: The default duration for a single frame</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">            for the character in milliseconds. Defaults to 200ms.</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="sd">    Example:</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">        ```python</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">        from nextrpg.rpg_maker_character_drawing_config import RpgMakerCharacterDrawingConfig</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">        from nextrpg.core import Millisecond</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="sd">        # Default configuration</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="sd">        config = RpgMakerCharacterDrawingConfig()</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">        # Fast animation configuration</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">        fast_config = RpgMakerCharacterDrawingConfig(</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="sd">            duration_per_frame=Millisecond(100)</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="sd">        )</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="sd">        # Slow animation configuration</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="sd">        slow_config = RpgMakerCharacterDrawingConfig(</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="sd">            duration_per_frame=Millisecond(300)</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="sd">        )</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a><span class="sd">        ```</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>    <span class="n">duration_per_frame</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">    Arguments:</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">        `duration_per_frame`: The default duration for a single frame for the</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">            character in milliseconds. Defaults to 200ms.</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">duration_per_frame</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>
 </span></pre></div>
 
 
@@ -201,48 +146,27 @@ own a copy of RPG Maker.</p>
 
     </div>
     <a class="headerlink" href="#RpgMakerCharacterDrawingConfig"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="RpgMakerCharacterDrawingConfig-42"><a href="#RpgMakerCharacterDrawingConfig-42"><span class="linenos">42</span></a><span class="nd">@export</span>
-</span><span id="RpgMakerCharacterDrawingConfig-43"><a href="#RpgMakerCharacterDrawingConfig-43"><span class="linenos">43</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="RpgMakerCharacterDrawingConfig-44"><a href="#RpgMakerCharacterDrawingConfig-44"><span class="linenos">44</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RpgMakerCharacterDrawingConfig</span><span class="p">:</span>
-</span><span id="RpgMakerCharacterDrawingConfig-45"><a href="#RpgMakerCharacterDrawingConfig-45"><span class="linenos">45</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="RpgMakerCharacterDrawingConfig-46"><a href="#RpgMakerCharacterDrawingConfig-46"><span class="linenos">46</span></a><span class="sd">    Configuration class for RPG Maker character drawings.</span>
-</span><span id="RpgMakerCharacterDrawingConfig-47"><a href="#RpgMakerCharacterDrawingConfig-47"><span class="linenos">47</span></a>
-</span><span id="RpgMakerCharacterDrawingConfig-48"><a href="#RpgMakerCharacterDrawingConfig-48"><span class="linenos">48</span></a><span class="sd">    This config is used by `nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing`</span>
-</span><span id="RpgMakerCharacterDrawingConfig-49"><a href="#RpgMakerCharacterDrawingConfig-49"><span class="linenos">49</span></a><span class="sd">    to control how character sprites are animated and displayed. It defines the</span>
-</span><span id="RpgMakerCharacterDrawingConfig-50"><a href="#RpgMakerCharacterDrawingConfig-50"><span class="linenos">50</span></a><span class="sd">    animation timing, idle behavior, and default orientation.</span>
-</span><span id="RpgMakerCharacterDrawingConfig-51"><a href="#RpgMakerCharacterDrawingConfig-51"><span class="linenos">51</span></a>
-</span><span id="RpgMakerCharacterDrawingConfig-52"><a href="#RpgMakerCharacterDrawingConfig-52"><span class="linenos">52</span></a><span class="sd">    Note that `nextrpg` is only compatible with the RPG Maker character</span>
-</span><span id="RpgMakerCharacterDrawingConfig-53"><a href="#RpgMakerCharacterDrawingConfig-53"><span class="linenos">53</span></a><span class="sd">    sprite sheet format to be able to re-use existing resources.</span>
-</span><span id="RpgMakerCharacterDrawingConfig-54"><a href="#RpgMakerCharacterDrawingConfig-54"><span class="linenos">54</span></a>
-</span><span id="RpgMakerCharacterDrawingConfig-55"><a href="#RpgMakerCharacterDrawingConfig-55"><span class="linenos">55</span></a><span class="sd">    However, using RPG Maker&#39;s Runtime Time Package (RTP) in non-RPG</span>
-</span><span id="RpgMakerCharacterDrawingConfig-56"><a href="#RpgMakerCharacterDrawingConfig-56"><span class="linenos">56</span></a><span class="sd">    Maker frameworks violates the license of RPG Maker, even if you</span>
-</span><span id="RpgMakerCharacterDrawingConfig-57"><a href="#RpgMakerCharacterDrawingConfig-57"><span class="linenos">57</span></a><span class="sd">    own a copy of RPG Maker.</span>
-</span><span id="RpgMakerCharacterDrawingConfig-58"><a href="#RpgMakerCharacterDrawingConfig-58"><span class="linenos">58</span></a>
-</span><span id="RpgMakerCharacterDrawingConfig-59"><a href="#RpgMakerCharacterDrawingConfig-59"><span class="linenos">59</span></a><span class="sd">    Arguments:</span>
-</span><span id="RpgMakerCharacterDrawingConfig-60"><a href="#RpgMakerCharacterDrawingConfig-60"><span class="linenos">60</span></a><span class="sd">        `duration_per_frame`: The default duration for a single frame</span>
-</span><span id="RpgMakerCharacterDrawingConfig-61"><a href="#RpgMakerCharacterDrawingConfig-61"><span class="linenos">61</span></a><span class="sd">            for the character in milliseconds. Defaults to 200ms.</span>
-</span><span id="RpgMakerCharacterDrawingConfig-62"><a href="#RpgMakerCharacterDrawingConfig-62"><span class="linenos">62</span></a>
-</span><span id="RpgMakerCharacterDrawingConfig-63"><a href="#RpgMakerCharacterDrawingConfig-63"><span class="linenos">63</span></a><span class="sd">    Example:</span>
-</span><span id="RpgMakerCharacterDrawingConfig-64"><a href="#RpgMakerCharacterDrawingConfig-64"><span class="linenos">64</span></a><span class="sd">        ```python</span>
-</span><span id="RpgMakerCharacterDrawingConfig-65"><a href="#RpgMakerCharacterDrawingConfig-65"><span class="linenos">65</span></a><span class="sd">        from nextrpg.rpg_maker_character_drawing_config import RpgMakerCharacterDrawingConfig</span>
-</span><span id="RpgMakerCharacterDrawingConfig-66"><a href="#RpgMakerCharacterDrawingConfig-66"><span class="linenos">66</span></a><span class="sd">        from nextrpg.core import Millisecond</span>
-</span><span id="RpgMakerCharacterDrawingConfig-67"><a href="#RpgMakerCharacterDrawingConfig-67"><span class="linenos">67</span></a>
-</span><span id="RpgMakerCharacterDrawingConfig-68"><a href="#RpgMakerCharacterDrawingConfig-68"><span class="linenos">68</span></a><span class="sd">        # Default configuration</span>
-</span><span id="RpgMakerCharacterDrawingConfig-69"><a href="#RpgMakerCharacterDrawingConfig-69"><span class="linenos">69</span></a><span class="sd">        config = RpgMakerCharacterDrawingConfig()</span>
-</span><span id="RpgMakerCharacterDrawingConfig-70"><a href="#RpgMakerCharacterDrawingConfig-70"><span class="linenos">70</span></a>
-</span><span id="RpgMakerCharacterDrawingConfig-71"><a href="#RpgMakerCharacterDrawingConfig-71"><span class="linenos">71</span></a><span class="sd">        # Fast animation configuration</span>
-</span><span id="RpgMakerCharacterDrawingConfig-72"><a href="#RpgMakerCharacterDrawingConfig-72"><span class="linenos">72</span></a><span class="sd">        fast_config = RpgMakerCharacterDrawingConfig(</span>
-</span><span id="RpgMakerCharacterDrawingConfig-73"><a href="#RpgMakerCharacterDrawingConfig-73"><span class="linenos">73</span></a><span class="sd">            duration_per_frame=Millisecond(100)</span>
-</span><span id="RpgMakerCharacterDrawingConfig-74"><a href="#RpgMakerCharacterDrawingConfig-74"><span class="linenos">74</span></a><span class="sd">        )</span>
-</span><span id="RpgMakerCharacterDrawingConfig-75"><a href="#RpgMakerCharacterDrawingConfig-75"><span class="linenos">75</span></a>
-</span><span id="RpgMakerCharacterDrawingConfig-76"><a href="#RpgMakerCharacterDrawingConfig-76"><span class="linenos">76</span></a><span class="sd">        # Slow animation configuration</span>
-</span><span id="RpgMakerCharacterDrawingConfig-77"><a href="#RpgMakerCharacterDrawingConfig-77"><span class="linenos">77</span></a><span class="sd">        slow_config = RpgMakerCharacterDrawingConfig(</span>
-</span><span id="RpgMakerCharacterDrawingConfig-78"><a href="#RpgMakerCharacterDrawingConfig-78"><span class="linenos">78</span></a><span class="sd">            duration_per_frame=Millisecond(300)</span>
-</span><span id="RpgMakerCharacterDrawingConfig-79"><a href="#RpgMakerCharacterDrawingConfig-79"><span class="linenos">79</span></a><span class="sd">        )</span>
-</span><span id="RpgMakerCharacterDrawingConfig-80"><a href="#RpgMakerCharacterDrawingConfig-80"><span class="linenos">80</span></a><span class="sd">        ```</span>
-</span><span id="RpgMakerCharacterDrawingConfig-81"><a href="#RpgMakerCharacterDrawingConfig-81"><span class="linenos">81</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="RpgMakerCharacterDrawingConfig-82"><a href="#RpgMakerCharacterDrawingConfig-82"><span class="linenos">82</span></a>
-</span><span id="RpgMakerCharacterDrawingConfig-83"><a href="#RpgMakerCharacterDrawingConfig-83"><span class="linenos">83</span></a>    <span class="n">duration_per_frame</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="RpgMakerCharacterDrawingConfig-27"><a href="#RpgMakerCharacterDrawingConfig-27"><span class="linenos">27</span></a><span class="nd">@export</span>
+</span><span id="RpgMakerCharacterDrawingConfig-28"><a href="#RpgMakerCharacterDrawingConfig-28"><span class="linenos">28</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="RpgMakerCharacterDrawingConfig-29"><a href="#RpgMakerCharacterDrawingConfig-29"><span class="linenos">29</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RpgMakerCharacterDrawingConfig</span><span class="p">:</span>
+</span><span id="RpgMakerCharacterDrawingConfig-30"><a href="#RpgMakerCharacterDrawingConfig-30"><span class="linenos">30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="RpgMakerCharacterDrawingConfig-31"><a href="#RpgMakerCharacterDrawingConfig-31"><span class="linenos">31</span></a><span class="sd">    Configuration class for RPG Maker character drawings.</span>
+</span><span id="RpgMakerCharacterDrawingConfig-32"><a href="#RpgMakerCharacterDrawingConfig-32"><span class="linenos">32</span></a>
+</span><span id="RpgMakerCharacterDrawingConfig-33"><a href="#RpgMakerCharacterDrawingConfig-33"><span class="linenos">33</span></a><span class="sd">    This config is used by `nextrpg.character.rpg_maker_drawing.RpgMakerCharacterDrawing`</span>
+</span><span id="RpgMakerCharacterDrawingConfig-34"><a href="#RpgMakerCharacterDrawingConfig-34"><span class="linenos">34</span></a><span class="sd">    to control how character sprites are animated and displayed. It defines the</span>
+</span><span id="RpgMakerCharacterDrawingConfig-35"><a href="#RpgMakerCharacterDrawingConfig-35"><span class="linenos">35</span></a><span class="sd">    animation timing, idle behavior, and default orientation.</span>
+</span><span id="RpgMakerCharacterDrawingConfig-36"><a href="#RpgMakerCharacterDrawingConfig-36"><span class="linenos">36</span></a>
+</span><span id="RpgMakerCharacterDrawingConfig-37"><a href="#RpgMakerCharacterDrawingConfig-37"><span class="linenos">37</span></a><span class="sd">    Note that `nextrpg` is only compatible with the RPG Maker character sprite</span>
+</span><span id="RpgMakerCharacterDrawingConfig-38"><a href="#RpgMakerCharacterDrawingConfig-38"><span class="linenos">38</span></a><span class="sd">    sheet format to be able to re-use existing resources. However, using RPG</span>
+</span><span id="RpgMakerCharacterDrawingConfig-39"><a href="#RpgMakerCharacterDrawingConfig-39"><span class="linenos">39</span></a><span class="sd">    Maker&#39;s Runtime Time Package (RTP) in non-RPG Maker frameworks violates the</span>
+</span><span id="RpgMakerCharacterDrawingConfig-40"><a href="#RpgMakerCharacterDrawingConfig-40"><span class="linenos">40</span></a><span class="sd">    license of RPG Maker, even if you own a copy of RPG Maker.</span>
+</span><span id="RpgMakerCharacterDrawingConfig-41"><a href="#RpgMakerCharacterDrawingConfig-41"><span class="linenos">41</span></a>
+</span><span id="RpgMakerCharacterDrawingConfig-42"><a href="#RpgMakerCharacterDrawingConfig-42"><span class="linenos">42</span></a><span class="sd">    Arguments:</span>
+</span><span id="RpgMakerCharacterDrawingConfig-43"><a href="#RpgMakerCharacterDrawingConfig-43"><span class="linenos">43</span></a><span class="sd">        `duration_per_frame`: The default duration for a single frame for the</span>
+</span><span id="RpgMakerCharacterDrawingConfig-44"><a href="#RpgMakerCharacterDrawingConfig-44"><span class="linenos">44</span></a><span class="sd">            character in milliseconds. Defaults to 200ms.</span>
+</span><span id="RpgMakerCharacterDrawingConfig-45"><a href="#RpgMakerCharacterDrawingConfig-45"><span class="linenos">45</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="RpgMakerCharacterDrawingConfig-46"><a href="#RpgMakerCharacterDrawingConfig-46"><span class="linenos">46</span></a>
+</span><span id="RpgMakerCharacterDrawingConfig-47"><a href="#RpgMakerCharacterDrawingConfig-47"><span class="linenos">47</span></a>    <span class="n">duration_per_frame</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>
 </span></pre></div>
 
 
@@ -252,42 +176,17 @@ own a copy of RPG Maker.</p>
 to control how character sprites are animated and displayed. It defines the
 animation timing, idle behavior, and default orientation.</p>
 
-<p>Note that <code><a href="../nextrpg.html">nextrpg</a></code> is only compatible with the RPG Maker character
-sprite sheet format to be able to re-use existing resources.</p>
-
-<p>However, using RPG Maker's Runtime Time Package (RTP) in non-RPG
-Maker frameworks violates the license of RPG Maker, even if you
-own a copy of RPG Maker.</p>
+<p>Note that <code><a href="../nextrpg.html">nextrpg</a></code> is only compatible with the RPG Maker character sprite
+sheet format to be able to re-use existing resources. However, using RPG
+Maker's Runtime Time Package (RTP) in non-RPG Maker frameworks violates the
+license of RPG Maker, even if you own a copy of RPG Maker.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong><code><a href="#RpgMakerCharacterDrawingConfig.duration_per_frame">duration_per_frame</a></code>:</strong>  The default duration for a single frame
-for the character in milliseconds. Defaults to 200ms.</li>
+<li><strong><code><a href="#RpgMakerCharacterDrawingConfig.duration_per_frame">duration_per_frame</a></code>:</strong>  The default duration for a single frame for the
+character in milliseconds. Defaults to 200ms.</li>
 </ul>
-
-<h6 id="example">Example:</h6>
-
-<blockquote>
-  <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.rpg_maker_character_drawing_config</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">RpgMakerCharacterDrawingConfig</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="core.html">nextrpg.core</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-
-<span class="c1"># Default configuration</span>
-<span class="n">config</span> <span class="o">=</span> <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">()</span>
-
-<span class="c1"># Fast animation configuration</span>
-<span class="n">fast_config</span> <span class="o">=</span> <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">(</span>
-    <span class="n">duration_per_frame</span><span class="o">=</span><span class="n">Millisecond</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
-<span class="p">)</span>
-
-<span class="c1"># Slow animation configuration</span>
-<span class="n">slow_config</span> <span class="o">=</span> <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">(</span>
-    <span class="n">duration_per_frame</span><span class="o">=</span><span class="n">Millisecond</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
-<span class="p">)</span>
-</code></pre>
-  </div>
-</blockquote>
 </div>
 
 

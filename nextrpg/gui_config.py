@@ -1,8 +1,22 @@
+"""
+GUI configuration system for `nextrpg`.
+
+This module provides configuration options for the graphical user interface in
+`nextrpg` games. It includes enums for resize and GUI modes, and the
+`GuiConfig` class for window and rendering settings.
+
+Features:
+    - Resize mode and GUI mode enums
+    - Window size, title, and background color configuration
+    - Frame rate and double buffering options
+    - Windowed/fullscreen and scaling options
+"""
+
 from dataclasses import dataclass
 from enum import Enum, auto
 
-from nextrpg.model import export
 from nextrpg.core import BLACK, Rgba, Size
+from nextrpg.model import export
 
 
 @export
@@ -11,9 +25,8 @@ class ResizeMode(Enum):
     Resize mode enum.
 
     Attributes:
-        `SCALE`: Scale the images to fit the GUI size.
-
-        `KEEP_NATIVE_SIZE`: Keep the native image size.
+        SCALE: Scale the images to fit the GUI size.
+        KEEP_NATIVE_SIZE: Keep the native image size.
     """
 
     SCALE = auto()
@@ -26,9 +39,8 @@ class GuiMode(Enum):
     Gui mode enum.
 
     Attributes:
-        `WINDOWED`: Windowed GUI.
-
-        `FULL_SCREEN`: Full screen GUI.
+        WINDOWED: Windowed GUI.
+        FULL_SCREEN: Full screen GUI.
     """
 
     WINDOWED = auto()
@@ -40,7 +52,7 @@ class GuiMode(Enum):
         Get the opposite gui mode.
 
         Returns:
-            `GuiMode`: The opposite gui mode.
+            The opposite gui mode.
         """
         return _OPPOSITE_GUI_MODE[self]
 
@@ -51,27 +63,21 @@ class GuiConfig:
     """
     Configuration class for Graphical User Interface (GUI).
 
-    This is used by `nextrpg.gui.Gui` to initialize
-    the pygame window and by the rendering system to control display properties.
+    This is used by `nextrpg.gui.Gui` to initialize the pygame window and by the
+    rendering system to control display properties.
 
     Attributes:
-        `title`: The title of the GUI window.
-
-        `size`: The resolution or dimensions of the GUI window defined
-            by width and height. This also defines the aspect ratio of the game.
-
-        `frames_per_second`: FPS. The target frame rate for the application's
+        title: The title of the GUI window.
+        size: The resolution or dimensions of the GUI window defined by width
+            and height. This also defines the aspect ratio of the game.
+        frames_per_second: FPS. The target frame rate for the application's
             rendering performance.
-
-        `background_color`: The background color of the GUI window.
-
-        `gui_mode`: Whether to start the game in windowed or full screen mode.
-
-        `resize_mode`: Whether to scale the images to fit the GUI size,
-            or keep the native image size.
-
-        `allow_window_resize`: Whether to allow the user to resize the window
-            in windowed mode.
+        background_color: The background color of the GUI window.
+        gui_mode: Whether to start the game in windowed or full screen mode.
+        resize_mode: Whether to scale the images to fit the GUI size, or keep
+            the native image size.
+        allow_window_resize: Whether to allow the user to resize the window in
+            windowed mode.
     """
 
     title: str = "nextrpg"

@@ -1,36 +1,15 @@
 """
-Drawable elements and rendering utilities for NextRPG.
+Drawable elements and rendering utilities for `nextrpg`.
 
-This module provides the core drawing system for NextRPG games. It
-defines classes for representing drawable elements, managing their
-positioning on screen, and handling various drawing operations.
+This module provides the core drawing system for `nextrpg` games. It defines
+classes for representing drawable elements, managing their positioning on
+screen, and handling various drawing operations.
 
-The module includes:
-- `Drawing`: Represents a drawable element with size and surface access
-- `DrawOnScreen`: Combines a drawing with its position on screen
-- `Polygon`: Represents polygon shapes with collision detection
-- `Rectangle`: Specialized rectangle with optimized collision detection
-
-These classes provide the foundation for all visual elements in
-NextRPG games, from sprites and backgrounds to UI elements and
-geometric shapes.
-
-Example:
-    ```python
-    from nextrpg.draw_on_screen import Drawing, DrawOnScreen, Rectangle
-    from nextrpg.coordinate import Coordinate
-    from nextrpg.core import Size, Rgba
-
-    # Load a sprite
-    sprite = Drawing("assets/player.png")
-
-    # Position it on screen
-    player = DrawOnScreen(Coordinate(100, 100), sprite)
-
-    # Create a colored rectangle
-    rect = Rectangle(Coordinate(0, 0), Size(50, 50))
-    colored_rect = rect.fill(Rgba(255, 0, 0, 255))
-    ```
+Features:
+    - `Drawing`: Represents a drawable element with size and surface access
+    - `DrawOnScreen`: Combines a drawing with its position on screen
+    - `Polygon`: Represents polygon shapes with collision detection
+    - `Rectangle`: Specialized rectangle with optimized collision detection
 """
 
 from collections.abc import Callable
@@ -39,17 +18,16 @@ from functools import cached_property
 from os import PathLike
 from typing import Self, override
 
-from pygame import Mask, Rect, SRCALPHA, Surface
+from pygame import SRCALPHA, Mask, Rect, Surface
 from pygame.draw import lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
 
-from nextrpg.model import cached
 from nextrpg.coordinate import Coordinate
-from nextrpg.core import Alpha, BLACK, Pixel, Rgba, Size
+from nextrpg.core import BLACK, Alpha, Pixel, Rgba, Size
 from nextrpg.global_config import config
 from nextrpg.logger import Logger
-from nextrpg.model import export
+from nextrpg.model import cached, export
 
 logger = Logger("Draw")
 

@@ -1,26 +1,15 @@
 """
-Plugin system for NextRPG.
+Plugin system for `NextRPG`.
 
-This module provides plugin functions that extend the functionality
-of NextRPG games. It includes event handlers and utility functions
-that can be registered and used throughout the game framework.
+This module provides plugin functions that extend the functionality of
+`NextRPG` games. It includes event handlers and utility functions that can be
+registered and used throughout the game framework.
 
 The plugin system features:
 - Event registration and handling
 - Character and scene interaction
 - Message display functionality
 - Integration with RPG event system
-
-Example:
-    ```python
-    from nextrpg.plugins import say
-    from nextrpg.character_on_screen import CharacterOnScreen
-
-    # Register a say event
-    @register_rpg_event
-    def talk_to_npc():
-        say(character, "Hello, how are you?")
-    ```
 """
 
 from typing import Any
@@ -41,43 +30,21 @@ def say(
     **kwargs: Any
 ) -> None:
     """
-    Character says a message.
+    Display a message from a character or scene using a say event.
 
-    This function creates a say event that displays a message
-    from a character or scene. It's registered as an RPG event
-    and can be used in event scripts.
+    This function creates a say event that displays a message from a character
+    or scene. It is registered as an RPG event and can be used in event scripts.
 
     Arguments:
-        `character_or_scene`: The character or scene that will
-            say the message.
-
+        `character_or_scene`: The character or scene that will say the message.
         `message`: The message to say.
-
-        `arg`: Optional coordinate argument for positioning.
-            Defaults to `None`.
-
-        `**kwargs`: Additional keyword arguments passed to the
-            say event.
+        `arg`: Optional coordinate argument for positioning. Defaults to `None`.
+        `**kwargs`: Additional keyword arguments passed to the say event.
 
     Returns:
-        `None`: For user code (RpgEventSpec), `say` returns no result
-            (from the `SayEvent` scene). For `Npcs`/`MapScene` to yield
-            the scene coroutine, it returns an `RpgEventCallable`.
-
-    Example:
-        ```python
-        from nextrpg.plugins import say
-        from nextrpg.character_on_screen import CharacterOnScreen
-
-        # Character says a message
-        say(character, "Hello, adventurer!")
-
-        # Scene says a message
-        say(scene, "You found a treasure chest!")
-
-        # Say with positioning
-        say(character, "Look over here!", Coordinate(100, 200))
-        ```
+        `None`: For user code (`RpgEventSpec`), `say` returns no result (from
+        the `SayEvent` scene). For `Npcs`/`MapScene` to yield the scene
+        coroutine, it returns an `RpgEventCallable`.
     """
     from nextrpg.say_event import SayEvent
 

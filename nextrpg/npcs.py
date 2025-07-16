@@ -1,34 +1,16 @@
-"""NPC (Non-Player Character) system for NextRPG.
+"""
+NPC (Non-Player Character) system for `nextrpg`.
 
-This module provides the core NPC functionality for the NextRPG game engine.
-It includes classes for managing NPCs on screen, event specifications,
-and scene management for player-NPC interactions.
+This module provides the core NPC functionality for the `nextrpg` game engine.
+It includes classes for managing NPCs on screen, event specifications, and scene
+management for player-NPC interactions.
 
-The module defines:
-- NpcOnScreen: In-game NPC interface for stationary NPCs
-- EventfulScene: Scene that supports event execution via coroutines/generators
-- RpgEventScene: Scene wrapper for RPG events
-- NpcSpec: Base class for NPC specifications
-- Type aliases for event specifications and generators
-
-Example:
-    ```python
-    # Create an NPC specification
-    npc_spec = NpcSpec(
-        name="Shopkeeper",
-        drawing=character_drawing,
-        event=shop_dialog_event
-    )
-
-    # Create an NPC on screen
-    npc = NpcOnScreen(spec=npc_spec)
-
-    # Create an eventful scene with NPCs
-    scene = EventfulScene(
-        player=player,
-        npcs=(npc,)
-    )
-    ```
+Features:
+    - `NpcOnScreen`: In-game NPC interface for stationary NPCs
+    - `EventfulScene`: Scene that supports event execution via coroutines/generators
+    - `RpgEventScene`: Scene wrapper for RPG events
+    - `NpcSpec`: Base class for NPC specifications
+    - Type aliases for event specifications and generators
 """
 
 from collections.abc import Callable, Generator

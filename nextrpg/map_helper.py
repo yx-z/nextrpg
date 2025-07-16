@@ -1,5 +1,16 @@
 """
-Map helper class for loading the TMX tiles.
+Map helper system for `nextrpg`.
+
+This module provides helper classes and functions for loading and processing TMX
+tile maps in `nextrpg` games. It includes utilities for tile grouping, polygon
+creation, collision detection, and map rendering.
+
+Features:
+    - Tile grouping and bottom pixel calculation
+    - Polygon and rectangle creation from Tiled objects
+    - Foreground/background/above-character layer management
+    - Collision detection and debug visualization
+    - Map object and layer access utilities
 """
 
 from dataclasses import dataclass
@@ -9,24 +20,13 @@ from pathlib import Path
 from typing import NamedTuple
 
 from pygame import Surface
-from pytmx import (
-    TiledMap,
-    TiledObject,
-    TiledObjectGroup,
-    TiledTileLayer,
-    load_pygame,
-)
+from pytmx import TiledMap, TiledObject, TiledObjectGroup, TiledTileLayer, load_pygame
 
 from nextrpg.character_on_screen import CharacterOnScreen
-from nextrpg.global_config import config
-from nextrpg.core import Pixel, Size
-from nextrpg.draw_on_screen import (
-    DrawOnScreen,
-    Polygon,
-    Rectangle,
-)
-from nextrpg.draw_on_screen import Drawing
 from nextrpg.coordinate import Coordinate
+from nextrpg.core import Pixel, Size
+from nextrpg.draw_on_screen import Drawing, DrawOnScreen, Polygon, Rectangle
+from nextrpg.global_config import config
 from nextrpg.logger import Logger
 from nextrpg.model import cached, export
 

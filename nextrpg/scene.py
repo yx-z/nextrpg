@@ -1,10 +1,10 @@
 """
-Base scene interface and management for NextRPG.
+Base scene interface and management for `NextRPG`.
 
-This module provides the foundational scene system for NextRPG games.
-It defines the `Scene` base class that all game scenes must inherit
-from, providing a consistent interface for scene management, event
-handling, and rendering.
+This module provides the foundational scene system for `NextRPG` games. It
+defines the `Scene` base class that all game scenes must inherit from,
+providing a consistent interface for scene management, event handling, and
+rendering.
 
 The scene system provides:
 - Abstract base class for all game scenes
@@ -13,34 +13,17 @@ The scene system provides:
 - Drawing management with screen shifting
 - Scene state management and transitions
 
-This module establishes the contract that all scene implementations
-must follow, ensuring consistent behavior across different types
-of game scenes.
-
-Example:
-    ```python
-    from nextrpg.scene import Scene
-    from nextrpg.event.pygame_event import PygameEvent, KeyPressDown
-    from nextrpg.core import Millisecond
-
-    class MyScene(Scene):
-        def event(self, event: PygameEvent) -> Scene:
-            # Handle events
-            return self
-
-        def tick(self, time_delta: Millisecond) -> Scene:
-            # Update scene state
-            return self
-    ```
+This module establishes the contract that all scene implementations must
+follow, ensuring consistent behavior across different types of game scenes.
 """
 
 from functools import cached_property
 
-from nextrpg.core import Millisecond
 from nextrpg.coordinate import Coordinate
+from nextrpg.core import Millisecond
 from nextrpg.draw_on_screen import DrawOnScreen
-from nextrpg.pygame_event import PygameEvent
 from nextrpg.model import export
+from nextrpg.pygame_event import PygameEvent
 
 
 @export
@@ -48,13 +31,13 @@ class Scene:
     """
     Base class representing a game scene.
 
-    This abstract base class defines the interface that all game scenes
-    must implement. It provides methods for event handling, time-based
-    updates, and drawing management.
+    This abstract base class defines the interface that all game scenes must
+    implement. It provides methods for event handling, time-based updates, and
+    drawing management.
 
-    The scene system is designed to be immutable, with all methods
-    returning new scene instances rather than modifying the current
-    state. This ensures thread safety and predictable behavior.
+    The scene system is designed to be immutable, with all methods returning
+    new scene instances rather than modifying the current state. This ensures
+    thread safety and predictable behavior.
 
     Scenes can represent various game states such as:
     - Game world exploration
@@ -62,22 +45,6 @@ class Scene:
     - Dialog sequences
     - Battle scenes
     - Transition effects
-
-    Example:
-        ```python
-        from nextrpg.scene import Scene
-        from nextrpg.event.pygame_event import PygameEvent
-        from nextrpg.core import Millisecond
-
-        class MenuScene(Scene):
-            def event(self, event: PygameEvent) -> Scene:
-                # Handle menu navigation
-                return self
-
-            def tick(self, time_delta: Millisecond) -> Scene:
-                # Update menu animations
-                return self
-        ```
     """
 
     @cached_property

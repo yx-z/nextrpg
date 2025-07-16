@@ -1,29 +1,18 @@
 """
-Code transformation system for NextRPG.
+Code transformation system for `nextrpg`.
 
-This module provides AST-based code transformers for RPG events
-in NextRPG games. It includes transformers for adding parent
-references, yield statements, and say annotations.
+This module provides AST-based code transformers for RPG events in `nextrpg`
+games. It includes transformers for adding parent references, yield statements,
+and say annotations.
 
-The code transformation system features:
-- AST node transformation
-- Parent reference tracking
-- Automatic yield insertion
-- Say annotation processing
-- Integration with RPG event system
-
-Example:
-    ```python
-    from nextrpg.code_transformers import ADD_PARENT, ADD_YIELD, ANNOTATE_SAY
-
-    # Apply transformers to AST
-    tree = ADD_PARENT.visit(tree)
-    tree = ADD_YIELD.visit(tree)
-    tree = ANNOTATE_SAY.visit(tree)
-    ```
+Features:
+    - AST node transformation
+    - Parent reference tracking
+    - Automatic yield insertion
+    - Say annotation processing
+    - Integration with RPG event system
 """
 
-from typing import Any
 from ast import (
     AST,
     AnnAssign,
@@ -32,14 +21,14 @@ from ast import (
     Expr,
     Load,
     Name,
-    expr,
     NodeTransformer,
     Subscript,
     Yield,
+    expr,
     iter_child_nodes,
     unparse,
 )
-from typing import NamedTuple, NoReturn
+from typing import Any, NamedTuple, NoReturn
 
 from nextrpg.rpg_event import registered_events
 
@@ -48,17 +37,8 @@ class AddParent(NodeTransformer):
     """
     AST transformer that adds parent references to nodes.
 
-    This transformer traverses the AST and adds parent references
-    to each node, allowing child nodes to access their parent
-    during transformation.
-
-    Example:
-        ```python
-        from nextrpg.code_transformers import AddParent
-
-        transformer = AddParent()
-        tree = transformer.visit(tree)
-        ```
+    This transformer traverses the AST and adds parent references to each node,
+    allowing child nodes to access their parent during transformation.
     """
 
     def visit(self, node: AST) -> AST:
@@ -68,10 +48,10 @@ class AddParent(NodeTransformer):
         Adds parent references to all child nodes of the given node.
 
         Arguments:
-            `node`: The AST node to transform.
+            node: The AST node to transform.
 
         Returns:
-            `AST`: The transformed node with parent references.
+            The transformed node with parent references.
         """
         self.generic_visit(node)
         for child in iter_child_nodes(node):
@@ -87,31 +67,22 @@ class AddYield(NodeTransformer):
     """
     AST transformer that adds yield statements to event calls.
 
-    This transformer automatically wraps event function calls
-    in yield statements to enable coroutine-based event handling.
-
-    Example:
-        ```python
-        from nextrpg.code_transformers import AddYield
-
-        transformer = AddYield()
-        tree = transformer.visit(tree)
-        ```
+    This transformer automatically wraps event function calls in yield
+    statements to enable coroutine-based event handling.
     """
 
     def visit_Call(self, node: Call) -> Yield | Call:
         """
         Visit and transform a function call node.
 
-        Wraps registered event calls in yield statements if they
-        are not already within a yield statement.
+        Wraps registered event calls in yield statements if they are not already
+        within a yield statement.
 
         Arguments:
-            `node`: The function call node to transform.
+            node: The function call node to transform.
 
         Returns:
-            `Yield | Call`: Either a yield statement wrapping the call
-                or the original call node.
+            Either a yield statement wrapping the call or the original call node.
         """
         self.generic_visit(node)
         func_event = isinstance(node.func, Name) and _is_event(node.func.id)
@@ -134,34 +105,26 @@ class AnnotateSay(NodeTransformer):
     """
     AST transformer that processes say annotations.
 
-    This transformer converts type annotations with say strings
-    into actual say function calls.
-
-    Example:
-        ```python
-        from nextrpg.code_transformers import AnnotateSay
-
-        transformer = AnnotateSay()
-        tree = transformer.visit(tree)
-        ```
+    This transformer converts type annotations with say strings into actual say
+    function calls.
     """
 
     def visit_AnnAssign(self, node: AnnAssign) -> Expr | AnnAssign:
         """
         Visit and transform an annotated assignment node.
 
-        Converts say annotations like `player: "Hello"` into
-        `player.say("Hello")` function calls.
+        Converts say annotations like `player: "Hello"` into `player.say("Hello")`
+        function calls.
 
         Arguments:
-            `node`: The annotated assignment node to transform.
+            node: The annotated assignment node to transform.
 
         Returns:
-            `Expr | AnnAssign`: Either a say function call expression
-                or the original annotated assignment.
+            Either a say function call expression or the original annotated
+            assignment.
 
         Raises:
-            `ValueError`: If the annotation format is invalid.
+            ValueError: If the annotation format is invalid.
         """
         if node.value is not None:
             return node
@@ -202,10 +165,10 @@ def _raise_annotate_say(node: Subscript | Attribute) -> NoReturn:
     Raise an error for invalid say annotation format.
 
     Arguments:
-        `node`: The invalid annotated assignment node.
+        node: The invalid annotated assignment node.
 
     Raises:
-        `ValueError`: Always raised with a descriptive error message.
+        ValueError: Always raised with a descriptive error message.
     """
     raise ValueError(
         f'Expect var[arg]: "...", where var is player/npc and arg is the ad-hoc config. Got complex expression {unparse(node)}'

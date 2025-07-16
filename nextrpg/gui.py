@@ -1,34 +1,17 @@
 """
-Game window and Graphical User Interface (GUI) management for NextRPG.
+Game window and Graphical User Interface (GUI) management for `nextrpg`.
 
-This module provides the core GUI system for NextRPG games, handling
-window management, screen rendering, and user interface interactions.
-It includes the `Gui` class which manages the game window, screen
-scaling, and drawing operations.
+This module provides the core GUI system for `nextrpg` games, handling window
+management, screen rendering, and user interface interactions. It includes the
+`Gui` class which manages the game window, screen scaling, and drawing
+operations.
 
-The GUI system features:
-- Window management with fullscreen and windowed modes
-- Automatic screen scaling and centering
-- Event handling for window resizing and mode switching
-- Drawing surface management and rendering
-- Integration with the logging system for debug output
-
-Example:
-    ```python
-    from nextrpg.window import Gui
-    from nextrpg.draw_on_screen import DrawOnScreen
-    from nextrpg.core import Millisecond
-
-    # Create GUI instance
-    gui = Gui()
-
-    # Draw elements to screen
-    drawings = (sprite1, sprite2, background)
-    gui.draw(drawings, time_delta)
-
-    # Handle GUI events
-    gui = gui.event(resize_event)
-    ```
+Features:
+    - Window management with fullscreen and windowed modes
+    - Automatic screen scaling and centering
+    - Event handling for window resizing and mode switching
+    - Drawing surface management and rendering
+    - Integration with the logging system for debug output
 """
 
 from dataclasses import KW_ONLY, dataclass, field, replace
@@ -41,21 +24,14 @@ from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
-from nextrpg.model import not_constructor_below
 from nextrpg.coordinate import Coordinate
 from nextrpg.core import Millisecond, Pixel, Size
-from nextrpg.draw_on_screen import DrawOnScreen
-from nextrpg.draw_on_screen import Drawing
+from nextrpg.draw_on_screen import Drawing, DrawOnScreen
 from nextrpg.global_config import config, set_config
 from nextrpg.gui_config import GuiConfig, GuiMode, ResizeMode
 from nextrpg.logger import ComponentAndMessage, Logger, pop_messages
-from nextrpg.model import export
-from nextrpg.pygame_event import (
-    GuiResize,
-    KeyboardKey,
-    KeyPressDown,
-    PygameEvent,
-)
+from nextrpg.model import export, not_constructor_below
+from nextrpg.pygame_event import GuiResize, KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.text import Text
 from nextrpg.text_on_screen import TextOnScreen
 

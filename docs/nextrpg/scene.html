@@ -67,12 +67,12 @@
                     <h1 class="modulename">
 <a href="./../nextrpg.html">nextrpg</a><wbr>.scene    </h1>
 
-                        <div class="docstring"><p>Base scene interface and management for NextRPG.</p>
+                        <div class="docstring"><p>Base scene interface and management for <code>NextRPG</code>.</p>
 
-<p>This module provides the foundational scene system for NextRPG games.
-It defines the <code><a href="#Scene">Scene</a></code> base class that all game scenes must inherit
-from, providing a consistent interface for scene management, event
-handling, and rendering.</p>
+<p>This module provides the foundational scene system for <code>NextRPG</code> games. It
+defines the <code><a href="#Scene">Scene</a></code> base class that all game scenes must inherit from,
+providing a consistent interface for scene management, event handling, and
+rendering.</p>
 
 <p>The scene system provides:</p>
 
@@ -84,29 +84,8 @@ handling, and rendering.</p>
 <li>Scene state management and transitions</li>
 </ul>
 
-<p>This module establishes the contract that all scene implementations
-must follow, ensuring consistent behavior across different types
-of game scenes.</p>
-
-<h6 id="example">Example:</h6>
-
-<blockquote>
-  <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.scene</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">PygameEvent</span><span class="p">,</span> <span class="n">KeyPressDown</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="core.html">nextrpg.core</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-
-<span class="k">class</span><span class="w"> </span><span class="nc">MyScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-        <span class="c1"># Handle events</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-        <span class="c1"># Update scene state</span>
-        <span class="k">return</span> <span class="bp">self</span>
-</code></pre>
-  </div>
-</blockquote>
+<p>This module establishes the contract that all scene implementations must
+follow, ensuring consistent behavior across different types of game scenes.</p>
 </div>
 
                         <input id="mod-scene-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -114,12 +93,12 @@ of game scenes.</p>
                         <label class="view-source-button" for="mod-scene-view-source"><span>View Source</span></label>
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="sd">Base scene interface and management for NextRPG.</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a><span class="sd">Base scene interface and management for `NextRPG`.</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="sd">This module provides the foundational scene system for NextRPG games.</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="sd">It defines the `Scene` base class that all game scenes must inherit</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="sd">from, providing a consistent interface for scene management, event</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="sd">handling, and rendering.</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="sd">This module provides the foundational scene system for `NextRPG` games. It</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="sd">defines the `Scene` base class that all game scenes must inherit from,</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="sd">providing a consistent interface for scene management, event handling, and</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="sd">rendering.</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="sd">The scene system provides:</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="sd">- Abstract base class for all game scenes</span>
@@ -128,203 +107,170 @@ of game scenes.</p>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="sd">- Drawing management with screen shifting</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="sd">- Scene state management and transitions</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="sd">This module establishes the contract that all scene implementations</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="sd">must follow, ensuring consistent behavior across different types</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="sd">of game scenes.</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="sd">This module establishes the contract that all scene implementations must</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="sd">follow, ensuring consistent behavior across different types of game scenes.</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="sd">Example:</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="sd">    ```python</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="sd">    from nextrpg.scene import Scene</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="sd">    from nextrpg.event.pygame_event import PygameEvent, KeyPressDown</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="sd">    from nextrpg.core import Millisecond</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="sd">    class MyScene(Scene):</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="sd">        def event(self, event: PygameEvent) -&gt; Scene:</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="sd">            # Handle events</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="sd">            return self</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>
-</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="sd">        def tick(self, time_delta: Millisecond) -&gt; Scene:</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="sd">            # Update scene state</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="sd">            return self</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="sd">    ```</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">PygameEvent</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>
-</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>
-</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="nd">@export</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Scene</span><span class="p">:</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="sd">    Base class representing a game scene.</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">    This abstract base class defines the interface that all game scenes</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">    must implement. It provides methods for event handling, time-based</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="sd">    updates, and drawing management.</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">export</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">PygameEvent</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="nd">@export</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Scene</span><span class="p">:</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="sd">    Base class representing a game scene.</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="sd">    This abstract base class defines the interface that all game scenes must</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">    implement. It provides methods for event handling, time-based updates, and</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">    drawing management.</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="sd">    The scene system is designed to be immutable, with all methods returning</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="sd">    new scene instances rather than modifying the current state. This ensures</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="sd">    thread safety and predictable behavior.</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="sd">    Scenes can represent various game states such as:</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">    - Game world exploration</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">    - Menu systems</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="sd">    - Dialog sequences</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="sd">    - Battle scenes</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="sd">    - Transition effects</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="sd">        Get the offset applied to all drawings before GUI scaling.</span>
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="sd">    The scene system is designed to be immutable, with all methods</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="sd">    returning new scene instances rather than modifying the current</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">    state. This ensures thread safety and predictable behavior.</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">    Scenes can represent various game states such as:</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="sd">    - Game world exploration</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">    - Menu systems</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">    - Dialog sequences</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">    - Battle scenes</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">    - Transition effects</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">    Example:</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">        ```python</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">        from nextrpg.scene import Scene</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">        from nextrpg.event.pygame_event import PygameEvent</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">        from nextrpg.core import Millisecond</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">        class MenuScene(Scene):</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">            def event(self, event: PygameEvent) -&gt; Scene:</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">                # Handle menu navigation</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">                return self</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">            def tick(self, time_delta: Millisecond) -&gt; Scene:</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">                # Update menu animations</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">                return self</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">        ```</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">        Get the offset applied to all drawings before GUI scaling.</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">        This property provides a coordinate offset that is applied to</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">        all drawings in the scene. It&#39;s commonly used for camera</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">        positioning, such as centering the player on screen in map</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">        scenes.</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="sd">        Returns:</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">            `Coordinate | None`: The shift offset for all drawings,</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">                or `None` if no shift is applied.</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">        Example:</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">            ```python</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">            # Center the scene on the player</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">            def draw_on_screen_shift(self):</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">                return Coordinate(-player.x + screen_width/2,</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">                                -player.y + screen_height/2)</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">            ```</span>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>        <span class="k">return</span> <span class="kc">None</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">        Get the drawables to be rendered on screen with shift applied.</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">        This property returns all drawable objects for the scene,</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        with the `draw_on_screen_shift` applied if specified.</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a><span class="sd">        The shift is applied before GUI scaling to ensure proper</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">        positioning.</span>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="sd">        Returns:</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The drawables to be rendered.</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">        Example:</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">            ```python</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">            def draw_on_screens_before_shift(self):</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">                return (player_sprite, background, ui_elements)</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">            ```</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">:</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>                <span class="n">d</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">)</span>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screens_before_shift</span>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>            <span class="p">)</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screens_before_shift</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">        Get the drawables before shift is applied.</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">        This method should be overridden by subclasses to provide</span>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">        the actual drawable objects for the scene. The shift will</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">        be applied automatically by `draw_on_screens`.</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">        Returns:</span>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The drawables before shift.</span>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>        <span class="k">return</span> <span class="p">()</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">        Handle events for the scene.</span>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">        This method processes pygame events and returns an updated</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">        scene state. The recommended implementation uses</span>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">        `@singledispatchmethod` to handle different event types</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">        efficiently.</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="sd">        This property provides a coordinate offset that is applied to</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="sd">        all drawings in the scene. It&#39;s commonly used for camera</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">        positioning, such as centering the player on screen in map</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">        scenes.</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="sd">        Returns:</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">            `Coordinate | None`: The shift offset for all drawings,</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">                or `None` if no shift is applied.</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">        Example:</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">            ```python</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">            # Center the scene on the player</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">            def draw_on_screen_shift(self):</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">                return Coordinate(-player.x + screen_width/2,</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">                                -player.y + screen_height/2)</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">            ```</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>        <span class="k">return</span> <span class="kc">None</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">        Get the drawables to be rendered on screen with shift applied.</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">        This property returns all drawable objects for the scene,</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">        with the `draw_on_screen_shift` applied if specified.</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">        The shift is applied before GUI scaling to ensure proper</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">        positioning.</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">        Returns:</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The drawables to be rendered.</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">        Example:</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">            ```python</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">            def draw_on_screens_before_shift(self):</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">                return (player_sprite, background, ui_elements)</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">            ```</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">:</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>                <span class="n">d</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">)</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screens_before_shift</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>            <span class="p">)</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screens_before_shift</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">        Get the drawables before shift is applied.</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">        This method should be overridden by subclasses to provide</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="sd">        the actual drawable objects for the scene. The shift will</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="sd">        be applied automatically by `draw_on_screens`.</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="sd">        Returns:</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The drawables before shift.</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>        <span class="k">return</span> <span class="p">()</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">        Handle events for the scene.</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">        This method processes pygame events and returns an updated</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="sd">        scene state. The recommended implementation uses</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">        `@singledispatchmethod` to handle different event types</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">        efficiently.</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">            `event`: The pygame event to process.</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="sd">        Returns:</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">            `Scene`: The updated scene state after processing the event.</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="sd">        Example:</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a><span class="sd">            ```python</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">            from functools import singledispatchmethod</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">            from nextrpg.event.pygame_event import KeyPressDown, KeyPressUp</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">            class MyScene(Scene):</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">                @singledispatchmethod</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">                def event(self, event: PygameEvent) -&gt; Scene:</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">                    return self</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">                @event.register</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">                def _on_key_press_down(self, event: KeyPressDown) -&gt; Scene:</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">                    # Handle key press</span>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">                    return self</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">                @event.register</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">                def _on_key_press_up(self, event: KeyPressUp) -&gt; Scene:</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">                    # Handle key release</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="sd">                    return self</span>
+</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="sd">            ```</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a><span class="sd">        Update the scene state for a single game frame.</span>
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">            `event`: The pygame event to process.</span>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">        Returns:</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">            `Scene`: The updated scene state after processing the event.</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">        Example:</span>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">            ```python</span>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="sd">            from functools import singledispatchmethod</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">            from nextrpg.event.pygame_event import KeyPressDown, KeyPressUp</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">        This method is called each frame to update the scene state</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">        based on elapsed time. It handles animations, movements,</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">        and other time-dependent changes.</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">            `time_delta`: The time elapsed since the last update</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">                in milliseconds.</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="sd">        Returns:</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">            `Scene`: The updated scene state after the time step.</span>
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">            class MyScene(Scene):</span>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="sd">                @singledispatchmethod</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">                def event(self, event: PygameEvent) -&gt; Scene:</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">                    return self</span>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">                @event.register</span>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">                def _on_key_press_down(self, event: KeyPressDown) -&gt; Scene:</span>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">                    # Handle key press</span>
-</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">                    return self</span>
-</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>
-</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a><span class="sd">                @event.register</span>
-</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a><span class="sd">                def _on_key_press_up(self, event: KeyPressUp) -&gt; Scene:</span>
-</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a><span class="sd">                    # Handle key release</span>
-</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a><span class="sd">                    return self</span>
-</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a><span class="sd">            ```</span>
-</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>
-</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a><span class="sd">        Update the scene state for a single game frame.</span>
-</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>
-</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a><span class="sd">        This method is called each frame to update the scene state</span>
-</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a><span class="sd">        based on elapsed time. It handles animations, movements,</span>
-</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a><span class="sd">        and other time-dependent changes.</span>
-</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>
-</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="sd">            `time_delta`: The time elapsed since the last update</span>
-</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a><span class="sd">                in milliseconds.</span>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>
-</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="sd">        Returns:</span>
-</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a><span class="sd">            `Scene`: The updated scene state after the time step.</span>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>
-</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="sd">        Example:</span>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a><span class="sd">            ```python</span>
-</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="sd">            def tick(self, time_delta: Millisecond) -&gt; Scene:</span>
-</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="sd">                # Update character animations</span>
-</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="sd">                self.player = self.player.tick_idle(time_delta)</span>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>
-</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">                # Update timers</span>
-</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">                self.timer = self.timer.tick(time_delta)</span>
-</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>
-</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a><span class="sd">                return self</span>
-</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a><span class="sd">            ```</span>
-</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">        Example:</span>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="sd">            ```python</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">            def tick(self, time_delta: Millisecond) -&gt; Scene:</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">                # Update character animations</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">                self.player = self.player.tick_idle(time_delta)</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">                # Update timers</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">                self.timer = self.timer.tick(time_delta)</span>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>
+</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a><span class="sd">                return self</span>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a><span class="sd">            ```</span>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 
@@ -341,185 +287,169 @@ of game scenes.</p>
 
     </div>
     <a class="headerlink" href="#Scene"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene-47"><a href="#Scene-47"><span class="linenos"> 47</span></a><span class="nd">@export</span>
-</span><span id="Scene-48"><a href="#Scene-48"><span class="linenos"> 48</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Scene</span><span class="p">:</span>
-</span><span id="Scene-49"><a href="#Scene-49"><span class="linenos"> 49</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene-50"><a href="#Scene-50"><span class="linenos"> 50</span></a><span class="sd">    Base class representing a game scene.</span>
-</span><span id="Scene-51"><a href="#Scene-51"><span class="linenos"> 51</span></a>
-</span><span id="Scene-52"><a href="#Scene-52"><span class="linenos"> 52</span></a><span class="sd">    This abstract base class defines the interface that all game scenes</span>
-</span><span id="Scene-53"><a href="#Scene-53"><span class="linenos"> 53</span></a><span class="sd">    must implement. It provides methods for event handling, time-based</span>
-</span><span id="Scene-54"><a href="#Scene-54"><span class="linenos"> 54</span></a><span class="sd">    updates, and drawing management.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene-30"><a href="#Scene-30"><span class="linenos"> 30</span></a><span class="nd">@export</span>
+</span><span id="Scene-31"><a href="#Scene-31"><span class="linenos"> 31</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Scene</span><span class="p">:</span>
+</span><span id="Scene-32"><a href="#Scene-32"><span class="linenos"> 32</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene-33"><a href="#Scene-33"><span class="linenos"> 33</span></a><span class="sd">    Base class representing a game scene.</span>
+</span><span id="Scene-34"><a href="#Scene-34"><span class="linenos"> 34</span></a>
+</span><span id="Scene-35"><a href="#Scene-35"><span class="linenos"> 35</span></a><span class="sd">    This abstract base class defines the interface that all game scenes must</span>
+</span><span id="Scene-36"><a href="#Scene-36"><span class="linenos"> 36</span></a><span class="sd">    implement. It provides methods for event handling, time-based updates, and</span>
+</span><span id="Scene-37"><a href="#Scene-37"><span class="linenos"> 37</span></a><span class="sd">    drawing management.</span>
+</span><span id="Scene-38"><a href="#Scene-38"><span class="linenos"> 38</span></a>
+</span><span id="Scene-39"><a href="#Scene-39"><span class="linenos"> 39</span></a><span class="sd">    The scene system is designed to be immutable, with all methods returning</span>
+</span><span id="Scene-40"><a href="#Scene-40"><span class="linenos"> 40</span></a><span class="sd">    new scene instances rather than modifying the current state. This ensures</span>
+</span><span id="Scene-41"><a href="#Scene-41"><span class="linenos"> 41</span></a><span class="sd">    thread safety and predictable behavior.</span>
+</span><span id="Scene-42"><a href="#Scene-42"><span class="linenos"> 42</span></a>
+</span><span id="Scene-43"><a href="#Scene-43"><span class="linenos"> 43</span></a><span class="sd">    Scenes can represent various game states such as:</span>
+</span><span id="Scene-44"><a href="#Scene-44"><span class="linenos"> 44</span></a><span class="sd">    - Game world exploration</span>
+</span><span id="Scene-45"><a href="#Scene-45"><span class="linenos"> 45</span></a><span class="sd">    - Menu systems</span>
+</span><span id="Scene-46"><a href="#Scene-46"><span class="linenos"> 46</span></a><span class="sd">    - Dialog sequences</span>
+</span><span id="Scene-47"><a href="#Scene-47"><span class="linenos"> 47</span></a><span class="sd">    - Battle scenes</span>
+</span><span id="Scene-48"><a href="#Scene-48"><span class="linenos"> 48</span></a><span class="sd">    - Transition effects</span>
+</span><span id="Scene-49"><a href="#Scene-49"><span class="linenos"> 49</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Scene-50"><a href="#Scene-50"><span class="linenos"> 50</span></a>
+</span><span id="Scene-51"><a href="#Scene-51"><span class="linenos"> 51</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Scene-52"><a href="#Scene-52"><span class="linenos"> 52</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Scene-53"><a href="#Scene-53"><span class="linenos"> 53</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene-54"><a href="#Scene-54"><span class="linenos"> 54</span></a><span class="sd">        Get the offset applied to all drawings before GUI scaling.</span>
 </span><span id="Scene-55"><a href="#Scene-55"><span class="linenos"> 55</span></a>
-</span><span id="Scene-56"><a href="#Scene-56"><span class="linenos"> 56</span></a><span class="sd">    The scene system is designed to be immutable, with all methods</span>
-</span><span id="Scene-57"><a href="#Scene-57"><span class="linenos"> 57</span></a><span class="sd">    returning new scene instances rather than modifying the current</span>
-</span><span id="Scene-58"><a href="#Scene-58"><span class="linenos"> 58</span></a><span class="sd">    state. This ensures thread safety and predictable behavior.</span>
-</span><span id="Scene-59"><a href="#Scene-59"><span class="linenos"> 59</span></a>
-</span><span id="Scene-60"><a href="#Scene-60"><span class="linenos"> 60</span></a><span class="sd">    Scenes can represent various game states such as:</span>
-</span><span id="Scene-61"><a href="#Scene-61"><span class="linenos"> 61</span></a><span class="sd">    - Game world exploration</span>
-</span><span id="Scene-62"><a href="#Scene-62"><span class="linenos"> 62</span></a><span class="sd">    - Menu systems</span>
-</span><span id="Scene-63"><a href="#Scene-63"><span class="linenos"> 63</span></a><span class="sd">    - Dialog sequences</span>
-</span><span id="Scene-64"><a href="#Scene-64"><span class="linenos"> 64</span></a><span class="sd">    - Battle scenes</span>
-</span><span id="Scene-65"><a href="#Scene-65"><span class="linenos"> 65</span></a><span class="sd">    - Transition effects</span>
-</span><span id="Scene-66"><a href="#Scene-66"><span class="linenos"> 66</span></a>
-</span><span id="Scene-67"><a href="#Scene-67"><span class="linenos"> 67</span></a><span class="sd">    Example:</span>
-</span><span id="Scene-68"><a href="#Scene-68"><span class="linenos"> 68</span></a><span class="sd">        ```python</span>
-</span><span id="Scene-69"><a href="#Scene-69"><span class="linenos"> 69</span></a><span class="sd">        from nextrpg.scene import Scene</span>
-</span><span id="Scene-70"><a href="#Scene-70"><span class="linenos"> 70</span></a><span class="sd">        from nextrpg.event.pygame_event import PygameEvent</span>
-</span><span id="Scene-71"><a href="#Scene-71"><span class="linenos"> 71</span></a><span class="sd">        from nextrpg.core import Millisecond</span>
-</span><span id="Scene-72"><a href="#Scene-72"><span class="linenos"> 72</span></a>
-</span><span id="Scene-73"><a href="#Scene-73"><span class="linenos"> 73</span></a><span class="sd">        class MenuScene(Scene):</span>
-</span><span id="Scene-74"><a href="#Scene-74"><span class="linenos"> 74</span></a><span class="sd">            def event(self, event: PygameEvent) -&gt; Scene:</span>
-</span><span id="Scene-75"><a href="#Scene-75"><span class="linenos"> 75</span></a><span class="sd">                # Handle menu navigation</span>
-</span><span id="Scene-76"><a href="#Scene-76"><span class="linenos"> 76</span></a><span class="sd">                return self</span>
-</span><span id="Scene-77"><a href="#Scene-77"><span class="linenos"> 77</span></a>
-</span><span id="Scene-78"><a href="#Scene-78"><span class="linenos"> 78</span></a><span class="sd">            def tick(self, time_delta: Millisecond) -&gt; Scene:</span>
-</span><span id="Scene-79"><a href="#Scene-79"><span class="linenos"> 79</span></a><span class="sd">                # Update menu animations</span>
-</span><span id="Scene-80"><a href="#Scene-80"><span class="linenos"> 80</span></a><span class="sd">                return self</span>
-</span><span id="Scene-81"><a href="#Scene-81"><span class="linenos"> 81</span></a><span class="sd">        ```</span>
-</span><span id="Scene-82"><a href="#Scene-82"><span class="linenos"> 82</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Scene-83"><a href="#Scene-83"><span class="linenos"> 83</span></a>
-</span><span id="Scene-84"><a href="#Scene-84"><span class="linenos"> 84</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Scene-85"><a href="#Scene-85"><span class="linenos"> 85</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Scene-86"><a href="#Scene-86"><span class="linenos"> 86</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene-87"><a href="#Scene-87"><span class="linenos"> 87</span></a><span class="sd">        Get the offset applied to all drawings before GUI scaling.</span>
-</span><span id="Scene-88"><a href="#Scene-88"><span class="linenos"> 88</span></a>
-</span><span id="Scene-89"><a href="#Scene-89"><span class="linenos"> 89</span></a><span class="sd">        This property provides a coordinate offset that is applied to</span>
-</span><span id="Scene-90"><a href="#Scene-90"><span class="linenos"> 90</span></a><span class="sd">        all drawings in the scene. It&#39;s commonly used for camera</span>
-</span><span id="Scene-91"><a href="#Scene-91"><span class="linenos"> 91</span></a><span class="sd">        positioning, such as centering the player on screen in map</span>
-</span><span id="Scene-92"><a href="#Scene-92"><span class="linenos"> 92</span></a><span class="sd">        scenes.</span>
-</span><span id="Scene-93"><a href="#Scene-93"><span class="linenos"> 93</span></a>
-</span><span id="Scene-94"><a href="#Scene-94"><span class="linenos"> 94</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene-95"><a href="#Scene-95"><span class="linenos"> 95</span></a><span class="sd">            `Coordinate | None`: The shift offset for all drawings,</span>
-</span><span id="Scene-96"><a href="#Scene-96"><span class="linenos"> 96</span></a><span class="sd">                or `None` if no shift is applied.</span>
-</span><span id="Scene-97"><a href="#Scene-97"><span class="linenos"> 97</span></a>
-</span><span id="Scene-98"><a href="#Scene-98"><span class="linenos"> 98</span></a><span class="sd">        Example:</span>
-</span><span id="Scene-99"><a href="#Scene-99"><span class="linenos"> 99</span></a><span class="sd">            ```python</span>
-</span><span id="Scene-100"><a href="#Scene-100"><span class="linenos">100</span></a><span class="sd">            # Center the scene on the player</span>
-</span><span id="Scene-101"><a href="#Scene-101"><span class="linenos">101</span></a><span class="sd">            def draw_on_screen_shift(self):</span>
-</span><span id="Scene-102"><a href="#Scene-102"><span class="linenos">102</span></a><span class="sd">                return Coordinate(-player.x + screen_width/2,</span>
-</span><span id="Scene-103"><a href="#Scene-103"><span class="linenos">103</span></a><span class="sd">                                -player.y + screen_height/2)</span>
-</span><span id="Scene-104"><a href="#Scene-104"><span class="linenos">104</span></a><span class="sd">            ```</span>
-</span><span id="Scene-105"><a href="#Scene-105"><span class="linenos">105</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Scene-106"><a href="#Scene-106"><span class="linenos">106</span></a>        <span class="k">return</span> <span class="kc">None</span>
-</span><span id="Scene-107"><a href="#Scene-107"><span class="linenos">107</span></a>
-</span><span id="Scene-108"><a href="#Scene-108"><span class="linenos">108</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Scene-109"><a href="#Scene-109"><span class="linenos">109</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="Scene-110"><a href="#Scene-110"><span class="linenos">110</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene-111"><a href="#Scene-111"><span class="linenos">111</span></a><span class="sd">        Get the drawables to be rendered on screen with shift applied.</span>
-</span><span id="Scene-112"><a href="#Scene-112"><span class="linenos">112</span></a>
-</span><span id="Scene-113"><a href="#Scene-113"><span class="linenos">113</span></a><span class="sd">        This property returns all drawable objects for the scene,</span>
-</span><span id="Scene-114"><a href="#Scene-114"><span class="linenos">114</span></a><span class="sd">        with the `draw_on_screen_shift` applied if specified.</span>
-</span><span id="Scene-115"><a href="#Scene-115"><span class="linenos">115</span></a><span class="sd">        The shift is applied before GUI scaling to ensure proper</span>
-</span><span id="Scene-116"><a href="#Scene-116"><span class="linenos">116</span></a><span class="sd">        positioning.</span>
-</span><span id="Scene-117"><a href="#Scene-117"><span class="linenos">117</span></a>
-</span><span id="Scene-118"><a href="#Scene-118"><span class="linenos">118</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene-119"><a href="#Scene-119"><span class="linenos">119</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The drawables to be rendered.</span>
-</span><span id="Scene-120"><a href="#Scene-120"><span class="linenos">120</span></a>
-</span><span id="Scene-121"><a href="#Scene-121"><span class="linenos">121</span></a><span class="sd">        Example:</span>
-</span><span id="Scene-122"><a href="#Scene-122"><span class="linenos">122</span></a><span class="sd">            ```python</span>
-</span><span id="Scene-123"><a href="#Scene-123"><span class="linenos">123</span></a><span class="sd">            def draw_on_screens_before_shift(self):</span>
-</span><span id="Scene-124"><a href="#Scene-124"><span class="linenos">124</span></a><span class="sd">                return (player_sprite, background, ui_elements)</span>
-</span><span id="Scene-125"><a href="#Scene-125"><span class="linenos">125</span></a><span class="sd">            ```</span>
-</span><span id="Scene-126"><a href="#Scene-126"><span class="linenos">126</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Scene-127"><a href="#Scene-127"><span class="linenos">127</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">:</span>
-</span><span id="Scene-128"><a href="#Scene-128"><span class="linenos">128</span></a>            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
-</span><span id="Scene-129"><a href="#Scene-129"><span class="linenos">129</span></a>                <span class="n">d</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">)</span>
-</span><span id="Scene-130"><a href="#Scene-130"><span class="linenos">130</span></a>                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screens_before_shift</span>
-</span><span id="Scene-131"><a href="#Scene-131"><span class="linenos">131</span></a>            <span class="p">)</span>
-</span><span id="Scene-132"><a href="#Scene-132"><span class="linenos">132</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screens_before_shift</span>
-</span><span id="Scene-133"><a href="#Scene-133"><span class="linenos">133</span></a>
-</span><span id="Scene-134"><a href="#Scene-134"><span class="linenos">134</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Scene-135"><a href="#Scene-135"><span class="linenos">135</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="Scene-136"><a href="#Scene-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene-137"><a href="#Scene-137"><span class="linenos">137</span></a><span class="sd">        Get the drawables before shift is applied.</span>
-</span><span id="Scene-138"><a href="#Scene-138"><span class="linenos">138</span></a>
-</span><span id="Scene-139"><a href="#Scene-139"><span class="linenos">139</span></a><span class="sd">        This method should be overridden by subclasses to provide</span>
-</span><span id="Scene-140"><a href="#Scene-140"><span class="linenos">140</span></a><span class="sd">        the actual drawable objects for the scene. The shift will</span>
-</span><span id="Scene-141"><a href="#Scene-141"><span class="linenos">141</span></a><span class="sd">        be applied automatically by `draw_on_screens`.</span>
-</span><span id="Scene-142"><a href="#Scene-142"><span class="linenos">142</span></a>
-</span><span id="Scene-143"><a href="#Scene-143"><span class="linenos">143</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene-144"><a href="#Scene-144"><span class="linenos">144</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The drawables before shift.</span>
-</span><span id="Scene-145"><a href="#Scene-145"><span class="linenos">145</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Scene-146"><a href="#Scene-146"><span class="linenos">146</span></a>        <span class="k">return</span> <span class="p">()</span>
-</span><span id="Scene-147"><a href="#Scene-147"><span class="linenos">147</span></a>
-</span><span id="Scene-148"><a href="#Scene-148"><span class="linenos">148</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="Scene-149"><a href="#Scene-149"><span class="linenos">149</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene-150"><a href="#Scene-150"><span class="linenos">150</span></a><span class="sd">        Handle events for the scene.</span>
-</span><span id="Scene-151"><a href="#Scene-151"><span class="linenos">151</span></a>
-</span><span id="Scene-152"><a href="#Scene-152"><span class="linenos">152</span></a><span class="sd">        This method processes pygame events and returns an updated</span>
-</span><span id="Scene-153"><a href="#Scene-153"><span class="linenos">153</span></a><span class="sd">        scene state. The recommended implementation uses</span>
-</span><span id="Scene-154"><a href="#Scene-154"><span class="linenos">154</span></a><span class="sd">        `@singledispatchmethod` to handle different event types</span>
-</span><span id="Scene-155"><a href="#Scene-155"><span class="linenos">155</span></a><span class="sd">        efficiently.</span>
+</span><span id="Scene-56"><a href="#Scene-56"><span class="linenos"> 56</span></a><span class="sd">        This property provides a coordinate offset that is applied to</span>
+</span><span id="Scene-57"><a href="#Scene-57"><span class="linenos"> 57</span></a><span class="sd">        all drawings in the scene. It&#39;s commonly used for camera</span>
+</span><span id="Scene-58"><a href="#Scene-58"><span class="linenos"> 58</span></a><span class="sd">        positioning, such as centering the player on screen in map</span>
+</span><span id="Scene-59"><a href="#Scene-59"><span class="linenos"> 59</span></a><span class="sd">        scenes.</span>
+</span><span id="Scene-60"><a href="#Scene-60"><span class="linenos"> 60</span></a>
+</span><span id="Scene-61"><a href="#Scene-61"><span class="linenos"> 61</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene-62"><a href="#Scene-62"><span class="linenos"> 62</span></a><span class="sd">            `Coordinate | None`: The shift offset for all drawings,</span>
+</span><span id="Scene-63"><a href="#Scene-63"><span class="linenos"> 63</span></a><span class="sd">                or `None` if no shift is applied.</span>
+</span><span id="Scene-64"><a href="#Scene-64"><span class="linenos"> 64</span></a>
+</span><span id="Scene-65"><a href="#Scene-65"><span class="linenos"> 65</span></a><span class="sd">        Example:</span>
+</span><span id="Scene-66"><a href="#Scene-66"><span class="linenos"> 66</span></a><span class="sd">            ```python</span>
+</span><span id="Scene-67"><a href="#Scene-67"><span class="linenos"> 67</span></a><span class="sd">            # Center the scene on the player</span>
+</span><span id="Scene-68"><a href="#Scene-68"><span class="linenos"> 68</span></a><span class="sd">            def draw_on_screen_shift(self):</span>
+</span><span id="Scene-69"><a href="#Scene-69"><span class="linenos"> 69</span></a><span class="sd">                return Coordinate(-player.x + screen_width/2,</span>
+</span><span id="Scene-70"><a href="#Scene-70"><span class="linenos"> 70</span></a><span class="sd">                                -player.y + screen_height/2)</span>
+</span><span id="Scene-71"><a href="#Scene-71"><span class="linenos"> 71</span></a><span class="sd">            ```</span>
+</span><span id="Scene-72"><a href="#Scene-72"><span class="linenos"> 72</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene-73"><a href="#Scene-73"><span class="linenos"> 73</span></a>        <span class="k">return</span> <span class="kc">None</span>
+</span><span id="Scene-74"><a href="#Scene-74"><span class="linenos"> 74</span></a>
+</span><span id="Scene-75"><a href="#Scene-75"><span class="linenos"> 75</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Scene-76"><a href="#Scene-76"><span class="linenos"> 76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="Scene-77"><a href="#Scene-77"><span class="linenos"> 77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene-78"><a href="#Scene-78"><span class="linenos"> 78</span></a><span class="sd">        Get the drawables to be rendered on screen with shift applied.</span>
+</span><span id="Scene-79"><a href="#Scene-79"><span class="linenos"> 79</span></a>
+</span><span id="Scene-80"><a href="#Scene-80"><span class="linenos"> 80</span></a><span class="sd">        This property returns all drawable objects for the scene,</span>
+</span><span id="Scene-81"><a href="#Scene-81"><span class="linenos"> 81</span></a><span class="sd">        with the `draw_on_screen_shift` applied if specified.</span>
+</span><span id="Scene-82"><a href="#Scene-82"><span class="linenos"> 82</span></a><span class="sd">        The shift is applied before GUI scaling to ensure proper</span>
+</span><span id="Scene-83"><a href="#Scene-83"><span class="linenos"> 83</span></a><span class="sd">        positioning.</span>
+</span><span id="Scene-84"><a href="#Scene-84"><span class="linenos"> 84</span></a>
+</span><span id="Scene-85"><a href="#Scene-85"><span class="linenos"> 85</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene-86"><a href="#Scene-86"><span class="linenos"> 86</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The drawables to be rendered.</span>
+</span><span id="Scene-87"><a href="#Scene-87"><span class="linenos"> 87</span></a>
+</span><span id="Scene-88"><a href="#Scene-88"><span class="linenos"> 88</span></a><span class="sd">        Example:</span>
+</span><span id="Scene-89"><a href="#Scene-89"><span class="linenos"> 89</span></a><span class="sd">            ```python</span>
+</span><span id="Scene-90"><a href="#Scene-90"><span class="linenos"> 90</span></a><span class="sd">            def draw_on_screens_before_shift(self):</span>
+</span><span id="Scene-91"><a href="#Scene-91"><span class="linenos"> 91</span></a><span class="sd">                return (player_sprite, background, ui_elements)</span>
+</span><span id="Scene-92"><a href="#Scene-92"><span class="linenos"> 92</span></a><span class="sd">            ```</span>
+</span><span id="Scene-93"><a href="#Scene-93"><span class="linenos"> 93</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene-94"><a href="#Scene-94"><span class="linenos"> 94</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">:</span>
+</span><span id="Scene-95"><a href="#Scene-95"><span class="linenos"> 95</span></a>            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="Scene-96"><a href="#Scene-96"><span class="linenos"> 96</span></a>                <span class="n">d</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">)</span>
+</span><span id="Scene-97"><a href="#Scene-97"><span class="linenos"> 97</span></a>                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screens_before_shift</span>
+</span><span id="Scene-98"><a href="#Scene-98"><span class="linenos"> 98</span></a>            <span class="p">)</span>
+</span><span id="Scene-99"><a href="#Scene-99"><span class="linenos"> 99</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screens_before_shift</span>
+</span><span id="Scene-100"><a href="#Scene-100"><span class="linenos">100</span></a>
+</span><span id="Scene-101"><a href="#Scene-101"><span class="linenos">101</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Scene-102"><a href="#Scene-102"><span class="linenos">102</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="Scene-103"><a href="#Scene-103"><span class="linenos">103</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene-104"><a href="#Scene-104"><span class="linenos">104</span></a><span class="sd">        Get the drawables before shift is applied.</span>
+</span><span id="Scene-105"><a href="#Scene-105"><span class="linenos">105</span></a>
+</span><span id="Scene-106"><a href="#Scene-106"><span class="linenos">106</span></a><span class="sd">        This method should be overridden by subclasses to provide</span>
+</span><span id="Scene-107"><a href="#Scene-107"><span class="linenos">107</span></a><span class="sd">        the actual drawable objects for the scene. The shift will</span>
+</span><span id="Scene-108"><a href="#Scene-108"><span class="linenos">108</span></a><span class="sd">        be applied automatically by `draw_on_screens`.</span>
+</span><span id="Scene-109"><a href="#Scene-109"><span class="linenos">109</span></a>
+</span><span id="Scene-110"><a href="#Scene-110"><span class="linenos">110</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene-111"><a href="#Scene-111"><span class="linenos">111</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The drawables before shift.</span>
+</span><span id="Scene-112"><a href="#Scene-112"><span class="linenos">112</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene-113"><a href="#Scene-113"><span class="linenos">113</span></a>        <span class="k">return</span> <span class="p">()</span>
+</span><span id="Scene-114"><a href="#Scene-114"><span class="linenos">114</span></a>
+</span><span id="Scene-115"><a href="#Scene-115"><span class="linenos">115</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="Scene-116"><a href="#Scene-116"><span class="linenos">116</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene-117"><a href="#Scene-117"><span class="linenos">117</span></a><span class="sd">        Handle events for the scene.</span>
+</span><span id="Scene-118"><a href="#Scene-118"><span class="linenos">118</span></a>
+</span><span id="Scene-119"><a href="#Scene-119"><span class="linenos">119</span></a><span class="sd">        This method processes pygame events and returns an updated</span>
+</span><span id="Scene-120"><a href="#Scene-120"><span class="linenos">120</span></a><span class="sd">        scene state. The recommended implementation uses</span>
+</span><span id="Scene-121"><a href="#Scene-121"><span class="linenos">121</span></a><span class="sd">        `@singledispatchmethod` to handle different event types</span>
+</span><span id="Scene-122"><a href="#Scene-122"><span class="linenos">122</span></a><span class="sd">        efficiently.</span>
+</span><span id="Scene-123"><a href="#Scene-123"><span class="linenos">123</span></a>
+</span><span id="Scene-124"><a href="#Scene-124"><span class="linenos">124</span></a><span class="sd">        Arguments:</span>
+</span><span id="Scene-125"><a href="#Scene-125"><span class="linenos">125</span></a><span class="sd">            `event`: The pygame event to process.</span>
+</span><span id="Scene-126"><a href="#Scene-126"><span class="linenos">126</span></a>
+</span><span id="Scene-127"><a href="#Scene-127"><span class="linenos">127</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene-128"><a href="#Scene-128"><span class="linenos">128</span></a><span class="sd">            `Scene`: The updated scene state after processing the event.</span>
+</span><span id="Scene-129"><a href="#Scene-129"><span class="linenos">129</span></a>
+</span><span id="Scene-130"><a href="#Scene-130"><span class="linenos">130</span></a><span class="sd">        Example:</span>
+</span><span id="Scene-131"><a href="#Scene-131"><span class="linenos">131</span></a><span class="sd">            ```python</span>
+</span><span id="Scene-132"><a href="#Scene-132"><span class="linenos">132</span></a><span class="sd">            from functools import singledispatchmethod</span>
+</span><span id="Scene-133"><a href="#Scene-133"><span class="linenos">133</span></a><span class="sd">            from nextrpg.event.pygame_event import KeyPressDown, KeyPressUp</span>
+</span><span id="Scene-134"><a href="#Scene-134"><span class="linenos">134</span></a>
+</span><span id="Scene-135"><a href="#Scene-135"><span class="linenos">135</span></a><span class="sd">            class MyScene(Scene):</span>
+</span><span id="Scene-136"><a href="#Scene-136"><span class="linenos">136</span></a><span class="sd">                @singledispatchmethod</span>
+</span><span id="Scene-137"><a href="#Scene-137"><span class="linenos">137</span></a><span class="sd">                def event(self, event: PygameEvent) -&gt; Scene:</span>
+</span><span id="Scene-138"><a href="#Scene-138"><span class="linenos">138</span></a><span class="sd">                    return self</span>
+</span><span id="Scene-139"><a href="#Scene-139"><span class="linenos">139</span></a>
+</span><span id="Scene-140"><a href="#Scene-140"><span class="linenos">140</span></a><span class="sd">                @event.register</span>
+</span><span id="Scene-141"><a href="#Scene-141"><span class="linenos">141</span></a><span class="sd">                def _on_key_press_down(self, event: KeyPressDown) -&gt; Scene:</span>
+</span><span id="Scene-142"><a href="#Scene-142"><span class="linenos">142</span></a><span class="sd">                    # Handle key press</span>
+</span><span id="Scene-143"><a href="#Scene-143"><span class="linenos">143</span></a><span class="sd">                    return self</span>
+</span><span id="Scene-144"><a href="#Scene-144"><span class="linenos">144</span></a>
+</span><span id="Scene-145"><a href="#Scene-145"><span class="linenos">145</span></a><span class="sd">                @event.register</span>
+</span><span id="Scene-146"><a href="#Scene-146"><span class="linenos">146</span></a><span class="sd">                def _on_key_press_up(self, event: KeyPressUp) -&gt; Scene:</span>
+</span><span id="Scene-147"><a href="#Scene-147"><span class="linenos">147</span></a><span class="sd">                    # Handle key release</span>
+</span><span id="Scene-148"><a href="#Scene-148"><span class="linenos">148</span></a><span class="sd">                    return self</span>
+</span><span id="Scene-149"><a href="#Scene-149"><span class="linenos">149</span></a><span class="sd">            ```</span>
+</span><span id="Scene-150"><a href="#Scene-150"><span class="linenos">150</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene-151"><a href="#Scene-151"><span class="linenos">151</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="Scene-152"><a href="#Scene-152"><span class="linenos">152</span></a>
+</span><span id="Scene-153"><a href="#Scene-153"><span class="linenos">153</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="Scene-154"><a href="#Scene-154"><span class="linenos">154</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene-155"><a href="#Scene-155"><span class="linenos">155</span></a><span class="sd">        Update the scene state for a single game frame.</span>
 </span><span id="Scene-156"><a href="#Scene-156"><span class="linenos">156</span></a>
-</span><span id="Scene-157"><a href="#Scene-157"><span class="linenos">157</span></a><span class="sd">        Arguments:</span>
-</span><span id="Scene-158"><a href="#Scene-158"><span class="linenos">158</span></a><span class="sd">            `event`: The pygame event to process.</span>
-</span><span id="Scene-159"><a href="#Scene-159"><span class="linenos">159</span></a>
-</span><span id="Scene-160"><a href="#Scene-160"><span class="linenos">160</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene-161"><a href="#Scene-161"><span class="linenos">161</span></a><span class="sd">            `Scene`: The updated scene state after processing the event.</span>
-</span><span id="Scene-162"><a href="#Scene-162"><span class="linenos">162</span></a>
-</span><span id="Scene-163"><a href="#Scene-163"><span class="linenos">163</span></a><span class="sd">        Example:</span>
-</span><span id="Scene-164"><a href="#Scene-164"><span class="linenos">164</span></a><span class="sd">            ```python</span>
-</span><span id="Scene-165"><a href="#Scene-165"><span class="linenos">165</span></a><span class="sd">            from functools import singledispatchmethod</span>
-</span><span id="Scene-166"><a href="#Scene-166"><span class="linenos">166</span></a><span class="sd">            from nextrpg.event.pygame_event import KeyPressDown, KeyPressUp</span>
+</span><span id="Scene-157"><a href="#Scene-157"><span class="linenos">157</span></a><span class="sd">        This method is called each frame to update the scene state</span>
+</span><span id="Scene-158"><a href="#Scene-158"><span class="linenos">158</span></a><span class="sd">        based on elapsed time. It handles animations, movements,</span>
+</span><span id="Scene-159"><a href="#Scene-159"><span class="linenos">159</span></a><span class="sd">        and other time-dependent changes.</span>
+</span><span id="Scene-160"><a href="#Scene-160"><span class="linenos">160</span></a>
+</span><span id="Scene-161"><a href="#Scene-161"><span class="linenos">161</span></a><span class="sd">        Arguments:</span>
+</span><span id="Scene-162"><a href="#Scene-162"><span class="linenos">162</span></a><span class="sd">            `time_delta`: The time elapsed since the last update</span>
+</span><span id="Scene-163"><a href="#Scene-163"><span class="linenos">163</span></a><span class="sd">                in milliseconds.</span>
+</span><span id="Scene-164"><a href="#Scene-164"><span class="linenos">164</span></a>
+</span><span id="Scene-165"><a href="#Scene-165"><span class="linenos">165</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene-166"><a href="#Scene-166"><span class="linenos">166</span></a><span class="sd">            `Scene`: The updated scene state after the time step.</span>
 </span><span id="Scene-167"><a href="#Scene-167"><span class="linenos">167</span></a>
-</span><span id="Scene-168"><a href="#Scene-168"><span class="linenos">168</span></a><span class="sd">            class MyScene(Scene):</span>
-</span><span id="Scene-169"><a href="#Scene-169"><span class="linenos">169</span></a><span class="sd">                @singledispatchmethod</span>
-</span><span id="Scene-170"><a href="#Scene-170"><span class="linenos">170</span></a><span class="sd">                def event(self, event: PygameEvent) -&gt; Scene:</span>
-</span><span id="Scene-171"><a href="#Scene-171"><span class="linenos">171</span></a><span class="sd">                    return self</span>
-</span><span id="Scene-172"><a href="#Scene-172"><span class="linenos">172</span></a>
-</span><span id="Scene-173"><a href="#Scene-173"><span class="linenos">173</span></a><span class="sd">                @event.register</span>
-</span><span id="Scene-174"><a href="#Scene-174"><span class="linenos">174</span></a><span class="sd">                def _on_key_press_down(self, event: KeyPressDown) -&gt; Scene:</span>
-</span><span id="Scene-175"><a href="#Scene-175"><span class="linenos">175</span></a><span class="sd">                    # Handle key press</span>
-</span><span id="Scene-176"><a href="#Scene-176"><span class="linenos">176</span></a><span class="sd">                    return self</span>
-</span><span id="Scene-177"><a href="#Scene-177"><span class="linenos">177</span></a>
-</span><span id="Scene-178"><a href="#Scene-178"><span class="linenos">178</span></a><span class="sd">                @event.register</span>
-</span><span id="Scene-179"><a href="#Scene-179"><span class="linenos">179</span></a><span class="sd">                def _on_key_press_up(self, event: KeyPressUp) -&gt; Scene:</span>
-</span><span id="Scene-180"><a href="#Scene-180"><span class="linenos">180</span></a><span class="sd">                    # Handle key release</span>
-</span><span id="Scene-181"><a href="#Scene-181"><span class="linenos">181</span></a><span class="sd">                    return self</span>
-</span><span id="Scene-182"><a href="#Scene-182"><span class="linenos">182</span></a><span class="sd">            ```</span>
-</span><span id="Scene-183"><a href="#Scene-183"><span class="linenos">183</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Scene-184"><a href="#Scene-184"><span class="linenos">184</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="Scene-185"><a href="#Scene-185"><span class="linenos">185</span></a>
-</span><span id="Scene-186"><a href="#Scene-186"><span class="linenos">186</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="Scene-187"><a href="#Scene-187"><span class="linenos">187</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene-188"><a href="#Scene-188"><span class="linenos">188</span></a><span class="sd">        Update the scene state for a single game frame.</span>
-</span><span id="Scene-189"><a href="#Scene-189"><span class="linenos">189</span></a>
-</span><span id="Scene-190"><a href="#Scene-190"><span class="linenos">190</span></a><span class="sd">        This method is called each frame to update the scene state</span>
-</span><span id="Scene-191"><a href="#Scene-191"><span class="linenos">191</span></a><span class="sd">        based on elapsed time. It handles animations, movements,</span>
-</span><span id="Scene-192"><a href="#Scene-192"><span class="linenos">192</span></a><span class="sd">        and other time-dependent changes.</span>
-</span><span id="Scene-193"><a href="#Scene-193"><span class="linenos">193</span></a>
-</span><span id="Scene-194"><a href="#Scene-194"><span class="linenos">194</span></a><span class="sd">        Arguments:</span>
-</span><span id="Scene-195"><a href="#Scene-195"><span class="linenos">195</span></a><span class="sd">            `time_delta`: The time elapsed since the last update</span>
-</span><span id="Scene-196"><a href="#Scene-196"><span class="linenos">196</span></a><span class="sd">                in milliseconds.</span>
-</span><span id="Scene-197"><a href="#Scene-197"><span class="linenos">197</span></a>
-</span><span id="Scene-198"><a href="#Scene-198"><span class="linenos">198</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene-199"><a href="#Scene-199"><span class="linenos">199</span></a><span class="sd">            `Scene`: The updated scene state after the time step.</span>
-</span><span id="Scene-200"><a href="#Scene-200"><span class="linenos">200</span></a>
-</span><span id="Scene-201"><a href="#Scene-201"><span class="linenos">201</span></a><span class="sd">        Example:</span>
-</span><span id="Scene-202"><a href="#Scene-202"><span class="linenos">202</span></a><span class="sd">            ```python</span>
-</span><span id="Scene-203"><a href="#Scene-203"><span class="linenos">203</span></a><span class="sd">            def tick(self, time_delta: Millisecond) -&gt; Scene:</span>
-</span><span id="Scene-204"><a href="#Scene-204"><span class="linenos">204</span></a><span class="sd">                # Update character animations</span>
-</span><span id="Scene-205"><a href="#Scene-205"><span class="linenos">205</span></a><span class="sd">                self.player = self.player.tick_idle(time_delta)</span>
-</span><span id="Scene-206"><a href="#Scene-206"><span class="linenos">206</span></a>
-</span><span id="Scene-207"><a href="#Scene-207"><span class="linenos">207</span></a><span class="sd">                # Update timers</span>
-</span><span id="Scene-208"><a href="#Scene-208"><span class="linenos">208</span></a><span class="sd">                self.timer = self.timer.tick(time_delta)</span>
-</span><span id="Scene-209"><a href="#Scene-209"><span class="linenos">209</span></a>
-</span><span id="Scene-210"><a href="#Scene-210"><span class="linenos">210</span></a><span class="sd">                return self</span>
-</span><span id="Scene-211"><a href="#Scene-211"><span class="linenos">211</span></a><span class="sd">            ```</span>
-</span><span id="Scene-212"><a href="#Scene-212"><span class="linenos">212</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Scene-213"><a href="#Scene-213"><span class="linenos">213</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="Scene-168"><a href="#Scene-168"><span class="linenos">168</span></a><span class="sd">        Example:</span>
+</span><span id="Scene-169"><a href="#Scene-169"><span class="linenos">169</span></a><span class="sd">            ```python</span>
+</span><span id="Scene-170"><a href="#Scene-170"><span class="linenos">170</span></a><span class="sd">            def tick(self, time_delta: Millisecond) -&gt; Scene:</span>
+</span><span id="Scene-171"><a href="#Scene-171"><span class="linenos">171</span></a><span class="sd">                # Update character animations</span>
+</span><span id="Scene-172"><a href="#Scene-172"><span class="linenos">172</span></a><span class="sd">                self.player = self.player.tick_idle(time_delta)</span>
+</span><span id="Scene-173"><a href="#Scene-173"><span class="linenos">173</span></a>
+</span><span id="Scene-174"><a href="#Scene-174"><span class="linenos">174</span></a><span class="sd">                # Update timers</span>
+</span><span id="Scene-175"><a href="#Scene-175"><span class="linenos">175</span></a><span class="sd">                self.timer = self.timer.tick(time_delta)</span>
+</span><span id="Scene-176"><a href="#Scene-176"><span class="linenos">176</span></a>
+</span><span id="Scene-177"><a href="#Scene-177"><span class="linenos">177</span></a><span class="sd">                return self</span>
+</span><span id="Scene-178"><a href="#Scene-178"><span class="linenos">178</span></a><span class="sd">            ```</span>
+</span><span id="Scene-179"><a href="#Scene-179"><span class="linenos">179</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene-180"><a href="#Scene-180"><span class="linenos">180</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Base class representing a game scene.</p>
 
-<p>This abstract base class defines the interface that all game scenes
-must implement. It provides methods for event handling, time-based
-updates, and drawing management.</p>
+<p>This abstract base class defines the interface that all game scenes must
+implement. It provides methods for event handling, time-based updates, and
+drawing management.</p>
 
-<p>The scene system is designed to be immutable, with all methods
-returning new scene instances rather than modifying the current
-state. This ensures thread safety and predictable behavior.</p>
+<p>The scene system is designed to be immutable, with all methods returning
+new scene instances rather than modifying the current state. This ensures
+thread safety and predictable behavior.</p>
 
 <p>Scenes can represent various game states such as:</p>
 
@@ -530,26 +460,6 @@ state. This ensures thread safety and predictable behavior.</p>
 <li>Battle scenes</li>
 <li>Transition effects</li>
 </ul>
-
-<h6 id="example">Example:</h6>
-
-<blockquote>
-  <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn"><a href="">nextrpg.scene</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">PygameEvent</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn"><a href="core.html">nextrpg.core</a></span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-
-<span class="k">class</span><span class="w"> </span><span class="nc">MenuScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-        <span class="c1"># Handle menu navigation</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-        <span class="c1"># Update menu animations</span>
-        <span class="k">return</span> <span class="bp">self</span>
-</code></pre>
-  </div>
-</blockquote>
 </div>
 
 
@@ -562,29 +472,29 @@ state. This ensures thread safety and predictable behavior.</p>
 
     </div>
     <a class="headerlink" href="#Scene.draw_on_screen_shift"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.draw_on_screen_shift-84"><a href="#Scene.draw_on_screen_shift-84"><span class="linenos"> 84</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Scene.draw_on_screen_shift-85"><a href="#Scene.draw_on_screen_shift-85"><span class="linenos"> 85</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="Scene.draw_on_screen_shift-86"><a href="#Scene.draw_on_screen_shift-86"><span class="linenos"> 86</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene.draw_on_screen_shift-87"><a href="#Scene.draw_on_screen_shift-87"><span class="linenos"> 87</span></a><span class="sd">        Get the offset applied to all drawings before GUI scaling.</span>
-</span><span id="Scene.draw_on_screen_shift-88"><a href="#Scene.draw_on_screen_shift-88"><span class="linenos"> 88</span></a>
-</span><span id="Scene.draw_on_screen_shift-89"><a href="#Scene.draw_on_screen_shift-89"><span class="linenos"> 89</span></a><span class="sd">        This property provides a coordinate offset that is applied to</span>
-</span><span id="Scene.draw_on_screen_shift-90"><a href="#Scene.draw_on_screen_shift-90"><span class="linenos"> 90</span></a><span class="sd">        all drawings in the scene. It&#39;s commonly used for camera</span>
-</span><span id="Scene.draw_on_screen_shift-91"><a href="#Scene.draw_on_screen_shift-91"><span class="linenos"> 91</span></a><span class="sd">        positioning, such as centering the player on screen in map</span>
-</span><span id="Scene.draw_on_screen_shift-92"><a href="#Scene.draw_on_screen_shift-92"><span class="linenos"> 92</span></a><span class="sd">        scenes.</span>
-</span><span id="Scene.draw_on_screen_shift-93"><a href="#Scene.draw_on_screen_shift-93"><span class="linenos"> 93</span></a>
-</span><span id="Scene.draw_on_screen_shift-94"><a href="#Scene.draw_on_screen_shift-94"><span class="linenos"> 94</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene.draw_on_screen_shift-95"><a href="#Scene.draw_on_screen_shift-95"><span class="linenos"> 95</span></a><span class="sd">            `Coordinate | None`: The shift offset for all drawings,</span>
-</span><span id="Scene.draw_on_screen_shift-96"><a href="#Scene.draw_on_screen_shift-96"><span class="linenos"> 96</span></a><span class="sd">                or `None` if no shift is applied.</span>
-</span><span id="Scene.draw_on_screen_shift-97"><a href="#Scene.draw_on_screen_shift-97"><span class="linenos"> 97</span></a>
-</span><span id="Scene.draw_on_screen_shift-98"><a href="#Scene.draw_on_screen_shift-98"><span class="linenos"> 98</span></a><span class="sd">        Example:</span>
-</span><span id="Scene.draw_on_screen_shift-99"><a href="#Scene.draw_on_screen_shift-99"><span class="linenos"> 99</span></a><span class="sd">            ```python</span>
-</span><span id="Scene.draw_on_screen_shift-100"><a href="#Scene.draw_on_screen_shift-100"><span class="linenos">100</span></a><span class="sd">            # Center the scene on the player</span>
-</span><span id="Scene.draw_on_screen_shift-101"><a href="#Scene.draw_on_screen_shift-101"><span class="linenos">101</span></a><span class="sd">            def draw_on_screen_shift(self):</span>
-</span><span id="Scene.draw_on_screen_shift-102"><a href="#Scene.draw_on_screen_shift-102"><span class="linenos">102</span></a><span class="sd">                return Coordinate(-player.x + screen_width/2,</span>
-</span><span id="Scene.draw_on_screen_shift-103"><a href="#Scene.draw_on_screen_shift-103"><span class="linenos">103</span></a><span class="sd">                                -player.y + screen_height/2)</span>
-</span><span id="Scene.draw_on_screen_shift-104"><a href="#Scene.draw_on_screen_shift-104"><span class="linenos">104</span></a><span class="sd">            ```</span>
-</span><span id="Scene.draw_on_screen_shift-105"><a href="#Scene.draw_on_screen_shift-105"><span class="linenos">105</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Scene.draw_on_screen_shift-106"><a href="#Scene.draw_on_screen_shift-106"><span class="linenos">106</span></a>        <span class="k">return</span> <span class="kc">None</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.draw_on_screen_shift-51"><a href="#Scene.draw_on_screen_shift-51"><span class="linenos">51</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Scene.draw_on_screen_shift-52"><a href="#Scene.draw_on_screen_shift-52"><span class="linenos">52</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Scene.draw_on_screen_shift-53"><a href="#Scene.draw_on_screen_shift-53"><span class="linenos">53</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene.draw_on_screen_shift-54"><a href="#Scene.draw_on_screen_shift-54"><span class="linenos">54</span></a><span class="sd">        Get the offset applied to all drawings before GUI scaling.</span>
+</span><span id="Scene.draw_on_screen_shift-55"><a href="#Scene.draw_on_screen_shift-55"><span class="linenos">55</span></a>
+</span><span id="Scene.draw_on_screen_shift-56"><a href="#Scene.draw_on_screen_shift-56"><span class="linenos">56</span></a><span class="sd">        This property provides a coordinate offset that is applied to</span>
+</span><span id="Scene.draw_on_screen_shift-57"><a href="#Scene.draw_on_screen_shift-57"><span class="linenos">57</span></a><span class="sd">        all drawings in the scene. It&#39;s commonly used for camera</span>
+</span><span id="Scene.draw_on_screen_shift-58"><a href="#Scene.draw_on_screen_shift-58"><span class="linenos">58</span></a><span class="sd">        positioning, such as centering the player on screen in map</span>
+</span><span id="Scene.draw_on_screen_shift-59"><a href="#Scene.draw_on_screen_shift-59"><span class="linenos">59</span></a><span class="sd">        scenes.</span>
+</span><span id="Scene.draw_on_screen_shift-60"><a href="#Scene.draw_on_screen_shift-60"><span class="linenos">60</span></a>
+</span><span id="Scene.draw_on_screen_shift-61"><a href="#Scene.draw_on_screen_shift-61"><span class="linenos">61</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene.draw_on_screen_shift-62"><a href="#Scene.draw_on_screen_shift-62"><span class="linenos">62</span></a><span class="sd">            `Coordinate | None`: The shift offset for all drawings,</span>
+</span><span id="Scene.draw_on_screen_shift-63"><a href="#Scene.draw_on_screen_shift-63"><span class="linenos">63</span></a><span class="sd">                or `None` if no shift is applied.</span>
+</span><span id="Scene.draw_on_screen_shift-64"><a href="#Scene.draw_on_screen_shift-64"><span class="linenos">64</span></a>
+</span><span id="Scene.draw_on_screen_shift-65"><a href="#Scene.draw_on_screen_shift-65"><span class="linenos">65</span></a><span class="sd">        Example:</span>
+</span><span id="Scene.draw_on_screen_shift-66"><a href="#Scene.draw_on_screen_shift-66"><span class="linenos">66</span></a><span class="sd">            ```python</span>
+</span><span id="Scene.draw_on_screen_shift-67"><a href="#Scene.draw_on_screen_shift-67"><span class="linenos">67</span></a><span class="sd">            # Center the scene on the player</span>
+</span><span id="Scene.draw_on_screen_shift-68"><a href="#Scene.draw_on_screen_shift-68"><span class="linenos">68</span></a><span class="sd">            def draw_on_screen_shift(self):</span>
+</span><span id="Scene.draw_on_screen_shift-69"><a href="#Scene.draw_on_screen_shift-69"><span class="linenos">69</span></a><span class="sd">                return Coordinate(-player.x + screen_width/2,</span>
+</span><span id="Scene.draw_on_screen_shift-70"><a href="#Scene.draw_on_screen_shift-70"><span class="linenos">70</span></a><span class="sd">                                -player.y + screen_height/2)</span>
+</span><span id="Scene.draw_on_screen_shift-71"><a href="#Scene.draw_on_screen_shift-71"><span class="linenos">71</span></a><span class="sd">            ```</span>
+</span><span id="Scene.draw_on_screen_shift-72"><a href="#Scene.draw_on_screen_shift-72"><span class="linenos">72</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene.draw_on_screen_shift-73"><a href="#Scene.draw_on_screen_shift-73"><span class="linenos">73</span></a>        <span class="k">return</span> <span class="kc">None</span>
 </span></pre></div>
 
 
@@ -626,31 +536,31 @@ scenes.</p>
 
     </div>
     <a class="headerlink" href="#Scene.draw_on_screens"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.draw_on_screens-108"><a href="#Scene.draw_on_screens-108"><span class="linenos">108</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Scene.draw_on_screens-109"><a href="#Scene.draw_on_screens-109"><span class="linenos">109</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="Scene.draw_on_screens-110"><a href="#Scene.draw_on_screens-110"><span class="linenos">110</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene.draw_on_screens-111"><a href="#Scene.draw_on_screens-111"><span class="linenos">111</span></a><span class="sd">        Get the drawables to be rendered on screen with shift applied.</span>
-</span><span id="Scene.draw_on_screens-112"><a href="#Scene.draw_on_screens-112"><span class="linenos">112</span></a>
-</span><span id="Scene.draw_on_screens-113"><a href="#Scene.draw_on_screens-113"><span class="linenos">113</span></a><span class="sd">        This property returns all drawable objects for the scene,</span>
-</span><span id="Scene.draw_on_screens-114"><a href="#Scene.draw_on_screens-114"><span class="linenos">114</span></a><span class="sd">        with the `draw_on_screen_shift` applied if specified.</span>
-</span><span id="Scene.draw_on_screens-115"><a href="#Scene.draw_on_screens-115"><span class="linenos">115</span></a><span class="sd">        The shift is applied before GUI scaling to ensure proper</span>
-</span><span id="Scene.draw_on_screens-116"><a href="#Scene.draw_on_screens-116"><span class="linenos">116</span></a><span class="sd">        positioning.</span>
-</span><span id="Scene.draw_on_screens-117"><a href="#Scene.draw_on_screens-117"><span class="linenos">117</span></a>
-</span><span id="Scene.draw_on_screens-118"><a href="#Scene.draw_on_screens-118"><span class="linenos">118</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene.draw_on_screens-119"><a href="#Scene.draw_on_screens-119"><span class="linenos">119</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The drawables to be rendered.</span>
-</span><span id="Scene.draw_on_screens-120"><a href="#Scene.draw_on_screens-120"><span class="linenos">120</span></a>
-</span><span id="Scene.draw_on_screens-121"><a href="#Scene.draw_on_screens-121"><span class="linenos">121</span></a><span class="sd">        Example:</span>
-</span><span id="Scene.draw_on_screens-122"><a href="#Scene.draw_on_screens-122"><span class="linenos">122</span></a><span class="sd">            ```python</span>
-</span><span id="Scene.draw_on_screens-123"><a href="#Scene.draw_on_screens-123"><span class="linenos">123</span></a><span class="sd">            def draw_on_screens_before_shift(self):</span>
-</span><span id="Scene.draw_on_screens-124"><a href="#Scene.draw_on_screens-124"><span class="linenos">124</span></a><span class="sd">                return (player_sprite, background, ui_elements)</span>
-</span><span id="Scene.draw_on_screens-125"><a href="#Scene.draw_on_screens-125"><span class="linenos">125</span></a><span class="sd">            ```</span>
-</span><span id="Scene.draw_on_screens-126"><a href="#Scene.draw_on_screens-126"><span class="linenos">126</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Scene.draw_on_screens-127"><a href="#Scene.draw_on_screens-127"><span class="linenos">127</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">:</span>
-</span><span id="Scene.draw_on_screens-128"><a href="#Scene.draw_on_screens-128"><span class="linenos">128</span></a>            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
-</span><span id="Scene.draw_on_screens-129"><a href="#Scene.draw_on_screens-129"><span class="linenos">129</span></a>                <span class="n">d</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">)</span>
-</span><span id="Scene.draw_on_screens-130"><a href="#Scene.draw_on_screens-130"><span class="linenos">130</span></a>                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screens_before_shift</span>
-</span><span id="Scene.draw_on_screens-131"><a href="#Scene.draw_on_screens-131"><span class="linenos">131</span></a>            <span class="p">)</span>
-</span><span id="Scene.draw_on_screens-132"><a href="#Scene.draw_on_screens-132"><span class="linenos">132</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screens_before_shift</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.draw_on_screens-75"><a href="#Scene.draw_on_screens-75"><span class="linenos">75</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Scene.draw_on_screens-76"><a href="#Scene.draw_on_screens-76"><span class="linenos">76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="Scene.draw_on_screens-77"><a href="#Scene.draw_on_screens-77"><span class="linenos">77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene.draw_on_screens-78"><a href="#Scene.draw_on_screens-78"><span class="linenos">78</span></a><span class="sd">        Get the drawables to be rendered on screen with shift applied.</span>
+</span><span id="Scene.draw_on_screens-79"><a href="#Scene.draw_on_screens-79"><span class="linenos">79</span></a>
+</span><span id="Scene.draw_on_screens-80"><a href="#Scene.draw_on_screens-80"><span class="linenos">80</span></a><span class="sd">        This property returns all drawable objects for the scene,</span>
+</span><span id="Scene.draw_on_screens-81"><a href="#Scene.draw_on_screens-81"><span class="linenos">81</span></a><span class="sd">        with the `draw_on_screen_shift` applied if specified.</span>
+</span><span id="Scene.draw_on_screens-82"><a href="#Scene.draw_on_screens-82"><span class="linenos">82</span></a><span class="sd">        The shift is applied before GUI scaling to ensure proper</span>
+</span><span id="Scene.draw_on_screens-83"><a href="#Scene.draw_on_screens-83"><span class="linenos">83</span></a><span class="sd">        positioning.</span>
+</span><span id="Scene.draw_on_screens-84"><a href="#Scene.draw_on_screens-84"><span class="linenos">84</span></a>
+</span><span id="Scene.draw_on_screens-85"><a href="#Scene.draw_on_screens-85"><span class="linenos">85</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene.draw_on_screens-86"><a href="#Scene.draw_on_screens-86"><span class="linenos">86</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The drawables to be rendered.</span>
+</span><span id="Scene.draw_on_screens-87"><a href="#Scene.draw_on_screens-87"><span class="linenos">87</span></a>
+</span><span id="Scene.draw_on_screens-88"><a href="#Scene.draw_on_screens-88"><span class="linenos">88</span></a><span class="sd">        Example:</span>
+</span><span id="Scene.draw_on_screens-89"><a href="#Scene.draw_on_screens-89"><span class="linenos">89</span></a><span class="sd">            ```python</span>
+</span><span id="Scene.draw_on_screens-90"><a href="#Scene.draw_on_screens-90"><span class="linenos">90</span></a><span class="sd">            def draw_on_screens_before_shift(self):</span>
+</span><span id="Scene.draw_on_screens-91"><a href="#Scene.draw_on_screens-91"><span class="linenos">91</span></a><span class="sd">                return (player_sprite, background, ui_elements)</span>
+</span><span id="Scene.draw_on_screens-92"><a href="#Scene.draw_on_screens-92"><span class="linenos">92</span></a><span class="sd">            ```</span>
+</span><span id="Scene.draw_on_screens-93"><a href="#Scene.draw_on_screens-93"><span class="linenos">93</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene.draw_on_screens-94"><a href="#Scene.draw_on_screens-94"><span class="linenos">94</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">:</span>
+</span><span id="Scene.draw_on_screens-95"><a href="#Scene.draw_on_screens-95"><span class="linenos">95</span></a>            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="Scene.draw_on_screens-96"><a href="#Scene.draw_on_screens-96"><span class="linenos">96</span></a>                <span class="n">d</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">)</span>
+</span><span id="Scene.draw_on_screens-97"><a href="#Scene.draw_on_screens-97"><span class="linenos">97</span></a>                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screens_before_shift</span>
+</span><span id="Scene.draw_on_screens-98"><a href="#Scene.draw_on_screens-98"><span class="linenos">98</span></a>            <span class="p">)</span>
+</span><span id="Scene.draw_on_screens-99"><a href="#Scene.draw_on_screens-99"><span class="linenos">99</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw_on_screens_before_shift</span>
 </span></pre></div>
 
 
@@ -689,19 +599,19 @@ positioning.</p>
 
     </div>
     <a class="headerlink" href="#Scene.draw_on_screens_before_shift"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.draw_on_screens_before_shift-134"><a href="#Scene.draw_on_screens_before_shift-134"><span class="linenos">134</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Scene.draw_on_screens_before_shift-135"><a href="#Scene.draw_on_screens_before_shift-135"><span class="linenos">135</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="Scene.draw_on_screens_before_shift-136"><a href="#Scene.draw_on_screens_before_shift-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene.draw_on_screens_before_shift-137"><a href="#Scene.draw_on_screens_before_shift-137"><span class="linenos">137</span></a><span class="sd">        Get the drawables before shift is applied.</span>
-</span><span id="Scene.draw_on_screens_before_shift-138"><a href="#Scene.draw_on_screens_before_shift-138"><span class="linenos">138</span></a>
-</span><span id="Scene.draw_on_screens_before_shift-139"><a href="#Scene.draw_on_screens_before_shift-139"><span class="linenos">139</span></a><span class="sd">        This method should be overridden by subclasses to provide</span>
-</span><span id="Scene.draw_on_screens_before_shift-140"><a href="#Scene.draw_on_screens_before_shift-140"><span class="linenos">140</span></a><span class="sd">        the actual drawable objects for the scene. The shift will</span>
-</span><span id="Scene.draw_on_screens_before_shift-141"><a href="#Scene.draw_on_screens_before_shift-141"><span class="linenos">141</span></a><span class="sd">        be applied automatically by `draw_on_screens`.</span>
-</span><span id="Scene.draw_on_screens_before_shift-142"><a href="#Scene.draw_on_screens_before_shift-142"><span class="linenos">142</span></a>
-</span><span id="Scene.draw_on_screens_before_shift-143"><a href="#Scene.draw_on_screens_before_shift-143"><span class="linenos">143</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene.draw_on_screens_before_shift-144"><a href="#Scene.draw_on_screens_before_shift-144"><span class="linenos">144</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The drawables before shift.</span>
-</span><span id="Scene.draw_on_screens_before_shift-145"><a href="#Scene.draw_on_screens_before_shift-145"><span class="linenos">145</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Scene.draw_on_screens_before_shift-146"><a href="#Scene.draw_on_screens_before_shift-146"><span class="linenos">146</span></a>        <span class="k">return</span> <span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.draw_on_screens_before_shift-101"><a href="#Scene.draw_on_screens_before_shift-101"><span class="linenos">101</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Scene.draw_on_screens_before_shift-102"><a href="#Scene.draw_on_screens_before_shift-102"><span class="linenos">102</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens_before_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="Scene.draw_on_screens_before_shift-103"><a href="#Scene.draw_on_screens_before_shift-103"><span class="linenos">103</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene.draw_on_screens_before_shift-104"><a href="#Scene.draw_on_screens_before_shift-104"><span class="linenos">104</span></a><span class="sd">        Get the drawables before shift is applied.</span>
+</span><span id="Scene.draw_on_screens_before_shift-105"><a href="#Scene.draw_on_screens_before_shift-105"><span class="linenos">105</span></a>
+</span><span id="Scene.draw_on_screens_before_shift-106"><a href="#Scene.draw_on_screens_before_shift-106"><span class="linenos">106</span></a><span class="sd">        This method should be overridden by subclasses to provide</span>
+</span><span id="Scene.draw_on_screens_before_shift-107"><a href="#Scene.draw_on_screens_before_shift-107"><span class="linenos">107</span></a><span class="sd">        the actual drawable objects for the scene. The shift will</span>
+</span><span id="Scene.draw_on_screens_before_shift-108"><a href="#Scene.draw_on_screens_before_shift-108"><span class="linenos">108</span></a><span class="sd">        be applied automatically by `draw_on_screens`.</span>
+</span><span id="Scene.draw_on_screens_before_shift-109"><a href="#Scene.draw_on_screens_before_shift-109"><span class="linenos">109</span></a>
+</span><span id="Scene.draw_on_screens_before_shift-110"><a href="#Scene.draw_on_screens_before_shift-110"><span class="linenos">110</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene.draw_on_screens_before_shift-111"><a href="#Scene.draw_on_screens_before_shift-111"><span class="linenos">111</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The drawables before shift.</span>
+</span><span id="Scene.draw_on_screens_before_shift-112"><a href="#Scene.draw_on_screens_before_shift-112"><span class="linenos">112</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene.draw_on_screens_before_shift-113"><a href="#Scene.draw_on_screens_before_shift-113"><span class="linenos">113</span></a>        <span class="k">return</span> <span class="p">()</span>
 </span></pre></div>
 
 
@@ -731,43 +641,43 @@ be applied automatically by <code><a href="#Scene.draw_on_screens">draw_on_scree
 
     </div>
     <a class="headerlink" href="#Scene.event"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.event-148"><a href="#Scene.event-148"><span class="linenos">148</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="Scene.event-149"><a href="#Scene.event-149"><span class="linenos">149</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene.event-150"><a href="#Scene.event-150"><span class="linenos">150</span></a><span class="sd">        Handle events for the scene.</span>
-</span><span id="Scene.event-151"><a href="#Scene.event-151"><span class="linenos">151</span></a>
-</span><span id="Scene.event-152"><a href="#Scene.event-152"><span class="linenos">152</span></a><span class="sd">        This method processes pygame events and returns an updated</span>
-</span><span id="Scene.event-153"><a href="#Scene.event-153"><span class="linenos">153</span></a><span class="sd">        scene state. The recommended implementation uses</span>
-</span><span id="Scene.event-154"><a href="#Scene.event-154"><span class="linenos">154</span></a><span class="sd">        `@singledispatchmethod` to handle different event types</span>
-</span><span id="Scene.event-155"><a href="#Scene.event-155"><span class="linenos">155</span></a><span class="sd">        efficiently.</span>
-</span><span id="Scene.event-156"><a href="#Scene.event-156"><span class="linenos">156</span></a>
-</span><span id="Scene.event-157"><a href="#Scene.event-157"><span class="linenos">157</span></a><span class="sd">        Arguments:</span>
-</span><span id="Scene.event-158"><a href="#Scene.event-158"><span class="linenos">158</span></a><span class="sd">            `event`: The pygame event to process.</span>
-</span><span id="Scene.event-159"><a href="#Scene.event-159"><span class="linenos">159</span></a>
-</span><span id="Scene.event-160"><a href="#Scene.event-160"><span class="linenos">160</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene.event-161"><a href="#Scene.event-161"><span class="linenos">161</span></a><span class="sd">            `Scene`: The updated scene state after processing the event.</span>
-</span><span id="Scene.event-162"><a href="#Scene.event-162"><span class="linenos">162</span></a>
-</span><span id="Scene.event-163"><a href="#Scene.event-163"><span class="linenos">163</span></a><span class="sd">        Example:</span>
-</span><span id="Scene.event-164"><a href="#Scene.event-164"><span class="linenos">164</span></a><span class="sd">            ```python</span>
-</span><span id="Scene.event-165"><a href="#Scene.event-165"><span class="linenos">165</span></a><span class="sd">            from functools import singledispatchmethod</span>
-</span><span id="Scene.event-166"><a href="#Scene.event-166"><span class="linenos">166</span></a><span class="sd">            from nextrpg.event.pygame_event import KeyPressDown, KeyPressUp</span>
-</span><span id="Scene.event-167"><a href="#Scene.event-167"><span class="linenos">167</span></a>
-</span><span id="Scene.event-168"><a href="#Scene.event-168"><span class="linenos">168</span></a><span class="sd">            class MyScene(Scene):</span>
-</span><span id="Scene.event-169"><a href="#Scene.event-169"><span class="linenos">169</span></a><span class="sd">                @singledispatchmethod</span>
-</span><span id="Scene.event-170"><a href="#Scene.event-170"><span class="linenos">170</span></a><span class="sd">                def event(self, event: PygameEvent) -&gt; Scene:</span>
-</span><span id="Scene.event-171"><a href="#Scene.event-171"><span class="linenos">171</span></a><span class="sd">                    return self</span>
-</span><span id="Scene.event-172"><a href="#Scene.event-172"><span class="linenos">172</span></a>
-</span><span id="Scene.event-173"><a href="#Scene.event-173"><span class="linenos">173</span></a><span class="sd">                @event.register</span>
-</span><span id="Scene.event-174"><a href="#Scene.event-174"><span class="linenos">174</span></a><span class="sd">                def _on_key_press_down(self, event: KeyPressDown) -&gt; Scene:</span>
-</span><span id="Scene.event-175"><a href="#Scene.event-175"><span class="linenos">175</span></a><span class="sd">                    # Handle key press</span>
-</span><span id="Scene.event-176"><a href="#Scene.event-176"><span class="linenos">176</span></a><span class="sd">                    return self</span>
-</span><span id="Scene.event-177"><a href="#Scene.event-177"><span class="linenos">177</span></a>
-</span><span id="Scene.event-178"><a href="#Scene.event-178"><span class="linenos">178</span></a><span class="sd">                @event.register</span>
-</span><span id="Scene.event-179"><a href="#Scene.event-179"><span class="linenos">179</span></a><span class="sd">                def _on_key_press_up(self, event: KeyPressUp) -&gt; Scene:</span>
-</span><span id="Scene.event-180"><a href="#Scene.event-180"><span class="linenos">180</span></a><span class="sd">                    # Handle key release</span>
-</span><span id="Scene.event-181"><a href="#Scene.event-181"><span class="linenos">181</span></a><span class="sd">                    return self</span>
-</span><span id="Scene.event-182"><a href="#Scene.event-182"><span class="linenos">182</span></a><span class="sd">            ```</span>
-</span><span id="Scene.event-183"><a href="#Scene.event-183"><span class="linenos">183</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Scene.event-184"><a href="#Scene.event-184"><span class="linenos">184</span></a>        <span class="k">return</span> <span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.event-115"><a href="#Scene.event-115"><span class="linenos">115</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">PygameEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="Scene.event-116"><a href="#Scene.event-116"><span class="linenos">116</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene.event-117"><a href="#Scene.event-117"><span class="linenos">117</span></a><span class="sd">        Handle events for the scene.</span>
+</span><span id="Scene.event-118"><a href="#Scene.event-118"><span class="linenos">118</span></a>
+</span><span id="Scene.event-119"><a href="#Scene.event-119"><span class="linenos">119</span></a><span class="sd">        This method processes pygame events and returns an updated</span>
+</span><span id="Scene.event-120"><a href="#Scene.event-120"><span class="linenos">120</span></a><span class="sd">        scene state. The recommended implementation uses</span>
+</span><span id="Scene.event-121"><a href="#Scene.event-121"><span class="linenos">121</span></a><span class="sd">        `@singledispatchmethod` to handle different event types</span>
+</span><span id="Scene.event-122"><a href="#Scene.event-122"><span class="linenos">122</span></a><span class="sd">        efficiently.</span>
+</span><span id="Scene.event-123"><a href="#Scene.event-123"><span class="linenos">123</span></a>
+</span><span id="Scene.event-124"><a href="#Scene.event-124"><span class="linenos">124</span></a><span class="sd">        Arguments:</span>
+</span><span id="Scene.event-125"><a href="#Scene.event-125"><span class="linenos">125</span></a><span class="sd">            `event`: The pygame event to process.</span>
+</span><span id="Scene.event-126"><a href="#Scene.event-126"><span class="linenos">126</span></a>
+</span><span id="Scene.event-127"><a href="#Scene.event-127"><span class="linenos">127</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene.event-128"><a href="#Scene.event-128"><span class="linenos">128</span></a><span class="sd">            `Scene`: The updated scene state after processing the event.</span>
+</span><span id="Scene.event-129"><a href="#Scene.event-129"><span class="linenos">129</span></a>
+</span><span id="Scene.event-130"><a href="#Scene.event-130"><span class="linenos">130</span></a><span class="sd">        Example:</span>
+</span><span id="Scene.event-131"><a href="#Scene.event-131"><span class="linenos">131</span></a><span class="sd">            ```python</span>
+</span><span id="Scene.event-132"><a href="#Scene.event-132"><span class="linenos">132</span></a><span class="sd">            from functools import singledispatchmethod</span>
+</span><span id="Scene.event-133"><a href="#Scene.event-133"><span class="linenos">133</span></a><span class="sd">            from nextrpg.event.pygame_event import KeyPressDown, KeyPressUp</span>
+</span><span id="Scene.event-134"><a href="#Scene.event-134"><span class="linenos">134</span></a>
+</span><span id="Scene.event-135"><a href="#Scene.event-135"><span class="linenos">135</span></a><span class="sd">            class MyScene(Scene):</span>
+</span><span id="Scene.event-136"><a href="#Scene.event-136"><span class="linenos">136</span></a><span class="sd">                @singledispatchmethod</span>
+</span><span id="Scene.event-137"><a href="#Scene.event-137"><span class="linenos">137</span></a><span class="sd">                def event(self, event: PygameEvent) -&gt; Scene:</span>
+</span><span id="Scene.event-138"><a href="#Scene.event-138"><span class="linenos">138</span></a><span class="sd">                    return self</span>
+</span><span id="Scene.event-139"><a href="#Scene.event-139"><span class="linenos">139</span></a>
+</span><span id="Scene.event-140"><a href="#Scene.event-140"><span class="linenos">140</span></a><span class="sd">                @event.register</span>
+</span><span id="Scene.event-141"><a href="#Scene.event-141"><span class="linenos">141</span></a><span class="sd">                def _on_key_press_down(self, event: KeyPressDown) -&gt; Scene:</span>
+</span><span id="Scene.event-142"><a href="#Scene.event-142"><span class="linenos">142</span></a><span class="sd">                    # Handle key press</span>
+</span><span id="Scene.event-143"><a href="#Scene.event-143"><span class="linenos">143</span></a><span class="sd">                    return self</span>
+</span><span id="Scene.event-144"><a href="#Scene.event-144"><span class="linenos">144</span></a>
+</span><span id="Scene.event-145"><a href="#Scene.event-145"><span class="linenos">145</span></a><span class="sd">                @event.register</span>
+</span><span id="Scene.event-146"><a href="#Scene.event-146"><span class="linenos">146</span></a><span class="sd">                def _on_key_press_up(self, event: KeyPressUp) -&gt; Scene:</span>
+</span><span id="Scene.event-147"><a href="#Scene.event-147"><span class="linenos">147</span></a><span class="sd">                    # Handle key release</span>
+</span><span id="Scene.event-148"><a href="#Scene.event-148"><span class="linenos">148</span></a><span class="sd">                    return self</span>
+</span><span id="Scene.event-149"><a href="#Scene.event-149"><span class="linenos">149</span></a><span class="sd">            ```</span>
+</span><span id="Scene.event-150"><a href="#Scene.event-150"><span class="linenos">150</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene.event-151"><a href="#Scene.event-151"><span class="linenos">151</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 
@@ -829,34 +739,34 @@ efficiently.</p>
 
     </div>
     <a class="headerlink" href="#Scene.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.tick-186"><a href="#Scene.tick-186"><span class="linenos">186</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="Scene.tick-187"><a href="#Scene.tick-187"><span class="linenos">187</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Scene.tick-188"><a href="#Scene.tick-188"><span class="linenos">188</span></a><span class="sd">        Update the scene state for a single game frame.</span>
-</span><span id="Scene.tick-189"><a href="#Scene.tick-189"><span class="linenos">189</span></a>
-</span><span id="Scene.tick-190"><a href="#Scene.tick-190"><span class="linenos">190</span></a><span class="sd">        This method is called each frame to update the scene state</span>
-</span><span id="Scene.tick-191"><a href="#Scene.tick-191"><span class="linenos">191</span></a><span class="sd">        based on elapsed time. It handles animations, movements,</span>
-</span><span id="Scene.tick-192"><a href="#Scene.tick-192"><span class="linenos">192</span></a><span class="sd">        and other time-dependent changes.</span>
-</span><span id="Scene.tick-193"><a href="#Scene.tick-193"><span class="linenos">193</span></a>
-</span><span id="Scene.tick-194"><a href="#Scene.tick-194"><span class="linenos">194</span></a><span class="sd">        Arguments:</span>
-</span><span id="Scene.tick-195"><a href="#Scene.tick-195"><span class="linenos">195</span></a><span class="sd">            `time_delta`: The time elapsed since the last update</span>
-</span><span id="Scene.tick-196"><a href="#Scene.tick-196"><span class="linenos">196</span></a><span class="sd">                in milliseconds.</span>
-</span><span id="Scene.tick-197"><a href="#Scene.tick-197"><span class="linenos">197</span></a>
-</span><span id="Scene.tick-198"><a href="#Scene.tick-198"><span class="linenos">198</span></a><span class="sd">        Returns:</span>
-</span><span id="Scene.tick-199"><a href="#Scene.tick-199"><span class="linenos">199</span></a><span class="sd">            `Scene`: The updated scene state after the time step.</span>
-</span><span id="Scene.tick-200"><a href="#Scene.tick-200"><span class="linenos">200</span></a>
-</span><span id="Scene.tick-201"><a href="#Scene.tick-201"><span class="linenos">201</span></a><span class="sd">        Example:</span>
-</span><span id="Scene.tick-202"><a href="#Scene.tick-202"><span class="linenos">202</span></a><span class="sd">            ```python</span>
-</span><span id="Scene.tick-203"><a href="#Scene.tick-203"><span class="linenos">203</span></a><span class="sd">            def tick(self, time_delta: Millisecond) -&gt; Scene:</span>
-</span><span id="Scene.tick-204"><a href="#Scene.tick-204"><span class="linenos">204</span></a><span class="sd">                # Update character animations</span>
-</span><span id="Scene.tick-205"><a href="#Scene.tick-205"><span class="linenos">205</span></a><span class="sd">                self.player = self.player.tick_idle(time_delta)</span>
-</span><span id="Scene.tick-206"><a href="#Scene.tick-206"><span class="linenos">206</span></a>
-</span><span id="Scene.tick-207"><a href="#Scene.tick-207"><span class="linenos">207</span></a><span class="sd">                # Update timers</span>
-</span><span id="Scene.tick-208"><a href="#Scene.tick-208"><span class="linenos">208</span></a><span class="sd">                self.timer = self.timer.tick(time_delta)</span>
-</span><span id="Scene.tick-209"><a href="#Scene.tick-209"><span class="linenos">209</span></a>
-</span><span id="Scene.tick-210"><a href="#Scene.tick-210"><span class="linenos">210</span></a><span class="sd">                return self</span>
-</span><span id="Scene.tick-211"><a href="#Scene.tick-211"><span class="linenos">211</span></a><span class="sd">            ```</span>
-</span><span id="Scene.tick-212"><a href="#Scene.tick-212"><span class="linenos">212</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Scene.tick-213"><a href="#Scene.tick-213"><span class="linenos">213</span></a>        <span class="k">return</span> <span class="bp">self</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene.tick-153"><a href="#Scene.tick-153"><span class="linenos">153</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="Scene.tick-154"><a href="#Scene.tick-154"><span class="linenos">154</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Scene.tick-155"><a href="#Scene.tick-155"><span class="linenos">155</span></a><span class="sd">        Update the scene state for a single game frame.</span>
+</span><span id="Scene.tick-156"><a href="#Scene.tick-156"><span class="linenos">156</span></a>
+</span><span id="Scene.tick-157"><a href="#Scene.tick-157"><span class="linenos">157</span></a><span class="sd">        This method is called each frame to update the scene state</span>
+</span><span id="Scene.tick-158"><a href="#Scene.tick-158"><span class="linenos">158</span></a><span class="sd">        based on elapsed time. It handles animations, movements,</span>
+</span><span id="Scene.tick-159"><a href="#Scene.tick-159"><span class="linenos">159</span></a><span class="sd">        and other time-dependent changes.</span>
+</span><span id="Scene.tick-160"><a href="#Scene.tick-160"><span class="linenos">160</span></a>
+</span><span id="Scene.tick-161"><a href="#Scene.tick-161"><span class="linenos">161</span></a><span class="sd">        Arguments:</span>
+</span><span id="Scene.tick-162"><a href="#Scene.tick-162"><span class="linenos">162</span></a><span class="sd">            `time_delta`: The time elapsed since the last update</span>
+</span><span id="Scene.tick-163"><a href="#Scene.tick-163"><span class="linenos">163</span></a><span class="sd">                in milliseconds.</span>
+</span><span id="Scene.tick-164"><a href="#Scene.tick-164"><span class="linenos">164</span></a>
+</span><span id="Scene.tick-165"><a href="#Scene.tick-165"><span class="linenos">165</span></a><span class="sd">        Returns:</span>
+</span><span id="Scene.tick-166"><a href="#Scene.tick-166"><span class="linenos">166</span></a><span class="sd">            `Scene`: The updated scene state after the time step.</span>
+</span><span id="Scene.tick-167"><a href="#Scene.tick-167"><span class="linenos">167</span></a>
+</span><span id="Scene.tick-168"><a href="#Scene.tick-168"><span class="linenos">168</span></a><span class="sd">        Example:</span>
+</span><span id="Scene.tick-169"><a href="#Scene.tick-169"><span class="linenos">169</span></a><span class="sd">            ```python</span>
+</span><span id="Scene.tick-170"><a href="#Scene.tick-170"><span class="linenos">170</span></a><span class="sd">            def tick(self, time_delta: Millisecond) -&gt; Scene:</span>
+</span><span id="Scene.tick-171"><a href="#Scene.tick-171"><span class="linenos">171</span></a><span class="sd">                # Update character animations</span>
+</span><span id="Scene.tick-172"><a href="#Scene.tick-172"><span class="linenos">172</span></a><span class="sd">                self.player = self.player.tick_idle(time_delta)</span>
+</span><span id="Scene.tick-173"><a href="#Scene.tick-173"><span class="linenos">173</span></a>
+</span><span id="Scene.tick-174"><a href="#Scene.tick-174"><span class="linenos">174</span></a><span class="sd">                # Update timers</span>
+</span><span id="Scene.tick-175"><a href="#Scene.tick-175"><span class="linenos">175</span></a><span class="sd">                self.timer = self.timer.tick(time_delta)</span>
+</span><span id="Scene.tick-176"><a href="#Scene.tick-176"><span class="linenos">176</span></a>
+</span><span id="Scene.tick-177"><a href="#Scene.tick-177"><span class="linenos">177</span></a><span class="sd">                return self</span>
+</span><span id="Scene.tick-178"><a href="#Scene.tick-178"><span class="linenos">178</span></a><span class="sd">            ```</span>
+</span><span id="Scene.tick-179"><a href="#Scene.tick-179"><span class="linenos">179</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Scene.tick-180"><a href="#Scene.tick-180"><span class="linenos">180</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 

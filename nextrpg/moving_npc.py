@@ -1,18 +1,32 @@
+"""
+Moving NPC implementation for `nextrpg`.
+
+This module provides the implementation for non-player characters (NPCs) that can
+move along paths in `nextrpg` games. It extends the moving character system with
+NPC-specific pathing, idle/move timers, and walk cycles.
+
+Features:
+    - Path-based NPC movement
+    - Idle and move state timers
+    - Cyclic walk support
+    - Integration with walk and timer systems
+"""
+
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import NamedTuple, Self, override
 
-from nextrpg.model import not_constructor_below
-from nextrpg.moving_character_on_screen import MovingCharacterOnScreen
-from nextrpg.npcs import NpcOnScreen, NpcSpec
 from nextrpg.coordinate import Coordinate
 from nextrpg.core import Millisecond, PixelPerMillisecond, Timer
 from nextrpg.draw_on_screen import Polygon
 from nextrpg.model import (
     dataclass_with_instance_init,
-    instance_init,
     export,
+    instance_init,
+    not_constructor_below,
 )
+from nextrpg.moving_character_on_screen import MovingCharacterOnScreen
+from nextrpg.npcs import NpcOnScreen, NpcSpec
 from nextrpg.walk import Walk
 
 
@@ -23,11 +37,9 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     Moving NPC interface.
 
     Arguments:
-        `path`: Polygon representing the path of the NPC.
-
-        `idle_duration`: Duration of the idle state.
-
-        `move_duration`: Duration of the moving state.
+        path: Polygon representing the path of the NPC.
+        idle_duration: Duration of the idle state.
+        move_duration: Duration of the moving state.
     """
 
     path: Polygon

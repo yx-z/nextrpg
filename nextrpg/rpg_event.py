@@ -1,30 +1,15 @@
 """
-RPG event registration system for NextRPG.
+RPG event registration system for `NextRPG`.
 
-This module provides a decorator-based event registration system
-for RPG-style interactions. It allows functions to be marked as
-event handlers that can be triggered by player or NPC interactions.
+This module provides a decorator-based event registration system for RPG-style
+interactions. It allows functions to be marked as event handlers that can be
+triggered by player or NPC interactions.
 
 The RPG event system features:
 - Function decorator for event registration
 - Unique event name validation
 - Global event registry
 - Integration with player/NPC interaction systems
-
-Example:
-    ```python
-    from nextrpg.rpg_event import register_rpg_event
-
-    @register_rpg_event
-    def open_chest():
-        # Handle chest opening event
-        pass
-
-    @register_rpg_event
-    def talk_to_npc():
-        # Handle NPC conversation event
-        pass
-    ```
 """
 
 from collections.abc import Callable
@@ -37,34 +22,18 @@ def register_rpg_event[R, **P](fun: Callable[P, R]) -> Callable[P, R]:
     """
     Mark a function as an event handler.
 
-    This decorator registers a function as an RPG event handler
-    that can be triggered by player or NPC interactions. Each
-    event must have a unique function name.
+    This decorator registers a function as an RPG event handler that can be
+    triggered by player or NPC interactions. Each event must have a unique
+    function name.
 
     Arguments:
-        `fun`: Function with a unique name that handles
-            player/NPC interaction.
+        `fun`: Function with a unique name that handles player/NPC interaction.
 
     Returns:
         `Callable`: The original function.
 
     Raises:
         `ValueError`: If an event with the same name is already registered.
-
-    Example:
-        ```python
-        from nextrpg.rpg_event import register_rpg_event
-
-        @register_rpg_event
-        def open_door():
-            # Handle door opening
-            pass
-
-        @register_rpg_event
-        def collect_item():
-            # Handle item collection
-            pass
-        ```
     """
     if fun.__name__ in registered_events:
         raise ValueError(f"Event {fun.__name__} already registered.")
@@ -76,6 +45,6 @@ registered_events: dict[str, Callable[..., None]] = {}
 """
 Global registry of registered RPG events.
 
-This dictionary stores all registered event handlers, mapping
-function names to their corresponding callable functions.
+This dictionary stores all registered event handlers, mapping function names to
+their corresponding callable functions.
 """

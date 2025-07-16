@@ -1,39 +1,17 @@
 """
-Player character implementation for NextRPG.
+Player character implementation for `nextrpg`.
 
-This module provides the `PlayerOnScreen` class that handles player
-character movement, input processing, and interaction with the game
-world. It extends the base moving character functionality with
-keyboard input handling and player-specific behaviors.
+This module provides the `PlayerOnScreen` class that handles player character
+movement, input processing, and interaction with the game world. It extends the
+base moving character functionality with keyboard input handling and
+player-specific behaviors.
 
-The player character responds to keyboard input for movement in all
-eight directions (orthogonal and diagonal), handles key press and
-release events, and manages movement state based on currently
-pressed keys.
-
-Key Features:
+Features:
     - Keyboard input processing for movement
     - Eight-directional movement support
     - Key press and release event handling
     - Movement state management
     - Collision detection integration
-
-Example:
-    ```python
-    from nextrpg.player_on_screen import PlayerOnScreen
-    from nextrpg.character_drawing import CharacterDrawing
-    from nextrpg.coordinate import Coordinate
-
-    # Create a player character
-    player = PlayerOnScreen(
-        character=CharacterDrawing(drawing=player_sprite),
-        coordinate=Coordinate(100, 100),
-        collisions=map_collisions
-    )
-
-    # Handle input events
-    player = player.event(key_press_event)
-    ```
 """
 
 from dataclasses import KW_ONLY, dataclass, field, replace
