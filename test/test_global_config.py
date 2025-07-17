@@ -1,12 +1,12 @@
-import nextrpg
+import nextrpg.global_config.global_config as mod
 
 
 def test_initial_config() -> None:
-    nextrpg.global_config._initial_config = None
-    assert nextrpg.global_config.initial_config()
-    assert nextrpg.global_config.initial_config()
+    mod._initial_config = None
+    assert mod.initial_config()
+    assert mod.initial_config()
 
 
 def test_config() -> None:
-    nextrpg.global_config._cfg = None
-    assert nextrpg.global_config.config()
+    mod._cfg = None
+    assert mod.config()

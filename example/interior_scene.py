@@ -16,9 +16,9 @@ from nextrpg import (
     Drawing,
     Trim,
     RpgMakerCharacterDrawing,
-    Direction,
     SpriteSheetSelection,
 )
+from nextrpg.core.direction import Direction
 
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> Scene:

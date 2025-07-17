@@ -7,7 +7,6 @@ from pytest_mock import MockerFixture
 from nextrpg import (
     Config,
     DebugConfig,
-    Rgba,
     Size,
     DrawOnScreen,
     Drawing,
@@ -15,6 +14,7 @@ from nextrpg import (
     Rectangle,
     Coordinate,
 )
+from nextrpg.core.color import Rgba
 from test.util import override_config, MockSurface
 
 
@@ -22,7 +22,7 @@ def test_drawing(mocker: MockerFixture) -> None:
     surf = MockSurface()
     assert Drawing(surf)._surface
 
-    mocker.patch("nextrpg.draw_on_screen.load")
+    mocker.patch("nextrpg.draw.draw_on_screen.load")
     assert Drawing(Path("abc"))._surface
     drawing = Drawing(Surface((1, 2), SRCALPHA))
     assert drawing.width == 1

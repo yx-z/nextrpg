@@ -14,7 +14,7 @@ Core Components:
     - `.event`: Event handling and processing
     - `.draw`: Drawing utilities and screen rendering
     - `.gui`: GUI components and window management
-    - `.config`: Configuration management
+    - `.global_config`: Configuration management
     - `.game`: Main game loop and initialization
 
 Key Features:
@@ -96,50 +96,51 @@ Dependencies:
 
 __version__ = "0.1.10"
 
-from nextrpg.area import *
-from nextrpg.character_config import *
-from nextrpg.character_drawing import *
-from nextrpg.character_on_screen import *
-from nextrpg.code_transformers import *
-from nextrpg.coordinate import *
-from nextrpg.core import *
-from nextrpg.debug_config import *
-from nextrpg.draw_on_screen import *
-from nextrpg.draw_on_screen_config import *
-from nextrpg.event_as_attr import *
-from nextrpg.event_config import *
-from nextrpg.event_transformer import *
-from nextrpg.fade import *
-from nextrpg.frames import *
-from nextrpg.game import *
-from nextrpg.global_config import *
-from nextrpg.gui_config import *
-from nextrpg.key_mapping_config import *
-from nextrpg.logger import *
-from nextrpg.map_helper import *
-from nextrpg.map_scene import *
-from nextrpg.map_util import *
-from nextrpg.model import *
-from nextrpg.moving_character_on_screen import *
-from nextrpg.moving_npc import *
-from nextrpg.npcs import *
-from nextrpg.player_on_screen import *
-from nextrpg.plugins import *
-from nextrpg.pygame_event import *
-from nextrpg.resource_config import *
-from nextrpg.rpg_event import *
-from nextrpg.rpg_maker_character_drawing import *
-from nextrpg.rpg_maker_character_drawing_config import *
-from nextrpg.say_event import *
-from nextrpg.say_event_config import *
+from nextrpg.gui.area import *
+from nextrpg.global_config.character_config import *
+from nextrpg.character.character_drawing import *
+from nextrpg.character.character_on_screen import *
+from nextrpg.event.code_transformers import *
+from nextrpg.core.coordinate import *
+from nextrpg.core.dimension import *
+from nextrpg.core.color import *
+from nextrpg.global_config.debug_config import *
+from nextrpg.draw.draw_on_screen import *
+from nextrpg.global_config.draw_on_screen_config import *
+from nextrpg.core.event_as_attr import *
+from nextrpg.global_config.event_config import *
+from nextrpg.event.event_transformer import *
+from nextrpg.draw.fade import *
+from nextrpg.core.frames import *
+from nextrpg.core.game import *
+from nextrpg.global_config.global_config import *
+from nextrpg.global_config.gui_config import *
+from nextrpg.global_config.key_mapping_config import *
+from nextrpg.core.logger import *
+from nextrpg.scene.map_helper import *
+from nextrpg.scene.map_scene import *
+from nextrpg.scene.map_util import *
+from nextrpg.core.model import *
+from nextrpg.character.moving_character_on_screen import *
+from nextrpg.character.moving_npc import *
+from nextrpg.character.npcs import *
+from nextrpg.character.player_on_screen import *
+from nextrpg.event.plugins import *
+from nextrpg.event.pygame_event import *
+from nextrpg.global_config.resource_config import *
+from nextrpg.event.rpg_event import *
+from nextrpg.character.rpg_maker_character_drawing import *
+from nextrpg.global_config.rpg_maker_character_drawing_config import *
+from nextrpg.scene.say_event_scene import *
+from nextrpg.global_config.say_event_config import *
 from nextrpg.scene import *
-from nextrpg.static_scene import *
-from nextrpg.text import *
-from nextrpg.text_config import *
-from nextrpg.text_on_screen import *
-from nextrpg.tile_map_config import *
-from nextrpg.transition_config import *
-from nextrpg.transition_scene import *
-from nextrpg.walk import *
+from nextrpg.scene.static_scene import *
+from nextrpg.draw.text import *
+from nextrpg.global_config.text_config import *
+from nextrpg.draw.text_on_screen import *
+from nextrpg.global_config.tile_map_config import *
+from nextrpg.global_config.transition_config import *
+from nextrpg.scene.transition_scene import *
+from nextrpg.core.walk import *
 from nextrpg.gui import *
-from nextrpg.cached_decorator import *
+from nextrpg.core.cached_decorator import *

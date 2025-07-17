@@ -1,6 +1,8 @@
 from unittest.mock import Mock
 
-from nextrpg import Direction, DirectionalOffset, Font, Size
+from nextrpg import Size
+from nextrpg.core.font import Font
+from nextrpg.core.direction import Direction, DirectionalOffset
 
 
 def test_direction() -> None:

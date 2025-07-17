@@ -6,11 +6,11 @@ from nextrpg import (
     SpriteSheet,
     SpriteSheetSelection,
     XpFrameType,
-    Direction,
     Size,
     Drawing,
 )
-from nextrpg.rpg_maker_character_drawing import _adjust
+from nextrpg.core.direction import Direction
+from nextrpg.character.rpg_maker_character_drawing import _adjust
 
 
 def test_rpg_maker_drawing() -> None:

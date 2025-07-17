@@ -14,8 +14,8 @@ from nextrpg import (
     Coordinate,
     Millisecond,
     Drawing,
-    Direction,
 )
+from nextrpg.core.direction import Direction
 
 
 class MockColor(NamedTuple):

@@ -75,7 +75,7 @@ def test_move(mocker: MockerFixture) -> None:
         i += 1
         return i % 2 == 0
 
-    mocker.patch("nextrpg.draw_on_screen.Rectangle.collide", _increment)
+    mocker.patch("nextrpg.draw.draw_on_screen.Rectangle.collide", _increment)
 
     def to_scene(*_: Any) -> MapScene:
         return MapScene(
