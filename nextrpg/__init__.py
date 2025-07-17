@@ -84,7 +84,7 @@ Advanced Example:
     ```
 
 Version:
-    Current version: 0.1.10
+    Current version: 0.1.11
 
 Dependencies:
     - pygame: For graphics and input handling
@@ -94,7 +94,7 @@ Dependencies:
     - functools: For utility functions
 """
 
-__version__ = "0.1.10"
+__version__ = "0.1.11"
 
 from nextrpg.gui.area import *
 from nextrpg.global_config.character_config import *
