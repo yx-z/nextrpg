@@ -13,8 +13,8 @@ from nextrpg import (
     Polygon,
     Rectangle,
     Coordinate,
+    Rgba,
 )
-from nextrpg.core.color import Rgba
 from test.util import override_config, MockSurface
 
 

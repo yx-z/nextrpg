@@ -8,9 +8,8 @@ from nextrpg import (
     XpFrameType,
     Size,
     Drawing,
+    Direction,
 )
-from nextrpg.core.direction import Direction
-from nextrpg.character.rpg_maker_character_drawing import _adjust
 
 
 def test_rpg_maker_drawing() -> None:
@@ -40,7 +39,4 @@ def test_rpg_maker_drawing() -> None:
         animate_on_idle=False,
     )
     assert character.tick_idle(2).drawing.size == Size(2, 2)
-
-
-def test_adjust() -> None:
-    assert _adjust(Direction.DOWN_LEFT) is Direction.DOWN
+    assert character.turn(Direction.DOWN_LEFT)

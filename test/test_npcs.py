@@ -24,8 +24,8 @@ from nextrpg import (
     Quit,
     say,
     MapScene,
+    Direction,
 )
-from nextrpg.core.direction import Direction
 from test.util import MockCharacterDrawing
 
 
