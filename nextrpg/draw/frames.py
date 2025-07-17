@@ -16,13 +16,13 @@ Features:
 from dataclasses import KW_ONLY, replace
 from typing import Self
 
-from nextrpg.core.time import Millisecond, Timer
-from nextrpg.draw.draw_on_screen import Drawing
 from nextrpg.core.model import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
+from nextrpg.core.time import Millisecond, Timer
+from nextrpg.draw.draw_on_screen import Drawing
 
 
 @dataclass_with_instance_init

@@ -14,7 +14,6 @@ Features:
 
 from collections.abc import Callable
 
-
 from nextrpg.event.rpg_event import registered_events
 from nextrpg.scene.scene import Scene
 

@@ -1,3 +1,5 @@
+from test.util import MockSurface
+
 from nextrpg import (
     Coordinate,
     Drawing,
@@ -6,7 +8,6 @@ from nextrpg import (
     TransitioningScene,
     TransitionScene,
 )
-from test.util import MockSurface
 
 
 def test_transition_scene():

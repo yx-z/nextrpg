@@ -16,7 +16,6 @@ from dataclasses import dataclass
 from pygame import K_RETURN
 from pygame.locals import K_DOWN, K_F1, K_LEFT, K_RIGHT, K_UP
 
-
 type KeyCode = int
 """
 Type alias for keyboard key codes used in pygame.

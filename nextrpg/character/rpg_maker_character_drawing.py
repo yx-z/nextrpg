@@ -32,17 +32,17 @@ from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.time import Millisecond
-from nextrpg.core.direction import Direction
 from nextrpg.core.dimension import Pixel, Size
-from nextrpg.draw.draw_on_screen import Drawing
-from nextrpg.draw.frames import CyclicFrames
-from nextrpg.global_config.global_config import config
+from nextrpg.core.direction import Direction
 from nextrpg.core.model import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
+from nextrpg.core.time import Millisecond
+from nextrpg.draw.draw_on_screen import Drawing
+from nextrpg.draw.frames import CyclicFrames
+from nextrpg.global_config.global_config import config
 
 
 class DefaultFrameType(IntEnum):

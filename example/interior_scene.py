@@ -3,20 +3,20 @@ Sample interior scene.
 """
 
 from nextrpg import (
+    CharacterDrawing,
     CharacterSpec,
-    Scene,
+    Drawing,
+    EventfulScene,
     MapScene,
     Move,
-    NpcSpec,
-    CharacterDrawing,
-    PlayerOnScreen,
     NpcOnScreen,
-    EventfulScene,
-    SpriteSheet,
-    Drawing,
-    Trim,
+    NpcSpec,
+    PlayerOnScreen,
     RpgMakerCharacterDrawing,
+    Scene,
+    SpriteSheet,
     SpriteSheetSelection,
+    Trim,
 )
 from nextrpg.core.direction import Direction
 

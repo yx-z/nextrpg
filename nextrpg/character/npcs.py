@@ -22,20 +22,19 @@ from nextrpg.character.character_on_screen import (
     CharacterOnScreen,
     CharacterSpec,
 )
-from nextrpg.core.time import Millisecond
+from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.dimension import PixelPerMillisecond
 from nextrpg.core.event_as_attr import event_as_attr
-from nextrpg.event.event_transformer import transform_and_compile
-from nextrpg.global_config.global_config import config
 from nextrpg.core.logger import Logger
 from nextrpg.core.model import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
-
-from nextrpg.character.player_on_screen import PlayerOnScreen
+from nextrpg.core.time import Millisecond
+from nextrpg.event.event_transformer import transform_and_compile
 from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
+from nextrpg.global_config.global_config import config
 from nextrpg.scene.scene import Scene
 
 logger = Logger("Npcs")

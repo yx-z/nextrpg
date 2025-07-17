@@ -1,6 +1,6 @@
 from pytest import approx
 
-from nextrpg import Coordinate, DirectionalOffset, Direction
+from nextrpg import Coordinate, Direction, DirectionalOffset
 
 
 def test_coordinate() -> None:

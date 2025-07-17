@@ -14,8 +14,8 @@ Features:
 
 from dataclasses import dataclass
 
-from nextrpg.core.direction import Direction
 from nextrpg.core.dimension import PixelPerMillisecond
+from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
 
 

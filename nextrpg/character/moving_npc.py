@@ -15,19 +15,18 @@ Features:
 from dataclasses import KW_ONLY, field, replace
 from typing import NamedTuple, Self, override
 
+from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
+from nextrpg.character.npcs import NpcOnScreen, NpcSpec
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.time import Millisecond, Timer
 from nextrpg.core.dimension import PixelPerMillisecond
-from nextrpg.draw.draw_on_screen import Polygon
 from nextrpg.core.model import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
-
-from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
-from nextrpg.character.npcs import NpcOnScreen, NpcSpec
+from nextrpg.core.time import Millisecond, Timer
 from nextrpg.core.walk import Walk
+from nextrpg.draw.draw_on_screen import Polygon
 
 
 @dataclass_with_instance_init

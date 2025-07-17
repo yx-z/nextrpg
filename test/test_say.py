@@ -1,5 +1,6 @@
-from nextrpg import SayEventScene, Scene
 from test.util import MockCharacterDrawing
+
+from nextrpg import SayEventScene, Scene
 
 
 def test_say() -> None:

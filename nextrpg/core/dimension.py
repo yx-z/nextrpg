@@ -19,7 +19,6 @@ from collections import namedtuple
 from math import ceil
 from typing import Self
 
-
 type Pixel = int | float
 """
 Number of pixel on screen.

@@ -13,7 +13,6 @@ from nextrpg.global_config.draw_on_screen_config import DrawOnScreenConfig
 from nextrpg.global_config.event_config import EventConfig
 from nextrpg.global_config.gui_config import GuiConfig
 from nextrpg.global_config.key_mapping_config import KeyMappingConfig
-
 from nextrpg.global_config.resource_config import ResourceConfig
 from nextrpg.global_config.rpg_maker_character_drawing_config import (
     RpgMakerCharacterDrawingConfig,

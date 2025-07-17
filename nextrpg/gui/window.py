@@ -26,20 +26,20 @@ from pygame.transform import smoothscale
 
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
-from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw_on_screen import Drawing, DrawOnScreen
-from nextrpg.global_config.global_config import config, set_config
-from nextrpg.global_config.gui_config import GuiConfig, GuiMode, ResizeMode
 from nextrpg.core.logger import ComponentAndMessage, Logger, pop_messages
 from nextrpg.core.model import not_constructor_below
+from nextrpg.core.time import Millisecond
+from nextrpg.draw.draw_on_screen import Drawing, DrawOnScreen
+from nextrpg.draw.text import Text
+from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
     GuiResize,
     KeyboardKey,
     KeyPressDown,
     PygameEvent,
 )
-from nextrpg.draw.text import Text
-from nextrpg.draw.text_on_screen import TextOnScreen
+from nextrpg.global_config.global_config import config, set_config
+from nextrpg.global_config.gui_config import GuiConfig, GuiMode, ResizeMode
 
 logger = Logger("GUI")
 

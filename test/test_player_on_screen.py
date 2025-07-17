@@ -1,20 +1,21 @@
+from test.util import MockCharacterDrawing, override_config
+
 from pygame.event import Event
-from pygame.locals import KEYDOWN, KEYUP, K_RIGHT, K_SPACE, QUIT
+from pygame.locals import K_RIGHT, K_SPACE, KEYDOWN, KEYUP, QUIT
 
 from nextrpg import (
     CharacterSpec,
-    PlayerOnScreen,
     Config,
-    DebugConfig,
-    Size,
-    Rectangle,
     Coordinate,
+    DebugConfig,
     KeyPressDown,
     KeyPressUp,
+    PlayerOnScreen,
     Quit,
+    Rectangle,
+    Size,
     pop_messages,
 )
-from test.util import MockCharacterDrawing, override_config
 
 
 def test_player_on_screen():

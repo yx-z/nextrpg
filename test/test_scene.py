@@ -1,10 +1,10 @@
 from functools import cached_property
+from test.util import MockSurface
 
 from pygame import Event
 from pygame.locals import QUIT
 
 from nextrpg import Coordinate, Drawing, DrawOnScreen, PygameEvent, Scene
-from test.util import MockSurface
 
 
 def test_scene() -> None:

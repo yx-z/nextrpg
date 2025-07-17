@@ -1,5 +1,6 @@
-from nextrpg import CharacterSpec, Coordinate, PlayerOnScreen
 from test.util import MockCharacterDrawing
+
+from nextrpg import CharacterSpec, Coordinate, PlayerOnScreen
 
 
 def test_character_on_screen() -> None:

@@ -16,7 +16,6 @@ from typing import Any
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import Coordinate
-
 from nextrpg.event.rpg_event import register_rpg_event
 from nextrpg.scene.scene import Scene
 

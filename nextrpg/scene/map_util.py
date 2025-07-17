@@ -12,9 +12,9 @@ Features:
     - GUI coordinate calculations
 """
 
-from nextrpg.gui.area import gui_size
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
+from nextrpg.gui.area import gui_size
 
 
 def center_player(player_coord: Coordinate, map_size: Size) -> Coordinate:

@@ -20,17 +20,16 @@ from typing import Callable, Self
 import pygame
 from pygame.time import Clock
 
-from nextrpg.event import plugins
-from nextrpg.global_config.global_config import config
-from nextrpg.gui.window import Window
 from nextrpg.core.logger import Logger
 from nextrpg.core.model import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
-
+from nextrpg.event import plugins
 from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
+from nextrpg.global_config.global_config import config
+from nextrpg.gui.window import Window
 from nextrpg.scene.scene import Scene
 
 logger = Logger("Game")

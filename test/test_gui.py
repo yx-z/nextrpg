@@ -1,26 +1,27 @@
+from test.util import MockSurface, override_config
+
+from pygame import K_F1, K_LEFT, KEYDOWN, VIDEORESIZE, Event
 from pytest import raises
-from pygame import Event, KEYDOWN, K_F1, K_LEFT, VIDEORESIZE
 from pytest_mock import MockerFixture
 
 from nextrpg import (
     Config,
+    Coordinate,
     DebugConfig,
+    Drawing,
+    DrawOnScreen,
     GuiConfig,
     GuiMode,
-    ResizeMode,
-    Size,
-    DrawOnScreen,
-    Drawing,
-    Coordinate,
     GuiResize,
     KeyPressDown,
     KeyPressUp,
+    Logger,
+    ResizeMode,
+    Size,
     Window,
     config,
     gui_size,
-    Logger,
 )
-from test.util import MockSurface, override_config
 
 
 @override_config(Config(GuiConfig(size=Size(10, 10))))

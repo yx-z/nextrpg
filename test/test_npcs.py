@@ -1,32 +1,32 @@
 from dataclasses import replace
 from functools import cached_property
+from test.util import MockCharacterDrawing
 from types import SimpleNamespace
 from typing import Any
 from unittest.mock import Mock
 
-from pygame import Event, K_SPACE
-from pygame.locals import KEYDOWN, K_RETURN, QUIT
+from pygame import K_SPACE, Event
+from pygame.locals import K_RETURN, KEYDOWN, QUIT
 from pytest_mock import MockerFixture
 
 from nextrpg import (
     CharacterSpec,
+    Coordinate,
+    Direction,
     EventfulScene,
+    KeyPressDown,
+    MapScene,
     MovingNpcOnScreen,
     NpcOnScreen,
     NpcSpec,
+    PlayerOnScreen,
+    Quit,
+    Rectangle,
     RpgEventGenerator,
     RpgEventScene,
-    PlayerOnScreen,
     Size,
-    Rectangle,
-    Coordinate,
-    KeyPressDown,
-    Quit,
     say,
-    MapScene,
-    Direction,
 )
-from test.util import MockCharacterDrawing
 
 
 def test_npc_on_screen() -> None:
@@ -76,9 +76,9 @@ def test_npcs(mocker: MockerFixture) -> None:
     map_helper.above_character = ()
     map_helper.collision_visuals = ()
     map_helper.map_size = Size(100, 100)
-    mocker.patch("nextrpg.map_scene.MapHelper", return_value=map_helper)
+    mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=map_helper)
     mocker.patch(
-        "nextrpg.map_scene.MapScene.draw_on_screens_before_shift",
+        "nextrpg.scene.map_scene.MapScene.draw_on_screens_before_shift",
         return_value=(),
     )
     player = PlayerOnScreen(

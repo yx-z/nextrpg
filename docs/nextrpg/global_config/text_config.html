@@ -105,9 +105,9 @@ and rendering options for text display.</p>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">WHITE</span><span class="p">,</span> <span class="n">Rgba</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pixel</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.font</span><span class="w"> </span><span class="kn">import</span> <span class="n">Font</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pixel</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">WHITE</span><span class="p">,</span> <span class="n">Rgba</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.font</span><span class="w"> </span><span class="kn">import</span> <span class="n">Font</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -204,7 +204,7 @@ to render.</li>
                             <div id="TextConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">TextConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">font</span><span class="p">:</span> <span class="n"><a href="../core/font.html#Font">nextrpg.core.font.Font</a></span> <span class="o">=</span> <span class="n">Font</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>,</span><span class="param">	<span class="n">color</span><span class="p">:</span> <span class="n"><a href="../core/color.html#Rgba">nextrpg.core.color.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">line_spacing</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">8</span>,</span><span class="param">	<span class="n">antialias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
+        <span class="name">TextConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">font</span><span class="p">:</span> <span class="n"><a href="../draw/font.html#Font">nextrpg.draw.font.Font</a></span> <span class="o">=</span> <span class="n">Font</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>,</span><span class="param">	<span class="n">color</span><span class="p">:</span> <span class="n"><a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">line_spacing</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">8</span>,</span><span class="param">	<span class="n">antialias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
 
         
     </div>
@@ -215,7 +215,7 @@ to render.</li>
                             </div>
                             <div id="TextConfig.font" class="classattr">
                                 <div class="attr variable">
-            <span class="name">font</span><span class="annotation">: <a href="../core/font.html#Font">nextrpg.core.font.Font</a></span>        =
+            <span class="name">font</span><span class="annotation">: <a href="../draw/font.html#Font">nextrpg.draw.font.Font</a></span>        =
 <span class="default_value">Font(size=28, name=None)</span>
 
         
@@ -227,7 +227,7 @@ to render.</li>
                             </div>
                             <div id="TextConfig.color" class="classattr">
                                 <div class="attr variable">
-            <span class="name">color</span><span class="annotation">: <a href="../core/color.html#Rgba">nextrpg.core.color.Rgba</a></span>        =
+            <span class="name">color</span><span class="annotation">: <a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span>        =
 <span class="default_value">Rgba(red=255, green=255, blue=255, alpha=255)</span>
 
         

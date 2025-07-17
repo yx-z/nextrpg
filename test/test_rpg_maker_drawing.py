@@ -2,13 +2,13 @@ from pygame import Surface
 
 from nextrpg import (
     DefaultFrameType,
+    Direction,
+    Drawing,
     RpgMakerCharacterDrawing,
+    Size,
     SpriteSheet,
     SpriteSheetSelection,
     XpFrameType,
-    Size,
-    Drawing,
-    Direction,
 )
 
 

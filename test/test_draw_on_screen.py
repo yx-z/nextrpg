@@ -1,4 +1,5 @@
 from pathlib import Path
+from test.util import MockSurface, override_config
 
 from pygame import Color, Surface
 from pygame.locals import SRCALPHA
@@ -6,16 +7,15 @@ from pytest_mock import MockerFixture
 
 from nextrpg import (
     Config,
+    Coordinate,
     DebugConfig,
-    Size,
-    DrawOnScreen,
     Drawing,
+    DrawOnScreen,
     Polygon,
     Rectangle,
-    Coordinate,
     Rgba,
+    Size,
 )
-from test.util import override_config, MockSurface
 
 
 def test_drawing(mocker: MockerFixture) -> None:

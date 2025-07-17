@@ -1,5 +1,6 @@
-from nextrpg import Coordinate, Drawing, DrawOnScreen, StaticScene
 from test.util import MockSurface
+
+from nextrpg import Coordinate, Drawing, DrawOnScreen, StaticScene
 
 
 def test_static_scene() -> None:

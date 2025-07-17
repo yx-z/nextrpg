@@ -19,8 +19,8 @@ from collections import namedtuple
 from math import atan2, degrees, hypot, sqrt
 from typing import Self
 
-from nextrpg.core.direction import Direction, DirectionalOffset
 from nextrpg.core.dimension import Pixel
+from nextrpg.core.direction import Direction, DirectionalOffset
 
 
 class Coordinate(namedtuple("Coordinate", "left top")):

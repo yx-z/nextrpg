@@ -1,12 +1,13 @@
+from test.util import override_config
+
 from nextrpg import (
     Config,
     Coordinate,
     GuiConfig,
     ResizeMode,
-    center_player,
     Size,
+    center_player,
 )
-from test.util import override_config
 
 
 def test_center_player() -> None:

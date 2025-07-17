@@ -21,11 +21,10 @@ from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import PixelPerMillisecond
 from nextrpg.core.direction import Direction
+from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw_on_screen import DrawOnScreen, Polygon
 from nextrpg.global_config.global_config import config
-from nextrpg.core.logger import Logger
-
 
 logger = Logger("MovingCharacterOnScreen")
 

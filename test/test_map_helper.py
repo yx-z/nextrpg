@@ -1,22 +1,23 @@
 from pathlib import Path
+from test.util import MockCharacterDrawing, MockSurface, override_config
 from types import SimpleNamespace
 from unittest.mock import MagicMock
+
 from pytest import raises
 from pytest_mock import MockerFixture
 
 from nextrpg import (
     CharacterSpec,
-    DebugConfig,
-    PlayerOnScreen,
     Config,
+    Coordinate,
+    DebugConfig,
+    MapHelper,
+    PlayerOnScreen,
     Rectangle,
     ResourceConfig,
     Size,
-    Coordinate,
-    MapHelper,
     get_polygon,
 )
-from test.util import MockCharacterDrawing, MockSurface, override_config
 
 
 @override_config(Config(resource=ResourceConfig(map_cache_size=1)))
@@ -81,7 +82,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
             )
         },
     }
-    mocker.patch("nextrpg.map_helper.load_pygame", return_value=tmx)
+    mocker.patch("nextrpg.scene.map_helper.load_pygame", return_value=tmx)
     helper = MapHelper(Path("abc"))
     assert helper.map_size == Size(20, 60)
     assert helper.background
@@ -102,7 +103,9 @@ def test_map_helper(mocker: MockerFixture) -> None:
     efg = MapHelper(Path("efg"))
     assert efg is not helper
     object.__setattr__(efg, "_reversed_foregrounds", [None])
-    mocker.patch("nextrpg.map_helper._below_character_layer", return_value=True)
+    mocker.patch(
+        "nextrpg.scene.map_helper._below_character_layer", return_value=True
+    )
     assert not (
         efg._character_layer(
             PlayerOnScreen(

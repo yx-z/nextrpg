@@ -18,14 +18,14 @@ from typing import Self
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.core.event_as_attr import event_as_attr
 from nextrpg.core.model import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
+from nextrpg.core.time import Millisecond
+from nextrpg.draw.draw_on_screen import DrawOnScreen
 
 
 @dataclass_with_instance_init

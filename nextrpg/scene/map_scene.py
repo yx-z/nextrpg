@@ -21,22 +21,21 @@ from os import PathLike
 from typing import Callable, NamedTuple, OrderedDict, override
 
 from nextrpg.character.character_on_screen import CharacterSpec
+from nextrpg.character.moving_npc import MovingNpcOnScreen
+from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
+from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.time import Millisecond, get_timepoint
-from nextrpg.draw.draw_on_screen import DrawOnScreen
-from nextrpg.global_config.global_config import config
 from nextrpg.core.logger import Logger
-from nextrpg.scene.map_helper import MapHelper, get_polygon
-from nextrpg.scene.map_util import center_player
 from nextrpg.core.model import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
-
-from nextrpg.character.moving_npc import MovingNpcOnScreen
-from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
-from nextrpg.character.player_on_screen import PlayerOnScreen
+from nextrpg.core.time import Millisecond, get_timepoint
+from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.global_config.global_config import config
+from nextrpg.scene.map_helper import MapHelper, get_polygon
+from nextrpg.scene.map_util import center_player
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.static_scene import StaticScene
 from nextrpg.scene.transition_scene import TransitioningScene, TransitionScene

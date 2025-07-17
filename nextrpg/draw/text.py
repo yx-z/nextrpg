@@ -18,7 +18,6 @@ from functools import cached_property
 
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.global_config.global_config import config
-
 from nextrpg.global_config.text_config import TextConfig
 
 

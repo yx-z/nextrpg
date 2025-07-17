@@ -1,7 +1,7 @@
 from dataclasses import replace
-
-from nextrpg import MovingNpcOnScreen, NpcSpec, Coordinate, Size, Rectangle
 from test.util import MockCharacterDrawing
+
+from nextrpg import Coordinate, MovingNpcOnScreen, NpcSpec, Rectangle, Size
 
 
 def test_moving_npc_on_screen() -> None:

@@ -1,5 +1,6 @@
-from nextrpg import Drawing, CyclicFrames
 from test.util import MockSurface
+
+from nextrpg import CyclicFrames, Drawing
 
 
 def test_cyclic_frames() -> None:

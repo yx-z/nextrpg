@@ -1,6 +1,5 @@
 from collections import namedtuple
 
-
 type Alpha = int
 """
 Alpha channel that defines the transparency between [0, 255] for images.

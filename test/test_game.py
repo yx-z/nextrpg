@@ -5,7 +5,7 @@ from typing import Any, Self
 from unittest.mock import AsyncMock, MagicMock, Mock
 
 from pygame.event import Event
-from pygame.locals import KEYDOWN, K_LEFT, QUIT, VIDEORESIZE
+from pygame.locals import K_LEFT, KEYDOWN, QUIT, VIDEORESIZE
 from pytest_mock import MockerFixture
 
 from nextrpg import Game

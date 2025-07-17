@@ -2,8 +2,8 @@ from dataclasses import dataclass, field, replace
 
 from nextrpg import (
     cached,
-    instance_init,
     dataclass_with_instance_init,
+    instance_init,
 )
 
 

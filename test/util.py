@@ -9,12 +9,12 @@ from pygame import Surface
 from nextrpg import (
     CharacterDrawing,
     Config,
+    Coordinate,
+    Direction,
+    Drawing,
+    Millisecond,
     config,
     set_config,
-    Coordinate,
-    Millisecond,
-    Drawing,
-    Direction,
 )
 
 

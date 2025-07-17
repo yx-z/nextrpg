@@ -24,24 +24,24 @@ from dataclasses import field, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.gui.area import screen
 from nextrpg.character.character_on_screen import CharacterOnScreen
+from nextrpg.character.npcs import RpgEventScene
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.time import Millisecond
 from nextrpg.core.dimension import Size
-from nextrpg.draw.draw_on_screen import Drawing, DrawOnScreen, Rectangle
-from nextrpg.draw.fade import FadeIn, FadeOut
-from nextrpg.global_config.global_config import config
 from nextrpg.core.model import (
     dataclass_with_instance_init,
     instance_init,
 )
-from nextrpg.character.npcs import RpgEventScene
-from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
-from nextrpg.global_config.say_event_config import SayEventConfig
-from nextrpg.scene.scene import Scene
+from nextrpg.core.time import Millisecond
+from nextrpg.draw.draw_on_screen import Drawing, DrawOnScreen, Rectangle
+from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
+from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
+from nextrpg.global_config.global_config import config
+from nextrpg.global_config.say_event_config import SayEventConfig
+from nextrpg.gui.area import screen
+from nextrpg.scene.scene import Scene
 
 
 @dataclass_with_instance_init

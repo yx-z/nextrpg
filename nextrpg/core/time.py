@@ -5,7 +5,6 @@ from pygame.time import get_ticks
 
 from nextrpg.core.model import not_constructor_below
 
-
 type Millisecond = int
 """
 Millisecond elapsed between game loops.

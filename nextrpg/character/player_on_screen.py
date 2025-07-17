@@ -17,20 +17,19 @@ Features:
 from dataclasses import KW_ONLY, dataclass, field, replace
 from typing import Self, override
 
-from nextrpg.core.model import not_constructor_below
 from nextrpg.character.character_on_screen import CharacterOnScreen
+from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.direction import Direction, DirectionalOffset
+from nextrpg.core.model import not_constructor_below
 from nextrpg.core.time import Millisecond
-from nextrpg.global_config.global_config import config
-
-from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.event.pygame_event import (
     KeyboardKey,
     KeyPressDown,
     KeyPressUp,
     PygameEvent,
 )
+from nextrpg.global_config.global_config import config
 
 
 @dataclass(kw_only=True, frozen=True)

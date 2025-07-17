@@ -2,7 +2,7 @@ from ast import parse
 
 from pytest import raises
 
-from nextrpg import register_rpg_event, ADD_YIELD
+from nextrpg import ADD_YIELD, register_rpg_event
 
 
 def test_register_rpg_event() -> None:
