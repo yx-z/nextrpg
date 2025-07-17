@@ -103,7 +103,7 @@ from nextrpg.character.character_on_screen import *
 from nextrpg.event.code_transformers import *
 from nextrpg.core.coordinate import *
 from nextrpg.core.dimension import *
-from nextrpg.core.color import *
+from nextrpg.draw.color import *
 from nextrpg.global_config.debug_config import *
 from nextrpg.draw.draw_on_screen import *
 from nextrpg.global_config.draw_on_screen_config import *
@@ -111,8 +111,8 @@ from nextrpg.core.event_as_attr import *
 from nextrpg.global_config.event_config import *
 from nextrpg.event.event_transformer import *
 from nextrpg.draw.fade import *
-from nextrpg.core.frames import *
-from nextrpg.core.game import *
+from nextrpg.draw.frames import *
+from nextrpg.game import *
 from nextrpg.global_config.global_config import *
 from nextrpg.global_config.gui_config import *
 from nextrpg.global_config.key_mapping_config import *

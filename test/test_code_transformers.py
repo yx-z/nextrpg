@@ -11,8 +11,10 @@ from nextrpg import ANNOTATE_SAY
 
 def test_annotate_say() -> None:
     def fun(p: Any) -> None:
+        x: int = 10
+        x += 1
         p: "abc"
-        p["hi"]: "def"
+        p["hi"]: "defg"
 
     src = getsource(fun)
     tree = parse(dedent(src))
@@ -20,8 +22,7 @@ def test_annotate_say() -> None:
     assert tree
 
     def fun2(p: Any) -> None:
-        x: int = 1
-        p.dict["hi"]: "def"
+        p.dict["hi"]: "defg"
 
     src = getsource(fun2)
     tree = parse(dedent(src))
@@ -29,7 +30,7 @@ def test_annotate_say() -> None:
         ANNOTATE_SAY.visit(tree)
 
     def fun3(p: Any) -> None:
-        p.attr: "def"
+        p.attr: "defg"
 
     src = getsource(fun3)
     tree = parse(dedent(src))

@@ -15,9 +15,9 @@ The text configuration system features:
 
 from dataclasses import dataclass
 
-from nextrpg.core.color import WHITE, Rgba
+from nextrpg.draw.color import WHITE, Rgba
 from nextrpg.core.dimension import Pixel
-from nextrpg.core.font import Font
+from nextrpg.draw.font import Font
 
 
 @dataclass(frozen=True)

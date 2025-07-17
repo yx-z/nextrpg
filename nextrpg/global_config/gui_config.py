@@ -15,7 +15,7 @@ Features:
 from dataclasses import dataclass
 from enum import Enum, auto
 
-from nextrpg.core.color import BLACK, Rgba
+from nextrpg.draw.color import BLACK, Rgba
 from nextrpg.core.dimension import Size
 
 

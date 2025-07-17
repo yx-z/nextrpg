@@ -16,7 +16,7 @@ from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.core.color import Alpha, alpha_from_percentage
+from nextrpg.draw.color import Alpha, alpha_from_percentage
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.global_config.global_config import config

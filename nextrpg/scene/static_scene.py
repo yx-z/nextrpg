@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 from functools import cached_property
 
 from nextrpg.gui.area import screen
-from nextrpg.core.color import Rgba
+from nextrpg.draw.color import Rgba
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.global_config.global_config import config
 from nextrpg.scene.transition_scene import TransitioningScene

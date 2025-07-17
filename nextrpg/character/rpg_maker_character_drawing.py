@@ -36,7 +36,7 @@ from nextrpg.core.time import Millisecond
 from nextrpg.core.direction import Direction
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.draw.draw_on_screen import Drawing
-from nextrpg.core.frames import CyclicFrames
+from nextrpg.draw.frames import CyclicFrames
 from nextrpg.global_config.global_config import config
 from nextrpg.core.model import (
     dataclass_with_instance_init,

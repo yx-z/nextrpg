@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from enum import IntEnum, auto
 
 from nextrpg.core.time import Millisecond
-from nextrpg.core.color import Rgba
+from nextrpg.draw.color import Rgba
 
 
 class LogLevel(IntEnum):

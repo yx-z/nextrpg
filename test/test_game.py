@@ -12,7 +12,7 @@ from nextrpg import Game
 
 
 def test_game(mocker: MockerFixture) -> None:
-    mocker.patch("nextrpg.core.game.Window.__post_init__")
+    mocker.patch("nextrpg.game.Window.__post_init__")
     mocker.patch(
         "pygame.event.get",
         lambda: (
@@ -53,6 +53,6 @@ def test_game(mocker: MockerFixture) -> None:
 
     sleep = AsyncMock()
     object.__setattr__(game, "_loop", replace(game._loop, running=True))
-    mocker.patch("nextrpg.core.game.sleep", sleep)
+    mocker.patch("nextrpg.game.sleep", sleep)
     run(game.start_async())
     sleep.assert_called_once_with(0)

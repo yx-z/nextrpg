@@ -60,7 +60,7 @@ def test_npcs(mocker: MockerFixture) -> None:
             return Size(1, 1)
 
     assert MockFont().size == Size(1, 1)
-    mocker.patch("nextrpg.core.font.Font.pygame", MockFont)
+    mocker.patch("nextrpg.draw.font.Font.pygame", MockFont)
 
     def event(p: PlayerOnScreen, *args: Any) -> None:
         res = say(p, "hi")
@@ -117,7 +117,7 @@ def test_npcs(mocker: MockerFixture) -> None:
     say_event = map_scene.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
     object.__setattr__(say_event.scene, "draw_on_screens", ())
     assert say_event.tick(0)
-    mocker.patch("nextrpg.core.font.Font.pygame")
+    mocker.patch("nextrpg.draw.font.Font.pygame")
     assert say_event.event(Quit(Event(QUIT)))
     assert say_event.event(KeyPressDown(Event(KEYDOWN, key=K_SPACE)))
     player = replace(map_scene.player, coordinate=Coordinate(123, 100))

@@ -20,7 +20,7 @@ from nextrpg.core.model import (
     dataclass_with_instance_init,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.core.color import alpha_from_percentage
+from nextrpg.draw.color import alpha_from_percentage
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.global_config.global_config import config
 

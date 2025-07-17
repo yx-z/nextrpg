@@ -14,7 +14,7 @@ The say event configuration features:
 
 from dataclasses import dataclass, replace
 
-from nextrpg.core.color import BLACK, WHITE, Rgba
+from nextrpg.draw.color import BLACK, WHITE, Rgba
 from nextrpg.core.dimension import Pixel
 from nextrpg.core.time import Millisecond
 

@@ -163,7 +163,7 @@ class MapHelper:
         )
 
     @cached_property
-    def above_character(self) -> tuple[DrawOnSwcreen, ...]:
+    def above_character(self) -> tuple[DrawOnScreen, ...]:
         """
         Get the tuple of above-character drawings, which are all layers
         with the class name `global_config().map.above_character`.
