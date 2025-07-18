@@ -13,4 +13,5 @@ def test_fade() -> None:
         resource=(DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),)
     )
     assert not fade_in.draw_on_screens
+    assert fade_in.tick(9).draw_on_screens
     assert fade_in.tick(9).tick(999999999).draw_on_screens

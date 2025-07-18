@@ -36,7 +36,9 @@ def test_window(mocker: MockerFixture) -> None:
         current_config=GuiConfig(Size(10, 20)),
         last_config=GuiConfig(Size(10, 10)),
     )
-    drawing = window._scale((DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),))
+    drawing = window._scale(
+        (DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),)
+    )
     assert drawing.top_left == Coordinate(280, 0)
 
     window = window.event(GuiResize(Event(VIDEORESIZE, w=200, h=300)))
@@ -48,13 +50,19 @@ def test_window(mocker: MockerFixture) -> None:
     window._screen.blits.assert_not_called()
     object.__setattr__(window, "_draw_log", draw_debug)
 
-    window2 = Window(current_config=GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE_SIZE))
+    window2 = Window(
+        current_config=GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE_SIZE)
+    )
     window2.draw((), 0)
     window2._screen.blit.assert_called()
 
-    assert Window(current_config=GuiConfig(allow_window_resize=False))._current_gui_flag
+    assert Window(
+        current_config=GuiConfig(allow_window_resize=False)
+    )._current_gui_flag
 
-    Window(current_config=GuiConfig(resize_mode="Invalid resize mode")).draw((), 0)
+    Window(current_config=GuiConfig(resize_mode="Invalid resize mode")).draw(
+        (), 0
+    )
     Window(
         current_config=window.current_config,
         last_config=window.current_config,
@@ -67,7 +75,9 @@ def test_window(mocker: MockerFixture) -> None:
     assert window.event(KeyPressDown(Event(KEYDOWN, key=K_LEFT))) is window
     assert window.current_config.gui_mode is GuiMode.WINDOWED
     assert (
-        window.event(KeyPressDown(Event(KEYDOWN, key=K_F1))).current_config.gui_mode
+        window.event(
+            KeyPressDown(Event(KEYDOWN, key=K_F1))
+        ).current_config.gui_mode
         is GuiMode.FULL_SCREEN
     )
 
@@ -79,7 +89,9 @@ def test_window(mocker: MockerFixture) -> None:
 
     assert window.update
     with override_config(Config(gui=GuiConfig(allow_window_resize=True))):
-        assert Window(current_config=GuiConfig(allow_window_resize=False)).update
+        assert Window(
+            current_config=GuiConfig(allow_window_resize=False)
+        ).update
         assert Window(current_config=config().gui).update
 
 
@@ -87,8 +99,12 @@ def test_gui_size() -> None:
     with override_config(Config(GuiConfig(resize_mode=ResizeMode.SCALE))):
         assert gui_size() == Size(1280, 720)
 
-    with override_config(Config(GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE_SIZE))):
+    with override_config(
+        Config(GuiConfig(resize_mode=ResizeMode.KEEP_NATIVE_SIZE))
+    ):
         assert gui_size() == Size(1280, 720)
 
-    with raises(ValueError), override_config(Config(GuiConfig(resize_mode="INVALID"))):
+    with raises(ValueError), override_config(
+        Config(GuiConfig(resize_mode="INVALID"))
+    ):
         gui_size()
