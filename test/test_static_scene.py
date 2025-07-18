@@ -8,3 +8,6 @@ def test_static_scene() -> None:
     assert StaticScene(
         DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface()))
     ).draw_on_screens
+    assert StaticScene(
+        (DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),)
+    ).draw_on_screens

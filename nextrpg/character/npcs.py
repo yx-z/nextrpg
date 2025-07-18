@@ -297,10 +297,10 @@ class EventfulScene(Scene):
             create_next_scene = self._event_generator.send(self._event_result)
             return create_next_scene(self._event_generator, self)
         except StopIteration:
-            return self._clear_event
+            return self._complete_event
 
     @property
-    def _clear_event(self) -> Self:
+    def _complete_event(self) -> Self:
         """Clear the current event and return to normal scene state.
 
         This method is called when an event sequence completes and

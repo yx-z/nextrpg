@@ -222,7 +222,7 @@ class MapScene(EventfulScene, TransitioningScene):
         player_coord = self.player.draw_on_screen.rectangle.center
         shift = center_player(player_coord, self.map_helper.map_size)
         logger.debug(
-            t"Player center coord {player_coord}. Shift {shift}", duration=None
+            t"Player center coord {player_coord}. Shift {shift}", duration=100
         )
         return shift
 

@@ -37,7 +37,7 @@ class StaticScene(TransitioningScene):
             background color.
     """
 
-    resource: Rgba | DrawOnScreen = field(
+    resource: Rgba | DrawOnScreen | tuple[DrawOnScreen, ...] = field(
         default_factory=lambda: config().gui.background_color
     )
 
@@ -54,4 +54,6 @@ class StaticScene(TransitioningScene):
         """
         if isinstance(self.resource, Rgba):
             return (screen().fill(self.resource),)
-        return (self.resource,)
+        if isinstance(self.resource, DrawOnScreen):
+            return (self.resource,)
+        return self.resource

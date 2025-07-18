@@ -16,16 +16,14 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field, replace
 from typing import Self, override
 
-from nextrpg.core.model import (
-    dataclass_with_instance_init,
-)
+from nextrpg.core.model import dataclass_with_instance_init
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.color import alpha_from_percentage
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.global_config.global_config import config
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class Fade(ABC):
     """
     Fade effect for transitioning drawing resources.
@@ -41,7 +39,7 @@ class Fade(ABC):
         _elapsed: Internal elapsed time tracking.
     """
 
-    resource: tuple[DrawOnScreen, ...]
+    resource: DrawOnScreen | tuple[DrawOnScreen, ...]
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
     )
@@ -64,7 +62,7 @@ class Fade(ABC):
             return self._complete
         if self._elapsed == 0:
             return self._start
-        return self.resource
+        return self._resource_tuple
 
     def tick(self, time_delta: Millisecond) -> Self:
         """
@@ -83,7 +81,10 @@ class Fade(ABC):
             return self
         elapsed = self._elapsed + time_delta
         alpha = alpha_from_percentage(self._percentage)
-        resource = tuple(d.set_alpha(alpha) for d in self.resource)
+        if isinstance(self.resource, DrawOnScreen):
+            resource = self.resource.set_alpha(alpha)
+        else:
+            resource = tuple(d.set_alpha(alpha) for d in self.resource)
         return replace(self, _elapsed=elapsed, resource=resource)
 
     @property
@@ -97,7 +98,12 @@ class Fade(ABC):
         return self._elapsed >= self.duration
 
     @property
-    @abstractmethod
+    def _resource_tuple(self) -> tuple[DrawOnScreen, ...]:
+        if isinstance(self.resource, DrawOnScreen):
+            return (self.resource,)
+        return self.resource
+
+    @property
     def _start(self) -> tuple[DrawOnScreen, ...]:
         """
         Get the initial drawing state (empty).
@@ -105,9 +111,9 @@ class Fade(ABC):
         Returns:
             Empty drawing tuple.
         """
+        return ()
 
     @property
-    @abstractmethod
     def _complete(self) -> tuple[DrawOnScreen, ...]:
         """
         Get the final drawing state (empty).
@@ -115,6 +121,7 @@ class Fade(ABC):
         Returns:
             Empty drawing tuple.
         """
+        return ()
 
     @property
     @abstractmethod
@@ -140,18 +147,7 @@ class FadeIn(Fade):
     @override
     @property
     def _complete(self) -> tuple[DrawOnScreen, ...]:
-        return self.resource
-
-    @override
-    @property
-    def _start(self) -> tuple[DrawOnScreen, ...]:
-        """
-        Get the initial drawing state (empty).
-
-        Returns:
-            Empty drawing tuple.
-        """
-        return ()
+        return self._resource_tuple
 
     @override
     @property
@@ -195,16 +191,5 @@ class FadeOut(Fade):
 
     @override
     @property
-    def _complete(self) -> tuple[DrawOnScreen, ...]:
-        """
-        Get the final drawing state (empty).
-
-        Returns:
-            Empty drawing tuple.
-        """
-        return ()
-
-    @override
-    @property
     def _start(self) -> tuple[DrawOnScreen, ...]:
-        return self.resource
+        return self._resource_tuple
