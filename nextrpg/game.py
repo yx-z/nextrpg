@@ -94,10 +94,4 @@ class Game:
             await sleep(0)
 
     def _tick(self) -> None:
-        """
-        Execute one tick of the game loop.
-
-        Updates the internal game loop state by calling the tick method
-        on the current loop instance.
-        """
         object.__setattr__(self, "_loop", self._loop.tick)

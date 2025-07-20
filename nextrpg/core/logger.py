@@ -24,13 +24,7 @@ from nextrpg.global_config.global_config import config
 
 
 class _DurationFromConfig:
-    """
-    Sentinel class to indicate that the log duration is taken from global_config.
-
-    This class is used as a sentinel value to indicate that the log
-    message duration should be taken from the global configuration
-    rather than being specified explicitly.
-    """
+    pass
 
 
 _FROM_CONFIG = _DurationFromConfig()
@@ -259,34 +253,12 @@ def pop_messages(time_delta: Millisecond) -> tuple[ComponentAndMessage, ...]:
 
 @dataclass(frozen=True)
 class _Key:
-    """
-    Internal key for timed log entries.
-
-    Used internally to identify and manage timed log messages.
-
-    Arguments:
-        `component`: The component name.
-
-        `template`: The message template as a tuple of strings.
-    """
-
     component: str
     template: tuple[str, ...]
 
 
 @dataclass(frozen=True)
 class _LogEntry:
-    """
-    Internal representation of a log entry.
-
-    Arguments:
-        `component`: The component that generated the log.
-
-        `level`: The log level of the message.
-
-        `message`: The message template.
-    """
-
     component: str
     level: LogLevel
     message: Template
@@ -304,29 +276,10 @@ class _LogEntry:
 
 @dataclass(frozen=True)
 class _TimedLogEntry(_LogEntry):
-    """
-    Internal representation of a timed log entry.
-
-    Extends `_LogEntry` with timer functionality for messages
-    that should disappear after a certain duration.
-
-    Arguments:
-        `timer`: The timer controlling the message duration.
-    """
-
     timer: Timer
 
 
 def _pop(time_delta: Millisecond) -> None:
-    """
-    Pop all log entries and update timed entries.
-
-    Clears immediate log entries and advances timers for timed
-    entries, removing those that have completed.
-
-    Arguments:
-        `time_delta`: Milliseconds since the last game loop.
-    """
     _entries.clear()
     global _timed_entries
     _timed_entries = {
@@ -342,22 +295,6 @@ def _add(
     message: Template | str,
     duration: Millisecond | _DurationFromConfig | None,
 ) -> None:
-    """
-    Add a log entry to the internal log system.
-
-    This function handles the internal logic for adding log messages
-    to the appropriate storage (immediate or timed) based on the
-    duration parameter.
-
-    Arguments:
-        `component`: The component name.
-
-        `level`: The log level.
-
-        `message`: The message to log.
-
-        `duration`: The duration for timed messages, or None for immediate.
-    """
     if not (debug := config().debug):
         return
     message = Template(message) if isinstance(message, str) else message

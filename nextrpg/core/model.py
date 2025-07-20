@@ -111,15 +111,4 @@ _NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"
 
 @dataclass(frozen=True)
 class _Init:
-    """
-    Internal class for instance initialization markers.
-
-    This class is used internally by the `instance_init` function
-    to mark fields that should be initialized after the dataclass
-    instance is created.
-
-    Arguments:
-        `init`: The initialization function to call with the instance.
-    """
-
     init: Callable[[Any], Any]
