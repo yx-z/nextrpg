@@ -39,4 +39,4 @@ def transform_and_compile(fun: Callable) -> CodeType:
     tree = parse(src)
     for transformer in config().event.transformers:
         tree = transformer.visit(tree)
-    return compile(fix_missing_locations(tree), f"<{__file__}>", "exec")
+    return compile(fix_missing_locations(tree), __file__, "exec")

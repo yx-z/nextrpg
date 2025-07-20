@@ -1208,70 +1208,15 @@ into multiple tiles in a Tiled tmx map.</p>
 
 
                             <div id="MapHelper.__init__" class="classattr">
-                                        <input id="MapHelper.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
+                                <div class="attr function">
             
-        <span class="name">MapHelper</span><span class="signature pdoc-code condensed">(<span class="param"><span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span>, </span><span class="param"><span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span></span>)</span>
+        <span class="name">MapHelper</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">tmx_file</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span> <span class="o">|</span> <span class="nb">str</span></span>)</span>
 
-                <label class="view-source-button" for="MapHelper.__init__-view-source"><span>View Source</span></label>
-
+        
     </div>
     <a class="headerlink" href="#MapHelper.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MapHelper.__init__-56"><a href="#MapHelper.__init__-56"><span class="linenos">56</span></a>        <span class="k">def</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="n">klass</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="MapHelper.__init__-57"><a href="#MapHelper.__init__-57"><span class="linenos">57</span></a><span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="MapHelper.__init__-58"><a href="#MapHelper.__init__-58"><span class="linenos">58</span></a><span class="sd">            Create or retrieve a cached instance.</span>
-</span><span id="MapHelper.__init__-59"><a href="#MapHelper.__init__-59"><span class="linenos">59</span></a>
-</span><span id="MapHelper.__init__-60"><a href="#MapHelper.__init__-60"><span class="linenos">60</span></a><span class="sd">            Checks the cache for an existing instance with the same key.</span>
-</span><span id="MapHelper.__init__-61"><a href="#MapHelper.__init__-61"><span class="linenos">61</span></a><span class="sd">            If found, returns the cached instance. Otherwise, creates</span>
-</span><span id="MapHelper.__init__-62"><a href="#MapHelper.__init__-62"><span class="linenos">62</span></a><span class="sd">            a new instance and adds it to the cache.</span>
-</span><span id="MapHelper.__init__-63"><a href="#MapHelper.__init__-63"><span class="linenos">63</span></a>
-</span><span id="MapHelper.__init__-64"><a href="#MapHelper.__init__-64"><span class="linenos">64</span></a><span class="sd">            Arguments:</span>
-</span><span id="MapHelper.__init__-65"><a href="#MapHelper.__init__-65"><span class="linenos">65</span></a><span class="sd">                `*args`: Positional arguments for the class constructor.</span>
-</span><span id="MapHelper.__init__-66"><a href="#MapHelper.__init__-66"><span class="linenos">66</span></a>
-</span><span id="MapHelper.__init__-67"><a href="#MapHelper.__init__-67"><span class="linenos">67</span></a><span class="sd">                `**kwargs`: Keyword arguments for the class constructor.</span>
-</span><span id="MapHelper.__init__-68"><a href="#MapHelper.__init__-68"><span class="linenos">68</span></a>
-</span><span id="MapHelper.__init__-69"><a href="#MapHelper.__init__-69"><span class="linenos">69</span></a><span class="sd">            Returns:</span>
-</span><span id="MapHelper.__init__-70"><a href="#MapHelper.__init__-70"><span class="linenos">70</span></a><span class="sd">                `T`: Either a cached instance or a newly created one.</span>
-</span><span id="MapHelper.__init__-71"><a href="#MapHelper.__init__-71"><span class="linenos">71</span></a><span class="sd">            &quot;&quot;&quot;</span>
-</span><span id="MapHelper.__init__-72"><a href="#MapHelper.__init__-72"><span class="linenos">72</span></a>            <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">key_fun</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="MapHelper.__init__-73"><a href="#MapHelper.__init__-73"><span class="linenos">73</span></a>                <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">klass</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">klass</span><span class="p">)</span>
-</span><span id="MapHelper.__init__-74"><a href="#MapHelper.__init__-74"><span class="linenos">74</span></a>
-</span><span id="MapHelper.__init__-75"><a href="#MapHelper.__init__-75"><span class="linenos">75</span></a>            <span class="k">if</span> <span class="p">(</span><span class="n">instance</span> <span class="o">:=</span> <span class="n">klass</span><span class="o">.</span><span class="n">_nextrpg_instances</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="MapHelper.__init__-76"><a href="#MapHelper.__init__-76"><span class="linenos">76</span></a>                <span class="n">klass</span><span class="o">.</span><span class="n">_nextrpg_instances</span><span class="o">.</span><span class="n">move_to_end</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-</span><span id="MapHelper.__init__-77"><a href="#MapHelper.__init__-77"><span class="linenos">77</span></a>                <span class="k">return</span> <span class="n">instance</span>
-</span><span id="MapHelper.__init__-78"><a href="#MapHelper.__init__-78"><span class="linenos">78</span></a>
-</span><span id="MapHelper.__init__-79"><a href="#MapHelper.__init__-79"><span class="linenos">79</span></a>            <span class="k">while</span> <span class="p">(</span>
-</span><span id="MapHelper.__init__-80"><a href="#MapHelper.__init__-80"><span class="linenos">80</span></a>                <span class="n">klass</span><span class="o">.</span><span class="n">_nextrpg_instances</span>
-</span><span id="MapHelper.__init__-81"><a href="#MapHelper.__init__-81"><span class="linenos">81</span></a>                <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">klass</span><span class="o">.</span><span class="n">_nextrpg_instances</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size_fun</span><span class="p">()</span>
-</span><span id="MapHelper.__init__-82"><a href="#MapHelper.__init__-82"><span class="linenos">82</span></a>            <span class="p">):</span>
-</span><span id="MapHelper.__init__-83"><a href="#MapHelper.__init__-83"><span class="linenos">83</span></a>                <span class="n">klass</span><span class="o">.</span><span class="n">_nextrpg_instances</span><span class="o">.</span><span class="n">popitem</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</span><span id="MapHelper.__init__-84"><a href="#MapHelper.__init__-84"><span class="linenos">84</span></a>
-</span><span id="MapHelper.__init__-85"><a href="#MapHelper.__init__-85"><span class="linenos">85</span></a>            <span class="n">instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">klass</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">klass</span><span class="p">)</span>
-</span><span id="MapHelper.__init__-86"><a href="#MapHelper.__init__-86"><span class="linenos">86</span></a>            <span class="n">klass</span><span class="o">.</span><span class="n">_nextrpg_instances</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance</span>
-</span><span id="MapHelper.__init__-87"><a href="#MapHelper.__init__-87"><span class="linenos">87</span></a>            <span class="k">return</span> <span class="n">instance</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Create or retrieve a cached instance.</p>
-
-<p>Checks the cache for an existing instance with the same key.
-If found, returns the cached instance. Otherwise, creates
-a new instance and adds it to the cache.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code>*args</code>:</strong>  Positional arguments for the class constructor.</li>
-<li><strong><code>**kwargs</code>:</strong>  Keyword arguments for the class constructor.</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>T</code>: Either a cached instance or a newly created one.</p>
-</blockquote>
-</div>
-
+    
+    
 
                             </div>
                             <div id="MapHelper.tmx_file" class="classattr">

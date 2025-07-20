@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
+from typing import Self
 
 from nextrpg.core.dimension import Pixel
 
@@ -50,7 +51,7 @@ class Direction(Enum):
     DOWN_RIGHT = auto()
 
     @property
-    def opposite(self) -> Direction:
+    def opposite(self) -> Self:
         """
         Get the opposite direction.
 

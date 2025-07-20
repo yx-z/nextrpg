@@ -63,12 +63,6 @@ class DefaultFrameType(IntEnum):
 
     @classmethod
     def _frame_indices(cls) -> tuple[int, ...]:
-        """
-        Get the frame indices for the walking animation sequence.
-
-        Returns:
-            `tuple[int, ...]`: Frame indices in animation order.
-        """
         return (
             DefaultFrameType._IDLE,
             DefaultFrameType._RIGHT_FOOT,
@@ -96,12 +90,6 @@ class XpFrameType(IntEnum):
 
     @classmethod
     def _frame_indices(cls) -> tuple[int, ...]:
-        """
-        Get the frame indices for the walking animation sequence.
-
-        Returns:
-            `tuple[int, ...]`: Frame indices in animation order.
-        """
         return tuple(cls)
 
 
@@ -183,33 +171,6 @@ class SpriteSheet:
     style: FrameType = DefaultFrameType
 
 
-def _init_frames(
-    self: RpgMakerCharacterDrawing,
-) -> dict[Direction, CyclicFrames]:
-    """
-    Initialize animation frames for all directions.
-
-    Creates `CyclicFrames` for each direction by extracting the appropriate row
-    from the sprite sheet and processing the frames according to the selected
-    format.
-
-    Arguments:
-        `self`: The `RpgMakerCharacterDrawing` instance.
-
-    Returns:
-        `dict[Direction, CyclicFrames]`: Animation frames for each direction.
-    """
-    drawing = (
-        self._crop_by_selection(self.sprite_sheet_selection)
-        if self.sprite_sheet_selection
-        else self.sprite_sheet.drawing
-    )
-    return {
-        direction: self._load_frames_row(drawing, row)
-        for direction, row in _DIR_TO_ROW.items()
-    }
-
-
 @dataclass_with_instance_init
 class RpgMakerCharacterDrawing(CharacterDrawing):
     """
@@ -244,19 +205,12 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         default_factory=lambda: config().rpg_maker_character.duration_per_frame
     )
     _: KW_ONLY = not_constructor_below()
-    _frames: dict[Direction, CyclicFrames] = instance_init(_init_frames)
+    _frames: dict[Direction, CyclicFrames] = instance_init(
+        lambda self: self._init_frames
+    )
 
     @property
     def drawing(self) -> Drawing:
-        """
-        Get the current frame drawing for the character.
-
-        Returns the current animation frame for the character's current
-        direction.
-
-        Returns:
-            `Drawing`: The current character frame.
-        """
         return self._frames[_adjust(self.direction)].current_frame
 
     @override
@@ -275,24 +229,6 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         }
         return replace(self, _frames=frames)
 
-    def _tick_frames(
-        self, time_delta: Millisecond, adjusted_direction: Direction
-    ) -> CyclicFrames:
-        """
-        Update animation frames for a specific direction.
-
-        Arguments:
-            `time_delta`: The time elapsed since the last update.
-            `adjusted_direction`: The direction to update frames for.
-
-        Returns:
-            `CyclicFrames`: The updated animation frames.
-        """
-        frames = self._frames[adjusted_direction]
-        if adjusted_direction == _adjust(self.direction):
-            return frames.tick(time_delta)
-        return frames
-
     @override
     def tick_idle(self, time_delta: Millisecond) -> Self:
         if self.animate_on_idle:
@@ -300,16 +236,15 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         frames = {d: frames.reset for d, frames in self._frames.items()}
         return replace(self, _frames=frames)
 
+    def _tick_frames(
+        self, time_delta: Millisecond, adjusted_direction: Direction
+    ) -> CyclicFrames:
+        frames = self._frames[adjusted_direction]
+        if adjusted_direction == _adjust(self.direction):
+            return frames.tick(time_delta)
+        return frames
+
     def _crop_by_selection(self, selection: SpriteSheetSelection) -> Drawing:
-        """
-        Crop the sprite sheet to select a specific character.
-
-        Arguments:
-            `selection`: The character selection parameters.
-
-        Returns:
-            `Drawing`: The cropped sprite sheet for the selected character.
-        """
         drawing = self.sprite_sheet.drawing
         width = drawing.width / selection.max_columns
         height = drawing.height / selection.max_rows
@@ -318,39 +253,19 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         return drawing.crop(top_left, size)
 
     def _load_frames_row(self, drawing: Drawing, row: int) -> CyclicFrames:
-        """
-        Load animation frames from a specific row of the sprite sheet.
-
-        Arguments:
-            `drawing`: The sprite sheet drawing to process.
-            `row`: The row index to extract frames from.
-
-        Returns:
-            `CyclicFrames`: The animation frames for the row.
-        """
         frames = tuple(
             self._trim(d) for d in self._crop_into_frames_at_row(drawing, row)
         )
+        ordered_frames = tuple(
+            frames[i] for i in self.sprite_sheet.style._frame_indices()
+        )
         return CyclicFrames(
-            frames=tuple(
-                frames[i] for i in self.sprite_sheet.style._frame_indices()
-            ),
-            duration_per_frame=self.duration_per_frame,
+            frames=ordered_frames, duration_per_frame=self.duration_per_frame
         )
 
     def _crop_into_frames_at_row(
         self, drawing: Drawing, row: int
     ) -> tuple[Drawing, ...]:
-        """
-        Crop the sprite sheet into individual frames for a row.
-
-        Arguments:
-            `drawing`: The sprite sheet drawing to process.
-            `row`: The row index to extract frames from.
-
-        Returns:
-            `tuple[Drawing, ...]`: Individual frame drawings.
-        """
         num_frames = len(self.sprite_sheet.style)
         width = drawing.width / num_frames
         height = drawing.height / 4
@@ -362,26 +277,26 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         )
 
     def _trim(self, drawing: Drawing) -> Drawing:
-        """
-        Apply trimming to a character frame.
-
-        Arguments:
-            `drawing`: The frame drawing to trim.
-
-        Returns:
-            `Drawing`: The trimmed frame drawing.
-        """
         trim = self.sprite_sheet.trim
-        return drawing.crop(
-            Coordinate(trim.left, trim.top),
-            Size(
-                drawing.width - trim.left - trim.right,
-                drawing.height - trim.top - trim.bottom,
-            ),
+        coord = Coordinate(trim.left, trim.top)
+        size = Size(
+            drawing.width - coord.left - trim.right, drawing.height - coord.top
         )
+        return drawing.crop(coord, size)
+
+    @property
+    def _init_frames(self) -> dict[Direction, CyclicFrames]:
+        drawing = (
+            self._crop_by_selection(self.sprite_sheet_selection)
+            if self.sprite_sheet_selection
+            else self.sprite_sheet.drawing
+        )
+        return {
+            direction: self._load_frames_row(drawing, row)
+            for direction, row in _DIR_TO_ROW.items()
+        }
 
 
-# Direction to row mapping for RPG Maker sprite sheets
 _DIR_TO_ROW = {
     Direction.DOWN: 0,
     Direction.LEFT: 1,
@@ -391,19 +306,6 @@ _DIR_TO_ROW = {
 
 
 def _adjust(direction: Direction) -> Direction:
-    """
-    Adjust direction to RPG Maker sprite sheet format.
-
-    RPG Maker sprite sheets only support four directions (up, down, left,
-    right), so diagonal directions are mapped to the nearest cardinal
-    direction.
-
-    Arguments:
-        `direction`: The direction to adjust.
-
-    Returns:
-        `Direction`: The adjusted direction for sprite sheet lookup.
-    """
     if direction in (Direction.UP_LEFT, Direction.UP_RIGHT):
         return Direction.UP
     if direction in (Direction.DOWN_LEFT, Direction.DOWN_RIGHT):

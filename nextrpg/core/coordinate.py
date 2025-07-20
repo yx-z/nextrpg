@@ -101,7 +101,7 @@ class Coordinate(namedtuple("Coordinate", "left top")):
             case Direction.DOWN_RIGHT:
                 return Coordinate(self.left + diag, self.top + diag)
 
-    def relative_to(self, other: Coordinate) -> Direction:
+    def relative_to(self, other: Self) -> Direction:
         """
         Calculate the direction from another coordinate to this one.
 
@@ -133,7 +133,7 @@ class Coordinate(namedtuple("Coordinate", "left top")):
         """
         return f"({self.left:.1f}, {self.top:.1f})"
 
-    def distance(self, other: Coordinate) -> Pixel:
+    def distance(self, other: Self) -> Pixel:
         """
         Calculate the Euclidean distance to another coordinate.
 
@@ -149,20 +149,6 @@ class Coordinate(namedtuple("Coordinate", "left top")):
 
 
 def _angle_difference(a1: float, a2: float) -> float:
-    """
-    Calculate the smallest angle difference between two angles.
-
-    This function calculates the shortest angular distance between
-    two angles, handling the wraparound at 360 degrees.
-
-    Arguments:
-        a1: First angle in degrees.
-
-        a2: Second angle in degrees.
-
-    Returns:
-        The smallest angle difference in degrees.
-    """
     return abs((a1 - a2 + 180) % 360 - 180)
 
 

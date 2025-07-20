@@ -102,6 +102,9 @@
             <li>
                     <a class="function" href="#to_typed_event">to_typed_event</a>
             </li>
+            <li>
+                    <a class="function" href="#post_quit">post_quit</a>
+            </li>
     </ul>
 
 
@@ -157,7 +160,7 @@ classes for keyboard input, window management, and game control events.</p>
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.event</span><span class="w"> </span><span class="kn">import</span> <span class="n">Event</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.event</span><span class="w"> </span><span class="kn">import</span> <span class="n">Event</span><span class="p">,</span> <span class="n">post</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.locals</span><span class="w"> </span><span class="kn">import</span> <span class="n">KEYDOWN</span><span class="p">,</span> <span class="n">KEYUP</span><span class="p">,</span> <span class="n">QUIT</span><span class="p">,</span> <span class="n">VIDEORESIZE</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
@@ -265,65 +268,62 @@ classes for keyboard input, window management, and game control events.</p>
 </span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>
 </span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>
 </span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_KeyPressEvent</span><span class="p">(</span><span class="n">PygameEvent</span><span class="p">):</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">    Base class for keyboard press events.</span>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a><span class="sd">    This internal class provides common functionality for both key press and</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">    key release events.</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="nd">@property</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeyboardKey</span> <span class="o">|</span> <span class="n">KeyCode</span><span class="p">:</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">        Get the key associated with this event.</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">        Returns:</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">            `KeyboardKey | KeyCode`: The key that was pressed or released.</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>        <span class="k">return</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">from_pygame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>    <span class="nd">@property</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeyboardKey</span> <span class="o">|</span> <span class="n">KeyCode</span><span class="p">:</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a><span class="sd">        Get the key associated with this event.</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">        Returns:</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">            `KeyboardKey | KeyCode`: The key that was pressed or released.</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>        <span class="k">return</span> <span class="n">KeyboardKey</span><span class="o">.</span><span class="n">from_pygame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KeyPressDown</span><span class="p">(</span><span class="n">_KeyPressEvent</span><span class="p">):</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">    Represents a key press down event.</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">    This event is triggered when a key is first pressed down.</span>
 </span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KeyPressDown</span><span class="p">(</span><span class="n">_KeyPressEvent</span><span class="p">):</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a><span class="sd">    Represents a key press down event.</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">    Attributes:</span>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">        `key`: The key that was pressed down.</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>
 </span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="sd">    This event is triggered when a key is first pressed down.</span>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="sd">        `key`: The key that was pressed down.</span>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KeyPressUp</span><span class="p">(</span><span class="n">_KeyPressEvent</span><span class="p">):</span>
+</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="sd">    Represents a key release event.</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">    This event is triggered when a key is released after being pressed down.</span>
 </span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KeyPressUp</span><span class="p">(</span><span class="n">_KeyPressEvent</span><span class="p">):</span>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">    Represents a key release event.</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">    Attributes:</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">        `key`: The key that was released.</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>
 </span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">    This event is triggered when a key is released after being pressed down.</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">        `key`: The key that was released.</span>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="k">def</span><span class="w"> </span><span class="nf">to_typed_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PygameEvent</span><span class="p">:</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">    Create a typed event wrapper for pygame events.</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="sd">    Converts raw pygame events into strongly-typed event objects that provide</span>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">    better type safety and easier event handling.</span>
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="k">def</span><span class="w"> </span><span class="nf">to_typed_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PygameEvent</span><span class="p">:</span>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">    Create a typed event wrapper for pygame events.</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">    Converts raw pygame events into strongly-typed event objects that provide</span>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">    better type safety and easier event handling.</span>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">        `event`: The pygame event to wrap.</span>
-</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>
-</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a><span class="sd">    Returns:</span>
-</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a><span class="sd">        `PygameEvent`: A subclass instance based on the event type.</span>
-</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>    <span class="k">return</span> <span class="p">{</span>
-</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a>        <span class="n">QUIT</span><span class="p">:</span> <span class="n">Quit</span><span class="p">,</span>
-</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>        <span class="n">VIDEORESIZE</span><span class="p">:</span> <span class="n">GuiResize</span><span class="p">,</span>
-</span><span id="L-183"><a href="#L-183"><span class="linenos">183</span></a>        <span class="n">KEYDOWN</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">,</span>
-</span><span id="L-184"><a href="#L-184"><span class="linenos">184</span></a>        <span class="n">KEYUP</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">,</span>
-</span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>    <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">PygameEvent</span><span class="p">)(</span><span class="n">event</span><span class="p">)</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">    Arguments:</span>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="sd">        `event`: The pygame event to wrap.</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">    Returns:</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">        `PygameEvent`: A subclass instance based on the event type.</span>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>    <span class="k">return</span> <span class="p">{</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>        <span class="n">QUIT</span><span class="p">:</span> <span class="n">Quit</span><span class="p">,</span>
+</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>        <span class="n">VIDEORESIZE</span><span class="p">:</span> <span class="n">GuiResize</span><span class="p">,</span>
+</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>        <span class="n">KEYDOWN</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">,</span>
+</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>        <span class="n">KEYUP</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">,</span>
+</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>    <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">PygameEvent</span><span class="p">)(</span><span class="n">event</span><span class="p">)</span>
+</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>
+</span><span id="L-180"><a href="#L-180"><span class="linenos">180</span></a>
+</span><span id="L-181"><a href="#L-181"><span class="linenos">181</span></a><span class="k">def</span><span class="w"> </span><span class="nf">post_quit</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-182"><a href="#L-182"><span class="linenos">182</span></a>    <span class="n">post</span><span class="p">(</span><span class="n">Event</span><span class="p">(</span><span class="n">QUIT</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -766,15 +766,15 @@ custom handling.</p>
 
     </div>
     <a class="headerlink" href="#KeyPressDown"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="KeyPressDown-146"><a href="#KeyPressDown-146"><span class="linenos">146</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KeyPressDown</span><span class="p">(</span><span class="n">_KeyPressEvent</span><span class="p">):</span>
-</span><span id="KeyPressDown-147"><a href="#KeyPressDown-147"><span class="linenos">147</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="KeyPressDown-148"><a href="#KeyPressDown-148"><span class="linenos">148</span></a><span class="sd">    Represents a key press down event.</span>
-</span><span id="KeyPressDown-149"><a href="#KeyPressDown-149"><span class="linenos">149</span></a>
-</span><span id="KeyPressDown-150"><a href="#KeyPressDown-150"><span class="linenos">150</span></a><span class="sd">    This event is triggered when a key is first pressed down.</span>
-</span><span id="KeyPressDown-151"><a href="#KeyPressDown-151"><span class="linenos">151</span></a>
-</span><span id="KeyPressDown-152"><a href="#KeyPressDown-152"><span class="linenos">152</span></a><span class="sd">    Attributes:</span>
-</span><span id="KeyPressDown-153"><a href="#KeyPressDown-153"><span class="linenos">153</span></a><span class="sd">        `key`: The key that was pressed down.</span>
-</span><span id="KeyPressDown-154"><a href="#KeyPressDown-154"><span class="linenos">154</span></a><span class="sd">    &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="KeyPressDown-139"><a href="#KeyPressDown-139"><span class="linenos">139</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KeyPressDown</span><span class="p">(</span><span class="n">_KeyPressEvent</span><span class="p">):</span>
+</span><span id="KeyPressDown-140"><a href="#KeyPressDown-140"><span class="linenos">140</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="KeyPressDown-141"><a href="#KeyPressDown-141"><span class="linenos">141</span></a><span class="sd">    Represents a key press down event.</span>
+</span><span id="KeyPressDown-142"><a href="#KeyPressDown-142"><span class="linenos">142</span></a>
+</span><span id="KeyPressDown-143"><a href="#KeyPressDown-143"><span class="linenos">143</span></a><span class="sd">    This event is triggered when a key is first pressed down.</span>
+</span><span id="KeyPressDown-144"><a href="#KeyPressDown-144"><span class="linenos">144</span></a>
+</span><span id="KeyPressDown-145"><a href="#KeyPressDown-145"><span class="linenos">145</span></a><span class="sd">    Attributes:</span>
+</span><span id="KeyPressDown-146"><a href="#KeyPressDown-146"><span class="linenos">146</span></a><span class="sd">        `key`: The key that was pressed down.</span>
+</span><span id="KeyPressDown-147"><a href="#KeyPressDown-147"><span class="linenos">147</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -816,15 +816,15 @@ custom handling.</p>
 
     </div>
     <a class="headerlink" href="#KeyPressUp"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="KeyPressUp-157"><a href="#KeyPressUp-157"><span class="linenos">157</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KeyPressUp</span><span class="p">(</span><span class="n">_KeyPressEvent</span><span class="p">):</span>
-</span><span id="KeyPressUp-158"><a href="#KeyPressUp-158"><span class="linenos">158</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="KeyPressUp-159"><a href="#KeyPressUp-159"><span class="linenos">159</span></a><span class="sd">    Represents a key release event.</span>
-</span><span id="KeyPressUp-160"><a href="#KeyPressUp-160"><span class="linenos">160</span></a>
-</span><span id="KeyPressUp-161"><a href="#KeyPressUp-161"><span class="linenos">161</span></a><span class="sd">    This event is triggered when a key is released after being pressed down.</span>
-</span><span id="KeyPressUp-162"><a href="#KeyPressUp-162"><span class="linenos">162</span></a>
-</span><span id="KeyPressUp-163"><a href="#KeyPressUp-163"><span class="linenos">163</span></a><span class="sd">    Attributes:</span>
-</span><span id="KeyPressUp-164"><a href="#KeyPressUp-164"><span class="linenos">164</span></a><span class="sd">        `key`: The key that was released.</span>
-</span><span id="KeyPressUp-165"><a href="#KeyPressUp-165"><span class="linenos">165</span></a><span class="sd">    &quot;&quot;&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="KeyPressUp-150"><a href="#KeyPressUp-150"><span class="linenos">150</span></a><span class="k">class</span><span class="w"> </span><span class="nc">KeyPressUp</span><span class="p">(</span><span class="n">_KeyPressEvent</span><span class="p">):</span>
+</span><span id="KeyPressUp-151"><a href="#KeyPressUp-151"><span class="linenos">151</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="KeyPressUp-152"><a href="#KeyPressUp-152"><span class="linenos">152</span></a><span class="sd">    Represents a key release event.</span>
+</span><span id="KeyPressUp-153"><a href="#KeyPressUp-153"><span class="linenos">153</span></a>
+</span><span id="KeyPressUp-154"><a href="#KeyPressUp-154"><span class="linenos">154</span></a><span class="sd">    This event is triggered when a key is released after being pressed down.</span>
+</span><span id="KeyPressUp-155"><a href="#KeyPressUp-155"><span class="linenos">155</span></a>
+</span><span id="KeyPressUp-156"><a href="#KeyPressUp-156"><span class="linenos">156</span></a><span class="sd">    Attributes:</span>
+</span><span id="KeyPressUp-157"><a href="#KeyPressUp-157"><span class="linenos">157</span></a><span class="sd">        `key`: The key that was released.</span>
+</span><span id="KeyPressUp-158"><a href="#KeyPressUp-158"><span class="linenos">158</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -866,25 +866,25 @@ custom handling.</p>
 
     </div>
     <a class="headerlink" href="#to_typed_event"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="to_typed_event-168"><a href="#to_typed_event-168"><span class="linenos">168</span></a><span class="k">def</span><span class="w"> </span><span class="nf">to_typed_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PygameEvent</span><span class="p">:</span>
-</span><span id="to_typed_event-169"><a href="#to_typed_event-169"><span class="linenos">169</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="to_typed_event-170"><a href="#to_typed_event-170"><span class="linenos">170</span></a><span class="sd">    Create a typed event wrapper for pygame events.</span>
-</span><span id="to_typed_event-171"><a href="#to_typed_event-171"><span class="linenos">171</span></a>
-</span><span id="to_typed_event-172"><a href="#to_typed_event-172"><span class="linenos">172</span></a><span class="sd">    Converts raw pygame events into strongly-typed event objects that provide</span>
-</span><span id="to_typed_event-173"><a href="#to_typed_event-173"><span class="linenos">173</span></a><span class="sd">    better type safety and easier event handling.</span>
-</span><span id="to_typed_event-174"><a href="#to_typed_event-174"><span class="linenos">174</span></a>
-</span><span id="to_typed_event-175"><a href="#to_typed_event-175"><span class="linenos">175</span></a><span class="sd">    Arguments:</span>
-</span><span id="to_typed_event-176"><a href="#to_typed_event-176"><span class="linenos">176</span></a><span class="sd">        `event`: The pygame event to wrap.</span>
-</span><span id="to_typed_event-177"><a href="#to_typed_event-177"><span class="linenos">177</span></a>
-</span><span id="to_typed_event-178"><a href="#to_typed_event-178"><span class="linenos">178</span></a><span class="sd">    Returns:</span>
-</span><span id="to_typed_event-179"><a href="#to_typed_event-179"><span class="linenos">179</span></a><span class="sd">        `PygameEvent`: A subclass instance based on the event type.</span>
-</span><span id="to_typed_event-180"><a href="#to_typed_event-180"><span class="linenos">180</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="to_typed_event-181"><a href="#to_typed_event-181"><span class="linenos">181</span></a>    <span class="k">return</span> <span class="p">{</span>
-</span><span id="to_typed_event-182"><a href="#to_typed_event-182"><span class="linenos">182</span></a>        <span class="n">QUIT</span><span class="p">:</span> <span class="n">Quit</span><span class="p">,</span>
-</span><span id="to_typed_event-183"><a href="#to_typed_event-183"><span class="linenos">183</span></a>        <span class="n">VIDEORESIZE</span><span class="p">:</span> <span class="n">GuiResize</span><span class="p">,</span>
-</span><span id="to_typed_event-184"><a href="#to_typed_event-184"><span class="linenos">184</span></a>        <span class="n">KEYDOWN</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">,</span>
-</span><span id="to_typed_event-185"><a href="#to_typed_event-185"><span class="linenos">185</span></a>        <span class="n">KEYUP</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">,</span>
-</span><span id="to_typed_event-186"><a href="#to_typed_event-186"><span class="linenos">186</span></a>    <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">PygameEvent</span><span class="p">)(</span><span class="n">event</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="to_typed_event-161"><a href="#to_typed_event-161"><span class="linenos">161</span></a><span class="k">def</span><span class="w"> </span><span class="nf">to_typed_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PygameEvent</span><span class="p">:</span>
+</span><span id="to_typed_event-162"><a href="#to_typed_event-162"><span class="linenos">162</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="to_typed_event-163"><a href="#to_typed_event-163"><span class="linenos">163</span></a><span class="sd">    Create a typed event wrapper for pygame events.</span>
+</span><span id="to_typed_event-164"><a href="#to_typed_event-164"><span class="linenos">164</span></a>
+</span><span id="to_typed_event-165"><a href="#to_typed_event-165"><span class="linenos">165</span></a><span class="sd">    Converts raw pygame events into strongly-typed event objects that provide</span>
+</span><span id="to_typed_event-166"><a href="#to_typed_event-166"><span class="linenos">166</span></a><span class="sd">    better type safety and easier event handling.</span>
+</span><span id="to_typed_event-167"><a href="#to_typed_event-167"><span class="linenos">167</span></a>
+</span><span id="to_typed_event-168"><a href="#to_typed_event-168"><span class="linenos">168</span></a><span class="sd">    Arguments:</span>
+</span><span id="to_typed_event-169"><a href="#to_typed_event-169"><span class="linenos">169</span></a><span class="sd">        `event`: The pygame event to wrap.</span>
+</span><span id="to_typed_event-170"><a href="#to_typed_event-170"><span class="linenos">170</span></a>
+</span><span id="to_typed_event-171"><a href="#to_typed_event-171"><span class="linenos">171</span></a><span class="sd">    Returns:</span>
+</span><span id="to_typed_event-172"><a href="#to_typed_event-172"><span class="linenos">172</span></a><span class="sd">        `PygameEvent`: A subclass instance based on the event type.</span>
+</span><span id="to_typed_event-173"><a href="#to_typed_event-173"><span class="linenos">173</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="to_typed_event-174"><a href="#to_typed_event-174"><span class="linenos">174</span></a>    <span class="k">return</span> <span class="p">{</span>
+</span><span id="to_typed_event-175"><a href="#to_typed_event-175"><span class="linenos">175</span></a>        <span class="n">QUIT</span><span class="p">:</span> <span class="n">Quit</span><span class="p">,</span>
+</span><span id="to_typed_event-176"><a href="#to_typed_event-176"><span class="linenos">176</span></a>        <span class="n">VIDEORESIZE</span><span class="p">:</span> <span class="n">GuiResize</span><span class="p">,</span>
+</span><span id="to_typed_event-177"><a href="#to_typed_event-177"><span class="linenos">177</span></a>        <span class="n">KEYDOWN</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">,</span>
+</span><span id="to_typed_event-178"><a href="#to_typed_event-178"><span class="linenos">178</span></a>        <span class="n">KEYUP</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">,</span>
+</span><span id="to_typed_event-179"><a href="#to_typed_event-179"><span class="linenos">179</span></a>    <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">PygameEvent</span><span class="p">)(</span><span class="n">event</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -906,6 +906,25 @@ better type safety and easier event handling.</p>
 </blockquote>
 </div>
 
+
+                </section>
+                <section id="post_quit">
+                            <input id="post_quit-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">post_quit</span><span class="signature pdoc-code condensed">(<span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
+
+                <label class="view-source-button" for="post_quit-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#post_quit"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="post_quit-182"><a href="#post_quit-182"><span class="linenos">182</span></a><span class="k">def</span><span class="w"> </span><span class="nf">post_quit</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="post_quit-183"><a href="#post_quit-183"><span class="linenos">183</span></a>    <span class="n">post</span><span class="p">(</span><span class="n">Event</span><span class="p">(</span><span class="n">QUIT</span><span class="p">))</span>
+</span></pre></div>
+
+
+    
 
                 </section>
     </main>

@@ -40,10 +40,10 @@
                                 <a class="variable" href="#CharacterSpec.object_name">object_name</a>
                         </li>
                         <li>
-                                <a class="variable" href="#CharacterSpec.display_name">display_name</a>
+                                <a class="variable" href="#CharacterSpec.character">character</a>
                         </li>
                         <li>
-                                <a class="variable" href="#CharacterSpec.character">character</a>
+                                <a class="variable" href="#CharacterSpec.display_name">display_name</a>
                         </li>
                 </ul>
 
@@ -172,8 +172,8 @@ character management, and event handling for character interactions.</p>
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>    <span class="n">object_name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>    <span class="n">display_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_name</span><span class="p">)</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>    <span class="n">display_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_name</span><span class="p">)</span>
 </span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="nd">@dataclass_with_instance_init</span>
@@ -322,8 +322,8 @@ character management, and event handling for character interactions.</p>
 </span><span id="CharacterSpec-48"><a href="#CharacterSpec-48"><span class="linenos">48</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="CharacterSpec-49"><a href="#CharacterSpec-49"><span class="linenos">49</span></a>
 </span><span id="CharacterSpec-50"><a href="#CharacterSpec-50"><span class="linenos">50</span></a>    <span class="n">object_name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="CharacterSpec-51"><a href="#CharacterSpec-51"><span class="linenos">51</span></a>    <span class="n">display_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_name</span><span class="p">)</span>
-</span><span id="CharacterSpec-52"><a href="#CharacterSpec-52"><span class="linenos">52</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
+</span><span id="CharacterSpec-51"><a href="#CharacterSpec-51"><span class="linenos">51</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDrawing</span>
+</span><span id="CharacterSpec-52"><a href="#CharacterSpec-52"><span class="linenos">52</span></a>    <span class="n">display_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_name</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -349,7 +349,7 @@ and animation of the character.</li>
                             <div id="CharacterSpec.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">CharacterSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">object_name</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">display_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span></span>)</span>
+        <span class="name">CharacterSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">object_name</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span>,</span><span class="param">	<span class="n">display_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -369,17 +369,6 @@ and animation of the character.</li>
     
 
                             </div>
-                            <div id="CharacterSpec.display_name" class="classattr">
-                                <div class="attr variable">
-            <span class="name">display_name</span><span class="annotation">: str</span>
-
-        
-    </div>
-    <a class="headerlink" href="#CharacterSpec.display_name"></a>
-    
-    
-
-                            </div>
                             <div id="CharacterSpec.character" class="classattr">
                                 <div class="attr variable">
             <span class="name">character</span><span class="annotation">: <a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span>
@@ -387,6 +376,17 @@ and animation of the character.</li>
         
     </div>
     <a class="headerlink" href="#CharacterSpec.character"></a>
+    
+    
+
+                            </div>
+                            <div id="CharacterSpec.display_name" class="classattr">
+                                <div class="attr variable">
+            <span class="name">display_name</span><span class="annotation">: str</span>
+
+        
+    </div>
+    <a class="headerlink" href="#CharacterSpec.display_name"></a>
     
     
 

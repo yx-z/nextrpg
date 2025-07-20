@@ -198,7 +198,7 @@ class Walk:
             + reaming_poly.length
         )
 
-    @cached_property
+    @property
     def _final_target(self) -> Coordinate:
         if self.path.closed:
             return self.path.points[0]

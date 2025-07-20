@@ -196,9 +196,7 @@ class SayEventScene(RpgEventScene):
 
 
 @dataclass_with_instance_init
-class _FadeIn(Scene):
-    generator: RpgEventGenerator
-    scene: EventfulScene
+class _FadeIn(RpgEventScene):
     background: tuple[DrawOnScreen, ...]
     text: TextOnScreen
     config: SayEventConfig
@@ -213,28 +211,23 @@ class _FadeIn(Scene):
 
     def tick(self, time_delta: Millisecond) -> Scene:
         if self.fade_in.complete:
-            return self.typing
+            return _Typing(
+                scene=self.scene,
+                background=self.background,
+                text=self.text,
+                config=self.config,
+                generator=self.generator,
+            )
+
         return replace(
             self,
             scene=self.scene.tick_without_event(time_delta),
             fade_in=self.fade_in.tick(time_delta),
         )
 
-    @property
-    def typing(self) -> Scene:
-        return _Typing(
-            scene=self.scene,
-            background=self.background,
-            text=self.text,
-            config=self.config,
-            generator=self.generator,
-        )
-
 
 @dataclass_with_instance_init
-class _Typing(Scene):
-    generator: RpgEventGenerator
-    scene: EventfulScene
+class _Typing(RpgEventScene):
     background: tuple[DrawOnScreen, ...]
     text: TextOnScreen
     config: SayEventConfig
@@ -263,9 +256,7 @@ class _Typing(Scene):
 
 
 @dataclass_with_instance_init
-class _FadeOut(Scene):
-    generator: RpgEventGenerator
-    scene: EventfulScene
+class _FadeOut(RpgEventScene):
     draws: tuple[DrawOnScreen, ...]
     config: SayEventConfig
     fade_out: FadeOut = instance_init(
@@ -280,6 +271,7 @@ class _FadeOut(Scene):
     def tick(self, time_delta: Millisecond) -> Scene:
         if self.fade_out.complete:
             return self.scene.send(self.generator)
+
         return replace(
             self,
             scene=self.scene.tick_without_event(time_delta),

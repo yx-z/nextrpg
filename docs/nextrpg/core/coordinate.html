@@ -201,7 +201,7 @@ scaling, and mathematical operations.</p>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>            <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span>
 </span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>                <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">diag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">diag</span><span class="p">)</span>
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="sd">        Calculate the direction from another coordinate to this one.</span>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>
@@ -233,7 +233,7 @@ scaling, and mathematical operations.</p>
 </span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">)&quot;</span>
 </span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
 </span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">        Calculate the Euclidean distance to another coordinate.</span>
 </span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>
@@ -249,33 +249,19 @@ scaling, and mathematical operations.</p>
 </span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>
 </span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
 </span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_angle_difference</span><span class="p">(</span><span class="n">a1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">a2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a><span class="sd">    Calculate the smallest angle difference between two angles.</span>
+</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>    <span class="k">return</span> <span class="nb">abs</span><span class="p">((</span><span class="n">a1</span> <span class="o">-</span> <span class="n">a2</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span> <span class="o">-</span> <span class="mi">180</span><span class="p">)</span>
+</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>
 </span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="sd">    This function calculates the shortest angular distance between</span>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="sd">    two angles, handling the wraparound at 360 degrees.</span>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">        a1: First angle in degrees.</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">        a2: Second angle in degrees.</span>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">    Returns:</span>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="sd">        The smallest angle difference in degrees.</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>    <span class="k">return</span> <span class="nb">abs</span><span class="p">((</span><span class="n">a1</span> <span class="o">-</span> <span class="n">a2</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span> <span class="o">-</span> <span class="mi">180</span><span class="p">)</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="n">_ANGLE_TO_DIRECTION</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>    <span class="mi">0</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>    <span class="mi">45</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>    <span class="mi">90</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>    <span class="mi">135</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>    <span class="mi">180</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
-</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>    <span class="mi">225</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
-</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>    <span class="mi">270</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
-</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>    <span class="mi">315</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
-</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a><span class="p">}</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a><span class="n">_ANGLE_TO_DIRECTION</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>    <span class="mi">0</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
+</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>    <span class="mi">45</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="mi">90</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>    <span class="mi">135</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>    <span class="mi">180</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>    <span class="mi">225</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>    <span class="mi">270</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>    <span class="mi">315</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="p">}</span>
 </span></pre></div>
 
 
@@ -369,7 +355,7 @@ scaling, and mathematical operations.</p>
 </span><span id="Coordinate-102"><a href="#Coordinate-102"><span class="linenos">102</span></a>            <span class="k">case</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span>
 </span><span id="Coordinate-103"><a href="#Coordinate-103"><span class="linenos">103</span></a>                <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="n">diag</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="n">diag</span><span class="p">)</span>
 </span><span id="Coordinate-104"><a href="#Coordinate-104"><span class="linenos">104</span></a>
-</span><span id="Coordinate-105"><a href="#Coordinate-105"><span class="linenos">105</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
+</span><span id="Coordinate-105"><a href="#Coordinate-105"><span class="linenos">105</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
 </span><span id="Coordinate-106"><a href="#Coordinate-106"><span class="linenos">106</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Coordinate-107"><a href="#Coordinate-107"><span class="linenos">107</span></a><span class="sd">        Calculate the direction from another coordinate to this one.</span>
 </span><span id="Coordinate-108"><a href="#Coordinate-108"><span class="linenos">108</span></a>
@@ -401,7 +387,7 @@ scaling, and mathematical operations.</p>
 </span><span id="Coordinate-134"><a href="#Coordinate-134"><span class="linenos">134</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Coordinate-135"><a href="#Coordinate-135"><span class="linenos">135</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">top</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">)&quot;</span>
 </span><span id="Coordinate-136"><a href="#Coordinate-136"><span class="linenos">136</span></a>
-</span><span id="Coordinate-137"><a href="#Coordinate-137"><span class="linenos">137</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
+</span><span id="Coordinate-137"><a href="#Coordinate-137"><span class="linenos">137</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
 </span><span id="Coordinate-138"><a href="#Coordinate-138"><span class="linenos">138</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Coordinate-139"><a href="#Coordinate-139"><span class="linenos">139</span></a><span class="sd">        Calculate the Euclidean distance to another coordinate.</span>
 </span><span id="Coordinate-140"><a href="#Coordinate-140"><span class="linenos">140</span></a>
@@ -606,13 +592,13 @@ or <code><a href="#Coordinate">Coordinate</a></code> to add to the current coord
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">relative_to</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">other</span><span class="p">:</span> <span class="n"><a href="#Coordinate">Coordinate</a></span></span><span class="return-annotation">) -> <span class="n"><a href="direction.html#Direction">nextrpg.core.direction.Direction</a></span>:</span></span>
+        <span class="name">relative_to</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">other</span><span class="p">:</span> <span class="n">Self</span></span><span class="return-annotation">) -> <span class="n"><a href="direction.html#Direction">nextrpg.core.direction.Direction</a></span>:</span></span>
 
                 <label class="view-source-button" for="Coordinate.relative_to-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Coordinate.relative_to"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Coordinate.relative_to-105"><a href="#Coordinate.relative_to-105"><span class="linenos">105</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Coordinate.relative_to-105"><a href="#Coordinate.relative_to-105"><span class="linenos">105</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
 </span><span id="Coordinate.relative_to-106"><a href="#Coordinate.relative_to-106"><span class="linenos">106</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Coordinate.relative_to-107"><a href="#Coordinate.relative_to-107"><span class="linenos">107</span></a><span class="sd">        Calculate the direction from another coordinate to this one.</span>
 </span><span id="Coordinate.relative_to-108"><a href="#Coordinate.relative_to-108"><span class="linenos">108</span></a>
@@ -663,13 +649,13 @@ eight possible directions.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">distance</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">other</span><span class="p">:</span> <span class="n"><a href="#Coordinate">Coordinate</a></span></span><span class="return-annotation">) -> <span class="n">Pixel</span>:</span></span>
+        <span class="name">distance</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">other</span><span class="p">:</span> <span class="n">Self</span></span><span class="return-annotation">) -> <span class="n">Pixel</span>:</span></span>
 
                 <label class="view-source-button" for="Coordinate.distance-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Coordinate.distance"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Coordinate.distance-137"><a href="#Coordinate.distance-137"><span class="linenos">137</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Coordinate.distance-137"><a href="#Coordinate.distance-137"><span class="linenos">137</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
 </span><span id="Coordinate.distance-138"><a href="#Coordinate.distance-138"><span class="linenos">138</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Coordinate.distance-139"><a href="#Coordinate.distance-139"><span class="linenos">139</span></a><span class="sd">        Calculate the Euclidean distance to another coordinate.</span>
 </span><span id="Coordinate.distance-140"><a href="#Coordinate.distance-140"><span class="linenos">140</span></a>

@@ -106,7 +106,7 @@ class MapScene(EventfulScene, TransitioningScene):
         lambda self: self.init_player(self.player_spec)
     )
     _debug_visuals: tuple[DrawOnScreen, ...] = instance_init(
-        lambda self: self._init_debug_visuals
+        lambda self: self.map_helper.collision_visuals + self._npc_paths
     )
 
     @property
@@ -185,20 +185,6 @@ class MapScene(EventfulScene, TransitioningScene):
 
     @cached_property
     def _foreground_and_characters(self) -> tuple[DrawOnScreen, ...]:
-        """
-        Get foreground elements and characters with proper depth sorting.
-
-        Combines foreground map elements with character sprites
-        and sorts them by depth for proper rendering order.
-
-        Returns:
-            `tuple[DrawOnScreen, ...]`: Depth-sorted foreground elements.
-
-        Example:
-            ```python
-            foreground = map_scene._foreground_and_characters
-            ```
-        """
         characters = (self.player,) + self.npcs
         layer_bottom_draws = sorted(
             draw
@@ -211,23 +197,6 @@ class MapScene(EventfulScene, TransitioningScene):
 
     @cached_property
     def _move_to_scene(self) -> TransitionScene | None:
-        """
-        Get the transition scene if the player should move to another area.
-
-        Checks all move triggers in the scene and returns a transition
-        if the player has triggered a move to another map area.
-
-        Returns:
-            `TransitionScene | None`: The transition scene, or None if no move.
-
-        Example:
-            ```python
-            transition = map_scene._move_to_scene
-            if transition:
-                # Handle scene transition
-                pass
-            ```
-        """
         moves = self.moves if isinstance(self.moves, tuple) else (self.moves,)
         for move in moves:
             if m := self._move(move):
@@ -235,86 +204,22 @@ class MapScene(EventfulScene, TransitioningScene):
         return None
 
     def _move(self, move: Move) -> TransitionScene | None:
-        """
-        Check if a specific move should be triggered.
-
-        Arguments:
-            `move`: The move object to check.
-
-        Returns:
-            `TransitionScene | None`: The transition if triggered, or None.
-
-        Example:
-            ```python
-            transition = map_scene._move(move_object)
-            ```
-        """
         move_poly = get_polygon(self.map_helper.get_object(move.trigger_object))
         if self.player.draw_on_screen.rectangle.collide(move_poly):
             return move.to_scene(self, self.player)
         return None
 
     @cached_property
-    def _init_debug_visuals(self) -> tuple[DrawOnScreen, ...]:
-        """
-        Get debug visualization elements.
-
-        Returns collision visualizations and NPC path visualizations
-        when debug mode is enabled.
-
-        Returns:
-            `tuple[DrawOnScreen, ...]`: Debug visualization elements.
-
-        Example:
-            ```python
-            debug_visuals = map_scene._debug_visuals
-            ```
-        """
-        return self.map_helper.collision_visuals + self._npc_paths
-
-    @cached_property
     def _npc_paths(self) -> tuple[DrawOnScreen, ...]:
-        """
-        Get NPC path visualization elements.
-
-        Returns path lines for moving NPCs when debug mode
-        is enabled and NPC path visualization is configured.
-
-        Returns:
-            `tuple[DrawOnScreen, ...]`: NPC path visualization elements.
-
-        Example:
-            ```python
-            npc_paths = map_scene._npc_paths
-            ```
-        """
-        if (debug := config().debug) and (color := debug.npc_path_color):
-            return tuple(
-                npc.path.line(color)
-                for npc in self.npcs
-                if isinstance(npc, MovingNpcOnScreen)
-            )
-        return ()
+        if not (debug := config().debug) or not (color := debug.npc_path_color):
+            return ()
+        return tuple(
+            npc.path.line(color)
+            for npc in self.npcs
+            if isinstance(npc, MovingNpcOnScreen)
+        )
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
-        """
-        Initialize an NPC from its specification.
-
-        Creates an NPC instance positioned at the specified map
-        object location. Creates a moving NPC if the object has
-        a path polygon, otherwise creates a static NPC.
-
-        Arguments:
-            `spec`: The NPC specification.
-
-        Returns:
-            `NpcOnScreen`: The initialized NPC instance.
-
-        Example:
-            ```python
-            npc = map_scene._init_npc(npc_spec)
-            ```
-        """
         obj = self.map_helper.get_object(spec.object_name)
         coord = Coordinate(obj.x, obj.y)
         if poly := get_polygon(obj):
@@ -412,20 +317,10 @@ class Move:
         return TransitionScene(from_scene, StaticScene(), to_scene)
 
 
-# Internal caching for scene transitions
 _scenes: OrderedDict[str, _TimedScene] = OrderedDict()
 _tmxs: OrderedDict[Callable, str] = OrderedDict()
 
 
 class _TimedScene(NamedTuple):
-    """
-    Internal class for caching scenes with timestamps.
-
-    Arguments:
-        `time`: The timestamp when the scene was cached.
-
-        `scene`: The cached scene instance.
-    """
-
     time: Millisecond
     scene: MapScene

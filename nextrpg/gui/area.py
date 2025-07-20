@@ -55,8 +55,9 @@ def left_screen() -> Rectangle:
     Returns:
         A rectangle representing the left half of the screen.
     """
+    coord = Coordinate(0, 0)
     size = Size(gui_size().width / 2, gui_size().height)
-    return Rectangle(Coordinate(0, 0), size)
+    return Rectangle(coord, size)
 
 
 def right_screen() -> Rectangle:
@@ -66,8 +67,9 @@ def right_screen() -> Rectangle:
     Returns:
         A rectangle representing the right half of the screen.
     """
+    coord = Coordinate(gui_size().width / 2, 0)
     size = Size(gui_size().width / 2, gui_size().height)
-    return Rectangle(Coordinate(gui_size().width / 2, 0), size)
+    return Rectangle(coord, size)
 
 
 def top_screen() -> Rectangle:
@@ -77,8 +79,9 @@ def top_screen() -> Rectangle:
     Returns:
         A rectangle representing the top half of the screen.
     """
+    coord = Coordinate(0, 0)
     size = Size(gui_size().width, gui_size().height / 2)
-    return Rectangle(Coordinate(0, 0), size)
+    return Rectangle(coord, size)
 
 
 def bottom_screen() -> Rectangle:
@@ -88,8 +91,9 @@ def bottom_screen() -> Rectangle:
     Returns:
         A rectangle representing the bottom half of the screen.
     """
+    coord = Coordinate(0, gui_size().height / 2)
     size = Size(gui_size().width, gui_size().height / 2)
-    return Rectangle(Coordinate(0, gui_size().height / 2), size)
+    return Rectangle(coord, size)
 
 
 def top_left_screen() -> Rectangle:
@@ -99,8 +103,9 @@ def top_left_screen() -> Rectangle:
     Returns:
         A rectangle representing the top-left quarter of the screen.
     """
+    coord = Coordinate(0, 0)
     size = Size(gui_size().width / 2, gui_size().height / 2)
-    return Rectangle(Coordinate(0, 0), size)
+    return Rectangle(coord, size)
 
 
 def top_right_screen() -> Rectangle:
@@ -110,8 +115,9 @@ def top_right_screen() -> Rectangle:
     Returns:
         A rectangle representing the top-right quarter of the screen.
     """
+    coord = Coordinate(gui_size().width / 2, 0)
     size = Size(gui_size().width / 2, gui_size().height / 2)
-    return Rectangle(Coordinate(gui_size().width / 2, 0), size)
+    return Rectangle(coord, size)
 
 
 def bottom_left_screen() -> Rectangle:
@@ -121,8 +127,9 @@ def bottom_left_screen() -> Rectangle:
     Returns:
         A rectangle representing the bottom-left quarter of the screen.
     """
+    coord = Coordinate(0, gui_size().height / 2)
     size = Size(gui_size().width / 2, gui_size().height / 2)
-    return Rectangle(Coordinate(0, gui_size().height / 2), size)
+    return Rectangle(coord, size)
 
 
 def bottom_right_screen() -> Rectangle:
@@ -132,7 +139,6 @@ def bottom_right_screen() -> Rectangle:
     Returns:
         A rectangle representing the bottom-right quarter of the screen.
     """
+    coord = Coordinate(gui_size().width / 2, gui_size().height / 2)
     size = Size(gui_size().width / 2, gui_size().height / 2)
-    return Rectangle(
-        Coordinate(gui_size().width / 2, gui_size().height / 2), size
-    )
+    return Rectangle(coord, size)

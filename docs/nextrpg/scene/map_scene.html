@@ -1148,21 +1148,39 @@ specified map object location with collision detection.</p>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Update the scene state over time.</p>
+            <div class="docstring"><p>Update the scene state for a single game frame.</p>
 
-<p>This method updates the scene and handles ongoing events.
-If there's a next event to process, it will be executed.</p>
+<p>This method is called each frame to update the scene state
+based on elapsed time. It handles animations, movements,
+and other time-dependent changes.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
 <ul>
-<li><strong>time_delta:</strong>  Time elapsed since last update in milliseconds.</li>
+<li><strong><code>time_delta</code>:</strong>  The time elapsed since the last update
+in milliseconds.</li>
 </ul>
 
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p>Updated scene state.</p>
+  <p><code>Scene</code>: The updated scene state after the time step.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+    <span class="c1"># Update character animations</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">tick_idle</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+
+    <span class="c1"># Update timers</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="bp">self</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -1296,7 +1314,6 @@ be applied automatically by <code><a href="#MapScene.draw_on_screens">draw_on_sc
                                 <dd id="MapScene.npc" class="variable"><a href="../character/npcs.html#EventfulScene.npc">npc</a></dd>
                 <dd id="MapScene.npc_dict" class="variable"><a href="../character/npcs.html#EventfulScene.npc_dict">npc_dict</a></dd>
                 <dd id="MapScene.event" class="function"><a href="../character/npcs.html#EventfulScene.event">event</a></dd>
-                <dd id="MapScene.event_without_npc_trigger" class="function"><a href="../character/npcs.html#EventfulScene.event_without_npc_trigger">event_without_npc_trigger</a></dd>
                 <dd id="MapScene.tick_without_event" class="function"><a href="../character/npcs.html#EventfulScene.tick_without_event">tick_without_event</a></dd>
                 <dd id="MapScene.send" class="function"><a href="../character/npcs.html#EventfulScene.send">send</a></dd>
 

@@ -47,8 +47,8 @@ class CharacterSpec:
     """
 
     object_name: str
-    display_name: str = instance_init(lambda self: self.object_name)
     character: CharacterDrawing
+    display_name: str = instance_init(lambda self: self.object_name)
 
 
 @dataclass_with_instance_init

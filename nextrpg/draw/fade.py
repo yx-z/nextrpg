@@ -80,6 +80,7 @@ class Fade(ABC):
         """
         if self.complete:
             return self
+
         elapsed = self._elapsed + time_delta
         alpha = alpha_from_percentage(self._percentage)
         if isinstance(self.resource, DrawOnScreen):
@@ -105,6 +106,7 @@ class Fade(ABC):
         return self.resource
 
     @property
+    @abstractmethod
     def _start(self) -> tuple[DrawOnScreen, ...]:
         """
         Get the initial drawing state (empty).
@@ -112,9 +114,9 @@ class Fade(ABC):
         Returns:
             Empty drawing tuple.
         """
-        return ()
 
     @property
+    @abstractmethod
     def _complete(self) -> tuple[DrawOnScreen, ...]:
         """
         Get the final drawing state (empty).
@@ -122,7 +124,6 @@ class Fade(ABC):
         Returns:
             Empty drawing tuple.
         """
-        return ()
 
     @property
     @abstractmethod
@@ -143,6 +144,11 @@ class FadeIn(Fade):
     the alpha transparency of drawing resources over time, making them appear
     from transparent to fully opaque.
     """
+
+    @override
+    @property
+    def _start(self) -> tuple[DrawOnScreen, ...]:
+        return ()
 
     @override
     @property
@@ -174,3 +180,8 @@ class FadeOut(Fade):
     @property
     def _start(self) -> tuple[DrawOnScreen, ...]:
         return self._resource_tuple
+
+    @override
+    @property
+    def _complete(self) -> tuple[DrawOnScreen, ...]:
+        return ()

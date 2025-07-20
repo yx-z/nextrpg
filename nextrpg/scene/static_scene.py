@@ -43,15 +43,6 @@ class StaticScene(TransitioningScene):
 
     @cached_property
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        """
-        Get the drawings to render for this scene.
-
-        If the resource is a color, returns a screen-filling rectangle with that
-        color. If the resource is a drawing, returns the drawing as-is.
-
-        Returns:
-            `tuple[DrawOnScreen, ...]`: The drawings to render.
-        """
         if isinstance(self.resource, Rgba):
             return (screen().fill(self.resource),)
         if isinstance(self.resource, DrawOnScreen):

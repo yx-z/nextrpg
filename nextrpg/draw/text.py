@@ -61,6 +61,7 @@ class Text:
         """
         if not self.message:
             return Size(0, 0)
+
         text_sizes = tuple(
             self.config.font.text_size(line) for line in self.lines
         )

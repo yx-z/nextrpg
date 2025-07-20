@@ -305,7 +305,7 @@ animation systems, providing realistic path-following behavior.</p>
 </span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>            <span class="o">+</span> <span class="n">reaming_poly</span><span class="o">.</span><span class="n">length</span>
 </span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>        <span class="p">)</span>
 </span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>    <span class="nd">@property</span>
 </span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_final_target</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
 </span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -490,7 +490,7 @@ animation systems, providing realistic path-following behavior.</p>
 </span><span id="Walk-199"><a href="#Walk-199"><span class="linenos">199</span></a>            <span class="o">+</span> <span class="n">reaming_poly</span><span class="o">.</span><span class="n">length</span>
 </span><span id="Walk-200"><a href="#Walk-200"><span class="linenos">200</span></a>        <span class="p">)</span>
 </span><span id="Walk-201"><a href="#Walk-201"><span class="linenos">201</span></a>
-</span><span id="Walk-202"><a href="#Walk-202"><span class="linenos">202</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Walk-202"><a href="#Walk-202"><span class="linenos">202</span></a>    <span class="nd">@property</span>
 </span><span id="Walk-203"><a href="#Walk-203"><span class="linenos">203</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_final_target</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
 </span><span id="Walk-204"><a href="#Walk-204"><span class="linenos">204</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
 </span><span id="Walk-205"><a href="#Walk-205"><span class="linenos">205</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>

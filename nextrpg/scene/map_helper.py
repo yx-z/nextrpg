@@ -300,13 +300,14 @@ class MapHelper:
     def _from_rect(
         self, coord: _TileCoordinate, obj: TiledObject
     ) -> Rectangle | None:
-        if _is_rect(obj):
-            w, h = self._tile_size
-            cx, cy = coord
-            map_coord = Coordinate(cx * w + obj.x, cy * h + obj.y)
-            size = Size(obj.width, obj.height)
-            return Rectangle(map_coord, size)
-        return None
+        if not _is_rect(obj):
+            return None
+
+        w, h = self._tile_size
+        cx, cy = coord
+        map_coord = Coordinate(cx * w + obj.x, cy * h + obj.y)
+        size = Size(obj.width, obj.height)
+        return Rectangle(map_coord, size)
 
     def _tile_layers(self, class_name: str) -> tuple[TiledTileLayer, ...]:
         return tuple(

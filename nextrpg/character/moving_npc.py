@@ -36,8 +36,6 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
 
     Arguments:
         path: Polygon representing the path of the NPC.
-        idle_duration: Duration of the idle state.
-        move_duration: Duration of the moving state.
     """
 
     path: Polygon
@@ -67,39 +65,6 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
         if self._event_triggered or self._walk.complete:
             return super().tick(time_delta)
 
-        move_timer, idle_timer, moving = self._timers_and_moving(time_delta)
-        if moving:
-            moved = MovingCharacterOnScreen.tick(self, time_delta)
-            walked = self._walk.tick(time_delta)
-            return replace(
-                moved,
-                character=moved.character.turn(walked.direction),
-                _walk=walked,
-                _idle_timer=idle_timer.reset,
-                _move_timer=move_timer,
-                _moving=moving,
-            )
-        return replace(
-            NpcOnScreen.tick(self, time_delta),
-            _idle_timer=idle_timer,
-            _move_timer=move_timer.reset,
-            _moving=moving,
-        )
-
-    @property
-    @override
-    def moving(self) -> bool:
-        return (
-            self._moving
-            and not self._event_triggered
-            and not self._walk.complete
-        )
-
-    @override
-    def move(self, time_delta: Millisecond) -> Coordinate:
-        return self._walk.tick(time_delta).coordinate
-
-    def _timers_and_moving(self, time_delta: Millisecond) -> _TimerAndMoving:
         if self._moving:
             move_timer = self._move_timer.tick(time_delta)
             idle_timer = self._idle_timer
@@ -114,10 +79,33 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
         else:
             moving = self._moving
 
-        return _TimerAndMoving(move_timer, idle_timer, moving)
+        if moving:
+            moved = MovingCharacterOnScreen.tick(self, time_delta)
+            walked = self._walk.tick(time_delta)
+            return replace(
+                moved,
+                character=moved.character.turn(walked.direction),
+                _walk=walked,
+                _idle_timer=idle_timer.reset,
+                _move_timer=move_timer,
+                _moving=True,
+            )
+        return replace(
+            NpcOnScreen.tick(self, time_delta),
+            _idle_timer=idle_timer,
+            _move_timer=move_timer.reset,
+            _moving=False,
+        )
 
+    @property
+    @override
+    def moving(self) -> bool:
+        return (
+            self._moving
+            and not self._event_triggered
+            and not self._walk.complete
+        )
 
-class _TimerAndMoving(NamedTuple):
-    move_timer: Timer
-    idle_timer: Timer
-    moving: bool
+    @override
+    def move(self, time_delta: Millisecond) -> Coordinate:
+        return self._walk.tick(time_delta).coordinate

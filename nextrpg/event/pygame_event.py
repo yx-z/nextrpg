@@ -16,7 +16,7 @@ The event system features:
 from dataclasses import dataclass
 from enum import Enum, auto
 
-from pygame.event import Event
+from pygame.event import Event, post
 from pygame.locals import KEYDOWN, KEYUP, QUIT, VIDEORESIZE
 
 from nextrpg.core.dimension import Size
@@ -124,13 +124,6 @@ class KeyboardKey(Enum):
 
 
 class _KeyPressEvent(PygameEvent):
-    """
-    Base class for keyboard press events.
-
-    This internal class provides common functionality for both key press and
-    key release events.
-    """
-
     @property
     def key(self) -> KeyboardKey | KeyCode:
         """
@@ -183,3 +176,7 @@ def to_typed_event(event: Event) -> PygameEvent:
         KEYDOWN: KeyPressDown,
         KEYUP: KeyPressUp,
     }.get(event.type, PygameEvent)(event)
+
+
+def post_quit() -> None:
+    post(Event(QUIT))

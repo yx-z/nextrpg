@@ -81,19 +81,6 @@ class GameLoop:
         return loop
 
     def _event(self, e: PygameEvent) -> Self:
-        """
-        Process a single pygame event.
-
-        Handles the event by passing it to both the current scene and
-        GUI components. Updates the running state if a quit event is
-        received.
-
-        Arguments:
-            `e`: The pygame event to process.
-
-        Returns:
-            `GameLoop`: Updated game loop state after event processing.
-        """
         return replace(
             self,
             _scene=self._scene.event(e),

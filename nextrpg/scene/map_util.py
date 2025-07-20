@@ -28,21 +28,6 @@ def center_player(player_coord: Coordinate, map_size: Size) -> Coordinate:
 def _center_player(
     player_axis: Pixel, gui_axis: Pixel, map_axis: Pixel
 ) -> Pixel:
-    """
-    Calculate the camera position to center the player on screen.
-
-    This function calculates the optimal camera position to keep the player
-    centered on screen while respecting map boundaries. It handles edge cases
-    where the player is near map boundaries.
-
-    Arguments:
-        player_axis: The player's position on the given axis.
-        gui_axis: The size of the GUI on the given axis.
-        map_axis: The size of the map on the given axis.
-
-    Returns:
-        The camera position that centers the player.
-    """
     if player_axis < gui_axis / 2:
         return 0
     if player_axis > map_axis - gui_axis / 2:

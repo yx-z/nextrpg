@@ -53,21 +53,6 @@ class cached[T, K, **P]:
         cls._nextrpg_instances = OrderedDict[K, T]()
 
         def new(klass: type[T], *args: P.args, **kwargs: P.kwargs) -> T:
-            """
-            Create or retrieve a cached instance.
-
-            Checks the cache for an existing instance with the same key.
-            If found, returns the cached instance. Otherwise, creates
-            a new instance and adds it to the cache.
-
-            Arguments:
-                `*args`: Positional arguments for the class constructor.
-
-                `**kwargs`: Keyword arguments for the class constructor.
-
-            Returns:
-                `T`: Either a cached instance or a newly created one.
-            """
             if (key := self.key_fun(*args, **kwargs)) is None:
                 return super(klass, klass).__new__(klass)
 

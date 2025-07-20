@@ -185,27 +185,6 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
     def _collide(
         self, hit_coords: set[Coordinate]
     ) -> _CollisionAndCoord | None:
-        """
-        Check for collisions between hit coordinates and collision polygons.
-
-        Tests each hit coordinate against all collision polygons to
-        find any intersections. Returns the first collision found.
-
-        Arguments:
-            `hit_coords`: Set of coordinates to test for collisions.
-
-        Returns:
-            `_CollisionAndCoord | None`: The collision and coordinate if found,
-                otherwise None.
-
-        Example:
-            ```python
-            collision = character._collide({coord1, coord2, coord3})
-            if collision:
-                polygon, point = collision
-                # Handle collision
-            ```
-        """
         for collision in self.collisions:
             for coord in hit_coords:
                 if collision.contain(coord):
@@ -214,17 +193,5 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
 
 class _CollisionAndCoord(NamedTuple):
-    """
-    Represents a collision between a polygon and a coordinate point.
-
-    This internal class is used to return both the collision polygon
-    and the specific coordinate point where the collision occurred.
-
-    Arguments:
-        `polygon`: The collision polygon that was hit.
-
-        `coord`: The coordinate point where the collision occurred.
-    """
-
     polygon: Polygon
     coord: Coordinate

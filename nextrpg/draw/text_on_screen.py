@@ -59,15 +59,6 @@ class TextOnScreen:
         )
 
     def _surface(self, line: str) -> Surface:
-        """
-        Render a single line of text to a pygame surface.
-
-        Arguments:
-            `line`: The text line to render.
-
-        Returns:
-            `Surface`: The rendered text surface.
-        """
         return self.text.config.font.pygame.render(
             line,
             self.text.config.antialias,

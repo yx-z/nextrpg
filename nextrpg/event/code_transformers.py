@@ -34,57 +34,20 @@ from typing import NamedTuple, NoReturn
 from nextrpg.event.rpg_event import registered_events
 
 
-class AddParent(NodeTransformer):
-    """
-    AST transformer that adds parent references to nodes.
-
-    This transformer traverses the AST and adds parent references to each node,
-    allowing child nodes to access their parent during transformation.
-    """
-
+class _AddParent(NodeTransformer):
     def visit(self, node: AST) -> AST:
-        """
-        Visit and transform an AST node.
-
-        Adds parent references to all child nodes of the given node.
-
-        Arguments:
-            node: The AST node to transform.
-
-        Returns:
-            The transformed node with parent references.
-        """
         self.generic_visit(node)
         for child in iter_child_nodes(node):
             child._nextrpg_parent = node
         return node
 
 
-ADD_PARENT = AddParent()
+ADD_PARENT = _AddParent()
 """Global instance of the AddParent transformer."""
 
 
-class AddYield(NodeTransformer):
-    """
-    AST transformer that adds yield statements to event calls.
-
-    This transformer automatically wraps event function calls in yield
-    statements to enable coroutine-based event handling.
-    """
-
+class _AddYield(NodeTransformer):
     def visit_Call(self, node: Call) -> Yield | Call:
-        """
-        Visit and transform a function call node.
-
-        Wraps registered event calls in yield statements if they are not already
-        within a yield statement.
-
-        Arguments:
-            node: The function call node to transform.
-
-        Returns:
-            Either a yield statement wrapping the call or the original call node.
-        """
         self.generic_visit(node)
         func_event = isinstance(node.func, Name) and _is_event(node.func.id)
         attr_event = isinstance(node.func, Attribute) and _is_event(
@@ -98,7 +61,7 @@ class AddYield(NodeTransformer):
         return node
 
 
-ADD_YIELD = AddYield()
+ADD_YIELD = _AddYield()
 """Global instance of the AddYield transformer."""
 
 
@@ -161,19 +124,6 @@ def _get_target_and_arg(node: Name | Attribute | Subscript) -> _TargetAndArg:
         case Subscript():
             if isinstance(node.value, Name):
                 return _TargetAndArg(node.value.id, [node.slice])
-    _raise_annotate_say(node)
-
-
-def _raise_annotate_say(node: Subscript | Attribute) -> NoReturn:
-    """
-    Raise an error for invalid say annotation format.
-
-    Arguments:
-        node: The invalid annotated assignment node.
-
-    Raises:
-        ValueError: Always raised with a descriptive error message.
-    """
     raise ValueError(
         f'Expect var[arg]: "...", where var is player/npc and arg is the ad-hoc config. Got complex expression {unparse(node)}'
     )

@@ -149,18 +149,6 @@ class EventfulScene(Scene):
         return {n.spec.object_name: n for n in self.npcs}
 
     def event(self, event: PygameEvent) -> Scene:
-        """Handle pygame events and trigger NPC interactions.
-
-        This method processes pygame events and automatically triggers
-        NPC interactions when the player collides with an NPC and
-        presses the confirm key.
-
-        Args:
-            event: The pygame event to process.
-
-        Returns:
-            The updated scene after processing the event.
-        """
         if (
             not self.npc
             and isinstance(event, KeyPressDown)
@@ -172,31 +160,9 @@ class EventfulScene(Scene):
             generator = scene.npc.generator(scene.player, scene.npc, scene)
             logger.debug(t"Event {generator.__name__} started.")
             return next(generator)(generator, scene)
-        return self.event_without_npc_trigger(event)
-
-    def event_without_npc_trigger(self, event: PygameEvent) -> Self:
-        """Handle events without triggering NPC interactions.
-
-        Args:
-            event: The pygame event to process.
-
-        Returns:
-            Updated scene with only player event processing.
-        """
         return replace(self, player=self.player.event(event))
 
     def tick(self, time_delta: Millisecond) -> Scene:
-        """Update the scene state over time.
-
-        This method updates the scene and handles ongoing events.
-        If there's a next event to process, it will be executed.
-
-        Args:
-            time_delta: Time elapsed since last update in milliseconds.
-
-        Returns:
-            Updated scene state.
-        """
         if self._next_event:
             return self._next_event
         return self.tick_without_event(time_delta)
@@ -233,41 +199,14 @@ class EventfulScene(Scene):
 
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:
-        """Find the NPC that the player is currently colliding with.
-
-        Returns:
-            The NPC the player is colliding with, or None if no collision.
-        """
         for npc in self.npcs:
-            if self._collide(npc):
+            if npc.draw_on_screen.rectangle.collide(
+                self.player.draw_on_screen.rectangle
+            ):
                 return npc
         return None
 
-    def _collide(self, npc: NpcOnScreen) -> bool:
-        """Check if the player is colliding with an NPC.
-
-        Args:
-            npc: The NPC to check collision with.
-
-        Returns:
-            True if the player is colliding with the NPC, False otherwise.
-        """
-        return npc.draw_on_screen.rectangle.collide(
-            self.player.draw_on_screen.rectangle
-        )
-
     def _trigger(self, npc: NpcOnScreen) -> Self:
-        """Trigger an event with the specified NPC.
-
-        This method prepares the scene for an NPC interaction by
-        setting up the NPC and player in event mode.
-
-        Args:
-            npc: The NPC to trigger an event with.
-
-        Returns:
-            Updated scene with the NPC event triggered.
-        """
         triggered_npc = npc.start_event(self.player)
         npcs = tuple(
             triggered_npc if n.spec.object_name == npc.spec.object_name else n
@@ -282,14 +221,6 @@ class EventfulScene(Scene):
 
     @cached_property
     def _next_event(self) -> Scene | None:
-        """Get the scene for the next event.
-
-        This method continues the execution of the current event generator
-        and returns the next scene in the event sequence.
-
-        Returns:
-            The next scene to continue event execution, or None if no event.
-        """
         if not self._event_generator:
             return None
 
@@ -297,35 +228,18 @@ class EventfulScene(Scene):
             create_next_scene = self._event_generator.send(self._event_result)
             return create_next_scene(self._event_generator, self)
         except StopIteration:
-            return self._complete_event
-
-    @property
-    def _complete_event(self) -> Self:
-        """Clear the current event and return to normal scene state.
-
-        This method is called when an event sequence completes and
-        returns the scene to its normal state.
-
-        Returns:
-            Scene with event state cleared.
-        """
-        logger.debug(t"Event {self._event_generator.__name__} completed.")
-        return replace(
-            self,
-            player=self.player.complete_event,
-            npcs=self._completed_npcs,
-            npc=None,
-            _event_generator=None,
-            _event_result=None,
-        )
+            logger.debug(t"Event {self._event_generator.__name__} completed.")
+            return replace(
+                self,
+                player=self.player.complete_event,
+                npcs=self._completed_npcs,
+                npc=None,
+                _event_generator=None,
+                _event_result=None,
+            )
 
     @cached_property
     def _completed_npcs(self) -> tuple[NpcOnScreen, ...]:
-        """Get NPCs with their events completed.
-
-        Returns:
-            Tuple of NPCs with their event states completed.
-        """
         return tuple(n.complete_event for n in self.npcs)
 
 

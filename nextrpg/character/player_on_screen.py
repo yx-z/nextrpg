@@ -95,8 +95,9 @@ class PlayerOnScreen(MovingCharacterOnScreen):
             player = player.event(key_press_event)
             ```
         """
-        is_key_press = isinstance(event, (KeyPressDown, KeyPressUp))
-        if self._event_triggered or not is_key_press:
+        if self._event_triggered or not isinstance(
+            event, (KeyPressDown, KeyPressUp)
+        ):
             return self
 
         updated_keys = self._updated_movement_key(event)
@@ -111,23 +112,6 @@ class PlayerOnScreen(MovingCharacterOnScreen):
     def _updated_movement_key(
         self, event: KeyPressDown | KeyPressUp
     ) -> frozenset[KeyboardKey]:
-        """
-        Update the set of currently pressed movement keys.
-
-        Adds keys on press events and removes them on release events.
-        Only processes keys that are defined as movement keys.
-
-        Arguments:
-            `event`: The key press or release event to process.
-
-        Returns:
-            `frozenset[KeyboardKey]`: The updated set of pressed movement keys.
-
-        Example:
-            ```python
-            keys = player._updated_movement_key(key_event)
-            ```
-        """
         if event.key not in _MOVEMENT_KEYS:
             return self._movement_keys
         if isinstance(event, KeyPressDown):
@@ -141,33 +125,12 @@ class PlayerOnScreen(MovingCharacterOnScreen):
 
     @override
     def move(self, time_delta: Millisecond) -> Coordinate | None:
-        """
-        Calculate the player's new position based on movement.
-
-        Uses the character's current direction and movement speed
-        to calculate the new position after the time delta.
-
-        Arguments:
-            `time_delta`: The time elapsed since the last update
-                in milliseconds.
-
-        Returns:
-            `Coordinate | None`: The new position, or None if not moving.
-
-        Example:
-            ```python
-            new_pos = player.move(time_delta)
-            if new_pos and player._can_move(new_pos):
-                player = player.move_to(new_pos)
-            ```
-        """
         directional_offset = DirectionalOffset(
             self.character.direction, self.move_speed * time_delta
         )
         return self.coordinate.shift(directional_offset)
 
 
-# Movement key configuration
 _MOVEMENT_KEYS = {
     KeyboardKey.LEFT,
     KeyboardKey.RIGHT,
@@ -175,7 +138,6 @@ _MOVEMENT_KEYS = {
     KeyboardKey.DOWN,
 }
 
-# Key combination to direction mapping
 _KEY_TO_DIR = {
     frozenset({KeyboardKey.LEFT, KeyboardKey.UP}): Direction.UP_LEFT,
     frozenset({KeyboardKey.LEFT, KeyboardKey.DOWN}): Direction.DOWN_LEFT,

@@ -184,13 +184,6 @@ class Window:
         flip()
 
     def __post_init__(self) -> None:
-        """
-        Initialize pygame systems and update window state.
-
-        Called automatically after object initialization to set up
-        pygame display and font systems, and update the window
-        title and screen configuration.
-        """
         if not self._screen:
             init()
             font.init()
@@ -199,27 +192,12 @@ class Window:
         self._update_screen()
 
     def _draw_log(self, time_delta: Millisecond) -> None:
-        """
-        Draw debug log messages to the screen.
-
-        Arguments:
-            `time_delta`: The time elapsed since the last update.
-        """
         if msgs := pop_messages(time_delta):
             self._screen.blits(
                 d.pygame for t in _log_text(msgs) for d in t.draw_on_screens
             )
 
     def _scale(self, draws: tuple[DrawOnScreen, ...]) -> DrawOnScreen:
-        """
-        Scale drawings to fit the current screen size.
-
-        Arguments:
-            `draws`: The drawings to scale.
-
-        Returns:
-            `DrawOnScreen`: A single scaled drawing containing all elements.
-        """
         screen = Surface(self.initial_config.size)
         screen.blits(d.pygame for d in draws)
         scaled_drawing = Drawing(
@@ -229,15 +207,6 @@ class Window:
 
     @cached_property
     def _scaling(self) -> float:
-        """
-        Get the current scaling factor for screen rendering.
-
-        Calculates the scaling factor based on the ratio of current
-        screen size to initial screen size, maintaining aspect ratio.
-
-        Returns:
-            `float`: The scaling factor (1.0 = no scaling).
-        """
         current_width, current_height = self.current_config.size
         initial_width, initial_height = self.initial_config.size
         width_ratio = current_width / initial_width
@@ -246,15 +215,6 @@ class Window:
 
     @cached_property
     def _center_shift(self) -> Coordinate:
-        """
-        Get the coordinate shift needed to center scaled content.
-
-        Calculates the offset needed to center the scaled game content
-        within the current window size.
-
-        Returns:
-            `Coordinate`: The shift offset for centering.
-        """
         current_width, current_height = self.current_config.size
         initial_width, initial_height = self.initial_config.size
         width_shift = (current_width - self._scaling * initial_width) / 2
@@ -263,12 +223,6 @@ class Window:
 
     @cached_property
     def _current_gui_flag(self) -> _GuiFlag:
-        """
-        Get the pygame display flags for the current GUI mode.
-
-        Returns:
-            `_GuiFlag`: Pygame display flags for window configuration.
-        """
         flag = DOUBLEBUF if self.current_config.double_buffer else 0
         if self.current_config.gui_mode is GuiMode.FULL_SCREEN:
             flag |= FULLSCREEN
@@ -277,9 +231,6 @@ class Window:
         return flag
 
     def _update_title(self) -> None:
-        """
-        Update the window title if it has changed.
-        """
         if (
             self._title is None
             or self.current_config.title != self.last_config.title
@@ -288,9 +239,6 @@ class Window:
             set_caption(self._title)
 
     def _update_screen(self) -> None:
-        """
-        Update the screen surface if configuration has changed.
-        """
         if (
             self._screen is None
             or self.last_config.size != self.current_config.size
@@ -305,12 +253,6 @@ class Window:
 
     @cached_property
     def _toggle_gui_mode(self) -> Self:
-        """
-        Toggle between windowed and fullscreen modes.
-
-        Returns:
-            `Window`: Updated GUI instance with toggled mode.
-        """
         updated_gui_mode = self.current_config.gui_mode.opposite
         updated_config = replace(self.current_config, gui_mode=updated_gui_mode)
         set_config(replace(config(), gui=updated_config))
@@ -319,15 +261,6 @@ class Window:
         )
 
     def _resize(self, size: Size) -> Self:
-        """
-        Handle window resize events.
-
-        Arguments:
-            `size`: The new window size.
-
-        Returns:
-            `Window`: Updated GUI instance with new size.
-        """
         if size == self.current_config.size:
             return self
         updated_config = replace(self.current_config, size=size)

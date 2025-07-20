@@ -159,27 +159,21 @@ class Drawing:
     @cached_property
     def visible_rectangle(self) -> Rectangle:
         rectangle = self._surface.get_bounding_rect()
-        return Rectangle(
-            Coordinate(rectangle.x, rectangle.y),
-            Size(rectangle.width, rectangle.height),
-        )
+        coord = Coordinate(rectangle.x, rectangle.y)
+        size = Size(rectangle.width, rectangle.height)
+        return Rectangle(coord, size)
 
     @cached_property
     def _debug_surface(self) -> Surface | None:
-        """
-        Get debug surface with background color if debug mode is enabled.
-
-        Returns:
-            `Surface | None`: Debug surface or None if debug mode is disabled.
-        """
-        if (debug := config().debug) and (
+        if not (debug := config().debug) or not (
             color := debug.drawing_background_color
         ):
-            surface = Surface(self.size, SRCALPHA)
-            surface.fill(color)
-            surface.blit(self._surface, (0, 0))
-            return surface
-        return None
+            return None
+
+        surface = Surface(self.size, SRCALPHA)
+        surface.fill(color)
+        surface.blit(self._surface, (0, 0))
+        return surface
 
     @cached_property
     def _surface(self) -> Surface:
@@ -359,9 +353,9 @@ class Polygon:
         min_y = min(c.top for c in self.points)
         max_x = max(c.left for c in self.points)
         max_y = max(c.top for c in self.points)
-        return Rectangle(
-            Coordinate(min_x, min_y), Size(max_x - min_x, max_y - min_y)
-        )
+        coord = Coordinate(min_x, min_y)
+        size = Size(max_x - min_x, max_y - min_y)
+        return Rectangle(coord, size)
 
     @cached_property
     def _mask(self) -> Mask:
@@ -393,7 +387,8 @@ class Polygon:
             filled = triangle.fill(Rgba(255, 0, 0, 255))  # Red triangle
             ```
         """
-        return self._draw(lambda surf, points: polygon(surf, color, points))
+        poly = lambda surf, points: polygon(surf, color, points)
+        return self._draw(poly)
 
     def line(
         self, color: Rgba, stroke_width: Pixel | None = None
@@ -422,9 +417,10 @@ class Polygon:
             if stroke_width is None
             else stroke_width
         )
-        return self._draw(
-            lambda surf, points: lines(surf, color, self.closed, points, stroke)
+        line = lambda surf, points: lines(
+            surf, color, self.closed, points, stroke
         )
+        return self._draw(line)
 
     def collide(self, poly: Self) -> bool:
         """
@@ -708,14 +704,15 @@ class Rectangle(Polygon):
 
     @override
     def collide(self, poly: Polygon) -> bool:
-        if isinstance(poly, Rectangle):
-            return (
-                self.top_left.left < poly.top_right.left
-                and self.top_right.left > poly.top_left.left
-                and self.top_left.top < poly.bottom_right.top
-                and self.bottom_right.top > poly.top_left.top
-            )
-        return super().collide(poly)
+        if not isinstance(poly, Rectangle):
+            return super().collide(poly)
+
+        return (
+            self.top_left.left < poly.top_right.left
+            and self.top_right.left > poly.top_left.left
+            and self.top_left.top < poly.bottom_right.top
+            and self.bottom_right.top > poly.top_left.top
+        )
 
     @override
     def contain(self, coordinate: Coordinate) -> bool:
@@ -760,8 +757,5 @@ class Rectangle(Polygon):
         """
         surf = Surface(self.size, SRCALPHA)
         rectangle = Rect(Coordinate(0, 0), self.size)
-        if border_radius:
-            rect(surf, color, rectangle, border_radius=border_radius)
-        else:
-            rect(surf, color, rectangle)
+        rect(surf, color, rectangle, border_radius=border_radius or -1)
         return DrawOnScreen(self.top_left, Drawing(surf))
