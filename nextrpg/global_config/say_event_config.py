@@ -41,9 +41,10 @@ class SayEventConfig:
     """
 
     background: Rgba = WHITE
-    border_radius: Pixel = 20
+    border_radius: Pixel = 16
     padding: Pixel = 16
     fade_duration: Millisecond = 200
+    text_delay: Millisecond | None = 20
     name_color: Rgba | None = None
     center: Coordinate | None = None
     text: TextConfig | None = None

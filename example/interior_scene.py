@@ -71,7 +71,10 @@ def greet(
     Returns:
         `None`
     """
-    scene: "Greetings! This is a sample nextrpg event."
+    scene: """Greetings!
+This is...
+
+a sample nextrpg event. :)"""
 
     npc: "Nice to meet you! What's your name?"
     player: f"Hello {npc.name}! I am {player.name}."

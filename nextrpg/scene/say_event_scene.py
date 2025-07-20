@@ -20,14 +20,10 @@ Key Features:
     - Event-driven dialogue flow
 """
 
-from dataclasses import KW_ONLY, dataclass, replace
+from dataclasses import KW_ONLY, replace
 from functools import cached_property
-from typing import Self, override
+from typing import override
 
-from pygments.styles.dracula import background
-
-from nextrpg import EventfulScene, RpgEventGenerator
-from nextrpg.draw.color import BLACK
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npcs import RpgEventScene
 from nextrpg.core.coordinate import Coordinate
@@ -38,16 +34,18 @@ from nextrpg.core.model import (
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
+from nextrpg.draw.color import BLACK
 from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing, Rectangle
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
+from nextrpg.draw.typewriter import Typewriter
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
+from nextrpg.event.rpg_event import register_rpg_event
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.gui.area import screen
 from nextrpg.scene.scene import Scene
-from nextrpg.event.rpg_event import register_rpg_event
 
 
 @register_rpg_event
@@ -231,18 +229,34 @@ class _Typing(RpgEventScene):
     background: tuple[DrawOnScreen, ...]
     text: TextOnScreen
     config: SayEventConfig
+    _: KW_ONLY = not_constructor_below()
+    typewriter: Typewriter | None = instance_init(
+        lambda self: (
+            Typewriter(self.text, delay)
+            if (delay := self.config.text_delay)
+            else None
+        )
+    )
 
     @override
     @cached_property
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return (
-            self.scene.draw_on_screens
-            + self.background
-            + self.text.draw_on_screens
+        text = (
+            self.typewriter.draw_on_screens
+            if self.typewriter
+            else self.text.draw_on_screens
         )
+        return self.scene.draw_on_screens + self.background + text
 
     def tick(self, time_delta: Millisecond) -> Scene:
-        return replace(self, scene=self.scene.tick_without_event(time_delta))
+        typewriter = (
+            self.typewriter.tick(time_delta) if self.typewriter else None
+        )
+        return replace(
+            self,
+            scene=self.scene.tick_without_event(time_delta),
+            typewriter=typewriter,
+        )
 
     def event(self, event: PygameEvent) -> Scene:
         if isinstance(event, KeyPressDown) and event.key is KeyboardKey.CONFIRM:
