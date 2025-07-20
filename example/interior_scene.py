@@ -21,7 +21,7 @@ from nextrpg import (
 )
 
 
-def interior_scene(player_spec: CharacterSpec | None = None) -> Scene:
+def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
     """
     Defines an interior scene.
 
@@ -46,7 +46,7 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> Scene:
         # Use default player drawing when this scene is an entry scene.
         player_spec=player_spec or init_player(),
         # Move to another map.
-        moves=(Move("from_interior", "to_exterior", exterior_scene),),
+        moves=Move("from_interior", "to_exterior", exterior_scene),
         # NPC/events.
         npc_specs=(
             NpcSpec(object_name="david", character=david(), event=greet),

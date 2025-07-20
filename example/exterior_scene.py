@@ -2,10 +2,10 @@
 Sample exterior scene.
 """
 
-from nextrpg import CharacterSpec, MapScene, Move, Scene
+from nextrpg import CharacterSpec, MapScene, Move
 
 
-def exterior_scene(player_spec: CharacterSpec) -> Scene:
+def exterior_scene(player_spec: CharacterSpec) -> MapScene:
     """
     Arguments:
         `player_spec`: Character drawing and name to use for the player.
@@ -22,5 +22,5 @@ def exterior_scene(player_spec: CharacterSpec) -> Scene:
         # Reuse the same character drawing from the previous map.
         player_spec=player_spec,
         # Move to another map.
-        moves=(Move("from_exterior", "to_interior", interior_scene),),
+        moves=Move("from_exterior", "to_interior", interior_scene),
     )
