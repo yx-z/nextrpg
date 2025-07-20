@@ -118,7 +118,7 @@ from nextrpg.draw.text import *
 from nextrpg.draw.text_on_screen import *
 from nextrpg.event.code_transformers import *
 from nextrpg.event.event_transformer import *
-from nextrpg.event.plugins import *
+from nextrpg.gui.window import *
 from nextrpg.event.pygame_event import *
 from nextrpg.event.rpg_event import *
 from nextrpg.game import *

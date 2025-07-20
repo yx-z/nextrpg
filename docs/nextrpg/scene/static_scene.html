@@ -120,7 +120,7 @@ scenes like title screens, loading screens, or background-only scenes.</p>
 </span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">            background color.</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">|</span> <span class="n">DrawOnScreen</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">|</span> <span class="n">DrawOnScreen</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
 </span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">background_color</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="p">)</span>
 </span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
@@ -137,7 +137,9 @@ scenes like title screens, loading screens, or background-only scenes.</p>
 </span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,</span> <span class="n">Rgba</span><span class="p">):</span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>            <span class="k">return</span> <span class="p">(</span><span class="n">screen</span><span class="p">()</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">),)</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,)</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,</span> <span class="n">DrawOnScreen</span><span class="p">):</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,)</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span>
 </span></pre></div>
 
 
@@ -169,7 +171,7 @@ scenes like title screens, loading screens, or background-only scenes.</p>
 </span><span id="StaticScene-38"><a href="#StaticScene-38"><span class="linenos">38</span></a><span class="sd">            background color.</span>
 </span><span id="StaticScene-39"><a href="#StaticScene-39"><span class="linenos">39</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="StaticScene-40"><a href="#StaticScene-40"><span class="linenos">40</span></a>
-</span><span id="StaticScene-41"><a href="#StaticScene-41"><span class="linenos">41</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">|</span> <span class="n">DrawOnScreen</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+</span><span id="StaticScene-41"><a href="#StaticScene-41"><span class="linenos">41</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">|</span> <span class="n">DrawOnScreen</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
 </span><span id="StaticScene-42"><a href="#StaticScene-42"><span class="linenos">42</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">background_color</span>
 </span><span id="StaticScene-43"><a href="#StaticScene-43"><span class="linenos">43</span></a>    <span class="p">)</span>
 </span><span id="StaticScene-44"><a href="#StaticScene-44"><span class="linenos">44</span></a>
@@ -186,7 +188,9 @@ scenes like title screens, loading screens, or background-only scenes.</p>
 </span><span id="StaticScene-55"><a href="#StaticScene-55"><span class="linenos">55</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="StaticScene-56"><a href="#StaticScene-56"><span class="linenos">56</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,</span> <span class="n">Rgba</span><span class="p">):</span>
 </span><span id="StaticScene-57"><a href="#StaticScene-57"><span class="linenos">57</span></a>            <span class="k">return</span> <span class="p">(</span><span class="n">screen</span><span class="p">()</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">),)</span>
-</span><span id="StaticScene-58"><a href="#StaticScene-58"><span class="linenos">58</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,)</span>
+</span><span id="StaticScene-58"><a href="#StaticScene-58"><span class="linenos">58</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,</span> <span class="n">DrawOnScreen</span><span class="p">):</span>
+</span><span id="StaticScene-59"><a href="#StaticScene-59"><span class="linenos">59</span></a>            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,)</span>
+</span><span id="StaticScene-60"><a href="#StaticScene-60"><span class="linenos">60</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span>
 </span></pre></div>
 
 
@@ -209,7 +213,7 @@ background color.</li>
                             <div id="StaticScene.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">StaticScene</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">resource</span><span class="p">:</span> <span class="n"><a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span> <span class="o">|</span> <span class="n"><a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">StaticScene</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">resource</span><span class="p">:</span> <span class="n"><a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span> <span class="o">|</span> <span class="n"><a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -220,7 +224,7 @@ background color.</li>
                             </div>
                             <div id="StaticScene.resource" class="classattr">
                                 <div class="attr variable">
-            <span class="name">resource</span><span class="annotation">: <a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a> | <a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span>
+            <span class="name">resource</span><span class="annotation">: <a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a> | <a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a> | tuple[<a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a>, ...]</span>
 
         
     </div>
@@ -251,7 +255,9 @@ background color.</li>
 </span><span id="StaticScene.draw_on_screens-55"><a href="#StaticScene.draw_on_screens-55"><span class="linenos">55</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="StaticScene.draw_on_screens-56"><a href="#StaticScene.draw_on_screens-56"><span class="linenos">56</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,</span> <span class="n">Rgba</span><span class="p">):</span>
 </span><span id="StaticScene.draw_on_screens-57"><a href="#StaticScene.draw_on_screens-57"><span class="linenos">57</span></a>            <span class="k">return</span> <span class="p">(</span><span class="n">screen</span><span class="p">()</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">),)</span>
-</span><span id="StaticScene.draw_on_screens-58"><a href="#StaticScene.draw_on_screens-58"><span class="linenos">58</span></a>        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,)</span>
+</span><span id="StaticScene.draw_on_screens-58"><a href="#StaticScene.draw_on_screens-58"><span class="linenos">58</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,</span> <span class="n">DrawOnScreen</span><span class="p">):</span>
+</span><span id="StaticScene.draw_on_screens-59"><a href="#StaticScene.draw_on_screens-59"><span class="linenos">59</span></a>            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,)</span>
+</span><span id="StaticScene.draw_on_screens-60"><a href="#StaticScene.draw_on_screens-60"><span class="linenos">60</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span>
 </span></pre></div>
 
 

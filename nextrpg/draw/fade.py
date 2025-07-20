@@ -13,17 +13,17 @@ Features:
 """
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from typing import Self, override
 
-from nextrpg.core.model import dataclass_with_instance_init
+from nextrpg.core.model import not_constructor_below
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.color import alpha_from_percentage
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.global_config.global_config import config
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class Fade(ABC):
     """
     Fade effect for transitioning drawing resources.
@@ -43,6 +43,7 @@ class Fade(ABC):
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
     )
+    _: KW_ONLY = not_constructor_below()
     _elapsed: Millisecond = 0
 
     @property
@@ -134,7 +135,6 @@ class Fade(ABC):
         """
 
 
-@dataclass_with_instance_init
 class FadeIn(Fade):
     """
     Fade-in effect for gradually appearing drawing resources.
@@ -164,7 +164,6 @@ class FadeIn(Fade):
         return self._elapsed / self.duration
 
 
-@dataclass_with_instance_init
 class FadeOut(Fade):
     """
     Fade-out effect for gradually disappearing drawing resources.

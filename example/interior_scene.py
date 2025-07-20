@@ -17,8 +17,8 @@ from nextrpg import (
     SpriteSheet,
     SpriteSheetSelection,
     Trim,
+    Direction,
 )
-from nextrpg.core.direction import Direction
 
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> Scene:

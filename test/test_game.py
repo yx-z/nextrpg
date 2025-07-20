@@ -12,7 +12,7 @@ from nextrpg import Game
 
 
 def test_game(mocker: MockerFixture) -> None:
-    mocker.patch("nextrpg.game.Window.__post_init__")
+    mocker.patch("nextrpg.core.game_loop.Window.__post_init__")
     mocker.patch(
         "pygame.event.get",
         lambda: (

@@ -205,20 +205,6 @@ class MapScene(EventfulScene, TransitioningScene):
     @cached_property
     @override
     def draw_on_screen_shift(self) -> Coordinate:
-        """
-        Get the screen shift to center the player.
-
-        Calculates the offset needed to center the player on screen
-        while keeping the player within the map boundaries.
-
-        Returns:
-            `Coordinate`: The screen shift offset.
-
-        Example:
-            ```python
-            shift = map_scene.draw_on_screen_shift
-            ```
-        """
         player_coord = self.player.draw_on_screen.rectangle.center
         shift = center_player(player_coord, self.map_helper.map_size)
         logger.debug(
@@ -229,20 +215,6 @@ class MapScene(EventfulScene, TransitioningScene):
     @cached_property
     @override
     def draw_on_screens_before_shift(self) -> tuple[DrawOnScreen, ...]:
-        """
-        Get all drawable elements before screen shift is applied.
-
-        Returns all map elements, characters, and debug visuals
-        that should be rendered in the scene.
-
-        Returns:
-            `tuple[DrawOnScreen, ...]`: All drawable elements.
-
-        Example:
-            ```python
-            drawables = map_scene.draw_on_screens_before_shift
-            ```
-        """
         return (
             self.map_helper.background
             + self._foreground_and_characters
