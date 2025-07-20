@@ -943,88 +943,63 @@ screen, and handling various drawing operations.</p>
 </span><span id="L-708"><a href="#L-708"><span class="linenos">708</span></a>
 </span><span id="L-709"><a href="#L-709"><span class="linenos">709</span></a>    <span class="nd">@override</span>
 </span><span id="L-710"><a href="#L-710"><span class="linenos">710</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">collide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poly</span><span class="p">:</span> <span class="n">Polygon</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-711"><a href="#L-711"><span class="linenos">711</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-712"><a href="#L-712"><span class="linenos">712</span></a><span class="sd">        Optimized collision detection for rectangles.</span>
-</span><span id="L-713"><a href="#L-713"><span class="linenos">713</span></a>
-</span><span id="L-714"><a href="#L-714"><span class="linenos">714</span></a><span class="sd">        For rectangle-to-rectangle collisions, uses fast axis-aligned</span>
-</span><span id="L-715"><a href="#L-715"><span class="linenos">715</span></a><span class="sd">        bounding box intersection. For other polygon types, falls back</span>
-</span><span id="L-716"><a href="#L-716"><span class="linenos">716</span></a><span class="sd">        to the parent class implementation.</span>
-</span><span id="L-717"><a href="#L-717"><span class="linenos">717</span></a>
-</span><span id="L-718"><a href="#L-718"><span class="linenos">718</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-719"><a href="#L-719"><span class="linenos">719</span></a><span class="sd">            `poly`: The polygon to check for collision with.</span>
-</span><span id="L-720"><a href="#L-720"><span class="linenos">720</span></a>
-</span><span id="L-721"><a href="#L-721"><span class="linenos">721</span></a><span class="sd">        Returns:</span>
-</span><span id="L-722"><a href="#L-722"><span class="linenos">722</span></a><span class="sd">            `bool`: `True` if the rectangles overlap, `False` otherwise.</span>
-</span><span id="L-723"><a href="#L-723"><span class="linenos">723</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-724"><a href="#L-724"><span class="linenos">724</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">Rectangle</span><span class="p">):</span>
-</span><span id="L-725"><a href="#L-725"><span class="linenos">725</span></a>            <span class="k">return</span> <span class="p">(</span>
-</span><span id="L-726"><a href="#L-726"><span class="linenos">726</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span>
-</span><span id="L-727"><a href="#L-727"><span class="linenos">727</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
-</span><span id="L-728"><a href="#L-728"><span class="linenos">728</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span>
-</span><span id="L-729"><a href="#L-729"><span class="linenos">729</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
-</span><span id="L-730"><a href="#L-730"><span class="linenos">730</span></a>            <span class="p">)</span>
-</span><span id="L-731"><a href="#L-731"><span class="linenos">731</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
-</span><span id="L-732"><a href="#L-732"><span class="linenos">732</span></a>
-</span><span id="L-733"><a href="#L-733"><span class="linenos">733</span></a>    <span class="nd">@override</span>
-</span><span id="L-734"><a href="#L-734"><span class="linenos">734</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">contain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-735"><a href="#L-735"><span class="linenos">735</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-736"><a href="#L-736"><span class="linenos">736</span></a><span class="sd">        Check if a coordinate point lies within this rectangle.</span>
-</span><span id="L-737"><a href="#L-737"><span class="linenos">737</span></a>
-</span><span id="L-738"><a href="#L-738"><span class="linenos">738</span></a><span class="sd">        Uses simple bounds checking for efficient rectangle containment</span>
-</span><span id="L-739"><a href="#L-739"><span class="linenos">739</span></a><span class="sd">        testing.</span>
-</span><span id="L-740"><a href="#L-740"><span class="linenos">740</span></a>
-</span><span id="L-741"><a href="#L-741"><span class="linenos">741</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-742"><a href="#L-742"><span class="linenos">742</span></a><span class="sd">            `coordinate`: The coordinate point to check.</span>
-</span><span id="L-743"><a href="#L-743"><span class="linenos">743</span></a>
-</span><span id="L-744"><a href="#L-744"><span class="linenos">744</span></a><span class="sd">        Returns:</span>
-</span><span id="L-745"><a href="#L-745"><span class="linenos">745</span></a><span class="sd">            `bool`: Whether the coordinate lies within the rectangle.</span>
-</span><span id="L-746"><a href="#L-746"><span class="linenos">746</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-747"><a href="#L-747"><span class="linenos">747</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="L-748"><a href="#L-748"><span class="linenos">748</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
-</span><span id="L-749"><a href="#L-749"><span class="linenos">749</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
-</span><span id="L-750"><a href="#L-750"><span class="linenos">750</span></a>        <span class="p">)</span>
-</span><span id="L-751"><a href="#L-751"><span class="linenos">751</span></a>
-</span><span id="L-752"><a href="#L-752"><span class="linenos">752</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-753"><a href="#L-753"><span class="linenos">753</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-754"><a href="#L-754"><span class="linenos">754</span></a><span class="sd">        Shift the rectangle by the specified coordinate.</span>
-</span><span id="L-755"><a href="#L-755"><span class="linenos">755</span></a>
-</span><span id="L-756"><a href="#L-756"><span class="linenos">756</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-757"><a href="#L-757"><span class="linenos">757</span></a><span class="sd">            `coordinate`: The coordinate to shift the rectangle by.</span>
-</span><span id="L-758"><a href="#L-758"><span class="linenos">758</span></a>
-</span><span id="L-759"><a href="#L-759"><span class="linenos">759</span></a><span class="sd">        Returns:</span>
-</span><span id="L-760"><a href="#L-760"><span class="linenos">760</span></a><span class="sd">            `Rectangle`: A new rectangle shifted by the coordinate.</span>
-</span><span id="L-761"><a href="#L-761"><span class="linenos">761</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-762"><a href="#L-762"><span class="linenos">762</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">coordinate</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-</span><span id="L-763"><a href="#L-763"><span class="linenos">763</span></a>
-</span><span id="L-764"><a href="#L-764"><span class="linenos">764</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fill</span><span class="p">(</span>
-</span><span id="L-765"><a href="#L-765"><span class="linenos">765</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span><span class="p">,</span> <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-766"><a href="#L-766"><span class="linenos">766</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
-</span><span id="L-767"><a href="#L-767"><span class="linenos">767</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-768"><a href="#L-768"><span class="linenos">768</span></a><span class="sd">        Creates a filled rectangle drawing with the provided color.</span>
-</span><span id="L-769"><a href="#L-769"><span class="linenos">769</span></a>
-</span><span id="L-770"><a href="#L-770"><span class="linenos">770</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-771"><a href="#L-771"><span class="linenos">771</span></a><span class="sd">            `color`: The color to fill the rectangle with.</span>
-</span><span id="L-772"><a href="#L-772"><span class="linenos">772</span></a>
-</span><span id="L-773"><a href="#L-773"><span class="linenos">773</span></a><span class="sd">            `border_radius`: Optional border radius for rounded corners.</span>
-</span><span id="L-774"><a href="#L-774"><span class="linenos">774</span></a><span class="sd">                If `None`, creates a rectangle with sharp corners.</span>
-</span><span id="L-775"><a href="#L-775"><span class="linenos">775</span></a>
-</span><span id="L-776"><a href="#L-776"><span class="linenos">776</span></a><span class="sd">        Returns:</span>
-</span><span id="L-777"><a href="#L-777"><span class="linenos">777</span></a><span class="sd">            `DrawOnScreen`: A drawing of the filled rectangle.</span>
-</span><span id="L-778"><a href="#L-778"><span class="linenos">778</span></a>
-</span><span id="L-779"><a href="#L-779"><span class="linenos">779</span></a><span class="sd">        Example:</span>
-</span><span id="L-780"><a href="#L-780"><span class="linenos">780</span></a><span class="sd">            ```python</span>
-</span><span id="L-781"><a href="#L-781"><span class="linenos">781</span></a><span class="sd">            rect = Rectangle(Coordinate(0, 0), Size(100, 50))</span>
-</span><span id="L-782"><a href="#L-782"><span class="linenos">782</span></a><span class="sd">            filled = rect.fill(Rgba(255, 0, 0, 255))  # Red rectangle</span>
-</span><span id="L-783"><a href="#L-783"><span class="linenos">783</span></a><span class="sd">            rounded = rect.fill(Rgba(0, 255, 0, 255), border_radius=10)</span>
-</span><span id="L-784"><a href="#L-784"><span class="linenos">784</span></a><span class="sd">            ```</span>
-</span><span id="L-785"><a href="#L-785"><span class="linenos">785</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-786"><a href="#L-786"><span class="linenos">786</span></a>        <span class="n">surf</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
-</span><span id="L-787"><a href="#L-787"><span class="linenos">787</span></a>        <span class="n">rectangle</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-</span><span id="L-788"><a href="#L-788"><span class="linenos">788</span></a>        <span class="k">if</span> <span class="n">border_radius</span><span class="p">:</span>
-</span><span id="L-789"><a href="#L-789"><span class="linenos">789</span></a>            <span class="n">rect</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">rectangle</span><span class="p">,</span> <span class="n">border_radius</span><span class="o">=</span><span class="n">border_radius</span><span class="p">)</span>
-</span><span id="L-790"><a href="#L-790"><span class="linenos">790</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="L-791"><a href="#L-791"><span class="linenos">791</span></a>            <span class="n">rect</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">rectangle</span><span class="p">)</span>
-</span><span id="L-792"><a href="#L-792"><span class="linenos">792</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surf</span><span class="p">))</span>
+</span><span id="L-711"><a href="#L-711"><span class="linenos">711</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">Rectangle</span><span class="p">):</span>
+</span><span id="L-712"><a href="#L-712"><span class="linenos">712</span></a>            <span class="k">return</span> <span class="p">(</span>
+</span><span id="L-713"><a href="#L-713"><span class="linenos">713</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span>
+</span><span id="L-714"><a href="#L-714"><span class="linenos">714</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
+</span><span id="L-715"><a href="#L-715"><span class="linenos">715</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span>
+</span><span id="L-716"><a href="#L-716"><span class="linenos">716</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
+</span><span id="L-717"><a href="#L-717"><span class="linenos">717</span></a>            <span class="p">)</span>
+</span><span id="L-718"><a href="#L-718"><span class="linenos">718</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+</span><span id="L-719"><a href="#L-719"><span class="linenos">719</span></a>
+</span><span id="L-720"><a href="#L-720"><span class="linenos">720</span></a>    <span class="nd">@override</span>
+</span><span id="L-721"><a href="#L-721"><span class="linenos">721</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">contain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-722"><a href="#L-722"><span class="linenos">722</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="L-723"><a href="#L-723"><span class="linenos">723</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
+</span><span id="L-724"><a href="#L-724"><span class="linenos">724</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
+</span><span id="L-725"><a href="#L-725"><span class="linenos">725</span></a>        <span class="p">)</span>
+</span><span id="L-726"><a href="#L-726"><span class="linenos">726</span></a>
+</span><span id="L-727"><a href="#L-727"><span class="linenos">727</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-728"><a href="#L-728"><span class="linenos">728</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-729"><a href="#L-729"><span class="linenos">729</span></a><span class="sd">        Shift the rectangle by the specified coordinate.</span>
+</span><span id="L-730"><a href="#L-730"><span class="linenos">730</span></a>
+</span><span id="L-731"><a href="#L-731"><span class="linenos">731</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-732"><a href="#L-732"><span class="linenos">732</span></a><span class="sd">            `coordinate`: The coordinate to shift the rectangle by.</span>
+</span><span id="L-733"><a href="#L-733"><span class="linenos">733</span></a>
+</span><span id="L-734"><a href="#L-734"><span class="linenos">734</span></a><span class="sd">        Returns:</span>
+</span><span id="L-735"><a href="#L-735"><span class="linenos">735</span></a><span class="sd">            `Rectangle`: A new rectangle shifted by the coordinate.</span>
+</span><span id="L-736"><a href="#L-736"><span class="linenos">736</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-737"><a href="#L-737"><span class="linenos">737</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">coordinate</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="L-738"><a href="#L-738"><span class="linenos">738</span></a>
+</span><span id="L-739"><a href="#L-739"><span class="linenos">739</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fill</span><span class="p">(</span>
+</span><span id="L-740"><a href="#L-740"><span class="linenos">740</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span><span class="p">,</span> <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-741"><a href="#L-741"><span class="linenos">741</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="L-742"><a href="#L-742"><span class="linenos">742</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-743"><a href="#L-743"><span class="linenos">743</span></a><span class="sd">        Creates a filled rectangle drawing with the provided color.</span>
+</span><span id="L-744"><a href="#L-744"><span class="linenos">744</span></a>
+</span><span id="L-745"><a href="#L-745"><span class="linenos">745</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-746"><a href="#L-746"><span class="linenos">746</span></a><span class="sd">            `color`: The color to fill the rectangle with.</span>
+</span><span id="L-747"><a href="#L-747"><span class="linenos">747</span></a>
+</span><span id="L-748"><a href="#L-748"><span class="linenos">748</span></a><span class="sd">            `border_radius`: Optional border radius for rounded corners.</span>
+</span><span id="L-749"><a href="#L-749"><span class="linenos">749</span></a><span class="sd">                If `None`, creates a rectangle with sharp corners.</span>
+</span><span id="L-750"><a href="#L-750"><span class="linenos">750</span></a>
+</span><span id="L-751"><a href="#L-751"><span class="linenos">751</span></a><span class="sd">        Returns:</span>
+</span><span id="L-752"><a href="#L-752"><span class="linenos">752</span></a><span class="sd">            `DrawOnScreen`: A drawing of the filled rectangle.</span>
+</span><span id="L-753"><a href="#L-753"><span class="linenos">753</span></a>
+</span><span id="L-754"><a href="#L-754"><span class="linenos">754</span></a><span class="sd">        Example:</span>
+</span><span id="L-755"><a href="#L-755"><span class="linenos">755</span></a><span class="sd">            ```python</span>
+</span><span id="L-756"><a href="#L-756"><span class="linenos">756</span></a><span class="sd">            rect = Rectangle(Coordinate(0, 0), Size(100, 50))</span>
+</span><span id="L-757"><a href="#L-757"><span class="linenos">757</span></a><span class="sd">            filled = rect.fill(Rgba(255, 0, 0, 255))  # Red rectangle</span>
+</span><span id="L-758"><a href="#L-758"><span class="linenos">758</span></a><span class="sd">            rounded = rect.fill(Rgba(0, 255, 0, 255), border_radius=10)</span>
+</span><span id="L-759"><a href="#L-759"><span class="linenos">759</span></a><span class="sd">            ```</span>
+</span><span id="L-760"><a href="#L-760"><span class="linenos">760</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-761"><a href="#L-761"><span class="linenos">761</span></a>        <span class="n">surf</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
+</span><span id="L-762"><a href="#L-762"><span class="linenos">762</span></a>        <span class="n">rectangle</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="L-763"><a href="#L-763"><span class="linenos">763</span></a>        <span class="k">if</span> <span class="n">border_radius</span><span class="p">:</span>
+</span><span id="L-764"><a href="#L-764"><span class="linenos">764</span></a>            <span class="n">rect</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">rectangle</span><span class="p">,</span> <span class="n">border_radius</span><span class="o">=</span><span class="n">border_radius</span><span class="p">)</span>
+</span><span id="L-765"><a href="#L-765"><span class="linenos">765</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-766"><a href="#L-766"><span class="linenos">766</span></a>            <span class="n">rect</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">rectangle</span><span class="p">)</span>
+</span><span id="L-767"><a href="#L-767"><span class="linenos">767</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surf</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -2929,88 +2904,63 @@ back to the first point.</p>
 </span><span id="Rectangle-709"><a href="#Rectangle-709"><span class="linenos">709</span></a>
 </span><span id="Rectangle-710"><a href="#Rectangle-710"><span class="linenos">710</span></a>    <span class="nd">@override</span>
 </span><span id="Rectangle-711"><a href="#Rectangle-711"><span class="linenos">711</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">collide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poly</span><span class="p">:</span> <span class="n">Polygon</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Rectangle-712"><a href="#Rectangle-712"><span class="linenos">712</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Rectangle-713"><a href="#Rectangle-713"><span class="linenos">713</span></a><span class="sd">        Optimized collision detection for rectangles.</span>
-</span><span id="Rectangle-714"><a href="#Rectangle-714"><span class="linenos">714</span></a>
-</span><span id="Rectangle-715"><a href="#Rectangle-715"><span class="linenos">715</span></a><span class="sd">        For rectangle-to-rectangle collisions, uses fast axis-aligned</span>
-</span><span id="Rectangle-716"><a href="#Rectangle-716"><span class="linenos">716</span></a><span class="sd">        bounding box intersection. For other polygon types, falls back</span>
-</span><span id="Rectangle-717"><a href="#Rectangle-717"><span class="linenos">717</span></a><span class="sd">        to the parent class implementation.</span>
-</span><span id="Rectangle-718"><a href="#Rectangle-718"><span class="linenos">718</span></a>
-</span><span id="Rectangle-719"><a href="#Rectangle-719"><span class="linenos">719</span></a><span class="sd">        Arguments:</span>
-</span><span id="Rectangle-720"><a href="#Rectangle-720"><span class="linenos">720</span></a><span class="sd">            `poly`: The polygon to check for collision with.</span>
-</span><span id="Rectangle-721"><a href="#Rectangle-721"><span class="linenos">721</span></a>
-</span><span id="Rectangle-722"><a href="#Rectangle-722"><span class="linenos">722</span></a><span class="sd">        Returns:</span>
-</span><span id="Rectangle-723"><a href="#Rectangle-723"><span class="linenos">723</span></a><span class="sd">            `bool`: `True` if the rectangles overlap, `False` otherwise.</span>
-</span><span id="Rectangle-724"><a href="#Rectangle-724"><span class="linenos">724</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Rectangle-725"><a href="#Rectangle-725"><span class="linenos">725</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">Rectangle</span><span class="p">):</span>
-</span><span id="Rectangle-726"><a href="#Rectangle-726"><span class="linenos">726</span></a>            <span class="k">return</span> <span class="p">(</span>
-</span><span id="Rectangle-727"><a href="#Rectangle-727"><span class="linenos">727</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span>
-</span><span id="Rectangle-728"><a href="#Rectangle-728"><span class="linenos">728</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
-</span><span id="Rectangle-729"><a href="#Rectangle-729"><span class="linenos">729</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span>
-</span><span id="Rectangle-730"><a href="#Rectangle-730"><span class="linenos">730</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
-</span><span id="Rectangle-731"><a href="#Rectangle-731"><span class="linenos">731</span></a>            <span class="p">)</span>
-</span><span id="Rectangle-732"><a href="#Rectangle-732"><span class="linenos">732</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
-</span><span id="Rectangle-733"><a href="#Rectangle-733"><span class="linenos">733</span></a>
-</span><span id="Rectangle-734"><a href="#Rectangle-734"><span class="linenos">734</span></a>    <span class="nd">@override</span>
-</span><span id="Rectangle-735"><a href="#Rectangle-735"><span class="linenos">735</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">contain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Rectangle-736"><a href="#Rectangle-736"><span class="linenos">736</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Rectangle-737"><a href="#Rectangle-737"><span class="linenos">737</span></a><span class="sd">        Check if a coordinate point lies within this rectangle.</span>
-</span><span id="Rectangle-738"><a href="#Rectangle-738"><span class="linenos">738</span></a>
-</span><span id="Rectangle-739"><a href="#Rectangle-739"><span class="linenos">739</span></a><span class="sd">        Uses simple bounds checking for efficient rectangle containment</span>
-</span><span id="Rectangle-740"><a href="#Rectangle-740"><span class="linenos">740</span></a><span class="sd">        testing.</span>
-</span><span id="Rectangle-741"><a href="#Rectangle-741"><span class="linenos">741</span></a>
-</span><span id="Rectangle-742"><a href="#Rectangle-742"><span class="linenos">742</span></a><span class="sd">        Arguments:</span>
-</span><span id="Rectangle-743"><a href="#Rectangle-743"><span class="linenos">743</span></a><span class="sd">            `coordinate`: The coordinate point to check.</span>
-</span><span id="Rectangle-744"><a href="#Rectangle-744"><span class="linenos">744</span></a>
-</span><span id="Rectangle-745"><a href="#Rectangle-745"><span class="linenos">745</span></a><span class="sd">        Returns:</span>
-</span><span id="Rectangle-746"><a href="#Rectangle-746"><span class="linenos">746</span></a><span class="sd">            `bool`: Whether the coordinate lies within the rectangle.</span>
-</span><span id="Rectangle-747"><a href="#Rectangle-747"><span class="linenos">747</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Rectangle-748"><a href="#Rectangle-748"><span class="linenos">748</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="Rectangle-749"><a href="#Rectangle-749"><span class="linenos">749</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
-</span><span id="Rectangle-750"><a href="#Rectangle-750"><span class="linenos">750</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
-</span><span id="Rectangle-751"><a href="#Rectangle-751"><span class="linenos">751</span></a>        <span class="p">)</span>
-</span><span id="Rectangle-752"><a href="#Rectangle-752"><span class="linenos">752</span></a>
-</span><span id="Rectangle-753"><a href="#Rectangle-753"><span class="linenos">753</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Rectangle-754"><a href="#Rectangle-754"><span class="linenos">754</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Rectangle-755"><a href="#Rectangle-755"><span class="linenos">755</span></a><span class="sd">        Shift the rectangle by the specified coordinate.</span>
-</span><span id="Rectangle-756"><a href="#Rectangle-756"><span class="linenos">756</span></a>
-</span><span id="Rectangle-757"><a href="#Rectangle-757"><span class="linenos">757</span></a><span class="sd">        Arguments:</span>
-</span><span id="Rectangle-758"><a href="#Rectangle-758"><span class="linenos">758</span></a><span class="sd">            `coordinate`: The coordinate to shift the rectangle by.</span>
-</span><span id="Rectangle-759"><a href="#Rectangle-759"><span class="linenos">759</span></a>
-</span><span id="Rectangle-760"><a href="#Rectangle-760"><span class="linenos">760</span></a><span class="sd">        Returns:</span>
-</span><span id="Rectangle-761"><a href="#Rectangle-761"><span class="linenos">761</span></a><span class="sd">            `Rectangle`: A new rectangle shifted by the coordinate.</span>
-</span><span id="Rectangle-762"><a href="#Rectangle-762"><span class="linenos">762</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Rectangle-763"><a href="#Rectangle-763"><span class="linenos">763</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">coordinate</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-</span><span id="Rectangle-764"><a href="#Rectangle-764"><span class="linenos">764</span></a>
-</span><span id="Rectangle-765"><a href="#Rectangle-765"><span class="linenos">765</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fill</span><span class="p">(</span>
-</span><span id="Rectangle-766"><a href="#Rectangle-766"><span class="linenos">766</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span><span class="p">,</span> <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Rectangle-767"><a href="#Rectangle-767"><span class="linenos">767</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
-</span><span id="Rectangle-768"><a href="#Rectangle-768"><span class="linenos">768</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Rectangle-769"><a href="#Rectangle-769"><span class="linenos">769</span></a><span class="sd">        Creates a filled rectangle drawing with the provided color.</span>
-</span><span id="Rectangle-770"><a href="#Rectangle-770"><span class="linenos">770</span></a>
-</span><span id="Rectangle-771"><a href="#Rectangle-771"><span class="linenos">771</span></a><span class="sd">        Arguments:</span>
-</span><span id="Rectangle-772"><a href="#Rectangle-772"><span class="linenos">772</span></a><span class="sd">            `color`: The color to fill the rectangle with.</span>
-</span><span id="Rectangle-773"><a href="#Rectangle-773"><span class="linenos">773</span></a>
-</span><span id="Rectangle-774"><a href="#Rectangle-774"><span class="linenos">774</span></a><span class="sd">            `border_radius`: Optional border radius for rounded corners.</span>
-</span><span id="Rectangle-775"><a href="#Rectangle-775"><span class="linenos">775</span></a><span class="sd">                If `None`, creates a rectangle with sharp corners.</span>
-</span><span id="Rectangle-776"><a href="#Rectangle-776"><span class="linenos">776</span></a>
-</span><span id="Rectangle-777"><a href="#Rectangle-777"><span class="linenos">777</span></a><span class="sd">        Returns:</span>
-</span><span id="Rectangle-778"><a href="#Rectangle-778"><span class="linenos">778</span></a><span class="sd">            `DrawOnScreen`: A drawing of the filled rectangle.</span>
-</span><span id="Rectangle-779"><a href="#Rectangle-779"><span class="linenos">779</span></a>
-</span><span id="Rectangle-780"><a href="#Rectangle-780"><span class="linenos">780</span></a><span class="sd">        Example:</span>
-</span><span id="Rectangle-781"><a href="#Rectangle-781"><span class="linenos">781</span></a><span class="sd">            ```python</span>
-</span><span id="Rectangle-782"><a href="#Rectangle-782"><span class="linenos">782</span></a><span class="sd">            rect = Rectangle(Coordinate(0, 0), Size(100, 50))</span>
-</span><span id="Rectangle-783"><a href="#Rectangle-783"><span class="linenos">783</span></a><span class="sd">            filled = rect.fill(Rgba(255, 0, 0, 255))  # Red rectangle</span>
-</span><span id="Rectangle-784"><a href="#Rectangle-784"><span class="linenos">784</span></a><span class="sd">            rounded = rect.fill(Rgba(0, 255, 0, 255), border_radius=10)</span>
-</span><span id="Rectangle-785"><a href="#Rectangle-785"><span class="linenos">785</span></a><span class="sd">            ```</span>
-</span><span id="Rectangle-786"><a href="#Rectangle-786"><span class="linenos">786</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Rectangle-787"><a href="#Rectangle-787"><span class="linenos">787</span></a>        <span class="n">surf</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
-</span><span id="Rectangle-788"><a href="#Rectangle-788"><span class="linenos">788</span></a>        <span class="n">rectangle</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-</span><span id="Rectangle-789"><a href="#Rectangle-789"><span class="linenos">789</span></a>        <span class="k">if</span> <span class="n">border_radius</span><span class="p">:</span>
-</span><span id="Rectangle-790"><a href="#Rectangle-790"><span class="linenos">790</span></a>            <span class="n">rect</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">rectangle</span><span class="p">,</span> <span class="n">border_radius</span><span class="o">=</span><span class="n">border_radius</span><span class="p">)</span>
-</span><span id="Rectangle-791"><a href="#Rectangle-791"><span class="linenos">791</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="Rectangle-792"><a href="#Rectangle-792"><span class="linenos">792</span></a>            <span class="n">rect</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">rectangle</span><span class="p">)</span>
-</span><span id="Rectangle-793"><a href="#Rectangle-793"><span class="linenos">793</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surf</span><span class="p">))</span>
+</span><span id="Rectangle-712"><a href="#Rectangle-712"><span class="linenos">712</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">Rectangle</span><span class="p">):</span>
+</span><span id="Rectangle-713"><a href="#Rectangle-713"><span class="linenos">713</span></a>            <span class="k">return</span> <span class="p">(</span>
+</span><span id="Rectangle-714"><a href="#Rectangle-714"><span class="linenos">714</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span>
+</span><span id="Rectangle-715"><a href="#Rectangle-715"><span class="linenos">715</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
+</span><span id="Rectangle-716"><a href="#Rectangle-716"><span class="linenos">716</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span>
+</span><span id="Rectangle-717"><a href="#Rectangle-717"><span class="linenos">717</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
+</span><span id="Rectangle-718"><a href="#Rectangle-718"><span class="linenos">718</span></a>            <span class="p">)</span>
+</span><span id="Rectangle-719"><a href="#Rectangle-719"><span class="linenos">719</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+</span><span id="Rectangle-720"><a href="#Rectangle-720"><span class="linenos">720</span></a>
+</span><span id="Rectangle-721"><a href="#Rectangle-721"><span class="linenos">721</span></a>    <span class="nd">@override</span>
+</span><span id="Rectangle-722"><a href="#Rectangle-722"><span class="linenos">722</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">contain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Rectangle-723"><a href="#Rectangle-723"><span class="linenos">723</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="Rectangle-724"><a href="#Rectangle-724"><span class="linenos">724</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
+</span><span id="Rectangle-725"><a href="#Rectangle-725"><span class="linenos">725</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
+</span><span id="Rectangle-726"><a href="#Rectangle-726"><span class="linenos">726</span></a>        <span class="p">)</span>
+</span><span id="Rectangle-727"><a href="#Rectangle-727"><span class="linenos">727</span></a>
+</span><span id="Rectangle-728"><a href="#Rectangle-728"><span class="linenos">728</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Rectangle-729"><a href="#Rectangle-729"><span class="linenos">729</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Rectangle-730"><a href="#Rectangle-730"><span class="linenos">730</span></a><span class="sd">        Shift the rectangle by the specified coordinate.</span>
+</span><span id="Rectangle-731"><a href="#Rectangle-731"><span class="linenos">731</span></a>
+</span><span id="Rectangle-732"><a href="#Rectangle-732"><span class="linenos">732</span></a><span class="sd">        Arguments:</span>
+</span><span id="Rectangle-733"><a href="#Rectangle-733"><span class="linenos">733</span></a><span class="sd">            `coordinate`: The coordinate to shift the rectangle by.</span>
+</span><span id="Rectangle-734"><a href="#Rectangle-734"><span class="linenos">734</span></a>
+</span><span id="Rectangle-735"><a href="#Rectangle-735"><span class="linenos">735</span></a><span class="sd">        Returns:</span>
+</span><span id="Rectangle-736"><a href="#Rectangle-736"><span class="linenos">736</span></a><span class="sd">            `Rectangle`: A new rectangle shifted by the coordinate.</span>
+</span><span id="Rectangle-737"><a href="#Rectangle-737"><span class="linenos">737</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Rectangle-738"><a href="#Rectangle-738"><span class="linenos">738</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">coordinate</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="Rectangle-739"><a href="#Rectangle-739"><span class="linenos">739</span></a>
+</span><span id="Rectangle-740"><a href="#Rectangle-740"><span class="linenos">740</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fill</span><span class="p">(</span>
+</span><span id="Rectangle-741"><a href="#Rectangle-741"><span class="linenos">741</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span><span class="p">,</span> <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Rectangle-742"><a href="#Rectangle-742"><span class="linenos">742</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="Rectangle-743"><a href="#Rectangle-743"><span class="linenos">743</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Rectangle-744"><a href="#Rectangle-744"><span class="linenos">744</span></a><span class="sd">        Creates a filled rectangle drawing with the provided color.</span>
+</span><span id="Rectangle-745"><a href="#Rectangle-745"><span class="linenos">745</span></a>
+</span><span id="Rectangle-746"><a href="#Rectangle-746"><span class="linenos">746</span></a><span class="sd">        Arguments:</span>
+</span><span id="Rectangle-747"><a href="#Rectangle-747"><span class="linenos">747</span></a><span class="sd">            `color`: The color to fill the rectangle with.</span>
+</span><span id="Rectangle-748"><a href="#Rectangle-748"><span class="linenos">748</span></a>
+</span><span id="Rectangle-749"><a href="#Rectangle-749"><span class="linenos">749</span></a><span class="sd">            `border_radius`: Optional border radius for rounded corners.</span>
+</span><span id="Rectangle-750"><a href="#Rectangle-750"><span class="linenos">750</span></a><span class="sd">                If `None`, creates a rectangle with sharp corners.</span>
+</span><span id="Rectangle-751"><a href="#Rectangle-751"><span class="linenos">751</span></a>
+</span><span id="Rectangle-752"><a href="#Rectangle-752"><span class="linenos">752</span></a><span class="sd">        Returns:</span>
+</span><span id="Rectangle-753"><a href="#Rectangle-753"><span class="linenos">753</span></a><span class="sd">            `DrawOnScreen`: A drawing of the filled rectangle.</span>
+</span><span id="Rectangle-754"><a href="#Rectangle-754"><span class="linenos">754</span></a>
+</span><span id="Rectangle-755"><a href="#Rectangle-755"><span class="linenos">755</span></a><span class="sd">        Example:</span>
+</span><span id="Rectangle-756"><a href="#Rectangle-756"><span class="linenos">756</span></a><span class="sd">            ```python</span>
+</span><span id="Rectangle-757"><a href="#Rectangle-757"><span class="linenos">757</span></a><span class="sd">            rect = Rectangle(Coordinate(0, 0), Size(100, 50))</span>
+</span><span id="Rectangle-758"><a href="#Rectangle-758"><span class="linenos">758</span></a><span class="sd">            filled = rect.fill(Rgba(255, 0, 0, 255))  # Red rectangle</span>
+</span><span id="Rectangle-759"><a href="#Rectangle-759"><span class="linenos">759</span></a><span class="sd">            rounded = rect.fill(Rgba(0, 255, 0, 255), border_radius=10)</span>
+</span><span id="Rectangle-760"><a href="#Rectangle-760"><span class="linenos">760</span></a><span class="sd">            ```</span>
+</span><span id="Rectangle-761"><a href="#Rectangle-761"><span class="linenos">761</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Rectangle-762"><a href="#Rectangle-762"><span class="linenos">762</span></a>        <span class="n">surf</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
+</span><span id="Rectangle-763"><a href="#Rectangle-763"><span class="linenos">763</span></a>        <span class="n">rectangle</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="Rectangle-764"><a href="#Rectangle-764"><span class="linenos">764</span></a>        <span class="k">if</span> <span class="n">border_radius</span><span class="p">:</span>
+</span><span id="Rectangle-765"><a href="#Rectangle-765"><span class="linenos">765</span></a>            <span class="n">rect</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">rectangle</span><span class="p">,</span> <span class="n">border_radius</span><span class="o">=</span><span class="n">border_radius</span><span class="p">)</span>
+</span><span id="Rectangle-766"><a href="#Rectangle-766"><span class="linenos">766</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="Rectangle-767"><a href="#Rectangle-767"><span class="linenos">767</span></a>            <span class="n">rect</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">rectangle</span><span class="p">)</span>
+</span><span id="Rectangle-768"><a href="#Rectangle-768"><span class="linenos">768</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surf</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -3549,35 +3499,22 @@ from the top-left corner.</p>
     <a class="headerlink" href="#Rectangle.collide"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.collide-710"><a href="#Rectangle.collide-710"><span class="linenos">710</span></a>    <span class="nd">@override</span>
 </span><span id="Rectangle.collide-711"><a href="#Rectangle.collide-711"><span class="linenos">711</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">collide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">poly</span><span class="p">:</span> <span class="n">Polygon</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Rectangle.collide-712"><a href="#Rectangle.collide-712"><span class="linenos">712</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Rectangle.collide-713"><a href="#Rectangle.collide-713"><span class="linenos">713</span></a><span class="sd">        Optimized collision detection for rectangles.</span>
-</span><span id="Rectangle.collide-714"><a href="#Rectangle.collide-714"><span class="linenos">714</span></a>
-</span><span id="Rectangle.collide-715"><a href="#Rectangle.collide-715"><span class="linenos">715</span></a><span class="sd">        For rectangle-to-rectangle collisions, uses fast axis-aligned</span>
-</span><span id="Rectangle.collide-716"><a href="#Rectangle.collide-716"><span class="linenos">716</span></a><span class="sd">        bounding box intersection. For other polygon types, falls back</span>
-</span><span id="Rectangle.collide-717"><a href="#Rectangle.collide-717"><span class="linenos">717</span></a><span class="sd">        to the parent class implementation.</span>
-</span><span id="Rectangle.collide-718"><a href="#Rectangle.collide-718"><span class="linenos">718</span></a>
-</span><span id="Rectangle.collide-719"><a href="#Rectangle.collide-719"><span class="linenos">719</span></a><span class="sd">        Arguments:</span>
-</span><span id="Rectangle.collide-720"><a href="#Rectangle.collide-720"><span class="linenos">720</span></a><span class="sd">            `poly`: The polygon to check for collision with.</span>
-</span><span id="Rectangle.collide-721"><a href="#Rectangle.collide-721"><span class="linenos">721</span></a>
-</span><span id="Rectangle.collide-722"><a href="#Rectangle.collide-722"><span class="linenos">722</span></a><span class="sd">        Returns:</span>
-</span><span id="Rectangle.collide-723"><a href="#Rectangle.collide-723"><span class="linenos">723</span></a><span class="sd">            `bool`: `True` if the rectangles overlap, `False` otherwise.</span>
-</span><span id="Rectangle.collide-724"><a href="#Rectangle.collide-724"><span class="linenos">724</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Rectangle.collide-725"><a href="#Rectangle.collide-725"><span class="linenos">725</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">Rectangle</span><span class="p">):</span>
-</span><span id="Rectangle.collide-726"><a href="#Rectangle.collide-726"><span class="linenos">726</span></a>            <span class="k">return</span> <span class="p">(</span>
-</span><span id="Rectangle.collide-727"><a href="#Rectangle.collide-727"><span class="linenos">727</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span>
-</span><span id="Rectangle.collide-728"><a href="#Rectangle.collide-728"><span class="linenos">728</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
-</span><span id="Rectangle.collide-729"><a href="#Rectangle.collide-729"><span class="linenos">729</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span>
-</span><span id="Rectangle.collide-730"><a href="#Rectangle.collide-730"><span class="linenos">730</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
-</span><span id="Rectangle.collide-731"><a href="#Rectangle.collide-731"><span class="linenos">731</span></a>            <span class="p">)</span>
-</span><span id="Rectangle.collide-732"><a href="#Rectangle.collide-732"><span class="linenos">732</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+</span><span id="Rectangle.collide-712"><a href="#Rectangle.collide-712"><span class="linenos">712</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">Rectangle</span><span class="p">):</span>
+</span><span id="Rectangle.collide-713"><a href="#Rectangle.collide-713"><span class="linenos">713</span></a>            <span class="k">return</span> <span class="p">(</span>
+</span><span id="Rectangle.collide-714"><a href="#Rectangle.collide-714"><span class="linenos">714</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span>
+</span><span id="Rectangle.collide-715"><a href="#Rectangle.collide-715"><span class="linenos">715</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
+</span><span id="Rectangle.collide-716"><a href="#Rectangle.collide-716"><span class="linenos">716</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span>
+</span><span id="Rectangle.collide-717"><a href="#Rectangle.collide-717"><span class="linenos">717</span></a>                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom_right</span><span class="o">.</span><span class="n">top</span> <span class="o">&gt;</span> <span class="n">poly</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
+</span><span id="Rectangle.collide-718"><a href="#Rectangle.collide-718"><span class="linenos">718</span></a>            <span class="p">)</span>
+</span><span id="Rectangle.collide-719"><a href="#Rectangle.collide-719"><span class="linenos">719</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Optimized collision detection for rectangles.</p>
+            <div class="docstring"><p>Checks if this polygon overlaps with another polygon.</p>
 
-<p>For rectangle-to-rectangle collisions, uses fast axis-aligned
-bounding box intersection. For other polygon types, falls back
-to the parent class implementation.</p>
+<p>Performs precise collision detection using pygame masks.
+First checks bounding rectangles for efficiency, then
+performs pixel-perfect collision detection.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
@@ -3588,7 +3525,18 @@ to the parent class implementation.</p>
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>bool</code>: <code>True</code> if the rectangles overlap, <code>False</code> otherwise.</p>
+  <p><code>bool</code>: <code>True</code> if the polygons overlap, <code>False</code> otherwise.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="n">poly1</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">((</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)))</span>
+<span class="n">poly2</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">((</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">75</span><span class="p">,</span> <span class="mi">75</span><span class="p">)))</span>
+<span class="n">is_colliding</span> <span class="o">=</span> <span class="n">poly1</span><span class="o">.</span><span class="n">collide</span><span class="p">(</span><span class="n">poly2</span><span class="p">)</span>  <span class="c1"># True</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -3606,31 +3554,19 @@ to the parent class implementation.</p>
 
     </div>
     <a class="headerlink" href="#Rectangle.contain"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.contain-734"><a href="#Rectangle.contain-734"><span class="linenos">734</span></a>    <span class="nd">@override</span>
-</span><span id="Rectangle.contain-735"><a href="#Rectangle.contain-735"><span class="linenos">735</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">contain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Rectangle.contain-736"><a href="#Rectangle.contain-736"><span class="linenos">736</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Rectangle.contain-737"><a href="#Rectangle.contain-737"><span class="linenos">737</span></a><span class="sd">        Check if a coordinate point lies within this rectangle.</span>
-</span><span id="Rectangle.contain-738"><a href="#Rectangle.contain-738"><span class="linenos">738</span></a>
-</span><span id="Rectangle.contain-739"><a href="#Rectangle.contain-739"><span class="linenos">739</span></a><span class="sd">        Uses simple bounds checking for efficient rectangle containment</span>
-</span><span id="Rectangle.contain-740"><a href="#Rectangle.contain-740"><span class="linenos">740</span></a><span class="sd">        testing.</span>
-</span><span id="Rectangle.contain-741"><a href="#Rectangle.contain-741"><span class="linenos">741</span></a>
-</span><span id="Rectangle.contain-742"><a href="#Rectangle.contain-742"><span class="linenos">742</span></a><span class="sd">        Arguments:</span>
-</span><span id="Rectangle.contain-743"><a href="#Rectangle.contain-743"><span class="linenos">743</span></a><span class="sd">            `coordinate`: The coordinate point to check.</span>
-</span><span id="Rectangle.contain-744"><a href="#Rectangle.contain-744"><span class="linenos">744</span></a>
-</span><span id="Rectangle.contain-745"><a href="#Rectangle.contain-745"><span class="linenos">745</span></a><span class="sd">        Returns:</span>
-</span><span id="Rectangle.contain-746"><a href="#Rectangle.contain-746"><span class="linenos">746</span></a><span class="sd">            `bool`: Whether the coordinate lies within the rectangle.</span>
-</span><span id="Rectangle.contain-747"><a href="#Rectangle.contain-747"><span class="linenos">747</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Rectangle.contain-748"><a href="#Rectangle.contain-748"><span class="linenos">748</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="Rectangle.contain-749"><a href="#Rectangle.contain-749"><span class="linenos">749</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
-</span><span id="Rectangle.contain-750"><a href="#Rectangle.contain-750"><span class="linenos">750</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
-</span><span id="Rectangle.contain-751"><a href="#Rectangle.contain-751"><span class="linenos">751</span></a>        <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.contain-721"><a href="#Rectangle.contain-721"><span class="linenos">721</span></a>    <span class="nd">@override</span>
+</span><span id="Rectangle.contain-722"><a href="#Rectangle.contain-722"><span class="linenos">722</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">contain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Rectangle.contain-723"><a href="#Rectangle.contain-723"><span class="linenos">723</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="Rectangle.contain-724"><a href="#Rectangle.contain-724"><span class="linenos">724</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
+</span><span id="Rectangle.contain-725"><a href="#Rectangle.contain-725"><span class="linenos">725</span></a>            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="n">coordinate</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">bottom</span>
+</span><span id="Rectangle.contain-726"><a href="#Rectangle.contain-726"><span class="linenos">726</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Check if a coordinate point lies within this rectangle.</p>
+            <div class="docstring"><p>Checks if a coordinate point lies within this polygon.</p>
 
-<p>Uses simple bounds checking for efficient rectangle containment
-testing.</p>
+<p>The point is considered inside if it falls within the polygon's
+bounds, including points on the edges.</p>
 
 <h6 id="arguments">Arguments:</h6>
 
@@ -3641,7 +3577,18 @@ testing.</p>
 <h6 id="returns">Returns:</h6>
 
 <blockquote>
-  <p><code>bool</code>: Whether the coordinate lies within the rectangle.</p>
+  <p><code>bool</code>: Whether the coordinate lies within the polygon.</p>
+</blockquote>
+
+<h6 id="example">Example:</h6>
+
+<blockquote>
+  <div class="pdoc-code codehilite">
+<pre><span></span><code><span class="n">triangle</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">((</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                  <span class="n">Coordinate</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">)))</span>
+<span class="n">is_inside</span> <span class="o">=</span> <span class="n">triangle</span><span class="o">.</span><span class="n">contain</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">))</span>  <span class="c1"># True</span>
+</code></pre>
+  </div>
 </blockquote>
 </div>
 
@@ -3658,17 +3605,17 @@ testing.</p>
 
     </div>
     <a class="headerlink" href="#Rectangle.shift"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.shift-753"><a href="#Rectangle.shift-753"><span class="linenos">753</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Rectangle.shift-754"><a href="#Rectangle.shift-754"><span class="linenos">754</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Rectangle.shift-755"><a href="#Rectangle.shift-755"><span class="linenos">755</span></a><span class="sd">        Shift the rectangle by the specified coordinate.</span>
-</span><span id="Rectangle.shift-756"><a href="#Rectangle.shift-756"><span class="linenos">756</span></a>
-</span><span id="Rectangle.shift-757"><a href="#Rectangle.shift-757"><span class="linenos">757</span></a><span class="sd">        Arguments:</span>
-</span><span id="Rectangle.shift-758"><a href="#Rectangle.shift-758"><span class="linenos">758</span></a><span class="sd">            `coordinate`: The coordinate to shift the rectangle by.</span>
-</span><span id="Rectangle.shift-759"><a href="#Rectangle.shift-759"><span class="linenos">759</span></a>
-</span><span id="Rectangle.shift-760"><a href="#Rectangle.shift-760"><span class="linenos">760</span></a><span class="sd">        Returns:</span>
-</span><span id="Rectangle.shift-761"><a href="#Rectangle.shift-761"><span class="linenos">761</span></a><span class="sd">            `Rectangle`: A new rectangle shifted by the coordinate.</span>
-</span><span id="Rectangle.shift-762"><a href="#Rectangle.shift-762"><span class="linenos">762</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Rectangle.shift-763"><a href="#Rectangle.shift-763"><span class="linenos">763</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">coordinate</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.shift-728"><a href="#Rectangle.shift-728"><span class="linenos">728</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Rectangle.shift-729"><a href="#Rectangle.shift-729"><span class="linenos">729</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Rectangle.shift-730"><a href="#Rectangle.shift-730"><span class="linenos">730</span></a><span class="sd">        Shift the rectangle by the specified coordinate.</span>
+</span><span id="Rectangle.shift-731"><a href="#Rectangle.shift-731"><span class="linenos">731</span></a>
+</span><span id="Rectangle.shift-732"><a href="#Rectangle.shift-732"><span class="linenos">732</span></a><span class="sd">        Arguments:</span>
+</span><span id="Rectangle.shift-733"><a href="#Rectangle.shift-733"><span class="linenos">733</span></a><span class="sd">            `coordinate`: The coordinate to shift the rectangle by.</span>
+</span><span id="Rectangle.shift-734"><a href="#Rectangle.shift-734"><span class="linenos">734</span></a>
+</span><span id="Rectangle.shift-735"><a href="#Rectangle.shift-735"><span class="linenos">735</span></a><span class="sd">        Returns:</span>
+</span><span id="Rectangle.shift-736"><a href="#Rectangle.shift-736"><span class="linenos">736</span></a><span class="sd">            `Rectangle`: A new rectangle shifted by the coordinate.</span>
+</span><span id="Rectangle.shift-737"><a href="#Rectangle.shift-737"><span class="linenos">737</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Rectangle.shift-738"><a href="#Rectangle.shift-738"><span class="linenos">738</span></a>        <span class="k">return</span> <span class="n">Rectangle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">coordinate</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -3700,35 +3647,35 @@ testing.</p>
 
     </div>
     <a class="headerlink" href="#Rectangle.fill"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.fill-765"><a href="#Rectangle.fill-765"><span class="linenos">765</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fill</span><span class="p">(</span>
-</span><span id="Rectangle.fill-766"><a href="#Rectangle.fill-766"><span class="linenos">766</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span><span class="p">,</span> <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Rectangle.fill-767"><a href="#Rectangle.fill-767"><span class="linenos">767</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
-</span><span id="Rectangle.fill-768"><a href="#Rectangle.fill-768"><span class="linenos">768</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Rectangle.fill-769"><a href="#Rectangle.fill-769"><span class="linenos">769</span></a><span class="sd">        Creates a filled rectangle drawing with the provided color.</span>
-</span><span id="Rectangle.fill-770"><a href="#Rectangle.fill-770"><span class="linenos">770</span></a>
-</span><span id="Rectangle.fill-771"><a href="#Rectangle.fill-771"><span class="linenos">771</span></a><span class="sd">        Arguments:</span>
-</span><span id="Rectangle.fill-772"><a href="#Rectangle.fill-772"><span class="linenos">772</span></a><span class="sd">            `color`: The color to fill the rectangle with.</span>
-</span><span id="Rectangle.fill-773"><a href="#Rectangle.fill-773"><span class="linenos">773</span></a>
-</span><span id="Rectangle.fill-774"><a href="#Rectangle.fill-774"><span class="linenos">774</span></a><span class="sd">            `border_radius`: Optional border radius for rounded corners.</span>
-</span><span id="Rectangle.fill-775"><a href="#Rectangle.fill-775"><span class="linenos">775</span></a><span class="sd">                If `None`, creates a rectangle with sharp corners.</span>
-</span><span id="Rectangle.fill-776"><a href="#Rectangle.fill-776"><span class="linenos">776</span></a>
-</span><span id="Rectangle.fill-777"><a href="#Rectangle.fill-777"><span class="linenos">777</span></a><span class="sd">        Returns:</span>
-</span><span id="Rectangle.fill-778"><a href="#Rectangle.fill-778"><span class="linenos">778</span></a><span class="sd">            `DrawOnScreen`: A drawing of the filled rectangle.</span>
-</span><span id="Rectangle.fill-779"><a href="#Rectangle.fill-779"><span class="linenos">779</span></a>
-</span><span id="Rectangle.fill-780"><a href="#Rectangle.fill-780"><span class="linenos">780</span></a><span class="sd">        Example:</span>
-</span><span id="Rectangle.fill-781"><a href="#Rectangle.fill-781"><span class="linenos">781</span></a><span class="sd">            ```python</span>
-</span><span id="Rectangle.fill-782"><a href="#Rectangle.fill-782"><span class="linenos">782</span></a><span class="sd">            rect = Rectangle(Coordinate(0, 0), Size(100, 50))</span>
-</span><span id="Rectangle.fill-783"><a href="#Rectangle.fill-783"><span class="linenos">783</span></a><span class="sd">            filled = rect.fill(Rgba(255, 0, 0, 255))  # Red rectangle</span>
-</span><span id="Rectangle.fill-784"><a href="#Rectangle.fill-784"><span class="linenos">784</span></a><span class="sd">            rounded = rect.fill(Rgba(0, 255, 0, 255), border_radius=10)</span>
-</span><span id="Rectangle.fill-785"><a href="#Rectangle.fill-785"><span class="linenos">785</span></a><span class="sd">            ```</span>
-</span><span id="Rectangle.fill-786"><a href="#Rectangle.fill-786"><span class="linenos">786</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Rectangle.fill-787"><a href="#Rectangle.fill-787"><span class="linenos">787</span></a>        <span class="n">surf</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
-</span><span id="Rectangle.fill-788"><a href="#Rectangle.fill-788"><span class="linenos">788</span></a>        <span class="n">rectangle</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-</span><span id="Rectangle.fill-789"><a href="#Rectangle.fill-789"><span class="linenos">789</span></a>        <span class="k">if</span> <span class="n">border_radius</span><span class="p">:</span>
-</span><span id="Rectangle.fill-790"><a href="#Rectangle.fill-790"><span class="linenos">790</span></a>            <span class="n">rect</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">rectangle</span><span class="p">,</span> <span class="n">border_radius</span><span class="o">=</span><span class="n">border_radius</span><span class="p">)</span>
-</span><span id="Rectangle.fill-791"><a href="#Rectangle.fill-791"><span class="linenos">791</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="Rectangle.fill-792"><a href="#Rectangle.fill-792"><span class="linenos">792</span></a>            <span class="n">rect</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">rectangle</span><span class="p">)</span>
-</span><span id="Rectangle.fill-793"><a href="#Rectangle.fill-793"><span class="linenos">793</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surf</span><span class="p">))</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Rectangle.fill-740"><a href="#Rectangle.fill-740"><span class="linenos">740</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">fill</span><span class="p">(</span>
+</span><span id="Rectangle.fill-741"><a href="#Rectangle.fill-741"><span class="linenos">741</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span><span class="p">,</span> <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="Rectangle.fill-742"><a href="#Rectangle.fill-742"><span class="linenos">742</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawOnScreen</span><span class="p">:</span>
+</span><span id="Rectangle.fill-743"><a href="#Rectangle.fill-743"><span class="linenos">743</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Rectangle.fill-744"><a href="#Rectangle.fill-744"><span class="linenos">744</span></a><span class="sd">        Creates a filled rectangle drawing with the provided color.</span>
+</span><span id="Rectangle.fill-745"><a href="#Rectangle.fill-745"><span class="linenos">745</span></a>
+</span><span id="Rectangle.fill-746"><a href="#Rectangle.fill-746"><span class="linenos">746</span></a><span class="sd">        Arguments:</span>
+</span><span id="Rectangle.fill-747"><a href="#Rectangle.fill-747"><span class="linenos">747</span></a><span class="sd">            `color`: The color to fill the rectangle with.</span>
+</span><span id="Rectangle.fill-748"><a href="#Rectangle.fill-748"><span class="linenos">748</span></a>
+</span><span id="Rectangle.fill-749"><a href="#Rectangle.fill-749"><span class="linenos">749</span></a><span class="sd">            `border_radius`: Optional border radius for rounded corners.</span>
+</span><span id="Rectangle.fill-750"><a href="#Rectangle.fill-750"><span class="linenos">750</span></a><span class="sd">                If `None`, creates a rectangle with sharp corners.</span>
+</span><span id="Rectangle.fill-751"><a href="#Rectangle.fill-751"><span class="linenos">751</span></a>
+</span><span id="Rectangle.fill-752"><a href="#Rectangle.fill-752"><span class="linenos">752</span></a><span class="sd">        Returns:</span>
+</span><span id="Rectangle.fill-753"><a href="#Rectangle.fill-753"><span class="linenos">753</span></a><span class="sd">            `DrawOnScreen`: A drawing of the filled rectangle.</span>
+</span><span id="Rectangle.fill-754"><a href="#Rectangle.fill-754"><span class="linenos">754</span></a>
+</span><span id="Rectangle.fill-755"><a href="#Rectangle.fill-755"><span class="linenos">755</span></a><span class="sd">        Example:</span>
+</span><span id="Rectangle.fill-756"><a href="#Rectangle.fill-756"><span class="linenos">756</span></a><span class="sd">            ```python</span>
+</span><span id="Rectangle.fill-757"><a href="#Rectangle.fill-757"><span class="linenos">757</span></a><span class="sd">            rect = Rectangle(Coordinate(0, 0), Size(100, 50))</span>
+</span><span id="Rectangle.fill-758"><a href="#Rectangle.fill-758"><span class="linenos">758</span></a><span class="sd">            filled = rect.fill(Rgba(255, 0, 0, 255))  # Red rectangle</span>
+</span><span id="Rectangle.fill-759"><a href="#Rectangle.fill-759"><span class="linenos">759</span></a><span class="sd">            rounded = rect.fill(Rgba(0, 255, 0, 255), border_radius=10)</span>
+</span><span id="Rectangle.fill-760"><a href="#Rectangle.fill-760"><span class="linenos">760</span></a><span class="sd">            ```</span>
+</span><span id="Rectangle.fill-761"><a href="#Rectangle.fill-761"><span class="linenos">761</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Rectangle.fill-762"><a href="#Rectangle.fill-762"><span class="linenos">762</span></a>        <span class="n">surf</span> <span class="o">=</span> <span class="n">Surface</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">SRCALPHA</span><span class="p">)</span>
+</span><span id="Rectangle.fill-763"><a href="#Rectangle.fill-763"><span class="linenos">763</span></a>        <span class="n">rectangle</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">(</span><span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</span><span id="Rectangle.fill-764"><a href="#Rectangle.fill-764"><span class="linenos">764</span></a>        <span class="k">if</span> <span class="n">border_radius</span><span class="p">:</span>
+</span><span id="Rectangle.fill-765"><a href="#Rectangle.fill-765"><span class="linenos">765</span></a>            <span class="n">rect</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">rectangle</span><span class="p">,</span> <span class="n">border_radius</span><span class="o">=</span><span class="n">border_radius</span><span class="p">)</span>
+</span><span id="Rectangle.fill-766"><a href="#Rectangle.fill-766"><span class="linenos">766</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="Rectangle.fill-767"><a href="#Rectangle.fill-767"><span class="linenos">767</span></a>            <span class="n">rect</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">rectangle</span><span class="p">)</span>
+</span><span id="Rectangle.fill-768"><a href="#Rectangle.fill-768"><span class="linenos">768</span></a>        <span class="k">return</span> <span class="n">DrawOnScreen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">(</span><span class="n">surf</span><span class="p">))</span>
 </span></pre></div>
 
 

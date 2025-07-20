@@ -72,25 +72,6 @@ class PlayerOnScreen(MovingCharacterOnScreen):
 
     @override
     def start_event(self, character: CharacterOnScreen) -> Self:
-        """
-        Start an event interaction with another character.
-
-        When starting an event, the player stops all movement and
-        turns to face the other character. This ensures proper
-        interaction positioning.
-
-        Arguments:
-            `character`: The character to start an event with.
-
-        Returns:
-            `PlayerOnScreen`: The updated player state with movement stopped.
-
-        Example:
-            ```python
-            # Start interaction with NPC
-            player = player.start_event(npc)
-            ```
-        """
         start_event = super().start_event(character)
         return replace(start_event, _movement_keys=frozenset())
 
@@ -156,22 +137,6 @@ class PlayerOnScreen(MovingCharacterOnScreen):
     @property
     @override
     def moving(self) -> bool:
-        """
-        Get whether the player is currently moving.
-
-        Determines movement state based on whether any movement
-        keys are currently pressed.
-
-        Returns:
-            `bool`: Whether the player is currently moving.
-
-        Example:
-            ```python
-            if player.moving:
-                # Handle movement animation
-                pass
-            ```
-        """
         return bool(self._movement_keys)
 
     @override

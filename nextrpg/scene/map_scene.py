@@ -157,49 +157,10 @@ class MapScene(EventfulScene, TransitioningScene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
-        """
-        Update the map scene for a single game frame.
-
-        Checks for scene transitions and updates the scene state
-        accordingly. If no transitions are pending, updates
-        normally without transition processing.
-
-        Arguments:
-            `time_delta`: The time elapsed since the last update
-                in milliseconds.
-
-        Returns:
-            `Scene`: The updated scene state.
-
-        Example:
-            ```python
-            # Update map scene in game loop
-            scene = map_scene.tick(time_delta)
-            ```
-        """
         return self._move_to_scene or super().tick(time_delta)
 
     @override
     def tick_without_transition(self, time_delta: Millisecond) -> Scene:
-        """
-        Update scene state without transition processing.
-
-        Updates NPC states without checking for or processing
-        scene transitions.
-
-        Arguments:
-            `time_delta`: The time elapsed since the last update
-                in milliseconds.
-
-        Returns:
-            `Scene`: The updated scene state.
-
-        Example:
-            ```python
-            # Update without transitions
-            scene = map_scene.tick_without_transition(time_delta)
-            ```
-        """
         return replace(self, npcs=tuple(n.tick(time_delta) for n in self.npcs))
 
     @cached_property

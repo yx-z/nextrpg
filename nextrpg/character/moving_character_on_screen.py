@@ -113,26 +113,6 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        """
-        Update the character's state for a single game step/frame.
-
-        Calculates movement based on the current moving state, handles
-        collision detection, and updates the character's drawing state
-        (moving or idle animation).
-
-        Arguments:
-            `time_delta`: The time that has passed since the last update,
-                used for calculating movement distance.
-
-        Returns:
-            `MovingCharacterOnScreen`: The updated character state after the step.
-
-        Example:
-            ```python
-            # Update character in game loop
-            character = character.tick(time_delta)
-            ```
-        """
         if self._event_triggered:
             return super().tick(time_delta)
 

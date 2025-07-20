@@ -97,15 +97,6 @@ class TransitionScene(Scene):
     @cached_property
     @override
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        """
-        Get the current drawing resources for rendering.
-
-        Returns blended drawing resources from the involved scenes
-        based on the transition progress.
-
-        Returns:
-            `tuple[DrawOnScreen, ...]`: The current drawing resources.
-        """
         if self._elapsed < self._half_duration:
             alpha = alpha_from_percentage(self._elapsed / self._half_duration)
             intermediary_draws = self._intermediary_draw_on_screens(alpha)

@@ -708,19 +708,6 @@ class Rectangle(Polygon):
 
     @override
     def collide(self, poly: Polygon) -> bool:
-        """
-        Optimized collision detection for rectangles.
-
-        For rectangle-to-rectangle collisions, uses fast axis-aligned
-        bounding box intersection. For other polygon types, falls back
-        to the parent class implementation.
-
-        Arguments:
-            `poly`: The polygon to check for collision with.
-
-        Returns:
-            `bool`: `True` if the rectangles overlap, `False` otherwise.
-        """
         if isinstance(poly, Rectangle):
             return (
                 self.top_left.left < poly.top_right.left
@@ -732,18 +719,6 @@ class Rectangle(Polygon):
 
     @override
     def contain(self, coordinate: Coordinate) -> bool:
-        """
-        Check if a coordinate point lies within this rectangle.
-
-        Uses simple bounds checking for efficient rectangle containment
-        testing.
-
-        Arguments:
-            `coordinate`: The coordinate point to check.
-
-        Returns:
-            `bool`: Whether the coordinate lies within the rectangle.
-        """
         return (
             self.left < coordinate.left < self.right
             and self.top < coordinate.top < self.bottom

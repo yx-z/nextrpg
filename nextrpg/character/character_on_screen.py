@@ -100,7 +100,7 @@ class CharacterOnScreen:
         Returns:
             All visual elements for the character.
         """
-        # TODO: add visuals.
+        # TODO: Add visuals.
         return (self.draw_on_screen,)
 
     @property

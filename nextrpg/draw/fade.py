@@ -152,15 +152,6 @@ class FadeIn(Fade):
     @override
     @property
     def _percentage(self) -> float:
-        """
-        Get the fade-in completion percentage.
-
-        Calculates the percentage based on elapsed time divided by total
-        duration.
-
-        Returns:
-            The fade-in completion percentage (0.0 to 1.0).
-        """
         return self._elapsed / self.duration
 
 
@@ -176,15 +167,6 @@ class FadeOut(Fade):
     @override
     @property
     def _percentage(self) -> float:
-        """
-        Get the fade-out completion percentage.
-
-        Calculates the percentage based on remaining time divided by total
-        duration, so it decreases from 1.0 to 0.0.
-
-        Returns:
-            The fade-out completion percentage (1.0 to 0.0).
-        """
         remaining = self.duration - self._elapsed
         return remaining / self.duration
 

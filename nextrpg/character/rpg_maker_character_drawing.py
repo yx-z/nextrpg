@@ -261,18 +261,6 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
 
     @override
     def turn(self, direction: Direction) -> Self:
-        """
-        Turn the character to face a new direction.
-
-        Updates the character's direction and resets animation frames for all
-        directions except the new direction.
-
-        Arguments:
-            `direction`: The new direction to face.
-
-        Returns:
-            `RpgMakerCharacterDrawing`: The updated character state.
-        """
         frames = {
             d: frames if d == _adjust(direction) else frames.reset
             for d, frames in self._frames.items()
@@ -281,20 +269,6 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
 
     @override
     def tick_move(self, time_delta: Millisecond) -> Self:
-        """
-        Update the character's movement animation.
-
-        Advances the animation frames for all directions based on the elapsed
-        time, with the current direction being the only one that actually
-        animates.
-
-        Arguments:
-            `time_delta`: The time elapsed since the last update in
-                milliseconds.
-
-        Returns:
-            `RpgMakerCharacterDrawing`: The updated character state.
-        """
         frames = {
             direction: self._tick_frames(time_delta, direction)
             for direction, frames in self._frames.items()
@@ -321,19 +295,6 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
 
     @override
     def tick_idle(self, time_delta: Millisecond) -> Self:
-        """
-        Update the character's idle animation.
-
-        If idle animation is enabled, advances the movement animation.
-        Otherwise, resets all animation frames to their initial state.
-
-        Arguments:
-            `time_delta`: The time elapsed since the last update in
-                milliseconds.
-
-        Returns:
-            `RpgMakerCharacterDrawing`: The updated character state.
-        """
         if self.animate_on_idle:
             return self.tick_move(time_delta)
         frames = {d: frames.reset for d, frames in self._frames.items()}
