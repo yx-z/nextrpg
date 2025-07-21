@@ -14,10 +14,12 @@ Features:
 
 from abc import ABC, abstractmethod
 from dataclasses import KW_ONLY, dataclass, field, replace
-from typing import Self, override
+from functools import cached_property
+from typing import Self, TypeIs, override
 
 from nextrpg.core.model import not_constructor_below
 from nextrpg.core.time import Millisecond
+from nextrpg.draw.animation import Animation
 from nextrpg.draw.color import alpha_from_percentage
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.global_config.global_config import config
@@ -39,7 +41,12 @@ class Fade(ABC):
         _elapsed: Internal elapsed time tracking.
     """
 
-    resource: DrawOnScreen | tuple[DrawOnScreen, ...]
+    resource: (
+        DrawOnScreen
+        | tuple[DrawOnScreen, ...]
+        | Animation
+        | tuple[Animation, ...]
+    )
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
     )
@@ -63,7 +70,9 @@ class Fade(ABC):
             return self._complete
         if self._elapsed == 0:
             return self._start
-        return self._resource_tuple
+
+        alpha = alpha_from_percentage(self._percentage)
+        return tuple(d.set_alpha(alpha) for d in self._draw_on_screens)
 
     def tick(self, time_delta: Millisecond) -> Self:
         """
@@ -78,16 +87,15 @@ class Fade(ABC):
         Returns:
             A new fade instance with updated state.
         """
-        if self.complete:
-            return self
-
         elapsed = self._elapsed + time_delta
-        alpha = alpha_from_percentage(self._percentage)
-        if isinstance(self.resource, DrawOnScreen):
-            resource = self.resource.set_alpha(alpha)
-        else:
-            resource = tuple(d.set_alpha(alpha) for d in self.resource)
-        return replace(self, _elapsed=elapsed, resource=resource)
+        if isinstance(self.resource, Animation):
+            return replace(
+                self, resource=self.resource.tick(time_delta), _elapsed=elapsed
+            )
+        if _is_animation_tuple(self.resource):
+            animations = tuple(a.tick(time_delta) for a in self.resource)
+            return replace(self, resource=animations, _elapsed=elapsed)
+        return replace(self, _elapsed=elapsed)
 
     @property
     def complete(self) -> bool:
@@ -99,10 +107,14 @@ class Fade(ABC):
         """
         return self._elapsed >= self.duration
 
-    @property
-    def _resource_tuple(self) -> tuple[DrawOnScreen, ...]:
+    @cached_property
+    def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         if isinstance(self.resource, DrawOnScreen):
             return (self.resource,)
+        if isinstance(self.resource, Animation):
+            return self.resource.draw_on_screens
+        if _is_animation_tuple(self.resource):
+            return tuple(d for a in self.resource for d in a.draw_on_screens)
         return self.resource
 
     @property
@@ -153,7 +165,7 @@ class FadeIn(Fade):
     @override
     @property
     def _complete(self) -> tuple[DrawOnScreen, ...]:
-        return self._resource_tuple
+        return self._draw_on_screens
 
     @override
     @property
@@ -179,9 +191,26 @@ class FadeOut(Fade):
     @override
     @property
     def _start(self) -> tuple[DrawOnScreen, ...]:
-        return self._resource_tuple
+        return self._draw_on_screens
 
     @override
     @property
     def _complete(self) -> tuple[DrawOnScreen, ...]:
         return ()
+
+
+def _is_animation_tuple(
+    resource: (
+        DrawOnScreen
+        | tuple[DrawOnScreen, ...]
+        | Animation
+        | tuple[Animation, ...]
+    ),
+) -> TypeIs[tuple[Animation, ...]]:
+    if not resource:
+        return False
+    if not isinstance(resource, tuple):
+        return False
+    if not isinstance(resource[0], Animation):
+        return False
+    return True
