@@ -100,7 +100,7 @@ from nextrpg.character.character_drawing import *
 from nextrpg.character.character_on_screen import *
 from nextrpg.character.moving_character_on_screen import *
 from nextrpg.character.moving_npc_on_screen import *
-from nextrpg.character.npcs import *
+from nextrpg.character.npc_on_screen import *
 from nextrpg.character.player_on_screen import *
 from nextrpg.character.rpg_maker_character_drawing import *
 from nextrpg.core.cached_decorator import *

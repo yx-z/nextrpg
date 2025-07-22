@@ -26,7 +26,7 @@ from typing import override
 
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.character.npcs import RpgEventScene
+from nextrpg.scene.rpg_event_scene import RpgEventScene
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.model import (

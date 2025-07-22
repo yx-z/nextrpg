@@ -4,7 +4,7 @@ from functools import cached_property
 from typing import override
 
 from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
-from nextrpg.character.npcs import RpgEventScene
+from nextrpg.scene.rpg_event_scene import RpgEventScene
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.model import (
     dataclass_with_instance_init,

@@ -1,104 +1,18 @@
-"""
-NPC (Non-Player Character) system for `nextrpg`.
-
-This module provides the core NPC functionality for the `nextrpg` game engine.
-It includes classes for managing NPCs on screen, event specifications, and scene
-management for player-NPC interactions.
-
-Features:
-    - `NpcOnScreen`: In-game NPC interface for stationary NPCs
-    - `EventfulScene`: Scene that supports event execution via coroutines/generators
-    - `RpgEventScene`: Scene wrapper for RPG events
-    - `NpcSpec`: Base class for NPC specifications
-    - Type aliases for event specifications and generators
-"""
-
-from collections.abc import Callable, Generator
-from dataclasses import KW_ONLY, dataclass, field, replace
+from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from typing import Any, Self
 
-from nextrpg.character.character_on_screen import (
-    CharacterOnScreen,
-    CharacterSpec,
-)
+from nextrpg.event.pygame_event import PygameEvent, KeyPressDown, KeyboardKey
+from nextrpg.core.time import Millisecond
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.core.dimension import PixelPerMillisecond
+from nextrpg.character.npc_on_screen import RpgEventGenerator, NpcOnScreen
+from nextrpg.scene.scene import Scene
 from nextrpg.core.event_as_attr import event_as_attr
 from nextrpg.core.logger import Logger
-from nextrpg.core.model import (
-    dataclass_with_instance_init,
-    instance_init,
-    not_constructor_below,
-)
-from nextrpg.core.time import Millisecond
-from nextrpg.event.event_transformer import transform_and_compile
-from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
-from nextrpg.global_config.global_config import config
-from nextrpg.scene.scene import Scene
-
-logger = Logger("Npcs")
+from nextrpg.core.model import not_constructor_below
 
 
-type RpgEventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, EventfulScene]
-"""Type alias for RPG event specification parameters.
-
-Contains the player, NPC, and scene context needed for event execution.
-"""
-
-type RpgEventSpec = Callable[[*RpgEventSpecParams], None]
-"""Abstract protocol to define RPG events for player/NPC interactions.
-
-This type represents a callable that defines the behavior of an RPG event
-when a player interacts with an NPC. The callable receives the player,
-NPC, and scene context as parameters.
-"""
-
-type RpgEventGenerator = Generator[RpgEventCallable, Any, None]
-"""The event generator type that can be used to yield an event.
-
-This type represents a generator that yields event callables and can
-receive values during execution. Used for implementing complex
-multi-step event sequences.
-"""
-
-type RpgEventCallable = Callable[
-    [RpgEventGenerator, EventfulScene], RpgEventScene
-]
-"""The event callable type that can be used to generate a scene for certain event.
-
-This type represents a callable that takes an event generator and scene,
-and returns a new scene that represents the current event state.
-"""
-
-
-@dataclass_with_instance_init
-class NpcOnScreen(CharacterOnScreen):
-    """In-game NPC interface for stationary NPCs.
-
-    This class represents an NPC that doesn't move on screen. It provides
-    the interface for player-NPC interactions and event handling.
-
-    Attributes:
-        spec: The NPC specification containing drawing and event information.
-        generator: Callable that generates RPG events for this NPC.
-
-    Example:
-        ```python
-        npc_spec = NpcSpec(
-            name="Villager",
-            drawing=character_drawing,
-            event=villager_dialog
-        )
-        npc = NpcOnScreen(spec=npc_spec)
-        ```
-    """
-
-    spec: NpcSpec
-    _: KW_ONLY = not_constructor_below()
-    generator: Callable[[*RpgEventSpecParams], RpgEventGenerator] = (
-        instance_init(lambda self: self.spec.generator)
-    )
+logger = Logger("RpgEventScene")
 
 
 @dataclass(frozen=True)
@@ -151,7 +65,7 @@ class EventfulScene(Scene):
         ):
             logger.debug(t"Collided with {npc.spec.object_name}")
             scene = self._trigger(npc)
-            generator = scene.npc.generator(scene.player, scene.npc, scene)
+            generator = scene.npc.spec.generator(scene.player, scene.npc, scene)
             logger.debug(t"Event {generator.__name__} started.")
             return next(generator)(generator, scene)
         return replace(self, player=self.player.event(event))
@@ -263,66 +177,3 @@ class RpgEventScene(Scene):
 
     generator: RpgEventGenerator
     scene: EventfulScene
-
-
-@dataclass(frozen=True, kw_only=True)
-class NpcSpec(CharacterSpec):
-    """Base class to define NPC specifications.
-
-    This class defines the complete specification for an NPC, including
-    its appearance, movement behavior, and event interactions.
-
-    Attributes:
-        event: Event specification for player/NPC interactions.
-        move_speed: Movement speed in pixels per millisecond.
-        idle_duration: Duration to stay idle in milliseconds.
-        move_duration: Duration to move in milliseconds.
-        cyclic_walk: Whether the NPC should walk in cycles.
-
-    Example:
-        ```python
-        npc_spec = NpcSpec(
-            name="Merchant",
-            drawing=merchant_drawing,
-            event=shop_dialog,
-            move_speed=0.05,
-            idle_duration=2000,
-            move_duration=1000,
-            cyclic_walk=True
-        )
-        ```
-    """
-
-    event: RpgEventSpec
-    move_speed: PixelPerMillisecond = field(
-        default_factory=lambda: config().character.move_speed
-    )
-    idle_duration: Millisecond = field(
-        default_factory=lambda: config().character.idle_duration
-    )
-    move_duration: Millisecond = field(
-        default_factory=lambda: config().character.move_duration
-    )
-    cyclic_walk: bool = True
-
-    @cached_property
-    def generator(self) -> Callable[[*RpgEventSpecParams], RpgEventGenerator]:
-        """Create a generator function from the event specification.
-
-        This method transforms the event specification into a generator
-        function that can be used for event execution.
-
-        Returns:
-            A callable that creates an event generator from the specification.
-        """
-
-        def yield_event(*args: Any, **kwargs: Any) -> RpgEventGenerator:
-            fun = self.event
-            ctx = fun.__globals__ | {
-                v: c.cell_contents
-                for v, c in zip(fun.__code__.co_freevars, fun.__closure__ or ())
-            }
-            exec(transform_and_compile(fun), ctx)
-            return ctx[fun.__name__](*args, **kwargs)
-
-        return yield_event

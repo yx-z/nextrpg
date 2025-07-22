@@ -6,7 +6,6 @@ from nextrpg import (
     CharacterDrawing,
     CharacterSpec,
     Drawing,
-    EventfulScene,
     MapScene,
     Move,
     NpcOnScreen,
@@ -19,6 +18,7 @@ from nextrpg import (
     Trim,
     Direction,
 )
+from nextrpg.scene.rpg_event_scene import EventfulScene
 
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:

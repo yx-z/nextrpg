@@ -156,7 +156,7 @@
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeyPressDown</span><span class="p">,</span> <span class="n">KeyboardKey</span><span class="p">,</span> <span class="n">PygameEvent</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.npcs</span><span class="w"> </span><span class="kn">import</span> <span class="n">RpgEventScene</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.rpg_event_scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">RpgEventScene</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.model</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>    <span class="n">dataclass_with_instance_init</span><span class="p">,</span>
@@ -304,7 +304,7 @@
                     <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
 
     <span class="def">class</span>
-    <span class="name">SayEventAddOn</span><wbr>(<span class="base"><a href="../character/npcs.html#RpgEventScene">nextrpg.character.npcs.RpgEventScene</a></span>, <span class="base">abc.ABC</span>):
+    <span class="name">SayEventAddOn</span><wbr>(<span class="base"><a href="rpg_event_scene.html#RpgEventScene">nextrpg.scene.rpg_event_scene.RpgEventScene</a></span>, <span class="base">abc.ABC</span>):
 
                 <label class="view-source-button" for="SayEventAddOn-view-source"><span>View Source</span></label>
 
@@ -429,9 +429,9 @@ positioning.</p>
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
-                                    <div><dt><a href="../character/npcs.html#RpgEventScene">nextrpg.character.npcs.RpgEventScene</a></dt>
-                                <dd id="SayEventAddOn.generator" class="variable"><a href="../character/npcs.html#RpgEventScene.generator">generator</a></dd>
-                <dd id="SayEventAddOn.scene" class="variable"><a href="../character/npcs.html#RpgEventScene.scene">scene</a></dd>
+                                    <div><dt><a href="rpg_event_scene.html#RpgEventScene">nextrpg.scene.rpg_event_scene.RpgEventScene</a></dt>
+                                <dd id="SayEventAddOn.generator" class="variable"><a href="rpg_event_scene.html#RpgEventScene.generator">generator</a></dd>
+                <dd id="SayEventAddOn.scene" class="variable"><a href="rpg_event_scene.html#RpgEventScene.scene">scene</a></dd>
 
             </div>
             <div><dt><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></dt>
@@ -498,7 +498,7 @@ positioning.</p>
                             <div id="FadeInAddOn.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">FadeInAddOn</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">generator</span><span class="p">:</span> <span class="n">RpgEventGenerator</span>,</span><span class="param">	<span class="n">scene</span><span class="p">:</span> <span class="n"><a href="../character/npcs.html#EventfulScene">nextrpg.character.npcs.EventfulScene</a></span>,</span><span class="param">	<span class="n">npc_object_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">initial_coord</span><span class="p">:</span> <span class="n"><a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">background</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>,</span><span class="param">	<span class="n">text</span><span class="p">:</span> <span class="n"><a href="../draw/text_on_screen.html#TextOnScreen">nextrpg.draw.text_on_screen.TextOnScreen</a></span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="n"><a href="../global_config/say_event_config.html#SayEventConfig">nextrpg.global_config.say_event_config.SayEventConfig</a></span>,</span><span class="param">	<span class="n">fade_in</span><span class="p">:</span> <span class="n"><a href="../draw/fade.html#FadeIn">nextrpg.draw.fade.FadeIn</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">FadeInAddOn</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">generator</span><span class="p">:</span> <span class="n">RpgEventGenerator</span>,</span><span class="param">	<span class="n">scene</span><span class="p">:</span> <span class="n"><a href="rpg_event_scene.html#EventfulScene">nextrpg.scene.rpg_event_scene.EventfulScene</a></span>,</span><span class="param">	<span class="n">npc_object_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">initial_coord</span><span class="p">:</span> <span class="n"><a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">background</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>,</span><span class="param">	<span class="n">text</span><span class="p">:</span> <span class="n"><a href="../draw/text_on_screen.html#TextOnScreen">nextrpg.draw.text_on_screen.TextOnScreen</a></span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="n"><a href="../global_config/say_event_config.html#SayEventConfig">nextrpg.global_config.say_event_config.SayEventConfig</a></span>,</span><span class="param">	<span class="n">fade_in</span><span class="p">:</span> <span class="n"><a href="../draw/fade.html#FadeIn">nextrpg.draw.fade.FadeIn</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -612,9 +612,9 @@ positioning.</p>
                 <dd id="FadeInAddOn.draw_on_screens" class="variable"><a href="#SayEventAddOn.draw_on_screens">draw_on_screens</a></dd>
 
             </div>
-            <div><dt><a href="../character/npcs.html#RpgEventScene">nextrpg.character.npcs.RpgEventScene</a></dt>
-                                <dd id="FadeInAddOn.generator" class="variable"><a href="../character/npcs.html#RpgEventScene.generator">generator</a></dd>
-                <dd id="FadeInAddOn.scene" class="variable"><a href="../character/npcs.html#RpgEventScene.scene">scene</a></dd>
+            <div><dt><a href="rpg_event_scene.html#RpgEventScene">nextrpg.scene.rpg_event_scene.RpgEventScene</a></dt>
+                                <dd id="FadeInAddOn.generator" class="variable"><a href="rpg_event_scene.html#RpgEventScene.generator">generator</a></dd>
+                <dd id="FadeInAddOn.scene" class="variable"><a href="rpg_event_scene.html#RpgEventScene.scene">scene</a></dd>
 
             </div>
             <div><dt><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></dt>
@@ -689,7 +689,7 @@ positioning.</p>
                             <div id="TypingAddOn.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">TypingAddOn</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">generator</span><span class="p">:</span> <span class="n">RpgEventGenerator</span>,</span><span class="param">	<span class="n">scene</span><span class="p">:</span> <span class="n"><a href="../character/npcs.html#EventfulScene">nextrpg.character.npcs.EventfulScene</a></span>,</span><span class="param">	<span class="n">npc_object_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">initial_coord</span><span class="p">:</span> <span class="n"><a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">background</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>,</span><span class="param">	<span class="n">text</span><span class="p">:</span> <span class="n"><a href="../draw/text_on_screen.html#TextOnScreen">nextrpg.draw.text_on_screen.TextOnScreen</a></span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="n"><a href="../global_config/say_event_config.html#SayEventConfig">nextrpg.global_config.say_event_config.SayEventConfig</a></span>,</span><span class="param">	<span class="n">typewriter</span><span class="p">:</span> <span class="n"><a href="../draw/typewriter.html#Typewriter">nextrpg.draw.typewriter.Typewriter</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">TypingAddOn</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">generator</span><span class="p">:</span> <span class="n">RpgEventGenerator</span>,</span><span class="param">	<span class="n">scene</span><span class="p">:</span> <span class="n"><a href="rpg_event_scene.html#EventfulScene">nextrpg.scene.rpg_event_scene.EventfulScene</a></span>,</span><span class="param">	<span class="n">npc_object_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">initial_coord</span><span class="p">:</span> <span class="n"><a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">background</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>,</span><span class="param">	<span class="n">text</span><span class="p">:</span> <span class="n"><a href="../draw/text_on_screen.html#TextOnScreen">nextrpg.draw.text_on_screen.TextOnScreen</a></span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="n"><a href="../global_config/say_event_config.html#SayEventConfig">nextrpg.global_config.say_event_config.SayEventConfig</a></span>,</span><span class="param">	<span class="n">typewriter</span><span class="p">:</span> <span class="n"><a href="../draw/typewriter.html#Typewriter">nextrpg.draw.typewriter.Typewriter</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -874,9 +874,9 @@ efficiently.</p>
                 <dd id="TypingAddOn.draw_on_screens" class="variable"><a href="#SayEventAddOn.draw_on_screens">draw_on_screens</a></dd>
 
             </div>
-            <div><dt><a href="../character/npcs.html#RpgEventScene">nextrpg.character.npcs.RpgEventScene</a></dt>
-                                <dd id="TypingAddOn.generator" class="variable"><a href="../character/npcs.html#RpgEventScene.generator">generator</a></dd>
-                <dd id="TypingAddOn.scene" class="variable"><a href="../character/npcs.html#RpgEventScene.scene">scene</a></dd>
+            <div><dt><a href="rpg_event_scene.html#RpgEventScene">nextrpg.scene.rpg_event_scene.RpgEventScene</a></dt>
+                                <dd id="TypingAddOn.generator" class="variable"><a href="rpg_event_scene.html#RpgEventScene.generator">generator</a></dd>
+                <dd id="TypingAddOn.scene" class="variable"><a href="rpg_event_scene.html#RpgEventScene.scene">scene</a></dd>
 
             </div>
             <div><dt><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></dt>
@@ -929,7 +929,7 @@ efficiently.</p>
                             <div id="FadeOutAddOn.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">FadeOutAddOn</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">generator</span><span class="p">:</span> <span class="n">RpgEventGenerator</span>,</span><span class="param">	<span class="n">scene</span><span class="p">:</span> <span class="n"><a href="../character/npcs.html#EventfulScene">nextrpg.character.npcs.EventfulScene</a></span>,</span><span class="param">	<span class="n">npc_object_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">initial_coord</span><span class="p">:</span> <span class="n"><a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">draws</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="n"><a href="../global_config/say_event_config.html#SayEventConfig">nextrpg.global_config.say_event_config.SayEventConfig</a></span>,</span><span class="param">	<span class="n">fade_out</span><span class="p">:</span> <span class="n"><a href="../draw/fade.html#FadeOut">nextrpg.draw.fade.FadeOut</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">FadeOutAddOn</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">generator</span><span class="p">:</span> <span class="n">RpgEventGenerator</span>,</span><span class="param">	<span class="n">scene</span><span class="p">:</span> <span class="n"><a href="rpg_event_scene.html#EventfulScene">nextrpg.scene.rpg_event_scene.EventfulScene</a></span>,</span><span class="param">	<span class="n">npc_object_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">initial_coord</span><span class="p">:</span> <span class="n"><a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span> <span class="o">|</span> <span class="kc">None</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">draws</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="../draw/draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="n"><a href="../global_config/say_event_config.html#SayEventConfig">nextrpg.global_config.say_event_config.SayEventConfig</a></span>,</span><span class="param">	<span class="n">fade_out</span><span class="p">:</span> <span class="n"><a href="../draw/fade.html#FadeOut">nextrpg.draw.fade.FadeOut</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -1024,9 +1024,9 @@ efficiently.</p>
                 <dd id="FadeOutAddOn.draw_on_screens" class="variable"><a href="#SayEventAddOn.draw_on_screens">draw_on_screens</a></dd>
 
             </div>
-            <div><dt><a href="../character/npcs.html#RpgEventScene">nextrpg.character.npcs.RpgEventScene</a></dt>
-                                <dd id="FadeOutAddOn.generator" class="variable"><a href="../character/npcs.html#RpgEventScene.generator">generator</a></dd>
-                <dd id="FadeOutAddOn.scene" class="variable"><a href="../character/npcs.html#RpgEventScene.scene">scene</a></dd>
+            <div><dt><a href="rpg_event_scene.html#RpgEventScene">nextrpg.scene.rpg_event_scene.RpgEventScene</a></dt>
+                                <dd id="FadeOutAddOn.generator" class="variable"><a href="rpg_event_scene.html#RpgEventScene.generator">generator</a></dd>
+                <dd id="FadeOutAddOn.scene" class="variable"><a href="rpg_event_scene.html#RpgEventScene.scene">scene</a></dd>
 
             </div>
             <div><dt><a href="scene.html#Scene">nextrpg.scene.scene.Scene</a></dt>
