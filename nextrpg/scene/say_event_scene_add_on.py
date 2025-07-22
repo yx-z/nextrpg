@@ -27,7 +27,7 @@ class SayEventAddOn(RpgEventScene, ABC):
     @property
     @abstractmethod
     def add_ons(self) -> tuple[DrawOnScreen, ...]:
-        return NotImplemented
+        """"""
 
     @override
     @cached_property

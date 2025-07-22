@@ -43,7 +43,7 @@ from nextrpg.event.rpg_event import register_rpg_event
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.gui.area import screen
-from nextrpg.scene.say_event_add_on import FadeInAddOn
+from nextrpg.scene.say_event_scene_add_on import FadeInAddOn
 from nextrpg.scene.scene import Scene
 
 

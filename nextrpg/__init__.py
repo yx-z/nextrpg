@@ -144,3 +144,4 @@ from nextrpg.scene.map_util import *
 from nextrpg.scene.say_event_scene import *
 from nextrpg.scene.transition_scene import *
 from nextrpg.draw.typewriter import *
+from nextrpg.scene.say_event_scene_add_on import *

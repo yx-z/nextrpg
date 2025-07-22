@@ -11,6 +11,7 @@ from nextrpg import (
     DrawOnScreen,
     EventfulScene,
     NpcOnScreen,
+    NpcSpec,
     PlayerOnScreen,
     PygameEvent,
     Scene,
@@ -91,6 +92,33 @@ class MockScene(Scene):
 class MockEventfulScene(EventfulScene):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         pass
+
+    @property
+    def npcs(self) -> tuple[NpcOnScreen, ...]:
+        return ()
+
+    @property
+    def player(self) -> PlayerOnScreen:
+        return PlayerOnScreen(
+            coordinate=Coordinate(0, 0),
+            spec=CharacterSpec(
+                object_name="test", character=MockCharacterDrawing()
+            ),
+            collisions=(),
+        )
+
+    @property
+    def _npc_dict(self) -> dict[str, NpcOnScreen]:
+        return {
+            "test": NpcOnScreen(
+                coordinate=Coordinate(0, 0),
+                spec=NpcSpec(
+                    object_name="",
+                    character=MockCharacterDrawing(),
+                    event=lambda *_: None,
+                ),
+            )
+        }
 
 
 class MockTextOnScreen(TextOnScreen):
