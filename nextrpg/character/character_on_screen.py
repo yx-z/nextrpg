@@ -19,7 +19,7 @@ from typing import Self, override
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.event_as_attr import event_as_attr
+from nextrpg.event.event_as_attr import event_as_attr
 from nextrpg.core.model import (
     dataclass_with_instance_init,
     instance_init,

@@ -106,7 +106,7 @@ from nextrpg.character.rpg_maker_character_drawing import *
 from nextrpg.core.cached_decorator import *
 from nextrpg.core.coordinate import *
 from nextrpg.core.dimension import *
-from nextrpg.core.event_as_attr import *
+from nextrpg.event.event_as_attr import *
 from nextrpg.core.logger import *
 from nextrpg.core.model import *
 from nextrpg.core.walk import *
