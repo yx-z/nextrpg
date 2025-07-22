@@ -1,5 +1,5 @@
 from pathlib import Path
-from test.util import MockCharacterDrawing, MockSurface, override_config
+from test.util import MockCharacterDrawing, MockSurface, MockPlayerOnScreen
 from types import SimpleNamespace
 from typing import Any
 from unittest.mock import MagicMock, Mock
@@ -22,6 +22,7 @@ from nextrpg import (
     ResourceConfig,
     Size,
     TileBottomAndDrawOnScreen,
+    override_config,
 )
 
 
@@ -59,8 +60,6 @@ def test_map_scene(mocker: MockerFixture) -> None:
     assert map.draw_on_screens_before_shift
     assert map.event(Quit(Event(QUIT)))
     assert map.tick(0)
-    assert map.tick_without_transition(0)
-    assert map.tick_without_event(0)
 
 
 def test_move(mocker: MockerFixture) -> None:
@@ -78,7 +77,7 @@ def test_move(mocker: MockerFixture) -> None:
 
     def to_scene(*_: Any) -> MapScene:
         return MapScene(
-            tmx_file="test2",
+            tmx_file="test3",
             player_spec=CharacterSpec(
                 character=MockCharacterDrawing(), object_name=""
             ),
@@ -92,6 +91,7 @@ def test_move(mocker: MockerFixture) -> None:
         moves=(Move("from", "to", to_scene), Move("from2", "to2", to_scene)),
     )
     assert map._move_to_scene
+
     assert MapScene(
         tmx_file="test2",
         player_spec=CharacterSpec(
@@ -114,6 +114,18 @@ def test_move(mocker: MockerFixture) -> None:
                 Move("from2", "test2", to_scene),
             ),
         )._move_to_scene
+
+    def to_scene2(*_: Any) -> MapScene:
+        return MapScene(
+            tmx_file="test2",
+            player_spec=CharacterSpec(
+                character=MockCharacterDrawing(), object_name=""
+            ),
+        )
+
+    assert Move("to_object", "trigger_object", to_scene2).to_scene(
+        map, MockPlayerOnScreen()
+    )
 
 
 def test_init_npc(mocker: MockerFixture) -> None:

@@ -1,8 +1,6 @@
-from test.util import override_config
-
 from pytest import raises
 
-from nextrpg import Config, DebugConfig, Logger
+from nextrpg import Config, DebugConfig, Logger, override_config
 
 
 @override_config(Config(debug=DebugConfig()))

@@ -1,4 +1,4 @@
-from test.util import MockCharacterDrawing, override_config
+from test.util import MockCharacterDrawing
 
 from pygame.event import Event
 from pygame.locals import K_RIGHT, K_SPACE, KEYDOWN, KEYUP, QUIT
@@ -14,6 +14,7 @@ from nextrpg import (
     Quit,
     Rectangle,
     Size,
+    override_config,
     pop_messages,
 )
 
@@ -49,3 +50,6 @@ def test_player_on_screen():
 
     with override_config(Config(debug=DebugConfig(ignore_map_collisions=True))):
         assert player._can_move(Coordinate(10, 20))
+
+    assert player.stop_move
+    assert player.start_move

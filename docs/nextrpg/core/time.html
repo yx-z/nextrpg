@@ -54,6 +54,15 @@
                         <li>
                                 <a class="variable" href="#Timer.complete">complete</a>
                         </li>
+                        <li>
+                                <a class="variable" href="#Timer.completed_percentage">completed_percentage</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Timer.remaining">remaining</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Timer.remaining_percentage">remaining_percentage</a>
+                        </li>
                 </ul>
 
             </li>
@@ -184,26 +193,38 @@
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="sd">    Get the current time point in milliseconds.</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="sd">    Returns the current time from pygame&#39;s clock, which is typically</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">    used for calculating time deltas in game loops.</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>    <span class="nd">@property</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">completed_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>    <span class="nd">@property</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">    Returns:</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        `Millisecond`: Current time in milliseconds.</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="sd">    Example:</span>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="sd">        ```python</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="sd">        start_time = get_timepoint()</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">        # ... do some work ...</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="sd">        end_time = get_timepoint()</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">        elapsed = end_time - start_time</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">        ```</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="nd">@property</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="sd">    Get the current time point in milliseconds.</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">    Returns the current time from pygame&#39;s clock, which is typically</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">    used for calculating time deltas in game loops.</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">    Returns:</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">        `Millisecond`: Current time in milliseconds.</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">    Example:</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">        ```python</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="sd">        start_time = get_timepoint()</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a><span class="sd">        # ... do some work ...</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">        end_time = get_timepoint()</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">        elapsed = end_time - start_time</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">        ```</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -323,6 +344,18 @@
 </span><span id="Timer-101"><a href="#Timer-101"><span class="linenos">101</span></a><span class="sd">            ```</span>
 </span><span id="Timer-102"><a href="#Timer-102"><span class="linenos">102</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Timer-103"><a href="#Timer-103"><span class="linenos">103</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="Timer-104"><a href="#Timer-104"><span class="linenos">104</span></a>
+</span><span id="Timer-105"><a href="#Timer-105"><span class="linenos">105</span></a>    <span class="nd">@property</span>
+</span><span id="Timer-106"><a href="#Timer-106"><span class="linenos">106</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">completed_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="Timer-107"><a href="#Timer-107"><span class="linenos">107</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="Timer-108"><a href="#Timer-108"><span class="linenos">108</span></a>
+</span><span id="Timer-109"><a href="#Timer-109"><span class="linenos">109</span></a>    <span class="nd">@property</span>
+</span><span id="Timer-110"><a href="#Timer-110"><span class="linenos">110</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
+</span><span id="Timer-111"><a href="#Timer-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span>
+</span><span id="Timer-112"><a href="#Timer-112"><span class="linenos">112</span></a>
+</span><span id="Timer-113"><a href="#Timer-113"><span class="linenos">113</span></a>    <span class="nd">@property</span>
+</span><span id="Timer-114"><a href="#Timer-114"><span class="linenos">114</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="Timer-115"><a href="#Timer-115"><span class="linenos">115</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
@@ -563,6 +596,60 @@ elapsed time set to 0.</p>
 
 
                             </div>
+                            <div id="Timer.completed_percentage" class="classattr">
+                                        <input id="Timer.completed_percentage-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">completed_percentage</span><span class="annotation">: float</span>
+
+                <label class="view-source-button" for="Timer.completed_percentage-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Timer.completed_percentage"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.completed_percentage-105"><a href="#Timer.completed_percentage-105"><span class="linenos">105</span></a>    <span class="nd">@property</span>
+</span><span id="Timer.completed_percentage-106"><a href="#Timer.completed_percentage-106"><span class="linenos">106</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">completed_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="Timer.completed_percentage-107"><a href="#Timer.completed_percentage-107"><span class="linenos">107</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="Timer.remaining" class="classattr">
+                                        <input id="Timer.remaining-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">remaining</span><span class="annotation">: <a href="#Millisecond">Millisecond</a></span>
+
+                <label class="view-source-button" for="Timer.remaining-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Timer.remaining"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.remaining-109"><a href="#Timer.remaining-109"><span class="linenos">109</span></a>    <span class="nd">@property</span>
+</span><span id="Timer.remaining-110"><a href="#Timer.remaining-110"><span class="linenos">110</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
+</span><span id="Timer.remaining-111"><a href="#Timer.remaining-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="Timer.remaining_percentage" class="classattr">
+                                        <input id="Timer.remaining_percentage-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">remaining_percentage</span><span class="annotation">: float</span>
+
+                <label class="view-source-button" for="Timer.remaining_percentage-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Timer.remaining_percentage"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.remaining_percentage-113"><a href="#Timer.remaining_percentage-113"><span class="linenos">113</span></a>    <span class="nd">@property</span>
+</span><span id="Timer.remaining_percentage-114"><a href="#Timer.remaining_percentage-114"><span class="linenos">114</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="Timer.remaining_percentage-115"><a href="#Timer.remaining_percentage-115"><span class="linenos">115</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
                 </section>
                 <section id="get_timepoint">
                             <input id="get_timepoint-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -575,25 +662,25 @@ elapsed time set to 0.</p>
 
     </div>
     <a class="headerlink" href="#get_timepoint"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_timepoint-106"><a href="#get_timepoint-106"><span class="linenos">106</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
-</span><span id="get_timepoint-107"><a href="#get_timepoint-107"><span class="linenos">107</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="get_timepoint-108"><a href="#get_timepoint-108"><span class="linenos">108</span></a><span class="sd">    Get the current time point in milliseconds.</span>
-</span><span id="get_timepoint-109"><a href="#get_timepoint-109"><span class="linenos">109</span></a>
-</span><span id="get_timepoint-110"><a href="#get_timepoint-110"><span class="linenos">110</span></a><span class="sd">    Returns the current time from pygame&#39;s clock, which is typically</span>
-</span><span id="get_timepoint-111"><a href="#get_timepoint-111"><span class="linenos">111</span></a><span class="sd">    used for calculating time deltas in game loops.</span>
-</span><span id="get_timepoint-112"><a href="#get_timepoint-112"><span class="linenos">112</span></a>
-</span><span id="get_timepoint-113"><a href="#get_timepoint-113"><span class="linenos">113</span></a><span class="sd">    Returns:</span>
-</span><span id="get_timepoint-114"><a href="#get_timepoint-114"><span class="linenos">114</span></a><span class="sd">        `Millisecond`: Current time in milliseconds.</span>
-</span><span id="get_timepoint-115"><a href="#get_timepoint-115"><span class="linenos">115</span></a>
-</span><span id="get_timepoint-116"><a href="#get_timepoint-116"><span class="linenos">116</span></a><span class="sd">    Example:</span>
-</span><span id="get_timepoint-117"><a href="#get_timepoint-117"><span class="linenos">117</span></a><span class="sd">        ```python</span>
-</span><span id="get_timepoint-118"><a href="#get_timepoint-118"><span class="linenos">118</span></a><span class="sd">        start_time = get_timepoint()</span>
-</span><span id="get_timepoint-119"><a href="#get_timepoint-119"><span class="linenos">119</span></a><span class="sd">        # ... do some work ...</span>
-</span><span id="get_timepoint-120"><a href="#get_timepoint-120"><span class="linenos">120</span></a><span class="sd">        end_time = get_timepoint()</span>
-</span><span id="get_timepoint-121"><a href="#get_timepoint-121"><span class="linenos">121</span></a><span class="sd">        elapsed = end_time - start_time</span>
-</span><span id="get_timepoint-122"><a href="#get_timepoint-122"><span class="linenos">122</span></a><span class="sd">        ```</span>
-</span><span id="get_timepoint-123"><a href="#get_timepoint-123"><span class="linenos">123</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_timepoint-124"><a href="#get_timepoint-124"><span class="linenos">124</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_timepoint-118"><a href="#get_timepoint-118"><span class="linenos">118</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
+</span><span id="get_timepoint-119"><a href="#get_timepoint-119"><span class="linenos">119</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="get_timepoint-120"><a href="#get_timepoint-120"><span class="linenos">120</span></a><span class="sd">    Get the current time point in milliseconds.</span>
+</span><span id="get_timepoint-121"><a href="#get_timepoint-121"><span class="linenos">121</span></a>
+</span><span id="get_timepoint-122"><a href="#get_timepoint-122"><span class="linenos">122</span></a><span class="sd">    Returns the current time from pygame&#39;s clock, which is typically</span>
+</span><span id="get_timepoint-123"><a href="#get_timepoint-123"><span class="linenos">123</span></a><span class="sd">    used for calculating time deltas in game loops.</span>
+</span><span id="get_timepoint-124"><a href="#get_timepoint-124"><span class="linenos">124</span></a>
+</span><span id="get_timepoint-125"><a href="#get_timepoint-125"><span class="linenos">125</span></a><span class="sd">    Returns:</span>
+</span><span id="get_timepoint-126"><a href="#get_timepoint-126"><span class="linenos">126</span></a><span class="sd">        `Millisecond`: Current time in milliseconds.</span>
+</span><span id="get_timepoint-127"><a href="#get_timepoint-127"><span class="linenos">127</span></a>
+</span><span id="get_timepoint-128"><a href="#get_timepoint-128"><span class="linenos">128</span></a><span class="sd">    Example:</span>
+</span><span id="get_timepoint-129"><a href="#get_timepoint-129"><span class="linenos">129</span></a><span class="sd">        ```python</span>
+</span><span id="get_timepoint-130"><a href="#get_timepoint-130"><span class="linenos">130</span></a><span class="sd">        start_time = get_timepoint()</span>
+</span><span id="get_timepoint-131"><a href="#get_timepoint-131"><span class="linenos">131</span></a><span class="sd">        # ... do some work ...</span>
+</span><span id="get_timepoint-132"><a href="#get_timepoint-132"><span class="linenos">132</span></a><span class="sd">        end_time = get_timepoint()</span>
+</span><span id="get_timepoint-133"><a href="#get_timepoint-133"><span class="linenos">133</span></a><span class="sd">        elapsed = end_time - start_time</span>
+</span><span id="get_timepoint-134"><a href="#get_timepoint-134"><span class="linenos">134</span></a><span class="sd">        ```</span>
+</span><span id="get_timepoint-135"><a href="#get_timepoint-135"><span class="linenos">135</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_timepoint-136"><a href="#get_timepoint-136"><span class="linenos">136</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
 </span></pre></div>
 
 

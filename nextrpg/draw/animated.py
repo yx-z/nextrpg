@@ -5,8 +5,9 @@ from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.core.time import Millisecond
 
 
-class Animation(ABC):
+class Animated(ABC):
     @property
+    @abstractmethod
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         """ """
 

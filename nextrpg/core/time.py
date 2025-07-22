@@ -101,6 +101,18 @@ class Timer:
         """
         return self.elapsed > self.duration
 
+    @property
+    def completed_percentage(self) -> float:
+        return self.elapsed / self.duration
+
+    @property
+    def remaining(self) -> Millisecond:
+        return self.duration - self.elapsed
+
+    @property
+    def remaining_percentage(self) -> float:
+        return self.remaining / self.duration
+
 
 def get_timepoint() -> Millisecond:
     """

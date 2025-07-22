@@ -41,7 +41,7 @@ from nextrpg.core.model import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw_on_screen import Drawing
-from nextrpg.draw.frames import CyclicFrames
+from nextrpg.draw.cyclic_frames import CyclicFrames
 from nextrpg.global_config.global_config import config
 
 

@@ -1,4 +1,4 @@
-from test.util import MockSurface, override_config
+from test.util import MockSurface
 
 from pygame import K_F1, K_LEFT, KEYDOWN, VIDEORESIZE, Event
 from pytest import raises
@@ -21,6 +21,7 @@ from nextrpg import (
     Window,
     config,
     gui_size,
+    override_config,
 )
 
 

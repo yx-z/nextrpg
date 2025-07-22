@@ -1,5 +1,5 @@
 from pathlib import Path
-from test.util import MockSurface, override_config
+from test.util import MockSurface
 
 from pygame import Color, Surface
 from pygame.locals import SRCALPHA
@@ -15,6 +15,7 @@ from nextrpg import (
     Rectangle,
     Rgba,
     Size,
+    override_config,
 )
 
 

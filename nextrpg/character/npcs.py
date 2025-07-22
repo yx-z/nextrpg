@@ -133,20 +133,14 @@ class EventfulScene(Scene):
     """
 
     player: PlayerOnScreen
-    npcs: tuple[NpcOnScreen, ...] = field(default_factory=tuple)
+    npcs: tuple[NpcOnScreen, ...]
     _: KW_ONLY = not_constructor_below()
     npc: NpcOnScreen | None = None
     _event_generator: RpgEventGenerator | None = None
     _event_result: Any = None
 
-    @cached_property
-    def npc_dict(self) -> dict[str, NpcOnScreen]:
-        """Get a dictionary mapping NPC names to NPC objects.
-
-        Returns:
-            Dictionary with NPC object names as keys and NPC objects as values.
-        """
-        return {n.spec.object_name: n for n in self.npcs}
+    def get_npc(self, object_name: str) -> NpcOnScreen:
+        return self._npc_dict[object_name]
 
     def event(self, event: PygameEvent) -> Scene:
         if (
@@ -196,6 +190,10 @@ class EventfulScene(Scene):
             Scene that shall continue with the next event.
         """
         return replace(self, _event_generator=event, _event_result=result)
+
+    @cached_property
+    def _npc_dict(self) -> dict[str, NpcOnScreen]:
+        return {n.spec.object_name: n for n in self.npcs}
 
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:

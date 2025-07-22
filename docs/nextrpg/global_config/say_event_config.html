@@ -49,6 +49,9 @@
                                 <a class="variable" href="#SayEventConfig.fade_duration">fade_duration</a>
                         </li>
                         <li>
+                                <a class="variable" href="#SayEventConfig.text_delay">text_delay</a>
+                        </li>
+                        <li>
                                 <a class="variable" href="#SayEventConfig.name_color">name_color</a>
                         </li>
                         <li>
@@ -142,13 +145,14 @@ and timing parameters for text display.</p>
 </span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>
 </span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="n">background</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">WHITE</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">20</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>
 </span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">fade_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="n">name_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="n">center</span><span class="p">:</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="n">text</span><span class="p">:</span> <span class="n">TextConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="s2">&quot;Drawing | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="n">text_delay</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">20</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="n">name_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="n">center</span><span class="p">:</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="n">text</span><span class="p">:</span> <span class="n">TextConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="s2">&quot;Drawing | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
 </span></pre></div>
 
 
@@ -185,13 +189,14 @@ and timing parameters for text display.</p>
 </span><span id="SayEventConfig-42"><a href="#SayEventConfig-42"><span class="linenos">42</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="SayEventConfig-43"><a href="#SayEventConfig-43"><span class="linenos">43</span></a>
 </span><span id="SayEventConfig-44"><a href="#SayEventConfig-44"><span class="linenos">44</span></a>    <span class="n">background</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">WHITE</span>
-</span><span id="SayEventConfig-45"><a href="#SayEventConfig-45"><span class="linenos">45</span></a>    <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">20</span>
+</span><span id="SayEventConfig-45"><a href="#SayEventConfig-45"><span class="linenos">45</span></a>    <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>
 </span><span id="SayEventConfig-46"><a href="#SayEventConfig-46"><span class="linenos">46</span></a>    <span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>
 </span><span id="SayEventConfig-47"><a href="#SayEventConfig-47"><span class="linenos">47</span></a>    <span class="n">fade_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>
-</span><span id="SayEventConfig-48"><a href="#SayEventConfig-48"><span class="linenos">48</span></a>    <span class="n">name_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="SayEventConfig-49"><a href="#SayEventConfig-49"><span class="linenos">49</span></a>    <span class="n">center</span><span class="p">:</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="SayEventConfig-50"><a href="#SayEventConfig-50"><span class="linenos">50</span></a>    <span class="n">text</span><span class="p">:</span> <span class="n">TextConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="SayEventConfig-51"><a href="#SayEventConfig-51"><span class="linenos">51</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="s2">&quot;Drawing | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="SayEventConfig-48"><a href="#SayEventConfig-48"><span class="linenos">48</span></a>    <span class="n">text_delay</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">20</span>
+</span><span id="SayEventConfig-49"><a href="#SayEventConfig-49"><span class="linenos">49</span></a>    <span class="n">name_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="SayEventConfig-50"><a href="#SayEventConfig-50"><span class="linenos">50</span></a>    <span class="n">center</span><span class="p">:</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="SayEventConfig-51"><a href="#SayEventConfig-51"><span class="linenos">51</span></a>    <span class="n">text</span><span class="p">:</span> <span class="n">TextConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="SayEventConfig-52"><a href="#SayEventConfig-52"><span class="linenos">52</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="s2">&quot;Drawing | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
 </span></pre></div>
 
 
@@ -218,7 +223,7 @@ Defaults to 200ms.</li>
                             <div id="SayEventConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">SayEventConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">background</span><span class="p">:</span> <span class="n"><a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">20</span>,</span><span class="param">	<span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>,</span><span class="param">	<span class="n">fade_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>,</span><span class="param">	<span class="n">name_color</span><span class="p">:</span> <span class="n"><a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">center</span><span class="p">:</span> <span class="n"><a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">text</span><span class="p">:</span> <span class="n"><a href="text_config.html#TextConfig">nextrpg.global_config.text_config.TextConfig</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">drawing</span><span class="p">:</span> <span class="s1">&#39;Drawing | None&#39;</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
+        <span class="name">SayEventConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">background</span><span class="p">:</span> <span class="n"><a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>,</span><span class="param">	<span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>,</span><span class="param">	<span class="n">fade_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>,</span><span class="param">	<span class="n">text_delay</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">20</span>,</span><span class="param">	<span class="n">name_color</span><span class="p">:</span> <span class="n"><a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">center</span><span class="p">:</span> <span class="n"><a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">text</span><span class="p">:</span> <span class="n"><a href="text_config.html#TextConfig">nextrpg.global_config.text_config.TextConfig</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">drawing</span><span class="p">:</span> <span class="s1">&#39;Drawing | None&#39;</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
 
         
     </div>
@@ -242,7 +247,7 @@ Defaults to 200ms.</li>
                             <div id="SayEventConfig.border_radius" class="classattr">
                                 <div class="attr variable">
             <span class="name">border_radius</span><span class="annotation">: <a href="../core/dimension.html#Pixel">nextrpg.core.dimension.Pixel</a></span>        =
-<span class="default_value">20</span>
+<span class="default_value">16</span>
 
         
     </div>
@@ -271,6 +276,18 @@ Defaults to 200ms.</li>
         
     </div>
     <a class="headerlink" href="#SayEventConfig.fade_duration"></a>
+    
+    
+
+                            </div>
+                            <div id="SayEventConfig.text_delay" class="classattr">
+                                <div class="attr variable">
+            <span class="name">text_delay</span><span class="annotation">: Millisecond | None</span>        =
+<span class="default_value">20</span>
+
+        
+    </div>
+    <a class="headerlink" href="#SayEventConfig.text_delay"></a>
     
     
 

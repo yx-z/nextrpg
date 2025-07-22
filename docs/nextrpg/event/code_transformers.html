@@ -31,25 +31,7 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#AddParent">AddParent</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#AddParent.visit">visit</a>
-                        </li>
-                </ul>
-
-            </li>
-            <li>
                     <a class="variable" href="#ADD_PARENT">ADD_PARENT</a>
-            </li>
-            <li>
-                    <a class="class" href="#AddYield">AddYield</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#AddYield.visit_Call">visit_Call</a>
-                        </li>
-                </ul>
-
             </li>
             <li>
                     <a class="variable" href="#ADD_YIELD">ADD_YIELD</a>
@@ -147,252 +129,107 @@ and say annotations.</p>
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.rpg_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">registered_events</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="k">class</span><span class="w"> </span><span class="nc">AddParent</span><span class="p">(</span><span class="n">NodeTransformer</span><span class="p">):</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="sd">    AST transformer that adds parent references to nodes.</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="sd">    This transformer traverses the AST and adds parent references to each node,</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="sd">    allowing child nodes to access their parent during transformation.</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_AddParent</span><span class="p">(</span><span class="n">NodeTransformer</span><span class="p">):</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">AST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AST</span><span class="p">:</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">iter_child_nodes</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>            <span class="n">child</span><span class="o">.</span><span class="n">_nextrpg_parent</span> <span class="o">=</span> <span class="n">node</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>        <span class="k">return</span> <span class="n">node</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>
 </span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>
-</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">AST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AST</span><span class="p">:</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="sd">        Visit and transform an AST node.</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="n">ADD_PARENT</span> <span class="o">=</span> <span class="n">_AddParent</span><span class="p">()</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="sd">&quot;&quot;&quot;Global instance of the AddParent transformer.&quot;&quot;&quot;</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>
 </span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>
-</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="sd">        Adds parent references to all child nodes of the given node.</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>
-</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">            node: The AST node to transform.</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="sd">        Returns:</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="sd">            The transformed node with parent references.</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">iter_child_nodes</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>            <span class="n">child</span><span class="o">.</span><span class="n">_nextrpg_parent</span> <span class="o">=</span> <span class="n">node</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>        <span class="k">return</span> <span class="n">node</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_AddYield</span><span class="p">(</span><span class="n">NodeTransformer</span><span class="p">):</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit_Call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Call</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Yield</span> <span class="o">|</span> <span class="n">Call</span><span class="p">:</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>        <span class="n">func_event</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">Name</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_is_event</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>        <span class="n">attr_event</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">Attribute</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_is_event</span><span class="p">(</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>            <span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">attr</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>        <span class="p">)</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>        <span class="n">no_outer_yield</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>            <span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">_NEXTRPG_PARENT</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">Yield</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>        <span class="p">)</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">func_event</span> <span class="ow">or</span> <span class="n">attr_event</span><span class="p">)</span> <span class="ow">and</span> <span class="n">no_outer_yield</span><span class="p">:</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>            <span class="k">return</span> <span class="n">Yield</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>        <span class="k">return</span> <span class="n">node</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="n">ADD_PARENT</span> <span class="o">=</span> <span class="n">AddParent</span><span class="p">()</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">&quot;&quot;&quot;Global instance of the AddParent transformer.&quot;&quot;&quot;</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="n">ADD_YIELD</span> <span class="o">=</span> <span class="n">_AddYield</span><span class="p">()</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">&quot;&quot;&quot;Global instance of the AddYield transformer.&quot;&quot;&quot;</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="k">class</span><span class="w"> </span><span class="nc">AddYield</span><span class="p">(</span><span class="n">NodeTransformer</span><span class="p">):</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">    AST transformer that adds yield statements to event calls.</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">    This transformer automatically wraps event function calls in yield</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">    statements to enable coroutine-based event handling.</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit_Call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Call</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Yield</span> <span class="o">|</span> <span class="n">Call</span><span class="p">:</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">        Visit and transform a function call node.</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="k">class</span><span class="w"> </span><span class="nc">AnnotateSay</span><span class="p">(</span><span class="n">NodeTransformer</span><span class="p">):</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">    AST transformer that processes say annotations.</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">    This transformer converts type annotations with say strings into actual say</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">    function calls.</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>    <span class="n">say_event_name</span><span class="p">:</span> <span class="nb">str</span>
 </span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">        Wraps registered event calls in yield statements if they are not already</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">        within a yield statement.</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">            node: The function call node to transform.</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">        Returns:</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">            Either a yield statement wrapping the call or the original call node.</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>        <span class="n">func_event</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">Name</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_is_event</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>        <span class="n">attr_event</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">Attribute</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_is_event</span><span class="p">(</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>            <span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">attr</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>        <span class="p">)</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>        <span class="n">no_outer_yield</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>            <span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">_NEXTRPG_PARENT</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">Yield</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="p">)</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">func_event</span> <span class="ow">or</span> <span class="n">attr_event</span><span class="p">)</span> <span class="ow">and</span> <span class="n">no_outer_yield</span><span class="p">:</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>            <span class="k">return</span> <span class="n">Yield</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="k">return</span> <span class="n">node</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="n">ADD_YIELD</span> <span class="o">=</span> <span class="n">AddYield</span><span class="p">()</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">&quot;&quot;&quot;Global instance of the AddYield transformer.&quot;&quot;&quot;</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="k">class</span><span class="w"> </span><span class="nc">AnnotateSay</span><span class="p">(</span><span class="n">NodeTransformer</span><span class="p">):</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="sd">    AST transformer that processes say annotations.</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit_AnnAssign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">AnnAssign</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Expr</span> <span class="o">|</span> <span class="n">AnnAssign</span><span class="p">:</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">        Visit and transform an annotated assignment node.</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">        Converts say annotations like `player: &quot;Hello&quot;` into `player.say(&quot;Hello&quot;)`</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">        function calls.</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">            node: The annotated assignment node to transform.</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">        Returns:</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">            Either a say function call expression or the original annotated</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">            assignment.</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="sd">        Raises:</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">            ValueError: If the annotation format is invalid.</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>            <span class="k">return</span> <span class="n">node</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="n">target</span><span class="p">,</span> <span class="n">arg</span> <span class="o">=</span> <span class="n">_get_target_and_arg</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="n">say</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">Name</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Load</span><span class="p">()),</span> <span class="bp">self</span><span class="o">.</span><span class="n">say_event_name</span><span class="p">,</span> <span class="n">Load</span><span class="p">())</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="n">Call</span><span class="p">(</span><span class="n">say</span><span class="p">,</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">annotation</span><span class="p">]</span> <span class="o">+</span> <span class="n">arg</span><span class="p">))</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="n">ANNOTATE_SAY</span> <span class="o">=</span> <span class="n">AnnotateSay</span><span class="p">(</span><span class="s2">&quot;say&quot;</span><span class="p">)</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">&quot;&quot;&quot;Global instance of the AnnotateSay transformer.&quot;&quot;&quot;</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a><span class="n">_NEXTRPG_PARENT</span> <span class="o">=</span> <span class="s2">&quot;_nextrpg_parent&quot;</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="sd">&quot;&quot;&quot;Internal attribute name for parent references.&quot;&quot;&quot;</span>
 </span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="sd">    This transformer converts type annotations with say strings into actual say</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="sd">    function calls.</span>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_is_event</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">registered_events</span>
 </span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="n">say_event_name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit_AnnAssign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">AnnAssign</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Expr</span> <span class="o">|</span> <span class="n">AnnAssign</span><span class="p">:</span>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="sd">        Visit and transform an annotated assignment node.</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_TargetAndArg</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>    <span class="n">target</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>    <span class="n">arg</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">expr</span><span class="p">]</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>
 </span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="sd">        Converts say annotations like `player: &quot;Hello&quot;` into `player.say(&quot;Hello&quot;)`</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">        function calls.</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">            node: The annotated assignment node to transform.</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="sd">        Returns:</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">            Either a say function call expression or the original annotated</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">            assignment.</span>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a><span class="sd">        Raises:</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">            ValueError: If the annotation format is invalid.</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>            <span class="k">return</span> <span class="n">node</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>        <span class="n">target</span><span class="p">,</span> <span class="n">arg</span> <span class="o">=</span> <span class="n">_get_target_and_arg</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>        <span class="n">say</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">Name</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Load</span><span class="p">()),</span> <span class="bp">self</span><span class="o">.</span><span class="n">say_event_name</span><span class="p">,</span> <span class="n">Load</span><span class="p">())</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="n">Call</span><span class="p">(</span><span class="n">say</span><span class="p">,</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">annotation</span><span class="p">]</span> <span class="o">+</span> <span class="n">arg</span><span class="p">))</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="n">ANNOTATE_SAY</span> <span class="o">=</span> <span class="n">AnnotateSay</span><span class="p">(</span><span class="s2">&quot;say&quot;</span><span class="p">)</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">&quot;&quot;&quot;Global instance of the AnnotateSay transformer.&quot;&quot;&quot;</span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="n">_NEXTRPG_PARENT</span> <span class="o">=</span> <span class="s2">&quot;_nextrpg_parent&quot;</span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">&quot;&quot;&quot;Internal attribute name for parent references.&quot;&quot;&quot;</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>
-</span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>
-</span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_is_event</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>    <span class="k">return</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">registered_events</span>
-</span><span id="L-150"><a href="#L-150"><span class="linenos">150</span></a>
-</span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>
-</span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_TargetAndArg</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-</span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>    <span class="n">target</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>    <span class="n">arg</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">expr</span><span class="p">]</span>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
-</span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>
-</span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_get_target_and_arg</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">Name</span> <span class="o">|</span> <span class="n">Attribute</span> <span class="o">|</span> <span class="n">Subscript</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TargetAndArg</span><span class="p">:</span>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="k">match</span> <span class="n">node</span><span class="p">:</span>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a>        <span class="k">case</span> <span class="n">Name</span><span class="p">():</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a>            <span class="k">return</span> <span class="n">_TargetAndArg</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">[])</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a>        <span class="k">case</span> <span class="n">Subscript</span><span class="p">():</span>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">Name</span><span class="p">):</span>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a>                <span class="k">return</span> <span class="n">_TargetAndArg</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">slice</span><span class="p">])</span>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>    <span class="n">_raise_annotate_say</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>
-</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_raise_annotate_say</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">Subscript</span> <span class="o">|</span> <span class="n">Attribute</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">    Raise an error for invalid say annotation format.</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">        node: The invalid annotated assignment node.</span>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">    Raises:</span>
-</span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a><span class="sd">        ValueError: Always raised with a descriptive error message.</span>
-</span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="L-178"><a href="#L-178"><span class="linenos">178</span></a>        <span class="sa">f</span><span class="s1">&#39;Expect var[arg]: &quot;...&quot;, where var is player/npc and arg is the ad-hoc config. Got complex expression </span><span class="si">{</span><span class="n">unparse</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
-</span><span id="L-179"><a href="#L-179"><span class="linenos">179</span></a>    <span class="p">)</span>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_get_target_and_arg</span><span class="p">(</span><span class="n">node</span><span class="p">:</span> <span class="n">Name</span> <span class="o">|</span> <span class="n">Attribute</span> <span class="o">|</span> <span class="n">Subscript</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_TargetAndArg</span><span class="p">:</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>    <span class="k">match</span> <span class="n">node</span><span class="p">:</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>        <span class="k">case</span> <span class="n">Name</span><span class="p">():</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>            <span class="k">return</span> <span class="n">_TargetAndArg</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">[])</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>        <span class="k">case</span> <span class="n">Subscript</span><span class="p">():</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">Name</span><span class="p">):</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>                <span class="k">return</span> <span class="n">_TargetAndArg</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">slice</span><span class="p">])</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>        <span class="sa">f</span><span class="s1">&#39;Expect var[arg]: &quot;...&quot;, where var is player/npc and arg is the ad-hoc config. Got complex expression </span><span class="si">{</span><span class="n">unparse</span><span class="p">(</span><span class="n">node</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
             </section>
-                <section id="AddParent">
-                            <input id="AddParent-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr class">
-            
-    <span class="def">class</span>
-    <span class="name">AddParent</span><wbr>(<span class="base">ast.NodeTransformer</span>):
-
-                <label class="view-source-button" for="AddParent-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#AddParent"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AddParent-38"><a href="#AddParent-38"><span class="linenos">38</span></a><span class="k">class</span><span class="w"> </span><span class="nc">AddParent</span><span class="p">(</span><span class="n">NodeTransformer</span><span class="p">):</span>
-</span><span id="AddParent-39"><a href="#AddParent-39"><span class="linenos">39</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="AddParent-40"><a href="#AddParent-40"><span class="linenos">40</span></a><span class="sd">    AST transformer that adds parent references to nodes.</span>
-</span><span id="AddParent-41"><a href="#AddParent-41"><span class="linenos">41</span></a>
-</span><span id="AddParent-42"><a href="#AddParent-42"><span class="linenos">42</span></a><span class="sd">    This transformer traverses the AST and adds parent references to each node,</span>
-</span><span id="AddParent-43"><a href="#AddParent-43"><span class="linenos">43</span></a><span class="sd">    allowing child nodes to access their parent during transformation.</span>
-</span><span id="AddParent-44"><a href="#AddParent-44"><span class="linenos">44</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="AddParent-45"><a href="#AddParent-45"><span class="linenos">45</span></a>
-</span><span id="AddParent-46"><a href="#AddParent-46"><span class="linenos">46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">AST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AST</span><span class="p">:</span>
-</span><span id="AddParent-47"><a href="#AddParent-47"><span class="linenos">47</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="AddParent-48"><a href="#AddParent-48"><span class="linenos">48</span></a><span class="sd">        Visit and transform an AST node.</span>
-</span><span id="AddParent-49"><a href="#AddParent-49"><span class="linenos">49</span></a>
-</span><span id="AddParent-50"><a href="#AddParent-50"><span class="linenos">50</span></a><span class="sd">        Adds parent references to all child nodes of the given node.</span>
-</span><span id="AddParent-51"><a href="#AddParent-51"><span class="linenos">51</span></a>
-</span><span id="AddParent-52"><a href="#AddParent-52"><span class="linenos">52</span></a><span class="sd">        Arguments:</span>
-</span><span id="AddParent-53"><a href="#AddParent-53"><span class="linenos">53</span></a><span class="sd">            node: The AST node to transform.</span>
-</span><span id="AddParent-54"><a href="#AddParent-54"><span class="linenos">54</span></a>
-</span><span id="AddParent-55"><a href="#AddParent-55"><span class="linenos">55</span></a><span class="sd">        Returns:</span>
-</span><span id="AddParent-56"><a href="#AddParent-56"><span class="linenos">56</span></a><span class="sd">            The transformed node with parent references.</span>
-</span><span id="AddParent-57"><a href="#AddParent-57"><span class="linenos">57</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AddParent-58"><a href="#AddParent-58"><span class="linenos">58</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-</span><span id="AddParent-59"><a href="#AddParent-59"><span class="linenos">59</span></a>        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">iter_child_nodes</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
-</span><span id="AddParent-60"><a href="#AddParent-60"><span class="linenos">60</span></a>            <span class="n">child</span><span class="o">.</span><span class="n">_nextrpg_parent</span> <span class="o">=</span> <span class="n">node</span>
-</span><span id="AddParent-61"><a href="#AddParent-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="n">node</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>AST transformer that adds parent references to nodes.</p>
-
-<p>This transformer traverses the AST and adds parent references to each node,
-allowing child nodes to access their parent during transformation.</p>
-</div>
-
-
-                            <div id="AddParent.visit" class="classattr">
-                                        <input id="AddParent.visit-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">visit</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span></span><span class="return-annotation">) -> <span class="n">ast</span><span class="o">.</span><span class="n">AST</span>:</span></span>
-
-                <label class="view-source-button" for="AddParent.visit-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#AddParent.visit"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AddParent.visit-46"><a href="#AddParent.visit-46"><span class="linenos">46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">AST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AST</span><span class="p">:</span>
-</span><span id="AddParent.visit-47"><a href="#AddParent.visit-47"><span class="linenos">47</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="AddParent.visit-48"><a href="#AddParent.visit-48"><span class="linenos">48</span></a><span class="sd">        Visit and transform an AST node.</span>
-</span><span id="AddParent.visit-49"><a href="#AddParent.visit-49"><span class="linenos">49</span></a>
-</span><span id="AddParent.visit-50"><a href="#AddParent.visit-50"><span class="linenos">50</span></a><span class="sd">        Adds parent references to all child nodes of the given node.</span>
-</span><span id="AddParent.visit-51"><a href="#AddParent.visit-51"><span class="linenos">51</span></a>
-</span><span id="AddParent.visit-52"><a href="#AddParent.visit-52"><span class="linenos">52</span></a><span class="sd">        Arguments:</span>
-</span><span id="AddParent.visit-53"><a href="#AddParent.visit-53"><span class="linenos">53</span></a><span class="sd">            node: The AST node to transform.</span>
-</span><span id="AddParent.visit-54"><a href="#AddParent.visit-54"><span class="linenos">54</span></a>
-</span><span id="AddParent.visit-55"><a href="#AddParent.visit-55"><span class="linenos">55</span></a><span class="sd">        Returns:</span>
-</span><span id="AddParent.visit-56"><a href="#AddParent.visit-56"><span class="linenos">56</span></a><span class="sd">            The transformed node with parent references.</span>
-</span><span id="AddParent.visit-57"><a href="#AddParent.visit-57"><span class="linenos">57</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AddParent.visit-58"><a href="#AddParent.visit-58"><span class="linenos">58</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-</span><span id="AddParent.visit-59"><a href="#AddParent.visit-59"><span class="linenos">59</span></a>        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">iter_child_nodes</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
-</span><span id="AddParent.visit-60"><a href="#AddParent.visit-60"><span class="linenos">60</span></a>            <span class="n">child</span><span class="o">.</span><span class="n">_nextrpg_parent</span> <span class="o">=</span> <span class="n">node</span>
-</span><span id="AddParent.visit-61"><a href="#AddParent.visit-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="n">node</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Visit and transform an AST node.</p>
-
-<p>Adds parent references to all child nodes of the given node.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong>node:</strong>  The AST node to transform.</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p>The transformed node with parent references.</p>
-</blockquote>
-</div>
-
-
-                            </div>
-                </section>
                 <section id="ADD_PARENT">
                     <div class="attr variable">
             <span class="name">ADD_PARENT</span>        =
-<span class="default_value">&lt;<a href="#AddParent">AddParent</a> object&gt;</span>
+<span class="default_value">&lt;nextrpg.event.code_transformers._AddParent object&gt;</span>
 
         
     </div>
@@ -403,122 +240,10 @@ allowing child nodes to access their parent during transformation.</p>
 
 
                 </section>
-                <section id="AddYield">
-                            <input id="AddYield-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr class">
-            
-    <span class="def">class</span>
-    <span class="name">AddYield</span><wbr>(<span class="base">ast.NodeTransformer</span>):
-
-                <label class="view-source-button" for="AddYield-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#AddYield"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AddYield-68"><a href="#AddYield-68"><span class="linenos">68</span></a><span class="k">class</span><span class="w"> </span><span class="nc">AddYield</span><span class="p">(</span><span class="n">NodeTransformer</span><span class="p">):</span>
-</span><span id="AddYield-69"><a href="#AddYield-69"><span class="linenos">69</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="AddYield-70"><a href="#AddYield-70"><span class="linenos">70</span></a><span class="sd">    AST transformer that adds yield statements to event calls.</span>
-</span><span id="AddYield-71"><a href="#AddYield-71"><span class="linenos">71</span></a>
-</span><span id="AddYield-72"><a href="#AddYield-72"><span class="linenos">72</span></a><span class="sd">    This transformer automatically wraps event function calls in yield</span>
-</span><span id="AddYield-73"><a href="#AddYield-73"><span class="linenos">73</span></a><span class="sd">    statements to enable coroutine-based event handling.</span>
-</span><span id="AddYield-74"><a href="#AddYield-74"><span class="linenos">74</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="AddYield-75"><a href="#AddYield-75"><span class="linenos">75</span></a>
-</span><span id="AddYield-76"><a href="#AddYield-76"><span class="linenos">76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit_Call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Call</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Yield</span> <span class="o">|</span> <span class="n">Call</span><span class="p">:</span>
-</span><span id="AddYield-77"><a href="#AddYield-77"><span class="linenos">77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="AddYield-78"><a href="#AddYield-78"><span class="linenos">78</span></a><span class="sd">        Visit and transform a function call node.</span>
-</span><span id="AddYield-79"><a href="#AddYield-79"><span class="linenos">79</span></a>
-</span><span id="AddYield-80"><a href="#AddYield-80"><span class="linenos">80</span></a><span class="sd">        Wraps registered event calls in yield statements if they are not already</span>
-</span><span id="AddYield-81"><a href="#AddYield-81"><span class="linenos">81</span></a><span class="sd">        within a yield statement.</span>
-</span><span id="AddYield-82"><a href="#AddYield-82"><span class="linenos">82</span></a>
-</span><span id="AddYield-83"><a href="#AddYield-83"><span class="linenos">83</span></a><span class="sd">        Arguments:</span>
-</span><span id="AddYield-84"><a href="#AddYield-84"><span class="linenos">84</span></a><span class="sd">            node: The function call node to transform.</span>
-</span><span id="AddYield-85"><a href="#AddYield-85"><span class="linenos">85</span></a>
-</span><span id="AddYield-86"><a href="#AddYield-86"><span class="linenos">86</span></a><span class="sd">        Returns:</span>
-</span><span id="AddYield-87"><a href="#AddYield-87"><span class="linenos">87</span></a><span class="sd">            Either a yield statement wrapping the call or the original call node.</span>
-</span><span id="AddYield-88"><a href="#AddYield-88"><span class="linenos">88</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AddYield-89"><a href="#AddYield-89"><span class="linenos">89</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-</span><span id="AddYield-90"><a href="#AddYield-90"><span class="linenos">90</span></a>        <span class="n">func_event</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">Name</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_is_event</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-</span><span id="AddYield-91"><a href="#AddYield-91"><span class="linenos">91</span></a>        <span class="n">attr_event</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">Attribute</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_is_event</span><span class="p">(</span>
-</span><span id="AddYield-92"><a href="#AddYield-92"><span class="linenos">92</span></a>            <span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">attr</span>
-</span><span id="AddYield-93"><a href="#AddYield-93"><span class="linenos">93</span></a>        <span class="p">)</span>
-</span><span id="AddYield-94"><a href="#AddYield-94"><span class="linenos">94</span></a>        <span class="n">no_outer_yield</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
-</span><span id="AddYield-95"><a href="#AddYield-95"><span class="linenos">95</span></a>            <span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">_NEXTRPG_PARENT</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">Yield</span>
-</span><span id="AddYield-96"><a href="#AddYield-96"><span class="linenos">96</span></a>        <span class="p">)</span>
-</span><span id="AddYield-97"><a href="#AddYield-97"><span class="linenos">97</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">func_event</span> <span class="ow">or</span> <span class="n">attr_event</span><span class="p">)</span> <span class="ow">and</span> <span class="n">no_outer_yield</span><span class="p">:</span>
-</span><span id="AddYield-98"><a href="#AddYield-98"><span class="linenos">98</span></a>            <span class="k">return</span> <span class="n">Yield</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-</span><span id="AddYield-99"><a href="#AddYield-99"><span class="linenos">99</span></a>        <span class="k">return</span> <span class="n">node</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>AST transformer that adds yield statements to event calls.</p>
-
-<p>This transformer automatically wraps event function calls in yield
-statements to enable coroutine-based event handling.</p>
-</div>
-
-
-                            <div id="AddYield.visit_Call" class="classattr">
-                                        <input id="AddYield.visit_Call-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">visit_Call</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">node</span><span class="p">:</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span></span><span class="return-annotation">) -> <span class="n">ast</span><span class="o">.</span><span class="n">Yield</span> <span class="o">|</span> <span class="n">ast</span><span class="o">.</span><span class="n">Call</span>:</span></span>
-
-                <label class="view-source-button" for="AddYield.visit_Call-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#AddYield.visit_Call"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AddYield.visit_Call-76"><a href="#AddYield.visit_Call-76"><span class="linenos">76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit_Call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">Call</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Yield</span> <span class="o">|</span> <span class="n">Call</span><span class="p">:</span>
-</span><span id="AddYield.visit_Call-77"><a href="#AddYield.visit_Call-77"><span class="linenos">77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="AddYield.visit_Call-78"><a href="#AddYield.visit_Call-78"><span class="linenos">78</span></a><span class="sd">        Visit and transform a function call node.</span>
-</span><span id="AddYield.visit_Call-79"><a href="#AddYield.visit_Call-79"><span class="linenos">79</span></a>
-</span><span id="AddYield.visit_Call-80"><a href="#AddYield.visit_Call-80"><span class="linenos">80</span></a><span class="sd">        Wraps registered event calls in yield statements if they are not already</span>
-</span><span id="AddYield.visit_Call-81"><a href="#AddYield.visit_Call-81"><span class="linenos">81</span></a><span class="sd">        within a yield statement.</span>
-</span><span id="AddYield.visit_Call-82"><a href="#AddYield.visit_Call-82"><span class="linenos">82</span></a>
-</span><span id="AddYield.visit_Call-83"><a href="#AddYield.visit_Call-83"><span class="linenos">83</span></a><span class="sd">        Arguments:</span>
-</span><span id="AddYield.visit_Call-84"><a href="#AddYield.visit_Call-84"><span class="linenos">84</span></a><span class="sd">            node: The function call node to transform.</span>
-</span><span id="AddYield.visit_Call-85"><a href="#AddYield.visit_Call-85"><span class="linenos">85</span></a>
-</span><span id="AddYield.visit_Call-86"><a href="#AddYield.visit_Call-86"><span class="linenos">86</span></a><span class="sd">        Returns:</span>
-</span><span id="AddYield.visit_Call-87"><a href="#AddYield.visit_Call-87"><span class="linenos">87</span></a><span class="sd">            Either a yield statement wrapping the call or the original call node.</span>
-</span><span id="AddYield.visit_Call-88"><a href="#AddYield.visit_Call-88"><span class="linenos">88</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AddYield.visit_Call-89"><a href="#AddYield.visit_Call-89"><span class="linenos">89</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-</span><span id="AddYield.visit_Call-90"><a href="#AddYield.visit_Call-90"><span class="linenos">90</span></a>        <span class="n">func_event</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">Name</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_is_event</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-</span><span id="AddYield.visit_Call-91"><a href="#AddYield.visit_Call-91"><span class="linenos">91</span></a>        <span class="n">attr_event</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">Attribute</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_is_event</span><span class="p">(</span>
-</span><span id="AddYield.visit_Call-92"><a href="#AddYield.visit_Call-92"><span class="linenos">92</span></a>            <span class="n">node</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">attr</span>
-</span><span id="AddYield.visit_Call-93"><a href="#AddYield.visit_Call-93"><span class="linenos">93</span></a>        <span class="p">)</span>
-</span><span id="AddYield.visit_Call-94"><a href="#AddYield.visit_Call-94"><span class="linenos">94</span></a>        <span class="n">no_outer_yield</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
-</span><span id="AddYield.visit_Call-95"><a href="#AddYield.visit_Call-95"><span class="linenos">95</span></a>            <span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">_NEXTRPG_PARENT</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">Yield</span>
-</span><span id="AddYield.visit_Call-96"><a href="#AddYield.visit_Call-96"><span class="linenos">96</span></a>        <span class="p">)</span>
-</span><span id="AddYield.visit_Call-97"><a href="#AddYield.visit_Call-97"><span class="linenos">97</span></a>        <span class="k">if</span> <span class="p">(</span><span class="n">func_event</span> <span class="ow">or</span> <span class="n">attr_event</span><span class="p">)</span> <span class="ow">and</span> <span class="n">no_outer_yield</span><span class="p">:</span>
-</span><span id="AddYield.visit_Call-98"><a href="#AddYield.visit_Call-98"><span class="linenos">98</span></a>            <span class="k">return</span> <span class="n">Yield</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
-</span><span id="AddYield.visit_Call-99"><a href="#AddYield.visit_Call-99"><span class="linenos">99</span></a>        <span class="k">return</span> <span class="n">node</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Visit and transform a function call node.</p>
-
-<p>Wraps registered event calls in yield statements if they are not already
-within a yield statement.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong>node:</strong>  The function call node to transform.</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p>Either a yield statement wrapping the call or the original call node.</p>
-</blockquote>
-</div>
-
-
-                            </div>
-                </section>
                 <section id="ADD_YIELD">
                     <div class="attr variable">
             <span class="name">ADD_YIELD</span>        =
-<span class="default_value">&lt;<a href="#AddYield">AddYield</a> object&gt;</span>
+<span class="default_value">&lt;nextrpg.event.code_transformers._AddYield object&gt;</span>
 
         
     </div>
@@ -541,39 +266,39 @@ within a yield statement.</p>
 
     </div>
     <a class="headerlink" href="#AnnotateSay"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AnnotateSay-106"><a href="#AnnotateSay-106"><span class="linenos">106</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="AnnotateSay-107"><a href="#AnnotateSay-107"><span class="linenos">107</span></a><span class="k">class</span><span class="w"> </span><span class="nc">AnnotateSay</span><span class="p">(</span><span class="n">NodeTransformer</span><span class="p">):</span>
-</span><span id="AnnotateSay-108"><a href="#AnnotateSay-108"><span class="linenos">108</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="AnnotateSay-109"><a href="#AnnotateSay-109"><span class="linenos">109</span></a><span class="sd">    AST transformer that processes say annotations.</span>
-</span><span id="AnnotateSay-110"><a href="#AnnotateSay-110"><span class="linenos">110</span></a>
-</span><span id="AnnotateSay-111"><a href="#AnnotateSay-111"><span class="linenos">111</span></a><span class="sd">    This transformer converts type annotations with say strings into actual say</span>
-</span><span id="AnnotateSay-112"><a href="#AnnotateSay-112"><span class="linenos">112</span></a><span class="sd">    function calls.</span>
-</span><span id="AnnotateSay-113"><a href="#AnnotateSay-113"><span class="linenos">113</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="AnnotateSay-114"><a href="#AnnotateSay-114"><span class="linenos">114</span></a>
-</span><span id="AnnotateSay-115"><a href="#AnnotateSay-115"><span class="linenos">115</span></a>    <span class="n">say_event_name</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="AnnotateSay-116"><a href="#AnnotateSay-116"><span class="linenos">116</span></a>
-</span><span id="AnnotateSay-117"><a href="#AnnotateSay-117"><span class="linenos">117</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit_AnnAssign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">AnnAssign</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Expr</span> <span class="o">|</span> <span class="n">AnnAssign</span><span class="p">:</span>
-</span><span id="AnnotateSay-118"><a href="#AnnotateSay-118"><span class="linenos">118</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="AnnotateSay-119"><a href="#AnnotateSay-119"><span class="linenos">119</span></a><span class="sd">        Visit and transform an annotated assignment node.</span>
-</span><span id="AnnotateSay-120"><a href="#AnnotateSay-120"><span class="linenos">120</span></a>
-</span><span id="AnnotateSay-121"><a href="#AnnotateSay-121"><span class="linenos">121</span></a><span class="sd">        Converts say annotations like `player: &quot;Hello&quot;` into `player.say(&quot;Hello&quot;)`</span>
-</span><span id="AnnotateSay-122"><a href="#AnnotateSay-122"><span class="linenos">122</span></a><span class="sd">        function calls.</span>
-</span><span id="AnnotateSay-123"><a href="#AnnotateSay-123"><span class="linenos">123</span></a>
-</span><span id="AnnotateSay-124"><a href="#AnnotateSay-124"><span class="linenos">124</span></a><span class="sd">        Arguments:</span>
-</span><span id="AnnotateSay-125"><a href="#AnnotateSay-125"><span class="linenos">125</span></a><span class="sd">            node: The annotated assignment node to transform.</span>
-</span><span id="AnnotateSay-126"><a href="#AnnotateSay-126"><span class="linenos">126</span></a>
-</span><span id="AnnotateSay-127"><a href="#AnnotateSay-127"><span class="linenos">127</span></a><span class="sd">        Returns:</span>
-</span><span id="AnnotateSay-128"><a href="#AnnotateSay-128"><span class="linenos">128</span></a><span class="sd">            Either a say function call expression or the original annotated</span>
-</span><span id="AnnotateSay-129"><a href="#AnnotateSay-129"><span class="linenos">129</span></a><span class="sd">            assignment.</span>
-</span><span id="AnnotateSay-130"><a href="#AnnotateSay-130"><span class="linenos">130</span></a>
-</span><span id="AnnotateSay-131"><a href="#AnnotateSay-131"><span class="linenos">131</span></a><span class="sd">        Raises:</span>
-</span><span id="AnnotateSay-132"><a href="#AnnotateSay-132"><span class="linenos">132</span></a><span class="sd">            ValueError: If the annotation format is invalid.</span>
-</span><span id="AnnotateSay-133"><a href="#AnnotateSay-133"><span class="linenos">133</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnnotateSay-134"><a href="#AnnotateSay-134"><span class="linenos">134</span></a>        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="AnnotateSay-135"><a href="#AnnotateSay-135"><span class="linenos">135</span></a>            <span class="k">return</span> <span class="n">node</span>
-</span><span id="AnnotateSay-136"><a href="#AnnotateSay-136"><span class="linenos">136</span></a>        <span class="n">target</span><span class="p">,</span> <span class="n">arg</span> <span class="o">=</span> <span class="n">_get_target_and_arg</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
-</span><span id="AnnotateSay-137"><a href="#AnnotateSay-137"><span class="linenos">137</span></a>        <span class="n">say</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">Name</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Load</span><span class="p">()),</span> <span class="bp">self</span><span class="o">.</span><span class="n">say_event_name</span><span class="p">,</span> <span class="n">Load</span><span class="p">())</span>
-</span><span id="AnnotateSay-138"><a href="#AnnotateSay-138"><span class="linenos">138</span></a>        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="n">Call</span><span class="p">(</span><span class="n">say</span><span class="p">,</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">annotation</span><span class="p">]</span> <span class="o">+</span> <span class="n">arg</span><span class="p">))</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AnnotateSay-69"><a href="#AnnotateSay-69"><span class="linenos"> 69</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="AnnotateSay-70"><a href="#AnnotateSay-70"><span class="linenos"> 70</span></a><span class="k">class</span><span class="w"> </span><span class="nc">AnnotateSay</span><span class="p">(</span><span class="n">NodeTransformer</span><span class="p">):</span>
+</span><span id="AnnotateSay-71"><a href="#AnnotateSay-71"><span class="linenos"> 71</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="AnnotateSay-72"><a href="#AnnotateSay-72"><span class="linenos"> 72</span></a><span class="sd">    AST transformer that processes say annotations.</span>
+</span><span id="AnnotateSay-73"><a href="#AnnotateSay-73"><span class="linenos"> 73</span></a>
+</span><span id="AnnotateSay-74"><a href="#AnnotateSay-74"><span class="linenos"> 74</span></a><span class="sd">    This transformer converts type annotations with say strings into actual say</span>
+</span><span id="AnnotateSay-75"><a href="#AnnotateSay-75"><span class="linenos"> 75</span></a><span class="sd">    function calls.</span>
+</span><span id="AnnotateSay-76"><a href="#AnnotateSay-76"><span class="linenos"> 76</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="AnnotateSay-77"><a href="#AnnotateSay-77"><span class="linenos"> 77</span></a>
+</span><span id="AnnotateSay-78"><a href="#AnnotateSay-78"><span class="linenos"> 78</span></a>    <span class="n">say_event_name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="AnnotateSay-79"><a href="#AnnotateSay-79"><span class="linenos"> 79</span></a>
+</span><span id="AnnotateSay-80"><a href="#AnnotateSay-80"><span class="linenos"> 80</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit_AnnAssign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">AnnAssign</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Expr</span> <span class="o">|</span> <span class="n">AnnAssign</span><span class="p">:</span>
+</span><span id="AnnotateSay-81"><a href="#AnnotateSay-81"><span class="linenos"> 81</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="AnnotateSay-82"><a href="#AnnotateSay-82"><span class="linenos"> 82</span></a><span class="sd">        Visit and transform an annotated assignment node.</span>
+</span><span id="AnnotateSay-83"><a href="#AnnotateSay-83"><span class="linenos"> 83</span></a>
+</span><span id="AnnotateSay-84"><a href="#AnnotateSay-84"><span class="linenos"> 84</span></a><span class="sd">        Converts say annotations like `player: &quot;Hello&quot;` into `player.say(&quot;Hello&quot;)`</span>
+</span><span id="AnnotateSay-85"><a href="#AnnotateSay-85"><span class="linenos"> 85</span></a><span class="sd">        function calls.</span>
+</span><span id="AnnotateSay-86"><a href="#AnnotateSay-86"><span class="linenos"> 86</span></a>
+</span><span id="AnnotateSay-87"><a href="#AnnotateSay-87"><span class="linenos"> 87</span></a><span class="sd">        Arguments:</span>
+</span><span id="AnnotateSay-88"><a href="#AnnotateSay-88"><span class="linenos"> 88</span></a><span class="sd">            node: The annotated assignment node to transform.</span>
+</span><span id="AnnotateSay-89"><a href="#AnnotateSay-89"><span class="linenos"> 89</span></a>
+</span><span id="AnnotateSay-90"><a href="#AnnotateSay-90"><span class="linenos"> 90</span></a><span class="sd">        Returns:</span>
+</span><span id="AnnotateSay-91"><a href="#AnnotateSay-91"><span class="linenos"> 91</span></a><span class="sd">            Either a say function call expression or the original annotated</span>
+</span><span id="AnnotateSay-92"><a href="#AnnotateSay-92"><span class="linenos"> 92</span></a><span class="sd">            assignment.</span>
+</span><span id="AnnotateSay-93"><a href="#AnnotateSay-93"><span class="linenos"> 93</span></a>
+</span><span id="AnnotateSay-94"><a href="#AnnotateSay-94"><span class="linenos"> 94</span></a><span class="sd">        Raises:</span>
+</span><span id="AnnotateSay-95"><a href="#AnnotateSay-95"><span class="linenos"> 95</span></a><span class="sd">            ValueError: If the annotation format is invalid.</span>
+</span><span id="AnnotateSay-96"><a href="#AnnotateSay-96"><span class="linenos"> 96</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnnotateSay-97"><a href="#AnnotateSay-97"><span class="linenos"> 97</span></a>        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AnnotateSay-98"><a href="#AnnotateSay-98"><span class="linenos"> 98</span></a>            <span class="k">return</span> <span class="n">node</span>
+</span><span id="AnnotateSay-99"><a href="#AnnotateSay-99"><span class="linenos"> 99</span></a>        <span class="n">target</span><span class="p">,</span> <span class="n">arg</span> <span class="o">=</span> <span class="n">_get_target_and_arg</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+</span><span id="AnnotateSay-100"><a href="#AnnotateSay-100"><span class="linenos">100</span></a>        <span class="n">say</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">Name</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Load</span><span class="p">()),</span> <span class="bp">self</span><span class="o">.</span><span class="n">say_event_name</span><span class="p">,</span> <span class="n">Load</span><span class="p">())</span>
+</span><span id="AnnotateSay-101"><a href="#AnnotateSay-101"><span class="linenos">101</span></a>        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="n">Call</span><span class="p">(</span><span class="n">say</span><span class="p">,</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">annotation</span><span class="p">]</span> <span class="o">+</span> <span class="n">arg</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -618,28 +343,28 @@ function calls.</p>
 
     </div>
     <a class="headerlink" href="#AnnotateSay.visit_AnnAssign"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="AnnotateSay.visit_AnnAssign-117"><a href="#AnnotateSay.visit_AnnAssign-117"><span class="linenos">117</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit_AnnAssign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">AnnAssign</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Expr</span> <span class="o">|</span> <span class="n">AnnAssign</span><span class="p">:</span>
-</span><span id="AnnotateSay.visit_AnnAssign-118"><a href="#AnnotateSay.visit_AnnAssign-118"><span class="linenos">118</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="AnnotateSay.visit_AnnAssign-119"><a href="#AnnotateSay.visit_AnnAssign-119"><span class="linenos">119</span></a><span class="sd">        Visit and transform an annotated assignment node.</span>
-</span><span id="AnnotateSay.visit_AnnAssign-120"><a href="#AnnotateSay.visit_AnnAssign-120"><span class="linenos">120</span></a>
-</span><span id="AnnotateSay.visit_AnnAssign-121"><a href="#AnnotateSay.visit_AnnAssign-121"><span class="linenos">121</span></a><span class="sd">        Converts say annotations like `player: &quot;Hello&quot;` into `player.say(&quot;Hello&quot;)`</span>
-</span><span id="AnnotateSay.visit_AnnAssign-122"><a href="#AnnotateSay.visit_AnnAssign-122"><span class="linenos">122</span></a><span class="sd">        function calls.</span>
-</span><span id="AnnotateSay.visit_AnnAssign-123"><a href="#AnnotateSay.visit_AnnAssign-123"><span class="linenos">123</span></a>
-</span><span id="AnnotateSay.visit_AnnAssign-124"><a href="#AnnotateSay.visit_AnnAssign-124"><span class="linenos">124</span></a><span class="sd">        Arguments:</span>
-</span><span id="AnnotateSay.visit_AnnAssign-125"><a href="#AnnotateSay.visit_AnnAssign-125"><span class="linenos">125</span></a><span class="sd">            node: The annotated assignment node to transform.</span>
-</span><span id="AnnotateSay.visit_AnnAssign-126"><a href="#AnnotateSay.visit_AnnAssign-126"><span class="linenos">126</span></a>
-</span><span id="AnnotateSay.visit_AnnAssign-127"><a href="#AnnotateSay.visit_AnnAssign-127"><span class="linenos">127</span></a><span class="sd">        Returns:</span>
-</span><span id="AnnotateSay.visit_AnnAssign-128"><a href="#AnnotateSay.visit_AnnAssign-128"><span class="linenos">128</span></a><span class="sd">            Either a say function call expression or the original annotated</span>
-</span><span id="AnnotateSay.visit_AnnAssign-129"><a href="#AnnotateSay.visit_AnnAssign-129"><span class="linenos">129</span></a><span class="sd">            assignment.</span>
-</span><span id="AnnotateSay.visit_AnnAssign-130"><a href="#AnnotateSay.visit_AnnAssign-130"><span class="linenos">130</span></a>
-</span><span id="AnnotateSay.visit_AnnAssign-131"><a href="#AnnotateSay.visit_AnnAssign-131"><span class="linenos">131</span></a><span class="sd">        Raises:</span>
-</span><span id="AnnotateSay.visit_AnnAssign-132"><a href="#AnnotateSay.visit_AnnAssign-132"><span class="linenos">132</span></a><span class="sd">            ValueError: If the annotation format is invalid.</span>
-</span><span id="AnnotateSay.visit_AnnAssign-133"><a href="#AnnotateSay.visit_AnnAssign-133"><span class="linenos">133</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="AnnotateSay.visit_AnnAssign-134"><a href="#AnnotateSay.visit_AnnAssign-134"><span class="linenos">134</span></a>        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="AnnotateSay.visit_AnnAssign-135"><a href="#AnnotateSay.visit_AnnAssign-135"><span class="linenos">135</span></a>            <span class="k">return</span> <span class="n">node</span>
-</span><span id="AnnotateSay.visit_AnnAssign-136"><a href="#AnnotateSay.visit_AnnAssign-136"><span class="linenos">136</span></a>        <span class="n">target</span><span class="p">,</span> <span class="n">arg</span> <span class="o">=</span> <span class="n">_get_target_and_arg</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
-</span><span id="AnnotateSay.visit_AnnAssign-137"><a href="#AnnotateSay.visit_AnnAssign-137"><span class="linenos">137</span></a>        <span class="n">say</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">Name</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Load</span><span class="p">()),</span> <span class="bp">self</span><span class="o">.</span><span class="n">say_event_name</span><span class="p">,</span> <span class="n">Load</span><span class="p">())</span>
-</span><span id="AnnotateSay.visit_AnnAssign-138"><a href="#AnnotateSay.visit_AnnAssign-138"><span class="linenos">138</span></a>        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="n">Call</span><span class="p">(</span><span class="n">say</span><span class="p">,</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">annotation</span><span class="p">]</span> <span class="o">+</span> <span class="n">arg</span><span class="p">))</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AnnotateSay.visit_AnnAssign-80"><a href="#AnnotateSay.visit_AnnAssign-80"><span class="linenos"> 80</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">visit_AnnAssign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">AnnAssign</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Expr</span> <span class="o">|</span> <span class="n">AnnAssign</span><span class="p">:</span>
+</span><span id="AnnotateSay.visit_AnnAssign-81"><a href="#AnnotateSay.visit_AnnAssign-81"><span class="linenos"> 81</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="AnnotateSay.visit_AnnAssign-82"><a href="#AnnotateSay.visit_AnnAssign-82"><span class="linenos"> 82</span></a><span class="sd">        Visit and transform an annotated assignment node.</span>
+</span><span id="AnnotateSay.visit_AnnAssign-83"><a href="#AnnotateSay.visit_AnnAssign-83"><span class="linenos"> 83</span></a>
+</span><span id="AnnotateSay.visit_AnnAssign-84"><a href="#AnnotateSay.visit_AnnAssign-84"><span class="linenos"> 84</span></a><span class="sd">        Converts say annotations like `player: &quot;Hello&quot;` into `player.say(&quot;Hello&quot;)`</span>
+</span><span id="AnnotateSay.visit_AnnAssign-85"><a href="#AnnotateSay.visit_AnnAssign-85"><span class="linenos"> 85</span></a><span class="sd">        function calls.</span>
+</span><span id="AnnotateSay.visit_AnnAssign-86"><a href="#AnnotateSay.visit_AnnAssign-86"><span class="linenos"> 86</span></a>
+</span><span id="AnnotateSay.visit_AnnAssign-87"><a href="#AnnotateSay.visit_AnnAssign-87"><span class="linenos"> 87</span></a><span class="sd">        Arguments:</span>
+</span><span id="AnnotateSay.visit_AnnAssign-88"><a href="#AnnotateSay.visit_AnnAssign-88"><span class="linenos"> 88</span></a><span class="sd">            node: The annotated assignment node to transform.</span>
+</span><span id="AnnotateSay.visit_AnnAssign-89"><a href="#AnnotateSay.visit_AnnAssign-89"><span class="linenos"> 89</span></a>
+</span><span id="AnnotateSay.visit_AnnAssign-90"><a href="#AnnotateSay.visit_AnnAssign-90"><span class="linenos"> 90</span></a><span class="sd">        Returns:</span>
+</span><span id="AnnotateSay.visit_AnnAssign-91"><a href="#AnnotateSay.visit_AnnAssign-91"><span class="linenos"> 91</span></a><span class="sd">            Either a say function call expression or the original annotated</span>
+</span><span id="AnnotateSay.visit_AnnAssign-92"><a href="#AnnotateSay.visit_AnnAssign-92"><span class="linenos"> 92</span></a><span class="sd">            assignment.</span>
+</span><span id="AnnotateSay.visit_AnnAssign-93"><a href="#AnnotateSay.visit_AnnAssign-93"><span class="linenos"> 93</span></a>
+</span><span id="AnnotateSay.visit_AnnAssign-94"><a href="#AnnotateSay.visit_AnnAssign-94"><span class="linenos"> 94</span></a><span class="sd">        Raises:</span>
+</span><span id="AnnotateSay.visit_AnnAssign-95"><a href="#AnnotateSay.visit_AnnAssign-95"><span class="linenos"> 95</span></a><span class="sd">            ValueError: If the annotation format is invalid.</span>
+</span><span id="AnnotateSay.visit_AnnAssign-96"><a href="#AnnotateSay.visit_AnnAssign-96"><span class="linenos"> 96</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="AnnotateSay.visit_AnnAssign-97"><a href="#AnnotateSay.visit_AnnAssign-97"><span class="linenos"> 97</span></a>        <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AnnotateSay.visit_AnnAssign-98"><a href="#AnnotateSay.visit_AnnAssign-98"><span class="linenos"> 98</span></a>            <span class="k">return</span> <span class="n">node</span>
+</span><span id="AnnotateSay.visit_AnnAssign-99"><a href="#AnnotateSay.visit_AnnAssign-99"><span class="linenos"> 99</span></a>        <span class="n">target</span><span class="p">,</span> <span class="n">arg</span> <span class="o">=</span> <span class="n">_get_target_and_arg</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+</span><span id="AnnotateSay.visit_AnnAssign-100"><a href="#AnnotateSay.visit_AnnAssign-100"><span class="linenos">100</span></a>        <span class="n">say</span> <span class="o">=</span> <span class="n">Attribute</span><span class="p">(</span><span class="n">Name</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">Load</span><span class="p">()),</span> <span class="bp">self</span><span class="o">.</span><span class="n">say_event_name</span><span class="p">,</span> <span class="n">Load</span><span class="p">())</span>
+</span><span id="AnnotateSay.visit_AnnAssign-101"><a href="#AnnotateSay.visit_AnnAssign-101"><span class="linenos">101</span></a>        <span class="k">return</span> <span class="n">Expr</span><span class="p">(</span><span class="n">Call</span><span class="p">(</span><span class="n">say</span><span class="p">,</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">annotation</span><span class="p">]</span> <span class="o">+</span> <span class="n">arg</span><span class="p">))</span>
 </span></pre></div>
 
 

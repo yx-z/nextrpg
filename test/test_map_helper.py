@@ -1,5 +1,5 @@
 from pathlib import Path
-from test.util import MockCharacterDrawing, MockSurface, override_config
+from test.util import MockCharacterDrawing, MockSurface
 from types import SimpleNamespace
 from unittest.mock import MagicMock
 
@@ -17,6 +17,7 @@ from nextrpg import (
     ResourceConfig,
     Size,
     get_polygon,
+    override_config,
 )
 
 

@@ -5,7 +5,9 @@ You can either use the implicit, default configuration or pass the customized
 instance to `nextrpg.start_game.start_game`.
 """
 
+from contextlib import contextmanager
 from dataclasses import dataclass
+from typing import Generator
 
 from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.debug_config import DebugConfig
@@ -114,3 +116,12 @@ def initial_config() -> Config:
 
 _initial_config: Config | None = None
 _cfg: Config | None = None
+
+
+@contextmanager
+def override_config(cfg: Config) -> Generator[Config, None, None]:
+    prev = config()
+    try:
+        yield set_config(cfg)
+    finally:
+        set_config(prev)

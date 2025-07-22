@@ -37,14 +37,13 @@ from nextrpg.global_config.global_config import config
 from nextrpg.scene.map_helper import MapHelper, get_polygon
 from nextrpg.scene.map_util import center_player
 from nextrpg.scene.scene import Scene
-from nextrpg.scene.static_scene import StaticScene
-from nextrpg.scene.transition_scene import TransitioningScene, TransitionScene
+from nextrpg.scene.transition_scene import TransitionScene
 
 logger = Logger("MapScene")
 
 
 @dataclass_with_instance_init
-class MapScene(EventfulScene, TransitioningScene):
+class MapScene(EventfulScene):
     """
     A scene implementation that represents a game map loaded from Tiled TMX.
 
@@ -158,10 +157,6 @@ class MapScene(EventfulScene, TransitioningScene):
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
         return self._move_to_scene or super().tick(time_delta)
-
-    @override
-    def tick_without_transition(self, time_delta: Millisecond) -> Scene:
-        return replace(self, npcs=tuple(n.tick(time_delta) for n in self.npcs))
 
     @cached_property
     @override
@@ -302,7 +297,7 @@ class Move:
             timepoint, scene = timed_scene
             time_delta = now - timepoint
             scene_with_player = replace(scene, player=scene.init_player(spec))
-            to_scene = scene_with_player.tick_without_transition(time_delta)
+            to_scene = scene_with_player.tick(time_delta)
         else:
             to_scene = self.next_scene(spec)
 
@@ -314,13 +309,13 @@ class Move:
             _tmxs.popitem(last=False)
         _tmxs[self.next_scene] = tmx
 
-        return TransitionScene(from_scene, StaticScene(), to_scene)
-
-
-_scenes: OrderedDict[str, _TimedScene] = OrderedDict()
-_tmxs: OrderedDict[Callable, str] = OrderedDict()
+        return TransitionScene(from_scene=from_scene, to_scene=to_scene)
 
 
 class _TimedScene(NamedTuple):
     time: Millisecond
     scene: MapScene
+
+
+_scenes: OrderedDict[str, _TimedScene] = OrderedDict()
+_tmxs: OrderedDict[Callable, str] = OrderedDict()

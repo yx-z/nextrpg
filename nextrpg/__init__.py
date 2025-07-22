@@ -113,7 +113,7 @@ from nextrpg.core.walk import *
 from nextrpg.draw.color import *
 from nextrpg.draw.draw_on_screen import *
 from nextrpg.draw.fade import *
-from nextrpg.draw.frames import *
+from nextrpg.draw.cyclic_frames import *
 from nextrpg.draw.text import *
 from nextrpg.draw.text_on_screen import *
 from nextrpg.event.code_transformers import *
@@ -142,5 +142,4 @@ from nextrpg.scene.map_helper import *
 from nextrpg.scene.map_scene import *
 from nextrpg.scene.map_util import *
 from nextrpg.scene.say_event_scene import *
-from nextrpg.scene.static_scene import *
 from nextrpg.scene.transition_scene import *

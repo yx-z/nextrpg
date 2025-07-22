@@ -2,7 +2,7 @@ from dataclasses import replace
 from functools import cached_property
 from test.util import MockCharacterDrawing
 from types import SimpleNamespace
-from typing import Any
+from typing import Any, Self, override
 from unittest.mock import Mock
 
 from pygame import K_SPACE, Event
@@ -13,9 +13,11 @@ from nextrpg import (
     CharacterSpec,
     Coordinate,
     Direction,
+    DrawOnScreen,
     EventfulScene,
     KeyPressDown,
     MapScene,
+    Millisecond,
     MovingNpcOnScreen,
     NpcOnScreen,
     NpcSpec,
@@ -27,6 +29,7 @@ from nextrpg import (
     Size,
     say,
 )
+from test.util import MockEventfulScene
 
 
 def test_npc_on_screen() -> None:
@@ -113,7 +116,7 @@ def test_npcs(mocker: MockerFixture) -> None:
             ),
         ),
     )
-    assert map_scene.npc_dict
+    assert map_scene.get_npc("name")
     mocker.patch("nextrpg.draw.font.Font.text_size", return_value=Size(1, 1))
     say_event = map_scene.event(KeyPressDown(Event(KEYDOWN, key=K_RETURN)))
     object.__setattr__(say_event.scene, "draw_on_screens", ())
@@ -125,10 +128,25 @@ def test_npcs(mocker: MockerFixture) -> None:
 
 
 def test_eventful_scene() -> None:
+    class MyEventScene(RpgEventScene):
+        @override
+        def tick(self, time_delta: Millisecond) -> Self:
+            return self
+
+        @override
+        @property
+        def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+            return ()
+
     def event() -> RpgEventGenerator:
-        yield lambda generator, scene: RpgEventScene(generator, scene)
+        yield lambda generator, scene: MyEventScene(generator, scene)
 
     gen = event()
+
+    assert MyEventScene(generator=gen, scene=MockEventfulScene()).tick(0)
+    assert not MyEventScene(
+        generator=gen, scene=MockEventfulScene()
+    ).draw_on_screens
 
     eventful = EventfulScene(
         player=PlayerOnScreen(

@@ -1,5 +1,3 @@
-from test.util import override_config
-
 from nextrpg import (
     Config,
     Coordinate,
@@ -7,6 +5,7 @@ from nextrpg import (
     ResizeMode,
     Size,
     center_player,
+    override_config,
 )
 
 

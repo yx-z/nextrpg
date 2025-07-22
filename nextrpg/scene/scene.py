@@ -18,14 +18,16 @@ follow, ensuring consistent behavior across different types of game scenes.
 """
 
 from functools import cached_property
+from typing import override
 
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.event.pygame_event import PygameEvent
+from nextrpg.draw.animated import Animated
 
 
-class Scene:
+class Scene(Animated):
     """
     Base class representing a game scene.
 
@@ -70,6 +72,7 @@ class Scene:
         return None
 
     @cached_property
+    @override
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         """
         Get the drawables to be rendered on screen with shift applied.
@@ -143,35 +146,6 @@ class Scene:
                 def _on_key_press_up(self, event: KeyPressUp) -> Scene:
                     # Handle key release
                     return self
-            ```
-        """
-        return self
-
-    def tick(self, time_delta: Millisecond) -> Scene:
-        """
-        Update the scene state for a single game frame.
-
-        This method is called each frame to update the scene state
-        based on elapsed time. It handles animations, movements,
-        and other time-dependent changes.
-
-        Arguments:
-            `time_delta`: The time elapsed since the last update
-                in milliseconds.
-
-        Returns:
-            `Scene`: The updated scene state after the time step.
-
-        Example:
-            ```python
-            def tick(self, time_delta: Millisecond) -> Scene:
-                # Update character animations
-                self.player = self.player.tick_idle(time_delta)
-
-                # Update timers
-                self.timer = self.timer.tick(time_delta)
-
-                return self
             ```
         """
         return self

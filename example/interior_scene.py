@@ -80,7 +80,8 @@ a sample nextrpg event. :)"""
     player: f"Hello {npc.name}! I am {player.name}."
     npc: f"Hello {player.name}!"
 
-    other_npc = scene.npc_dict["david" if npc.name == "alisa" else "alisa"]
+    other_name = "david" if npc.name == "alisa" else "alisa"
+    other_npc = scene.get_npc(other_name)
     other_npc: f"Hello! I am {other_npc.name}!"
 
 

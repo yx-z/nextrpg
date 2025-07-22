@@ -13,7 +13,7 @@ Features:
 """
 
 from dataclasses import KW_ONLY, field, replace
-from typing import NamedTuple, Self, override
+from typing import Self, override
 
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npcs import NpcOnScreen, NpcSpec
@@ -52,59 +52,19 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
             cyclic=self.spec.cyclic_walk and self.path.closed,
         )
     )
-    _idle_timer: Timer = instance_init(
-        lambda self: Timer(self.spec.idle_duration)
-    )
-    _move_timer: Timer = instance_init(
-        lambda self: Timer(self.spec.move_duration)
-    )
-    _moving: bool = True
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        if self._event_triggered or self._walk.complete:
-            return super().tick(time_delta)
-
-        if self._moving:
-            move_timer = self._move_timer.tick(time_delta)
-            idle_timer = self._idle_timer
-        else:
-            move_timer = self._move_timer
-            idle_timer = self._idle_timer.tick(time_delta)
-
-        if self._moving and move_timer.complete:
-            moving = False
-        elif not self._moving and idle_timer.complete:
-            moving = True
-        else:
-            moving = self._moving
-
-        if moving:
-            moved = MovingCharacterOnScreen.tick(self, time_delta)
-            walked = self._walk.tick(time_delta)
-            return replace(
-                moved,
-                character=moved.character.turn(walked.direction),
-                _walk=walked,
-                _idle_timer=idle_timer.reset,
-                _move_timer=move_timer,
-                _moving=True,
-            )
+        walk = self._walk.tick(time_delta)
+        moved = MovingCharacterOnScreen.tick(self, time_delta)
         return replace(
-            NpcOnScreen.tick(self, time_delta),
-            _idle_timer=idle_timer,
-            _move_timer=move_timer.reset,
-            _moving=False,
+            moved, character=moved.character.turn(walk.direction), _walk=walk
         )
 
     @property
     @override
     def moving(self) -> bool:
-        return (
-            self._moving
-            and not self._event_triggered
-            and not self._walk.complete
-        )
+        return not self._event_triggered and not self._walk.complete
 
     @override
     def move(self, time_delta: Millisecond) -> Coordinate:

@@ -14,7 +14,7 @@ Features:
 """
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from typing import NamedTuple, Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
@@ -25,6 +25,7 @@ from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw_on_screen import DrawOnScreen, Polygon
 from nextrpg.global_config.global_config import config
+from nextrpg.core.model import not_constructor_below
 
 logger = Logger("MovingCharacterOnScreen")
 
@@ -62,6 +63,16 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
     move_speed: PixelPerMillisecond = field(
         default_factory=lambda: config().character.move_speed
     )
+    _: KW_ONLY = not_constructor_below()
+    _move_toggle: bool = True
+
+    @property
+    def start_move(self) -> Self:
+        return replace(self, _move_toggle=True)
+
+    @property
+    def stop_move(self) -> Self:
+        return replace(self, _move_toggle=False)
 
     @property
     @abstractmethod
@@ -113,10 +124,10 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        if self._event_triggered:
+        if not self.moving:
             return super().tick(time_delta)
 
-        moved_coord = self.move(time_delta) if self.moving else None
+        moved_coord = self.move(time_delta)
         character = (
             self.character.tick_move(time_delta)
             if self.moving

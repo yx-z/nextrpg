@@ -1,20 +1,26 @@
-from contextlib import contextmanager
 from dataclasses import dataclass, replace
 from functools import cached_property
 from types import SimpleNamespace
-from typing import Any, Generator, NamedTuple, Self
+from typing import Any, NamedTuple, Self, override
 
 from pygame import Surface
 
 from nextrpg import (
+    Animated,
+    CharacterSpec,
+    DrawOnScreen,
+    EventfulScene,
+    NpcOnScreen,
+    PlayerOnScreen,
+    PygameEvent,
+    Scene,
     CharacterDrawing,
-    Config,
     Coordinate,
     Direction,
     Drawing,
     Millisecond,
-    config,
-    set_config,
+    Text,
+    TextOnScreen,
 )
 
 
@@ -72,10 +78,57 @@ class MockCharacterDrawing(CharacterDrawing):
         return self
 
 
-@contextmanager
-def override_config(cfg: Config) -> Generator[Config, None, None]:
-    previous_config = config()
-    try:
-        yield set_config(cfg)
-    finally:
-        set_config(previous_config)
+class MockScene(Scene):
+    @override
+    def tick(self, time_delta: Millisecond) -> Self:
+        return self
+
+    @override
+    def event(self, event: PygameEvent) -> Scene:
+        return self
+
+
+class MockEventfulScene(EventfulScene):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        pass
+
+
+class MockTextOnScreen(TextOnScreen):
+    def __init__(self, *args: Any, message: str = "", **kwargs: Any) -> None:
+        self.draw_on_screens = (
+            DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),
+        )
+        self.message = message
+
+    @property
+    def top_left(self) -> Coordinate:
+        return Coordinate(0, 0)
+
+    @property
+    def text(self) -> Text:
+        return Text(self.message)
+
+
+class MockAnimated(Animated):
+    @override
+    def tick(self, time_delta: Millisecond) -> Self:
+        return self
+
+    @override
+    @property
+    @override
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+        return (DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),)
+
+
+class MockPlayerOnScreen(PlayerOnScreen):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        pass
+
+    @property
+    def character(self) -> MockCharacterDrawing:
+        return MockCharacterDrawing()
+
+    @property
+    def spec(self) -> CharacterSpec:
+        return CharacterSpec(object_name="", character=MockCharacterDrawing())

@@ -250,7 +250,7 @@ class MapHelper:
             LayerTileBottomAndDrawOnScreen(
                 character_layer, character_bottom, draw_on_screen
             )
-            for draw_on_screen in character.character_and_visuals
+            for draw_on_screen in character.draw_on_screens
         )
 
     def _character_layer(self, character: CharacterOnScreen) -> int:

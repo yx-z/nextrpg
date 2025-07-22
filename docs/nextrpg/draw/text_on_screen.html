@@ -145,20 +145,11 @@ positioning and rendering.</p>
 </span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>        <span class="p">)</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
 </span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Surface</span><span class="p">:</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">        Render a single line of text to a pygame surface.</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">            `line`: The text line to render.</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="sd">        Returns:</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">            `Surface`: The rendered text surface.</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>            <span class="n">line</span><span class="p">,</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">antialias</span><span class="p">,</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>        <span class="p">)</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>            <span class="n">line</span><span class="p">,</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">antialias</span><span class="p">,</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -212,20 +203,11 @@ positioning and rendering.</p>
 </span><span id="TextOnScreen-60"><a href="#TextOnScreen-60"><span class="linenos">60</span></a>        <span class="p">)</span>
 </span><span id="TextOnScreen-61"><a href="#TextOnScreen-61"><span class="linenos">61</span></a>
 </span><span id="TextOnScreen-62"><a href="#TextOnScreen-62"><span class="linenos">62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_surface</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Surface</span><span class="p">:</span>
-</span><span id="TextOnScreen-63"><a href="#TextOnScreen-63"><span class="linenos">63</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="TextOnScreen-64"><a href="#TextOnScreen-64"><span class="linenos">64</span></a><span class="sd">        Render a single line of text to a pygame surface.</span>
-</span><span id="TextOnScreen-65"><a href="#TextOnScreen-65"><span class="linenos">65</span></a>
-</span><span id="TextOnScreen-66"><a href="#TextOnScreen-66"><span class="linenos">66</span></a><span class="sd">        Arguments:</span>
-</span><span id="TextOnScreen-67"><a href="#TextOnScreen-67"><span class="linenos">67</span></a><span class="sd">            `line`: The text line to render.</span>
-</span><span id="TextOnScreen-68"><a href="#TextOnScreen-68"><span class="linenos">68</span></a>
-</span><span id="TextOnScreen-69"><a href="#TextOnScreen-69"><span class="linenos">69</span></a><span class="sd">        Returns:</span>
-</span><span id="TextOnScreen-70"><a href="#TextOnScreen-70"><span class="linenos">70</span></a><span class="sd">            `Surface`: The rendered text surface.</span>
-</span><span id="TextOnScreen-71"><a href="#TextOnScreen-71"><span class="linenos">71</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="TextOnScreen-72"><a href="#TextOnScreen-72"><span class="linenos">72</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
-</span><span id="TextOnScreen-73"><a href="#TextOnScreen-73"><span class="linenos">73</span></a>            <span class="n">line</span><span class="p">,</span>
-</span><span id="TextOnScreen-74"><a href="#TextOnScreen-74"><span class="linenos">74</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">antialias</span><span class="p">,</span>
-</span><span id="TextOnScreen-75"><a href="#TextOnScreen-75"><span class="linenos">75</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
-</span><span id="TextOnScreen-76"><a href="#TextOnScreen-76"><span class="linenos">76</span></a>        <span class="p">)</span>
+</span><span id="TextOnScreen-63"><a href="#TextOnScreen-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+</span><span id="TextOnScreen-64"><a href="#TextOnScreen-64"><span class="linenos">64</span></a>            <span class="n">line</span><span class="p">,</span>
+</span><span id="TextOnScreen-65"><a href="#TextOnScreen-65"><span class="linenos">65</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">antialias</span><span class="p">,</span>
+</span><span id="TextOnScreen-66"><a href="#TextOnScreen-66"><span class="linenos">66</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">color</span><span class="p">,</span>
+</span><span id="TextOnScreen-67"><a href="#TextOnScreen-67"><span class="linenos">67</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 

@@ -14,8 +14,9 @@ Features:
 """
 
 from dataclasses import KW_ONLY, replace
-from typing import Self
+from typing import Self, override
 
+from nextrpg.draw.animated import Animated
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.event_as_attr import event_as_attr
@@ -53,7 +54,7 @@ class CharacterSpec:
 
 @dataclass_with_instance_init
 @event_as_attr
-class CharacterOnScreen:
+class CharacterOnScreen(Animated):
     """
     Represents a character that can be displayed and interacted with on screen.
 
@@ -89,17 +90,13 @@ class CharacterOnScreen:
     def name(self) -> str:
         return self.spec.display_name
 
+    @override
+    def tick(self, time_delta: Millisecond) -> Self:
+        return replace(self, character=self.character.tick_idle(time_delta))
+
     @property
-    def character_and_visuals(self) -> tuple[DrawOnScreen, ...]:
-        """
-        Get all visual elements associated with this character.
-
-        Returns the character's main drawing and any additional visual elements
-        that should be rendered with the character.
-
-        Returns:
-            All visual elements for the character.
-        """
+    @override
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         # TODO: Add visuals.
         return (self.draw_on_screen,)
 
@@ -115,22 +112,6 @@ class CharacterOnScreen:
             The character's drawing at its current position.
         """
         return DrawOnScreen(self.coordinate, self.character.drawing)
-
-    def tick(self, time_delta: Millisecond) -> Self:
-        """
-        Update the character's state for a single game loop iteration.
-
-        Updates the character's animation and internal state based on the
-        elapsed time. This is called each frame to keep the character's visual
-        state current.
-
-        Arguments:
-            time_delta: The elapsed time since the last update in milliseconds.
-
-        Returns:
-            The updated character state after the tick.
-        """
-        return replace(self, character=self.character.tick_idle(time_delta))
 
     def start_event(self, character: CharacterOnScreen) -> Self:
         """

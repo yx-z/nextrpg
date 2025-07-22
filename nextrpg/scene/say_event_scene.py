@@ -199,7 +199,9 @@ class _FadeIn(RpgEventScene):
     text: TextOnScreen
     config: SayEventConfig
     fade_in: FadeIn = instance_init(
-        lambda self: FadeIn(self.background, self.config.fade_duration)
+        lambda self: FadeIn(
+            resource=self.background, duration=self.config.fade_duration
+        )
     )
 
     @override
@@ -274,7 +276,9 @@ class _FadeOut(RpgEventScene):
     draws: tuple[DrawOnScreen, ...]
     config: SayEventConfig
     fade_out: FadeOut = instance_init(
-        lambda self: FadeOut(self.draws, self.config.fade_duration)
+        lambda self: FadeOut(
+            resource=self.draws, duration=self.config.fade_duration
+        )
     )
 
     @override
