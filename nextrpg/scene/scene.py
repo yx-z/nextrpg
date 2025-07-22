@@ -24,10 +24,10 @@ from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.event.pygame_event import PygameEvent
-from nextrpg.draw.animated import Animated
+from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 
 
-class Scene(Animated):
+class Scene(AnimatedOnScreen):
     """
     Base class representing a game scene.
 

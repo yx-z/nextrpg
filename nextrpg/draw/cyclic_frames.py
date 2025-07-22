@@ -14,7 +14,7 @@ Features:
 """
 
 from dataclasses import KW_ONLY, replace
-from typing import Self
+from typing import Self, override
 
 from nextrpg.core.model import (
     dataclass_with_instance_init,
@@ -23,10 +23,11 @@ from nextrpg.core.model import (
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.draw_on_screen import Drawing
+from nextrpg.draw.animated import Animated
 
 
 @dataclass_with_instance_init
-class CyclicFrames:
+class CyclicFrames(Animated):
     """
     Static frames that can be played sequentially to create animations.
 
@@ -48,39 +49,20 @@ class CyclicFrames:
     _timer: Timer = instance_init(lambda self: Timer(self.duration_per_frame))
 
     @property
-    def current_frame(self) -> Drawing:
-        """
-        Get the currently active frame in the animation sequence.
+    @override
+    def drawings(self) -> tuple[Drawing, ...]:
+        return (self.drawing,)
 
-        Returns the drawing at the current animation index position. The result
-        is cached until the instance is replaced with a new one.
-
-        Returns:
-            The current frame in the animation sequence.
-        """
+    @property
+    def drawing(self) -> Drawing:
         return self.frames[self._index]
 
+    @override
     def tick(self, time_delta: Millisecond) -> Self:
-        """
-        Advance animation frames based on elapsed time.
-
-        Calculates how many frames to advance based on the accumulated time and
-        creates a new `CyclicFrames` instance with updated index and elapsed
-        time.
-
-        Arguments:
-            time_delta: The time that has passed since the last step.
-
-        Returns:
-            A new instance with an updated animation state.
-        """
         timer = self._timer.tick(time_delta)
         frames_to_step = timer.elapsed // self.duration_per_frame
         index = (self._index + frames_to_step) % len(self.frames)
-        timer_mod = replace(
-            timer, elapsed=timer.elapsed % self.duration_per_frame
-        )
-        return replace(self, _index=index, _timer=timer_mod)
+        return replace(self, _index=index, _timer=timer.modulo)
 
     @property
     def reset(self) -> Self:

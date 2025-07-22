@@ -20,14 +20,14 @@ from typing import Self, TypeIs, override
 from nextrpg.core.model import dataclass_with_instance_init, instance_init
 from nextrpg.core.model import not_constructor_below
 from nextrpg.core.time import Millisecond, Timer
-from nextrpg.draw.animated import Animated
+from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.draw.color import alpha_from_percentage
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.global_config.global_config import config
 
 
 @dataclass_with_instance_init
-class Fade(Animated, ABC):
+class Fade(AnimatedOnScreen, ABC):
     """
     Fade effect for transitioning drawing resources.
 
@@ -44,8 +44,8 @@ class Fade(Animated, ABC):
     resource: (
         DrawOnScreen
         | tuple[DrawOnScreen, ...]
-        | Animated
-        | tuple[Animated, ...]
+        | AnimatedOnScreen
+        | tuple[AnimatedOnScreen, ...]
     )
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
@@ -78,7 +78,7 @@ class Fade(Animated, ABC):
     @override
     def tick(self, time_delta: Millisecond) -> Self:
         timer = self._timer.tick(time_delta)
-        if isinstance(self.resource, Animated):
+        if isinstance(self.resource, AnimatedOnScreen):
             return replace(
                 self, resource=self.resource.tick(time_delta), _timer=timer
             )
@@ -101,7 +101,7 @@ class Fade(Animated, ABC):
     def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         if isinstance(self.resource, DrawOnScreen):
             return (self.resource,)
-        if isinstance(self.resource, Animated):
+        if isinstance(self.resource, AnimatedOnScreen):
             return self.resource.draw_on_screens
         if _is_animated_tuple(self.resource):
             return tuple(d for a in self.resource for d in a.draw_on_screens)
@@ -192,14 +192,14 @@ def _is_animated_tuple(
     resource: (
         DrawOnScreen
         | tuple[DrawOnScreen, ...]
-        | Animated
-        | tuple[Animated, ...]
+        | AnimatedOnScreen
+        | tuple[AnimatedOnScreen, ...]
     ),
-) -> TypeIs[tuple[Animated, ...]]:
+) -> TypeIs[tuple[AnimatedOnScreen, ...]]:
     if not resource:
         return False
     if not isinstance(resource, tuple):
         return False
-    if not isinstance(resource[0], Animated):
+    if not isinstance(resource[0], AnimatedOnScreen):
         return False
     return True

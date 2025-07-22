@@ -6,7 +6,7 @@ from typing import Any, NamedTuple, Self, override
 from pygame import Surface
 
 from nextrpg import (
-    Animated,
+    AnimatedOnScreen,
     CharacterSpec,
     DrawOnScreen,
     EventfulScene,
@@ -109,7 +109,7 @@ class MockTextOnScreen(TextOnScreen):
         return Text(self.message)
 
 
-class MockAnimated(Animated):
+class MockAnimatedOnScreen(AnimatedOnScreen):
     @override
     def tick(self, time_delta: Millisecond) -> Self:
         return self

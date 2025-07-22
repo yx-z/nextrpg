@@ -8,13 +8,13 @@ from nextrpg.core.model import (
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond, Timer
-from nextrpg.draw.animated import Animated
+from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.draw.text_on_screen import TextOnScreen
 
 
 @dataclass_with_instance_init
-class Typewriter(Animated):
+class Typewriter(AnimatedOnScreen):
     text_on_screen: TextOnScreen
     delay: Millisecond
     _: KW_ONLY = not_constructor_below()

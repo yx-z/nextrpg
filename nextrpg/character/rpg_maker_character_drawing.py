@@ -211,7 +211,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
 
     @property
     def drawing(self) -> Drawing:
-        return self._frames[_adjust(self.direction)].current_frame
+        return self._frames[_adjust(self.direction)].drawing
 
     @override
     def turn(self, direction: Direction) -> Self:

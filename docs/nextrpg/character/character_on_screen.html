@@ -141,7 +141,7 @@ character management, and event handling for character interactions.</p>
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">KW_ONLY</span><span class="p">,</span> <span class="n">replace</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">override</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.animated</span><span class="w"> </span><span class="kn">import</span> <span class="n">Animated</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.animated_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnimatedOnScreen</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.event_as_attr</span><span class="w"> </span><span class="kn">import</span> <span class="n">event_as_attr</span>
@@ -179,7 +179,7 @@ character management, and event handling for character interactions.</p>
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="nd">@dataclass_with_instance_init</span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="nd">@event_as_attr</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">(</span><span class="n">Animated</span><span class="p">):</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">):</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">    Represents a character that can be displayed and interacted with on screen.</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>
@@ -380,7 +380,7 @@ and animation of the character.</li>
         <div class="decorator decorator-event_as_attr">@event_as_attr</div>
 
     <span class="def">class</span>
-    <span class="name">CharacterOnScreen</span><wbr>(<span class="base"><a href="../draw/animated.html#Animated">nextrpg.draw.animated.Animated</a></span>):
+    <span class="name">CharacterOnScreen</span><wbr>(<span class="base"><a href="../draw/animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a></span>):
 
                 <label class="view-source-button" for="CharacterOnScreen-view-source"><span>View Source</span></label>
 
@@ -388,7 +388,7 @@ and animation of the character.</li>
     <a class="headerlink" href="#CharacterOnScreen"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen-56"><a href="#CharacterOnScreen-56"><span class="linenos"> 56</span></a><span class="nd">@dataclass_with_instance_init</span>
 </span><span id="CharacterOnScreen-57"><a href="#CharacterOnScreen-57"><span class="linenos"> 57</span></a><span class="nd">@event_as_attr</span>
-</span><span id="CharacterOnScreen-58"><a href="#CharacterOnScreen-58"><span class="linenos"> 58</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">(</span><span class="n">Animated</span><span class="p">):</span>
+</span><span id="CharacterOnScreen-58"><a href="#CharacterOnScreen-58"><span class="linenos"> 58</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterOnScreen</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">):</span>
 </span><span id="CharacterOnScreen-59"><a href="#CharacterOnScreen-59"><span class="linenos"> 59</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterOnScreen-60"><a href="#CharacterOnScreen-60"><span class="linenos"> 60</span></a><span class="sd">    Represents a character that can be displayed and interacted with on screen.</span>
 </span><span id="CharacterOnScreen-61"><a href="#CharacterOnScreen-61"><span class="linenos"> 61</span></a>

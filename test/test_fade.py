@@ -1,6 +1,6 @@
 from nextrpg import Coordinate, DrawOnScreen, Drawing, FadeIn, FadeOut
 from test.util import MockSurface
-from test.util import MockAnimated
+from test.util import MockAnimatedOnScreen
 
 
 def test_fade() -> None:
@@ -18,6 +18,6 @@ def test_fade() -> None:
     assert fade_in.tick(9).draw_on_screens
     assert fade_in.tick(9).tick(999999999).draw_on_screens
 
-    assert FadeIn(resource=(MockAnimated(),)).tick(1).draw_on_screens
-    assert FadeOut(resource=MockAnimated()).tick(1).draw_on_screens
+    assert FadeIn(resource=(MockAnimatedOnScreen(),)).tick(1).draw_on_screens
+    assert FadeOut(resource=MockAnimatedOnScreen()).tick(1).draw_on_screens
     assert not FadeOut(resource=()).tick(1).draw_on_screens

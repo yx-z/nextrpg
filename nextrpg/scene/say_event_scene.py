@@ -28,7 +28,7 @@ from typing import Self, override
 
 from pygame.mixer_music import fadeout
 
-from nextrpg import Animated, MovingNpcOnScreen
+from nextrpg import AnimatedOnScreen, MovingNpcOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npcs import RpgEventScene
 from nextrpg.core.coordinate import Coordinate

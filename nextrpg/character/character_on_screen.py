@@ -16,7 +16,7 @@ Features:
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
-from nextrpg.draw.animated import Animated
+from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.event_as_attr import event_as_attr
@@ -54,7 +54,7 @@ class CharacterSpec:
 
 @dataclass_with_instance_init
 @event_as_attr
-class CharacterOnScreen(Animated):
+class CharacterOnScreen(AnimatedOnScreen):
     """
     Represents a character that can be displayed and interacted with on screen.
 
