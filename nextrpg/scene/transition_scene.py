@@ -70,16 +70,18 @@ class TransitionScene(Scene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
-        if not self._fade_in.complete:
+        fade_in = self._fade_in.tick(time_delta)
+        if not fade_in.complete:
             from_scene = self.from_scene.tick(time_delta)
-            fade_in = self._fade_in.tick(time_delta)
             return replace(self, from_scene=from_scene, _fade_in=fade_in)
 
-        to_scene = self.to_scene.tick(time_delta)
-        if self._fade_out.complete:
-            return to_scene
         fade_out = self._fade_out.tick(time_delta)
-        return replace(self, to_scene=to_scene, _fade_out=fade_out)
+        to_scene = self.to_scene.tick(time_delta)
+        if fade_out.complete:
+            return to_scene
+        return replace(
+            self, to_scene=to_scene, _fade_in=fade_in, _fade_out=fade_out
+        )
 
     @cached_property
     @override

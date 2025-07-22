@@ -43,6 +43,10 @@ class Timer:
     _: KW_ONLY = not_constructor_below()
     elapsed: Millisecond = 0
 
+    @property
+    def modulo(self) -> Self:
+        return self.reset.tick(self.elapsed % self.duration)
+
     def tick(self, time_delta: Millisecond) -> Self:
         """
         Tick the timer in a game loop.

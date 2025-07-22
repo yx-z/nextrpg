@@ -46,6 +46,9 @@
                                 <a class="variable" href="#Timer.elapsed">elapsed</a>
                         </li>
                         <li>
+                                <a class="variable" href="#Timer.modulo">modulo</a>
+                        </li>
+                        <li>
                                 <a class="function" href="#Timer.tick">tick</a>
                         </li>
                         <li>
@@ -135,96 +138,100 @@
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
 </span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>    <span class="n">elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>
-</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a><span class="sd">        Tick the timer in a game loop.</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>    <span class="nd">@property</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">modulo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>
-</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a><span class="sd">        Advances the timer by the given time delta and returns a new</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="sd">        timer instance with updated elapsed time.</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>
-</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="sd">            `time_delta`: The time elapsed since the last tick in</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="sd">                milliseconds.</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">        Tick the timer in a game loop.</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="sd">        Advances the timer by the given time delta and returns a new</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="sd">        timer instance with updated elapsed time.</span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">        Returns:</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">            `Timer`: A new timer with elapsed time updated.</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="sd">        Example:</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">            ```python</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">            timer = Timer(1000)  # 1 second timer</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">            timer = timer.tick(100)  # Advance by 100ms</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">            ```</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="nd">@property</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">        Get a reset timer.</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">        Creates a new timer instance with the same duration but</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">        elapsed time set to 0.</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">        Returns:</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">        Example:</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">            ```python</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">            timer = Timer(1000, 500)  # 1s timer, 500ms elapsed</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">            reset_timer = timer.reset  # 1s timer, 0ms elapsed</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">            ```</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>    <span class="nd">@property</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">        Get whether the timer has completed.</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">        Returns:</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="sd">            `bool`: Whether the timer has completed (elapsed &gt;= duration).</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">        Example:</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">            ```python</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">            timer = Timer(1000, 1200)  # 1s timer, 1.2s elapsed</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">            if timer.complete:</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">                print(&quot;Timer is done!&quot;)</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">            ```</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>    <span class="nd">@property</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">completed_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="sd">        Arguments:</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="sd">            `time_delta`: The time elapsed since the last tick in</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">                milliseconds.</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">        Returns:</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">            `Timer`: A new timer with elapsed time updated.</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">        Example:</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">            ```python</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">            timer = Timer(1000)  # 1 second timer</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">            timer = timer.tick(100)  # Advance by 100ms</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">            ```</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="nd">@property</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a><span class="sd">        Get a reset timer.</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">        Creates a new timer instance with the same duration but</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="sd">        elapsed time set to 0.</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">        Returns:</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">        Example:</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">            ```python</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">            timer = Timer(1000, 500)  # 1s timer, 500ms elapsed</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">            reset_timer = timer.reset  # 1s timer, 0ms elapsed</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">            ```</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>    <span class="nd">@property</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">        Get whether the timer has completed.</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">        Returns:</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">            `bool`: Whether the timer has completed (elapsed &gt;= duration).</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">        Example:</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="sd">            ```python</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="sd">            timer = Timer(1000, 1200)  # 1s timer, 1.2s elapsed</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="sd">            if timer.complete:</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">                print(&quot;Timer is done!&quot;)</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">            ```</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>
 </span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>    <span class="nd">@property</span>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">completed_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="nd">@property</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span>
 </span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>
-</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="sd">    Get the current time point in milliseconds.</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>    <span class="nd">@property</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
 </span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="sd">    Returns the current time from pygame&#39;s clock, which is typically</span>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">    used for calculating time deltas in game loops.</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">    Returns:</span>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">        `Millisecond`: Current time in milliseconds.</span>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a><span class="sd">    Example:</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">        ```python</span>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="sd">        start_time = get_timepoint()</span>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a><span class="sd">        # ... do some work ...</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">        end_time = get_timepoint()</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">        elapsed = end_time - start_time</span>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">        ```</span>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">    Get the current time point in milliseconds.</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">    Returns the current time from pygame&#39;s clock, which is typically</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="sd">    used for calculating time deltas in game loops.</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="sd">    Returns:</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="sd">        `Millisecond`: Current time in milliseconds.</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="sd">    Example:</span>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="sd">        ```python</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">        start_time = get_timepoint()</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">        # ... do some work ...</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">        end_time = get_timepoint()</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">        elapsed = end_time - start_time</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">        ```</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -287,75 +294,79 @@
 </span><span id="Timer-44"><a href="#Timer-44"><span class="linenos"> 44</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
 </span><span id="Timer-45"><a href="#Timer-45"><span class="linenos"> 45</span></a>    <span class="n">elapsed</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">0</span>
 </span><span id="Timer-46"><a href="#Timer-46"><span class="linenos"> 46</span></a>
-</span><span id="Timer-47"><a href="#Timer-47"><span class="linenos"> 47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Timer-48"><a href="#Timer-48"><span class="linenos"> 48</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer-49"><a href="#Timer-49"><span class="linenos"> 49</span></a><span class="sd">        Tick the timer in a game loop.</span>
+</span><span id="Timer-47"><a href="#Timer-47"><span class="linenos"> 47</span></a>    <span class="nd">@property</span>
+</span><span id="Timer-48"><a href="#Timer-48"><span class="linenos"> 48</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">modulo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Timer-49"><a href="#Timer-49"><span class="linenos"> 49</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
 </span><span id="Timer-50"><a href="#Timer-50"><span class="linenos"> 50</span></a>
-</span><span id="Timer-51"><a href="#Timer-51"><span class="linenos"> 51</span></a><span class="sd">        Advances the timer by the given time delta and returns a new</span>
-</span><span id="Timer-52"><a href="#Timer-52"><span class="linenos"> 52</span></a><span class="sd">        timer instance with updated elapsed time.</span>
-</span><span id="Timer-53"><a href="#Timer-53"><span class="linenos"> 53</span></a>
-</span><span id="Timer-54"><a href="#Timer-54"><span class="linenos"> 54</span></a><span class="sd">        Arguments:</span>
-</span><span id="Timer-55"><a href="#Timer-55"><span class="linenos"> 55</span></a><span class="sd">            `time_delta`: The time elapsed since the last tick in</span>
-</span><span id="Timer-56"><a href="#Timer-56"><span class="linenos"> 56</span></a><span class="sd">                milliseconds.</span>
+</span><span id="Timer-51"><a href="#Timer-51"><span class="linenos"> 51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Timer-52"><a href="#Timer-52"><span class="linenos"> 52</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer-53"><a href="#Timer-53"><span class="linenos"> 53</span></a><span class="sd">        Tick the timer in a game loop.</span>
+</span><span id="Timer-54"><a href="#Timer-54"><span class="linenos"> 54</span></a>
+</span><span id="Timer-55"><a href="#Timer-55"><span class="linenos"> 55</span></a><span class="sd">        Advances the timer by the given time delta and returns a new</span>
+</span><span id="Timer-56"><a href="#Timer-56"><span class="linenos"> 56</span></a><span class="sd">        timer instance with updated elapsed time.</span>
 </span><span id="Timer-57"><a href="#Timer-57"><span class="linenos"> 57</span></a>
-</span><span id="Timer-58"><a href="#Timer-58"><span class="linenos"> 58</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer-59"><a href="#Timer-59"><span class="linenos"> 59</span></a><span class="sd">            `Timer`: A new timer with elapsed time updated.</span>
-</span><span id="Timer-60"><a href="#Timer-60"><span class="linenos"> 60</span></a>
-</span><span id="Timer-61"><a href="#Timer-61"><span class="linenos"> 61</span></a><span class="sd">        Example:</span>
-</span><span id="Timer-62"><a href="#Timer-62"><span class="linenos"> 62</span></a><span class="sd">            ```python</span>
-</span><span id="Timer-63"><a href="#Timer-63"><span class="linenos"> 63</span></a><span class="sd">            timer = Timer(1000)  # 1 second timer</span>
-</span><span id="Timer-64"><a href="#Timer-64"><span class="linenos"> 64</span></a><span class="sd">            timer = timer.tick(100)  # Advance by 100ms</span>
-</span><span id="Timer-65"><a href="#Timer-65"><span class="linenos"> 65</span></a><span class="sd">            ```</span>
-</span><span id="Timer-66"><a href="#Timer-66"><span class="linenos"> 66</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer-67"><a href="#Timer-67"><span class="linenos"> 67</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
-</span><span id="Timer-68"><a href="#Timer-68"><span class="linenos"> 68</span></a>
-</span><span id="Timer-69"><a href="#Timer-69"><span class="linenos"> 69</span></a>    <span class="nd">@property</span>
-</span><span id="Timer-70"><a href="#Timer-70"><span class="linenos"> 70</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Timer-71"><a href="#Timer-71"><span class="linenos"> 71</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer-72"><a href="#Timer-72"><span class="linenos"> 72</span></a><span class="sd">        Get a reset timer.</span>
-</span><span id="Timer-73"><a href="#Timer-73"><span class="linenos"> 73</span></a>
-</span><span id="Timer-74"><a href="#Timer-74"><span class="linenos"> 74</span></a><span class="sd">        Creates a new timer instance with the same duration but</span>
-</span><span id="Timer-75"><a href="#Timer-75"><span class="linenos"> 75</span></a><span class="sd">        elapsed time set to 0.</span>
-</span><span id="Timer-76"><a href="#Timer-76"><span class="linenos"> 76</span></a>
-</span><span id="Timer-77"><a href="#Timer-77"><span class="linenos"> 77</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer-78"><a href="#Timer-78"><span class="linenos"> 78</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
-</span><span id="Timer-79"><a href="#Timer-79"><span class="linenos"> 79</span></a>
-</span><span id="Timer-80"><a href="#Timer-80"><span class="linenos"> 80</span></a><span class="sd">        Example:</span>
-</span><span id="Timer-81"><a href="#Timer-81"><span class="linenos"> 81</span></a><span class="sd">            ```python</span>
-</span><span id="Timer-82"><a href="#Timer-82"><span class="linenos"> 82</span></a><span class="sd">            timer = Timer(1000, 500)  # 1s timer, 500ms elapsed</span>
-</span><span id="Timer-83"><a href="#Timer-83"><span class="linenos"> 83</span></a><span class="sd">            reset_timer = timer.reset  # 1s timer, 0ms elapsed</span>
-</span><span id="Timer-84"><a href="#Timer-84"><span class="linenos"> 84</span></a><span class="sd">            ```</span>
-</span><span id="Timer-85"><a href="#Timer-85"><span class="linenos"> 85</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer-86"><a href="#Timer-86"><span class="linenos"> 86</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span><span id="Timer-87"><a href="#Timer-87"><span class="linenos"> 87</span></a>
-</span><span id="Timer-88"><a href="#Timer-88"><span class="linenos"> 88</span></a>    <span class="nd">@property</span>
-</span><span id="Timer-89"><a href="#Timer-89"><span class="linenos"> 89</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Timer-90"><a href="#Timer-90"><span class="linenos"> 90</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer-91"><a href="#Timer-91"><span class="linenos"> 91</span></a><span class="sd">        Get whether the timer has completed.</span>
-</span><span id="Timer-92"><a href="#Timer-92"><span class="linenos"> 92</span></a>
-</span><span id="Timer-93"><a href="#Timer-93"><span class="linenos"> 93</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer-94"><a href="#Timer-94"><span class="linenos"> 94</span></a><span class="sd">            `bool`: Whether the timer has completed (elapsed &gt;= duration).</span>
-</span><span id="Timer-95"><a href="#Timer-95"><span class="linenos"> 95</span></a>
-</span><span id="Timer-96"><a href="#Timer-96"><span class="linenos"> 96</span></a><span class="sd">        Example:</span>
-</span><span id="Timer-97"><a href="#Timer-97"><span class="linenos"> 97</span></a><span class="sd">            ```python</span>
-</span><span id="Timer-98"><a href="#Timer-98"><span class="linenos"> 98</span></a><span class="sd">            timer = Timer(1000, 1200)  # 1s timer, 1.2s elapsed</span>
-</span><span id="Timer-99"><a href="#Timer-99"><span class="linenos"> 99</span></a><span class="sd">            if timer.complete:</span>
-</span><span id="Timer-100"><a href="#Timer-100"><span class="linenos">100</span></a><span class="sd">                print(&quot;Timer is done!&quot;)</span>
-</span><span id="Timer-101"><a href="#Timer-101"><span class="linenos">101</span></a><span class="sd">            ```</span>
-</span><span id="Timer-102"><a href="#Timer-102"><span class="linenos">102</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer-103"><a href="#Timer-103"><span class="linenos">103</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
-</span><span id="Timer-104"><a href="#Timer-104"><span class="linenos">104</span></a>
-</span><span id="Timer-105"><a href="#Timer-105"><span class="linenos">105</span></a>    <span class="nd">@property</span>
-</span><span id="Timer-106"><a href="#Timer-106"><span class="linenos">106</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">completed_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="Timer-107"><a href="#Timer-107"><span class="linenos">107</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="Timer-58"><a href="#Timer-58"><span class="linenos"> 58</span></a><span class="sd">        Arguments:</span>
+</span><span id="Timer-59"><a href="#Timer-59"><span class="linenos"> 59</span></a><span class="sd">            `time_delta`: The time elapsed since the last tick in</span>
+</span><span id="Timer-60"><a href="#Timer-60"><span class="linenos"> 60</span></a><span class="sd">                milliseconds.</span>
+</span><span id="Timer-61"><a href="#Timer-61"><span class="linenos"> 61</span></a>
+</span><span id="Timer-62"><a href="#Timer-62"><span class="linenos"> 62</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer-63"><a href="#Timer-63"><span class="linenos"> 63</span></a><span class="sd">            `Timer`: A new timer with elapsed time updated.</span>
+</span><span id="Timer-64"><a href="#Timer-64"><span class="linenos"> 64</span></a>
+</span><span id="Timer-65"><a href="#Timer-65"><span class="linenos"> 65</span></a><span class="sd">        Example:</span>
+</span><span id="Timer-66"><a href="#Timer-66"><span class="linenos"> 66</span></a><span class="sd">            ```python</span>
+</span><span id="Timer-67"><a href="#Timer-67"><span class="linenos"> 67</span></a><span class="sd">            timer = Timer(1000)  # 1 second timer</span>
+</span><span id="Timer-68"><a href="#Timer-68"><span class="linenos"> 68</span></a><span class="sd">            timer = timer.tick(100)  # Advance by 100ms</span>
+</span><span id="Timer-69"><a href="#Timer-69"><span class="linenos"> 69</span></a><span class="sd">            ```</span>
+</span><span id="Timer-70"><a href="#Timer-70"><span class="linenos"> 70</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer-71"><a href="#Timer-71"><span class="linenos"> 71</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
+</span><span id="Timer-72"><a href="#Timer-72"><span class="linenos"> 72</span></a>
+</span><span id="Timer-73"><a href="#Timer-73"><span class="linenos"> 73</span></a>    <span class="nd">@property</span>
+</span><span id="Timer-74"><a href="#Timer-74"><span class="linenos"> 74</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Timer-75"><a href="#Timer-75"><span class="linenos"> 75</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer-76"><a href="#Timer-76"><span class="linenos"> 76</span></a><span class="sd">        Get a reset timer.</span>
+</span><span id="Timer-77"><a href="#Timer-77"><span class="linenos"> 77</span></a>
+</span><span id="Timer-78"><a href="#Timer-78"><span class="linenos"> 78</span></a><span class="sd">        Creates a new timer instance with the same duration but</span>
+</span><span id="Timer-79"><a href="#Timer-79"><span class="linenos"> 79</span></a><span class="sd">        elapsed time set to 0.</span>
+</span><span id="Timer-80"><a href="#Timer-80"><span class="linenos"> 80</span></a>
+</span><span id="Timer-81"><a href="#Timer-81"><span class="linenos"> 81</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer-82"><a href="#Timer-82"><span class="linenos"> 82</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
+</span><span id="Timer-83"><a href="#Timer-83"><span class="linenos"> 83</span></a>
+</span><span id="Timer-84"><a href="#Timer-84"><span class="linenos"> 84</span></a><span class="sd">        Example:</span>
+</span><span id="Timer-85"><a href="#Timer-85"><span class="linenos"> 85</span></a><span class="sd">            ```python</span>
+</span><span id="Timer-86"><a href="#Timer-86"><span class="linenos"> 86</span></a><span class="sd">            timer = Timer(1000, 500)  # 1s timer, 500ms elapsed</span>
+</span><span id="Timer-87"><a href="#Timer-87"><span class="linenos"> 87</span></a><span class="sd">            reset_timer = timer.reset  # 1s timer, 0ms elapsed</span>
+</span><span id="Timer-88"><a href="#Timer-88"><span class="linenos"> 88</span></a><span class="sd">            ```</span>
+</span><span id="Timer-89"><a href="#Timer-89"><span class="linenos"> 89</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer-90"><a href="#Timer-90"><span class="linenos"> 90</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="Timer-91"><a href="#Timer-91"><span class="linenos"> 91</span></a>
+</span><span id="Timer-92"><a href="#Timer-92"><span class="linenos"> 92</span></a>    <span class="nd">@property</span>
+</span><span id="Timer-93"><a href="#Timer-93"><span class="linenos"> 93</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Timer-94"><a href="#Timer-94"><span class="linenos"> 94</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer-95"><a href="#Timer-95"><span class="linenos"> 95</span></a><span class="sd">        Get whether the timer has completed.</span>
+</span><span id="Timer-96"><a href="#Timer-96"><span class="linenos"> 96</span></a>
+</span><span id="Timer-97"><a href="#Timer-97"><span class="linenos"> 97</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer-98"><a href="#Timer-98"><span class="linenos"> 98</span></a><span class="sd">            `bool`: Whether the timer has completed (elapsed &gt;= duration).</span>
+</span><span id="Timer-99"><a href="#Timer-99"><span class="linenos"> 99</span></a>
+</span><span id="Timer-100"><a href="#Timer-100"><span class="linenos">100</span></a><span class="sd">        Example:</span>
+</span><span id="Timer-101"><a href="#Timer-101"><span class="linenos">101</span></a><span class="sd">            ```python</span>
+</span><span id="Timer-102"><a href="#Timer-102"><span class="linenos">102</span></a><span class="sd">            timer = Timer(1000, 1200)  # 1s timer, 1.2s elapsed</span>
+</span><span id="Timer-103"><a href="#Timer-103"><span class="linenos">103</span></a><span class="sd">            if timer.complete:</span>
+</span><span id="Timer-104"><a href="#Timer-104"><span class="linenos">104</span></a><span class="sd">                print(&quot;Timer is done!&quot;)</span>
+</span><span id="Timer-105"><a href="#Timer-105"><span class="linenos">105</span></a><span class="sd">            ```</span>
+</span><span id="Timer-106"><a href="#Timer-106"><span class="linenos">106</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer-107"><a href="#Timer-107"><span class="linenos">107</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span><span id="Timer-108"><a href="#Timer-108"><span class="linenos">108</span></a>
 </span><span id="Timer-109"><a href="#Timer-109"><span class="linenos">109</span></a>    <span class="nd">@property</span>
-</span><span id="Timer-110"><a href="#Timer-110"><span class="linenos">110</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
-</span><span id="Timer-111"><a href="#Timer-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span>
+</span><span id="Timer-110"><a href="#Timer-110"><span class="linenos">110</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">completed_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="Timer-111"><a href="#Timer-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span><span id="Timer-112"><a href="#Timer-112"><span class="linenos">112</span></a>
 </span><span id="Timer-113"><a href="#Timer-113"><span class="linenos">113</span></a>    <span class="nd">@property</span>
-</span><span id="Timer-114"><a href="#Timer-114"><span class="linenos">114</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="Timer-115"><a href="#Timer-115"><span class="linenos">115</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="Timer-114"><a href="#Timer-114"><span class="linenos">114</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
+</span><span id="Timer-115"><a href="#Timer-115"><span class="linenos">115</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span>
+</span><span id="Timer-116"><a href="#Timer-116"><span class="linenos">116</span></a>
+</span><span id="Timer-117"><a href="#Timer-117"><span class="linenos">117</span></a>    <span class="nd">@property</span>
+</span><span id="Timer-118"><a href="#Timer-118"><span class="linenos">118</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="Timer-119"><a href="#Timer-119"><span class="linenos">119</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
@@ -426,6 +437,24 @@ used for animations, delays, and time-based game mechanics.</p>
     
 
                             </div>
+                            <div id="Timer.modulo" class="classattr">
+                                        <input id="Timer.modulo-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">modulo</span><span class="annotation">: Self</span>
+
+                <label class="view-source-button" for="Timer.modulo-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Timer.modulo"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.modulo-47"><a href="#Timer.modulo-47"><span class="linenos">47</span></a>    <span class="nd">@property</span>
+</span><span id="Timer.modulo-48"><a href="#Timer.modulo-48"><span class="linenos">48</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">modulo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Timer.modulo-49"><a href="#Timer.modulo-49"><span class="linenos">49</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
                             <div id="Timer.tick" class="classattr">
                                         <input id="Timer.tick-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
@@ -437,27 +466,27 @@ used for animations, delays, and time-based game mechanics.</p>
 
     </div>
     <a class="headerlink" href="#Timer.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.tick-47"><a href="#Timer.tick-47"><span class="linenos">47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Timer.tick-48"><a href="#Timer.tick-48"><span class="linenos">48</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer.tick-49"><a href="#Timer.tick-49"><span class="linenos">49</span></a><span class="sd">        Tick the timer in a game loop.</span>
-</span><span id="Timer.tick-50"><a href="#Timer.tick-50"><span class="linenos">50</span></a>
-</span><span id="Timer.tick-51"><a href="#Timer.tick-51"><span class="linenos">51</span></a><span class="sd">        Advances the timer by the given time delta and returns a new</span>
-</span><span id="Timer.tick-52"><a href="#Timer.tick-52"><span class="linenos">52</span></a><span class="sd">        timer instance with updated elapsed time.</span>
-</span><span id="Timer.tick-53"><a href="#Timer.tick-53"><span class="linenos">53</span></a>
-</span><span id="Timer.tick-54"><a href="#Timer.tick-54"><span class="linenos">54</span></a><span class="sd">        Arguments:</span>
-</span><span id="Timer.tick-55"><a href="#Timer.tick-55"><span class="linenos">55</span></a><span class="sd">            `time_delta`: The time elapsed since the last tick in</span>
-</span><span id="Timer.tick-56"><a href="#Timer.tick-56"><span class="linenos">56</span></a><span class="sd">                milliseconds.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.tick-51"><a href="#Timer.tick-51"><span class="linenos">51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Timer.tick-52"><a href="#Timer.tick-52"><span class="linenos">52</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer.tick-53"><a href="#Timer.tick-53"><span class="linenos">53</span></a><span class="sd">        Tick the timer in a game loop.</span>
+</span><span id="Timer.tick-54"><a href="#Timer.tick-54"><span class="linenos">54</span></a>
+</span><span id="Timer.tick-55"><a href="#Timer.tick-55"><span class="linenos">55</span></a><span class="sd">        Advances the timer by the given time delta and returns a new</span>
+</span><span id="Timer.tick-56"><a href="#Timer.tick-56"><span class="linenos">56</span></a><span class="sd">        timer instance with updated elapsed time.</span>
 </span><span id="Timer.tick-57"><a href="#Timer.tick-57"><span class="linenos">57</span></a>
-</span><span id="Timer.tick-58"><a href="#Timer.tick-58"><span class="linenos">58</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer.tick-59"><a href="#Timer.tick-59"><span class="linenos">59</span></a><span class="sd">            `Timer`: A new timer with elapsed time updated.</span>
-</span><span id="Timer.tick-60"><a href="#Timer.tick-60"><span class="linenos">60</span></a>
-</span><span id="Timer.tick-61"><a href="#Timer.tick-61"><span class="linenos">61</span></a><span class="sd">        Example:</span>
-</span><span id="Timer.tick-62"><a href="#Timer.tick-62"><span class="linenos">62</span></a><span class="sd">            ```python</span>
-</span><span id="Timer.tick-63"><a href="#Timer.tick-63"><span class="linenos">63</span></a><span class="sd">            timer = Timer(1000)  # 1 second timer</span>
-</span><span id="Timer.tick-64"><a href="#Timer.tick-64"><span class="linenos">64</span></a><span class="sd">            timer = timer.tick(100)  # Advance by 100ms</span>
-</span><span id="Timer.tick-65"><a href="#Timer.tick-65"><span class="linenos">65</span></a><span class="sd">            ```</span>
-</span><span id="Timer.tick-66"><a href="#Timer.tick-66"><span class="linenos">66</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer.tick-67"><a href="#Timer.tick-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
+</span><span id="Timer.tick-58"><a href="#Timer.tick-58"><span class="linenos">58</span></a><span class="sd">        Arguments:</span>
+</span><span id="Timer.tick-59"><a href="#Timer.tick-59"><span class="linenos">59</span></a><span class="sd">            `time_delta`: The time elapsed since the last tick in</span>
+</span><span id="Timer.tick-60"><a href="#Timer.tick-60"><span class="linenos">60</span></a><span class="sd">                milliseconds.</span>
+</span><span id="Timer.tick-61"><a href="#Timer.tick-61"><span class="linenos">61</span></a>
+</span><span id="Timer.tick-62"><a href="#Timer.tick-62"><span class="linenos">62</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer.tick-63"><a href="#Timer.tick-63"><span class="linenos">63</span></a><span class="sd">            `Timer`: A new timer with elapsed time updated.</span>
+</span><span id="Timer.tick-64"><a href="#Timer.tick-64"><span class="linenos">64</span></a>
+</span><span id="Timer.tick-65"><a href="#Timer.tick-65"><span class="linenos">65</span></a><span class="sd">        Example:</span>
+</span><span id="Timer.tick-66"><a href="#Timer.tick-66"><span class="linenos">66</span></a><span class="sd">            ```python</span>
+</span><span id="Timer.tick-67"><a href="#Timer.tick-67"><span class="linenos">67</span></a><span class="sd">            timer = Timer(1000)  # 1 second timer</span>
+</span><span id="Timer.tick-68"><a href="#Timer.tick-68"><span class="linenos">68</span></a><span class="sd">            timer = timer.tick(100)  # Advance by 100ms</span>
+</span><span id="Timer.tick-69"><a href="#Timer.tick-69"><span class="linenos">69</span></a><span class="sd">            ```</span>
+</span><span id="Timer.tick-70"><a href="#Timer.tick-70"><span class="linenos">70</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer.tick-71"><a href="#Timer.tick-71"><span class="linenos">71</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">+</span> <span class="n">time_delta</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -501,24 +530,24 @@ milliseconds.</li>
 
     </div>
     <a class="headerlink" href="#Timer.reset"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.reset-69"><a href="#Timer.reset-69"><span class="linenos">69</span></a>    <span class="nd">@property</span>
-</span><span id="Timer.reset-70"><a href="#Timer.reset-70"><span class="linenos">70</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Timer.reset-71"><a href="#Timer.reset-71"><span class="linenos">71</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer.reset-72"><a href="#Timer.reset-72"><span class="linenos">72</span></a><span class="sd">        Get a reset timer.</span>
-</span><span id="Timer.reset-73"><a href="#Timer.reset-73"><span class="linenos">73</span></a>
-</span><span id="Timer.reset-74"><a href="#Timer.reset-74"><span class="linenos">74</span></a><span class="sd">        Creates a new timer instance with the same duration but</span>
-</span><span id="Timer.reset-75"><a href="#Timer.reset-75"><span class="linenos">75</span></a><span class="sd">        elapsed time set to 0.</span>
-</span><span id="Timer.reset-76"><a href="#Timer.reset-76"><span class="linenos">76</span></a>
-</span><span id="Timer.reset-77"><a href="#Timer.reset-77"><span class="linenos">77</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer.reset-78"><a href="#Timer.reset-78"><span class="linenos">78</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
-</span><span id="Timer.reset-79"><a href="#Timer.reset-79"><span class="linenos">79</span></a>
-</span><span id="Timer.reset-80"><a href="#Timer.reset-80"><span class="linenos">80</span></a><span class="sd">        Example:</span>
-</span><span id="Timer.reset-81"><a href="#Timer.reset-81"><span class="linenos">81</span></a><span class="sd">            ```python</span>
-</span><span id="Timer.reset-82"><a href="#Timer.reset-82"><span class="linenos">82</span></a><span class="sd">            timer = Timer(1000, 500)  # 1s timer, 500ms elapsed</span>
-</span><span id="Timer.reset-83"><a href="#Timer.reset-83"><span class="linenos">83</span></a><span class="sd">            reset_timer = timer.reset  # 1s timer, 0ms elapsed</span>
-</span><span id="Timer.reset-84"><a href="#Timer.reset-84"><span class="linenos">84</span></a><span class="sd">            ```</span>
-</span><span id="Timer.reset-85"><a href="#Timer.reset-85"><span class="linenos">85</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer.reset-86"><a href="#Timer.reset-86"><span class="linenos">86</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.reset-73"><a href="#Timer.reset-73"><span class="linenos">73</span></a>    <span class="nd">@property</span>
+</span><span id="Timer.reset-74"><a href="#Timer.reset-74"><span class="linenos">74</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Timer.reset-75"><a href="#Timer.reset-75"><span class="linenos">75</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer.reset-76"><a href="#Timer.reset-76"><span class="linenos">76</span></a><span class="sd">        Get a reset timer.</span>
+</span><span id="Timer.reset-77"><a href="#Timer.reset-77"><span class="linenos">77</span></a>
+</span><span id="Timer.reset-78"><a href="#Timer.reset-78"><span class="linenos">78</span></a><span class="sd">        Creates a new timer instance with the same duration but</span>
+</span><span id="Timer.reset-79"><a href="#Timer.reset-79"><span class="linenos">79</span></a><span class="sd">        elapsed time set to 0.</span>
+</span><span id="Timer.reset-80"><a href="#Timer.reset-80"><span class="linenos">80</span></a>
+</span><span id="Timer.reset-81"><a href="#Timer.reset-81"><span class="linenos">81</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer.reset-82"><a href="#Timer.reset-82"><span class="linenos">82</span></a><span class="sd">            `Timer`: A new timer with elapsed time set to 0.</span>
+</span><span id="Timer.reset-83"><a href="#Timer.reset-83"><span class="linenos">83</span></a>
+</span><span id="Timer.reset-84"><a href="#Timer.reset-84"><span class="linenos">84</span></a><span class="sd">        Example:</span>
+</span><span id="Timer.reset-85"><a href="#Timer.reset-85"><span class="linenos">85</span></a><span class="sd">            ```python</span>
+</span><span id="Timer.reset-86"><a href="#Timer.reset-86"><span class="linenos">86</span></a><span class="sd">            timer = Timer(1000, 500)  # 1s timer, 500ms elapsed</span>
+</span><span id="Timer.reset-87"><a href="#Timer.reset-87"><span class="linenos">87</span></a><span class="sd">            reset_timer = timer.reset  # 1s timer, 0ms elapsed</span>
+</span><span id="Timer.reset-88"><a href="#Timer.reset-88"><span class="linenos">88</span></a><span class="sd">            ```</span>
+</span><span id="Timer.reset-89"><a href="#Timer.reset-89"><span class="linenos">89</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer.reset-90"><a href="#Timer.reset-90"><span class="linenos">90</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elapsed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -555,22 +584,22 @@ elapsed time set to 0.</p>
 
     </div>
     <a class="headerlink" href="#Timer.complete"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.complete-88"><a href="#Timer.complete-88"><span class="linenos"> 88</span></a>    <span class="nd">@property</span>
-</span><span id="Timer.complete-89"><a href="#Timer.complete-89"><span class="linenos"> 89</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="Timer.complete-90"><a href="#Timer.complete-90"><span class="linenos"> 90</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Timer.complete-91"><a href="#Timer.complete-91"><span class="linenos"> 91</span></a><span class="sd">        Get whether the timer has completed.</span>
-</span><span id="Timer.complete-92"><a href="#Timer.complete-92"><span class="linenos"> 92</span></a>
-</span><span id="Timer.complete-93"><a href="#Timer.complete-93"><span class="linenos"> 93</span></a><span class="sd">        Returns:</span>
-</span><span id="Timer.complete-94"><a href="#Timer.complete-94"><span class="linenos"> 94</span></a><span class="sd">            `bool`: Whether the timer has completed (elapsed &gt;= duration).</span>
-</span><span id="Timer.complete-95"><a href="#Timer.complete-95"><span class="linenos"> 95</span></a>
-</span><span id="Timer.complete-96"><a href="#Timer.complete-96"><span class="linenos"> 96</span></a><span class="sd">        Example:</span>
-</span><span id="Timer.complete-97"><a href="#Timer.complete-97"><span class="linenos"> 97</span></a><span class="sd">            ```python</span>
-</span><span id="Timer.complete-98"><a href="#Timer.complete-98"><span class="linenos"> 98</span></a><span class="sd">            timer = Timer(1000, 1200)  # 1s timer, 1.2s elapsed</span>
-</span><span id="Timer.complete-99"><a href="#Timer.complete-99"><span class="linenos"> 99</span></a><span class="sd">            if timer.complete:</span>
-</span><span id="Timer.complete-100"><a href="#Timer.complete-100"><span class="linenos">100</span></a><span class="sd">                print(&quot;Timer is done!&quot;)</span>
-</span><span id="Timer.complete-101"><a href="#Timer.complete-101"><span class="linenos">101</span></a><span class="sd">            ```</span>
-</span><span id="Timer.complete-102"><a href="#Timer.complete-102"><span class="linenos">102</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Timer.complete-103"><a href="#Timer.complete-103"><span class="linenos">103</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.complete-92"><a href="#Timer.complete-92"><span class="linenos"> 92</span></a>    <span class="nd">@property</span>
+</span><span id="Timer.complete-93"><a href="#Timer.complete-93"><span class="linenos"> 93</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="Timer.complete-94"><a href="#Timer.complete-94"><span class="linenos"> 94</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Timer.complete-95"><a href="#Timer.complete-95"><span class="linenos"> 95</span></a><span class="sd">        Get whether the timer has completed.</span>
+</span><span id="Timer.complete-96"><a href="#Timer.complete-96"><span class="linenos"> 96</span></a>
+</span><span id="Timer.complete-97"><a href="#Timer.complete-97"><span class="linenos"> 97</span></a><span class="sd">        Returns:</span>
+</span><span id="Timer.complete-98"><a href="#Timer.complete-98"><span class="linenos"> 98</span></a><span class="sd">            `bool`: Whether the timer has completed (elapsed &gt;= duration).</span>
+</span><span id="Timer.complete-99"><a href="#Timer.complete-99"><span class="linenos"> 99</span></a>
+</span><span id="Timer.complete-100"><a href="#Timer.complete-100"><span class="linenos">100</span></a><span class="sd">        Example:</span>
+</span><span id="Timer.complete-101"><a href="#Timer.complete-101"><span class="linenos">101</span></a><span class="sd">            ```python</span>
+</span><span id="Timer.complete-102"><a href="#Timer.complete-102"><span class="linenos">102</span></a><span class="sd">            timer = Timer(1000, 1200)  # 1s timer, 1.2s elapsed</span>
+</span><span id="Timer.complete-103"><a href="#Timer.complete-103"><span class="linenos">103</span></a><span class="sd">            if timer.complete:</span>
+</span><span id="Timer.complete-104"><a href="#Timer.complete-104"><span class="linenos">104</span></a><span class="sd">                print(&quot;Timer is done!&quot;)</span>
+</span><span id="Timer.complete-105"><a href="#Timer.complete-105"><span class="linenos">105</span></a><span class="sd">            ```</span>
+</span><span id="Timer.complete-106"><a href="#Timer.complete-106"><span class="linenos">106</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Timer.complete-107"><a href="#Timer.complete-107"><span class="linenos">107</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
@@ -605,9 +634,9 @@ elapsed time set to 0.</p>
 
     </div>
     <a class="headerlink" href="#Timer.completed_percentage"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.completed_percentage-105"><a href="#Timer.completed_percentage-105"><span class="linenos">105</span></a>    <span class="nd">@property</span>
-</span><span id="Timer.completed_percentage-106"><a href="#Timer.completed_percentage-106"><span class="linenos">106</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">completed_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="Timer.completed_percentage-107"><a href="#Timer.completed_percentage-107"><span class="linenos">107</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.completed_percentage-109"><a href="#Timer.completed_percentage-109"><span class="linenos">109</span></a>    <span class="nd">@property</span>
+</span><span id="Timer.completed_percentage-110"><a href="#Timer.completed_percentage-110"><span class="linenos">110</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">completed_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="Timer.completed_percentage-111"><a href="#Timer.completed_percentage-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
@@ -623,9 +652,9 @@ elapsed time set to 0.</p>
 
     </div>
     <a class="headerlink" href="#Timer.remaining"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.remaining-109"><a href="#Timer.remaining-109"><span class="linenos">109</span></a>    <span class="nd">@property</span>
-</span><span id="Timer.remaining-110"><a href="#Timer.remaining-110"><span class="linenos">110</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
-</span><span id="Timer.remaining-111"><a href="#Timer.remaining-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.remaining-113"><a href="#Timer.remaining-113"><span class="linenos">113</span></a>    <span class="nd">@property</span>
+</span><span id="Timer.remaining-114"><a href="#Timer.remaining-114"><span class="linenos">114</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
+</span><span id="Timer.remaining-115"><a href="#Timer.remaining-115"><span class="linenos">115</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">elapsed</span>
 </span></pre></div>
 
 
@@ -641,9 +670,9 @@ elapsed time set to 0.</p>
 
     </div>
     <a class="headerlink" href="#Timer.remaining_percentage"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.remaining_percentage-113"><a href="#Timer.remaining_percentage-113"><span class="linenos">113</span></a>    <span class="nd">@property</span>
-</span><span id="Timer.remaining_percentage-114"><a href="#Timer.remaining_percentage-114"><span class="linenos">114</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="Timer.remaining_percentage-115"><a href="#Timer.remaining_percentage-115"><span class="linenos">115</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Timer.remaining_percentage-117"><a href="#Timer.remaining_percentage-117"><span class="linenos">117</span></a>    <span class="nd">@property</span>
+</span><span id="Timer.remaining_percentage-118"><a href="#Timer.remaining_percentage-118"><span class="linenos">118</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">remaining_percentage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="Timer.remaining_percentage-119"><a href="#Timer.remaining_percentage-119"><span class="linenos">119</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
@@ -662,25 +691,25 @@ elapsed time set to 0.</p>
 
     </div>
     <a class="headerlink" href="#get_timepoint"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_timepoint-118"><a href="#get_timepoint-118"><span class="linenos">118</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
-</span><span id="get_timepoint-119"><a href="#get_timepoint-119"><span class="linenos">119</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="get_timepoint-120"><a href="#get_timepoint-120"><span class="linenos">120</span></a><span class="sd">    Get the current time point in milliseconds.</span>
-</span><span id="get_timepoint-121"><a href="#get_timepoint-121"><span class="linenos">121</span></a>
-</span><span id="get_timepoint-122"><a href="#get_timepoint-122"><span class="linenos">122</span></a><span class="sd">    Returns the current time from pygame&#39;s clock, which is typically</span>
-</span><span id="get_timepoint-123"><a href="#get_timepoint-123"><span class="linenos">123</span></a><span class="sd">    used for calculating time deltas in game loops.</span>
-</span><span id="get_timepoint-124"><a href="#get_timepoint-124"><span class="linenos">124</span></a>
-</span><span id="get_timepoint-125"><a href="#get_timepoint-125"><span class="linenos">125</span></a><span class="sd">    Returns:</span>
-</span><span id="get_timepoint-126"><a href="#get_timepoint-126"><span class="linenos">126</span></a><span class="sd">        `Millisecond`: Current time in milliseconds.</span>
-</span><span id="get_timepoint-127"><a href="#get_timepoint-127"><span class="linenos">127</span></a>
-</span><span id="get_timepoint-128"><a href="#get_timepoint-128"><span class="linenos">128</span></a><span class="sd">    Example:</span>
-</span><span id="get_timepoint-129"><a href="#get_timepoint-129"><span class="linenos">129</span></a><span class="sd">        ```python</span>
-</span><span id="get_timepoint-130"><a href="#get_timepoint-130"><span class="linenos">130</span></a><span class="sd">        start_time = get_timepoint()</span>
-</span><span id="get_timepoint-131"><a href="#get_timepoint-131"><span class="linenos">131</span></a><span class="sd">        # ... do some work ...</span>
-</span><span id="get_timepoint-132"><a href="#get_timepoint-132"><span class="linenos">132</span></a><span class="sd">        end_time = get_timepoint()</span>
-</span><span id="get_timepoint-133"><a href="#get_timepoint-133"><span class="linenos">133</span></a><span class="sd">        elapsed = end_time - start_time</span>
-</span><span id="get_timepoint-134"><a href="#get_timepoint-134"><span class="linenos">134</span></a><span class="sd">        ```</span>
-</span><span id="get_timepoint-135"><a href="#get_timepoint-135"><span class="linenos">135</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="get_timepoint-136"><a href="#get_timepoint-136"><span class="linenos">136</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_timepoint-122"><a href="#get_timepoint-122"><span class="linenos">122</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_timepoint</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
+</span><span id="get_timepoint-123"><a href="#get_timepoint-123"><span class="linenos">123</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="get_timepoint-124"><a href="#get_timepoint-124"><span class="linenos">124</span></a><span class="sd">    Get the current time point in milliseconds.</span>
+</span><span id="get_timepoint-125"><a href="#get_timepoint-125"><span class="linenos">125</span></a>
+</span><span id="get_timepoint-126"><a href="#get_timepoint-126"><span class="linenos">126</span></a><span class="sd">    Returns the current time from pygame&#39;s clock, which is typically</span>
+</span><span id="get_timepoint-127"><a href="#get_timepoint-127"><span class="linenos">127</span></a><span class="sd">    used for calculating time deltas in game loops.</span>
+</span><span id="get_timepoint-128"><a href="#get_timepoint-128"><span class="linenos">128</span></a>
+</span><span id="get_timepoint-129"><a href="#get_timepoint-129"><span class="linenos">129</span></a><span class="sd">    Returns:</span>
+</span><span id="get_timepoint-130"><a href="#get_timepoint-130"><span class="linenos">130</span></a><span class="sd">        `Millisecond`: Current time in milliseconds.</span>
+</span><span id="get_timepoint-131"><a href="#get_timepoint-131"><span class="linenos">131</span></a>
+</span><span id="get_timepoint-132"><a href="#get_timepoint-132"><span class="linenos">132</span></a><span class="sd">    Example:</span>
+</span><span id="get_timepoint-133"><a href="#get_timepoint-133"><span class="linenos">133</span></a><span class="sd">        ```python</span>
+</span><span id="get_timepoint-134"><a href="#get_timepoint-134"><span class="linenos">134</span></a><span class="sd">        start_time = get_timepoint()</span>
+</span><span id="get_timepoint-135"><a href="#get_timepoint-135"><span class="linenos">135</span></a><span class="sd">        # ... do some work ...</span>
+</span><span id="get_timepoint-136"><a href="#get_timepoint-136"><span class="linenos">136</span></a><span class="sd">        end_time = get_timepoint()</span>
+</span><span id="get_timepoint-137"><a href="#get_timepoint-137"><span class="linenos">137</span></a><span class="sd">        elapsed = end_time - start_time</span>
+</span><span id="get_timepoint-138"><a href="#get_timepoint-138"><span class="linenos">138</span></a><span class="sd">        ```</span>
+</span><span id="get_timepoint-139"><a href="#get_timepoint-139"><span class="linenos">139</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="get_timepoint-140"><a href="#get_timepoint-140"><span class="linenos">140</span></a>    <span class="k">return</span> <span class="n">get_ticks</span><span class="p">()</span>
 </span></pre></div>
 
 

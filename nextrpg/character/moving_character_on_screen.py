@@ -189,7 +189,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
         if collision_and_coord := self._collide(hit_coords):
             collision, coord = collision_and_coord
-            logger.debug(f"Collision {coord} and {collision.points}")
+            logger.debug(t"Collision {coord} and {collision.points}")
             return False
         return True
 

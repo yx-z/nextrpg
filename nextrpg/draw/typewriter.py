@@ -36,8 +36,7 @@ class Typewriter(Animated):
             return replace(self, _timer=timer)
 
         index = self._tick(timer.elapsed // self.delay)
-        mod = timer.reset.tick(timer.elapsed % self.delay)
-        return replace(self, _index=index, _timer=mod)
+        return replace(self, _index=index, _timer=timer.modulo)
 
     def _tick(self, steps: int) -> int:
         message = self.text_on_screen.text.message

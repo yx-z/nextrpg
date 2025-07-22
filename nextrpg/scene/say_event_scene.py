@@ -26,6 +26,8 @@ from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from typing import Self, override
 
+from pygame.mixer_music import fadeout
+
 from nextrpg import Animated, MovingNpcOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npcs import RpgEventScene
@@ -247,6 +249,7 @@ class _FadeIn(_SayEventAddOn):
     def add_ons(self) -> tuple[DrawOnScreen, ...]:
         return self.fade_in.draw_on_screens
 
+    @override
     def tick(self, time_delta: Millisecond) -> Scene:
         fade_in = self.fade_in.tick(time_delta)
         scene = self.scene.tick_without_event(time_delta)
@@ -291,11 +294,8 @@ class _Typing(_SayEventAddOn):
         typewriter = (
             self.typewriter.tick(time_delta) if self.typewriter else None
         )
-        return replace(
-            self,
-            scene=self.scene.tick_without_event(time_delta),
-            typewriter=typewriter,
-        )
+        scene = self.scene.tick_without_event(time_delta)
+        return replace(self, scene=scene, typewriter=typewriter)
 
     @override
     def event(self, event: PygameEvent) -> Scene:
@@ -328,11 +328,8 @@ class _FadeOut(_SayEventAddOn):
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
-        if self.fade_out.complete:
-            return self.scene.send(self.generator)
-
-        return replace(
-            self,
-            scene=self.scene.tick_without_event(time_delta),
-            fade_out=self.fade_out.tick(time_delta),
-        )
+        fade_out = self.fade_out.tick(time_delta)
+        scene = self.scene.tick_without_event(time_delta)
+        if fade_out.complete:
+            return scene.send(self.generator)
+        return replace(self, scene=scene, fade_out=fade_out)
