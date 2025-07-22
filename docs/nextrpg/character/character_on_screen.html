@@ -64,7 +64,7 @@
                                 <a class="variable" href="#CharacterOnScreen.character">character</a>
                         </li>
                         <li>
-                                <a class="variable" href="#CharacterOnScreen.name">name</a>
+                                <a class="variable" href="#CharacterOnScreen.display_name">display_name</a>
                         </li>
                         <li>
                                 <a class="function" href="#CharacterOnScreen.tick">tick</a>
@@ -212,7 +212,7 @@ character management, and event handling for character interactions.</p>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>    <span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>    <span class="nd">@property</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>    <span class="nd">@override</span>
@@ -421,7 +421,7 @@ and animation of the character.</li>
 </span><span id="CharacterOnScreen-88"><a href="#CharacterOnScreen-88"><span class="linenos"> 88</span></a>    <span class="n">_event_triggered</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 </span><span id="CharacterOnScreen-89"><a href="#CharacterOnScreen-89"><span class="linenos"> 89</span></a>
 </span><span id="CharacterOnScreen-90"><a href="#CharacterOnScreen-90"><span class="linenos"> 90</span></a>    <span class="nd">@property</span>
-</span><span id="CharacterOnScreen-91"><a href="#CharacterOnScreen-91"><span class="linenos"> 91</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="CharacterOnScreen-91"><a href="#CharacterOnScreen-91"><span class="linenos"> 91</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 </span><span id="CharacterOnScreen-92"><a href="#CharacterOnScreen-92"><span class="linenos"> 92</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span>
 </span><span id="CharacterOnScreen-93"><a href="#CharacterOnScreen-93"><span class="linenos"> 93</span></a>
 </span><span id="CharacterOnScreen-94"><a href="#CharacterOnScreen-94"><span class="linenos"> 94</span></a>    <span class="nd">@override</span>
@@ -551,18 +551,18 @@ participating in an event.</li>
     
 
                             </div>
-                            <div id="CharacterOnScreen.name" class="classattr">
-                                        <input id="CharacterOnScreen.name-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="CharacterOnScreen.display_name" class="classattr">
+                                        <input id="CharacterOnScreen.display_name-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">name</span><span class="annotation">: str</span>
+            <span class="name">display_name</span><span class="annotation">: str</span>
 
-                <label class="view-source-button" for="CharacterOnScreen.name-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="CharacterOnScreen.display_name-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#CharacterOnScreen.name"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.name-90"><a href="#CharacterOnScreen.name-90"><span class="linenos">90</span></a>    <span class="nd">@property</span>
-</span><span id="CharacterOnScreen.name-91"><a href="#CharacterOnScreen.name-91"><span class="linenos">91</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="CharacterOnScreen.name-92"><a href="#CharacterOnScreen.name-92"><span class="linenos">92</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span>
+    <a class="headerlink" href="#CharacterOnScreen.display_name"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterOnScreen.display_name-90"><a href="#CharacterOnScreen.display_name-90"><span class="linenos">90</span></a>    <span class="nd">@property</span>
+</span><span id="CharacterOnScreen.display_name-91"><a href="#CharacterOnScreen.display_name-91"><span class="linenos">91</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="CharacterOnScreen.display_name-92"><a href="#CharacterOnScreen.display_name-92"><span class="linenos">92</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span>
 </span></pre></div>
 
 

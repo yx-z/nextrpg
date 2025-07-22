@@ -8,4 +8,4 @@ def test_character_on_screen() -> None:
         spec=CharacterSpec(object_name="abc", character=MockCharacterDrawing()),
         coordinate=Coordinate(0, 0),
         collisions=(),
-    ).name
+    ).display_name

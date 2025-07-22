@@ -73,6 +73,7 @@ class GameLoop:
         window = self._window.update
         window.draw(self._scene.draw_on_screens, time_delta)
 
+        logger.debug(t"Current scene {type(self._scene)}", duration=None)
         loop = replace(
             self, _scene=self._scene.tick(time_delta), _window=window
         )

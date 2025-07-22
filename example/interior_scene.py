@@ -71,18 +71,18 @@ def greet(
     Returns:
         `None`
     """
+    other_name = "david" if npc.display_name == "alisa" else "alisa"
+    other_npc = scene.get_npc(other_name)
+    other_npc: f"Hello! I am {other_npc.display_name}!"
+
     scene: """Greetings!
 This is...
 
 a sample nextrpg event. :)"""
 
     npc: "Nice to meet you! What's your name?"
-    player: f"Hello {npc.name}! I am {player.name}."
-    npc: f"Hello {player.name}!"
-
-    other_name = "david" if npc.name == "alisa" else "alisa"
-    other_npc = scene.get_npc(other_name)
-    other_npc: f"Hello! I am {other_npc.name}!"
+    player: f"Hello {npc.display_name}! I am {player.display_name}."
+    npc: f"Hello {player.display_name}!"
 
 
 def sprite_sheet() -> SpriteSheet:

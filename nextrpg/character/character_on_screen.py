@@ -87,7 +87,7 @@ class CharacterOnScreen(Animated):
     _event_triggered: bool = False
 
     @property
-    def name(self) -> str:
+    def display_name(self) -> str:
         return self.spec.display_name
 
     @override

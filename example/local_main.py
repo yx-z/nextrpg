@@ -13,5 +13,5 @@ from nextrpg import Config, DebugConfig, Game, set_config
 
 # set up global (debug) global_config
 set_config(Config(debug=DebugConfig()))
-set_config(Config())
+# set_config(Config())
 Game(entry_scene=interior_scene).start()

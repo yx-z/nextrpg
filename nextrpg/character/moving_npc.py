@@ -55,6 +55,9 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
+        if not self.moving:
+            return super().tick(time_delta)
+
         walk = self._walk.tick(time_delta)
         moved = MovingCharacterOnScreen.tick(self, time_delta)
         return replace(

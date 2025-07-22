@@ -20,10 +20,13 @@ Key Features:
     - Event-driven dialogue flow
 """
 
-from dataclasses import KW_ONLY, replace
+from abc import ABC, abstractmethod
+from collections.abc import Callable
+from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
-from typing import override
+from typing import Self, override
 
+from nextrpg import Animated, MovingNpcOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npcs import RpgEventScene
 from nextrpg.core.coordinate import Coordinate
@@ -125,12 +128,24 @@ class SayEventScene(RpgEventScene):
 
     @property
     def _init_state(self) -> Scene:
+        character_object_name = (
+            self.character_or_scene.spec.object_name
+            if isinstance(self.character_or_scene, MovingNpcOnScreen)
+            else None
+        )
+        initial_coord = (
+            self.scene.get_npc(character_object_name).coordinate
+            if character_object_name
+            else None
+        )
         return _FadeIn(
             scene=self.scene,
             background=self._background,
             text=self._text_on_screen,
             config=self.config,
             generator=self.generator,
+            npc_object_name=character_object_name,
+            initial_coord=initial_coord,
         )
 
     @cached_property
@@ -193,8 +208,31 @@ class SayEventScene(RpgEventScene):
         )
 
 
+@dataclass(frozen=True)
+class _SayEventAddOn(RpgEventScene, ABC):
+    npc_object_name: str | None
+    initial_coord: Coordinate | None
+
+    @property
+    @abstractmethod
+    def add_ons(self) -> tuple[DrawOnScreen, ...]:
+        return NotImplemented
+
+    @override
+    @cached_property
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+        if self.npc_object_name:
+            npc = self.scene.get_npc(self.npc_object_name)
+            diff = npc.coordinate.shift(self.initial_coord.negate)
+            add_on = tuple(a.shift(diff) for a in self.add_ons)
+        else:
+            add_on = self.add_ons
+
+        return self.scene.draw_on_screens + add_on
+
+
 @dataclass_with_instance_init
-class _FadeIn(RpgEventScene):
+class _FadeIn(_SayEventAddOn):
     background: tuple[DrawOnScreen, ...]
     text: TextOnScreen
     config: SayEventConfig
@@ -204,52 +242,51 @@ class _FadeIn(RpgEventScene):
         )
     )
 
+    @property
     @override
-    @cached_property
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return self.scene.draw_on_screens + self.fade_in.draw_on_screens
+    def add_ons(self) -> tuple[DrawOnScreen, ...]:
+        return self.fade_in.draw_on_screens
 
     def tick(self, time_delta: Millisecond) -> Scene:
-        if self.fade_in.complete:
+        fade_in = self.fade_in.tick(time_delta)
+        scene = self.scene.tick_without_event(time_delta)
+        if fade_in.complete:
             return _Typing(
-                scene=self.scene,
+                scene=scene,
                 background=self.background,
                 text=self.text,
                 config=self.config,
                 generator=self.generator,
+                npc_object_name=self.npc_object_name,
+                initial_coord=self.initial_coord,
             )
-
-        return replace(
-            self,
-            scene=self.scene.tick_without_event(time_delta),
-            fade_in=self.fade_in.tick(time_delta),
-        )
+        return replace(self, scene=scene, fade_in=fade_in)
 
 
 @dataclass_with_instance_init
-class _Typing(RpgEventScene):
+class _Typing(_SayEventAddOn):
     background: tuple[DrawOnScreen, ...]
     text: TextOnScreen
     config: SayEventConfig
-    _: KW_ONLY = not_constructor_below()
     typewriter: Typewriter | None = instance_init(
         lambda self: (
-            Typewriter(self.text, delay)
+            Typewriter(text_on_screen=self.text, delay=delay)
             if (delay := self.config.text_delay)
             else None
         )
     )
 
     @override
-    @cached_property
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+    @property
+    def add_ons(self) -> tuple[DrawOnScreen, ...]:
         text = (
             self.typewriter.draw_on_screens
             if self.typewriter
             else self.text.draw_on_screens
         )
-        return self.scene.draw_on_screens + self.background + text
+        return self.background + text
 
+    @override
     def tick(self, time_delta: Millisecond) -> Scene:
         typewriter = (
             self.typewriter.tick(time_delta) if self.typewriter else None
@@ -260,6 +297,7 @@ class _Typing(RpgEventScene):
             typewriter=typewriter,
         )
 
+    @override
     def event(self, event: PygameEvent) -> Scene:
         if isinstance(event, KeyPressDown) and event.key is KeyboardKey.CONFIRM:
             return _FadeOut(
@@ -267,12 +305,14 @@ class _Typing(RpgEventScene):
                 draws=self.background + self.text.draw_on_screens,
                 config=self.config,
                 generator=self.generator,
+                npc_object_name=self.npc_object_name,
+                initial_coord=self.initial_coord,
             )
         return self
 
 
 @dataclass_with_instance_init
-class _FadeOut(RpgEventScene):
+class _FadeOut(_SayEventAddOn):
     draws: tuple[DrawOnScreen, ...]
     config: SayEventConfig
     fade_out: FadeOut = instance_init(
@@ -282,10 +322,11 @@ class _FadeOut(RpgEventScene):
     )
 
     @override
-    @cached_property
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return self.scene.draw_on_screens + self.fade_out.draw_on_screens
+    @property
+    def add_ons(self) -> tuple[DrawOnScreen, ...]:
+        return self.fade_out.draw_on_screens
 
+    @override
     def tick(self, time_delta: Millisecond) -> Scene:
         if self.fade_out.complete:
             return self.scene.send(self.generator)
