@@ -9,8 +9,7 @@ from nextrpg import (
     Quit,
     SayEventConfig,
 )
-from test.util import MockTextOnScreen
-from test.util import MockEventfulScene, MockSurface
+from test.util import MockEventfulScene, MockSurface, MockTextOnScreen
 
 
 def test_say_event_add_on() -> None:

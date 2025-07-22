@@ -1,4 +1,4 @@
-from test.util import MockSurface, MockScene
+from test.util import MockScene, MockSurface
 
 from nextrpg import Coordinate, Drawing, DrawOnScreen, TransitionScene
 

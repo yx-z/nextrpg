@@ -24,9 +24,8 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import override
 
-from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.scene.rpg_event_scene import RpgEventScene
+from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.model import (
@@ -36,13 +35,14 @@ from nextrpg.core.model import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.color import BLACK
-from nextrpg.draw.draw_on_screen import DrawOnScreen, Drawing, Rectangle
+from nextrpg.draw.draw_on_screen import Drawing, DrawOnScreen, Rectangle
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.rpg_event import register_rpg_event
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.gui.area import screen
+from nextrpg.scene.rpg_event_scene import RpgEventScene
 from nextrpg.scene.say_event_scene_add_on import FadeInAddOn
 from nextrpg.scene.scene import Scene
 

@@ -1,6 +1,5 @@
 from nextrpg import Coordinate, DrawOnScreen, Drawing, FadeIn, FadeOut
-from test.util import MockSurface
-from test.util import MockAnimatedOnScreen
+from test.util import MockSurface, MockAnimatedOnScreen
 
 
 def test_fade() -> None:

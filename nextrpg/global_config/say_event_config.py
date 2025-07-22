@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.color import Rgba, WHITE
+from nextrpg.draw.color import WHITE, Rgba
 from nextrpg.global_config.text_config import TextConfig
 
 

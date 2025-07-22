@@ -40,8 +40,8 @@ from nextrpg.core.model import (
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw_on_screen import Drawing
 from nextrpg.draw.cyclic_frames import CyclicFrames
+from nextrpg.draw.draw_on_screen import Drawing
 from nextrpg.global_config.global_config import config
 
 

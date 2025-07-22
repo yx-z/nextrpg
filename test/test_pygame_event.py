@@ -1,6 +1,7 @@
 from unittest.mock import Mock
 
 from pytest_mock import MockerFixture
+
 from nextrpg import post_quit
 
 

@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Self
 
-from nextrpg.draw.draw_on_screen import Drawing
 from nextrpg.core.time import Millisecond
+from nextrpg.draw.draw_on_screen import Drawing
 
 
 class Animated(ABC):

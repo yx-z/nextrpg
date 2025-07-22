@@ -16,17 +16,17 @@ Features:
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
-from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.event.event_as_attr import event_as_attr
 from nextrpg.core.model import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
+from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.event.event_as_attr import event_as_attr
 
 
 @dataclass_with_instance_init

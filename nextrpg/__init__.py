@@ -84,7 +84,7 @@ Advanced Example:
     ```
 
 Version:
-    Current version: 0.1.11
+    Current version: 0.1.12
 
 Dependencies:
     - pygame: For graphics and input handling
@@ -94,7 +94,7 @@ Dependencies:
     - functools: For utility functions
 """
 
-__version__ = "0.1.11"
+__version__ = "0.1.12"
 
 from nextrpg.character.character_drawing import *
 from nextrpg.character.character_on_screen import *
@@ -106,19 +106,19 @@ from nextrpg.character.rpg_maker_character_drawing import *
 from nextrpg.core.cached_decorator import *
 from nextrpg.core.coordinate import *
 from nextrpg.core.dimension import *
-from nextrpg.event.event_as_attr import *
 from nextrpg.core.logger import *
 from nextrpg.core.model import *
 from nextrpg.core.walk import *
 from nextrpg.draw.color import *
+from nextrpg.draw.cyclic_frames import *
 from nextrpg.draw.draw_on_screen import *
 from nextrpg.draw.fade import *
-from nextrpg.draw.cyclic_frames import *
 from nextrpg.draw.text import *
 from nextrpg.draw.text_on_screen import *
+from nextrpg.draw.typewriter import *
 from nextrpg.event.code_transformers import *
+from nextrpg.event.event_as_attr import *
 from nextrpg.event.event_transformer import *
-from nextrpg.gui.window import *
 from nextrpg.event.pygame_event import *
 from nextrpg.event.rpg_event import *
 from nextrpg.game import *
@@ -137,11 +137,11 @@ from nextrpg.global_config.tile_map_config import *
 from nextrpg.global_config.transition_config import *
 from nextrpg.gui import *
 from nextrpg.gui.area import *
+from nextrpg.gui.window import *
 from nextrpg.scene import *
 from nextrpg.scene.map_helper import *
 from nextrpg.scene.map_scene import *
 from nextrpg.scene.map_util import *
 from nextrpg.scene.say_event_scene import *
-from nextrpg.scene.transition_scene import *
-from nextrpg.draw.typewriter import *
 from nextrpg.scene.say_event_scene_add_on import *
+from nextrpg.scene.transition_scene import *

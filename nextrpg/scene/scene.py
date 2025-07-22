@@ -22,9 +22,9 @@ from typing import override
 
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.time import Millisecond
+from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.event.pygame_event import PygameEvent
-from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 
 
 class Scene(AnimatedOnScreen):

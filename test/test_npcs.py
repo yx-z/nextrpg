@@ -1,6 +1,6 @@
 from dataclasses import replace
 from functools import cached_property
-from test.util import MockCharacterDrawing
+from test.util import MockCharacterDrawing, MockEventfulScene
 from types import SimpleNamespace
 from typing import Any, Self, override
 from unittest.mock import Mock
@@ -29,7 +29,6 @@ from nextrpg import (
     Size,
     say,
 )
-from test.util import MockEventfulScene
 
 
 def test_npc_on_screen() -> None:

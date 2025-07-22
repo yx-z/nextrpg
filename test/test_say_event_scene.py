@@ -11,9 +11,7 @@ from nextrpg import (
     Size,
     Text,
 )
-from test.util import MockScene
-from test.util import MockEventfulScene
-from test.util import MockSurface
+from test.util import MockScene, MockEventfulScene, MockSurface
 
 
 def test_say_event_scene(mocker: MockerFixture) -> None:

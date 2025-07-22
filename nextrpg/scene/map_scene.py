@@ -23,7 +23,6 @@ from typing import Callable, NamedTuple, OrderedDict, override
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec
-from nextrpg.scene.rpg_event_scene import EventfulScene
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.logger import Logger
@@ -37,6 +36,7 @@ from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.global_config.global_config import config
 from nextrpg.scene.map_helper import MapHelper, get_polygon
 from nextrpg.scene.map_util import center_player
+from nextrpg.scene.rpg_event_scene import EventfulScene
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 

@@ -1,5 +1,5 @@
 from pathlib import Path
-from test.util import MockCharacterDrawing, MockSurface, MockPlayerOnScreen
+from test.util import MockCharacterDrawing, MockPlayerOnScreen, MockSurface
 from types import SimpleNamespace
 from typing import Any
 from unittest.mock import MagicMock, Mock

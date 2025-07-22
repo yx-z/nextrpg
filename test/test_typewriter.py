@@ -1,5 +1,6 @@
-from nextrpg import Typewriter
 from test.util import MockTextOnScreen
+
+from nextrpg import Typewriter
 
 
 def test_typewriter() -> None:

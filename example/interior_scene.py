@@ -5,6 +5,7 @@ Sample interior scene.
 from nextrpg import (
     CharacterDrawing,
     CharacterSpec,
+    Direction,
     Drawing,
     MapScene,
     Move,
@@ -16,7 +17,6 @@ from nextrpg import (
     SpriteSheet,
     SpriteSheetSelection,
     Trim,
-    Direction,
 )
 from nextrpg.scene.rpg_event_scene import EventfulScene
 

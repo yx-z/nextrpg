@@ -22,8 +22,8 @@ from nextrpg.core.model import (
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond, Timer
-from nextrpg.draw.draw_on_screen import Drawing
 from nextrpg.draw.animated import Animated
+from nextrpg.draw.draw_on_screen import Drawing
 
 
 @dataclass_with_instance_init

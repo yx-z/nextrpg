@@ -28,7 +28,6 @@ from nextrpg.core.time import Millisecond
 from nextrpg.event.event_transformer import transform_and_compile
 from nextrpg.global_config.global_config import config
 
-
 type RpgEventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
 """Type alias for RPG event specification parameters.
 

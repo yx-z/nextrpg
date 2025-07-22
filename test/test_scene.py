@@ -1,10 +1,10 @@
 from functools import cached_property
+from test.util import MockScene, MockSurface
 from typing import Self, override
 
 from pygame import Event
 from pygame.locals import QUIT
 
-from test.util import MockSurface, MockScene
 from nextrpg import (
     Coordinate,
     Drawing,

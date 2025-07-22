@@ -11,9 +11,9 @@ from nextrpg.core.model import (
     not_constructor_below,
 )
 from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
-from nextrpg.scene.scene import Scene
-from nextrpg.gui.window import Window
 from nextrpg.global_config.global_config import config
+from nextrpg.gui.window import Window
+from nextrpg.scene.scene import Scene
 
 logger = Logger("Game")
 

@@ -17,8 +17,11 @@ from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self, TypeIs, override
 
-from nextrpg.core.model import dataclass_with_instance_init, instance_init
-from nextrpg.core.model import not_constructor_below
+from nextrpg.core.model import (
+    dataclass_with_instance_init,
+    instance_init,
+    not_constructor_below,
+)
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.draw.color import alpha_from_percentage

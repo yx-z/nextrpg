@@ -2,15 +2,14 @@ from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from typing import Any, Self
 
-from nextrpg.event.pygame_event import PygameEvent, KeyPressDown, KeyboardKey
-from nextrpg.core.time import Millisecond
+from nextrpg.character.npc_on_screen import NpcOnScreen, RpgEventGenerator
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.character.npc_on_screen import RpgEventGenerator, NpcOnScreen
-from nextrpg.scene.scene import Scene
-from nextrpg.event.event_as_attr import event_as_attr
 from nextrpg.core.logger import Logger
 from nextrpg.core.model import not_constructor_below
-
+from nextrpg.core.time import Millisecond
+from nextrpg.event.event_as_attr import event_as_attr
+from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
+from nextrpg.scene.scene import Scene
 
 logger = Logger("RpgEventScene")
 
