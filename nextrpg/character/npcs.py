@@ -265,7 +265,7 @@ class RpgEventScene(Scene):
     scene: EventfulScene
 
 
-@dataclass_with_instance_init
+@dataclass(frozen=True, kw_only=True)
 class NpcSpec(CharacterSpec):
     """Base class to define NPC specifications.
 

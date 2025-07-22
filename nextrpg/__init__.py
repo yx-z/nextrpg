@@ -99,7 +99,7 @@ __version__ = "0.1.11"
 from nextrpg.character.character_drawing import *
 from nextrpg.character.character_on_screen import *
 from nextrpg.character.moving_character_on_screen import *
-from nextrpg.character.moving_npc import *
+from nextrpg.character.moving_npc_on_screen import *
 from nextrpg.character.npcs import *
 from nextrpg.character.player_on_screen import *
 from nextrpg.character.rpg_maker_character_drawing import *
@@ -143,3 +143,4 @@ from nextrpg.scene.map_scene import *
 from nextrpg.scene.map_util import *
 from nextrpg.scene.say_event_scene import *
 from nextrpg.scene.transition_scene import *
+from nextrpg.draw.typewriter import *

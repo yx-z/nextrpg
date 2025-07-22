@@ -21,7 +21,7 @@ from os import PathLike
 from typing import Callable, NamedTuple, OrderedDict, override
 
 from nextrpg.character.character_on_screen import CharacterSpec
-from nextrpg.character.moving_npc import MovingNpcOnScreen
+from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.npcs import EventfulScene, NpcOnScreen, NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.coordinate import Coordinate
