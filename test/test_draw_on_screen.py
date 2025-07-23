@@ -51,6 +51,7 @@ def test_draw_on_screen() -> None:
     assert isinstance(surface, Surface)
     assert coord == (10, 20)
     assert (draw_on_screen + Coordinate(1, 2)).top_left == Coordinate(11, 22)
+    assert draw_on_screen - Coordinate(1,2)
 
 
 def test_rectangle() -> None:
@@ -100,3 +101,4 @@ def test_polygon() -> None:
         closed=False,
     ).length
     assert polygon.line(Rgba(0, 0, 0, 0), 2)
+    assert polygon.line(Rgba(0, 0, 0, 0))

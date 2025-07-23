@@ -30,3 +30,5 @@ def test_coordinate() -> None:
     ) == approx(Coordinate(17.071067811865476, 27.071067811865476))
     assert Coordinate(10, 20) + Coordinate(1, 2) == Coordinate(11, 22)
     assert not Coordinate(10, 20) + DirectionalOffset("invalid", 1)
+    assert Coordinate(1, 1).negate_top == Coordinate(1, -1)
+    assert Coordinate(1, 1).negate_left == Coordinate(-1, 1)

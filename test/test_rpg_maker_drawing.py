@@ -8,6 +8,7 @@ from nextrpg import (
     Size,
     SpriteSheet,
     SpriteSheetSelection,
+    Trim,
     XpFrameType,
 )
 
@@ -40,3 +41,10 @@ def test_rpg_maker_drawing() -> None:
     )
     assert character.tick_idle(2).drawing.size == Size(2, 2)
     assert character.turn(Direction.DOWN_LEFT)
+
+    assert RpgMakerCharacterDrawing(
+        direction=Direction.DOWN,
+        sprite_sheet=SpriteSheet(Drawing(Surface((24, 16))), Trim(top=0)),
+        duration_per_frame=1,
+        animate_on_idle=False,
+    )
