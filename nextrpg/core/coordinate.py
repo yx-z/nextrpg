@@ -46,6 +46,14 @@ class Coordinate(namedtuple("Coordinate", "left top")):
     top: Pixel
 
     @property
+    def negate_left(self) -> Self:
+        return Coordinate(-self.left, self.top)
+
+    @property
+    def negate_top(self) -> Self:
+        return Coordinate(self.left, -self.top)
+
+    @property
     def negate(self) -> Self:
         """
         Get the negated coordinate.

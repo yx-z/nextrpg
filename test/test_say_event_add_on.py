@@ -48,3 +48,21 @@ def test_say_event_add_on() -> None:
         fade_in.tick(10).tick(9910).tick(2).event(enter).tick(1).draw_on_screens
     )
     assert fade_in.tick(10).tick(9910).tick(2).event(enter).tick(1).tick(3000)
+
+    assert (
+        FadeInAddOn(
+            background=(
+                DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),
+            ),
+            text=MockTextOnScreen(),
+            config=SayEventConfig(text_delay=None),
+            scene=MockEventfulScene(),
+            npc_object_name=None,
+            initial_coord=Coordinate(0, 0),
+            generator=lambda *_: None,
+        )
+        .tick(10)
+        .tick(1220)
+        .tick(10)
+        .draw_on_screens
+    )

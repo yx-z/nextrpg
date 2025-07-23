@@ -91,11 +91,10 @@ class TypingAddOn(SayEventAddOn):
     @override
     @property
     def add_ons(self) -> tuple[DrawOnScreen, ...]:
-        text = (
-            self.typewriter.draw_on_screens
-            if self.typewriter
-            else self.text.draw_on_screens
-        )
+        if self.typewriter:
+            text = self.typewriter.draw_on_screens
+        else:
+            text = self.text.draw_on_screens
         return self.background + text
 
     @override

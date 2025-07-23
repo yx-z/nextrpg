@@ -24,6 +24,12 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import override
 
+from nextrpg import (
+    TextConfig,
+    bottom_left_screen,
+    top_left_screen,
+    top_right_screen,
+)
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.core.coordinate import Coordinate
@@ -34,7 +40,6 @@ from nextrpg.core.model import (
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.color import BLACK
 from nextrpg.draw.draw_on_screen import Drawing, DrawOnScreen, Rectangle
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
@@ -160,6 +165,16 @@ class SayEventScene(RpgEventScene):
         )
 
     @cached_property
+    def _name_on_screen(self) -> TextOnScreen | None:
+        if not self._name:
+            return None
+        left, top = self._text_top_left
+        coord = Coordinate(
+            left, top - self._name.size.height - self.config.padding
+        )
+        return TextOnScreen(coord, self._name)
+
+    @cached_property
     def _text_on_screen(self) -> TextOnScreen:
         return TextOnScreen(self._text_top_left, self._text)
 
@@ -168,22 +183,67 @@ class SayEventScene(RpgEventScene):
         if isinstance(self.character_or_scene, Scene):
             return (self._text_background,)
         # TODO: Implement text tail/tick
-        return (self._text_background,)
+        res = (self._text_background,)
+        if self._name_on_screen:
+            return res + self._name_on_screen.draw_on_screens
+        return res
+
+    @cached_property
+    def _name(self) -> Text | None:
+        if isinstance(self.character_or_scene, Scene):
+            return None
+        if not self.config.name_color:
+            return None
+        text_config = replace(self._text_config, color=self.config.name_color)
+        return Text(self.character_or_scene.display_name, text_config)
+
+    @cached_property
+    def _text_config(self) -> TextConfig:
+        return (
+            self.config.default_text_config or self.config.default_text_config
+        )
 
     @cached_property
     def _text(self) -> Text:
-        black_text = replace(config().text, color=BLACK)
-        return Text(self.message, self.config.text or black_text)
+        return Text(self.message, self._text_config)
 
     @cached_property
     def _text_top_left(self) -> Coordinate:
         if isinstance(self.character_or_scene, Scene):
             return self._scene_top_left
 
-        coord = self.character_or_scene.coordinate
         if self.scene.draw_on_screen_shift:
-            return coord.shift(self.scene.draw_on_screen_shift)
-        return coord
+            top_left = self.character_or_scene.coordinate.shift(
+                self.scene.draw_on_screen_shift
+            )
+        else:
+            top_left = self.character_or_scene.coordinate
+
+        rect = self.character_or_scene.draw_on_screen.rectangle
+        shift = self.config.pop_up_shift
+        print(f"{top_left=} {top_right_screen()=}")
+        if top_left_screen().contain(top_left):
+            coord = rect.bottom_center.shift(shift)
+        elif top_right_screen().contain(top_left):
+            coord = rect.bottom_center.shift(shift.negate_left)
+        elif bottom_left_screen().contain(top_left):
+            coord = rect.top_center.shift(shift.negate_top)
+        else:
+            coord = rect.top_center.shift(shift.negate)
+
+        width, height = self._text.size
+        centered_coord = coord.shift(Coordinate(width / 2, height / 2).negate)
+
+        if self.scene.draw_on_screen_shift:
+            centered_coord = centered_coord.shift(
+                self.scene.draw_on_screen_shift
+            )
+
+        if self._name:
+            name_height = self._name.size.height + self.config.padding
+            width, height = centered_coord
+            return Coordinate(width, height + name_height)
+        return centered_coord
 
     @cached_property
     def _scene_top_left(self) -> Coordinate:
@@ -193,12 +253,21 @@ class SayEventScene(RpgEventScene):
 
     @cached_property
     def _text_background(self) -> DrawOnScreen:
+        if self._name:
+            name_width, name_height = self._name.size
+        else:
+            name_width = 0
+            name_height = 0
+
+        left, top = self._text_top_left
+        padding = self.config.padding
+        top_left = Coordinate(left - padding, top - 2 * padding - name_height)
+
         width, height = self._text.size
-        top_left = self._text_top_left.shift(
-            Coordinate(self.config.padding, self.config.padding).negate
-        )
-        padding = self.config.padding * 2
-        size = Size(width + padding, height + padding)
+        background_width = max(width, name_width) + 2 * padding
+        background_height = height + 3 * padding + name_height
+        size = Size(background_width, background_height)
+
         return Rectangle(top_left, size).fill(
             self.config.background, self.config.border_radius
         )

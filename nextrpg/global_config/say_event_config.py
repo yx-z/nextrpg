@@ -12,12 +12,12 @@ The say event configuration features:
 - Text configuration integration
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.color import WHITE, Rgba
+from nextrpg.draw.color import BLACK, WHITE, Rgba
 from nextrpg.global_config.text_config import TextConfig
 
 
@@ -44,8 +44,15 @@ class SayEventConfig:
     border_radius: Pixel = 16
     padding: Pixel = 16
     fade_duration: Millisecond = 200
-    text_delay: Millisecond | None = 20
-    name_color: Rgba | None = None
+    text_delay: Millisecond = 20
+    pop_up_shift: Coordinate = Coordinate(50, 50)
+    name_color: Rgba | None = Rgba(0, 0, 255, 255)
     center: Coordinate | None = None
     text: TextConfig | None = None
     drawing: "Drawing | None" = None
+
+    @property
+    def default_text_config(self) -> TextConfig:
+        from nextrpg.global_config.global_config import config
+
+        return replace(config().text, color=BLACK)

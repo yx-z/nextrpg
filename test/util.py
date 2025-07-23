@@ -61,6 +61,10 @@ class MockSurface(Surface):
 class MockCharacterDrawing(CharacterDrawing):
     direction: Direction = Direction.DOWN
 
+    @property
+    def display_name(self) -> str:
+        return "abc"
+
     @cached_property
     def coordinate(self) -> Coordinate:
         return Coordinate(0, 0)
