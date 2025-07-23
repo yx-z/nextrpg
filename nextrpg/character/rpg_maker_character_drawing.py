@@ -34,7 +34,7 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.direction import Direction
-from nextrpg.core.model import (
+from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
@@ -167,7 +167,7 @@ class SpriteSheet:
     """
 
     drawing: Drawing
-    trim: Trim = Trim()
+    trim: Trim | None = None
     style: FrameType = DefaultFrameType
 
 
@@ -277,20 +277,20 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         )
 
     def _trim(self, drawing: Drawing) -> Drawing:
-        trim = self.sprite_sheet.trim
+        if not (trim := self.sprite_sheet.trim):
+            return drawing
         coord = Coordinate(trim.left, trim.top)
-        size = Size(
-            drawing.width - coord.left - trim.right, drawing.height - coord.top
-        )
+        width = drawing.width - coord.left - trim.right
+        height = drawing.height - coord.top - trim.bottom
+        size = Size(width, height)
         return drawing.crop(coord, size)
 
     @property
     def _init_frames(self) -> dict[Direction, CyclicFrames]:
-        drawing = (
-            self._crop_by_selection(self.sprite_sheet_selection)
-            if self.sprite_sheet_selection
-            else self.sprite_sheet.drawing
-        )
+        if select := self.sprite_sheet_selection:
+            drawing = self._crop_by_selection(select)
+        else:
+            drawing = self.sprite_sheet.drawing
         return {
             direction: self._load_frames_row(drawing, row)
             for direction, row in _DIR_TO_ROW.items()

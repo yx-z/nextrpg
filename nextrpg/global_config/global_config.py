@@ -114,10 +114,6 @@ def initial_config() -> Config:
     return _initial_config
 
 
-_initial_config: Config | None = None
-_cfg: Config | None = None
-
-
 @contextmanager
 def override_config(cfg: Config) -> Generator[Config, None, None]:
     prev = config()
@@ -125,3 +121,7 @@ def override_config(cfg: Config) -> Generator[Config, None, None]:
         yield set_config(cfg)
     finally:
         set_config(prev)
+
+
+_initial_config: Config | None = None
+_cfg: Config | None = None

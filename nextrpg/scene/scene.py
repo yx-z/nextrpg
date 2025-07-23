@@ -18,10 +18,9 @@ follow, ensuring consistent behavior across different types of game scenes.
 """
 
 from functools import cached_property
-from typing import override
+from typing import Self, override
 
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.time import Millisecond
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.event.pygame_event import PygameEvent
@@ -91,11 +90,8 @@ class Scene(AnimatedOnScreen):
                 return (player_sprite, background, ui_elements)
             ```
         """
-        if self.draw_on_screen_shift:
-            return tuple(
-                d.shift(self.draw_on_screen_shift)
-                for d in self.draw_on_screens_before_shift
-            )
+        if shift := self.draw_on_screen_shift:
+            return tuple(d + shift for d in self.draw_on_screens_before_shift)
         return self.draw_on_screens_before_shift
 
     @property
@@ -112,7 +108,7 @@ class Scene(AnimatedOnScreen):
         """
         return ()
 
-    def event(self, event: PygameEvent) -> Scene:
+    def event(self, event: PygameEvent) -> Self:
         """
         Handle events for the scene.
 

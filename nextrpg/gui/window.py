@@ -27,7 +27,7 @@ from pygame.transform import smoothscale
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.logger import ComponentAndMessage, Logger, pop_messages
-from nextrpg.core.model import not_constructor_below
+from nextrpg.core.dataclass_with_instance_init import not_constructor_below
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw_on_screen import Drawing, DrawOnScreen
 from nextrpg.draw.text import Text
@@ -201,7 +201,10 @@ class Window:
         screen = Surface(self.initial_config.size)
         screen.blits(d.pygame for d in draws)
         scaled_drawing = Drawing(
-            smoothscale(screen, self.initial_config.size.scale(self._scaling))
+            smoothscale(
+                screen,
+                self.initial_config.size.all_dimension_scale(self._scaling),
+            )
         )
         return DrawOnScreen(self._center_shift, scaled_drawing)
 

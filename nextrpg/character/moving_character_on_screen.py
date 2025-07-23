@@ -22,7 +22,7 @@ from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import PixelPerMillisecond
 from nextrpg.core.direction import Direction
 from nextrpg.core.logger import Logger
-from nextrpg.core.model import not_constructor_below
+from nextrpg.core.dataclass_with_instance_init import not_constructor_below
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw_on_screen import DrawOnScreen, Polygon
 from nextrpg.global_config.global_config import config
@@ -111,15 +111,6 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
         Returns:
             `Coordinate`: The updated character position after the move step.
-
-        Example:
-            ```python
-            def move(self, time_delta: Millisecond) -> Coordinate:
-                distance = self.move_speed * time_delta
-                return self.coordinate.shift(
-                    DirectionalOffset(self.direction, distance)
-                )
-            ```
         """
 
     @override

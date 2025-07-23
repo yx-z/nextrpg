@@ -16,7 +16,7 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import override
 
-from nextrpg.core.model import (
+from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
@@ -58,14 +58,10 @@ class TransitionScene(Scene):
     )
     _: KW_ONLY = not_constructor_below()
     _fade_in: FadeIn = instance_init(
-        lambda self: FadeIn(
-            resource=self._intermediary, duration=self._half_duration
-        )
+        lambda self: FadeIn(self._intermediary, self._half_duration)
     )
     _fade_out: FadeOut = instance_init(
-        lambda self: FadeOut(
-            resource=self._intermediary, duration=self._half_duration
-        )
+        lambda self: FadeOut(self._intermediary, self._half_duration)
     )
 
     @override
@@ -99,5 +95,5 @@ class TransitionScene(Scene):
     @property
     def _intermediary(self) -> DrawOnScreen | tuple[DrawOnScreen, ...]:
         if isinstance(self.intermediary, Rgba):
-            return screen().fill(color=self.intermediary)
+            return screen().fill(self.intermediary)
         return self.intermediary

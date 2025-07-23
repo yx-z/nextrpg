@@ -18,7 +18,7 @@ from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.model import (
+from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
@@ -52,7 +52,7 @@ class CharacterSpec:
     display_name: str = instance_init(lambda self: self.object_name)
 
 
-@dataclass_with_instance_init
+@dataclass_with_instance_init(kw_only=True)
 @event_as_attr
 class CharacterOnScreen(AnimatedOnScreen):
     """

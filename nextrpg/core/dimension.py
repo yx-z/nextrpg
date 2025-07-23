@@ -16,7 +16,7 @@ mechanics throughout the framework.
 """
 
 from collections import namedtuple
-from math import ceil
+from math import sqrt
 from typing import Self
 
 type Pixel = int | float
@@ -44,41 +44,22 @@ class Size(namedtuple("Size", "width height")):
         `width`: The width of the size in pixels.
 
         `height`: The height of the size in pixels.
-
-    Example:
-        ```python
-        # Create a size for a sprite
-        sprite_size = Size(32, 32)
-
-        # Scale the size
-        scaled_size = sprite_size.scale(2.0)  # Returns Size(64, 64)
-        ```
     """
 
     width: Pixel
     height: Pixel
 
-    def scale(self, scaling: float) -> Self:
-        """
-        Scales the dimensions by a scaling factor and returns a new `Size`.
+    def __mul__(self, scaling: float) -> Self:
+        dimension_scaling = sqrt(scaling)
+        width = self.width * dimension_scaling
+        height = self.height * dimension_scaling
+        return Size(width, height)
 
-        The new dimensions are rounded up to the nearest integer to ensure
-        that drawings won't leave tiny, black gaps after scaling.
+    def __truediv__(self, scaling: float) -> Self:
+        return self * (1 / scaling)
 
-        Arguments:
-            `scaling`: A scaling factor by which the width and height will be
-                multiplied.
+    def all_dimension_scale(self, scaling: float) -> Self:
+        return Size(self.width * scaling, self.height * scaling)
 
-        Returns:
-            `Size`: A new `Size` object representing the scaled dimensions.
-
-        Example:
-            ```python
-            size = Size(10, 20)
-            scaled = size.scale(1.5)  # Returns Size(15, 30)
-            ```
-        """
-        return Size(ceil(self.width * scaling), ceil(self.height * scaling))
-
-    def __repr__(self) -> str:
-        return f"({self.width}, {self.height})"
+    def __str__(self) -> str:
+        return f"({self.width:.0f}, {self.height:.0f})"

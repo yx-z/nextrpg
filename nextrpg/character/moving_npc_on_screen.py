@@ -19,7 +19,7 @@ from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import PixelPerMillisecond
-from nextrpg.core.model import (
+from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
@@ -29,7 +29,7 @@ from nextrpg.core.walk import Walk
 from nextrpg.draw.draw_on_screen import Polygon
 
 
-@dataclass_with_instance_init
+@dataclass_with_instance_init(kw_only=True)
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     """
     Moving NPC interface.
@@ -47,9 +47,9 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     _: KW_ONLY = not_constructor_below()
     _walk: Walk = instance_init(
         lambda self: Walk(
-            path=self.path,
-            move_speed=self.move_speed,
-            cyclic=self.spec.cyclic_walk and self.path.closed,
+            self.path,
+            self.move_speed,
+            self.spec.cyclic_walk and self.path.closed,
         )
     )
 

@@ -49,7 +49,7 @@
                                 <a class="variable" href="#Size.height">height</a>
                         </li>
                         <li>
-                                <a class="function" href="#Size.scale">scale</a>
+                                <a class="function" href="#Size.all_dimension_scale">all_dimension_scale</a>
                         </li>
                 </ul>
 
@@ -110,7 +110,7 @@ mechanics throughout the framework.</p>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">namedtuple</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">ceil</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">sqrt</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="nb">type</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span>
@@ -138,44 +138,25 @@ mechanics throughout the framework.</p>
 </span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">        `width`: The width of the size in pixels.</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>
 </span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">        `height`: The height of the size in pixels.</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">    Example:</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">        ```python</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">        # Create a size for a sprite</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">        sprite_size = Size(32, 32)</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">        # Scale the size</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">        scaled_size = sprite_size.scale(2.0)  # Returns Size(64, 64)</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">        ```</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>        <span class="n">dimension_scaling</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">scaling</span><span class="p">)</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">dimension_scaling</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">dimension_scaling</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="bp">self</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">scaling</span><span class="p">)</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer to ensure</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">        that drawings won&#39;t leave tiny, black gaps after scaling.</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">            `scaling`: A scaling factor by which the width and height will be</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">                multiplied.</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="sd">        Returns:</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="sd">        Example:</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="sd">            ```python</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="sd">            size = Size(10, 20)</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="sd">            scaled = size.scale(1.5)  # Returns Size(15, 30)</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a><span class="sd">            ```</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">))</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2">)&quot;</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">all_dimension_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">)</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">)&quot;</span>
 </span></pre></div>
 
 
@@ -233,44 +214,25 @@ mechanics throughout the framework.</p>
 </span><span id="Size-45"><a href="#Size-45"><span class="linenos">45</span></a><span class="sd">        `width`: The width of the size in pixels.</span>
 </span><span id="Size-46"><a href="#Size-46"><span class="linenos">46</span></a>
 </span><span id="Size-47"><a href="#Size-47"><span class="linenos">47</span></a><span class="sd">        `height`: The height of the size in pixels.</span>
-</span><span id="Size-48"><a href="#Size-48"><span class="linenos">48</span></a>
-</span><span id="Size-49"><a href="#Size-49"><span class="linenos">49</span></a><span class="sd">    Example:</span>
-</span><span id="Size-50"><a href="#Size-50"><span class="linenos">50</span></a><span class="sd">        ```python</span>
-</span><span id="Size-51"><a href="#Size-51"><span class="linenos">51</span></a><span class="sd">        # Create a size for a sprite</span>
-</span><span id="Size-52"><a href="#Size-52"><span class="linenos">52</span></a><span class="sd">        sprite_size = Size(32, 32)</span>
-</span><span id="Size-53"><a href="#Size-53"><span class="linenos">53</span></a>
-</span><span id="Size-54"><a href="#Size-54"><span class="linenos">54</span></a><span class="sd">        # Scale the size</span>
-</span><span id="Size-55"><a href="#Size-55"><span class="linenos">55</span></a><span class="sd">        scaled_size = sprite_size.scale(2.0)  # Returns Size(64, 64)</span>
-</span><span id="Size-56"><a href="#Size-56"><span class="linenos">56</span></a><span class="sd">        ```</span>
-</span><span id="Size-57"><a href="#Size-57"><span class="linenos">57</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Size-48"><a href="#Size-48"><span class="linenos">48</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Size-49"><a href="#Size-49"><span class="linenos">49</span></a>
+</span><span id="Size-50"><a href="#Size-50"><span class="linenos">50</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="Size-51"><a href="#Size-51"><span class="linenos">51</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="Size-52"><a href="#Size-52"><span class="linenos">52</span></a>
+</span><span id="Size-53"><a href="#Size-53"><span class="linenos">53</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Size-54"><a href="#Size-54"><span class="linenos">54</span></a>        <span class="n">dimension_scaling</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">scaling</span><span class="p">)</span>
+</span><span id="Size-55"><a href="#Size-55"><span class="linenos">55</span></a>        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">dimension_scaling</span>
+</span><span id="Size-56"><a href="#Size-56"><span class="linenos">56</span></a>        <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">dimension_scaling</span>
+</span><span id="Size-57"><a href="#Size-57"><span class="linenos">57</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
 </span><span id="Size-58"><a href="#Size-58"><span class="linenos">58</span></a>
-</span><span id="Size-59"><a href="#Size-59"><span class="linenos">59</span></a>    <span class="n">width</span><span class="p">:</span> <span class="n">Pixel</span>
-</span><span id="Size-60"><a href="#Size-60"><span class="linenos">60</span></a>    <span class="n">height</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="Size-59"><a href="#Size-59"><span class="linenos">59</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Size-60"><a href="#Size-60"><span class="linenos">60</span></a>        <span class="k">return</span> <span class="bp">self</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">scaling</span><span class="p">)</span>
 </span><span id="Size-61"><a href="#Size-61"><span class="linenos">61</span></a>
-</span><span id="Size-62"><a href="#Size-62"><span class="linenos">62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Size-63"><a href="#Size-63"><span class="linenos">63</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Size-64"><a href="#Size-64"><span class="linenos">64</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
-</span><span id="Size-65"><a href="#Size-65"><span class="linenos">65</span></a>
-</span><span id="Size-66"><a href="#Size-66"><span class="linenos">66</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer to ensure</span>
-</span><span id="Size-67"><a href="#Size-67"><span class="linenos">67</span></a><span class="sd">        that drawings won&#39;t leave tiny, black gaps after scaling.</span>
-</span><span id="Size-68"><a href="#Size-68"><span class="linenos">68</span></a>
-</span><span id="Size-69"><a href="#Size-69"><span class="linenos">69</span></a><span class="sd">        Arguments:</span>
-</span><span id="Size-70"><a href="#Size-70"><span class="linenos">70</span></a><span class="sd">            `scaling`: A scaling factor by which the width and height will be</span>
-</span><span id="Size-71"><a href="#Size-71"><span class="linenos">71</span></a><span class="sd">                multiplied.</span>
-</span><span id="Size-72"><a href="#Size-72"><span class="linenos">72</span></a>
-</span><span id="Size-73"><a href="#Size-73"><span class="linenos">73</span></a><span class="sd">        Returns:</span>
-</span><span id="Size-74"><a href="#Size-74"><span class="linenos">74</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
-</span><span id="Size-75"><a href="#Size-75"><span class="linenos">75</span></a>
-</span><span id="Size-76"><a href="#Size-76"><span class="linenos">76</span></a><span class="sd">        Example:</span>
-</span><span id="Size-77"><a href="#Size-77"><span class="linenos">77</span></a><span class="sd">            ```python</span>
-</span><span id="Size-78"><a href="#Size-78"><span class="linenos">78</span></a><span class="sd">            size = Size(10, 20)</span>
-</span><span id="Size-79"><a href="#Size-79"><span class="linenos">79</span></a><span class="sd">            scaled = size.scale(1.5)  # Returns Size(15, 30)</span>
-</span><span id="Size-80"><a href="#Size-80"><span class="linenos">80</span></a><span class="sd">            ```</span>
-</span><span id="Size-81"><a href="#Size-81"><span class="linenos">81</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Size-82"><a href="#Size-82"><span class="linenos">82</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">))</span>
-</span><span id="Size-83"><a href="#Size-83"><span class="linenos">83</span></a>
-</span><span id="Size-84"><a href="#Size-84"><span class="linenos">84</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="Size-85"><a href="#Size-85"><span class="linenos">85</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2">)&quot;</span>
+</span><span id="Size-62"><a href="#Size-62"><span class="linenos">62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">all_dimension_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Size-63"><a href="#Size-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">)</span>
+</span><span id="Size-64"><a href="#Size-64"><span class="linenos">64</span></a>
+</span><span id="Size-65"><a href="#Size-65"><span class="linenos">65</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="Size-66"><a href="#Size-66"><span class="linenos">66</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">)&quot;</span>
 </span></pre></div>
 
 
@@ -286,19 +248,6 @@ manipulation of dimensions.</p>
 <li><strong><code><a href="#Size.width">width</a></code>:</strong>  The width of the size in pixels.</li>
 <li><strong><code><a href="#Size.height">height</a></code>:</strong>  The height of the size in pixels.</li>
 </ul>
-
-<h6 id="example">Example:</h6>
-
-<blockquote>
-  <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="c1"># Create a size for a sprite</span>
-<span class="n">sprite_size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
-
-<span class="c1"># Scale the size</span>
-<span class="n">scaled_size</span> <span class="o">=</span> <span class="n">sprite_size</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>  <span class="c1"># Returns Size(64, 64)</span>
-</code></pre>
-  </div>
-</blockquote>
 </div>
 
 
@@ -342,70 +291,23 @@ manipulation of dimensions.</p>
 
 
                             </div>
-                            <div id="Size.scale" class="classattr">
-                                        <input id="Size.scale-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="Size.all_dimension_scale" class="classattr">
+                                        <input id="Size.all_dimension_scale-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">scale</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
+        <span class="name">all_dimension_scale</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
-                <label class="view-source-button" for="Size.scale-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="Size.all_dimension_scale-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Size.scale"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Size.scale-62"><a href="#Size.scale-62"><span class="linenos">62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Size.scale-63"><a href="#Size.scale-63"><span class="linenos">63</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Size.scale-64"><a href="#Size.scale-64"><span class="linenos">64</span></a><span class="sd">        Scales the dimensions by a scaling factor and returns a new `Size`.</span>
-</span><span id="Size.scale-65"><a href="#Size.scale-65"><span class="linenos">65</span></a>
-</span><span id="Size.scale-66"><a href="#Size.scale-66"><span class="linenos">66</span></a><span class="sd">        The new dimensions are rounded up to the nearest integer to ensure</span>
-</span><span id="Size.scale-67"><a href="#Size.scale-67"><span class="linenos">67</span></a><span class="sd">        that drawings won&#39;t leave tiny, black gaps after scaling.</span>
-</span><span id="Size.scale-68"><a href="#Size.scale-68"><span class="linenos">68</span></a>
-</span><span id="Size.scale-69"><a href="#Size.scale-69"><span class="linenos">69</span></a><span class="sd">        Arguments:</span>
-</span><span id="Size.scale-70"><a href="#Size.scale-70"><span class="linenos">70</span></a><span class="sd">            `scaling`: A scaling factor by which the width and height will be</span>
-</span><span id="Size.scale-71"><a href="#Size.scale-71"><span class="linenos">71</span></a><span class="sd">                multiplied.</span>
-</span><span id="Size.scale-72"><a href="#Size.scale-72"><span class="linenos">72</span></a>
-</span><span id="Size.scale-73"><a href="#Size.scale-73"><span class="linenos">73</span></a><span class="sd">        Returns:</span>
-</span><span id="Size.scale-74"><a href="#Size.scale-74"><span class="linenos">74</span></a><span class="sd">            `Size`: A new `Size` object representing the scaled dimensions.</span>
-</span><span id="Size.scale-75"><a href="#Size.scale-75"><span class="linenos">75</span></a>
-</span><span id="Size.scale-76"><a href="#Size.scale-76"><span class="linenos">76</span></a><span class="sd">        Example:</span>
-</span><span id="Size.scale-77"><a href="#Size.scale-77"><span class="linenos">77</span></a><span class="sd">            ```python</span>
-</span><span id="Size.scale-78"><a href="#Size.scale-78"><span class="linenos">78</span></a><span class="sd">            size = Size(10, 20)</span>
-</span><span id="Size.scale-79"><a href="#Size.scale-79"><span class="linenos">79</span></a><span class="sd">            scaled = size.scale(1.5)  # Returns Size(15, 30)</span>
-</span><span id="Size.scale-80"><a href="#Size.scale-80"><span class="linenos">80</span></a><span class="sd">            ```</span>
-</span><span id="Size.scale-81"><a href="#Size.scale-81"><span class="linenos">81</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Size.scale-82"><a href="#Size.scale-82"><span class="linenos">82</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">),</span> <span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">))</span>
+    <a class="headerlink" href="#Size.all_dimension_scale"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Size.all_dimension_scale-62"><a href="#Size.all_dimension_scale-62"><span class="linenos">62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">all_dimension_scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Size.all_dimension_scale-63"><a href="#Size.all_dimension_scale-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">scaling</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Scales the dimensions by a scaling factor and returns a new <code><a href="#Size">Size</a></code>.</p>
-
-<p>The new dimensions are rounded up to the nearest integer to ensure
-that drawings won't leave tiny, black gaps after scaling.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code>scaling</code>:</strong>  A scaling factor by which the width and height will be
-multiplied.</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code><a href="#Size">Size</a></code>: A new <code><a href="#Size">Size</a></code> object representing the scaled dimensions.</p>
-</blockquote>
-
-<h6 id="example">Example:</h6>
-
-<blockquote>
-  <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="n">size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-<span class="n">scaled</span> <span class="o">=</span> <span class="n">size</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)</span>  <span class="c1"># Returns Size(15, 30)</span>
-</code></pre>
-  </div>
-</blockquote>
-</div>
-
+    
 
                             </div>
                 </section>

@@ -114,7 +114,7 @@ player-specific behaviors.</p>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.moving_character_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">MovingCharacterOnScreen</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.direction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">DirectionalOffset</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">not_constructor_below</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_instance_init</span><span class="w"> </span><span class="kn">import</span> <span class="n">not_constructor_below</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>    <span class="n">KeyboardKey</span><span class="p">,</span>
@@ -221,7 +221,7 @@ player-specific behaviors.</p>
 </span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>        <span class="n">directional_offset</span> <span class="o">=</span> <span class="n">DirectionalOffset</span><span class="p">(</span>
 </span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span> <span class="o">*</span> <span class="n">time_delta</span>
 </span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>        <span class="p">)</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">directional_offset</span><span class="p">)</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span> <span class="o">+</span> <span class="n">directional_offset</span>
 </span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
 </span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
 </span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="n">_MOVEMENT_KEYS</span> <span class="o">=</span> <span class="p">{</span>
@@ -379,7 +379,7 @@ player-specific behaviors.</p>
 </span><span id="PlayerOnScreen-129"><a href="#PlayerOnScreen-129"><span class="linenos">129</span></a>        <span class="n">directional_offset</span> <span class="o">=</span> <span class="n">DirectionalOffset</span><span class="p">(</span>
 </span><span id="PlayerOnScreen-130"><a href="#PlayerOnScreen-130"><span class="linenos">130</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span> <span class="o">*</span> <span class="n">time_delta</span>
 </span><span id="PlayerOnScreen-131"><a href="#PlayerOnScreen-131"><span class="linenos">131</span></a>        <span class="p">)</span>
-</span><span id="PlayerOnScreen-132"><a href="#PlayerOnScreen-132"><span class="linenos">132</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">directional_offset</span><span class="p">)</span>
+</span><span id="PlayerOnScreen-132"><a href="#PlayerOnScreen-132"><span class="linenos">132</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span> <span class="o">+</span> <span class="n">directional_offset</span>
 </span></pre></div>
 
 
@@ -612,7 +612,7 @@ both animation and movement calculations.</p>
 </span><span id="PlayerOnScreen.move-129"><a href="#PlayerOnScreen.move-129"><span class="linenos">129</span></a>        <span class="n">directional_offset</span> <span class="o">=</span> <span class="n">DirectionalOffset</span><span class="p">(</span>
 </span><span id="PlayerOnScreen.move-130"><a href="#PlayerOnScreen.move-130"><span class="linenos">130</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span> <span class="o">*</span> <span class="n">time_delta</span>
 </span><span id="PlayerOnScreen.move-131"><a href="#PlayerOnScreen.move-131"><span class="linenos">131</span></a>        <span class="p">)</span>
-</span><span id="PlayerOnScreen.move-132"><a href="#PlayerOnScreen.move-132"><span class="linenos">132</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="n">directional_offset</span><span class="p">)</span>
+</span><span id="PlayerOnScreen.move-132"><a href="#PlayerOnScreen.move-132"><span class="linenos">132</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span> <span class="o">+</span> <span class="n">directional_offset</span>
 </span></pre></div>
 
 
@@ -634,19 +634,6 @@ in milliseconds.</li>
 
 <blockquote>
   <p><code>Coordinate</code>: The updated character position after the move step.</p>
-</blockquote>
-
-<h6 id="example">Example:</h6>
-
-<blockquote>
-  <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-    <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span> <span class="o">*</span> <span class="n">time_delta</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span>
-        <span class="n">DirectionalOffset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="n">distance</span><span class="p">)</span>
-    <span class="p">)</span>
-</code></pre>
-  </div>
 </blockquote>
 </div>
 

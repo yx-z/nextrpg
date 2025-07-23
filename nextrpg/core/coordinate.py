@@ -19,7 +19,7 @@ from collections import namedtuple
 from math import atan2, degrees, hypot, sqrt
 from typing import Self
 
-from nextrpg.core.dimension import Pixel
+from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.direction import Direction, DirectionalOffset
 
 
@@ -53,40 +53,17 @@ class Coordinate(namedtuple("Coordinate", "left top")):
     def negate_top(self) -> Self:
         return Coordinate(self.left, -self.top)
 
-    @property
-    def negate(self) -> Self:
-        """
-        Get the negated coordinate.
-
-        Returns a new coordinate with both x and y components negated. This is
-        useful for reversing directions or creating opposite positions.
-
-        Returns:
-            A new coordinate with negated components.
-        """
+    def __neg__(self) -> Self:
         return Coordinate(-self.left, -self.top)
 
-    def shift(self, offset: DirectionalOffset | Self) -> Self:
-        """
-        Shift the coordinate by a directional offset or add another coordinate.
-
-        This method supports two modes of operation:
-        1. Shifting by a `DirectionalOffset` for directional movement
-        2. Adding another `Coordinate` for coordinate arithmetic
-
-        For diagonal directions, the offset is divided proportionally using the
-        square root of 2 to maintain consistent movement speed.
-
-        Arguments:
-            offset: A `DirectionalOffset` representing the direction and offset,
-                or `Coordinate` to add to the current coordinate.
-
-        Returns:
-            A new coordinate shifted by the specified offset in the given
-            direction.
-        """
+    def __add__(self, offset: DirectionalOffset | Size | Self) -> Self:
         if isinstance(offset, Coordinate):
             return Coordinate(self.left + offset.left, self.top + offset.top)
+
+        if isinstance(offset, Size):
+            return Coordinate(
+                self.left + offset.width, self.top + offset.height
+            )
 
         match offset.direction:
             case Direction.UP:
@@ -108,6 +85,11 @@ class Coordinate(namedtuple("Coordinate", "left top")):
                 return Coordinate(self.left - diag, self.top + diag)
             case Direction.DOWN_RIGHT:
                 return Coordinate(self.left + diag, self.top + diag)
+
+    def __sub__(self, offset: DirectionalOffset | Size | Self) -> Self:
+        if isinstance(offset, Size):
+            return self + Size(-offset.width, -offset.height)
+        return self + -offset
 
     def relative_to(self, other: Self) -> Direction:
         """
@@ -132,14 +114,8 @@ class Coordinate(namedtuple("Coordinate", "left top")):
         )
         return closest[1]
 
-    def __repr__(self) -> str:
-        """
-        Get a string representation of the coordinate.
-
-        Returns:
-            A formatted string showing the coordinate values.
-        """
-        return f"({self.left:.1f}, {self.top:.1f})"
+    def __str__(self) -> str:
+        return f"({self.left:.0f}, {self.top:.0f})"
 
     def distance(self, other: Self) -> Pixel:
         """

@@ -16,7 +16,7 @@ Features:
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
-from nextrpg.core.model import (
+from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,

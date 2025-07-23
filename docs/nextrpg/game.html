@@ -105,7 +105,7 @@ management, and the primary game loop.</p>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.game_loop</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameLoop</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.model</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_instance_init</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="n">dataclass_with_instance_init</span><span class="p">,</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="n">instance_init</span><span class="p">,</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="n">not_constructor_below</span><span class="p">,</span>
@@ -307,7 +307,7 @@ because drawings can only be loaded after pygame initialization.</li>
                             <div id="Game.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">Game</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">entry_scene</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n"><a href="scene/scene.html#Scene">nextrpg.scene.scene.Scene</a></span><span class="p">]</span>,</span><span class="param">	<span class="n">_loop</span><span class="p">:</span> <span class="n"><a href="core/game_loop.html#GameLoop">nextrpg.core.game_loop.GameLoop</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">Game</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">entry_scene</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n"><a href="scene/scene.html#Scene">nextrpg.scene.scene.Scene</a></span><span class="p">]</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">_loop</span><span class="p">:</span> <span class="n"><a href="core/game_loop.html#GameLoop">nextrpg.core.game_loop.GameLoop</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>

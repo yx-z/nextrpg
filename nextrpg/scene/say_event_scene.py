@@ -34,7 +34,7 @@ from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
-from nextrpg.core.model import (
+from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
@@ -213,8 +213,9 @@ class SayEventScene(RpgEventScene):
             return self._scene_top_left
 
         if self.scene.draw_on_screen_shift:
-            top_left = self.character_or_scene.coordinate.shift(
-                self.scene.draw_on_screen_shift
+            top_left = (
+                self.character_or_scene.coordinate
+                + self.scene.draw_on_screen_shift
             )
         else:
             top_left = self.character_or_scene.coordinate
@@ -223,21 +224,17 @@ class SayEventScene(RpgEventScene):
         shift = self.config.pop_up_shift
         print(f"{top_left=} {top_right_screen()=}")
         if top_left_screen().contain(top_left):
-            coord = rect.bottom_center.shift(shift)
+            coord = rect.bottom_center + shift
         elif top_right_screen().contain(top_left):
-            coord = rect.bottom_center.shift(shift.negate_left)
+            coord = rect.bottom_center + shift.negate_left
         elif bottom_left_screen().contain(top_left):
-            coord = rect.top_center.shift(shift.negate_top)
+            coord = rect.top_center + shift.negate_top
         else:
-            coord = rect.top_center.shift(shift.negate)
+            coord = rect.top_center - shift
 
-        width, height = self._text.size
-        centered_coord = coord.shift(Coordinate(width / 2, height / 2).negate)
-
+        centered_coord = coord - self._text.size.all_dimension_scale(0.5)
         if self.scene.draw_on_screen_shift:
-            centered_coord = centered_coord.shift(
-                self.scene.draw_on_screen_shift
-            )
+            centered_coord = centered_coord + self.scene.draw_on_screen_shift
 
         if self._name:
             name_height = self._name.size.height + self.config.padding
@@ -248,8 +245,7 @@ class SayEventScene(RpgEventScene):
     @cached_property
     def _scene_top_left(self) -> Coordinate:
         center = self.config.center or screen().center
-        width, height = self._text.size
-        return center.shift(Coordinate(width / 2, height / 2).negate)
+        return center - self._text.size.all_dimension_scale(0.5)
 
     @cached_property
     def _text_background(self) -> DrawOnScreen:

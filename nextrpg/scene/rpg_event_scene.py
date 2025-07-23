@@ -5,7 +5,7 @@ from typing import Any, Self
 from nextrpg.character.npc_on_screen import NpcOnScreen, RpgEventGenerator
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.logger import Logger
-from nextrpg.core.model import not_constructor_below
+from nextrpg.core.dataclass_with_instance_init import not_constructor_below
 from nextrpg.core.time import Millisecond
 from nextrpg.event.event_as_attr import event_as_attr
 from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent

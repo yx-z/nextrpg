@@ -18,6 +18,18 @@ from dataclasses import dataclass, field, fields
 from typing import Any, dataclass_transform
 
 
+def not_constructor_below() -> Any:
+    """
+    Sentinel value for marking fields below are not constructor arguments.
+
+    However fields below can still be public member if not prefixed with `_`.
+
+    Returns:
+        `Any`: No real return value.
+    """
+    return field()
+
+
 def instance_init(init: Callable[[Any], Any]) -> Any:
     """
     Mark a field for instance initialization in dataclasses.
@@ -46,8 +58,13 @@ def instance_init(init: Callable[[Any], Any]) -> Any:
     return field(repr=False, default_factory=lambda: _Init(init))
 
 
-@dataclass_transform(kw_only_default=True, frozen_default=True)
-def dataclass_with_instance_init[T](cls: type[T]) -> type[T]:
+@dataclass_transform(
+    frozen_default=True,
+    field_descriptors=(not_constructor_below, instance_init),
+)
+def dataclass_with_instance_init[T](
+    cls: type[T] | None = None, /, **kwargs: Any
+) -> Callable[[type[T]], type[T]] | type[T]:
     """
     Class decorator to allow the use of `instance_init` in dataclasses.
 
@@ -74,14 +91,10 @@ def dataclass_with_instance_init[T](cls: type[T]) -> type[T]:
             )
         ```
     """
+    if cls is None:
+        return lambda c: dataclass_with_instance_init(c, **kwargs)
 
     def post_init(self) -> None:
-        """
-        Post-initialization hook for instance init fields.
-
-        Processes all fields marked with `instance_init` and calls
-        their initialization functions with the instance as argument.
-        """
         if getattr(self, _NEXTRPG_INSTANCE_INIT, None):
             return
 
@@ -91,19 +104,8 @@ def dataclass_with_instance_init[T](cls: type[T]) -> type[T]:
         object.__setattr__(self, _NEXTRPG_INSTANCE_INIT, True)
 
     cls.__post_init__ = post_init
-    return dataclass(cls, kw_only=True, frozen=True)
 
-
-def not_constructor_below() -> Any:
-    """
-    Sentinel value for marking fields below are not constructor arguments.
-
-    However fields below can still be public member if not prefixed with `_`.
-
-    Returns:
-        `Any`: No real return value.
-    """
-    return field()
+    return dataclass(cls, **{"frozen": True} | kwargs)
 
 
 _NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"

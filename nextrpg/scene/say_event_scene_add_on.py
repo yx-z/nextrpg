@@ -4,7 +4,7 @@ from functools import cached_property
 from typing import override
 
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.model import (
+from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
 )
@@ -34,8 +34,8 @@ class SayEventAddOn(RpgEventScene, ABC):
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         if self.npc_object_name:
             npc = self.scene.get_npc(self.npc_object_name)
-            diff = npc.coordinate.shift(self.initial_coord.negate)
-            add_on = tuple(a.shift(diff) for a in self.add_ons)
+            diff = npc.coordinate - self.initial_coord
+            add_on = tuple(a + diff for a in self.add_ons)
         else:
             add_on = self.add_ons
 

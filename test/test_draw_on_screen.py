@@ -50,7 +50,7 @@ def test_draw_on_screen() -> None:
     surface, coord = draw_on_screen.pygame
     assert isinstance(surface, Surface)
     assert coord == (10, 20)
-    assert draw_on_screen.shift(Coordinate(1, 2)).top_left == Coordinate(11, 22)
+    assert (draw_on_screen + Coordinate(1, 2)).top_left == Coordinate(11, 22)
 
 
 def test_rectangle() -> None:

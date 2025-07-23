@@ -21,7 +21,7 @@ from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.direction import Direction, DirectionalOffset
-from nextrpg.core.model import not_constructor_below
+from nextrpg.core.dataclass_with_instance_init import not_constructor_below
 from nextrpg.core.time import Millisecond
 from nextrpg.event.pygame_event import (
     KeyboardKey,
@@ -128,7 +128,7 @@ class PlayerOnScreen(MovingCharacterOnScreen):
         directional_offset = DirectionalOffset(
             self.character.direction, self.move_speed * time_delta
         )
-        return self.coordinate.shift(directional_offset)
+        return self.coordinate + directional_offset
 
 
 _MOVEMENT_KEYS = {

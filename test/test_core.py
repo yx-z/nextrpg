@@ -4,7 +4,7 @@ from nextrpg import Direction, DirectionalOffset, Font, Size
 
 
 def test_direction() -> None:
-    assert Direction.UP.opposite is Direction.DOWN
+    assert -Direction.UP is Direction.DOWN
 
 
 def test_directional_offset() -> None:
@@ -13,7 +13,7 @@ def test_directional_offset() -> None:
 
 
 def test_size() -> None:
-    assert Size(2, 3).scale(2) == Size(4, 6)
+    assert Size(2, 3).all_dimension_scale(2) == Size(4, 6)
     assert f"{Size(2, 3)}" == "(2, 3)"
 
 

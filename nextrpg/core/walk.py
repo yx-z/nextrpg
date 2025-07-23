@@ -25,7 +25,7 @@ from typing import Self
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, PixelPerMillisecond
 from nextrpg.core.direction import Direction
-from nextrpg.core.model import (
+from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
@@ -65,7 +65,7 @@ class Walk:
     move_speed: PixelPerMillisecond
     cyclic: bool
     _: KW_ONLY = not_constructor_below()
-    coordinate: Coordinate = instance_init(lambda self: self.path.points[0])
+    coordinate: Coordinate = instance_init(lambda self: self._initial_point)
     _target_index: int | None = 1
 
     @cached_property
@@ -89,12 +89,10 @@ class Walk:
         """
         if self._target_index is None:
             if self.path.closed:
-                last = self.path.points[0]
                 penultimate = self.path.points[-1]
             else:
-                last = self.path.points[-1]
                 penultimate = self.path.points[-2]
-            return last.relative_to(penultimate)
+            return self._final_target.relative_to(penultimate)
 
         target = self.path.points[self._target_index]
         current = self.path.points[self._target_index - 1]
@@ -117,7 +115,7 @@ class Walk:
             walk = walk.reset
             ```
         """
-        return replace(self, coordinate=self.path.points[0], _target_index=1)
+        return replace(self, coordinate=self._initial_point, _target_index=1)
 
     def tick(self, time_delta: Millisecond) -> Self:
         """
@@ -199,7 +197,11 @@ class Walk:
         )
 
     @property
+    def _initial_point(self) -> Coordinate:
+        return self.path.points[0]
+
+    @property
     def _final_target(self) -> Coordinate:
         if self.path.closed:
-            return self.path.points[0]
+            return self._initial_point
         return self.path.points[-1]

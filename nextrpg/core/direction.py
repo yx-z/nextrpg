@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import Enum, auto
 from typing import Self
 
@@ -50,8 +50,7 @@ class Direction(Enum):
     DOWN_LEFT = auto()
     DOWN_RIGHT = auto()
 
-    @property
-    def opposite(self) -> Self:
+    def __neg__(self) -> Self:
         """
         Get the opposite direction.
 
@@ -102,3 +101,6 @@ class DirectionalOffset:
 
     direction: Direction
     offset: Pixel
+
+    def __neg__(self) -> Self:
+        return replace(self, direction=-self.direction)

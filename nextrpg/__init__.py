@@ -107,7 +107,7 @@ from nextrpg.core.cached_decorator import *
 from nextrpg.core.coordinate import *
 from nextrpg.core.dimension import *
 from nextrpg.core.logger import *
-from nextrpg.core.model import *
+from nextrpg.core.dataclass_with_instance_init import *
 from nextrpg.core.walk import *
 from nextrpg.draw.color import *
 from nextrpg.draw.cyclic_frames import *

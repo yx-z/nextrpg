@@ -244,7 +244,7 @@ class DrawOnScreen:
             `Rectangle`: A rectangle defining only the visible (non-transparent)
                 area of the drawing on screen.
         """
-        return self.drawing.visible_rectangle.shift(self.top_left)
+        return self.drawing.visible_rectangle + self.top_left
 
     @property
     def pygame(self) -> tuple[Surface, Coordinate]:
@@ -258,7 +258,7 @@ class DrawOnScreen:
         """
         return self.drawing.pygame, self.top_left
 
-    def shift(self, coord: Coordinate) -> Self:
+    def __add__(self, coord: Coordinate) -> Self:
         """
         Shift the drawing by the specified coordinate.
 
@@ -267,15 +267,11 @@ class DrawOnScreen:
 
         Returns:
             `DrawOnScreen`: A new `DrawOnScreen` shifted by the coordinate.
-
-        Example:
-            ```python
-            player = DrawOnScreen(Coordinate(100, 100), sprite)
-            # Move player 10 pixels to the right
-            moved = player.shift(Coordinate(10, 0))
-            ```
         """
-        return DrawOnScreen(self.top_left.shift(coord), self.drawing)
+        return DrawOnScreen(self.top_left + coord, self.drawing)
+
+    def __sub__(self, coord: Coordinate) -> Self:
+        return self + -coord
 
     def set_alpha(self, alpha: Alpha) -> Self:
         """
@@ -412,11 +408,10 @@ class Polygon:
             outline = triangle.line(Rgba(0, 0, 255, 255), stroke_width=2)
             ```
         """
-        stroke = (
-            config().draw_on_screen.stroke_width
-            if stroke_width is None
-            else stroke_width
-        )
+        if stroke_width is None:
+            stroke = config().draw_on_screen.stroke_width
+        else:
+            stroke = stroke_width
         line = lambda surf, points: lines(
             surf, color, self.closed, points, stroke
         )
@@ -445,8 +440,8 @@ class Polygon:
         """
         if not self.bounding_rectangle.collide(poly.bounding_rectangle):
             return False
-        offset = self.bounding_rectangle.top_left.shift(
-            poly.bounding_rectangle.top_left.negate
+        offset = (
+            self.bounding_rectangle.top_left - poly.bounding_rectangle.top_left
         )
         return bool(self._mask.overlap(poly._mask, offset))
 
@@ -470,7 +465,7 @@ class Polygon:
             is_inside = triangle.contain(Coordinate(25, 25))  # True
             ```
         """
-        x, y = coordinate.shift(self.bounding_rectangle.top_left.negate)
+        x, y = coordinate - self.bounding_rectangle.top_left
         width, height = self._mask.get_size()
         if 0 <= x < width and 0 <= y < height:
             return bool(self._mask.get_at((x, y)))
@@ -516,9 +511,7 @@ class Polygon:
         """
         rectangle = self.bounding_rectangle
         surf = Surface(rectangle.size, SRCALPHA)
-        negated = tuple(
-            (p.shift(rectangle.top_left.negate)) for p in self.points
-        )
+        negated = tuple(p - rectangle.top_left for p in self.points)
         surf_and_points(surf, negated)
         return DrawOnScreen(rectangle.top_left, Drawing(surf))
 
@@ -721,7 +714,7 @@ class Rectangle(Polygon):
             and self.top < coordinate.top < self.bottom
         )
 
-    def shift(self, coordinate: Coordinate) -> Self:
+    def __add__(self, coordinate: Coordinate) -> Self:
         """
         Shift the rectangle by the specified coordinate.
 
@@ -731,7 +724,7 @@ class Rectangle(Polygon):
         Returns:
             `Rectangle`: A new rectangle shifted by the coordinate.
         """
-        return Rectangle(self.top_left.shift(coordinate), self.size)
+        return Rectangle(self.top_left + coordinate, self.size)
 
     def fill(
         self, color: Rgba, border_radius: Pixel | None = None
