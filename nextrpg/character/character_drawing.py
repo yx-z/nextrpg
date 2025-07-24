@@ -18,7 +18,7 @@ from typing import Self
 
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw_on_screen import Drawing
+from nextrpg.draw.drawing import Drawing
 
 
 @dataclass(frozen=True)

@@ -29,7 +29,8 @@ from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.logger import ComponentAndMessage, Logger, pop_messages
 from nextrpg.core.dataclass_with_instance_init import not_constructor_below
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw_on_screen import Drawing, DrawOnScreen
+from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg import Drawing
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (

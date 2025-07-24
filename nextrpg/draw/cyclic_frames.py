@@ -23,7 +23,7 @@ from nextrpg.core.dataclass_with_instance_init import (
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.animated import Animated
-from nextrpg.draw.draw_on_screen import Drawing
+from nextrpg import Drawing
 
 
 @dataclass_with_instance_init

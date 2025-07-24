@@ -25,6 +25,7 @@ from functools import cached_property
 from typing import override
 
 from nextrpg import (
+    Drawing,
     TextConfig,
     bottom_left_screen,
     top_left_screen,
@@ -40,7 +41,7 @@ from nextrpg.core.dataclass_with_instance_init import (
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw_on_screen import Drawing, DrawOnScreen, Rectangle
+from nextrpg.draw.draw_on_screen import DrawOnScreen, Rectangle
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.rpg_event import register_rpg_event

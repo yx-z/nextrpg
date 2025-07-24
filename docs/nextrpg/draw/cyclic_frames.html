@@ -121,7 +121,7 @@ to be played sequentially to create animated effects. It includes the
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="p">)</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Timer</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.animated</span><span class="w"> </span><span class="kn">import</span> <span class="n">Animated</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
 </span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="nd">@dataclass_with_instance_init</span>
@@ -265,7 +265,7 @@ looping of the animation sequence.</p>
                             <div id="CyclicFrames.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">CyclicFrames</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">frames</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="draw_on_screen.html#Drawing">nextrpg.draw.draw_on_screen.Drawing</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>,</span><span class="param">	<span class="n">duration_per_frame</span><span class="p">:</span> <span class="n">Millisecond</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>,</span><span class="param">	<span class="n">_timer</span><span class="p">:</span> <span class="n"><a href="../core/time.html#Timer">nextrpg.core.time.Timer</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">CyclicFrames</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">frames</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="drawing.html#Drawing">nextrpg.draw.drawing.Drawing</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>,</span><span class="param">	<span class="n">duration_per_frame</span><span class="p">:</span> <span class="n">Millisecond</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>,</span><span class="param">	<span class="n">_timer</span><span class="p">:</span> <span class="n"><a href="../core/time.html#Timer">nextrpg.core.time.Timer</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
@@ -276,7 +276,7 @@ looping of the animation sequence.</p>
                             </div>
                             <div id="CyclicFrames.frames" class="classattr">
                                 <div class="attr variable">
-            <span class="name">frames</span><span class="annotation">: tuple[<a href="draw_on_screen.html#Drawing">nextrpg.draw.draw_on_screen.Drawing</a>, ...]</span>
+            <span class="name">frames</span><span class="annotation">: tuple[<a href="drawing.html#Drawing">nextrpg.draw.drawing.Drawing</a>, ...]</span>
 
         
     </div>
@@ -299,7 +299,7 @@ looping of the animation sequence.</p>
                             <div id="CyclicFrames.drawings" class="classattr">
                                         <input id="CyclicFrames.drawings-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">drawings</span><span class="annotation">: tuple[<a href="draw_on_screen.html#Drawing">nextrpg.draw.draw_on_screen.Drawing</a>, ...]</span>
+            <span class="name">drawings</span><span class="annotation">: tuple[<a href="drawing.html#Drawing">nextrpg.draw.drawing.Drawing</a>, ...]</span>
 
                 <label class="view-source-button" for="CyclicFrames.drawings-view-source"><span>View Source</span></label>
 
@@ -318,7 +318,7 @@ looping of the animation sequence.</p>
                             <div id="CyclicFrames.drawing" class="classattr">
                                         <input id="CyclicFrames.drawing-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">drawing</span><span class="annotation">: <a href="draw_on_screen.html#Drawing">nextrpg.draw.draw_on_screen.Drawing</a></span>
+            <span class="name">drawing</span><span class="annotation">: <a href="drawing.html#Drawing">nextrpg.draw.drawing.Drawing</a></span>
 
                 <label class="view-source-button" for="CyclicFrames.drawing-view-source"><span>View Source</span></label>
 

@@ -33,11 +33,11 @@ from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.logger import Logger
 from nextrpg.draw.draw_on_screen import (
-    Drawing,
     DrawOnScreen,
     Polygon,
     Rectangle,
 )
+from nextrpg import Drawing
 from nextrpg.global_config.global_config import config
 
 logger = Logger("MapHelper")

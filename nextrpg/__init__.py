@@ -141,6 +141,7 @@ from nextrpg.gui.window import *
 from nextrpg.scene import *
 from nextrpg.scene.map_helper import *
 from nextrpg.scene.map_scene import *
+from nextrpg.draw.drawing import *
 from nextrpg.scene.map_util import *
 from nextrpg.scene.say_event_scene import *
 from nextrpg.scene.say_event_scene_add_on import *
