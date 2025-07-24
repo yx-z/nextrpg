@@ -105,13 +105,14 @@ from nextrpg.character.player_on_screen import *
 from nextrpg.character.rpg_maker_character_drawing import *
 from nextrpg.core.cached_decorator import *
 from nextrpg.core.coordinate import *
+from nextrpg.core.dataclass_with_instance_init import *
 from nextrpg.core.dimension import *
 from nextrpg.core.logger import *
-from nextrpg.core.dataclass_with_instance_init import *
 from nextrpg.core.walk import *
 from nextrpg.draw.color import *
 from nextrpg.draw.cyclic_frames import *
 from nextrpg.draw.draw_on_screen import *
+from nextrpg.draw.drawing import *
 from nextrpg.draw.fade import *
 from nextrpg.draw.text import *
 from nextrpg.draw.text_on_screen import *
@@ -141,7 +142,6 @@ from nextrpg.gui.window import *
 from nextrpg.scene import *
 from nextrpg.scene.map_helper import *
 from nextrpg.scene.map_scene import *
-from nextrpg.draw.drawing import *
 from nextrpg.scene.map_util import *
 from nextrpg.scene.say_event_scene import *
 from nextrpg.scene.say_event_scene_add_on import *

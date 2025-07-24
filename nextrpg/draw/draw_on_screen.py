@@ -21,10 +21,10 @@ from pygame import SRCALPHA, Mask, Rect, Surface
 from pygame.draw import lines, polygon, rect
 from pygame.mask import from_surface
 
-from nextrpg.draw.drawing import Drawing
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.draw.color import BLACK, Alpha, Rgba
+from nextrpg.draw.drawing import Drawing
 from nextrpg.global_config.global_config import config
 
 

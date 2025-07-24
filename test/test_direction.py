@@ -1,4 +1,4 @@
-from nextrpg import DirectionalOffset, Direction
+from nextrpg import Direction, DirectionalOffset
 
 
 def test_directional_offset() -> None:

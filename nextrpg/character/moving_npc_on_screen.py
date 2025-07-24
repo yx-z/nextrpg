@@ -18,12 +18,12 @@ from typing import Self, override
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import PixelPerMillisecond
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
+from nextrpg.core.dimension import PixelPerMillisecond
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.core.walk import Walk
 from nextrpg.draw.draw_on_screen import Polygon

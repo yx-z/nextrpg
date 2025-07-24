@@ -23,13 +23,13 @@ from functools import cached_property
 from typing import Self
 
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Pixel, PixelPerMillisecond
-from nextrpg.core.direction import Direction
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
+from nextrpg.core.dimension import Pixel, PixelPerMillisecond
+from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw_on_screen import Polygon
 

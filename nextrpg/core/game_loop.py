@@ -4,12 +4,12 @@ from typing import Callable, Self
 import pygame
 from pygame import Clock
 
-from nextrpg.core.logger import Logger
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
+from nextrpg.core.logger import Logger
 from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
 from nextrpg.global_config.global_config import config
 from nextrpg.gui.window import Window

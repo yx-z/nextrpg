@@ -16,12 +16,12 @@ from asyncio import sleep
 from dataclasses import KW_ONLY
 from typing import Callable
 
-from nextrpg.core.game_loop import GameLoop
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
+from nextrpg.core.game_loop import GameLoop
 from nextrpg.scene.scene import Scene
 
 

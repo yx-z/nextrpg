@@ -15,12 +15,14 @@ Features:
     - Support for both orthogonal and diagonal movement
 """
 
+from abc import ABC, abstractmethod
 from collections import namedtuple
 from math import atan2, degrees, hypot, sqrt
 from typing import Self
 
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.direction import Direction, DirectionalOffset
+from nextrpg.core.time import Millisecond
 
 
 class Coordinate(namedtuple("Coordinate", "left top")):
@@ -130,6 +132,14 @@ class Coordinate(namedtuple("Coordinate", "left top")):
         dx = self.left - other.left
         dy = self.top - other.top
         return hypot(dx, dy)
+
+
+class Moving(ABC):
+    coordinate: Coordinate
+
+    @abstractmethod
+    def tick(self, time_delta: Millisecond) -> Self:
+        """"""
 
 
 def _angle_difference(a1: float, a2: float) -> float:

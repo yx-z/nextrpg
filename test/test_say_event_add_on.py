@@ -1,15 +1,17 @@
+from test.util import MockEventfulScene, MockSurface, MockTextOnScreen
+
 from pygame import Event
-from pygame.locals import KEYDOWN, K_RETURN, QUIT
+from pygame.locals import K_RETURN, KEYDOWN, QUIT
+
 from nextrpg import (
     Coordinate,
-    DrawOnScreen,
     Drawing,
+    DrawOnScreen,
     FadeInAddOn,
     KeyPressDown,
     Quit,
     SayEventConfig,
 )
-from test.util import MockEventfulScene, MockSurface, MockTextOnScreen
 
 
 def test_say_event_add_on() -> None:

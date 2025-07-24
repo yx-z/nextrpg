@@ -1,3 +1,4 @@
+from test.util import MockEventfulScene, MockScene, MockSurface
 from unittest.mock import PropertyMock
 
 from pytest import raises
@@ -11,7 +12,6 @@ from nextrpg import (
     Size,
     Text,
 )
-from test.util import MockScene, MockEventfulScene, MockSurface
 
 
 def test_say_event_scene(mocker: MockerFixture) -> None:

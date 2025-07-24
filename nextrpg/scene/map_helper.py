@@ -27,6 +27,7 @@ from pytmx import (
     load_pygame,
 )
 
+from nextrpg import Drawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.coordinate import Coordinate
@@ -37,7 +38,6 @@ from nextrpg.draw.draw_on_screen import (
     Polygon,
     Rectangle,
 )
-from nextrpg import Drawing
 from nextrpg.global_config.global_config import config
 
 logger = Logger("MapHelper")

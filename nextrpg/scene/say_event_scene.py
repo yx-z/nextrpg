@@ -34,12 +34,12 @@ from nextrpg import (
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Size
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
+from nextrpg.core.dimension import Size
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw_on_screen import DrawOnScreen, Rectangle
 from nextrpg.draw.text import Text
@@ -223,7 +223,6 @@ class SayEventScene(RpgEventScene):
 
         rect = self.character_or_scene.draw_on_screen.rectangle
         shift = self.config.pop_up_shift
-        print(f"{top_left=} {top_right_screen()=}")
         if top_left_screen().contain(top_left):
             coord = rect.bottom_center + shift
         elif top_right_screen().contain(top_left):

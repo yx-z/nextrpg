@@ -25,12 +25,12 @@ from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.logger import Logger
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
+from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond, get_timepoint
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.global_config.global_config import config

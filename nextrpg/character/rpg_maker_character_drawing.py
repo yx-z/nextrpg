@@ -30,18 +30,18 @@ from dataclasses import KW_ONLY, dataclass, field, replace
 from enum import IntEnum
 from typing import Self, override
 
+from nextrpg import Drawing
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Pixel, Size
-from nextrpg.core.direction import Direction
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
+from nextrpg.core.dimension import Pixel, Size
+from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.cyclic_frames import CyclicFrames
-from nextrpg import Drawing
 from nextrpg.global_config.global_config import config
 
 
