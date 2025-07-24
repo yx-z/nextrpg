@@ -22,6 +22,28 @@ def test_draw_on_screen() -> None:
     assert draw_on_screen - Coordinate(1, 2)
 
 
+def test_polygon() -> None:
+    polygon = Polygon((Coordinate(0, 0), Coordinate(1, 0), Coordinate(1, 1)))
+    assert polygon.bounding_rectangle == Rectangle(Coordinate(0, 0), Size(1, 1))
+
+    assert polygon.collide(
+        Polygon((Coordinate(0, 0), Coordinate(1, 2), Coordinate(1, 1)))
+    )
+    assert not polygon.collide(
+        Polygon((Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20)))
+    )
+    assert polygon.contain(Coordinate(0.5, 0.5))
+    assert not polygon.contain(Coordinate(10, 20))
+    assert polygon.length
+    assert Polygon(
+        (Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20)),
+        closed=False,
+    ).length
+    assert polygon.line(Rgba(0, 0, 0, 0), 2)
+    assert polygon.line(Rgba(0, 0, 0, 0))
+    assert polygon - Coordinate(1, 2)
+
+
 def test_rectangle() -> None:
     rect = Rectangle(Coordinate(10, 20), Size(2, 2))
     assert rect.size == Size(2, 2)
@@ -49,24 +71,4 @@ def test_rectangle() -> None:
     assert Rectangle(Coordinate(0, 0), Size(0, 0)).fill(
         Rgba(0, 0, 0, 0)
     ).visible_rectangle.size == Size(0, 0)
-
-
-def test_polygon() -> None:
-    polygon = Polygon((Coordinate(0, 0), Coordinate(1, 0), Coordinate(1, 1)))
-    assert polygon.bounding_rectangle == Rectangle(Coordinate(0, 0), Size(1, 1))
-
-    assert polygon.collide(
-        Polygon((Coordinate(0, 0), Coordinate(1, 2), Coordinate(1, 1)))
-    )
-    assert not polygon.collide(
-        Polygon((Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20)))
-    )
-    assert polygon.contain(Coordinate(0.5, 0.5))
-    assert not polygon.contain(Coordinate(10, 20))
-    assert polygon.length
-    assert Polygon(
-        (Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20)),
-        closed=False,
-    ).length
-    assert polygon.line(Rgba(0, 0, 0, 0), 2)
-    assert polygon.line(Rgba(0, 0, 0, 0))
+    assert rect + Coordinate(1, 2)

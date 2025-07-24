@@ -13,7 +13,7 @@ Features:
 """
 
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Self, override
 
@@ -351,6 +351,13 @@ class Polygon:
         surf_and_points(surf, negated)
         return DrawOnScreen(rectangle.top_left, Drawing(surf))
 
+    def __add__(self, coordinate: Coordinate) -> Self:
+        points = tuple(t + coordinate for t in self.points)
+        return replace(self, points=points)
+
+    def __sub__(self, coordinate: Coordinate) -> Self:
+        return self + -coordinate
+
 
 class Rectangle(Polygon):
     """
@@ -550,16 +557,8 @@ class Rectangle(Polygon):
             and self.top < coordinate.top < self.bottom
         )
 
+    @override
     def __add__(self, coordinate: Coordinate) -> Self:
-        """
-        Shift the rectangle by the specified coordinate.
-
-        Arguments:
-            `coordinate`: The coordinate to shift the rectangle by.
-
-        Returns:
-            `Rectangle`: A new rectangle shifted by the coordinate.
-        """
         return Rectangle(self.top_left + coordinate, self.size)
 
     def fill(
