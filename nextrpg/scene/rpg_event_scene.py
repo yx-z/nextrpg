@@ -59,7 +59,6 @@ class EventfulScene(Scene):
             return self.player
         return self.get_npc(object_name)
 
-
     def get_npc(self, object_name: str) -> NpcOnScreen:
         return self._npc_dict[object_name]
 

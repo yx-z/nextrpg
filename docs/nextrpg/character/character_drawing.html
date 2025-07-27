@@ -109,7 +109,7 @@ animation in <code><a href="../../nextrpg.html">nextrpg</a></code> games. It def
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.direction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Draw</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -133,7 +133,7 @@ animation in <code><a href="../../nextrpg.html">nextrpg</a></code> games. It def
 </span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>    <span class="nd">@property</span>
 </span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
 </span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="sd">        Get the character&#39;s current drawing representation.</span>
 </span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>
@@ -230,7 +230,7 @@ animation in <code><a href="../../nextrpg.html">nextrpg</a></code> games. It def
 </span><span id="CharacterDrawing-43"><a href="#CharacterDrawing-43"><span class="linenos"> 43</span></a>
 </span><span id="CharacterDrawing-44"><a href="#CharacterDrawing-44"><span class="linenos"> 44</span></a>    <span class="nd">@property</span>
 </span><span id="CharacterDrawing-45"><a href="#CharacterDrawing-45"><span class="linenos"> 45</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing-46"><a href="#CharacterDrawing-46"><span class="linenos"> 46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
+</span><span id="CharacterDrawing-46"><a href="#CharacterDrawing-46"><span class="linenos"> 46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
 </span><span id="CharacterDrawing-47"><a href="#CharacterDrawing-47"><span class="linenos"> 47</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterDrawing-48"><a href="#CharacterDrawing-48"><span class="linenos"> 48</span></a><span class="sd">        Get the character&#39;s current drawing representation.</span>
 </span><span id="CharacterDrawing-49"><a href="#CharacterDrawing-49"><span class="linenos"> 49</span></a>
@@ -325,7 +325,7 @@ safety and predictable behavior in the game loop.</p>
                             <div id="CharacterDrawing.drawing" class="classattr">
                                         <input id="CharacterDrawing.drawing-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">drawing</span><span class="annotation">: <a href="../draw/drawing.html#Drawing">nextrpg.draw.drawing.Drawing</a></span>
+            <span class="name">drawing</span><span class="annotation">: <a href="../draw/draw_on_screen.html#Draw">nextrpg.draw.draw_on_screen.Draw</a></span>
 
                 <label class="view-source-button" for="CharacterDrawing.drawing-view-source"><span>View Source</span></label>
 
@@ -333,7 +333,7 @@ safety and predictable behavior in the game loop.</p>
     <a class="headerlink" href="#CharacterDrawing.drawing"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterDrawing.drawing-44"><a href="#CharacterDrawing.drawing-44"><span class="linenos">44</span></a>    <span class="nd">@property</span>
 </span><span id="CharacterDrawing.drawing-45"><a href="#CharacterDrawing.drawing-45"><span class="linenos">45</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="CharacterDrawing.drawing-46"><a href="#CharacterDrawing.drawing-46"><span class="linenos">46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
+</span><span id="CharacterDrawing.drawing-46"><a href="#CharacterDrawing.drawing-46"><span class="linenos">46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
 </span><span id="CharacterDrawing.drawing-47"><a href="#CharacterDrawing.drawing-47"><span class="linenos">47</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="CharacterDrawing.drawing-48"><a href="#CharacterDrawing.drawing-48"><span class="linenos">48</span></a><span class="sd">        Get the character&#39;s current drawing representation.</span>
 </span><span id="CharacterDrawing.drawing-49"><a href="#CharacterDrawing.drawing-49"><span class="linenos">49</span></a>

@@ -67,7 +67,7 @@
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg</span><span class="w"> </span><span class="kn">import</span> <span class="n">Draw</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing_group</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawingGroup</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
@@ -78,7 +78,7 @@
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="nd">@property</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Draw</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -102,7 +102,7 @@
 </span><span id="Animated-14"><a href="#Animated-14"><span class="linenos">14</span></a>
 </span><span id="Animated-15"><a href="#Animated-15"><span class="linenos">15</span></a>    <span class="nd">@property</span>
 </span><span id="Animated-16"><a href="#Animated-16"><span class="linenos">16</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Animated-17"><a href="#Animated-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="Animated-17"><a href="#Animated-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Draw</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="Animated-18"><a href="#Animated-18"><span class="linenos">18</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
 </span></pre></div>
 
@@ -136,7 +136,7 @@ inheritance.</p>
                             <div id="Animated.drawings" class="classattr">
                                         <input id="Animated.drawings-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">drawings</span><span class="annotation">: tuple[<a href="drawing.html#Drawing">nextrpg.draw.drawing.Drawing</a> | <a href="drawing_group.html#DrawingGroup">nextrpg.draw.drawing_group.DrawingGroup</a>, ...]</span>
+            <span class="name">drawings</span><span class="annotation">: tuple[<a href="draw_on_screen.html#Draw">nextrpg.draw.draw_on_screen.Draw</a> | <a href="drawing_group.html#DrawingGroup">nextrpg.draw.drawing_group.DrawingGroup</a>, ...]</span>
 
                 <label class="view-source-button" for="Animated.drawings-view-source"><span>View Source</span></label>
 
@@ -144,7 +144,7 @@ inheritance.</p>
     <a class="headerlink" href="#Animated.drawings"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Animated.drawings-15"><a href="#Animated.drawings-15"><span class="linenos">15</span></a>    <span class="nd">@property</span>
 </span><span id="Animated.drawings-16"><a href="#Animated.drawings-16"><span class="linenos">16</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Animated.drawings-17"><a href="#Animated.drawings-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="Animated.drawings-17"><a href="#Animated.drawings-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Draw</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="Animated.drawings-18"><a href="#Animated.drawings-18"><span class="linenos">18</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
 </span></pre></div>
 

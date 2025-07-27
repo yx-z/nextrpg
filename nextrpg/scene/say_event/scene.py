@@ -140,7 +140,9 @@ class SayEventScene(RpgEventScene):
     def _state(self) -> FadeInState:
         if isinstance(self.character_or_scene, CharacterOnScreen):
             character_object_name = self.character_or_scene.spec.object_name
-            initial_coord = self.scene.get_character(character_object_name).coordinate
+            initial_coord = self.scene.get_character(
+                character_object_name
+            ).coordinate
             text_on_screen = self._character_say.text_on_screen
             background = self._character_say.background
         else:

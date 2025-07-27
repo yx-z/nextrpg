@@ -169,7 +169,7 @@ class Draw:
     @cached_property
     def _debug_surface(self) -> Surface | None:
         if not (debug := config().debug) or not (
-                color := debug.drawing_background_color
+            color := debug.drawing_background_color
         ):
             return None
 
@@ -194,6 +194,7 @@ class Draw:
             return self.resource
         logger.debug(t"Loading {self.resource}")
         return load(self.resource).convert_alpha()
+
 
 @dataclass(frozen=True)
 class DrawOnScreen:
@@ -756,4 +757,3 @@ class Rectangle(Polygon):
         rectangle = Rect(Coordinate(0, 0), self.size)
         rect(surf, color, rectangle, border_radius=border_radius or -1)
         return DrawOnScreen(self.top_left, Draw(surf))
-

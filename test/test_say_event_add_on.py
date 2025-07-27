@@ -44,7 +44,9 @@ def test_say_event_add_on() -> None:
     assert fade_in.tick(10000).tick(99910).tick(2).draw_on_screens
     enter = KeyPressDown(Event(KEYDOWN, key=K_RETURN))
     assert fade_in.tick(10).tick(10).tick(3099).event(Quit(Event(QUIT)))
-    assert fade_in.tick(10).tick(9910).tick(2).event(enter).tick(1).draw_on_screens
+    assert (
+        fade_in.tick(10).tick(9910).tick(2).event(enter).tick(1).draw_on_screens
+    )
     assert fade_in.tick(10).tick(9910).tick(2).event(enter).tick(1).tick(3000)
 
     assert (

@@ -43,31 +43,43 @@
                                 <a class="variable" href="#SayEventConfig.border_radius">border_radius</a>
                         </li>
                         <li>
+                                <a class="variable" href="#SayEventConfig.fade_duration">fade_duration</a>
+                        </li>
+                        <li>
                                 <a class="variable" href="#SayEventConfig.padding">padding</a>
                         </li>
                         <li>
-                                <a class="variable" href="#SayEventConfig.fade_duration">fade_duration</a>
+                                <a class="variable" href="#SayEventConfig.shift">shift</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#SayEventConfig.tail_size">tail_size</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#SayEventConfig.tail_tip_shift">tail_tip_shift</a>
                         </li>
                         <li>
                                 <a class="variable" href="#SayEventConfig.text_delay">text_delay</a>
                         </li>
                         <li>
-                                <a class="variable" href="#SayEventConfig.pop_up_shift">pop_up_shift</a>
-                        </li>
-                        <li>
                                 <a class="variable" href="#SayEventConfig.name_color">name_color</a>
                         </li>
                         <li>
-                                <a class="variable" href="#SayEventConfig.center">center</a>
+                                <a class="variable" href="#SayEventConfig.name_override">name_override</a>
                         </li>
                         <li>
-                                <a class="variable" href="#SayEventConfig.text">text</a>
+                                <a class="variable" href="#SayEventConfig.coordinate">coordinate</a>
                         </li>
                         <li>
                                 <a class="variable" href="#SayEventConfig.drawing">drawing</a>
                         </li>
                         <li>
+                                <a class="variable" href="#SayEventConfig.text">text</a>
+                        </li>
+                        <li>
                                 <a class="variable" href="#SayEventConfig.default_text_config">default_text_config</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#SayEventConfig.default_scene_coordinate">default_scene_coordinate</a>
                         </li>
                 </ul>
 
@@ -125,7 +137,7 @@ and timing parameters for text display.</p>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">replace</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pixel</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pixel</span><span class="p">,</span> <span class="n">Size</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">WHITE</span><span class="p">,</span> <span class="n">Rgba</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.text_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextConfig</span>
@@ -152,20 +164,29 @@ and timing parameters for text display.</p>
 </span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>
 </span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="n">background</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">WHITE</span>
 </span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">fade_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="n">text_delay</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">20</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="n">pop_up_shift</span><span class="p">:</span> <span class="n">Coordinate</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="n">name_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="n">center</span><span class="p">:</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="n">text</span><span class="p">:</span> <span class="n">TextConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="s2">&quot;Drawing | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="nd">@property</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">default_text_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextConfig</span><span class="p">:</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">)</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">fade_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="n">shift</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="n">tail_size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="n">tail_tip_shift</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">5</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="n">text_delay</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">20</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="n">name_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="n">name_override</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="s2">&quot;Drawing | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="n">text</span><span class="p">:</span> <span class="n">TextConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="nd">@property</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">default_text_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextConfig</span><span class="p">:</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">)</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="nd">@property</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">default_scene_coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.gui.area</span><span class="w"> </span><span class="kn">import</span> <span class="n">screen</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="n">screen</span><span class="p">()</span><span class="o">.</span><span class="n">center</span>
 </span></pre></div>
 
 
@@ -203,20 +224,29 @@ and timing parameters for text display.</p>
 </span><span id="SayEventConfig-43"><a href="#SayEventConfig-43"><span class="linenos">43</span></a>
 </span><span id="SayEventConfig-44"><a href="#SayEventConfig-44"><span class="linenos">44</span></a>    <span class="n">background</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">WHITE</span>
 </span><span id="SayEventConfig-45"><a href="#SayEventConfig-45"><span class="linenos">45</span></a>    <span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>
-</span><span id="SayEventConfig-46"><a href="#SayEventConfig-46"><span class="linenos">46</span></a>    <span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>
-</span><span id="SayEventConfig-47"><a href="#SayEventConfig-47"><span class="linenos">47</span></a>    <span class="n">fade_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>
-</span><span id="SayEventConfig-48"><a href="#SayEventConfig-48"><span class="linenos">48</span></a>    <span class="n">text_delay</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">20</span>
-</span><span id="SayEventConfig-49"><a href="#SayEventConfig-49"><span class="linenos">49</span></a>    <span class="n">pop_up_shift</span><span class="p">:</span> <span class="n">Coordinate</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-</span><span id="SayEventConfig-50"><a href="#SayEventConfig-50"><span class="linenos">50</span></a>    <span class="n">name_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
-</span><span id="SayEventConfig-51"><a href="#SayEventConfig-51"><span class="linenos">51</span></a>    <span class="n">center</span><span class="p">:</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="SayEventConfig-52"><a href="#SayEventConfig-52"><span class="linenos">52</span></a>    <span class="n">text</span><span class="p">:</span> <span class="n">TextConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="SayEventConfig-53"><a href="#SayEventConfig-53"><span class="linenos">53</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="s2">&quot;Drawing | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="SayEventConfig-54"><a href="#SayEventConfig-54"><span class="linenos">54</span></a>
-</span><span id="SayEventConfig-55"><a href="#SayEventConfig-55"><span class="linenos">55</span></a>    <span class="nd">@property</span>
-</span><span id="SayEventConfig-56"><a href="#SayEventConfig-56"><span class="linenos">56</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">default_text_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextConfig</span><span class="p">:</span>
-</span><span id="SayEventConfig-57"><a href="#SayEventConfig-57"><span class="linenos">57</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="SayEventConfig-58"><a href="#SayEventConfig-58"><span class="linenos">58</span></a>
-</span><span id="SayEventConfig-59"><a href="#SayEventConfig-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">)</span>
+</span><span id="SayEventConfig-46"><a href="#SayEventConfig-46"><span class="linenos">46</span></a>    <span class="n">fade_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>
+</span><span id="SayEventConfig-47"><a href="#SayEventConfig-47"><span class="linenos">47</span></a>    <span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>
+</span><span id="SayEventConfig-48"><a href="#SayEventConfig-48"><span class="linenos">48</span></a>    <span class="n">shift</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+</span><span id="SayEventConfig-49"><a href="#SayEventConfig-49"><span class="linenos">49</span></a>    <span class="n">tail_size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</span><span id="SayEventConfig-50"><a href="#SayEventConfig-50"><span class="linenos">50</span></a>    <span class="n">tail_tip_shift</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">5</span>
+</span><span id="SayEventConfig-51"><a href="#SayEventConfig-51"><span class="linenos">51</span></a>    <span class="n">text_delay</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">20</span>
+</span><span id="SayEventConfig-52"><a href="#SayEventConfig-52"><span class="linenos">52</span></a>    <span class="n">name_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+</span><span id="SayEventConfig-53"><a href="#SayEventConfig-53"><span class="linenos">53</span></a>    <span class="n">name_override</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="SayEventConfig-54"><a href="#SayEventConfig-54"><span class="linenos">54</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="SayEventConfig-55"><a href="#SayEventConfig-55"><span class="linenos">55</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="s2">&quot;Drawing | None&quot;</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="SayEventConfig-56"><a href="#SayEventConfig-56"><span class="linenos">56</span></a>    <span class="n">text</span><span class="p">:</span> <span class="n">TextConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="SayEventConfig-57"><a href="#SayEventConfig-57"><span class="linenos">57</span></a>
+</span><span id="SayEventConfig-58"><a href="#SayEventConfig-58"><span class="linenos">58</span></a>    <span class="nd">@property</span>
+</span><span id="SayEventConfig-59"><a href="#SayEventConfig-59"><span class="linenos">59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">default_text_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextConfig</span><span class="p">:</span>
+</span><span id="SayEventConfig-60"><a href="#SayEventConfig-60"><span class="linenos">60</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="SayEventConfig-61"><a href="#SayEventConfig-61"><span class="linenos">61</span></a>
+</span><span id="SayEventConfig-62"><a href="#SayEventConfig-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">)</span>
+</span><span id="SayEventConfig-63"><a href="#SayEventConfig-63"><span class="linenos">63</span></a>
+</span><span id="SayEventConfig-64"><a href="#SayEventConfig-64"><span class="linenos">64</span></a>    <span class="nd">@property</span>
+</span><span id="SayEventConfig-65"><a href="#SayEventConfig-65"><span class="linenos">65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">default_scene_coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="SayEventConfig-66"><a href="#SayEventConfig-66"><span class="linenos">66</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.gui.area</span><span class="w"> </span><span class="kn">import</span> <span class="n">screen</span>
+</span><span id="SayEventConfig-67"><a href="#SayEventConfig-67"><span class="linenos">67</span></a>
+</span><span id="SayEventConfig-68"><a href="#SayEventConfig-68"><span class="linenos">68</span></a>        <span class="k">return</span> <span class="n">screen</span><span class="p">()</span><span class="o">.</span><span class="n">center</span>
 </span></pre></div>
 
 
@@ -243,7 +273,7 @@ Defaults to 200ms.</li>
                             <div id="SayEventConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">SayEventConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">background</span><span class="p">:</span> <span class="n"><a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>,</span><span class="param">	<span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>,</span><span class="param">	<span class="n">fade_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>,</span><span class="param">	<span class="n">text_delay</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">20</span>,</span><span class="param">	<span class="n">pop_up_shift</span><span class="p">:</span> <span class="n"><a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>,</span><span class="param">	<span class="n">name_color</span><span class="p">:</span> <span class="n"><a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">center</span><span class="p">:</span> <span class="n"><a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">text</span><span class="p">:</span> <span class="n"><a href="text_config.html#TextConfig">nextrpg.global_config.text_config.TextConfig</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">drawing</span><span class="p">:</span> <span class="s1">&#39;Drawing | None&#39;</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
+        <span class="name">SayEventConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">background</span><span class="p">:</span> <span class="n"><a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">border_radius</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>,</span><span class="param">	<span class="n">fade_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">200</span>,</span><span class="param">	<span class="n">padding</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">16</span>,</span><span class="param">	<span class="n">shift</span><span class="p">:</span> <span class="n"><a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a></span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>,</span><span class="param">	<span class="n">tail_size</span><span class="p">:</span> <span class="n"><a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a></span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>,</span><span class="param">	<span class="n">tail_tip_shift</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">5</span>,</span><span class="param">	<span class="n">text_delay</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">20</span>,</span><span class="param">	<span class="n">name_color</span><span class="p">:</span> <span class="n"><a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">name_override</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">coordinate</span><span class="p">:</span> <span class="n"><a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">drawing</span><span class="p">:</span> <span class="s1">&#39;Drawing | None&#39;</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">text</span><span class="p">:</span> <span class="n"><a href="text_config.html#TextConfig">nextrpg.global_config.text_config.TextConfig</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
 
         
     </div>
@@ -276,6 +306,18 @@ Defaults to 200ms.</li>
     
 
                             </div>
+                            <div id="SayEventConfig.fade_duration" class="classattr">
+                                <div class="attr variable">
+            <span class="name">fade_duration</span><span class="annotation">: <a href="../core/time.html#Millisecond">nextrpg.core.time.Millisecond</a></span>        =
+<span class="default_value">200</span>
+
+        
+    </div>
+    <a class="headerlink" href="#SayEventConfig.fade_duration"></a>
+    
+    
+
+                            </div>
                             <div id="SayEventConfig.padding" class="classattr">
                                 <div class="attr variable">
             <span class="name">padding</span><span class="annotation">: <a href="../core/dimension.html#Pixel">nextrpg.core.dimension.Pixel</a></span>        =
@@ -288,14 +330,38 @@ Defaults to 200ms.</li>
     
 
                             </div>
-                            <div id="SayEventConfig.fade_duration" class="classattr">
+                            <div id="SayEventConfig.shift" class="classattr">
                                 <div class="attr variable">
-            <span class="name">fade_duration</span><span class="annotation">: <a href="../core/time.html#Millisecond">nextrpg.core.time.Millisecond</a></span>        =
-<span class="default_value">200</span>
+            <span class="name">shift</span><span class="annotation">: <a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a></span>        =
+<span class="default_value">Size(width=0, height=50)</span>
 
         
     </div>
-    <a class="headerlink" href="#SayEventConfig.fade_duration"></a>
+    <a class="headerlink" href="#SayEventConfig.shift"></a>
+    
+    
+
+                            </div>
+                            <div id="SayEventConfig.tail_size" class="classattr">
+                                <div class="attr variable">
+            <span class="name">tail_size</span><span class="annotation">: <a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a></span>        =
+<span class="default_value">Size(width=10, height=10)</span>
+
+        
+    </div>
+    <a class="headerlink" href="#SayEventConfig.tail_size"></a>
+    
+    
+
+                            </div>
+                            <div id="SayEventConfig.tail_tip_shift" class="classattr">
+                                <div class="attr variable">
+            <span class="name">tail_tip_shift</span><span class="annotation">: <a href="../core/dimension.html#Pixel">nextrpg.core.dimension.Pixel</a></span>        =
+<span class="default_value">5</span>
+
+        
+    </div>
+    <a class="headerlink" href="#SayEventConfig.tail_tip_shift"></a>
     
     
 
@@ -312,21 +378,9 @@ Defaults to 200ms.</li>
     
 
                             </div>
-                            <div id="SayEventConfig.pop_up_shift" class="classattr">
-                                <div class="attr variable">
-            <span class="name">pop_up_shift</span><span class="annotation">: <a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span>        =
-<span class="default_value">Coordinate(left=50, top=50)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#SayEventConfig.pop_up_shift"></a>
-    
-    
-
-                            </div>
                             <div id="SayEventConfig.name_color" class="classattr">
                                 <div class="attr variable">
-            <span class="name">name_color</span><span class="annotation">: <a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a> | None</span>        =
+            <span class="name">name_color</span><span class="annotation">: <a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span>        =
 <span class="default_value">Rgba(red=0, green=0, blue=255, alpha=255)</span>
 
         
@@ -336,26 +390,26 @@ Defaults to 200ms.</li>
     
 
                             </div>
-                            <div id="SayEventConfig.center" class="classattr">
+                            <div id="SayEventConfig.name_override" class="classattr">
                                 <div class="attr variable">
-            <span class="name">center</span><span class="annotation">: <a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a> | None</span>        =
+            <span class="name">name_override</span><span class="annotation">: str | None</span>        =
 <span class="default_value">None</span>
 
         
     </div>
-    <a class="headerlink" href="#SayEventConfig.center"></a>
+    <a class="headerlink" href="#SayEventConfig.name_override"></a>
     
     
 
                             </div>
-                            <div id="SayEventConfig.text" class="classattr">
+                            <div id="SayEventConfig.coordinate" class="classattr">
                                 <div class="attr variable">
-            <span class="name">text</span><span class="annotation">: <a href="text_config.html#TextConfig">nextrpg.global_config.text_config.TextConfig</a> | None</span>        =
+            <span class="name">coordinate</span><span class="annotation">: <a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a> | None</span>        =
 <span class="default_value">None</span>
 
         
     </div>
-    <a class="headerlink" href="#SayEventConfig.text"></a>
+    <a class="headerlink" href="#SayEventConfig.coordinate"></a>
     
     
 
@@ -372,6 +426,18 @@ Defaults to 200ms.</li>
     
 
                             </div>
+                            <div id="SayEventConfig.text" class="classattr">
+                                <div class="attr variable">
+            <span class="name">text</span><span class="annotation">: <a href="text_config.html#TextConfig">nextrpg.global_config.text_config.TextConfig</a> | None</span>        =
+<span class="default_value">None</span>
+
+        
+    </div>
+    <a class="headerlink" href="#SayEventConfig.text"></a>
+    
+    
+
+                            </div>
                             <div id="SayEventConfig.default_text_config" class="classattr">
                                         <input id="SayEventConfig.default_text_config-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
@@ -381,11 +447,31 @@ Defaults to 200ms.</li>
 
     </div>
     <a class="headerlink" href="#SayEventConfig.default_text_config"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SayEventConfig.default_text_config-55"><a href="#SayEventConfig.default_text_config-55"><span class="linenos">55</span></a>    <span class="nd">@property</span>
-</span><span id="SayEventConfig.default_text_config-56"><a href="#SayEventConfig.default_text_config-56"><span class="linenos">56</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">default_text_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextConfig</span><span class="p">:</span>
-</span><span id="SayEventConfig.default_text_config-57"><a href="#SayEventConfig.default_text_config-57"><span class="linenos">57</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="SayEventConfig.default_text_config-58"><a href="#SayEventConfig.default_text_config-58"><span class="linenos">58</span></a>
-</span><span id="SayEventConfig.default_text_config-59"><a href="#SayEventConfig.default_text_config-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SayEventConfig.default_text_config-58"><a href="#SayEventConfig.default_text_config-58"><span class="linenos">58</span></a>    <span class="nd">@property</span>
+</span><span id="SayEventConfig.default_text_config-59"><a href="#SayEventConfig.default_text_config-59"><span class="linenos">59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">default_text_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TextConfig</span><span class="p">:</span>
+</span><span id="SayEventConfig.default_text_config-60"><a href="#SayEventConfig.default_text_config-60"><span class="linenos">60</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="SayEventConfig.default_text_config-61"><a href="#SayEventConfig.default_text_config-61"><span class="linenos">61</span></a>
+</span><span id="SayEventConfig.default_text_config-62"><a href="#SayEventConfig.default_text_config-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">)</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="SayEventConfig.default_scene_coordinate" class="classattr">
+                                        <input id="SayEventConfig.default_scene_coordinate-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">default_scene_coordinate</span><span class="annotation">: <a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span>
+
+                <label class="view-source-button" for="SayEventConfig.default_scene_coordinate-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#SayEventConfig.default_scene_coordinate"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SayEventConfig.default_scene_coordinate-64"><a href="#SayEventConfig.default_scene_coordinate-64"><span class="linenos">64</span></a>    <span class="nd">@property</span>
+</span><span id="SayEventConfig.default_scene_coordinate-65"><a href="#SayEventConfig.default_scene_coordinate-65"><span class="linenos">65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">default_scene_coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="SayEventConfig.default_scene_coordinate-66"><a href="#SayEventConfig.default_scene_coordinate-66"><span class="linenos">66</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.gui.area</span><span class="w"> </span><span class="kn">import</span> <span class="n">screen</span>
+</span><span id="SayEventConfig.default_scene_coordinate-67"><a href="#SayEventConfig.default_scene_coordinate-67"><span class="linenos">67</span></a>
+</span><span id="SayEventConfig.default_scene_coordinate-68"><a href="#SayEventConfig.default_scene_coordinate-68"><span class="linenos">68</span></a>        <span class="k">return</span> <span class="n">screen</span><span class="p">()</span><span class="o">.</span><span class="n">center</span>
 </span></pre></div>
 
 

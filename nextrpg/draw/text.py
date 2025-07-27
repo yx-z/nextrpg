@@ -62,7 +62,9 @@ class Text:
             size = text.size  # Returns Size(width, height)
             ```
         """
-        text_sizes = tuple(self.config.font.text_size(line) for line in self._lines)
+        text_sizes = tuple(
+            self.config.font.text_size(line) for line in self._lines
+        )
         width = max(s.width for s in text_sizes)
         height = sum(s.height for s in text_sizes)
         spacings = self.config.line_spacing * (len(self._lines) - 1)
