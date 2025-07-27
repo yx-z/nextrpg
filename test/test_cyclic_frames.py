@@ -1,11 +1,11 @@
 from test.util import MockSurface
 
-from nextrpg import CyclicFrames, Drawing
+from nextrpg import CyclicFrames, Draw
 
 
 def test_cyclic_frames() -> None:
     frames = CyclicFrames(
-        frames=tuple(Drawing(MockSurface(x)) for x in ("a", "b", "c")),
+        frames=tuple(Draw(MockSurface(x)) for x in ("a", "b", "c")),
         duration_per_frame=5,
     )
     assert frames.drawing._surface.data == "a"

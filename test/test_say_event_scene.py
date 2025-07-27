@@ -6,7 +6,7 @@ from pytest_mock import MockerFixture
 
 from nextrpg import (
     Coordinate,
-    Drawing,
+    Draw,
     SayEventConfig,
     SayEventScene,
     Size,
@@ -24,7 +24,7 @@ def test_say_event_scene(mocker: MockerFixture) -> None:
         generator=lambda *_: None,
         character_or_scene=MockScene(),
         message="abc",
-        arg=SayEventConfig(),
+        arg=(SayEventConfig(),),
     ).draw_on_screens
     assert SayEventScene(
         scene=MockEventfulScene(),
@@ -45,7 +45,7 @@ def test_say_event_scene(mocker: MockerFixture) -> None:
         generator=lambda *_: None,
         character_or_scene=MockScene(),
         message="abc",
-        arg=Drawing(MockSurface()),
+        arg=Draw(MockSurface()),
     ).draw_on_screens
 
     with raises(ValueError):

@@ -17,7 +17,7 @@ from functools import cached_property
 
 from pygame import Surface
 
-from nextrpg import Drawing
+from nextrpg import Draw
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.draw.text import Text
@@ -51,17 +51,4 @@ class TextOnScreen:
         Returns:
             `tuple[DrawOnScreen, ...]`: The text rendered on screen.
         """
-        left, top = self.top_left
-        return tuple(
-            DrawOnScreen(
-                Coordinate(left, top + height), Drawing(self._surface(line))
-            )
-            for line, height in zip(self.text.lines, self.text.line_heights)
-        )
-
-    def _surface(self, line: str) -> Surface:
-        return self.text.config.font.pygame.render(
-            line,
-            self.text.config.antialias,
-            self.text.config.color,
-        )
+        return self.text.drawing_group.draw_on_screens(self.top_left)

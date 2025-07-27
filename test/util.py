@@ -11,7 +11,7 @@ from nextrpg import (
     CharacterSpec,
     Coordinate,
     Direction,
-    Drawing,
+    Draw,
     DrawOnScreen,
     EventfulScene,
     Millisecond,
@@ -70,8 +70,8 @@ class MockCharacterDrawing(CharacterDrawing):
         return Coordinate(0, 0)
 
     @cached_property
-    def drawing(self) -> Drawing:
-        return Drawing(MockSurface("a"))
+    def drawing(self) -> Draw:
+        return Draw(MockSurface("a"))
 
     def turn(self, direction: Direction) -> CharacterDrawing:
         return replace(self, direction=direction)
@@ -128,7 +128,7 @@ class MockEventfulScene(EventfulScene):
 class MockTextOnScreen(TextOnScreen):
     def __init__(self, *args: Any, message: str = "", **kwargs: Any) -> None:
         self.draw_on_screens = (
-            DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),
+            DrawOnScreen(Coordinate(0, 0), Draw(MockSurface())),
         )
         self.message = message
 
@@ -150,7 +150,7 @@ class MockAnimatedOnScreen(AnimatedOnScreen):
     @property
     @override
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return (DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),)
+        return (DrawOnScreen(Coordinate(0, 0), Draw(MockSurface())),)
 
 
 class MockPlayerOnScreen(PlayerOnScreen):

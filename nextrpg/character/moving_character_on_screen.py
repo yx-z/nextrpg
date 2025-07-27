@@ -189,7 +189,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
     ) -> _CollisionAndCoord | None:
         for collision in self.collisions:
             for coord in hit_coords:
-                if collision.contain(coord):
+                if coord in collision:
                     return _CollisionAndCoord(collision, coord)
         return None
 

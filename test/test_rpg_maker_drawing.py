@@ -3,7 +3,7 @@ from pygame import Surface
 from nextrpg import (
     DefaultFrameType,
     Direction,
-    Drawing,
+    Draw,
     RpgMakerCharacterDrawing,
     Size,
     SpriteSheet,
@@ -21,7 +21,7 @@ def test_rpg_maker_drawing() -> None:
 
     character = RpgMakerCharacterDrawing(
         direction=Direction.DOWN,
-        sprite_sheet=SpriteSheet(Drawing(Surface((24, 16)))),
+        sprite_sheet=SpriteSheet(Draw(Surface((24, 16)))),
         sprite_sheet_selection=SpriteSheetSelection(0, 0),
         duration_per_frame=1,
         animate_on_idle=True,
@@ -34,7 +34,7 @@ def test_rpg_maker_drawing() -> None:
 
     character = RpgMakerCharacterDrawing(
         direction=Direction.DOWN,
-        sprite_sheet=SpriteSheet(Drawing(Surface((24, 16)))),
+        sprite_sheet=SpriteSheet(Draw(Surface((24, 16)))),
         sprite_sheet_selection=SpriteSheetSelection(0, 0),
         duration_per_frame=1,
         animate_on_idle=False,
@@ -44,7 +44,7 @@ def test_rpg_maker_drawing() -> None:
 
     assert RpgMakerCharacterDrawing(
         direction=Direction.DOWN,
-        sprite_sheet=SpriteSheet(Drawing(Surface((24, 16))), Trim(top=0)),
+        sprite_sheet=SpriteSheet(Draw(Surface((24, 16))), Trim(top=0)),
         duration_per_frame=1,
         animate_on_idle=False,
     )

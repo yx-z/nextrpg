@@ -15,7 +15,10 @@ The text system features:
 
 from dataclasses import dataclass, field
 from functools import cached_property
+from pygame import Surface
 
+from nextrpg import Coordinate, Draw
+from nextrpg.draw.drawing_group import DrawingGroup, DrawRelativeTo
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.text_config import TextConfig
@@ -59,54 +62,32 @@ class Text:
             size = text.size  # Returns Size(width, height)
             ```
         """
-        if not self.message:
-            return Size(0, 0)
-
-        text_sizes = tuple(
-            self.config.font.text_size(line) for line in self.lines
-        )
+        text_sizes = tuple(self.config.font.text_size(line) for line in self._lines)
         width = max(s.width for s in text_sizes)
         height = sum(s.height for s in text_sizes)
-        spacings = self.config.line_spacing * (len(self.lines) - 1)
+        spacings = self.config.line_spacing * (len(self._lines) - 1)
         return Size(width, height + spacings)
 
     @cached_property
-    def line_heights(self) -> tuple[Pixel, ...]:
-        """
-        Get the vertical position of each line in the text.
-
-        Returns a list of pixel positions where each line should
-        be rendered, taking into account line spacing.
-
-        Returns:
-            `list[Pixel]`: List of vertical positions for each line.
-
-        Example:
-            ```python
-            text = Text("Line 1\nLine 2\nLine 3")
-            heights = text.line_heights  # [0, 20, 40] (example)
-            ```
-        """
-        return tuple(
-            (self.config.font.text_height + self.config.line_spacing) * i
-            for i in range(len(self.lines))
+    def drawing_group(self) -> DrawingGroup:
+        leader = self._drawing(self._lines[0])
+        followers = tuple(
+            DrawRelativeTo(self._drawing(line), self._line_shift(i))
+            for i, line in enumerate(self._lines[1:], start=1)
         )
+        return DrawingGroup(leader, followers)
 
     @cached_property
-    def lines(self) -> tuple[str, ...]:
-        """
-        Get the individual lines of the text message.
-
-        Splits the message on newline characters to create a list
-        of individual lines for rendering.
-
-        Returns:
-            `list[str]`: List of text lines.
-
-        Example:
-            ```python
-            text = Text("First line\nSecond line\nThird line")
-            lines = text.lines  # ["First line", "Second line", "Third line"]
-            ```
-        """
+    def _lines(self) -> tuple[str, ...]:
         return tuple(self.message.splitlines())
+
+    def _line_shift(self, index: int) -> Coordinate:
+        height = self.config.font.text_height + self.config.line_spacing
+        shift = height * index
+        return Coordinate(0, shift)
+
+    def _drawing(self, line: str) -> Draw:
+        surface = self.config.font.pygame.render(
+            line, self.config.antialias, self.config.color
+        )
+        return Draw(surface)

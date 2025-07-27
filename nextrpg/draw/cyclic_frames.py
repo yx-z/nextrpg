@@ -16,7 +16,7 @@ Features:
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
-from nextrpg import Drawing
+from nextrpg import Draw
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
@@ -43,7 +43,7 @@ class CyclicFrames(Animated):
         _timer: Internal timer for frame timing control.
     """
 
-    frames: tuple[Drawing, ...]
+    frames: tuple[Draw, ...]
     duration_per_frame: Millisecond
     _: KW_ONLY = not_constructor_below()
     _index: int = 0
@@ -51,11 +51,11 @@ class CyclicFrames(Animated):
 
     @property
     @override
-    def drawings(self) -> tuple[Drawing | DrawingGroup, ...]:
+    def drawings(self) -> tuple[Draw | DrawingGroup, ...]:
         return (self.drawing,)
 
     @property
-    def drawing(self) -> Drawing:
+    def drawing(self) -> Draw:
         return self.frames[self._index]
 
     @override

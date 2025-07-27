@@ -2,7 +2,7 @@ from nextrpg import (
     CharacterDrawing,
     CharacterSpec,
     Direction,
-    Drawing,
+    Draw,
     MapScene,
     Move,
     NpcOnScreen,
@@ -12,8 +12,8 @@ from nextrpg import (
     SpriteSheet,
     SpriteSheetSelection,
     Trim,
+    EventfulScene,
 )
-from nextrpg.scene.rpg_event_scene import EventfulScene
 
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
@@ -34,24 +34,24 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
 def greet(
     player: PlayerOnScreen, npc: NpcOnScreen, scene: EventfulScene
 ) -> None:
-    other_name = "david" if npc.display_name == "alisa" else "alisa"
-    other_npc = scene.get_npc(other_name)
-    other_npc: f"Hello! I am {other_npc.display_name}!"
+    scene[
+        "Name"
+    ]: """Greetings!
+    This is...
 
-    scene: """Greetings!
-This is...
-
-a sample nextrpg event. :)"""
+    a sample nextrpg event. :)"""
 
     npc: "Nice to meet you! What's your name?"
     player: f"Hello {npc.display_name}! I am {player.display_name}."
     npc: f"Hello {player.display_name}!"
 
+    other_name = "david" if npc.display_name == "alisa" else "alisa"
+    other_npc = scene.get_npc(other_name)
+    other_npc: f"Hello! I am {other_npc.display_name}!"
+
 
 def sprite_sheet() -> SpriteSheet:
-    return SpriteSheet(
-        Drawing("example/assets/Characters_MV.png"), Trim(top=25)
-    )
+    return SpriteSheet(Draw("example/assets/Characters_MV.png"), Trim(top=25))
 
 
 def init_player() -> CharacterSpec:

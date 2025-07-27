@@ -15,7 +15,7 @@ The say event configuration features:
 from dataclasses import dataclass, replace
 
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Pixel
+from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.color import BLACK, WHITE, Rgba
 from nextrpg.global_config.text_config import TextConfig
@@ -42,17 +42,26 @@ class SayEventConfig:
 
     background: Rgba = WHITE
     border_radius: Pixel = 16
-    padding: Pixel = 16
     fade_duration: Millisecond = 200
+    padding: Pixel = 16
+    shift: Size = Size(0, 50)
+    tail_size: Size = Size(10, 10)
+    tail_tip_shift: Pixel = 5
     text_delay: Millisecond = 20
-    pop_up_shift: Coordinate = Coordinate(50, 50)
-    name_color: Rgba | None = Rgba(0, 0, 255, 255)
-    center: Coordinate | None = None
-    text: TextConfig | None = None
+    name_color: Rgba = Rgba(0, 0, 255, 255)
+    name_override: str | None = None
+    coordinate: Coordinate | None = None
     drawing: "Drawing | None" = None
+    text: TextConfig | None = None
 
     @property
     def default_text_config(self) -> TextConfig:
         from nextrpg.global_config.global_config import config
 
         return replace(config().text, color=BLACK)
+
+    @property
+    def default_scene_coordinate(self) -> Coordinate:
+        from nextrpg.gui.area import screen
+
+        return screen().center

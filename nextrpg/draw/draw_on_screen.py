@@ -15,18 +15,185 @@ Features:
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 from functools import cached_property
+from os import PathLike
 from typing import Self, override
 
-from pygame import SRCALPHA, Mask, Rect, Surface
+from pygame import Mask, Rect, SRCALPHA, Surface
 from pygame.draw import lines, polygon, rect
+from pygame.image import load
 from pygame.mask import from_surface
 
+from nextrpg.core.logger import Logger
+from nextrpg.core.cached_decorator import cached
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
-from nextrpg.draw.color import BLACK, Alpha, Rgba
-from nextrpg.draw.drawing import Drawing
+from nextrpg.draw.color import Alpha, BLACK, Rgba
 from nextrpg.global_config.global_config import config
 
+logger = Logger("Draw")
+
+
+@cached(
+    lambda: config().resource.drawing_cache_size,
+    lambda resource: None if isinstance(resource, Surface) else resource,
+)
+@dataclass(frozen=True)
+class Draw:
+    """
+    Represents a drawable element and provides methods for accessing its size
+    and dimensions.
+
+    This class loads a surface from a file or directly accepts a
+    `pygame.Surface` as input. It provides properties to access surface
+    dimensions and size and methods to crop and scale the surface.
+
+    Arguments:
+        `resource`: A path to a file containing the drawing resource,
+            or a `pygame.Surface` object.
+
+    Example:
+        ```python
+        # Load from file
+        sprite = Drawing("assets/player.png")
+
+        # Use existing surface
+        surface = pygame.Surface((32, 32))
+        drawing = Drawing(surface)
+
+        # Get dimensions
+        size = drawing.size  # Returns Size(width, height)
+        width = drawing.width  # Returns int
+        ```
+    """
+
+    resource: str | PathLike | Surface
+
+    @property
+    def width(self) -> Pixel:
+        """
+        Gets the width of the surface.
+
+        Returns:
+            `Pixel`: The width of the surface in pixel measurement.
+        """
+        return self._surface.width
+
+    @property
+    def height(self) -> Pixel:
+        """
+        Gets the height of the surface.
+
+        Returns:
+            `Pixel`: The height of the surface in pixel measurement.
+        """
+        return self._surface.height
+
+    @property
+    def size(self) -> Size:
+        """
+        Gets the size of an object as a combination of its width and height.
+
+        Returns:
+            `Size`: A Size object containing the width and height of the object.
+        """
+        return Size(self.width, self.height)
+
+    @property
+    def pygame(self) -> Surface:
+        """
+        Gets the current `pygame.Surface` for the object.
+
+        Returns:
+            `pygame.Surface`: The underlying `pygame.Surface`.
+        """
+        return self._debug_surface or self._surface
+
+    def crop(self, top_left: Coordinate, size: Size) -> Self:
+        """
+        Crops a rectangular portion of the drawing specified by the
+        top-left corner and the size.
+
+        The method extracts a subsection of the drawing based on the provided
+        coordinates and dimensions and returns a new `Drawing` instance.
+        The original drawing remains unchanged.
+
+        Arguments:
+            `top_left`: The top-left coordinate of the rectangle to be cropped.
+
+            `size`: The width and height of the rectangle to be cropped.
+
+        Returns:
+            `Draw`: A new `Drawing` instance representing the cropped area.
+
+        Example:
+            ```python
+            drawing = Drawing("spritesheet.png")
+            # Crop a 32x32 sprite from position (64, 0)
+            sprite = drawing.crop(Coordinate(64, 0), Size(32, 32))
+            ```
+        """
+        left, top = top_left
+        width, height = size
+        return Draw(self.pygame.subsurface((left, top, width, height)))
+
+    def set_alpha(self, alpha: Alpha) -> Self:
+        """
+        Creates a new `Drawing` with the specified alpha value.
+
+        Arguments:
+            `alpha`: The new alpha value.
+
+        Returns:
+            `Draw`: A new `Drawing` with the specified alpha value.
+
+        Example:
+            ```python
+            drawing = Drawing("sprite.png")
+            transparent = drawing.set_alpha(128)  # 50% transparency
+            ```
+        """
+        surf = self._surface.copy()
+        surf.set_alpha(alpha)
+        return Draw(surf)
+
+    def draw_on_screen(self, coord: Coordinate) -> DrawOnScreen:
+        return DrawOnScreen(coord, self)
+
+    @cached_property
+    def _visible_rectangle(self) -> Rectangle:
+        rectangle = self._surface.get_bounding_rect()
+        coord = Coordinate(rectangle.x, rectangle.y)
+        size = Size(rectangle.width, rectangle.height)
+        return Rectangle(coord, size)
+
+    @cached_property
+    def _debug_surface(self) -> Surface | None:
+        if not (debug := config().debug) or not (
+                color := debug.drawing_background_color
+        ):
+            return None
+
+        surface = Surface(self.size, SRCALPHA)
+        surface.fill(color)
+        surface.blit(self._surface, (0, 0))
+        return surface
+
+    @cached_property
+    def _surface(self) -> Surface:
+        """
+        Get the pygame surface for this drawing.
+
+        Loads the surface from file if needed, or returns the existing
+        surface. The surface is converted to alpha format for proper
+        transparency support.
+
+        Returns:
+            `Surface`: The pygame surface for this drawing.
+        """
+        if isinstance(self.resource, Surface):
+            return self.resource
+        logger.debug(t"Loading {self.resource}")
+        return load(self.resource).convert_alpha()
 
 @dataclass(frozen=True)
 class DrawOnScreen:
@@ -56,7 +223,7 @@ class DrawOnScreen:
     """
 
     top_left: Coordinate
-    drawing: Drawing
+    drawing: Draw
 
     @property
     def rectangle(self) -> Rectangle:
@@ -79,7 +246,9 @@ class DrawOnScreen:
             `Rectangle`: A rectangle defining only the visible (non-transparent)
                 area of the drawing on screen.
         """
-        coord, size = self.drawing._visible_rectangle
+        rect = self.drawing._visible_rectangle
+        coord = rect.top_left
+        size = rect.size
         return Rectangle(self.top_left + coord, size)
 
     @property
@@ -281,7 +450,7 @@ class Polygon:
         )
         return bool(self._mask.overlap(poly._mask, offset))
 
-    def contain(self, coordinate: Coordinate) -> bool:
+    def __contains__(self, coordinate: Coordinate) -> bool:
         """
         Checks if a coordinate point lies within this polygon.
 
@@ -349,7 +518,7 @@ class Polygon:
         surf = Surface(rectangle.size, SRCALPHA)
         negated = tuple(p - rectangle.top_left for p in self.points)
         surf_and_points(surf, negated)
-        return DrawOnScreen(rectangle.top_left, Drawing(surf))
+        return DrawOnScreen(rectangle.top_left, Draw(surf))
 
     def __add__(self, coordinate: Coordinate) -> Self:
         points = tuple(t + coordinate for t in self.points)
@@ -551,7 +720,7 @@ class Rectangle(Polygon):
         )
 
     @override
-    def contain(self, coordinate: Coordinate) -> bool:
+    def __contains__(self, coordinate: Coordinate) -> bool:
         return (
             self.left < coordinate.left < self.right
             and self.top < coordinate.top < self.bottom
@@ -586,4 +755,5 @@ class Rectangle(Polygon):
         surf = Surface(self.size, SRCALPHA)
         rectangle = Rect(Coordinate(0, 0), self.size)
         rect(surf, color, rectangle, border_radius=border_radius or -1)
-        return DrawOnScreen(self.top_left, Drawing(surf))
+        return DrawOnScreen(self.top_left, Draw(surf))
+

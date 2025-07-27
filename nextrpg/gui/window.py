@@ -24,7 +24,7 @@ from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
-from nextrpg import Drawing
+from nextrpg import Draw
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_instance_init import not_constructor_below
 from nextrpg.core.dimension import Pixel, Size
@@ -201,7 +201,7 @@ class Window:
     def _scale(self, draws: tuple[DrawOnScreen, ...]) -> DrawOnScreen:
         screen = Surface(self.initial_config.size)
         screen.blits(d.pygame for d in draws)
-        scaled_drawing = Drawing(
+        scaled_drawing = Draw(
             smoothscale(
                 screen,
                 self.initial_config.size.all_dimension_scale(self._scaling),

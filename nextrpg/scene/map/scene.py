@@ -34,8 +34,8 @@ from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond, get_timepoint
 from nextrpg.draw.draw_on_screen import DrawOnScreen
 from nextrpg.global_config.global_config import config
-from nextrpg.scene.map_helper import MapHelper, get_polygon
-from nextrpg.scene.map_util import center_player
+from nextrpg.scene.map.loader import MapHelper, get_polygon
+from nextrpg.scene.map.shift import center_player
 from nextrpg.scene.rpg_event_scene import EventfulScene
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene

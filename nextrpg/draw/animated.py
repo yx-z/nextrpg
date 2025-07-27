@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Self
 
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import Drawing
+from nextrpg import Draw
 from nextrpg.draw.drawing_group import DrawingGroup
 
 
@@ -13,5 +13,5 @@ class Animated(ABC):
 
     @property
     @abstractmethod
-    def drawings(self) -> tuple[Drawing | DrawingGroup, ...]:
+    def drawings(self) -> tuple[Draw | DrawingGroup, ...]:
         """"""

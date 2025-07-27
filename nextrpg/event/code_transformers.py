@@ -15,6 +15,8 @@ Features:
 
 from ast import (
     AST,
+    Tuple,
+    Index,
     AnnAssign,
     Attribute,
     Call,
@@ -95,9 +97,9 @@ class AnnotateSay(NodeTransformer):
         """
         if node.value is not None:
             return node
-        target, arg = _get_target_and_arg(node.target)
+        target, args = _get_target_and_arg(node.target)
         say = Attribute(Name(target, Load()), self.say_event_name, Load())
-        return Expr(Call(say, [node.annotation] + arg))
+        return Expr(Call(say, [node.annotation] + args))
 
 
 ANNOTATE_SAY = AnnotateSay("say")
@@ -117,13 +119,16 @@ class _TargetAndArg(NamedTuple):
     arg: list[expr]
 
 
-def _get_target_and_arg(node: Name | Attribute | Subscript) -> _TargetAndArg:
-    match node:
+def _get_target_and_arg(target: Name | Attribute | Subscript) -> _TargetAndArg:
+    match target:
         case Name():
-            return _TargetAndArg(node.id, [])
+            return _TargetAndArg(target.id, [])
         case Subscript():
-            if isinstance(node.value, Name):
-                return _TargetAndArg(node.value.id, [node.slice])
+            target_id = target.value.id
+            if isinstance(target.value, Name):
+                return _TargetAndArg(target_id, [target.slice])
+            if isinstance(target.slice, Index):
+                return _TargetAndArg(target_id, target.slice.value.elts)
     raise ValueError(
-        f'Expect var[arg]: "...", where var is player/npc and arg is the ad-hoc config. Got complex expression {unparse(node)}'
+        f'Expect var[arg1, arg2, ...]: "...", where var is player/npc and arg is the ad-hoc config. Got unexpected expression {unparse(target)}'
     )

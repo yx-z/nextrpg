@@ -12,7 +12,7 @@ from nextrpg import (
     Config,
     Coordinate,
     DebugConfig,
-    Drawing,
+    Draw,
     DrawOnScreen,
     MapScene,
     Move,
@@ -30,7 +30,7 @@ def test_map_scene(mocker: MockerFixture) -> None:
     helper = MagicMock()
     helper.background = ()
     foreground = TileBottomAndDrawOnScreen(
-        10, DrawOnScreen(Coordinate(1, 2), Drawing(MockSurface()))
+        10, DrawOnScreen(Coordinate(1, 2), Draw(MockSurface()))
     )
     helper.foreground = ((foreground,),)
     helper.above_character = ()
@@ -53,7 +53,7 @@ def test_map_scene(mocker: MockerFixture) -> None:
             (
                 None,
                 None,
-                DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),
+                DrawOnScreen(Coordinate(0, 0), Draw(MockSurface())),
             )
         ],
     )

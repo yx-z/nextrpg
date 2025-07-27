@@ -7,7 +7,7 @@ from pygame.locals import QUIT
 
 from nextrpg import (
     Coordinate,
-    Drawing,
+    Draw,
     DrawOnScreen,
     Millisecond,
     PygameEvent,
@@ -43,7 +43,7 @@ def test_scene() -> None:
         @override
         @cached_property
         def draw_on_screens_before_shift(self) -> tuple[DrawOnScreen, ...]:
-            return (DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),)
+            return (DrawOnScreen(Coordinate(0, 0), Draw(MockSurface())),)
 
         @override
         def tick(self, time_delta: Millisecond) -> Self:

@@ -49,6 +49,12 @@ class Size(namedtuple("Size", "width height")):
     width: Pixel
     height: Pixel
 
+    def __add__(self, other: Self) -> Self:
+        return Size(self.width + other.width, self.height + other.height)
+
+    def __sub__(self, other: Self) -> Self:
+        return Size(self.width - other.width, self.height - other.height)
+
     def __mul__(self, scaling: float) -> Self:
         dimension_scaling = sqrt(scaling)
         width = self.width * dimension_scaling

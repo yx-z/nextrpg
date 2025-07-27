@@ -8,7 +8,7 @@ from nextrpg import (
     Config,
     Coordinate,
     DebugConfig,
-    Drawing,
+    Draw,
     DrawOnScreen,
     GuiConfig,
     GuiMode,
@@ -38,7 +38,7 @@ def test_window(mocker: MockerFixture) -> None:
         last_config=GuiConfig(Size(10, 10)),
     )
     drawing = window._scale(
-        (DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),)
+        (DrawOnScreen(Coordinate(0, 0), Draw(MockSurface())),)
     )
     assert drawing.top_left == Coordinate(280, 0)
 

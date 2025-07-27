@@ -30,7 +30,7 @@ from dataclasses import KW_ONLY, dataclass, field, replace
 from enum import IntEnum
 from typing import Self, override
 
-from nextrpg import Drawing
+from nextrpg import Draw
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_instance_init import (
@@ -166,7 +166,7 @@ class SpriteSheet:
             `DefaultFrameType`.
     """
 
-    drawing: Drawing
+    drawing: Draw
     trim: Trim | None = None
     style: FrameType = DefaultFrameType
 
@@ -210,7 +210,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     )
 
     @property
-    def drawing(self) -> Drawing:
+    def drawing(self) -> Draw:
         return self._frames[_adjust(self.direction)].drawing
 
     @override
@@ -244,7 +244,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             return frames.tick(time_delta)
         return frames
 
-    def _crop_by_selection(self, selection: SpriteSheetSelection) -> Drawing:
+    def _crop_by_selection(self, selection: SpriteSheetSelection) -> Draw:
         drawing = self.sprite_sheet.drawing
         width = drawing.width / selection.max_columns
         height = drawing.height / selection.max_rows
@@ -252,7 +252,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         size = Size(width, height)
         return drawing.crop(top_left, size)
 
-    def _load_frames_row(self, drawing: Drawing, row: int) -> CyclicFrames:
+    def _load_frames_row(self, drawing: Draw, row: int) -> CyclicFrames:
         frames = tuple(
             self._trim(d) for d in self._crop_into_frames_at_row(drawing, row)
         )
@@ -264,8 +264,8 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         )
 
     def _crop_into_frames_at_row(
-        self, drawing: Drawing, row: int
-    ) -> tuple[Drawing, ...]:
+        self, drawing: Draw, row: int
+    ) -> tuple[Draw, ...]:
         num_frames = len(self.sprite_sheet.style)
         width = drawing.width / num_frames
         height = drawing.height / 4
@@ -276,7 +276,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             for i in range(num_frames)
         )
 
-    def _trim(self, drawing: Drawing) -> Drawing:
+    def _trim(self, drawing: Draw) -> Draw:
         if not (trim := self.sprite_sheet.trim):
             return drawing
         coord = Coordinate(trim.left, trim.top)

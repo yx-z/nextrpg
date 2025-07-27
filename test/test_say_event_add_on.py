@@ -5,9 +5,9 @@ from pygame.locals import K_RETURN, KEYDOWN, QUIT
 
 from nextrpg import (
     Coordinate,
-    Drawing,
+    Draw,
     DrawOnScreen,
-    FadeInAddOn,
+    FadeInState,
     KeyPressDown,
     Quit,
     SayEventConfig,
@@ -15,26 +15,24 @@ from nextrpg import (
 
 
 def test_say_event_add_on() -> None:
-    fade_in = FadeInAddOn(
-        background=(DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),),
-        text=MockTextOnScreen(),
+    fade_in = FadeInState(
+        background=(DrawOnScreen(Coordinate(0, 0), Draw(MockSurface())),),
+        text_on_screen=MockTextOnScreen(),
         config=SayEventConfig(),
         scene=MockEventfulScene(),
-        npc_object_name="test",
+        character_object_name="test",
         initial_coord=Coordinate(0, 0),
         generator=lambda *_: None,
     )
     assert fade_in.tick(1).draw_on_screens
 
     assert (
-        FadeInAddOn(
-            background=(
-                DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),
-            ),
-            text=MockTextOnScreen(),
+        FadeInState(
+            background=(DrawOnScreen(Coordinate(0, 0), Draw(MockSurface())),),
+            text_on_screen=MockTextOnScreen(),
             config=SayEventConfig(),
             scene=MockEventfulScene(),
-            npc_object_name=None,
+            character_object_name=None,
             initial_coord=Coordinate(0, 0),
             generator=lambda *_: None,
         )
@@ -46,20 +44,16 @@ def test_say_event_add_on() -> None:
     assert fade_in.tick(10000).tick(99910).tick(2).draw_on_screens
     enter = KeyPressDown(Event(KEYDOWN, key=K_RETURN))
     assert fade_in.tick(10).tick(10).tick(3099).event(Quit(Event(QUIT)))
-    assert (
-        fade_in.tick(10).tick(9910).tick(2).event(enter).tick(1).draw_on_screens
-    )
+    assert fade_in.tick(10).tick(9910).tick(2).event(enter).tick(1).draw_on_screens
     assert fade_in.tick(10).tick(9910).tick(2).event(enter).tick(1).tick(3000)
 
     assert (
-        FadeInAddOn(
-            background=(
-                DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),
-            ),
-            text=MockTextOnScreen(),
+        FadeInState(
+            background=(DrawOnScreen(Coordinate(0, 0), Draw(MockSurface())),),
+            text_on_screen=MockTextOnScreen(),
             config=SayEventConfig(text_delay=None),
             scene=MockEventfulScene(),
-            npc_object_name=None,
+            character_object_name=None,
             initial_coord=Coordinate(0, 0),
             generator=lambda *_: None,
         )

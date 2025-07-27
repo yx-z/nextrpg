@@ -1,6 +1,6 @@
 from test.util import MockScene, MockSurface
 
-from nextrpg import Coordinate, Drawing, DrawOnScreen, TransitionScene
+from nextrpg import Coordinate, Draw, DrawOnScreen, TransitionScene
 
 
 def test_transition_scene():
@@ -9,12 +9,12 @@ def test_transition_scene():
     object.__setattr__(
         scene1,
         "draw_on_screens",
-        (DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),),
+        (DrawOnScreen(Coordinate(0, 0), Draw(MockSurface())),),
     )
     object.__setattr__(
         scene3,
         "draw_on_screens",
-        (DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),),
+        (DrawOnScreen(Coordinate(0, 0), Draw(MockSurface())),),
     )
     transition = TransitionScene(
         from_scene=scene1,
@@ -29,6 +29,6 @@ def test_transition_scene():
         from_scene=scene1,
         to_scene=scene3,
         duration=10,
-        intermediary=DrawOnScreen(Coordinate(0, 0), Drawing(MockSurface())),
+        intermediary=DrawOnScreen(Coordinate(0, 0), Draw(MockSurface())),
     )
     assert transition2.tick(1).draw_on_screens

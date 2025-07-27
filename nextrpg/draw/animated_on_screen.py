@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, replace
+from functools import cached_property
 from typing import Self
 
-from nextrpg import Drawing
+from nextrpg import Draw
 from nextrpg.core.coordinate import Moving
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animated import Animated
@@ -25,10 +26,11 @@ class MovingAnimatedOnScreen(AnimatedOnScreen):
     moving: Moving
     animated: Animated
 
+    @cached_property
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         res = []
         for d in self.animated.drawings:
-            if isinstance(d, Drawing):
+            if isinstance(d, Draw):
                 res.append(DrawOnScreen(self.moving.coordinate, d))
             else:
                 res += d.draw_on_screens(self.moving.coordinate)

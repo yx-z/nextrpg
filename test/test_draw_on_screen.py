@@ -1,18 +1,49 @@
-from pygame import Surface
+from pathlib import Path
+
+from pygame import Color, Surface
+from pygame.locals import SRCALPHA
+from pytest_mock import MockerFixture
 
 from nextrpg import (
+    Config,
     Coordinate,
-    Drawing,
+    DebugConfig,
+    Draw,
     DrawOnScreen,
     Polygon,
     Rectangle,
     Rgba,
     Size,
+    override_config,
 )
+from test.util import MockSurface
+
+
+def test_draw(mocker: MockerFixture) -> None:
+    surf = MockSurface()
+    assert Draw(surf)._surface
+
+    mocker.patch("nextrpg.draw.drawing.load")
+    assert Draw(Path("abc"))._surface
+    drawing = Draw(Surface((1, 2), SRCALPHA))
+    assert drawing.width == 1
+    assert drawing.height == 2
+    assert drawing.size == Size(1, 2)
+    assert drawing.crop(Coordinate(0, 0), Size(1, 2)).size == Size(1, 2)
+    assert isinstance(drawing.pygame, Surface)
+
+    assert drawing.set_alpha(0) is not drawing
+
+    with override_config(
+        Config(debug=DebugConfig(drawing_background_color=Rgba(0, 0, 255, 32)))
+    ):
+        surface = Draw(Surface((1, 2), SRCALPHA)).pygame
+        assert isinstance(surface, Surface)
+        assert surface.get_at((0, 0)) == Color(0, 0, 255, 32)
 
 
 def test_draw_on_screen() -> None:
-    draw_on_screen = DrawOnScreen(Coordinate(10, 20), Drawing(Surface((1, 2))))
+    draw_on_screen = DrawOnScreen(Coordinate(10, 20), Draw(Surface((1, 2))))
     assert draw_on_screen.rectangle == Rectangle(Coordinate(10, 20), Size(1, 2))
     assert draw_on_screen.visible_rectangle
     surface, coord = draw_on_screen.pygame

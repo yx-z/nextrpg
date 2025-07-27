@@ -27,7 +27,7 @@ from pytmx import (
     load_pygame,
 )
 
-from nextrpg import Drawing
+from nextrpg.draw.draw_on_screen import Draw
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.coordinate import Coordinate
@@ -359,7 +359,7 @@ class MapHelper:
         width, height = self._tile_size
         return DrawOnScreen(
             Coordinate(left * width, top * height),
-            Drawing(surface),
+            Draw(surface),
         )
 
     def _class(
