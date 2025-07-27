@@ -20,7 +20,7 @@ def test_say_event_add_on() -> None:
         text_on_screen=MockTextOnScreen(),
         config=SayEventConfig(),
         scene=MockEventfulScene(),
-        character_object_name="test",
+        object_name="test",
         initial_coord=Coordinate(0, 0),
         generator=lambda *_: None,
     )
@@ -32,7 +32,7 @@ def test_say_event_add_on() -> None:
             text_on_screen=MockTextOnScreen(),
             config=SayEventConfig(),
             scene=MockEventfulScene(),
-            character_object_name=None,
+            object_name=None,
             initial_coord=Coordinate(0, 0),
             generator=lambda *_: None,
         )
@@ -55,7 +55,7 @@ def test_say_event_add_on() -> None:
             text_on_screen=MockTextOnScreen(),
             config=SayEventConfig(text_delay=None),
             scene=MockEventfulScene(),
-            character_object_name=None,
+            object_name=None,
             initial_coord=Coordinate(0, 0),
             generator=lambda *_: None,
         )

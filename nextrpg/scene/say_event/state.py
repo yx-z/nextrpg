@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, replace
+from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from typing import override
 
@@ -7,6 +7,7 @@ from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
+    not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import DrawOnScreen
@@ -19,10 +20,14 @@ from nextrpg.scene.rpg_event_scene import RpgEventScene
 from nextrpg.scene.scene import Scene
 
 
-@dataclass(frozen=True)
-class SayEventState(RpgEventScene, ABC):
-    character_object_name: str | None
-    initial_coord: Coordinate | None
+@dataclass_with_instance_init(frozen=True, kw_only=True)
+class State(RpgEventScene, ABC):
+    object_name: str | None
+    initial_coord: Coordinate | None = instance_init(
+        lambda self: (
+            self.scene.character.coordinate if self.object_name else None
+        )
+    )
 
     @property
     @abstractmethod
@@ -32,8 +37,8 @@ class SayEventState(RpgEventScene, ABC):
     @override
     @cached_property
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        if self.character_object_name:
-            character = self.scene.get_character(self.character_object_name)
+        if self.object_name:
+            character = self.scene.get_character(self.object_name)
             diff = character.coordinate - self.initial_coord
             add_on = tuple(a + diff for a in self.add_ons)
         else:
@@ -42,43 +47,45 @@ class SayEventState(RpgEventScene, ABC):
         return self.scene.draw_on_screens + add_on
 
 
-@dataclass_with_instance_init(frozen=True)
-class FadeInState(SayEventState):
+@dataclass_with_instance_init(frozen=True, kw_only=True)
+class FadeInState(State):
     background: tuple[DrawOnScreen, ...]
     text_on_screen: TextOnScreen
     config: SayEventConfig
-    fade_in: FadeIn = instance_init(
+    _: KW_ONLY = not_constructor_below()
+    _fade_in: FadeIn = instance_init(
         lambda self: FadeIn(self.background, self.config.fade_duration)
     )
 
     @property
     @override
     def add_ons(self) -> tuple[DrawOnScreen, ...]:
-        return self.fade_in.draw_on_screens
+        return self._fade_in.draw_on_screens
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
-        fade_in = self.fade_in.tick(time_delta)
+        fade_in = self._fade_in.tick(time_delta)
         scene = self.scene.tick_without_event(time_delta)
         if not fade_in.complete:
-            return replace(self, scene=scene, fade_in=fade_in)
+            return replace(self, scene=scene, _fade_in=fade_in)
         return TypingState(
-            self.generator,
-            scene,
-            self.character_object_name,
-            self.initial_coord,
-            self.background,
-            self.text_on_screen,
-            self.config,
+            generator=self.generator,
+            scene=scene,
+            object_name=self.object_name,
+            initial_coord=self.initial_coord,
+            background=self.background,
+            text_on_screen=self.text_on_screen,
+            config=self.config,
         )
 
 
-@dataclass_with_instance_init(frozen=True)
-class TypingState(SayEventState):
+@dataclass_with_instance_init(frozen=True, kw_only=True)
+class TypingState(State):
     background: tuple[DrawOnScreen, ...]
     text_on_screen: TextOnScreen
     config: SayEventConfig
-    typewriter: Typewriter | None = instance_init(
+    _: KW_ONLY = not_constructor_below()
+    _typewriter: Typewriter | None = instance_init(
         lambda self: (
             Typewriter(self.text_on_screen, delay)
             if (delay := self.config.text_delay)
@@ -89,21 +96,21 @@ class TypingState(SayEventState):
     @override
     @property
     def add_ons(self) -> tuple[DrawOnScreen, ...]:
-        if self.typewriter:
-            text = self.typewriter.draw_on_screens
+        if self._typewriter:
+            text = self._typewriter.draw_on_screens
         else:
             text = self.text_on_screen.draw_on_screens
         return self.background + text
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
-        if self.typewriter:
-            typewriter = self.typewriter.tick(time_delta)
+        if self._typewriter:
+            typewriter = self._typewriter.tick(time_delta)
         else:
             typewriter = None
 
         scene = self.scene.tick_without_event(time_delta)
-        return replace(self, scene=scene, typewriter=typewriter)
+        return replace(self, scene=scene, _typewriter=typewriter)
 
     @override
     def event(self, event: PygameEvent) -> Scene:
@@ -113,32 +120,33 @@ class TypingState(SayEventState):
         ):
             return self
         return FadeOutState(
-            self.generator,
-            self.scene,
-            self.character_object_name,
-            self.initial_coord,
-            self.background + self.text_on_screen.draw_on_screens,
-            self.config,
+            generator=self.generator,
+            scene=self.scene,
+            object_name=self.object_name,
+            initial_coord=self.initial_coord,
+            draws=self.background + self.text_on_screen.draw_on_screens,
+            config=self.config,
         )
 
 
-@dataclass_with_instance_init(frozen=True)
-class FadeOutState(SayEventState):
+@dataclass_with_instance_init(frozen=True, kw_only=True)
+class FadeOutState(State):
     draws: tuple[DrawOnScreen, ...]
     config: SayEventConfig
-    fade_out: FadeOut = instance_init(
+    _: KW_ONLY = not_constructor_below()
+    _fade_out: FadeOut = instance_init(
         lambda self: FadeOut(self.draws, self.config.fade_duration)
     )
 
     @override
     @property
     def add_ons(self) -> tuple[DrawOnScreen, ...]:
-        return self.fade_out.draw_on_screens
+        return self._fade_out.draw_on_screens
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
-        fade_out = self.fade_out.tick(time_delta)
+        fade_out = self._fade_out.tick(time_delta)
         scene = self.scene.tick_without_event(time_delta)
         if fade_out.complete:
             return scene.send(self.generator)
-        return replace(self, scene=scene, fade_out=fade_out)
+        return replace(self, scene=scene, _fade_out=fade_out)

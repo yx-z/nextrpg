@@ -38,7 +38,7 @@ from nextrpg.global_config.global_config import config
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.global_config.text_config import TextConfig
 from nextrpg.scene.rpg_event_scene import RpgEventScene
-from nextrpg.scene.say_event.add_on import CharacterSay, SceneSay
+from nextrpg.scene.say_event.add_on import CharacterAddOn, SceneAddOn
 from nextrpg.scene.say_event.state import FadeInState
 from nextrpg.scene.scene import Scene
 
@@ -121,22 +121,22 @@ class SayEventScene(RpgEventScene):
         return cfg
 
     @cached_property
-    def _character_say(self) -> CharacterSay | None:
+    def _character_add_on(self) -> CharacterAddOn | None:
         if isinstance(self.character_or_scene, CharacterOnScreen):
-            return CharacterSay(
+            return CharacterAddOn(
                 self._text,
                 self._add_on,
                 self._background,
+                self.config,
                 self.scene,
                 self.character_or_scene,
-                self.config,
             )
         return None
 
     @cached_property
-    def _scene_say(self) -> SceneSay | None:
+    def _scene_add_on(self) -> SceneAddOn | None:
         if isinstance(self.character_or_scene, Scene):
-            return SceneSay(
+            return SceneAddOn(
                 self._text, self._add_on, self._background, self.config
             )
         return None
@@ -144,26 +144,21 @@ class SayEventScene(RpgEventScene):
     @cached_property
     def _state(self) -> FadeInState:
         if isinstance(self.character_or_scene, CharacterOnScreen):
-            character_object_name = self.character_or_scene.spec.object_name
-            initial_coord = self.scene.get_character(
-                character_object_name
-            ).coordinate
-            text_on_screen = self._character_say.text_on_screen
-            background = self._character_say.background
+            object_name = self.character_or_scene.spec.object_name
+            text_on_screen = self._character_add_on.text_on_screen
+            background = self._character_add_on.background
         else:
-            character_object_name = None
-            initial_coord = None
-            text_on_screen = self._scene_say.text_on_screen
-            background = self._scene_say.background
+            object_name = None
+            text_on_screen = self._scene_add_on.text_on_screen
+            background = self._scene_add_on.background
 
         return FadeInState(
-            self.generator,
-            self.scene,
-            character_object_name,
-            initial_coord,
-            background,
-            text_on_screen,
-            self.config,
+            generator=self.generator,
+            scene=self.scene,
+            object_name=object_name,
+            background=background,
+            text_on_screen=text_on_screen,
+            config=self.config,
         )
 
     @cached_property
