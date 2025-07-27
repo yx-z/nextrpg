@@ -18,7 +18,7 @@ from functools import cached_property
 from pygame import Surface
 
 from nextrpg import Coordinate, Draw
-from nextrpg.draw.drawing_group import DrawingGroup, DrawRelativeTo
+from nextrpg.draw.group import Group, DrawRelativeTo
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.text_config import TextConfig
@@ -71,13 +71,13 @@ class Text:
         return Size(width, height + spacings)
 
     @cached_property
-    def drawing_group(self) -> DrawingGroup:
-        leader = self._drawing(self._lines[0])
+    def group(self) -> Group:
+        leader = self._draw(self._lines[0])
         followers = tuple(
-            DrawRelativeTo(self._drawing(line), self._line_shift(i))
+            DrawRelativeTo(self._draw(line), self._line_shift(i))
             for i, line in enumerate(self._lines[1:], start=1)
         )
-        return DrawingGroup(leader, followers)
+        return Group(leader, followers)
 
     @cached_property
     def _lines(self) -> tuple[str, ...]:
@@ -88,7 +88,7 @@ class Text:
         shift = height * index
         return Coordinate(0, shift)
 
-    def _drawing(self, line: str) -> Draw:
+    def _draw(self, line: str) -> Draw:
         surface = self.config.font.pygame.render(
             line, self.config.antialias, self.config.color
         )

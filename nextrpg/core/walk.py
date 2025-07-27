@@ -31,10 +31,10 @@ from nextrpg.core.dataclass_with_instance_init import (
 from nextrpg.core.dimension import Pixel, PixelPerMillisecond
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw_on_screen import Polygon
+from nextrpg.draw.draw import PolygonOnScreen
 
 
-@dataclass_with_instance_init
+@dataclass_with_instance_init(frozen=True)
 class Walk:
     """
     Path-based walking system for characters and objects.
@@ -61,7 +61,7 @@ class Walk:
         `_last_index`: Previous path point index.
     """
 
-    path: Polygon
+    path: PolygonOnScreen
     move_speed: PixelPerMillisecond
     cyclic: bool
     _: KW_ONLY = not_constructor_below()

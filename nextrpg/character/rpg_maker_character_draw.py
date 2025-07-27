@@ -31,7 +31,7 @@ from enum import IntEnum
 from typing import Self, override
 
 from nextrpg import Draw
-from nextrpg.character.character_drawing import CharacterDrawing
+from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
@@ -166,13 +166,13 @@ class SpriteSheet:
             `DefaultFrameType`.
     """
 
-    drawing: Draw
+    draw: Draw
     trim: Trim | None = None
     style: FrameType = DefaultFrameType
 
 
-@dataclass_with_instance_init
-class RpgMakerCharacterDrawing(CharacterDrawing):
+@dataclass_with_instance_init(frozen=True)
+class RpgMakerCharacterDraw(CharacterDraw):
     """
     RPG Maker style character drawing with animation support.
 
@@ -210,8 +210,8 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     )
 
     @property
-    def drawing(self) -> Draw:
-        return self._frames[_adjust(self.direction)].drawing
+    def draw(self) -> Draw:
+        return self._frames[_adjust(self.direction)].draw
 
     @override
     def turn(self, direction: Direction) -> Self:
@@ -245,16 +245,16 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         return frames
 
     def _crop_by_selection(self, selection: SpriteSheetSelection) -> Draw:
-        drawing = self.sprite_sheet.drawing
-        width = drawing.width / selection.max_columns
-        height = drawing.height / selection.max_rows
+        draw = self.sprite_sheet.draw
+        width = draw.width / selection.max_columns
+        height = draw.height / selection.max_rows
         top_left = Coordinate(width * selection.column, height * selection.row)
         size = Size(width, height)
-        return drawing.crop(top_left, size)
+        return draw.crop(top_left, size)
 
-    def _load_frames_row(self, drawing: Draw, row: int) -> CyclicFrames:
+    def _load_frames_row(self, draw: Draw, row: int) -> CyclicFrames:
         frames = tuple(
-            self._trim(d) for d in self._crop_into_frames_at_row(drawing, row)
+            self._trim(d) for d in self._crop_into_frames_at_row(draw, row)
         )
         ordered_frames = tuple(
             frames[i] for i in self.sprite_sheet.style._frame_indices()
@@ -264,35 +264,33 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         )
 
     def _crop_into_frames_at_row(
-        self, drawing: Draw, row: int
+        self, draw: Draw, row: int
     ) -> tuple[Draw, ...]:
         num_frames = len(self.sprite_sheet.style)
-        width = drawing.width / num_frames
-        height = drawing.height / 4
+        width = draw.width / num_frames
+        height = draw.height / 4
         return tuple(
-            drawing.crop(
-                Coordinate(width * i, height * row), Size(width, height)
-            )
+            draw.crop(Coordinate(width * i, height * row), Size(width, height))
             for i in range(num_frames)
         )
 
-    def _trim(self, drawing: Draw) -> Draw:
+    def _trim(self, draw: Draw) -> Draw:
         if not (trim := self.sprite_sheet.trim):
-            return drawing
+            return draw
         coord = Coordinate(trim.left, trim.top)
-        width = drawing.width - coord.left - trim.right
-        height = drawing.height - coord.top - trim.bottom
+        width = draw.width - coord.left - trim.right
+        height = draw.height - coord.top - trim.bottom
         size = Size(width, height)
-        return drawing.crop(coord, size)
+        return draw.crop(coord, size)
 
     @property
     def _init_frames(self) -> dict[Direction, CyclicFrames]:
         if select := self.sprite_sheet_selection:
-            drawing = self._crop_by_selection(select)
+            draw = self._crop_by_selection(select)
         else:
-            drawing = self.sprite_sheet.drawing
+            draw = self.sprite_sheet.draw
         return {
-            direction: self._load_frames_row(drawing, row)
+            direction: self._load_frames_row(draw, row)
             for direction, row in _DIR_TO_ROW.items()
         }
 

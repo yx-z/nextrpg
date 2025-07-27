@@ -59,13 +59,9 @@ class Coordinate(namedtuple("Coordinate", "left top")):
         return Coordinate(-self.left, -self.top)
 
     def __add__(self, offset: DirectionalOffset | Size | Self) -> Self:
-        if isinstance(offset, Coordinate):
-            return Coordinate(self.left + offset.left, self.top + offset.top)
-
-        if isinstance(offset, Size):
-            return Coordinate(
-                self.left + offset.width, self.top + offset.height
-            )
+        if isinstance(offset, (Coordinate, Size)):
+            x, y = offset
+            return Coordinate(self.left + x, self.top + y)
 
         match offset.direction:
             case Direction.UP:
@@ -89,8 +85,6 @@ class Coordinate(namedtuple("Coordinate", "left top")):
                 return Coordinate(self.left + diag, self.top + diag)
 
     def __sub__(self, offset: DirectionalOffset | Size | Self) -> Self:
-        if isinstance(offset, Size):
-            return self + Size(-offset.width, -offset.height)
         return self + -offset
 
     def relative_to(self, other: Self) -> Direction:

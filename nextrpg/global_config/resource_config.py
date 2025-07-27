@@ -31,4 +31,4 @@ class ResourceConfig:
     """
 
     map_cache_size: int = 8
-    drawing_cache_size: int = 8
+    draw_cache_size: int = 8

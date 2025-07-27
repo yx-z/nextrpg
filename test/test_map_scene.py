@@ -1,5 +1,5 @@
 from pathlib import Path
-from test.util import MockCharacterDrawing, MockPlayerOnScreen, MockSurface
+from test.util import MockCharacterDraw, MockPlayerOnScreen, MockSurface
 from types import SimpleNamespace
 from typing import Any
 from unittest.mock import MagicMock, Mock
@@ -18,7 +18,7 @@ from nextrpg import (
     Move,
     NpcSpec,
     Quit,
-    Rectangle,
+    RectangleOnScreen,
     ResourceConfig,
     Size,
     TileBottomAndDrawOnScreen,
@@ -38,13 +38,13 @@ def test_map_scene(mocker: MockerFixture) -> None:
     helper.get_object.return_value = SimpleNamespace(
         x=0, y=0, width=1, height=2, properties={}
     )
-    helper.collisions = (Rectangle(Coordinate(0, 0), Size(0, 0)),)
+    helper.collisions = (RectangleOnScreen(Coordinate(0, 0), Size(0, 0)),)
     helper.collision_visuals = ()
     mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=helper)
     map = MapScene(
         tmx_file=Path("test"),
         player_spec=CharacterSpec(
-            character=MockCharacterDrawing(), object_name=""
+            character=MockCharacterDraw(), object_name=""
         ),
     )
     mocker.patch(
@@ -79,14 +79,14 @@ def test_move(mocker: MockerFixture) -> None:
         return MapScene(
             tmx_file="test3",
             player_spec=CharacterSpec(
-                character=MockCharacterDrawing(), object_name=""
+                character=MockCharacterDraw(), object_name=""
             ),
         )
 
     map = MapScene(
         tmx_file="test2",
         player_spec=CharacterSpec(
-            character=MockCharacterDrawing(), object_name=""
+            character=MockCharacterDraw(), object_name=""
         ),
         moves=(Move("from", "to", to_scene), Move("from2", "to2", to_scene)),
     )
@@ -95,7 +95,7 @@ def test_move(mocker: MockerFixture) -> None:
     assert MapScene(
         tmx_file="test2",
         player_spec=CharacterSpec(
-            character=MockCharacterDrawing(), object_name=""
+            character=MockCharacterDraw(), object_name=""
         ),
         moves=(
             Move("from", "test2", to_scene),
@@ -107,7 +107,7 @@ def test_move(mocker: MockerFixture) -> None:
         assert MapScene(
             tmx_file="test2",
             player_spec=CharacterSpec(
-                character=MockCharacterDrawing(), object_name=""
+                character=MockCharacterDraw(), object_name=""
             ),
             moves=(
                 Move("from", "test2", to_scene),
@@ -119,7 +119,7 @@ def test_move(mocker: MockerFixture) -> None:
         return MapScene(
             tmx_file="test2",
             player_spec=CharacterSpec(
-                character=MockCharacterDrawing(), object_name=""
+                character=MockCharacterDraw(), object_name=""
             ),
         )
 
@@ -140,17 +140,17 @@ def test_init_npc(mocker: MockerFixture) -> None:
     map_scene = MapScene(
         tmx_file="",
         player_spec=CharacterSpec(
-            character=MockCharacterDrawing(), object_name=""
+            character=MockCharacterDraw(), object_name=""
         ),
         npc_specs=(
             NpcSpec(
                 object_name="",
-                character=MockCharacterDrawing(),
+                character=MockCharacterDraw(),
                 event=lambda *_: None,
             ),
             NpcSpec(
                 object_name="",
-                character=MockCharacterDrawing(),
+                character=MockCharacterDraw(),
                 event=lambda *_: None,
             ),
         ),
@@ -171,12 +171,12 @@ def test_init_moving_npc(mocker: MockerFixture) -> None:
     map_scene = MapScene(
         tmx_file="",
         player_spec=CharacterSpec(
-            character=MockCharacterDrawing(), object_name=""
+            character=MockCharacterDraw(), object_name=""
         ),
         npc_specs=(
             NpcSpec(
                 object_name="",
-                character=MockCharacterDrawing(),
+                character=MockCharacterDraw(),
                 event=lambda *_: None,
             ),
         ),

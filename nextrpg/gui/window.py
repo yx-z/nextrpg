@@ -30,7 +30,7 @@ from nextrpg.core.dataclass_with_instance_init import not_constructor_below
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.logger import ComponentAndMessage, Logger, pop_messages
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
@@ -201,13 +201,13 @@ class Window:
     def _scale(self, draws: tuple[DrawOnScreen, ...]) -> DrawOnScreen:
         screen = Surface(self.initial_config.size)
         screen.blits(d.pygame for d in draws)
-        scaled_drawing = Draw(
+        scaled_draw = Draw(
             smoothscale(
                 screen,
                 self.initial_config.size.all_dimension_scale(self._scaling),
             )
         )
-        return DrawOnScreen(self._center_shift, scaled_drawing)
+        return DrawOnScreen(self._center_shift, scaled_draw)
 
     @cached_property
     def _scaling(self) -> float:

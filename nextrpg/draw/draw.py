@@ -23,10 +23,10 @@ from pygame.draw import lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
 
-from nextrpg.core.logger import Logger
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
+from nextrpg.core.logger import Logger
 from nextrpg.draw.color import Alpha, BLACK, Rgba
 from nextrpg.global_config.global_config import config
 
@@ -34,7 +34,7 @@ logger = Logger("Draw")
 
 
 @cached(
-    lambda: config().resource.drawing_cache_size,
+    lambda: config().resource.draw_cache_size,
     lambda resource: None if isinstance(resource, Surface) else resource,
 )
 @dataclass(frozen=True)
@@ -160,16 +160,16 @@ class Draw:
         return DrawOnScreen(coord, self)
 
     @cached_property
-    def _visible_rectangle(self) -> Rectangle:
+    def _visible_rectangle(self) -> RectangleOnScreen:
         rectangle = self._surface.get_bounding_rect()
         coord = Coordinate(rectangle.x, rectangle.y)
         size = Size(rectangle.width, rectangle.height)
-        return Rectangle(coord, size)
+        return RectangleOnScreen(coord, size)
 
     @cached_property
     def _debug_surface(self) -> Surface | None:
         if not (debug := config().debug) or not (
-            color := debug.drawing_background_color
+            color := debug.draw_background_color
         ):
             return None
 
@@ -227,30 +227,29 @@ class DrawOnScreen:
     drawing: Draw
 
     @property
-    def rectangle(self) -> Rectangle:
+    def rectangle_on_screen(self) -> RectangleOnScreen:
         """
         Gets the rectangular bounds of the drawing on screen.
 
         Returns:
-            `Rectangle`: A rectangle defining the drawing's position and size
+            `RectangleOnScreen`: A rectangle defining the drawing's position and size
             on screen.
         """
-        return Rectangle(self.top_left, self.drawing.size)
+        return RectangleOnScreen(self.top_left, self.drawing.size)
 
     @cached_property
-    def visible_rectangle(self) -> Rectangle:
+    def visible_rectangle_on_screen(self) -> RectangleOnScreen:
         """
         Calculate the actual visible bounds of the drawing,
         ignoring transparent pixels.
 
         Returns:
-            `Rectangle`: A rectangle defining only the visible (non-transparent)
+            `RectangleOnScreen`: A rectangle defining only the visible (non-transparent)
                 area of the drawing on screen.
         """
-        rect = self.drawing._visible_rectangle
-        coord = rect.top_left
-        size = rect.size
-        return Rectangle(self.top_left + coord, size)
+        coord = self.drawing._visible_rectangle.top_left
+        size = self.drawing._visible_rectangle.size
+        return RectangleOnScreen(self.top_left + coord, size)
 
     @property
     def pygame(self) -> tuple[Surface, Coordinate]:
@@ -299,77 +298,40 @@ class DrawOnScreen:
         return DrawOnScreen(self.top_left, self.drawing.set_alpha(alpha))
 
 
+class PolygonDraw:
+    def __init__(self, points: tuple[Coordinate, ...], color: Rgba) -> None:
+        surf = _draw_polygon(points, _fill_polygon(color))
+        _set_resource(self, surf)
+
+
 @dataclass(frozen=True)
-class Polygon:
+class PolygonOnScreen:
     """
     Represents a polygon shape defined by a sequence of points.
 
     This class provides polygon functionality including collision detection,
     drawing operations, and geometric calculations. Polygons can be either
     closed (default) or open shapes.
-
-    Arguments:
-        `points`: A tuple of coordinates defining the polygon vertices.
-
-        `closed`: Whether the polygon is closed (last point connects to first).
-            Defaults to `True`.
-
-    Example:
-        ```python
-        # Create a triangle
-        triangle = Polygon((
-            Coordinate(0, 0),
-            Coordinate(50, 0),
-            Coordinate(25, 50)
-        ))
-
-        # Create an open line
-        line = Polygon((
-            Coordinate(0, 0),
-            Coordinate(100, 100)
-        ), closed=False)
-        ```
     """
 
     points: tuple[Coordinate, ...]
     closed: bool = True
 
     @cached_property
-    def bounding_rectangle(self) -> Rectangle:
-        """
-        Get a rectangle bounding the polygon.
+    def length(self) -> Pixel:
+        length = sum(
+            p.distance(np) for p, np in zip(self.points, self.points[1:])
+        )
+        if self.closed:
+            return length + self.points[0].distance(self.points[-1])
+        return length
 
-        Calculates the smallest rectangle that completely contains
-        all points of the polygon.
-
-        Returns:
-            `Rectangle`: A rectangle bounding the polygon.
-
-        Example:
-            ```python
-            polygon = Polygon((Coordinate(0, 0), Coordinate(50, 50)))
-            bounds = polygon.bounding_rectangle
-            ```
-        """
-        min_x = min(c.left for c in self.points)
-        min_y = min(c.top for c in self.points)
-        max_x = max(c.left for c in self.points)
-        max_y = max(c.top for c in self.points)
-        coord = Coordinate(min_x, min_y)
-        size = Size(max_x - min_x, max_y - min_y)
-        return Rectangle(coord, size)
+    @cached_property
+    def bounding_rectangle(self) -> RectangleOnScreen:
+        return _bounding_rectangle(self.points)
 
     @cached_property
     def _mask(self) -> Mask:
-        """
-        Get the collision mask for this polygon.
-
-        Creates a pygame mask from the filled polygon for precise
-        collision detection.
-
-        Returns:
-            `Mask`: The collision mask for this polygon.
-        """
         return from_surface(self.fill(BLACK).drawing.pygame)
 
     def fill(self, color: Rgba) -> DrawOnScreen:
@@ -389,8 +351,7 @@ class Polygon:
             filled = triangle.fill(Rgba(255, 0, 0, 255))  # Red triangle
             ```
         """
-        poly = lambda surf, points: polygon(surf, color, points)
-        return self._draw(poly)
+        return self._draw(_fill_polygon(color))
 
     def line(
         self, color: Rgba, stroke_width: Pixel | None = None
@@ -418,10 +379,11 @@ class Polygon:
             stroke = config().draw_on_screen.stroke_width
         else:
             stroke = stroke_width
-        line = lambda surf, points: lines(
-            surf, color, self.closed, points, stroke
-        )
-        return self._draw(line)
+
+        def _line(surface: Surface, points: tuple[Coordinate, ...]) -> None:
+            lines(surface, color, self.closed, points, stroke)
+
+        return self._draw(_line)
 
     def collide(self, poly: Self) -> bool:
         """
@@ -477,49 +439,11 @@ class Polygon:
             return bool(self._mask.get_at((x, y)))
         return False
 
-    @cached_property
-    def length(self) -> Pixel:
-        """
-        Get the perimeter length of the polygon.
-
-        Calculates the total length of all edges in the polygon.
-        For closed polygons, includes the edge from the last point
-        back to the first point.
-
-        Returns:
-            `Pixel`: The perimeter length in pixels.
-
-        Example:
-            ```python
-            triangle = Polygon((Coordinate(0, 0), Coordinate(50, 0),
-                              Coordinate(25, 50)))
-            perimeter = triangle.length  # Total edge length
-            ```
-        """
-        length = sum(
-            p.distance(np) for p, np in zip(self.points, self.points[1:])
-        )
-        if self.closed:
-            length += self.points[0].distance(self.points[-1])
-        return length
-
     def _draw(
-        self, surf_and_points: Callable[[Surface, tuple[Coordinate, ...]], None]
+        self, method: Callable[[Surface, tuple[Coordinate, ...]], None]
     ) -> DrawOnScreen:
-        """
-        Internal method to create a drawing from the polygon.
-
-        Arguments:
-            `surf_and_points`: Function that draws on a surface with points.
-
-        Returns:
-            `DrawOnScreen`: The polygon drawing.
-        """
-        rectangle = self.bounding_rectangle
-        surf = Surface(rectangle.size, SRCALPHA)
-        negated = tuple(p - rectangle.top_left for p in self.points)
-        surf_and_points(surf, negated)
-        return DrawOnScreen(rectangle.top_left, Draw(surf))
+        surf = _draw_polygon(self.points, method, self.bounding_rectangle)
+        return DrawOnScreen(self.bounding_rectangle.top_left, Draw(surf))
 
     def __add__(self, coordinate: Coordinate) -> Self:
         points = tuple(t + coordinate for t in self.points)
@@ -529,7 +453,17 @@ class Polygon:
         return self + -coordinate
 
 
-class Rectangle(Polygon):
+class RectangleDraw(Draw):
+    def __init__(
+        self, size: Size, color: Rgba, border_radius: Pixel | None = None
+    ) -> None:
+        surface = Surface(size, SRCALPHA)
+        rectangle = Rect(Coordinate(0, 0), size)
+        rect(surface, color, rectangle, border_radius=border_radius or -1)
+        _set_resource(self, surface)
+
+
+class RectangleOnScreen(PolygonOnScreen):
     """
     A specialized rectangle polygon defined by its top-left corner and size.
 
@@ -709,8 +643,8 @@ class Rectangle(Polygon):
         )
 
     @override
-    def collide(self, poly: Polygon) -> bool:
-        if not isinstance(poly, Rectangle):
+    def collide(self, poly: PolygonOnScreen) -> bool:
+        if not isinstance(poly, RectangleOnScreen):
             return super().collide(poly)
 
         return (
@@ -729,7 +663,7 @@ class Rectangle(Polygon):
 
     @override
     def __add__(self, coordinate: Coordinate) -> Self:
-        return Rectangle(self.top_left + coordinate, self.size)
+        return RectangleOnScreen(self.top_left + coordinate, self.size)
 
     def fill(
         self, color: Rgba, border_radius: Pixel | None = None
@@ -753,7 +687,41 @@ class Rectangle(Polygon):
             rounded = rect.fill(Rgba(0, 255, 0, 255), border_radius=10)
             ```
         """
-        surf = Surface(self.size, SRCALPHA)
-        rectangle = Rect(Coordinate(0, 0), self.size)
-        rect(surf, color, rectangle, border_radius=border_radius or -1)
-        return DrawOnScreen(self.top_left, Draw(surf))
+        return DrawOnScreen(
+            self.top_left, RectangleDraw(self.size, color, border_radius)
+        )
+
+
+def _bounding_rectangle(points: tuple[Coordinate, ...]) -> RectangleOnScreen:
+    min_x = min(c.left for c in points)
+    min_y = min(c.top for c in points)
+    max_x = max(c.left for c in points)
+    max_y = max(c.top for c in points)
+    coord = Coordinate(min_x, min_y)
+    size = Size(max_x - min_x, max_y - min_y)
+    return RectangleOnScreen(coord, size)
+
+
+def _draw_polygon(
+    points: tuple[Coordinate, ...],
+    method: Callable[[Surface, tuple[Coordinate, ...]], None],
+    bounding_rectangle: RectangleOnScreen | None = None,
+) -> Surface:
+    bounding_rectangle = bounding_rectangle or _bounding_rectangle(points)
+    surf = Surface(bounding_rectangle.size, SRCALPHA)
+    negated = tuple(p - bounding_rectangle.top_left for p in points)
+    method(surf, negated)
+    return surf
+
+
+def _set_resource[T](self: T, surface: Surface) -> None:
+    object.__setattr__(self, "resource", surface)
+
+
+def _fill_polygon(
+    color: Rgba,
+) -> Callable[[Surface, tuple[Coordinate, ...]], None]:
+    def fill(surface: Surface, points: tuple[Coordinate, ...]) -> None:
+        polygon(surface, color, points)
+
+    return fill

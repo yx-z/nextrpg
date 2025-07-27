@@ -1,9 +1,9 @@
-from nextrpg import Coordinate, Polygon, Walk
+from nextrpg import Coordinate, PolygonOnScreen, Walk
 
 
 def test_walk() -> None:
     w = Walk(
-        path=Polygon(
+        path=PolygonOnScreen(
             (Coordinate(0, 0), Coordinate(1, 0), Coordinate(0, 1)), closed=False
         ),
         move_speed=1,
@@ -14,7 +14,9 @@ def test_walk() -> None:
     assert w.tick(0).tick(1).tick(10).tick(100)
 
     ww = Walk(
-        path=Polygon((Coordinate(0, 0), Coordinate(1, 0), Coordinate(0, 1))),
+        path=PolygonOnScreen(
+            (Coordinate(0, 0), Coordinate(1, 0), Coordinate(0, 1))
+        ),
         move_speed=1,
         cyclic=False,
     )
@@ -22,7 +24,7 @@ def test_walk() -> None:
     assert ww.tick(99999).direction
 
     w2 = Walk(
-        path=Polygon(
+        path=PolygonOnScreen(
             (Coordinate(0, 0), Coordinate(1, 0), Coordinate(0, 1)), closed=False
         ),
         move_speed=1,
@@ -32,7 +34,7 @@ def test_walk() -> None:
     assert w2.tick(100000).complete
 
     w3 = Walk(
-        path=Polygon(
+        path=PolygonOnScreen(
             (
                 Coordinate(0, 0),
                 Coordinate(1, 0),

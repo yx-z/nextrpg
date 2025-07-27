@@ -8,7 +8,7 @@ from nextrpg import (
 
 
 def test_instance_init() -> None:
-    @dataclass_with_instance_init
+    @dataclass_with_instance_init(frozen=True)
     class MyModel:
         user_input: str
         public_data: str = "public"

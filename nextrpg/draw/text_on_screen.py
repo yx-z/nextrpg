@@ -19,7 +19,7 @@ from pygame import Surface
 
 from nextrpg import Draw
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.text import Text
 
 
@@ -51,4 +51,4 @@ class TextOnScreen:
         Returns:
             `tuple[DrawOnScreen, ...]`: The text rendered on screen.
         """
-        return self.text.drawing_group.draw_on_screens(self.top_left)
+        return self.text.group.draw_on_screens(self.top_left)

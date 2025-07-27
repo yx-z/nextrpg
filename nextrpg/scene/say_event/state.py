@@ -9,7 +9,7 @@ from nextrpg.core.dataclass_with_instance_init import (
     instance_init,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.draw.typewriter import Typewriter
@@ -33,8 +33,8 @@ class SayEventState(RpgEventScene, ABC):
     @cached_property
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         if self.character_object_name:
-            npc = self.scene.get_character(self.character_object_name)
-            diff = npc.coordinate - self.initial_coord
+            character = self.scene.get_character(self.character_object_name)
+            diff = character.coordinate - self.initial_coord
             add_on = tuple(a + diff for a in self.add_ons)
         else:
             add_on = self.add_ons
@@ -42,7 +42,7 @@ class SayEventState(RpgEventScene, ABC):
         return self.scene.draw_on_screens + add_on
 
 
-@dataclass_with_instance_init
+@dataclass_with_instance_init(frozen=True)
 class FadeInState(SayEventState):
     background: tuple[DrawOnScreen, ...]
     text_on_screen: TextOnScreen
@@ -73,7 +73,7 @@ class FadeInState(SayEventState):
         )
 
 
-@dataclass_with_instance_init
+@dataclass_with_instance_init(frozen=True)
 class TypingState(SayEventState):
     background: tuple[DrawOnScreen, ...]
     text_on_screen: TextOnScreen
@@ -122,7 +122,7 @@ class TypingState(SayEventState):
         )
 
 
-@dataclass_with_instance_init
+@dataclass_with_instance_init(frozen=True)
 class FadeOutState(SayEventState):
     draws: tuple[DrawOnScreen, ...]
     config: SayEventConfig

@@ -7,7 +7,7 @@ from nextrpg import Draw
 from nextrpg.core.coordinate import Moving
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animated import Animated
-from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.draw.draw import DrawOnScreen
 
 
 class AnimatedOnScreen(ABC):
@@ -29,7 +29,7 @@ class MovingAnimatedOnScreen(AnimatedOnScreen):
     @cached_property
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         res = []
-        for d in self.animated.drawings:
+        for d in self.animated.draw:
             if isinstance(d, Draw):
                 res.append(DrawOnScreen(self.moving.coordinate, d))
             else:

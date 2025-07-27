@@ -118,8 +118,8 @@ class EventfulScene(Scene):
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:
         for npc in self.npcs:
-            if npc.draw_on_screen.rectangle.collide(
-                self.player.draw_on_screen.rectangle
+            if npc.draw_on_screen.rectangle_on_screen.collide(
+                self.player.draw_on_screen.rectangle_on_screen
             ):
                 return npc
         return None

@@ -26,10 +26,10 @@ from nextrpg.core.dataclass_with_instance_init import (
 from nextrpg.core.dimension import PixelPerMillisecond
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.core.walk import Walk
-from nextrpg.draw.draw_on_screen import Polygon
+from nextrpg.draw.draw import PolygonOnScreen
 
 
-@dataclass_with_instance_init(kw_only=True)
+@dataclass_with_instance_init(frozen=True, kw_only=True)
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     """
     Moving NPC interface.
@@ -38,9 +38,9 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
         path: Polygon representing the path of the NPC.
     """
 
-    path: Polygon
+    path: PolygonOnScreen
     spec: NpcSpec
-    collisions: tuple[Polygon, ...] = field(default_factory=tuple)
+    collisions: tuple[PolygonOnScreen, ...] = field(default_factory=tuple)
     move_speed: PixelPerMillisecond = instance_init(
         lambda self: self.spec.move_speed
     )

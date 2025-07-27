@@ -22,7 +22,7 @@ from typing import Self, override
 
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
-from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.event.pygame_event import PygameEvent
 
 

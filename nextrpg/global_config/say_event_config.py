@@ -51,7 +51,7 @@ class SayEventConfig:
     name_color: Rgba = Rgba(0, 0, 255, 255)
     name_override: str | None = None
     coordinate: Coordinate | None = None
-    drawing: "Drawing | None" = None
+    avatar: "Draw | Group | None" = None
     text: TextConfig | None = None
 
     @property

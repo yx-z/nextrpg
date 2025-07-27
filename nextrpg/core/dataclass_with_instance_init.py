@@ -49,7 +49,7 @@ def instance_init(init: Callable[[Any], Any]) -> Any:
         ```python
         from nextrpg.model import dataclass_with_instance_init, instance_init
 
-        @dataclass_with_instance_init
+        @dataclass_with_instance_init(frozen=True)
         class MyClass:
             value: int
             computed: str = instance_init(lambda self: f"Value: {self.value}")
@@ -58,10 +58,7 @@ def instance_init(init: Callable[[Any], Any]) -> Any:
     return field(repr=False, default_factory=lambda: _Init(init))
 
 
-@dataclass_transform(
-    frozen_default=True,
-    field_descriptors=(not_constructor_below, instance_init),
-)
+@dataclass_transform(field_descriptors=(not_constructor_below, instance_init))
 def dataclass_with_instance_init[T](
     cls: type[T] | None = None, /, **kwargs: Any
 ) -> Callable[[type[T]], type[T]] | type[T]:
@@ -82,7 +79,7 @@ def dataclass_with_instance_init[T](
         ```python
         from nextrpg.model import dataclass_with_instance_init, instance_init
 
-        @dataclass_with_instance_init
+        @dataclass_with_instance_init(frozen=True)
         class Character:
             name: str
             level: int
@@ -105,7 +102,7 @@ def dataclass_with_instance_init[T](
 
     cls.__post_init__ = post_init
 
-    return dataclass(cls, **{"frozen": True} | kwargs)
+    return dataclass(cls, **kwargs)
 
 
 _NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"

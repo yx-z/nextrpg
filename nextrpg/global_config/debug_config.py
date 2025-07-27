@@ -51,7 +51,7 @@ class DebugConfig:
     areas.
 
     Arguments:
-        drawing_background_color: The background color used for debug drawing.
+        draw_background_color: The background color used for debug drawing.
             Default is semi-transparent blue (0, 0, 255, 16).
         collision_rectangle_color: The color used to highlight collision areas
             when debugging is enabled. Default is semi-transparent red (255, 0,
@@ -64,7 +64,7 @@ class DebugConfig:
         log_duration: The default duration of log messages in milliseconds.
     """
 
-    drawing_background_color: Rgba | None = Rgba(0, 0, 255, 16)
+    draw_background_color: Rgba | None = Rgba(0, 0, 255, 16)
     collision_rectangle_color: Rgba | None = Rgba(255, 0, 0, 64)
     npc_path_color: Rgba | None = Rgba(0, 255, 0, 64)
     ignore_map_collisions: bool = False

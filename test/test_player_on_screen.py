@@ -1,4 +1,4 @@
-from test.util import MockCharacterDrawing
+from test.util import MockCharacterDraw
 
 from pygame.event import Event
 from pygame.locals import K_RIGHT, K_SPACE, KEYDOWN, KEYUP, QUIT
@@ -12,7 +12,7 @@ from nextrpg import (
     KeyPressUp,
     PlayerOnScreen,
     Quit,
-    Rectangle,
+    RectangleOnScreen,
     Size,
     override_config,
     pop_messages,
@@ -21,10 +21,10 @@ from nextrpg import (
 
 def test_player_on_screen():
     player = PlayerOnScreen(
-        spec=CharacterSpec(object_name="", character=MockCharacterDrawing()),
+        spec=CharacterSpec(object_name="", character=MockCharacterDraw()),
         coordinate=Coordinate(10, 20),
         move_speed=0.2,
-        collisions=(Rectangle(Coordinate(12, 20), Size(10, 10)),),
+        collisions=(RectangleOnScreen(Coordinate(12, 20), Size(10, 10)),),
     )
     assert player.event(Quit(Event(QUIT))) is player
     assert player.tick(100).coordinate == Coordinate(10, 20)

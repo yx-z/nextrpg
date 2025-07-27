@@ -18,7 +18,8 @@ Features:
 from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from os import PathLike
-from typing import Callable, NamedTuple, OrderedDict, override
+from typing import NamedTuple, OrderedDict, override
+from collections.abc import Callable
 
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
@@ -32,7 +33,7 @@ from nextrpg.core.dataclass_with_instance_init import (
 )
 from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond, get_timepoint
-from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.global_config.global_config import config
 from nextrpg.scene.map.loader import MapHelper, get_polygon
 from nextrpg.scene.map.shift import center_player
@@ -43,7 +44,7 @@ from nextrpg.scene.transition_scene import TransitionScene
 logger = Logger("MapScene")
 
 
-@dataclass_with_instance_init
+@dataclass_with_instance_init(frozen=True)
 class MapScene(EventfulScene):
     """
     A scene implementation that represents a game map loaded from Tiled TMX.
@@ -162,7 +163,7 @@ class MapScene(EventfulScene):
     @cached_property
     @override
     def draw_on_screen_shift(self) -> Coordinate:
-        player_coord = self.player.draw_on_screen.rectangle.center
+        player_coord = self.player.draw_on_screen.rectangle_on_screen.center
         shift = center_player(player_coord, self.map_helper.map_size)
         logger.debug(
             t"Player center coord {player_coord}. Shift {shift}", duration=100
@@ -201,7 +202,7 @@ class MapScene(EventfulScene):
 
     def _move(self, move: Move) -> TransitionScene | None:
         move_poly = get_polygon(self.map_helper.get_object(move.trigger_object))
-        if self.player.draw_on_screen.rectangle.collide(move_poly):
+        if self.player.draw_on_screen.rectangle_on_screen.collide(move_poly):
             return move.to_scene(self, self.player)
         return None
 

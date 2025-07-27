@@ -1,5 +1,6 @@
 from dataclasses import KW_ONLY, field, replace
-from typing import Callable, Self
+from typing import Self
+from collections.abc import Callable
 
 import pygame
 from pygame import Clock
@@ -18,7 +19,7 @@ from nextrpg.scene.scene import Scene
 logger = Logger("Game")
 
 
-@dataclass_with_instance_init
+@dataclass_with_instance_init(frozen=True)
 class GameLoop:
     """
     Internal game loop implementation.

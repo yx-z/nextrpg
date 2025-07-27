@@ -1,5 +1,5 @@
 from pathlib import Path
-from test.util import MockCharacterDrawing, MockSurface
+from test.util import MockCharacterDraw, MockSurface
 from types import SimpleNamespace
 from unittest.mock import MagicMock
 
@@ -13,7 +13,7 @@ from nextrpg import (
     DebugConfig,
     MapHelper,
     PlayerOnScreen,
-    Rectangle,
+    RectangleOnScreen,
     ResourceConfig,
     Size,
     get_polygon,
@@ -94,9 +94,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
     assert helper.layer_bottom_and_draw(
         PlayerOnScreen(
             coordinate=Coordinate(0, 0),
-            spec=CharacterSpec(
-                object_name="", character=MockCharacterDrawing()
-            ),
+            spec=CharacterSpec(object_name="", character=MockCharacterDraw()),
             collisions=(),
         )
     )
@@ -112,7 +110,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
             PlayerOnScreen(
                 coordinate=Coordinate(0, 0),
                 spec=CharacterSpec(
-                    object_name="", character=MockCharacterDrawing()
+                    object_name="", character=MockCharacterDraw()
                 ),
                 collisions=(),
             )
@@ -127,7 +125,9 @@ def test_map_helper(mocker: MockerFixture) -> None:
     with override_config(Config(debug=DebugConfig())):
         ghi = MapHelper(Path("ghi"))
         object.__setattr__(
-            ghi, "collisions", (Rectangle(Coordinate(0, 0), Size(1, 1)),)
+            ghi,
+            "collisions",
+            (RectangleOnScreen(Coordinate(0, 0), Size(1, 1)),),
         )
         assert ghi.collision_visuals
 

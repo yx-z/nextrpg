@@ -1,6 +1,6 @@
 from collections import OrderedDict
 from dataclasses import dataclass
-from typing import Callable
+from collections.abc import Callable
 
 
 @dataclass(frozen=True)
@@ -53,6 +53,9 @@ class cached[T, K, **P]:
         cls._nextrpg_instances = OrderedDict[K, T]()
 
         def new(klass: type[T], *args: P.args, **kwargs: P.kwargs) -> T:
+            if klass is not cls:
+                return object.__new__(klass)
+
             if (key := self.key_fun(*args, **kwargs)) is None:
                 return super(klass, klass).__new__(klass)
 

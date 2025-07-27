@@ -37,10 +37,8 @@ def test_window(mocker: MockerFixture) -> None:
         current_config=GuiConfig(Size(10, 20)),
         last_config=GuiConfig(Size(10, 10)),
     )
-    drawing = window._scale(
-        (DrawOnScreen(Coordinate(0, 0), Draw(MockSurface())),)
-    )
-    assert drawing.top_left == Coordinate(280, 0)
+    draw = window._scale((DrawOnScreen(Coordinate(0, 0), Draw(MockSurface())),))
+    assert draw.top_left == Coordinate(280, 0)
 
     window = window.event(GuiResize(Event(VIDEORESIZE, w=200, h=300)))
     assert window.current_config.size == Size(200, 300)

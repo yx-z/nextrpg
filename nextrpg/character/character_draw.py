@@ -18,11 +18,11 @@ from typing import Self
 
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw_on_screen import Draw
+from nextrpg.draw.draw import Draw
 
 
 @dataclass(frozen=True)
-class CharacterDrawing(ABC):
+class CharacterDraw(ABC):
     """
     Abstract interface for drawing characters on screen.
 
@@ -42,7 +42,7 @@ class CharacterDrawing(ABC):
 
     @property
     @abstractmethod
-    def drawing(self) -> Draw:
+    def draw(self) -> Draw:
         """
         Get the character's current drawing representation.
 

@@ -96,13 +96,13 @@ Dependencies:
 
 __version__ = "0.1.12"
 
-from nextrpg.character.character_drawing import *
+from nextrpg.character.character_draw import *
 from nextrpg.character.character_on_screen import *
 from nextrpg.character.moving_character_on_screen import *
 from nextrpg.character.moving_npc_on_screen import *
 from nextrpg.character.npc_on_screen import *
 from nextrpg.character.player_on_screen import *
-from nextrpg.character.rpg_maker_character_drawing import *
+from nextrpg.character.rpg_maker_character_draw import *
 from nextrpg.core.cached_decorator import *
 from nextrpg.core.coordinate import *
 from nextrpg.core.dataclass_with_instance_init import *
@@ -111,7 +111,7 @@ from nextrpg.core.logger import *
 from nextrpg.core.walk import *
 from nextrpg.draw.color import *
 from nextrpg.draw.cyclic_frames import *
-from nextrpg.draw.draw_on_screen import *
+from nextrpg.draw.draw import *
 from nextrpg.draw.fade import *
 from nextrpg.draw.text import *
 from nextrpg.draw.text_on_screen import *
@@ -130,7 +130,7 @@ from nextrpg.global_config.global_config import *
 from nextrpg.global_config.gui_config import *
 from nextrpg.global_config.key_mapping_config import *
 from nextrpg.global_config.resource_config import *
-from nextrpg.global_config.rpg_maker_character_drawing_config import *
+from nextrpg.global_config.rpg_maker_character_draw_config import *
 from nextrpg.global_config.say_event_config import *
 from nextrpg.global_config.text_config import *
 from nextrpg.global_config.tile_map_config import *

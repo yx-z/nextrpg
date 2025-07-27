@@ -24,10 +24,10 @@ from nextrpg.core.dataclass_with_instance_init import (
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.animated import Animated
-from nextrpg.draw.drawing_group import DrawingGroup
+from nextrpg.draw.group import Group
 
 
-@dataclass_with_instance_init
+@dataclass_with_instance_init(frozen=True)
 class CyclicFrames(Animated):
     """
     Static frames that can be played sequentially to create animations.
@@ -51,11 +51,7 @@ class CyclicFrames(Animated):
 
     @property
     @override
-    def drawings(self) -> tuple[Draw | DrawingGroup, ...]:
-        return (self.drawing,)
-
-    @property
-    def drawing(self) -> Draw:
+    def draw(self) -> Draw:
         return self.frames[self._index]
 
     @override

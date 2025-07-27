@@ -16,7 +16,7 @@ Features:
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
-from nextrpg.character.character_drawing import CharacterDrawing
+from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.core.coordinate import Coordinate, Moving
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
@@ -25,11 +25,11 @@ from nextrpg.core.dataclass_with_instance_init import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
-from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.event.event_as_attr import event_as_attr
 
 
-@dataclass_with_instance_init
+@dataclass_with_instance_init(frozen=True)
 class CharacterSpec:
     """
     Specification for a character's properties and configuration.
@@ -48,11 +48,11 @@ class CharacterSpec:
     """
 
     object_name: str
-    character: CharacterDrawing
+    character: CharacterDraw
     display_name: str = instance_init(lambda self: self.object_name)
 
 
-@dataclass_with_instance_init(kw_only=True)
+@dataclass_with_instance_init(frozen=True, kw_only=True)
 @event_as_attr
 class CharacterOnScreen(Moving, AnimatedOnScreen):
     """
@@ -81,9 +81,7 @@ class CharacterOnScreen(Moving, AnimatedOnScreen):
     spec: CharacterSpec
     coordinate: Coordinate
     _: KW_ONLY = not_constructor_below()
-    character: CharacterDrawing = instance_init(
-        lambda self: self.spec.character
-    )
+    character: CharacterDraw = instance_init(lambda self: self.spec.character)
     _event_triggered: bool = False
 
     @property
@@ -111,7 +109,7 @@ class CharacterOnScreen(Moving, AnimatedOnScreen):
         Returns:
             The character's drawing at its current position.
         """
-        return DrawOnScreen(self.coordinate, self.character.drawing)
+        return DrawOnScreen(self.coordinate, self.character.draw)
 
     def start_event(self, character: CharacterOnScreen) -> Self:
         """

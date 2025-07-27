@@ -14,7 +14,7 @@ Features:
 
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
-from nextrpg.draw.draw_on_screen import Rectangle
+from nextrpg.draw.draw import RectangleOnScreen
 from nextrpg.global_config.global_config import config, initial_config
 from nextrpg.global_config.gui_config import ResizeMode
 
@@ -38,17 +38,17 @@ def gui_size() -> Size:
     raise ValueError(f"Invalid resize mode {config().gui.resize_mode}")
 
 
-def screen() -> Rectangle:
+def screen() -> RectangleOnScreen:
     """
     Get the full screen area as a rectangle.
 
     Returns:
         A rectangle representing the entire screen area.
     """
-    return Rectangle(Coordinate(0, 0), gui_size())
+    return RectangleOnScreen(Coordinate(0, 0), gui_size())
 
 
-def left_screen() -> Rectangle:
+def left_screen() -> RectangleOnScreen:
     """
     Get the left half of the screen as a rectangle.
 
@@ -57,10 +57,10 @@ def left_screen() -> Rectangle:
     """
     coord = Coordinate(0, 0)
     size = Size(gui_size().width / 2, gui_size().height)
-    return Rectangle(coord, size)
+    return RectangleOnScreen(coord, size)
 
 
-def right_screen() -> Rectangle:
+def right_screen() -> RectangleOnScreen:
     """
     Get the right half of the screen as a rectangle.
 
@@ -69,10 +69,10 @@ def right_screen() -> Rectangle:
     """
     coord = Coordinate(gui_size().width / 2, 0)
     size = Size(gui_size().width / 2, gui_size().height)
-    return Rectangle(coord, size)
+    return RectangleOnScreen(coord, size)
 
 
-def top_screen() -> Rectangle:
+def top_screen() -> RectangleOnScreen:
     """
     Get the top half of the screen as a rectangle.
 
@@ -81,10 +81,10 @@ def top_screen() -> Rectangle:
     """
     coord = Coordinate(0, 0)
     size = Size(gui_size().width, gui_size().height / 2)
-    return Rectangle(coord, size)
+    return RectangleOnScreen(coord, size)
 
 
-def bottom_screen() -> Rectangle:
+def bottom_screen() -> RectangleOnScreen:
     """
     Get the bottom half of the screen as a rectangle.
 
@@ -93,10 +93,10 @@ def bottom_screen() -> Rectangle:
     """
     coord = Coordinate(0, gui_size().height / 2)
     size = Size(gui_size().width, gui_size().height / 2)
-    return Rectangle(coord, size)
+    return RectangleOnScreen(coord, size)
 
 
-def top_left_screen() -> Rectangle:
+def top_left_screen() -> RectangleOnScreen:
     """
     Get the top-left quarter of the screen as a rectangle.
 
@@ -105,10 +105,10 @@ def top_left_screen() -> Rectangle:
     """
     coord = Coordinate(0, 0)
     size = gui_size().all_dimension_scale(0.5)
-    return Rectangle(coord, size)
+    return RectangleOnScreen(coord, size)
 
 
-def top_right_screen() -> Rectangle:
+def top_right_screen() -> RectangleOnScreen:
     """
     Get the top-right quarter of the screen as a rectangle.
 
@@ -117,10 +117,10 @@ def top_right_screen() -> Rectangle:
     """
     coord = Coordinate(gui_size().width / 2, 0)
     size = gui_size().all_dimension_scale(0.5)
-    return Rectangle(coord, size)
+    return RectangleOnScreen(coord, size)
 
 
-def bottom_left_screen() -> Rectangle:
+def bottom_left_screen() -> RectangleOnScreen:
     """
     Get the bottom-left quarter of the screen as a rectangle.
 
@@ -129,10 +129,10 @@ def bottom_left_screen() -> Rectangle:
     """
     coord = Coordinate(0, gui_size().height / 2)
     size = gui_size().all_dimension_scale(0.5)
-    return Rectangle(coord, size)
+    return RectangleOnScreen(coord, size)
 
 
-def bottom_right_screen() -> Rectangle:
+def bottom_right_screen() -> RectangleOnScreen:
     """
     Get the bottom-right quarter of the screen as a rectangle.
 
@@ -141,4 +141,4 @@ def bottom_right_screen() -> Rectangle:
     """
     coord = Coordinate(gui_size().width / 2, gui_size().height / 2)
     size = gui_size().all_dimension_scale(0.5)
-    return Rectangle(coord, size)
+    return RectangleOnScreen(coord, size)

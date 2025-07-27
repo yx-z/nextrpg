@@ -1,7 +1,13 @@
 from dataclasses import replace
-from test.util import MockCharacterDrawing
+from test.util import MockCharacterDraw
 
-from nextrpg import Coordinate, MovingNpcOnScreen, NpcSpec, Rectangle, Size
+from nextrpg import (
+    Coordinate,
+    MovingNpcOnScreen,
+    NpcSpec,
+    RectangleOnScreen,
+    Size,
+)
 
 
 def test_moving_npc_on_screen() -> None:
@@ -9,12 +15,12 @@ def test_moving_npc_on_screen() -> None:
         coordinate=Coordinate(0, 0),
         spec=NpcSpec(
             object_name="name",
-            character=MockCharacterDrawing(),
+            character=MockCharacterDraw(),
             event=lambda *_: None,
             idle_duration=10,
             move_duration=10,
         ),
-        path=Rectangle(Coordinate(0, 0), Size(10, 10)),
+        path=RectangleOnScreen(Coordinate(0, 0), Size(10, 10)),
         collisions=(),
     )
     assert npc.tick(1).tick(1).moving

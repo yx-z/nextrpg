@@ -23,14 +23,14 @@ from nextrpg.core.dataclass_with_instance_init import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.color import Rgba
-from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.global_config.global_config import config
 from nextrpg.gui.area import screen
 from nextrpg.scene.scene import Scene
 
 
-@dataclass_with_instance_init
+@dataclass_with_instance_init(frozen=True)
 class TransitionScene(Scene):
     """
     Scene that handles transitions between other scenes.

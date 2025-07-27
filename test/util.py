@@ -7,7 +7,7 @@ from pygame import Surface
 
 from nextrpg import (
     AnimatedOnScreen,
-    CharacterDrawing,
+    CharacterDraw,
     CharacterSpec,
     Coordinate,
     Direction,
@@ -58,7 +58,7 @@ class MockSurface(Surface):
 
 
 @dataclass(frozen=True)
-class MockCharacterDrawing(CharacterDrawing):
+class MockCharacterDraw(CharacterDraw):
     direction: Direction = Direction.DOWN
 
     @property
@@ -70,16 +70,16 @@ class MockCharacterDrawing(CharacterDrawing):
         return Coordinate(0, 0)
 
     @cached_property
-    def drawing(self) -> Draw:
+    def draw(self) -> Draw:
         return Draw(MockSurface("a"))
 
-    def turn(self, direction: Direction) -> CharacterDrawing:
+    def turn(self, direction: Direction) -> CharacterDraw:
         return replace(self, direction=direction)
 
-    def tick_move(self, time_delta: Millisecond) -> CharacterDrawing:
+    def tick_move(self, time_delta: Millisecond) -> CharacterDraw:
         return self
 
-    def tick_idle(self, time_delta: Millisecond) -> CharacterDrawing:
+    def tick_idle(self, time_delta: Millisecond) -> CharacterDraw:
         return self
 
 
@@ -106,7 +106,7 @@ class MockEventfulScene(EventfulScene):
         return PlayerOnScreen(
             coordinate=Coordinate(0, 0),
             spec=CharacterSpec(
-                object_name="test", character=MockCharacterDrawing()
+                object_name="test", character=MockCharacterDraw()
             ),
             collisions=(),
         )
@@ -118,7 +118,7 @@ class MockEventfulScene(EventfulScene):
                 coordinate=Coordinate(0, 0),
                 spec=NpcSpec(
                     object_name="",
-                    character=MockCharacterDrawing(),
+                    character=MockCharacterDraw(),
                     event=lambda *_: None,
                 ),
             )
@@ -158,9 +158,9 @@ class MockPlayerOnScreen(PlayerOnScreen):
         pass
 
     @property
-    def character(self) -> MockCharacterDrawing:
-        return MockCharacterDrawing()
+    def character(self) -> MockCharacterDraw:
+        return MockCharacterDraw()
 
     @property
     def spec(self) -> CharacterSpec:
-        return CharacterSpec(object_name="", character=MockCharacterDrawing())
+        return CharacterSpec(object_name="", character=MockCharacterDraw())

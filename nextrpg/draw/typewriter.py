@@ -9,11 +9,11 @@ from nextrpg.core.dataclass_with_instance_init import (
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
-from nextrpg.draw.draw_on_screen import DrawOnScreen
+from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.text_on_screen import TextOnScreen
 
 
-@dataclass_with_instance_init
+@dataclass_with_instance_init(frozen=True)
 class Typewriter(AnimatedOnScreen):
     text_on_screen: TextOnScreen
     delay: Millisecond

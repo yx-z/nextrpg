@@ -16,8 +16,8 @@ from nextrpg.global_config.event_config import EventConfig
 from nextrpg.global_config.gui_config import GuiConfig
 from nextrpg.global_config.key_mapping_config import KeyMappingConfig
 from nextrpg.global_config.resource_config import ResourceConfig
-from nextrpg.global_config.rpg_maker_character_drawing_config import (
-    RpgMakerCharacterDrawingConfig,
+from nextrpg.global_config.rpg_maker_character_draw_config import (
+    RpgMakerCharacterDrawConfig,
 )
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.global_config.text_config import TextConfig
@@ -58,8 +58,8 @@ class Config:
     gui: GuiConfig = GuiConfig()
     map: TileMapConfig = TileMapConfig()
     character: CharacterConfig = CharacterConfig()
-    rpg_maker_character: RpgMakerCharacterDrawingConfig = (
-        RpgMakerCharacterDrawingConfig()
+    rpg_maker_character: RpgMakerCharacterDrawConfig = (
+        RpgMakerCharacterDrawConfig()
     )
     key_mapping: KeyMappingConfig = KeyMappingConfig()
     resource: ResourceConfig = ResourceConfig()

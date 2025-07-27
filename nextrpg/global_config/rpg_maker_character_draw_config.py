@@ -23,7 +23,7 @@ from nextrpg.core.time import Millisecond
 
 
 @dataclass(frozen=True)
-class RpgMakerCharacterDrawingConfig:
+class RpgMakerCharacterDrawConfig:
     """
     Configuration class for RPG Maker character drawings.
 

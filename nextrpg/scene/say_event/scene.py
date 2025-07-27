@@ -24,12 +24,14 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import override
 
+from pygments.styles.dracula import background
+
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw_on_screen import Draw, DrawOnScreen
-from nextrpg.draw.drawing_group import DrawRelativeTo, DrawingGroup
+from nextrpg.draw.draw import Draw, DrawOnScreen, RectangleDraw
+from nextrpg.draw.group import DrawRelativeTo, Group
 from nextrpg.draw.text import Text
 from nextrpg.event.rpg_event import register_rpg_event
 from nextrpg.global_config.global_config import config
@@ -103,7 +105,7 @@ class SayEventScene(RpgEventScene):
     args: tuple[SayEventArg, ...] = field(default_factory=tuple)
 
     @override
-    @property
+    @cached_property
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         return self._state.draw_on_screens
 
@@ -124,6 +126,7 @@ class SayEventScene(RpgEventScene):
             return CharacterSay(
                 self._text,
                 self._add_on,
+                self._background,
                 self.scene,
                 self.character_or_scene,
                 self.config,
@@ -133,7 +136,9 @@ class SayEventScene(RpgEventScene):
     @cached_property
     def _scene_say(self) -> SceneSay | None:
         if isinstance(self.character_or_scene, Scene):
-            return SceneSay(self._text, self._add_on, self.config)
+            return SceneSay(
+                self._text, self._add_on, self._background, self.config
+            )
         return None
 
     @cached_property
@@ -161,22 +166,51 @@ class SayEventScene(RpgEventScene):
             self.config,
         )
 
-    @property
-    def _add_on(self) -> DrawingGroup:
-        followers = tuple(d for d in (self._drawing, self._name) if d)
-        return DrawingGroup(self._text.drawing_group, followers)
+    @cached_property
+    def _add_on(self) -> Group:
+        leader = self._text.group
+        followers = tuple(d for d in (self._avatar, self._name) if d)
+        content = Group(leader, followers)
+        background, shift = self._background
+        return Group(background, DrawRelativeTo(content, shift))
 
-    @property
-    def _drawing(self) -> DrawRelativeTo | None:
-        if not (drawing := self.config.drawing):
+    @cached_property
+    def _background(self) -> DrawRelativeTo:
+        padding = self.config.padding
+        text_width, text_height = self._text.size
+        relative_to_width = padding
+        relative_to_height = padding
+
+        rect_height = text_height + 2 * padding
+        if self._name:
+            extra_height = self._name.draw.size.height + padding
+            relative_to_height += extra_height
+            rect_height += extra_height
+
+        rect_width = text_width + 2 * padding
+        if self._avatar:
+            extra_width = self._avatar.draw.size.width + padding
+            relative_to_width += extra_width
+            rect_width += extra_width
+
+        size = Size(rect_width, rect_height)
+        rect = RectangleDraw(
+            size, self.config.background, self.config.border_radius
+        )
+        shift = Size(relative_to_width, relative_to_height)
+        return DrawRelativeTo(rect, shift)
+
+    @cached_property
+    def _avatar(self) -> DrawRelativeTo | None:
+        if not (avatar := self.config.avatar):
             return None
-        width, height = drawing.size
+        width, height = avatar.size
         left_shift = -self.config.padding - width
         top_shift = self._text.size.height - height
         shift = Size(left_shift, top_shift)
-        return DrawRelativeTo(drawing, shift)
+        return DrawRelativeTo(avatar, shift)
 
-    @property
+    @cached_property
     def _name(self) -> DrawRelativeTo | None:
         if self.config.name_override:
             name = self.config.name_override
@@ -190,13 +224,13 @@ class SayEventScene(RpgEventScene):
 
         name_height = text.size.height
         shift = Size(0, -name_height - self.config.padding)
-        return DrawRelativeTo(text.drawing_group, shift)
+        return DrawRelativeTo(text.group, shift)
 
     @cached_property
     def _text(self) -> Text:
         return Text(self.message, self._text_config)
 
-    @property
+    @cached_property
     def _text_config(self) -> TextConfig:
         return self.config.text or self.config.default_text_config
 
@@ -208,7 +242,7 @@ def _update_config(cfg: SayEventArg, arg: SayEventArg) -> SayEventConfig:
         case Coordinate():
             return replace(cfg, coordinate=arg)
         case Draw():
-            return replace(cfg, drawing=arg)
+            return replace(cfg, draw=arg)
         case str():
             return replace(cfg, name_override=arg)
     raise ValueError(

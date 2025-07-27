@@ -24,7 +24,7 @@ from nextrpg.core.dimension import PixelPerMillisecond
 from nextrpg.core.direction import Direction
 from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw_on_screen import DrawOnScreen, Polygon
+from nextrpg.draw.draw import DrawOnScreen, PolygonOnScreen
 from nextrpg.global_config.global_config import config
 
 logger = Logger("MovingCharacterOnScreen")
@@ -59,7 +59,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         ```
     """
 
-    collisions: tuple[Polygon, ...]
+    collisions: tuple[PolygonOnScreen, ...]
     move_speed: PixelPerMillisecond = field(
         default_factory=lambda: config().character.move_speed
     )
@@ -154,7 +154,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         if (debug := config().debug) and debug.ignore_map_collisions:
             return True
 
-        rect = DrawOnScreen(coordinate, self.character.drawing).rectangle
+        rect = DrawOnScreen(coordinate, self.character.draw).rectangle_on_screen
         hit_coords = {
             Direction.LEFT: {rect.bottom_left, rect.center_left},
             Direction.RIGHT: {rect.bottom_right, rect.center_right},
@@ -195,5 +195,5 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
 
 class _CollisionAndCoord(NamedTuple):
-    polygon: Polygon
+    polygon: PolygonOnScreen
     coord: Coordinate

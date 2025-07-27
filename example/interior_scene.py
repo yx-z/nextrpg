@@ -1,5 +1,5 @@
 from nextrpg import (
-    CharacterDrawing,
+    CharacterDraw,
     CharacterSpec,
     Direction,
     Draw,
@@ -8,7 +8,7 @@ from nextrpg import (
     NpcOnScreen,
     NpcSpec,
     PlayerOnScreen,
-    RpgMakerCharacterDrawing,
+    RpgMakerCharacterDraw,
     SpriteSheet,
     SpriteSheetSelection,
     Trim,
@@ -58,7 +58,7 @@ def init_player() -> CharacterSpec:
     return CharacterSpec(
         object_name="player",
         display_name="Will",
-        character=RpgMakerCharacterDrawing(
+        character=RpgMakerCharacterDraw(
             Direction.DOWN,
             sprite_sheet(),
             SpriteSheetSelection(row=0, column=0),
@@ -66,13 +66,13 @@ def init_player() -> CharacterSpec:
     )
 
 
-def alisa() -> CharacterDrawing:
-    return RpgMakerCharacterDrawing(
+def alisa() -> CharacterDraw:
+    return RpgMakerCharacterDraw(
         Direction.RIGHT, sprite_sheet(), SpriteSheetSelection(0, 1)
     )
 
 
-def david() -> CharacterDrawing:
-    return RpgMakerCharacterDrawing(
+def david() -> CharacterDraw:
+    return RpgMakerCharacterDraw(
         Direction.DOWN, sprite_sheet(), SpriteSheetSelection(0, 2)
     )
