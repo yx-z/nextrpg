@@ -62,9 +62,6 @@ def test_npcs(mocker: MockerFixture) -> None:
         def size(self) -> Size:
             return Size(1, 1)
 
-        def text_size(self, *args: Any) -> Size:
-            return Size(1, 1)
-
         def render(self, *args: Any) -> Surface:
             return MockSurface()
 

@@ -111,18 +111,6 @@ class MockEventfulScene(EventfulScene):
             collisions=(),
         )
 
-    @property
-    def _npc_dict(self) -> dict[str, NpcOnScreen]:
-        return {
-            "test": NpcOnScreen(
-                coordinate=Coordinate(0, 0),
-                spec=NpcSpec(
-                    object_name="",
-                    character=MockCharacterDraw(),
-                    event=lambda *_: None,
-                ),
-            )
-        }
 
 
 class MockTextOnScreen(TextOnScreen):
