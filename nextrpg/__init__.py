@@ -37,52 +37,6 @@ Architecture:
     - Drawing utilities abstract pygame rendering operations
     - Configuration system allows easy customization
 
-Example Usage:
-    ```python
-    from nextrpg.game import Game
-    from nextrpg.scene import StaticScene
-    from nextrpg.character_drawing import CharacterDrawing
-    from nextrpg.coordinate import Coordinate
-    from nextrpg.direction import Direction
-
-    def create_entry_scene():
-        # Create a simple scene with a character
-        character = CharacterDrawing(
-            drawing=load_sprite("player.png"),
-            direction=Direction.DOWN
-        )
-        return StaticScene()
-
-    # Initialize and start the game
-    game = Game(entry_scene=create_entry_scene)
-    game.start()
-    ```
-
-Advanced Example:
-    ```python
-    from nextrpg.map_scene import MapScene
-    from nextrpg.npcs import NpcSpec, EventfulScene
-    from nextrpg.say_event import say_event
-
-    def create_town_scene():
-        # Create NPCs with events
-        shopkeeper = NpcSpec(
-            name="Shopkeeper",
-            drawing=load_character("shopkeeper.png"),
-            event=shop_dialog_event
-        )
-
-        # Create map scene with NPCs
-        return EventfulScene(
-            player=player,
-            npcs=(shopkeeper,)
-        )
-
-    def shop_dialog_event(player, npc, scene):
-        yield say_event("Welcome to my shop!")
-        yield say_event("What would you like to buy?")
-    ```
-
 Version:
     Current version: 0.1.12
 
@@ -109,7 +63,7 @@ from nextrpg.core.dataclass_with_instance_init import *
 from nextrpg.core.dimension import *
 from nextrpg.core.logger import *
 from nextrpg.core.walk import *
-from nextrpg.draw.color import *
+from nextrpg.core.color import *
 from nextrpg.draw.cyclic_frames import *
 from nextrpg.draw.draw import *
 from nextrpg.draw.fade import *
@@ -140,9 +94,9 @@ from nextrpg.gui.area import *
 from nextrpg.gui.window import *
 from nextrpg.scene import *
 from nextrpg.scene.map.loader import *
-from nextrpg.scene.map.scene import *
+from nextrpg.scene.map.map_scene import *
 from nextrpg.scene.map.shift import *
-from nextrpg.scene.say_event.scene import *
+from nextrpg.scene.say_event.say_event_scene import *
 from nextrpg.scene.say_event.state import *
 from nextrpg.scene.say_event.add_on import *
 from nextrpg.scene.transition_scene import *

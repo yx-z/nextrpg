@@ -40,7 +40,7 @@ def test_map_scene(mocker: MockerFixture) -> None:
     )
     helper.collisions = (RectangleOnScreen(Coordinate(0, 0), Size(0, 0)),)
     helper.collision_visuals = ()
-    mocker.patch("nextrpg.scene.map.scene.MapLoader", return_value=helper)
+    mocker.patch("nextrpg.scene.map.map_scene.MapLoader", return_value=helper)
     map = MapScene(
         tmx_file=Path("test"),
         player_spec=CharacterSpec(
@@ -48,7 +48,7 @@ def test_map_scene(mocker: MockerFixture) -> None:
         ),
     )
     mocker.patch(
-        "nextrpg.scene.map.scene.sorted",
+        "nextrpg.scene.map.map_scene.sorted",
         return_value=[
             (
                 None,
@@ -63,9 +63,9 @@ def test_map_scene(mocker: MockerFixture) -> None:
 
 
 def test_move(mocker: MockerFixture) -> None:
-    mocker.patch("nextrpg.scene.map.scene.MapLoader")
-    mocker.patch("nextrpg.scene.map.scene.MapLoader.get_object")
-    mocker.patch("nextrpg.scene.map.scene.get_polygon")
+    mocker.patch("nextrpg.scene.map.map_scene.MapLoader")
+    mocker.patch("nextrpg.scene.map.map_scene.MapLoader.get_object")
+    mocker.patch("nextrpg.scene.map.map_scene.get_polygon")
     i = 0
 
     def _increment(*_: Any) -> bool:
@@ -135,8 +135,8 @@ def test_init_npc(mocker: MockerFixture) -> None:
     )
     map_helper.collisions = ()
     map_helper.collision_visuals = ()
-    mocker.patch("nextrpg.scene.map.scene.MapLoader", map_helper)
-    mocker.patch("nextrpg.scene.map.scene.get_polygon")
+    mocker.patch("nextrpg.scene.map.map_scene.MapLoader", map_helper)
+    mocker.patch("nextrpg.scene.map.map_scene.get_polygon")
     map_scene = MapScene(
         tmx_file="",
         player_spec=CharacterSpec(
@@ -166,8 +166,8 @@ def test_init_moving_npc(mocker: MockerFixture) -> None:
     )
     map_helper.collisions = ()
     map_helper.collision_visuals = ()
-    mocker.patch("nextrpg.scene.map.scene.MapLoader", map_helper)
-    mocker.patch("nextrpg.scene.map.scene.get_polygon", return_value=None)
+    mocker.patch("nextrpg.scene.map.map_scene.MapLoader", map_helper)
+    mocker.patch("nextrpg.scene.map.map_scene.get_polygon", return_value=None)
     map_scene = MapScene(
         tmx_file="",
         player_spec=CharacterSpec(

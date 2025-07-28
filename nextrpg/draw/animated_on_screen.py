@@ -3,7 +3,8 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Self
 
-from nextrpg import Draw, GroupOnScreen
+from nextrpg.draw.draw import Draw
+from nextrpg.draw.group import GroupOnScreen
 from nextrpg.core.coordinate import Moving
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animated import Animated

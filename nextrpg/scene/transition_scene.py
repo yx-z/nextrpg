@@ -22,7 +22,7 @@ from nextrpg.core.dataclass_with_instance_init import (
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.color import Rgba
+from nextrpg.core.color import Rgba
 from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.global_config.global_config import config

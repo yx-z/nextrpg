@@ -16,6 +16,7 @@ Features:
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
+from nextrpg.draw.group import Group
 from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.core.coordinate import Coordinate, Moving
 from nextrpg.core.dataclass_with_instance_init import (
@@ -25,7 +26,7 @@ from nextrpg.core.dataclass_with_instance_init import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
-from nextrpg.draw.draw import DrawOnScreen
+from nextrpg.draw.draw import Draw, DrawOnScreen
 from nextrpg.event.event_as_attr import event_as_attr
 
 
@@ -49,6 +50,7 @@ class CharacterSpec:
 
     object_name: str
     character: CharacterDraw
+    avatar: Draw | Group | None = None
     display_name: str = instance_init(lambda self: self.object_name)
 
 

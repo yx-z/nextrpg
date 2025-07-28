@@ -27,7 +27,7 @@ from nextrpg.core.cached_decorator import cached
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.logger import Logger
-from nextrpg.draw.color import Alpha, BLACK, Rgba
+from nextrpg.core.color import Alpha, BLACK, Rgba
 from nextrpg.global_config.global_config import config
 
 logger = Logger("Draw")

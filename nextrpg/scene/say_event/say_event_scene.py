@@ -34,9 +34,8 @@ from nextrpg.draw.text import Text
 from nextrpg.event.rpg_event import register_rpg_event
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.say_event_config import SayEventConfig
-from nextrpg.global_config.text_config import TextConfig
 from nextrpg.scene.rpg_event_scene import RpgEventScene
-from nextrpg.scene.say_event.add_on import CharacterAddOn, SceneAddOn
+from nextrpg.scene.say_event.add_on import AddOn, CharacterAddOn
 from nextrpg.scene.say_event.state import FadeInState
 from nextrpg.scene.scene import Scene
 
@@ -119,115 +118,30 @@ class SayEventScene(RpgEventScene):
         return cfg
 
     @cached_property
-    def _character_add_on(self) -> CharacterAddOn | None:
-        if isinstance(c := self.character_or_scene, CharacterOnScreen):
-            name = c.spec.object_name
+    def _add_on(self) -> AddOn:
+        if isinstance(self.character_or_scene, CharacterOnScreen):
+            name = self.character_or_scene.spec.object_name
             ticked_character = self.scene.get_character(name)
             return CharacterAddOn(
-                self._text,
-                self._add_on,
-                self._background,
-                self.config,
-                self.scene,
-                ticked_character,
+                self.config, self.message, self.scene, ticked_character
             )
-        return None
-
-    @cached_property
-    def _scene_add_on(self) -> SceneAddOn | None:
-        if isinstance(self.character_or_scene, Scene):
-            return SceneAddOn(
-                self._text, self._add_on, self._background, self.config
-            )
-        return None
+        return AddOn(self.config, self.message)
 
     @cached_property
     def _state(self) -> FadeInState:
         if isinstance(self.character_or_scene, CharacterOnScreen):
             object_name = self.character_or_scene.spec.object_name
-            text_on_screen = self._character_add_on.text_on_screen
-            background = self._character_add_on.background
         else:
             object_name = None
-            text_on_screen = self._scene_add_on.text_on_screen
-            background = self._scene_add_on.background
 
         return FadeInState(
             generator=self.generator,
             scene=self.scene,
             object_name=object_name,
-            background=background,
-            text_on_screen=text_on_screen,
+            background=self._add_on.background,
+            text_on_screen=self._add_on.text_on_screen,
             config=self.config,
         )
-
-    @cached_property
-    def _add_on(self) -> Group:
-        leader = self._text.group
-        followers = tuple(d for d in (self._avatar, self._name) if d)
-        content = Group(leader, followers)
-        background, shift = self._background
-        return Group(background, DrawRelativeTo(content, shift))
-
-    @cached_property
-    def _background(self) -> DrawRelativeTo:
-        padding = self.config.padding
-        text_width, text_height = self._text.size
-        relative_to_width = padding
-        relative_to_height = padding
-
-        rect_height = text_height + 2 * padding
-        if self._name:
-            extra_height = self._name.draw.size.height + padding
-            relative_to_height += extra_height
-            rect_height += extra_height
-
-        rect_width = text_width + 2 * padding
-        if self._avatar:
-            extra_width = self._avatar.draw.size.width + padding
-            relative_to_width += extra_width
-            rect_width += extra_width
-
-        size = Size(rect_width, rect_height)
-        rect = RectangleDraw(
-            size, self.config.background, self.config.border_radius
-        )
-        shift = Size(relative_to_width, relative_to_height)
-        return DrawRelativeTo(rect, shift)
-
-    @cached_property
-    def _avatar(self) -> DrawRelativeTo | None:
-        if not (avatar := self.config.avatar):
-            return None
-        width, height = avatar.size
-        left_shift = -self.config.padding - width
-        top_shift = self._text.size.height - height
-        shift = Size(left_shift, top_shift)
-        return DrawRelativeTo(avatar, shift)
-
-    @cached_property
-    def _name(self) -> DrawRelativeTo | None:
-        if self.config.name_override:
-            name = self.config.name_override
-        elif isinstance(self.character_or_scene, CharacterOnScreen):
-            name = self.character_or_scene.display_name
-        else:
-            return None
-
-        text_config = replace(self._text_config, color=self.config.name_color)
-        text = Text(name, text_config)
-
-        name_height = text.size.height
-        shift = Size(0, -name_height - self.config.padding)
-        return DrawRelativeTo(text.group, shift)
-
-    @cached_property
-    def _text(self) -> Text:
-        return Text(self.message, self._text_config)
-
-    @cached_property
-    def _text_config(self) -> TextConfig:
-        return self.config.text or self.config.default_text_config
 
 
 def _update_config(cfg: SayEventArg, arg: SayEventArg) -> SayEventConfig:

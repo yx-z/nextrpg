@@ -24,7 +24,7 @@ from nextrpg.core.dataclass_with_instance_init import (
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
-from nextrpg.draw.color import alpha_from_percentage
+from nextrpg.core.color import alpha_from_percentage
 from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.global_config.global_config import config
 

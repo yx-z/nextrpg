@@ -15,7 +15,7 @@ from nextrpg import (
 
 
 def test_say_event_scene(mocker: MockerFixture) -> None:
-    mocker.patch("nextrpg.scene.say_event.scene.FadeInState")
+    mocker.patch("nextrpg.scene.say_event.say_event_scene.FadeInState")
     mocker.patch("nextrpg.draw.font.Font.pygame")
     mocker.patch.object(
         Text, "size", new_callable=PropertyMock, return_value=Size(1, 1)
