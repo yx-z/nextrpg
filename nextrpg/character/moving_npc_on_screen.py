@@ -24,7 +24,7 @@ from nextrpg.core.dataclass_with_instance_init import (
     not_constructor_below,
 )
 from nextrpg.core.dimension import PixelPerMillisecond
-from nextrpg.core.time import Millisecond, Timer
+from nextrpg.core.time import Millisecond
 from nextrpg.core.walk import Walk
 from nextrpg.draw.draw import PolygonOnScreen
 

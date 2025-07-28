@@ -24,8 +24,6 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import override
 
-from pygments.styles.dracula import background
-
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
@@ -122,14 +120,16 @@ class SayEventScene(RpgEventScene):
 
     @cached_property
     def _character_add_on(self) -> CharacterAddOn | None:
-        if isinstance(self.character_or_scene, CharacterOnScreen):
+        if isinstance(c := self.character_or_scene, CharacterOnScreen):
+            name = c.spec.object_name
+            ticked_character = self.scene.get_character(name)
             return CharacterAddOn(
                 self._text,
                 self._add_on,
                 self._background,
                 self.config,
                 self.scene,
-                self.character_or_scene,
+                ticked_character,
             )
         return None
 

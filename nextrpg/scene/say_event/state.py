@@ -23,6 +23,8 @@ from nextrpg.scene.scene import Scene
 @dataclass_with_instance_init(frozen=True, kw_only=True)
 class State(RpgEventScene, ABC):
     object_name: str | None
+    config: SayEventConfig
+    _: KW_ONLY = not_constructor_below()
     initial_coord: Coordinate | None = instance_init(
         lambda self: (
             self.scene.get_character(n).coordinate
@@ -85,7 +87,6 @@ class FadeInState(State):
 class TypingState(State):
     background: tuple[DrawOnScreen, ...]
     text_on_screen: TextOnScreen
-    config: SayEventConfig
     _: KW_ONLY = not_constructor_below()
     _typewriter: Typewriter | None = instance_init(
         lambda self: (
