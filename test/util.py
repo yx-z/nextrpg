@@ -112,7 +112,6 @@ class MockEventfulScene(EventfulScene):
         )
 
 
-
 class MockTextOnScreen(TextOnScreen):
     def __init__(self, *args: Any, message: str = "", **kwargs: Any) -> None:
         self.draw_on_screens = (

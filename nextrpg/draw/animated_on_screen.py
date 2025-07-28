@@ -3,7 +3,7 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Self
 
-from nextrpg import Draw
+from nextrpg import Draw, GroupOnScreen
 from nextrpg.core.coordinate import Moving
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animated import Animated
@@ -29,11 +29,10 @@ class MovingAnimatedOnScreen(AnimatedOnScreen):
     @cached_property
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         res = []
-        for d in self.animated.draw:
-            if isinstance(d, Draw):
-                res.append(DrawOnScreen(self.moving.coordinate, d))
-            else:
-                res += d.draw_on_screens(self.moving.coordinate)
+        if isinstance(d := self.animated.draw, Draw):
+            res.append(DrawOnScreen(self.moving.coordinate, d))
+        else:
+            res += GroupOnScreen(self.moving.coordinate, d).draw_on_screens
         return tuple(res)
 
     def tick(self, time_delta: Millisecond) -> Self:
