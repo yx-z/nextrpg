@@ -5,7 +5,7 @@ from types import SimpleNamespace
 from typing import Any, Self, override
 from unittest.mock import Mock
 
-from pygame import K_SPACE, Event
+from pygame import K_SPACE, Event, Surface
 from pygame.locals import K_RETURN, KEYDOWN, QUIT
 from pytest_mock import MockerFixture
 
@@ -29,6 +29,7 @@ from nextrpg import (
     Size,
     say,
 )
+from test.util import MockSurface
 
 
 def test_npc_on_screen() -> None:
@@ -46,7 +47,7 @@ def test_npc_on_screen() -> None:
             PlayerOnScreen(
                 collisions=(),
                 spec=CharacterSpec(
-                    object_name="", character=MockCharacterDraw()
+                    object_name="a", character=MockCharacterDraw()
                 ),
                 coordinate=Coordinate(0, 0),
             )
@@ -60,6 +61,12 @@ def test_npcs(mocker: MockerFixture) -> None:
         @cached_property
         def size(self) -> Size:
             return Size(1, 1)
+
+        def text_size(self, *args: Any) -> Size:
+            return Size(1, 1)
+
+        def render(self, *args: Any) -> Surface:
+            return MockSurface()
 
     assert MockFont().size == Size(1, 1)
     mocker.patch("nextrpg.draw.font.Font.pygame", MockFont)
@@ -78,13 +85,13 @@ def test_npcs(mocker: MockerFixture) -> None:
     map_helper.above_character = ()
     map_helper.collision_visuals = ()
     map_helper.map_size = Size(100, 100)
-    mocker.patch("nextrpg.scene.map_scene.MapHelper", return_value=map_helper)
+    mocker.patch("nextrpg.scene.map.scene.MapLoader", return_value=map_helper)
     mocker.patch(
-        "nextrpg.scene.map_scene.MapScene.draw_on_screens_before_shift",
+        "nextrpg.scene.map.scene.MapScene.draw_on_screens_before_shift",
         return_value=(),
     )
     player = PlayerOnScreen(
-        spec=CharacterSpec(object_name="", character=MockCharacterDraw()),
+        spec=CharacterSpec(object_name="a", character=MockCharacterDraw()),
         coordinate=Coordinate(0, 0),
         collisions=(),
     )
@@ -92,7 +99,7 @@ def test_npcs(mocker: MockerFixture) -> None:
     map_scene = MapScene(
         tmx_file="",
         player_spec=CharacterSpec(
-            character=MockCharacterDraw(), object_name=""
+            character=MockCharacterDraw(), object_name="a"
         ),
         npcs=(
             NpcOnScreen(
@@ -126,7 +133,9 @@ def test_npcs(mocker: MockerFixture) -> None:
     assert not replace(map_scene, player=player)._collided_npc
 
 
-def test_eventful_scene() -> None:
+def test_eventful_scene(mocker: MockerFixture) -> None:
+    mocker.patch("nextrpg.draw.font.Font.text_size", return_value=Size(1, 1))
+
     class MyEventScene(RpgEventScene):
         @override
         def tick(self, time_delta: Millisecond) -> Self:
@@ -150,7 +159,7 @@ def test_eventful_scene() -> None:
     eventful = EventfulScene(
         player=PlayerOnScreen(
             coordinate=Coordinate(0, 0),
-            spec=CharacterSpec(object_name="", character=MockCharacterDraw()),
+            spec=CharacterSpec(object_name="a", character=MockCharacterDraw()),
             collisions=(),
         ),
         npcs=(
@@ -190,7 +199,7 @@ def test_eventful_scene() -> None:
     scene = EventfulScene(
         player=PlayerOnScreen(
             coordinate=Coordinate(0, 0),
-            spec=CharacterSpec(object_name="", character=MockCharacterDraw()),
+            spec=CharacterSpec(object_name="a", character=MockCharacterDraw()),
             collisions=(),
         ),
         npc=npc,

@@ -11,7 +11,7 @@ from nextrpg import (
     Config,
     Coordinate,
     DebugConfig,
-    MapHelper,
+    MapLoader,
     PlayerOnScreen,
     RectangleOnScreen,
     ResourceConfig,
@@ -83,8 +83,8 @@ def test_map_helper(mocker: MockerFixture) -> None:
             )
         },
     }
-    mocker.patch("nextrpg.scene.map_helper.load_pygame", return_value=tmx)
-    helper = MapHelper(Path("abc"))
+    mocker.patch("nextrpg.scene.map.loader.load_pygame", return_value=tmx)
+    helper = MapLoader(Path("abc"))
     assert helper.map_size == Size(20, 60)
     assert helper.background
     assert helper.above_character
@@ -98,12 +98,12 @@ def test_map_helper(mocker: MockerFixture) -> None:
             collisions=(),
         )
     )
-    assert MapHelper(Path("abc")) is helper
-    efg = MapHelper(Path("efg"))
+    assert MapLoader(Path("abc")) is helper
+    efg = MapLoader(Path("efg"))
     assert efg is not helper
     object.__setattr__(efg, "_reversed_foregrounds", [None])
     mocker.patch(
-        "nextrpg.scene.map_helper._below_character_layer", return_value=True
+        "nextrpg.scene.map.loader._below_character_layer", return_value=True
     )
     assert not (
         efg._character_layer(
@@ -123,7 +123,7 @@ def test_map_helper(mocker: MockerFixture) -> None:
     assert not efg.collision_visuals
 
     with override_config(Config(debug=DebugConfig())):
-        ghi = MapHelper(Path("ghi"))
+        ghi = MapLoader(Path("ghi"))
         object.__setattr__(
             ghi,
             "collisions",

@@ -71,8 +71,8 @@ def test_polygon() -> None:
             (Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20))
         )
     )
-    assert polygon.contain(Coordinate(0.5, 0.5))
-    assert not polygon.contain(Coordinate(10, 20))
+    assert Coordinate(0.5, 0.5) in polygon
+    assert Coordinate(10, 20) not in polygon
     assert polygon.length
     assert PolygonOnScreen(
         (Coordinate(10, 20), Coordinate(21, 20), Coordinate(20, 20)),
@@ -100,7 +100,7 @@ def test_rectangle() -> None:
     assert rect.center_right == Coordinate(12, 21)
     assert rect.center == Coordinate(11, 21)
     assert rect.collide(RectangleOnScreen(Coordinate(9, 20), Size(10, 20)))
-    assert rect.contain(Coordinate(11, 21))
+    assert Coordinate(11, 21) in rect
     assert rect.collide(
         PolygonOnScreen(
             (Coordinate(10, 20), Coordinate(11, 20), Coordinate(11, 21))

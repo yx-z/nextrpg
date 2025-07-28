@@ -35,7 +35,7 @@ from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond, get_timepoint
 from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.global_config.global_config import config
-from nextrpg.scene.map.loader import MapHelper, get_polygon
+from nextrpg.scene.map.loader import MapLoader, get_polygon
 from nextrpg.scene.map.shift import center_player
 from nextrpg.scene.rpg_event_scene import EventfulScene
 from nextrpg.scene.scene import Scene
@@ -111,15 +111,15 @@ class MapScene(EventfulScene):
     )
 
     @property
-    def map_helper(self) -> MapHelper:
+    def map_helper(self) -> MapLoader:
         """
         Get the map helper for this scene.
 
-        Creates and caches a MapHelper instance for loading
+        Creates and caches a MapLoader instance for loading
         and processing the TMX map data.
 
         Returns:
-            `MapHelper`: The map helper for this scene.
+            `MapLoader`: The map helper for this scene.
 
         Example:
             ```python
@@ -127,7 +127,7 @@ class MapScene(EventfulScene):
             collisions = helper.collisions
             ```
         """
-        return MapHelper(self.tmx_file)
+        return MapLoader(self.tmx_file)
 
     def init_player(self, player_spec: CharacterSpec) -> PlayerOnScreen:
         """

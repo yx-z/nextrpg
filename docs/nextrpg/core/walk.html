@@ -138,10 +138,10 @@ animation systems, providing realistic path-following behavior.</p>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pixel</span><span class="p">,</span> <span class="n">PixelPerMillisecond</span>
 </span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.direction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolygonOnScreen</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="nd">@dataclass_with_instance_init</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Walk</span><span class="p">:</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="sd">    Path-based walking system for characters and objects.</span>
@@ -168,7 +168,7 @@ animation systems, providing realistic path-following behavior.</p>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">        `_last_index`: Previous path point index.</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Polygon</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">PolygonOnScreen</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>    <span class="n">cyclic</span><span class="p">:</span> <span class="nb">bool</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
@@ -319,7 +319,7 @@ animation systems, providing realistic path-following behavior.</p>
                 <section id="Walk">
                             <input id="Walk-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init</div>
+                    <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init(frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">Walk</span>:
@@ -328,7 +328,7 @@ animation systems, providing realistic path-following behavior.</p>
 
     </div>
     <a class="headerlink" href="#Walk"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Walk-38"><a href="#Walk-38"><span class="linenos"> 38</span></a><span class="nd">@dataclass_with_instance_init</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Walk-38"><a href="#Walk-38"><span class="linenos"> 38</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="Walk-39"><a href="#Walk-39"><span class="linenos"> 39</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Walk</span><span class="p">:</span>
 </span><span id="Walk-40"><a href="#Walk-40"><span class="linenos"> 40</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Walk-41"><a href="#Walk-41"><span class="linenos"> 41</span></a><span class="sd">    Path-based walking system for characters and objects.</span>
@@ -355,7 +355,7 @@ animation systems, providing realistic path-following behavior.</p>
 </span><span id="Walk-62"><a href="#Walk-62"><span class="linenos"> 62</span></a><span class="sd">        `_last_index`: Previous path point index.</span>
 </span><span id="Walk-63"><a href="#Walk-63"><span class="linenos"> 63</span></a><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="Walk-64"><a href="#Walk-64"><span class="linenos"> 64</span></a>
-</span><span id="Walk-65"><a href="#Walk-65"><span class="linenos"> 65</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">Polygon</span>
+</span><span id="Walk-65"><a href="#Walk-65"><span class="linenos"> 65</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">PolygonOnScreen</span>
 </span><span id="Walk-66"><a href="#Walk-66"><span class="linenos"> 66</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span>
 </span><span id="Walk-67"><a href="#Walk-67"><span class="linenos"> 67</span></a>    <span class="n">cyclic</span><span class="p">:</span> <span class="nb">bool</span>
 </span><span id="Walk-68"><a href="#Walk-68"><span class="linenos"> 68</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
@@ -533,7 +533,7 @@ Automatically initialized to the path's starting point.</li>
                             <div id="Walk.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">Walk</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">path</span><span class="p">:</span> <span class="n"><a href="../draw/draw_on_screen.html#Polygon">nextrpg.draw.draw_on_screen.Polygon</a></span>,</span><span class="param">	<span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span>,</span><span class="param">	<span class="n">cyclic</span><span class="p">:</span> <span class="nb">bool</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">coordinate</span><span class="p">:</span> <span class="n"><a href="coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_target_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">1</span></span>)</span>
+        <span class="name">Walk</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">path</span><span class="p">:</span> <span class="n"><a href="../draw/draw.html#PolygonOnScreen">nextrpg.draw.draw.PolygonOnScreen</a></span>,</span><span class="param">	<span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span>,</span><span class="param">	<span class="n">cyclic</span><span class="p">:</span> <span class="nb">bool</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">coordinate</span><span class="p">:</span> <span class="n"><a href="coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">_target_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">1</span></span>)</span>
 
         
     </div>
@@ -544,7 +544,7 @@ Automatically initialized to the path's starting point.</li>
                             </div>
                             <div id="Walk.path" class="classattr">
                                 <div class="attr variable">
-            <span class="name">path</span><span class="annotation">: <a href="../draw/draw_on_screen.html#Polygon">nextrpg.draw.draw_on_screen.Polygon</a></span>
+            <span class="name">path</span><span class="annotation">: <a href="../draw/draw.html#PolygonOnScreen">nextrpg.draw.draw.PolygonOnScreen</a></span>
 
         
     </div>

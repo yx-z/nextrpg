@@ -102,7 +102,7 @@ management, and the primary game loop.</p>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">asyncio</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">KW_ONLY</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_instance_init</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">dataclass_with_instance_init</span><span class="p">,</span>
@@ -113,7 +113,7 @@ management, and the primary game loop.</p>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
 </span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="nd">@dataclass_with_instance_init</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Game</span><span class="p">:</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">    Main game controller that sets up the game window and manages the game loop.</span>
@@ -190,7 +190,7 @@ management, and the primary game loop.</p>
                 <section id="Game">
                             <input id="Game-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init</div>
+                    <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init(frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">Game</span>:
@@ -199,7 +199,7 @@ management, and the primary game loop.</p>
 
     </div>
     <a class="headerlink" href="#Game"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Game-29"><a href="#Game-29"><span class="linenos">29</span></a><span class="nd">@dataclass_with_instance_init</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Game-29"><a href="#Game-29"><span class="linenos">29</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="Game-30"><a href="#Game-30"><span class="linenos">30</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Game</span><span class="p">:</span>
 </span><span id="Game-31"><a href="#Game-31"><span class="linenos">31</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Game-32"><a href="#Game-32"><span class="linenos">32</span></a><span class="sd">    Main game controller that sets up the game window and manages the game loop.</span>

@@ -40,7 +40,7 @@ from nextrpg.draw.draw import (
 )
 from nextrpg.global_config.global_config import config
 
-logger = Logger("MapHelper")
+logger = Logger("MapLoader")
 
 
 class TileBottomAndDrawOnScreen(NamedTuple):
@@ -106,7 +106,7 @@ def get_polygon(obj: TiledObject) -> PolygonOnScreen | None:
 
 @cached(lambda: config().resource.map_cache_size)
 @dataclass(frozen=True)
-class MapHelper:
+class MapLoader:
     """
     Tiled tmx map helper class for loading the tiles.
     """

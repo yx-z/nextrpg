@@ -116,7 +116,7 @@ drawing resources over time.</p>
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">KW_ONLY</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">KW_ONLY</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">TypeIs</span><span class="p">,</span> <span class="n">override</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>
@@ -128,11 +128,11 @@ drawing resources over time.</p>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Timer</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.animated_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnimatedOnScreen</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">alpha_from_percentage</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="nd">@dataclass_with_instance_init</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Fade</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">    Fade effect for transitioning drawing resources.</span>
@@ -316,7 +316,7 @@ drawing resources over time.</p>
                 <section id="Fade">
                             <input id="Fade-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init</div>
+                    <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init(frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">Fade</span><wbr>(<span class="base"><a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a></span>, <span class="base">abc.ABC</span>):
@@ -325,7 +325,7 @@ drawing resources over time.</p>
 
     </div>
     <a class="headerlink" href="#Fade"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Fade-33"><a href="#Fade-33"><span class="linenos"> 33</span></a><span class="nd">@dataclass_with_instance_init</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Fade-33"><a href="#Fade-33"><span class="linenos"> 33</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="Fade-34"><a href="#Fade-34"><span class="linenos"> 34</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Fade</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
 </span><span id="Fade-35"><a href="#Fade-35"><span class="linenos"> 35</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Fade-36"><a href="#Fade-36"><span class="linenos"> 36</span></a><span class="sd">    Fade effect for transitioning drawing resources.</span>
@@ -456,7 +456,7 @@ the global transition duration.</li>
 
                             <div id="Fade.resource" class="classattr">
                                 <div class="attr variable">
-            <span class="name">resource</span><span class="annotation">: <a href="draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a> | tuple[<a href="draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a>, ...] | <a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a> | tuple[<a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a>, ...]</span>
+            <span class="name">resource</span><span class="annotation">: <a href="draw.html#DrawOnScreen">nextrpg.draw.draw.DrawOnScreen</a> | tuple[<a href="draw.html#DrawOnScreen">nextrpg.draw.draw.DrawOnScreen</a>, ...] | <a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a> | tuple[<a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a>, ...]</span>
 
         
     </div>
@@ -479,7 +479,7 @@ the global transition duration.</li>
                             <div id="Fade.draw_on_screens" class="classattr">
                                         <input id="Fade.draw_on_screens-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">draw_on_screens</span><span class="annotation">: tuple[<a href="draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a>, ...]</span>
+            <span class="name">draw_on_screens</span><span class="annotation">: tuple[<a href="draw.html#DrawOnScreen">nextrpg.draw.draw.DrawOnScreen</a>, ...]</span>
 
                 <label class="view-source-button" for="Fade.draw_on_screens-view-source"><span>View Source</span></label>
 

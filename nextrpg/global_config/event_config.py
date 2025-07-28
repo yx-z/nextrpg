@@ -14,7 +14,7 @@ Features:
 from ast import NodeTransformer
 from dataclasses import dataclass
 
-from nextrpg.event.code_transformers import ADD_PARENT, ADD_YIELD, ANNOTATE_SAY
+from nextrpg.event.code_transformer import ADD_PARENT, ADD_YIELD, ANNOTATE_SAY
 
 
 @dataclass(frozen=True)

@@ -124,8 +124,11 @@ def _get_target_and_arg(target: Name | Attribute | Subscript) -> _TargetAndArg:
         case Name():
             return _TargetAndArg(target.id, [])
         case Subscript():
-            target_id = target.value.id
-            if isinstance(target.value, Name):
+            if isinstance(v := target.value, Name):
+                target_id = v.id
+            else:
+                target_id = v.value.id
+            if isinstance(v, Name):
                 return _TargetAndArg(target_id, [target.slice])
             if isinstance(target.slice, Index):
                 return _TargetAndArg(target_id, target.slice.value.elts)

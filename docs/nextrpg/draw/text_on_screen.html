@@ -105,7 +105,7 @@ positioning and rendering.</p>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg</span><span class="w"> </span><span class="kn">import</span> <span class="n">Draw</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">Text</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
@@ -137,7 +137,7 @@ positioning and rendering.</p>
 </span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">        Returns:</span>
 </span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The text rendered on screen.</span>
 </span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">drawing_group</span><span class="o">.</span><span class="n">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -182,7 +182,7 @@ positioning and rendering.</p>
 </span><span id="TextOnScreen-52"><a href="#TextOnScreen-52"><span class="linenos">52</span></a><span class="sd">        Returns:</span>
 </span><span id="TextOnScreen-53"><a href="#TextOnScreen-53"><span class="linenos">53</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The text rendered on screen.</span>
 </span><span id="TextOnScreen-54"><a href="#TextOnScreen-54"><span class="linenos">54</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="TextOnScreen-55"><a href="#TextOnScreen-55"><span class="linenos">55</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">drawing_group</span><span class="o">.</span><span class="n">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span>
+</span><span id="TextOnScreen-55"><a href="#TextOnScreen-55"><span class="linenos">55</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -238,7 +238,7 @@ elements.</p>
                             <div id="TextOnScreen.draw_on_screens" class="classattr">
                                         <input id="TextOnScreen.draw_on_screens-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">draw_on_screens</span><span class="annotation">: tuple[<a href="draw_on_screen.html#DrawOnScreen">nextrpg.draw.draw_on_screen.DrawOnScreen</a>, ...]</span>
+            <span class="name">draw_on_screens</span><span class="annotation">: tuple[<a href="draw.html#DrawOnScreen">nextrpg.draw.draw.DrawOnScreen</a>, ...]</span>
 
                 <label class="view-source-button" for="TextOnScreen.draw_on_screens-view-source"><span>View Source</span></label>
 
@@ -255,7 +255,7 @@ elements.</p>
 </span><span id="TextOnScreen.draw_on_screens-52"><a href="#TextOnScreen.draw_on_screens-52"><span class="linenos">52</span></a><span class="sd">        Returns:</span>
 </span><span id="TextOnScreen.draw_on_screens-53"><a href="#TextOnScreen.draw_on_screens-53"><span class="linenos">53</span></a><span class="sd">            `tuple[DrawOnScreen, ...]`: The text rendered on screen.</span>
 </span><span id="TextOnScreen.draw_on_screens-54"><a href="#TextOnScreen.draw_on_screens-54"><span class="linenos">54</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="TextOnScreen.draw_on_screens-55"><a href="#TextOnScreen.draw_on_screens-55"><span class="linenos">55</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">drawing_group</span><span class="o">.</span><span class="n">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span>
+</span><span id="TextOnScreen.draw_on_screens-55"><a href="#TextOnScreen.draw_on_screens-55"><span class="linenos">55</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span>
 </span></pre></div>
 
 

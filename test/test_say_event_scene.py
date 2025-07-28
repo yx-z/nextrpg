@@ -15,7 +15,8 @@ from nextrpg import (
 
 
 def test_say_event_scene(mocker: MockerFixture) -> None:
-    mocker.patch("nextrpg.scene.say_event_scene.FadeInAddOn")
+    mocker.patch("nextrpg.scene.say_event.scene.FadeInState")
+    mocker.patch("nextrpg.draw.font.Font.pygame")
     mocker.patch.object(
         Text, "size", new_callable=PropertyMock, return_value=Size(1, 1)
     )
@@ -24,28 +25,28 @@ def test_say_event_scene(mocker: MockerFixture) -> None:
         generator=lambda *_: None,
         character_or_scene=MockScene(),
         message="abc",
-        arg=(SayEventConfig(),),
+        args=(SayEventConfig(),),
     ).draw_on_screens
     assert SayEventScene(
         scene=MockEventfulScene(),
         generator=lambda *_: None,
         character_or_scene=MockScene(),
         message="abc",
-        arg=None,
+        args=(),
     ).draw_on_screens
     assert SayEventScene(
         scene=MockEventfulScene(),
         generator=lambda *_: None,
         character_or_scene=MockScene(),
         message="abc",
-        arg=Coordinate(0, 0),
+        args=(Coordinate(0, 0),),
     ).draw_on_screens
     assert SayEventScene(
         scene=MockEventfulScene(),
         generator=lambda *_: None,
         character_or_scene=MockScene(),
         message="abc",
-        arg=Draw(MockSurface()),
+        args=(Draw(MockSurface()),),
     ).draw_on_screens
 
     with raises(ValueError):
@@ -54,5 +55,5 @@ def test_say_event_scene(mocker: MockerFixture) -> None:
             generator=lambda *_: None,
             character_or_scene=MockScene(),
             message="abc",
-            arg="",
-        )
+            args=(2,),
+        ).config

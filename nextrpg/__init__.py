@@ -116,7 +116,7 @@ from nextrpg.draw.fade import *
 from nextrpg.draw.text import *
 from nextrpg.draw.text_on_screen import *
 from nextrpg.draw.typewriter import *
-from nextrpg.event.code_transformers import *
+from nextrpg.event.code_transformer import *
 from nextrpg.event.event_as_attr import *
 from nextrpg.event.event_transformer import *
 from nextrpg.event.pygame_event import *
