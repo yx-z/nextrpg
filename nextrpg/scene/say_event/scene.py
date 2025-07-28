@@ -237,7 +237,7 @@ def _update_config(cfg: SayEventArg, arg: SayEventArg) -> SayEventConfig:
         case Coordinate():
             return replace(cfg, coordinate=arg)
         case Draw():
-            return replace(cfg, draw=arg)
+            return replace(cfg, avatar=arg)
         case str():
             return replace(cfg, name_override=arg)
     raise ValueError(

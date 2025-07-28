@@ -13,7 +13,7 @@ Features:
 """
 
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Size
+from nextrpg.core.dimension import Size, Pixel
 from nextrpg.draw.draw import RectangleOnScreen
 from nextrpg.global_config.global_config import config, initial_config
 from nextrpg.global_config.gui_config import ResizeMode
@@ -36,6 +36,14 @@ def gui_size() -> Size:
         case ResizeMode.KEEP_NATIVE_SIZE:
             return config().gui.size
     raise ValueError(f"Invalid resize mode {config().gui.resize_mode}")
+
+
+def gui_width() -> Pixel:
+    return gui_size().width
+
+
+def gui_height() -> Pixel:
+    return gui_size().height
 
 
 def screen() -> RectangleOnScreen:

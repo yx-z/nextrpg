@@ -25,7 +25,9 @@ class State(RpgEventScene, ABC):
     object_name: str | None
     initial_coord: Coordinate | None = instance_init(
         lambda self: (
-            self.scene.character.coordinate if self.object_name else None
+            self.scene.get_character(n).coordinate
+            if (n := self.object_name)
+            else None
         )
     )
 

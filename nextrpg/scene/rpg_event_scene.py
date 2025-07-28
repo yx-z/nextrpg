@@ -54,7 +54,6 @@ class EventfulScene(Scene):
     _event_result: Any = None
 
     def get_character(self, object_name: str) -> CharacterOnScreen:
-        print(f"{self.player.spec.object_name=} {object_name=}")
         if object_name == self.player.spec.object_name:
             return self.player
         return self.get_npc(object_name)

@@ -22,6 +22,14 @@ from nextrpg.global_config.text_config import TextConfig
 
 
 @dataclass(frozen=True)
+class AddOnConfig:
+    add_on_shift: Size = Size(0, 100)
+    tail_base1_shift: Pixel = 10
+    tail_base2_shift: Pixel = 30
+    tail_tip_shift: Size = Size(0, 0)
+
+
+@dataclass(frozen=True)
 class SayEventConfig:
     """
     Configuration class for say events and dialogue boxes.
@@ -44,11 +52,9 @@ class SayEventConfig:
     border_radius: Pixel = 16
     fade_duration: Millisecond = 200
     padding: Pixel = 16
-    shift: Size = Size(0, 50)
-    tail_size: Size = Size(10, 10)
-    tail_tip_shift: Pixel = 5
     text_delay: Millisecond = 20
     name_color: Rgba = Rgba(0, 0, 255, 255)
+    add_on: AddOnConfig = AddOnConfig()
     name_override: str | None = None
     coordinate: Coordinate | None = None
     avatar: "Draw | Group | None" = None

@@ -34,13 +34,6 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
 def greet(
     player: PlayerOnScreen, npc: NpcOnScreen, scene: EventfulScene
 ) -> None:
-    scene[
-        "Name"
-    ]: """Greetings!
-    This is...
-
-    a sample nextrpg event. :)"""
-
     npc: "Nice to meet you! What's your name?"
     player: f"Hello {npc.display_name}! I am {player.display_name}."
     npc: f"Hello {player.display_name}!"
@@ -48,6 +41,13 @@ def greet(
     other_name = "david" if npc.display_name == "alisa" else "alisa"
     other_npc = scene.get_npc(other_name)
     other_npc: f"Hello! I am {other_npc.display_name}!"
+
+    scene[
+        "Name"
+    ]: """Greetings!
+    This is...
+
+    a sample nextrpg event. :)"""
 
 
 def sprite_sheet() -> SpriteSheet:
