@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 from functools import cached_property
+from math import ceil
 from os import PathLike
 from typing import Self, override
 
@@ -8,12 +9,13 @@ from pygame import Mask, Rect, SRCALPHA, Surface
 from pygame.draw import lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
+from pygame.transform import smoothscale
 
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.logger import Logger
-from nextrpg.core.color import Alpha, BLACK, Rgba
+from nextrpg.core.color import Alpha, BLACK, Rgb, Rgba
 from nextrpg.global_config.global_config import config
 
 logger = Logger("Draw")
@@ -29,11 +31,12 @@ class Trim:
 
 @cached(
     lambda: config().resource.draw_cache_size,
-    lambda resource: None if isinstance(resource, Surface) else resource,
+    lambda resource, *_: None if isinstance(resource, Surface) else resource,
 )
 @dataclass(frozen=True)
 class Draw:
     resource: str | PathLike | Surface
+    color_key: Rgb | Coordinate | None = None
 
     @property
     def width(self) -> Pixel:
@@ -71,6 +74,10 @@ class Draw:
     def draw_on_screen(self, coord: Coordinate) -> DrawOnScreen:
         return DrawOnScreen(coord, self)
 
+    def __mul__(self, scale: float) -> Self:
+        surf = smoothscale(self._surface, self.size.all_dimension_scale(scale))
+        return Draw(surf)
+
     @cached_property
     def _visible_rectangle(self) -> RectangleOnScreen:
         rectangle = self._surface.get_bounding_rect()
@@ -93,44 +100,52 @@ class Draw:
     @cached_property
     def _surface(self) -> Surface:
         if isinstance(self.resource, Surface):
-            return self.resource
-        logger.debug(t"Loading {self.resource}")
-        return load(self.resource).convert_alpha()
+            res = self.resource
+        else:
+            logger.debug(t"Loading {self.resource}")
+            res = load(self.resource).convert_alpha()
+        if self.color_key:
+            if isinstance(self.color_key, Coordinate):
+                color = res.get_at(self.color_key)
+                res.set_colorkey(color)
+            else:
+                res.set_colorkey(self.color_key)
+        return res
 
 
 @dataclass(frozen=True)
 class DrawOnScreen:
     top_left: Coordinate
-    drawing: Draw
+    draw: Draw
 
     @property
     def rectangle_on_screen(self) -> RectangleOnScreen:
-        return RectangleOnScreen(self.top_left, self.drawing.size)
+        return RectangleOnScreen(self.top_left, self.draw.size)
 
     @cached_property
     def visible_rectangle_on_screen(self) -> RectangleOnScreen:
-        coord = self.drawing._visible_rectangle.top_left
-        size = self.drawing._visible_rectangle.size
+        coord = self.draw._visible_rectangle.top_left
+        size = self.draw._visible_rectangle.size
         return RectangleOnScreen(self.top_left + coord, size)
 
     @property
     def pygame(self) -> tuple[Surface, Coordinate]:
-        return self.drawing.pygame, self.top_left
+        return self.draw.pygame, self.top_left
 
     def __add__(self, coord: Coordinate) -> Self:
-        return DrawOnScreen(self.top_left + coord, self.drawing)
+        return DrawOnScreen(self.top_left + coord, self.draw)
 
     def __sub__(self, coord: Coordinate) -> Self:
         return self + -coord
 
     def set_alpha(self, alpha: Alpha) -> Self:
-        return DrawOnScreen(self.top_left, self.drawing.set_alpha(alpha))
+        return DrawOnScreen(self.top_left, self.draw.set_alpha(alpha))
 
 
 class PolygonDraw:
     def __init__(self, points: tuple[Coordinate, ...], color: Rgba) -> None:
         surf = _draw_polygon(points, _fill_polygon(color))
-        _set_resource(self, surf)
+        _set_resource_and_color_key(self, surf)
 
 
 @dataclass(frozen=True)
@@ -154,7 +169,7 @@ class PolygonOnScreen:
 
     @cached_property
     def _mask(self) -> Mask:
-        return from_surface(self.fill(BLACK).drawing.pygame)
+        return from_surface(self.fill(BLACK).draw.pygame)
 
     def fill(self, color: Rgba) -> DrawOnScreen:
         return self._draw(_fill_polygon(color))
@@ -208,7 +223,7 @@ class RectangleDraw(Draw):
         surface = Surface(size, SRCALPHA)
         rectangle = Rect(Coordinate(0, 0), size)
         rect(surface, color, rectangle, border_radius=border_radius or -1)
-        _set_resource(self, surface)
+        _set_resource_and_color_key(self, surface)
 
 
 class RectangleOnScreen(PolygonOnScreen):
@@ -328,8 +343,9 @@ def _draw_polygon(
     return surf
 
 
-def _set_resource[T](self: T, surface: Surface) -> None:
+def _set_resource_and_color_key[T](self: T, surface: Surface) -> None:
     object.__setattr__(self, "resource", surface)
+    object.__setattr__(self, "color_key", None)
 
 
 def _fill_polygon(

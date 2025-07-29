@@ -1,7 +1,9 @@
 from nextrpg import (
     CharacterDraw,
     CharacterSpec,
+    Coordinate,
     Direction,
+    Draw,
     EventfulScene,
     MapScene,
     Move,
@@ -20,7 +22,7 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
     from exterior_scene import exterior_scene
 
     return MapScene(
-        "example/assets/interior.tmx",
+        "example/asset/interior.tmx",
         player_spec or init_player(),
         Move("from_interior", "to_exterior", exterior_scene),
         (
@@ -51,7 +53,7 @@ def greet(
 
 def sprite_sheet() -> RpgMakerSpriteSheet:
     return RpgMakerSpriteSheet(
-        resource="example/assets/Characters_MV.png", trim=Trim(top=25)
+        resource="example/asset/Characters_MV.png", trim=Trim(top=25)
     )
 
 
@@ -64,6 +66,7 @@ def init_player() -> CharacterSpec:
             sprite_sheet(),
             Selection(row=0, column=0),
         ),
+        avatar=Draw("example/asset/avatar.png"),
     )
 
 

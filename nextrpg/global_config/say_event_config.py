@@ -20,7 +20,7 @@ class SayEventConfig:
     background: Rgba = WHITE
     border_radius: Pixel = 16
     fade_duration: Millisecond = 200
-    padding: Pixel = 16
+    padding: Pixel = 12
     text_delay: Millisecond = 20
     name_color: Rgba = Rgba(0, 0, 255, 255)
     add_on: AddOnConfig = AddOnConfig()

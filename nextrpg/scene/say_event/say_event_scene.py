@@ -78,7 +78,7 @@ class SayEventScene(RpgEventScene):
         )
 
 
-def _update_config(cfg: SayEventArg, arg: SayEventArg) -> SayEventConfig:
+def _update_config(cfg: SayEventConfig, arg: SayEventArg) -> SayEventConfig:
     match arg:
         case SayEventConfig():
             return arg

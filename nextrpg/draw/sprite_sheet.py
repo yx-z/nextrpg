@@ -5,6 +5,7 @@ from pathlib import Path
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.draw.draw import Draw
 from nextrpg.core.dimension import Size
+from nextrpg.core.color import Rgb
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -18,6 +19,7 @@ class SpriteSheet:
     resource: Draw | str | Path
     num_row: int
     num_column: int
+    color_key: Rgb | None = None
 
     def select(self, selection: Selection) -> Draw:
         width = self.draw.width / self.num_column
@@ -28,6 +30,4 @@ class SpriteSheet:
 
     @cached_property
     def draw(self) -> Draw:
-        if isinstance(self.resource, Draw):
-            return self.resource
-        return Draw(self.resource)
+        return Draw(self.resource, self.color_key)

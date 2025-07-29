@@ -6,7 +6,7 @@ def exterior_scene(player_spec: CharacterSpec) -> MapScene:
     from interior_scene import interior_scene
 
     return MapScene(
-        "example/assets/exterior.tmx",
+        "example/asset/exterior.tmx",
         player_spec,
         Move("from_exterior", "to_interior", interior_scene),
     )
