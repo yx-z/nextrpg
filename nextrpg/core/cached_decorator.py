@@ -19,7 +19,7 @@ class cached[T, K, **P]:
                 return object.__new__(klass)
 
             if (key := self.key_fun(*args, **kwargs)) is None:
-                return super(klass, klass).__new__(klass)
+                return object.__new__(klass)
 
             if (instance := klass._nextrpg_instances.get(key)) is not None:
                 klass._nextrpg_instances.move_to_end(key)
@@ -31,7 +31,7 @@ class cached[T, K, **P]:
             ):
                 klass._nextrpg_instances.popitem(last=False)
 
-            instance = super(klass, klass).__new__(klass)
+            instance = object.__new__(klass)
             klass._nextrpg_instances[key] = instance
             return instance
 
