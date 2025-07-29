@@ -46,16 +46,9 @@ class GroupOnScreen:
     top_left: Coordinate
     group: Group
 
-    def group_coordinate(self, group: Group) -> Coordinate:
-        if coord := self._group(group, lambda c: c):
+    def coordinate(self, group: Group) -> Coordinate:
+        if coord := self._coordinate(group):
             return coord
-        raise ValueError(f"Group {group} not found.")
-
-    def group_draw_on_screens(self, group: Group) -> tuple[DrawOnScreen, ...]:
-        if d := self._group(
-            group, lambda c: GroupOnScreen(c, group).draw_on_screens
-        ):
-            return d
         raise ValueError(f"Group {group} not found.")
 
     @cached_property
@@ -77,20 +70,18 @@ class GroupOnScreen:
 
     @property
     def _followers(self) -> tuple[DrawRelativeTo, ...]:
-        if isinstance(f := self.group.followers, DrawRelativeTo):
-            return (f,)
-        return f
+        if isinstance(self.group.followers, DrawRelativeTo):
+            return (self.group.followers,)
+        return self.group.followers
 
-    def _group[T](
-        self, group: Group, action: Callable[[Coordinate], T | None]
-    ) -> T | None:
+    def _coordinate(self, group: Group) -> Coordinate | None:
         if group == self.group:
-            return action(self.top_left)
+            return self.top_left
 
         if isinstance(l := self.group.leader, Group):
             if l == group:
-                return action(self.top_left)
-            if res := GroupOnScreen(self.top_left, l)._group(group, action):
+                return self.top_left
+            if res := GroupOnScreen(self.top_left, l)._coordinate(group):
                 return res
 
         for draw, relative_to in self._followers:
@@ -98,8 +89,8 @@ class GroupOnScreen:
             if isinstance(draw, Draw):
                 continue
             if draw == group:
-                return action(coord)
-            if res := GroupOnScreen(coord, draw)._group(group, action):
+                return coord
+            if res := GroupOnScreen(coord, draw)._coordinate(group):
                 return res
 
         return None

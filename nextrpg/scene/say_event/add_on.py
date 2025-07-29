@@ -24,7 +24,8 @@ class AddOn:
     @cached_property
     def background(self) -> tuple[DrawOnScreen, ...]:
         add_on_on_screen = GroupOnScreen(self.background_top_left, self._group)
-        text_add_on = add_on_on_screen.group_draw_on_screens(self._text.group)
+        text_coord = add_on_on_screen.coordinate(self._text.group)
+        text_add_on = TextOnScreen(text_coord, self._text).draw_on_screens
         return tuple(
             d for d in add_on_on_screen.draw_on_screens if d not in text_add_on
         )
