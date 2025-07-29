@@ -1,18 +1,3 @@
-"""
-Moving character implementation for `nextrpg`.
-
-This module provides the base class for characters that can move around the game
-world. It handles movement calculations, collision detection, and character
-state management during movement.
-
-Features:
-    - Abstract movement interface for characters
-    - Collision detection against polygon boundaries
-    - Movement speed and direction handling
-    - Character animation state management
-    - Event-driven movement controls
-"""
-
 from abc import ABC, abstractmethod
 from dataclasses import KW_ONLY, dataclass, field, replace
 from typing import NamedTuple, Self, override
@@ -32,33 +17,6 @@ logger = Logger("MovingCharacterOnScreen")
 
 @dataclass(kw_only=True, frozen=True)
 class MovingCharacterOnScreen(CharacterOnScreen, ABC):
-    """
-    Abstract base class for characters that can move around the game world.
-
-    This class provides the foundation for movement-capable characters,
-    including collision detection, movement calculations, and proper
-    animation state management. It's designed to be extended by both
-    player characters and NPCs that need movement capabilities.
-
-    Arguments:
-        `collisions`: Tuple of polygons representing collision boundaries
-            that the character cannot pass through.
-
-        `move_speed`: Movement speed in pixels per millisecond.
-            Defaults to the global character configuration.
-
-    Example:
-        ```python
-        class PlayerCharacter(MovingCharacterOnScreen):
-            @cached_property
-            def moving(self) -> bool:
-                return bool(self.pressed_keys)
-
-            def move(self, time_delta: Millisecond) -> Coordinate:
-                return self.calculate_new_position(time_delta)
-        ```
-    """
-
     collisions: tuple[PolygonOnScreen, ...]
     move_speed: PixelPerMillisecond = field(
         default_factory=lambda: config().character.move_speed
@@ -76,42 +34,10 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
     @property
     @abstractmethod
-    def moving(self) -> bool:
-        """
-        Get whether the character is currently moving.
-
-        This property should be implemented by subclasses to determine
-        if the character should be in a moving state. This affects
-        both animation and movement calculations.
-
-        Returns:
-            `bool`: Whether the character is currently moving.
-
-        Example:
-            ```python
-            @cached_property
-            def moving(self) -> bool:
-                return bool(self.pressed_movement_keys)
-            ```
-        """
+    def moving(self) -> bool: ...
 
     @abstractmethod
-    def move(self, time_delta: Millisecond) -> Coordinate:
-        """
-        Calculate the new position after movement.
-
-        This method should be implemented by subclasses to calculate
-        the character's new position based on current movement state,
-        speed, and time delta. The returned coordinate will be used
-        if no collision is detected.
-
-        Arguments:
-            `time_delta`: The time that has passed since the last update
-                in milliseconds.
-
-        Returns:
-            `Coordinate`: The updated character position after the move step.
-        """
+    def move(self, time_delta: Millisecond) -> Coordinate: ...
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
@@ -132,25 +58,6 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         return replace(self, character=character, coordinate=coordinate)
 
     def _can_move(self, coordinate: Coordinate) -> bool:
-        """
-        Check if the character can move to the specified coordinate.
-
-        Performs collision detection against all collision polygons
-        to determine if the movement is allowed. Uses different
-        collision points based on the character's current direction.
-
-        Arguments:
-            `coordinate`: The target coordinate to check for movement.
-
-        Returns:
-            `bool`: Whether the character can move to the coordinate.
-
-        Example:
-            ```python
-            if character._can_move(new_position):
-                character = character.move_to(new_position)
-            ```
-        """
         if (debug := config().debug) and debug.ignore_map_collisions:
             return True
 

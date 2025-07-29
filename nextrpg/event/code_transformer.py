@@ -1,26 +1,10 @@
-"""
-Code transformation system for `nextrpg`.
-
-This module provides AST-based code transformers for RPG events in `nextrpg`
-games. It includes transformers for adding parent references, yield statements,
-and say annotations.
-
-Features:
-    - AST node transformation
-    - Parent reference tracking
-    - Automatic yield insertion
-    - Say annotation processing
-    - Integration with RPG event system
-"""
-
 from ast import (
     AST,
-    Tuple,
-    Index,
     AnnAssign,
     Attribute,
     Call,
     Expr,
+    Index,
     Load,
     Name,
     NodeTransformer,
@@ -31,7 +15,7 @@ from ast import (
     unparse,
 )
 from dataclasses import dataclass
-from typing import NamedTuple, NoReturn
+from typing import NamedTuple
 
 from nextrpg.event.rpg_event import registered_events
 
@@ -45,7 +29,6 @@ class _AddParent(NodeTransformer):
 
 
 ADD_PARENT = _AddParent()
-"""Global instance of the AddParent transformer."""
 
 
 class _AddYield(NodeTransformer):
@@ -64,37 +47,13 @@ class _AddYield(NodeTransformer):
 
 
 ADD_YIELD = _AddYield()
-"""Global instance of the AddYield transformer."""
 
 
 @dataclass(frozen=True)
 class AnnotateSay(NodeTransformer):
-    """
-    AST transformer that processes say annotations.
-
-    This transformer converts type annotations with say strings into actual say
-    function calls.
-    """
-
     say_event_name: str
 
     def visit_AnnAssign(self, node: AnnAssign) -> Expr | AnnAssign:
-        """
-        Visit and transform an annotated assignment node.
-
-        Converts say annotations like `player: "Hello"` into `player.say("Hello")`
-        function calls.
-
-        Arguments:
-            node: The annotated assignment node to transform.
-
-        Returns:
-            Either a say function call expression or the original annotated
-            assignment.
-
-        Raises:
-            ValueError: If the annotation format is invalid.
-        """
         if node.value is not None:
             return node
         target, args = _get_target_and_arg(node.target)

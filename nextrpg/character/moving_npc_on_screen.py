@@ -31,13 +31,6 @@ from nextrpg.draw.draw import PolygonOnScreen
 
 @dataclass_with_instance_init(frozen=True, kw_only=True)
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
-    """
-    Moving NPC interface.
-
-    Arguments:
-        path: Polygon representing the path of the NPC.
-    """
-
     path: PolygonOnScreen
     spec: NpcSpec
     collisions: tuple[PolygonOnScreen, ...] = field(default_factory=tuple)

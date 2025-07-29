@@ -1,22 +1,8 @@
-"""
-Logging system for `nextrpg` games.
-
-This module provides an on-screen logging system designed specifically for
-`nextrpg` games. It supports different log levels, timed messages, and
-component-based logging for better organization.
-
-Features:
-    - Component-based loggers for different game systems
-    - Multiple log levels (DEBUG, INFO, WARNING, ERROR)
-    - Timed log messages that automatically disappear
-    - Template-based message formatting
-    - Configurable log duration and level filtering
-"""
-
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from functools import cached_property
+from inspect import stack
 from string.templatelib import Interpolation, Template
-from typing import NamedTuple, Self
+from typing import NamedTuple
 
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.global_config.debug_config import LogLevel
@@ -28,41 +14,16 @@ class _DurationFromConfig:
 
 
 _FROM_CONFIG = _DurationFromConfig()
-"""Sentinel object to indicate that the log duration is taken from global_config."""
+
+
+def _logger_name() -> str:
+    # /path/to/file.py -> "file"
+    return stack()[2].filename.split("/")[-1].split(".")[0]
 
 
 @dataclass(frozen=True)
 class Logger:
-    """
-    On-screen logger for NextRPG components.
-
-    This class provides logging functionality for specific game components.
-    Each logger instance is tied to a unique component name, allowing
-    for organized and filtered logging output.
-
-    The logger supports multiple log levels and can display messages
-    either immediately or with a configurable duration.
-
-    Arguments:
-        `component`: Unique name of the component that the logger is for.
-            This name is used to identify the source of log messages
-            and can be used for filtering.
-
-    Example:
-        ```python
-        from nextrpg.logger import Logger
-
-        # Create loggers for different components
-        player_logger = Logger("Player")
-        enemy_logger = Logger("Enemy")
-
-        # Use the loggers
-        player_logger.info("Player moved")
-        enemy_logger.warning("Enemy spotted player")
-        ```
-    """
-
-    component: str
+    component: str = field(default_factory=_logger_name)
 
     def debug(
         self,
@@ -70,27 +31,6 @@ class Logger:
         *,
         duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
     ) -> None:
-        """
-        Log a debug message.
-
-        Debug messages are typically used for detailed information
-        useful for debugging and development. They are usually only
-        displayed when debug logging is enabled.
-
-        Arguments:
-            `message`: The message to log. Can be a string or template.
-
-            `duration`: The duration of the log message in milliseconds.
-                If `None`, the message will be flushed in the next game loop.
-                If `FROM_CONFIG`, the duration is taken from
-                `global_config().debug.log_duration`.
-
-        Example:
-            ```python
-            logger.debug("Player position: (100, 200)")
-            logger.debug("Animation frame: 3/8", duration=2000)
-            ```
-        """
         _add(self.component, LogLevel.DEBUG, message, duration)
 
     def info(
@@ -99,24 +39,6 @@ class Logger:
         *,
         duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
     ) -> None:
-        """
-        Log an info message.
-
-        Info messages provide general information about game events
-        and are typically displayed to provide context to the player.
-
-        Arguments:
-            `message`: The message to log. Can be a string or template.
-
-            `duration`: The duration of the log message in milliseconds.
-                If `None`, the message will be flushed in the next game loop.
-
-        Example:
-            ```python
-            logger.info("Welcome to the game!")
-            logger.info("You found a treasure chest", duration=3000)
-            ```
-        """
         _add(self.component, LogLevel.INFO, message, duration)
 
     def warning(
@@ -125,24 +47,6 @@ class Logger:
         *,
         duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
     ) -> None:
-        """
-        Log a warning message.
-
-        Warning messages indicate potential issues or important
-        information that the player should be aware of.
-
-        Arguments:
-            `message`: The message to log. Can be a string or template.
-
-            `duration`: The duration of the log message in milliseconds.
-                If `None`, the message will be flushed in the next game loop.
-
-        Example:
-            ```python
-            logger.warning("Your health is low!")
-            logger.warning("Enemy approaching", duration=5000)
-            ```
-        """
         _add(self.component, LogLevel.WARNING, message, duration)
 
     def error(
@@ -151,93 +55,15 @@ class Logger:
         *,
         duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
     ) -> None:
-        """
-        Log an error message.
-
-        Error messages indicate serious problems or failures that
-        need immediate attention.
-
-        Arguments:
-            `message`: The message to log. Can be a string or template.
-
-            `duration`: The duration of the log message in milliseconds.
-                If `None`, the message will be flushed in the next game loop.
-
-        Example:
-            ```python
-            logger.error("Failed to load save file")
-            logger.error("Network connection lost", duration=10000)
-            ```
-        """
         _add(self.component, LogLevel.ERROR, message, duration)
-
-    def __new__(cls, component: str) -> Self:
-        """
-        Create a new logger instance with component name validation.
-
-        Ensures that each component name is unique across all logger
-        instances to prevent confusion in log output.
-
-        Arguments:
-            `component`: The component name for the logger.
-
-        Returns:
-            `Logger`: A new logger instance.
-
-        Raises:
-            `ValueError`: If a logger with the same component name
-                already exists.
-        """
-        if component in _instances:
-            raise ValueError(
-                f"Logger {component=} already exists."
-                f"Use another name for better log separation."
-            )
-
-        _instances.add(component)
-        return super().__new__(cls)
 
 
 class ComponentAndMessage(NamedTuple):
-    """
-    Log component and message pair for formatted output.
-
-    This named tuple represents a log message with its associated
-    component name, used for displaying formatted log messages.
-
-    Arguments:
-        `component`: The name of the component that generated the log.
-
-        `message`: The formatted log message text.
-    """
-
     component: str
     message: str
 
 
 def pop_messages(time_delta: Millisecond) -> tuple[ComponentAndMessage, ...]:
-    """
-    Pop all log messages and return them in a formatted fashion.
-
-    This function retrieves all current log messages that meet the
-    configured log level criteria and advances the timers for timed
-    messages.
-
-    Arguments:
-        `time_delta`: Milliseconds since the last game loop.
-
-    Returns:
-        `tuple[ComponentAndMessage, ...]`: Tuple of log messages with
-            their component names.
-
-    Example:
-        ```python
-        # In the game loop
-        messages = pop_messages(time_delta)
-        for component, message in messages:
-            display_log_message(component, message)
-        ```
-    """
     if not (debug := config().debug):
         _pop(time_delta)
         return ()
@@ -265,12 +91,6 @@ class _LogEntry:
 
     @cached_property
     def formatted(self) -> str:
-        """
-        Get the formatted message text.
-
-        Returns:
-            `str`: The formatted log message.
-        """
         return "".join(_format(m) for m in self.message)
 
 
@@ -314,6 +134,5 @@ def _format(s: Interpolation | str) -> str:
     return s
 
 
-_instances: set[str] = set()
 _entries: list[_LogEntry] = []
 _timed_entries: dict[_Key, _TimedLogEntry] = {}

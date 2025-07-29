@@ -42,12 +42,12 @@ def greet(
     other_npc = scene.get_npc(other_name)
     other_npc: f"Hello! I am {other_npc.display_name}!"
 
-    scene[
-        "Name"
-    ]: """Greetings!
+    # fmt: off
+    scene["Name"]: """Greetings!
     This is...
 
     a sample nextrpg event. :)"""
+    # fmt: on
 
 
 def sprite_sheet() -> SpriteSheet:

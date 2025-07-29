@@ -1,17 +1,3 @@
-"""
-Map utility functions for `nextrpg`.
-
-This module provides utility functions for map-related calculations in `nextrpg`
-games. It includes functions for camera positioning and player centering on
-maps.
-
-Features:
-    - Player centering calculations
-    - Camera positioning logic
-    - Map boundary handling
-    - GUI coordinate calculations
-"""
-
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.gui.area import gui_size

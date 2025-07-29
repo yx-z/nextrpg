@@ -1,17 +1,3 @@
-"""
-Transition scene system for `NextRPG`.
-
-This module provides transition scene functionality for smooth scene changes in
-`NextRPG` games. It includes the `TransitionScene` class which handles
-crossfade transitions between scenes.
-
-The transition scene system features:
-- Crossfade transitions between scenes
-- Configurable transition duration
-- Alpha-based blending
-- Intermediary scene support
-"""
-
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import override
@@ -32,22 +18,6 @@ from nextrpg.scene.scene import Scene
 
 @dataclass_with_instance_init(frozen=True)
 class TransitionScene(Scene):
-    """
-    Scene that handles transitions between other scenes.
-
-    This class provides crossfade transition functionality between scenes. It
-    manages the transition timing and alpha blending of drawing resources from
-    multiple scenes.
-
-    Arguments:
-        `from_scene`: The scene to transition from.
-        `intermediary`: The intermediary scene used during transition.
-        `to_scene`: The scene to transition to.
-        `duration`: The duration of the transition in milliseconds. Defaults to
-            the global transition duration.
-        `_elapsed`: Internal elapsed time tracking.
-    """
-
     from_scene: Scene
     to_scene: Scene
     intermediary: DrawOnScreen | tuple[DrawOnScreen, ...] | Rgba = field(

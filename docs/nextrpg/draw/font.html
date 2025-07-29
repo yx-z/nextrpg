@@ -86,78 +86,20 @@
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Font</span><span class="p">:</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">    Font configuration for text rendering in the game.</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">    This class provides a convenient way to configure fonts for text</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">    rendering. It supports both system fonts and custom font files,</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">    with automatic pygame font object creation.</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Font</span><span class="p">:</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>        <span class="k">return</span> <span class="n">SysFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">        `size`: Font size in pixels.</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">        `name`: Font name. If `None`, uses the default system font.</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    Example:</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">        ```python</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">        # Create a font with default system font</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">        font = Font(16)</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">        # Create a font with specific name</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">        custom_font = Font(24, &quot;Arial&quot;)</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">        # Get text dimensions</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">        text_size = font.text_size(&quot;Hello World&quot;)</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">        ```</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Font</span><span class="p">:</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">        Get the pygame font object.</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">        Creates and caches a pygame Font object based on the font</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a><span class="sd">        configuration. This is used internally for text rendering.</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">        Returns:</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">            `pygame.Font`: Pygame font object for text rendering.</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>        <span class="k">return</span> <span class="n">SysFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">        Get the drawing size of a text string.</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">        Calculates the pixel dimensions required to render the given</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">        text string with this font configuration.</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="sd">        Arguments:</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">            `text`: The text string to measure.</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">        Returns:</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">            `Size`: The size of the text string in pixels.</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">        Example:</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="sd">            ```python</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="sd">            font = Font(16)</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">            size = font.text_size(&quot;Hello&quot;)  # Returns Size(width, height)</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">            ```</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>    <span class="nd">@property</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="sd">        Get the line height of the font.</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a><span class="sd">        Returns:</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a><span class="sd">            `Pixel`: The line height in pixels.</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">get_linesize</span><span class="p">()</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="nd">@property</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">get_linesize</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -176,111 +118,24 @@
     <a class="headerlink" href="#Font"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Font-11"><a href="#Font-11"><span class="linenos">11</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="Font-12"><a href="#Font-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Font</span><span class="p">:</span>
-</span><span id="Font-13"><a href="#Font-13"><span class="linenos">13</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Font-14"><a href="#Font-14"><span class="linenos">14</span></a><span class="sd">    Font configuration for text rendering in the game.</span>
+</span><span id="Font-13"><a href="#Font-13"><span class="linenos">13</span></a>    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Font-14"><a href="#Font-14"><span class="linenos">14</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="Font-15"><a href="#Font-15"><span class="linenos">15</span></a>
-</span><span id="Font-16"><a href="#Font-16"><span class="linenos">16</span></a><span class="sd">    This class provides a convenient way to configure fonts for text</span>
-</span><span id="Font-17"><a href="#Font-17"><span class="linenos">17</span></a><span class="sd">    rendering. It supports both system fonts and custom font files,</span>
-</span><span id="Font-18"><a href="#Font-18"><span class="linenos">18</span></a><span class="sd">    with automatic pygame font object creation.</span>
+</span><span id="Font-16"><a href="#Font-16"><span class="linenos">16</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Font-17"><a href="#Font-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Font</span><span class="p">:</span>
+</span><span id="Font-18"><a href="#Font-18"><span class="linenos">18</span></a>        <span class="k">return</span> <span class="n">SysFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 </span><span id="Font-19"><a href="#Font-19"><span class="linenos">19</span></a>
-</span><span id="Font-20"><a href="#Font-20"><span class="linenos">20</span></a><span class="sd">    Arguments:</span>
-</span><span id="Font-21"><a href="#Font-21"><span class="linenos">21</span></a><span class="sd">        `size`: Font size in pixels.</span>
-</span><span id="Font-22"><a href="#Font-22"><span class="linenos">22</span></a>
-</span><span id="Font-23"><a href="#Font-23"><span class="linenos">23</span></a><span class="sd">        `name`: Font name. If `None`, uses the default system font.</span>
-</span><span id="Font-24"><a href="#Font-24"><span class="linenos">24</span></a>
-</span><span id="Font-25"><a href="#Font-25"><span class="linenos">25</span></a><span class="sd">    Example:</span>
-</span><span id="Font-26"><a href="#Font-26"><span class="linenos">26</span></a><span class="sd">        ```python</span>
-</span><span id="Font-27"><a href="#Font-27"><span class="linenos">27</span></a><span class="sd">        # Create a font with default system font</span>
-</span><span id="Font-28"><a href="#Font-28"><span class="linenos">28</span></a><span class="sd">        font = Font(16)</span>
-</span><span id="Font-29"><a href="#Font-29"><span class="linenos">29</span></a>
-</span><span id="Font-30"><a href="#Font-30"><span class="linenos">30</span></a><span class="sd">        # Create a font with specific name</span>
-</span><span id="Font-31"><a href="#Font-31"><span class="linenos">31</span></a><span class="sd">        custom_font = Font(24, &quot;Arial&quot;)</span>
-</span><span id="Font-32"><a href="#Font-32"><span class="linenos">32</span></a>
-</span><span id="Font-33"><a href="#Font-33"><span class="linenos">33</span></a><span class="sd">        # Get text dimensions</span>
-</span><span id="Font-34"><a href="#Font-34"><span class="linenos">34</span></a><span class="sd">        text_size = font.text_size(&quot;Hello World&quot;)</span>
-</span><span id="Font-35"><a href="#Font-35"><span class="linenos">35</span></a><span class="sd">        ```</span>
-</span><span id="Font-36"><a href="#Font-36"><span class="linenos">36</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Font-37"><a href="#Font-37"><span class="linenos">37</span></a>
-</span><span id="Font-38"><a href="#Font-38"><span class="linenos">38</span></a>    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Font-39"><a href="#Font-39"><span class="linenos">39</span></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="Font-40"><a href="#Font-40"><span class="linenos">40</span></a>
-</span><span id="Font-41"><a href="#Font-41"><span class="linenos">41</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Font-42"><a href="#Font-42"><span class="linenos">42</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Font</span><span class="p">:</span>
-</span><span id="Font-43"><a href="#Font-43"><span class="linenos">43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Font-44"><a href="#Font-44"><span class="linenos">44</span></a><span class="sd">        Get the pygame font object.</span>
-</span><span id="Font-45"><a href="#Font-45"><span class="linenos">45</span></a>
-</span><span id="Font-46"><a href="#Font-46"><span class="linenos">46</span></a><span class="sd">        Creates and caches a pygame Font object based on the font</span>
-</span><span id="Font-47"><a href="#Font-47"><span class="linenos">47</span></a><span class="sd">        configuration. This is used internally for text rendering.</span>
-</span><span id="Font-48"><a href="#Font-48"><span class="linenos">48</span></a>
-</span><span id="Font-49"><a href="#Font-49"><span class="linenos">49</span></a><span class="sd">        Returns:</span>
-</span><span id="Font-50"><a href="#Font-50"><span class="linenos">50</span></a><span class="sd">            `pygame.Font`: Pygame font object for text rendering.</span>
-</span><span id="Font-51"><a href="#Font-51"><span class="linenos">51</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Font-52"><a href="#Font-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="n">SysFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-</span><span id="Font-53"><a href="#Font-53"><span class="linenos">53</span></a>
-</span><span id="Font-54"><a href="#Font-54"><span class="linenos">54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="Font-55"><a href="#Font-55"><span class="linenos">55</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Font-56"><a href="#Font-56"><span class="linenos">56</span></a><span class="sd">        Get the drawing size of a text string.</span>
-</span><span id="Font-57"><a href="#Font-57"><span class="linenos">57</span></a>
-</span><span id="Font-58"><a href="#Font-58"><span class="linenos">58</span></a><span class="sd">        Calculates the pixel dimensions required to render the given</span>
-</span><span id="Font-59"><a href="#Font-59"><span class="linenos">59</span></a><span class="sd">        text string with this font configuration.</span>
-</span><span id="Font-60"><a href="#Font-60"><span class="linenos">60</span></a>
-</span><span id="Font-61"><a href="#Font-61"><span class="linenos">61</span></a><span class="sd">        Arguments:</span>
-</span><span id="Font-62"><a href="#Font-62"><span class="linenos">62</span></a><span class="sd">            `text`: The text string to measure.</span>
-</span><span id="Font-63"><a href="#Font-63"><span class="linenos">63</span></a>
-</span><span id="Font-64"><a href="#Font-64"><span class="linenos">64</span></a><span class="sd">        Returns:</span>
-</span><span id="Font-65"><a href="#Font-65"><span class="linenos">65</span></a><span class="sd">            `Size`: The size of the text string in pixels.</span>
-</span><span id="Font-66"><a href="#Font-66"><span class="linenos">66</span></a>
-</span><span id="Font-67"><a href="#Font-67"><span class="linenos">67</span></a><span class="sd">        Example:</span>
-</span><span id="Font-68"><a href="#Font-68"><span class="linenos">68</span></a><span class="sd">            ```python</span>
-</span><span id="Font-69"><a href="#Font-69"><span class="linenos">69</span></a><span class="sd">            font = Font(16)</span>
-</span><span id="Font-70"><a href="#Font-70"><span class="linenos">70</span></a><span class="sd">            size = font.text_size(&quot;Hello&quot;)  # Returns Size(width, height)</span>
-</span><span id="Font-71"><a href="#Font-71"><span class="linenos">71</span></a><span class="sd">            ```</span>
-</span><span id="Font-72"><a href="#Font-72"><span class="linenos">72</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Font-73"><a href="#Font-73"><span class="linenos">73</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-</span><span id="Font-74"><a href="#Font-74"><span class="linenos">74</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
-</span><span id="Font-75"><a href="#Font-75"><span class="linenos">75</span></a>
-</span><span id="Font-76"><a href="#Font-76"><span class="linenos">76</span></a>    <span class="nd">@property</span>
-</span><span id="Font-77"><a href="#Font-77"><span class="linenos">77</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
-</span><span id="Font-78"><a href="#Font-78"><span class="linenos">78</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Font-79"><a href="#Font-79"><span class="linenos">79</span></a><span class="sd">        Get the line height of the font.</span>
-</span><span id="Font-80"><a href="#Font-80"><span class="linenos">80</span></a>
-</span><span id="Font-81"><a href="#Font-81"><span class="linenos">81</span></a><span class="sd">        Returns:</span>
-</span><span id="Font-82"><a href="#Font-82"><span class="linenos">82</span></a><span class="sd">            `Pixel`: The line height in pixels.</span>
-</span><span id="Font-83"><a href="#Font-83"><span class="linenos">83</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Font-84"><a href="#Font-84"><span class="linenos">84</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">get_linesize</span><span class="p">()</span>
+</span><span id="Font-20"><a href="#Font-20"><span class="linenos">20</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="Font-21"><a href="#Font-21"><span class="linenos">21</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</span><span id="Font-22"><a href="#Font-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+</span><span id="Font-23"><a href="#Font-23"><span class="linenos">23</span></a>
+</span><span id="Font-24"><a href="#Font-24"><span class="linenos">24</span></a>    <span class="nd">@property</span>
+</span><span id="Font-25"><a href="#Font-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
+</span><span id="Font-26"><a href="#Font-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">get_linesize</span><span class="p">()</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Font configuration for text rendering in the game.</p>
-
-<p>This class provides a convenient way to configure fonts for text
-rendering. It supports both system fonts and custom font files,
-with automatic pygame font object creation.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code><a href="#Font.size">size</a></code>:</strong>  Font size in pixels.</li>
-<li><strong><code><a href="#Font.name">name</a></code>:</strong>  Font name. If <code>None</code>, uses the default system font.</li>
-</ul>
-
-<h6 id="example">Example:</h6>
-
-<blockquote>
-  <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="c1"># Create a font with default system font</span>
-<span class="n">font</span> <span class="o">=</span> <span class="n">Font</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-
-<span class="c1"># Create a font with specific name</span>
-<span class="n">custom_font</span> <span class="o">=</span> <span class="n">Font</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span> <span class="s2">&quot;Arial&quot;</span><span class="p">)</span>
-
-<span class="c1"># Get text dimensions</span>
-<span class="n">text_size</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">text_size</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
-</code></pre>
-  </div>
-</blockquote>
-</div>
-
+    
 
                             <div id="Font.__init__" class="classattr">
                                 <div class="attr function">
@@ -326,33 +181,13 @@ with automatic pygame font object creation.</p>
 
     </div>
     <a class="headerlink" href="#Font.pygame"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Font.pygame-41"><a href="#Font.pygame-41"><span class="linenos">41</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Font.pygame-42"><a href="#Font.pygame-42"><span class="linenos">42</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Font</span><span class="p">:</span>
-</span><span id="Font.pygame-43"><a href="#Font.pygame-43"><span class="linenos">43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Font.pygame-44"><a href="#Font.pygame-44"><span class="linenos">44</span></a><span class="sd">        Get the pygame font object.</span>
-</span><span id="Font.pygame-45"><a href="#Font.pygame-45"><span class="linenos">45</span></a>
-</span><span id="Font.pygame-46"><a href="#Font.pygame-46"><span class="linenos">46</span></a><span class="sd">        Creates and caches a pygame Font object based on the font</span>
-</span><span id="Font.pygame-47"><a href="#Font.pygame-47"><span class="linenos">47</span></a><span class="sd">        configuration. This is used internally for text rendering.</span>
-</span><span id="Font.pygame-48"><a href="#Font.pygame-48"><span class="linenos">48</span></a>
-</span><span id="Font.pygame-49"><a href="#Font.pygame-49"><span class="linenos">49</span></a><span class="sd">        Returns:</span>
-</span><span id="Font.pygame-50"><a href="#Font.pygame-50"><span class="linenos">50</span></a><span class="sd">            `pygame.Font`: Pygame font object for text rendering.</span>
-</span><span id="Font.pygame-51"><a href="#Font.pygame-51"><span class="linenos">51</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Font.pygame-52"><a href="#Font.pygame-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="n">SysFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Font.pygame-16"><a href="#Font.pygame-16"><span class="linenos">16</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Font.pygame-17"><a href="#Font.pygame-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pygame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Font</span><span class="p">:</span>
+</span><span id="Font.pygame-18"><a href="#Font.pygame-18"><span class="linenos">18</span></a>        <span class="k">return</span> <span class="n">SysFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Get the pygame font object.</p>
-
-<p>Creates and caches a pygame Font object based on the font
-configuration. This is used internally for text rendering.</p>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>pygame.Font</code>: Pygame font object for text rendering.</p>
-</blockquote>
-</div>
-
+    
 
                             </div>
                             <div id="Font.text_size" class="classattr">
@@ -366,58 +201,13 @@ configuration. This is used internally for text rendering.</p>
 
     </div>
     <a class="headerlink" href="#Font.text_size"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Font.text_size-54"><a href="#Font.text_size-54"><span class="linenos">54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="Font.text_size-55"><a href="#Font.text_size-55"><span class="linenos">55</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Font.text_size-56"><a href="#Font.text_size-56"><span class="linenos">56</span></a><span class="sd">        Get the drawing size of a text string.</span>
-</span><span id="Font.text_size-57"><a href="#Font.text_size-57"><span class="linenos">57</span></a>
-</span><span id="Font.text_size-58"><a href="#Font.text_size-58"><span class="linenos">58</span></a><span class="sd">        Calculates the pixel dimensions required to render the given</span>
-</span><span id="Font.text_size-59"><a href="#Font.text_size-59"><span class="linenos">59</span></a><span class="sd">        text string with this font configuration.</span>
-</span><span id="Font.text_size-60"><a href="#Font.text_size-60"><span class="linenos">60</span></a>
-</span><span id="Font.text_size-61"><a href="#Font.text_size-61"><span class="linenos">61</span></a><span class="sd">        Arguments:</span>
-</span><span id="Font.text_size-62"><a href="#Font.text_size-62"><span class="linenos">62</span></a><span class="sd">            `text`: The text string to measure.</span>
-</span><span id="Font.text_size-63"><a href="#Font.text_size-63"><span class="linenos">63</span></a>
-</span><span id="Font.text_size-64"><a href="#Font.text_size-64"><span class="linenos">64</span></a><span class="sd">        Returns:</span>
-</span><span id="Font.text_size-65"><a href="#Font.text_size-65"><span class="linenos">65</span></a><span class="sd">            `Size`: The size of the text string in pixels.</span>
-</span><span id="Font.text_size-66"><a href="#Font.text_size-66"><span class="linenos">66</span></a>
-</span><span id="Font.text_size-67"><a href="#Font.text_size-67"><span class="linenos">67</span></a><span class="sd">        Example:</span>
-</span><span id="Font.text_size-68"><a href="#Font.text_size-68"><span class="linenos">68</span></a><span class="sd">            ```python</span>
-</span><span id="Font.text_size-69"><a href="#Font.text_size-69"><span class="linenos">69</span></a><span class="sd">            font = Font(16)</span>
-</span><span id="Font.text_size-70"><a href="#Font.text_size-70"><span class="linenos">70</span></a><span class="sd">            size = font.text_size(&quot;Hello&quot;)  # Returns Size(width, height)</span>
-</span><span id="Font.text_size-71"><a href="#Font.text_size-71"><span class="linenos">71</span></a><span class="sd">            ```</span>
-</span><span id="Font.text_size-72"><a href="#Font.text_size-72"><span class="linenos">72</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Font.text_size-73"><a href="#Font.text_size-73"><span class="linenos">73</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-</span><span id="Font.text_size-74"><a href="#Font.text_size-74"><span class="linenos">74</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Font.text_size-20"><a href="#Font.text_size-20"><span class="linenos">20</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="Font.text_size-21"><a href="#Font.text_size-21"><span class="linenos">21</span></a>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</span><span id="Font.text_size-22"><a href="#Font.text_size-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Get the drawing size of a text string.</p>
-
-<p>Calculates the pixel dimensions required to render the given
-text string with this font configuration.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code>text</code>:</strong>  The text string to measure.</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>Size</code>: The size of the text string in pixels.</p>
-</blockquote>
-
-<h6 id="example">Example:</h6>
-
-<blockquote>
-  <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="n">font</span> <span class="o">=</span> <span class="n">Font</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">size</span> <span class="o">=</span> <span class="n">font</span><span class="o">.</span><span class="n">text_size</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">)</span>  <span class="c1"># Returns Size(width, height)</span>
-</code></pre>
-  </div>
-</blockquote>
-</div>
-
+    
 
                             </div>
                             <div id="Font.text_height" class="classattr">
@@ -429,27 +219,13 @@ text string with this font configuration.</p>
 
     </div>
     <a class="headerlink" href="#Font.text_height"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Font.text_height-76"><a href="#Font.text_height-76"><span class="linenos">76</span></a>    <span class="nd">@property</span>
-</span><span id="Font.text_height-77"><a href="#Font.text_height-77"><span class="linenos">77</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
-</span><span id="Font.text_height-78"><a href="#Font.text_height-78"><span class="linenos">78</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Font.text_height-79"><a href="#Font.text_height-79"><span class="linenos">79</span></a><span class="sd">        Get the line height of the font.</span>
-</span><span id="Font.text_height-80"><a href="#Font.text_height-80"><span class="linenos">80</span></a>
-</span><span id="Font.text_height-81"><a href="#Font.text_height-81"><span class="linenos">81</span></a><span class="sd">        Returns:</span>
-</span><span id="Font.text_height-82"><a href="#Font.text_height-82"><span class="linenos">82</span></a><span class="sd">            `Pixel`: The line height in pixels.</span>
-</span><span id="Font.text_height-83"><a href="#Font.text_height-83"><span class="linenos">83</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Font.text_height-84"><a href="#Font.text_height-84"><span class="linenos">84</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">get_linesize</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Font.text_height-24"><a href="#Font.text_height-24"><span class="linenos">24</span></a>    <span class="nd">@property</span>
+</span><span id="Font.text_height-25"><a href="#Font.text_height-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">text_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pixel</span><span class="p">:</span>
+</span><span id="Font.text_height-26"><a href="#Font.text_height-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pygame</span><span class="o">.</span><span class="n">get_linesize</span><span class="p">()</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Get the line height of the font.</p>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>Pixel</code>: The line height in pixels.</p>
-</blockquote>
-</div>
-
+    
 
                             </div>
                 </section>

@@ -14,12 +14,10 @@ from nextrpg.draw.draw import DrawOnScreen
 class AnimatedOnScreen(ABC):
     @property
     @abstractmethod
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        """ """
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]: ...
 
     @abstractmethod
-    def tick(self, time_delta: Millisecond) -> Self:
-        """ """
+    def tick(self, time_delta: Millisecond) -> Self: ...
 
 
 @dataclass(frozen=True)
@@ -29,11 +27,12 @@ class MovingAnimatedOnScreen(AnimatedOnScreen):
 
     @cached_property
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        res = []
-        if isinstance(d := self.animated.draw, Draw):
-            res.append(DrawOnScreen(self.moving.coordinate, d))
+        res: list[DrawOnScreen] = []
+        if isinstance(self.animated.draw, Draw):
+            res.append(DrawOnScreen(self.moving.coordinate, self.animated.draw))
         else:
-            res += GroupOnScreen(self.moving.coordinate, d).draw_on_screens
+            group = GroupOnScreen(self.moving.coordinate, self.animated.draw)
+            res += group.draw_on_screens
         return tuple(res)
 
     def tick(self, time_delta: Millisecond) -> Self:

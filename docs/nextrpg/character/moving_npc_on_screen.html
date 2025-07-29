@@ -131,47 +131,40 @@ NPC-specific pathing, idle/move timers, and walk cycles.</p>
 </span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
 </span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingNpcOnScreen</span><span class="p">(</span><span class="n">NpcOnScreen</span><span class="p">,</span> <span class="n">MovingCharacterOnScreen</span><span class="p">):</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">    Moving NPC interface.</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">        path: Polygon representing the path of the NPC.</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">PolygonOnScreen</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">NpcSpec</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PolygonOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">tuple</span><span class="p">)</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">move_speed</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="p">)</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="n">_walk</span><span class="p">:</span> <span class="n">Walk</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Walk</span><span class="p">(</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span><span class="p">,</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">cyclic_walk</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">closed</span><span class="p">,</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>        <span class="p">)</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="p">)</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="nd">@override</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>        <span class="n">walk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>        <span class="n">moved</span> <span class="o">=</span> <span class="n">MovingCharacterOnScreen</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>            <span class="n">moved</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">moved</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">direction</span><span class="p">),</span> <span class="n">_walk</span><span class="o">=</span><span class="n">walk</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>        <span class="p">)</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="nd">@property</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="nd">@override</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">complete</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="nd">@override</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span><span class="o">.</span><span class="n">coordinate</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">PolygonOnScreen</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">NpcSpec</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PolygonOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">tuple</span><span class="p">)</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">move_speed</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="p">)</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="n">_walk</span><span class="p">:</span> <span class="n">Walk</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Walk</span><span class="p">(</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span><span class="p">,</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">cyclic_walk</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">closed</span><span class="p">,</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>        <span class="p">)</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="p">)</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="nd">@override</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="n">walk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="n">moved</span> <span class="o">=</span> <span class="n">MovingCharacterOnScreen</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>            <span class="n">moved</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">moved</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">direction</span><span class="p">),</span> <span class="n">_walk</span><span class="o">=</span><span class="n">walk</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>        <span class="p">)</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="nd">@property</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="nd">@override</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">complete</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="nd">@override</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span><span class="o">.</span><span class="n">coordinate</span>
 </span></pre></div>
 
 
@@ -190,59 +183,44 @@ NPC-specific pathing, idle/move timers, and walk cycles.</p>
     <a class="headerlink" href="#MovingNpcOnScreen"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="MovingNpcOnScreen-33"><a href="#MovingNpcOnScreen-33"><span class="linenos">33</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="MovingNpcOnScreen-34"><a href="#MovingNpcOnScreen-34"><span class="linenos">34</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MovingNpcOnScreen</span><span class="p">(</span><span class="n">NpcOnScreen</span><span class="p">,</span> <span class="n">MovingCharacterOnScreen</span><span class="p">):</span>
-</span><span id="MovingNpcOnScreen-35"><a href="#MovingNpcOnScreen-35"><span class="linenos">35</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="MovingNpcOnScreen-36"><a href="#MovingNpcOnScreen-36"><span class="linenos">36</span></a><span class="sd">    Moving NPC interface.</span>
-</span><span id="MovingNpcOnScreen-37"><a href="#MovingNpcOnScreen-37"><span class="linenos">37</span></a>
-</span><span id="MovingNpcOnScreen-38"><a href="#MovingNpcOnScreen-38"><span class="linenos">38</span></a><span class="sd">    Arguments:</span>
-</span><span id="MovingNpcOnScreen-39"><a href="#MovingNpcOnScreen-39"><span class="linenos">39</span></a><span class="sd">        path: Polygon representing the path of the NPC.</span>
-</span><span id="MovingNpcOnScreen-40"><a href="#MovingNpcOnScreen-40"><span class="linenos">40</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="MovingNpcOnScreen-41"><a href="#MovingNpcOnScreen-41"><span class="linenos">41</span></a>
-</span><span id="MovingNpcOnScreen-42"><a href="#MovingNpcOnScreen-42"><span class="linenos">42</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">PolygonOnScreen</span>
-</span><span id="MovingNpcOnScreen-43"><a href="#MovingNpcOnScreen-43"><span class="linenos">43</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">NpcSpec</span>
-</span><span id="MovingNpcOnScreen-44"><a href="#MovingNpcOnScreen-44"><span class="linenos">44</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PolygonOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">tuple</span><span class="p">)</span>
-</span><span id="MovingNpcOnScreen-45"><a href="#MovingNpcOnScreen-45"><span class="linenos">45</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
-</span><span id="MovingNpcOnScreen-46"><a href="#MovingNpcOnScreen-46"><span class="linenos">46</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">move_speed</span>
-</span><span id="MovingNpcOnScreen-47"><a href="#MovingNpcOnScreen-47"><span class="linenos">47</span></a>    <span class="p">)</span>
-</span><span id="MovingNpcOnScreen-48"><a href="#MovingNpcOnScreen-48"><span class="linenos">48</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
-</span><span id="MovingNpcOnScreen-49"><a href="#MovingNpcOnScreen-49"><span class="linenos">49</span></a>    <span class="n">_walk</span><span class="p">:</span> <span class="n">Walk</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
-</span><span id="MovingNpcOnScreen-50"><a href="#MovingNpcOnScreen-50"><span class="linenos">50</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Walk</span><span class="p">(</span>
-</span><span id="MovingNpcOnScreen-51"><a href="#MovingNpcOnScreen-51"><span class="linenos">51</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
-</span><span id="MovingNpcOnScreen-52"><a href="#MovingNpcOnScreen-52"><span class="linenos">52</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span><span class="p">,</span>
-</span><span id="MovingNpcOnScreen-53"><a href="#MovingNpcOnScreen-53"><span class="linenos">53</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">cyclic_walk</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">closed</span><span class="p">,</span>
-</span><span id="MovingNpcOnScreen-54"><a href="#MovingNpcOnScreen-54"><span class="linenos">54</span></a>        <span class="p">)</span>
-</span><span id="MovingNpcOnScreen-55"><a href="#MovingNpcOnScreen-55"><span class="linenos">55</span></a>    <span class="p">)</span>
-</span><span id="MovingNpcOnScreen-56"><a href="#MovingNpcOnScreen-56"><span class="linenos">56</span></a>
-</span><span id="MovingNpcOnScreen-57"><a href="#MovingNpcOnScreen-57"><span class="linenos">57</span></a>    <span class="nd">@override</span>
-</span><span id="MovingNpcOnScreen-58"><a href="#MovingNpcOnScreen-58"><span class="linenos">58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="MovingNpcOnScreen-59"><a href="#MovingNpcOnScreen-59"><span class="linenos">59</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
-</span><span id="MovingNpcOnScreen-60"><a href="#MovingNpcOnScreen-60"><span class="linenos">60</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingNpcOnScreen-61"><a href="#MovingNpcOnScreen-61"><span class="linenos">61</span></a>
-</span><span id="MovingNpcOnScreen-62"><a href="#MovingNpcOnScreen-62"><span class="linenos">62</span></a>        <span class="n">walk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingNpcOnScreen-63"><a href="#MovingNpcOnScreen-63"><span class="linenos">63</span></a>        <span class="n">moved</span> <span class="o">=</span> <span class="n">MovingCharacterOnScreen</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingNpcOnScreen-64"><a href="#MovingNpcOnScreen-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-</span><span id="MovingNpcOnScreen-65"><a href="#MovingNpcOnScreen-65"><span class="linenos">65</span></a>            <span class="n">moved</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">moved</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">direction</span><span class="p">),</span> <span class="n">_walk</span><span class="o">=</span><span class="n">walk</span>
-</span><span id="MovingNpcOnScreen-66"><a href="#MovingNpcOnScreen-66"><span class="linenos">66</span></a>        <span class="p">)</span>
-</span><span id="MovingNpcOnScreen-67"><a href="#MovingNpcOnScreen-67"><span class="linenos">67</span></a>
-</span><span id="MovingNpcOnScreen-68"><a href="#MovingNpcOnScreen-68"><span class="linenos">68</span></a>    <span class="nd">@property</span>
-</span><span id="MovingNpcOnScreen-69"><a href="#MovingNpcOnScreen-69"><span class="linenos">69</span></a>    <span class="nd">@override</span>
-</span><span id="MovingNpcOnScreen-70"><a href="#MovingNpcOnScreen-70"><span class="linenos">70</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="MovingNpcOnScreen-71"><a href="#MovingNpcOnScreen-71"><span class="linenos">71</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">complete</span>
-</span><span id="MovingNpcOnScreen-72"><a href="#MovingNpcOnScreen-72"><span class="linenos">72</span></a>
-</span><span id="MovingNpcOnScreen-73"><a href="#MovingNpcOnScreen-73"><span class="linenos">73</span></a>    <span class="nd">@override</span>
-</span><span id="MovingNpcOnScreen-74"><a href="#MovingNpcOnScreen-74"><span class="linenos">74</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="MovingNpcOnScreen-75"><a href="#MovingNpcOnScreen-75"><span class="linenos">75</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span><span class="o">.</span><span class="n">coordinate</span>
+</span><span id="MovingNpcOnScreen-35"><a href="#MovingNpcOnScreen-35"><span class="linenos">35</span></a>    <span class="n">path</span><span class="p">:</span> <span class="n">PolygonOnScreen</span>
+</span><span id="MovingNpcOnScreen-36"><a href="#MovingNpcOnScreen-36"><span class="linenos">36</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">NpcSpec</span>
+</span><span id="MovingNpcOnScreen-37"><a href="#MovingNpcOnScreen-37"><span class="linenos">37</span></a>    <span class="n">collisions</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PolygonOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">tuple</span><span class="p">)</span>
+</span><span id="MovingNpcOnScreen-38"><a href="#MovingNpcOnScreen-38"><span class="linenos">38</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="MovingNpcOnScreen-39"><a href="#MovingNpcOnScreen-39"><span class="linenos">39</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">move_speed</span>
+</span><span id="MovingNpcOnScreen-40"><a href="#MovingNpcOnScreen-40"><span class="linenos">40</span></a>    <span class="p">)</span>
+</span><span id="MovingNpcOnScreen-41"><a href="#MovingNpcOnScreen-41"><span class="linenos">41</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
+</span><span id="MovingNpcOnScreen-42"><a href="#MovingNpcOnScreen-42"><span class="linenos">42</span></a>    <span class="n">_walk</span><span class="p">:</span> <span class="n">Walk</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="MovingNpcOnScreen-43"><a href="#MovingNpcOnScreen-43"><span class="linenos">43</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Walk</span><span class="p">(</span>
+</span><span id="MovingNpcOnScreen-44"><a href="#MovingNpcOnScreen-44"><span class="linenos">44</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+</span><span id="MovingNpcOnScreen-45"><a href="#MovingNpcOnScreen-45"><span class="linenos">45</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span><span class="p">,</span>
+</span><span id="MovingNpcOnScreen-46"><a href="#MovingNpcOnScreen-46"><span class="linenos">46</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">cyclic_walk</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">closed</span><span class="p">,</span>
+</span><span id="MovingNpcOnScreen-47"><a href="#MovingNpcOnScreen-47"><span class="linenos">47</span></a>        <span class="p">)</span>
+</span><span id="MovingNpcOnScreen-48"><a href="#MovingNpcOnScreen-48"><span class="linenos">48</span></a>    <span class="p">)</span>
+</span><span id="MovingNpcOnScreen-49"><a href="#MovingNpcOnScreen-49"><span class="linenos">49</span></a>
+</span><span id="MovingNpcOnScreen-50"><a href="#MovingNpcOnScreen-50"><span class="linenos">50</span></a>    <span class="nd">@override</span>
+</span><span id="MovingNpcOnScreen-51"><a href="#MovingNpcOnScreen-51"><span class="linenos">51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="MovingNpcOnScreen-52"><a href="#MovingNpcOnScreen-52"><span class="linenos">52</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
+</span><span id="MovingNpcOnScreen-53"><a href="#MovingNpcOnScreen-53"><span class="linenos">53</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="MovingNpcOnScreen-54"><a href="#MovingNpcOnScreen-54"><span class="linenos">54</span></a>
+</span><span id="MovingNpcOnScreen-55"><a href="#MovingNpcOnScreen-55"><span class="linenos">55</span></a>        <span class="n">walk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="MovingNpcOnScreen-56"><a href="#MovingNpcOnScreen-56"><span class="linenos">56</span></a>        <span class="n">moved</span> <span class="o">=</span> <span class="n">MovingCharacterOnScreen</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">)</span>
+</span><span id="MovingNpcOnScreen-57"><a href="#MovingNpcOnScreen-57"><span class="linenos">57</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="MovingNpcOnScreen-58"><a href="#MovingNpcOnScreen-58"><span class="linenos">58</span></a>            <span class="n">moved</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">moved</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">direction</span><span class="p">),</span> <span class="n">_walk</span><span class="o">=</span><span class="n">walk</span>
+</span><span id="MovingNpcOnScreen-59"><a href="#MovingNpcOnScreen-59"><span class="linenos">59</span></a>        <span class="p">)</span>
+</span><span id="MovingNpcOnScreen-60"><a href="#MovingNpcOnScreen-60"><span class="linenos">60</span></a>
+</span><span id="MovingNpcOnScreen-61"><a href="#MovingNpcOnScreen-61"><span class="linenos">61</span></a>    <span class="nd">@property</span>
+</span><span id="MovingNpcOnScreen-62"><a href="#MovingNpcOnScreen-62"><span class="linenos">62</span></a>    <span class="nd">@override</span>
+</span><span id="MovingNpcOnScreen-63"><a href="#MovingNpcOnScreen-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="MovingNpcOnScreen-64"><a href="#MovingNpcOnScreen-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">complete</span>
+</span><span id="MovingNpcOnScreen-65"><a href="#MovingNpcOnScreen-65"><span class="linenos">65</span></a>
+</span><span id="MovingNpcOnScreen-66"><a href="#MovingNpcOnScreen-66"><span class="linenos">66</span></a>    <span class="nd">@override</span>
+</span><span id="MovingNpcOnScreen-67"><a href="#MovingNpcOnScreen-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="MovingNpcOnScreen-68"><a href="#MovingNpcOnScreen-68"><span class="linenos">68</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span><span class="o">.</span><span class="n">coordinate</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Moving NPC interface.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong>path:</strong>  Polygon representing the path of the NPC.</li>
-</ul>
-</div>
-
+    
 
                             <div id="MovingNpcOnScreen.__init__" class="classattr">
                                 <div class="attr function">
@@ -312,16 +290,16 @@ NPC-specific pathing, idle/move timers, and walk cycles.</p>
 
     </div>
     <a class="headerlink" href="#MovingNpcOnScreen.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingNpcOnScreen.tick-57"><a href="#MovingNpcOnScreen.tick-57"><span class="linenos">57</span></a>    <span class="nd">@override</span>
-</span><span id="MovingNpcOnScreen.tick-58"><a href="#MovingNpcOnScreen.tick-58"><span class="linenos">58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="MovingNpcOnScreen.tick-59"><a href="#MovingNpcOnScreen.tick-59"><span class="linenos">59</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
-</span><span id="MovingNpcOnScreen.tick-60"><a href="#MovingNpcOnScreen.tick-60"><span class="linenos">60</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingNpcOnScreen.tick-61"><a href="#MovingNpcOnScreen.tick-61"><span class="linenos">61</span></a>
-</span><span id="MovingNpcOnScreen.tick-62"><a href="#MovingNpcOnScreen.tick-62"><span class="linenos">62</span></a>        <span class="n">walk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingNpcOnScreen.tick-63"><a href="#MovingNpcOnScreen.tick-63"><span class="linenos">63</span></a>        <span class="n">moved</span> <span class="o">=</span> <span class="n">MovingCharacterOnScreen</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">)</span>
-</span><span id="MovingNpcOnScreen.tick-64"><a href="#MovingNpcOnScreen.tick-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-</span><span id="MovingNpcOnScreen.tick-65"><a href="#MovingNpcOnScreen.tick-65"><span class="linenos">65</span></a>            <span class="n">moved</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">moved</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">direction</span><span class="p">),</span> <span class="n">_walk</span><span class="o">=</span><span class="n">walk</span>
-</span><span id="MovingNpcOnScreen.tick-66"><a href="#MovingNpcOnScreen.tick-66"><span class="linenos">66</span></a>        <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingNpcOnScreen.tick-50"><a href="#MovingNpcOnScreen.tick-50"><span class="linenos">50</span></a>    <span class="nd">@override</span>
+</span><span id="MovingNpcOnScreen.tick-51"><a href="#MovingNpcOnScreen.tick-51"><span class="linenos">51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="MovingNpcOnScreen.tick-52"><a href="#MovingNpcOnScreen.tick-52"><span class="linenos">52</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
+</span><span id="MovingNpcOnScreen.tick-53"><a href="#MovingNpcOnScreen.tick-53"><span class="linenos">53</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="MovingNpcOnScreen.tick-54"><a href="#MovingNpcOnScreen.tick-54"><span class="linenos">54</span></a>
+</span><span id="MovingNpcOnScreen.tick-55"><a href="#MovingNpcOnScreen.tick-55"><span class="linenos">55</span></a>        <span class="n">walk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="MovingNpcOnScreen.tick-56"><a href="#MovingNpcOnScreen.tick-56"><span class="linenos">56</span></a>        <span class="n">moved</span> <span class="o">=</span> <span class="n">MovingCharacterOnScreen</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">)</span>
+</span><span id="MovingNpcOnScreen.tick-57"><a href="#MovingNpcOnScreen.tick-57"><span class="linenos">57</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="MovingNpcOnScreen.tick-58"><a href="#MovingNpcOnScreen.tick-58"><span class="linenos">58</span></a>            <span class="n">moved</span><span class="p">,</span> <span class="n">character</span><span class="o">=</span><span class="n">moved</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">turn</span><span class="p">(</span><span class="n">walk</span><span class="o">.</span><span class="n">direction</span><span class="p">),</span> <span class="n">_walk</span><span class="o">=</span><span class="n">walk</span>
+</span><span id="MovingNpcOnScreen.tick-59"><a href="#MovingNpcOnScreen.tick-59"><span class="linenos">59</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -337,37 +315,14 @@ NPC-specific pathing, idle/move timers, and walk cycles.</p>
 
     </div>
     <a class="headerlink" href="#MovingNpcOnScreen.moving"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingNpcOnScreen.moving-68"><a href="#MovingNpcOnScreen.moving-68"><span class="linenos">68</span></a>    <span class="nd">@property</span>
-</span><span id="MovingNpcOnScreen.moving-69"><a href="#MovingNpcOnScreen.moving-69"><span class="linenos">69</span></a>    <span class="nd">@override</span>
-</span><span id="MovingNpcOnScreen.moving-70"><a href="#MovingNpcOnScreen.moving-70"><span class="linenos">70</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="MovingNpcOnScreen.moving-71"><a href="#MovingNpcOnScreen.moving-71"><span class="linenos">71</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">complete</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingNpcOnScreen.moving-61"><a href="#MovingNpcOnScreen.moving-61"><span class="linenos">61</span></a>    <span class="nd">@property</span>
+</span><span id="MovingNpcOnScreen.moving-62"><a href="#MovingNpcOnScreen.moving-62"><span class="linenos">62</span></a>    <span class="nd">@override</span>
+</span><span id="MovingNpcOnScreen.moving-63"><a href="#MovingNpcOnScreen.moving-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="MovingNpcOnScreen.moving-64"><a href="#MovingNpcOnScreen.moving-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event_triggered</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">complete</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Get whether the character is currently moving.</p>
-
-<p>This property should be implemented by subclasses to determine
-if the character should be in a moving state. This affects
-both animation and movement calculations.</p>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>bool</code>: Whether the character is currently moving.</p>
-</blockquote>
-
-<h6 id="example">Example:</h6>
-
-<blockquote>
-  <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="nd">@cached_property</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">moving</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pressed_movement_keys</span><span class="p">)</span>
-</code></pre>
-  </div>
-</blockquote>
-</div>
-
+    
 
                             </div>
                             <div id="MovingNpcOnScreen.move" class="classattr">
@@ -382,33 +337,13 @@ both animation and movement calculations.</p>
 
     </div>
     <a class="headerlink" href="#MovingNpcOnScreen.move"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingNpcOnScreen.move-73"><a href="#MovingNpcOnScreen.move-73"><span class="linenos">73</span></a>    <span class="nd">@override</span>
-</span><span id="MovingNpcOnScreen.move-74"><a href="#MovingNpcOnScreen.move-74"><span class="linenos">74</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="MovingNpcOnScreen.move-75"><a href="#MovingNpcOnScreen.move-75"><span class="linenos">75</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span><span class="o">.</span><span class="n">coordinate</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MovingNpcOnScreen.move-66"><a href="#MovingNpcOnScreen.move-66"><span class="linenos">66</span></a>    <span class="nd">@override</span>
+</span><span id="MovingNpcOnScreen.move-67"><a href="#MovingNpcOnScreen.move-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="MovingNpcOnScreen.move-68"><a href="#MovingNpcOnScreen.move-68"><span class="linenos">68</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_walk</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span><span class="o">.</span><span class="n">coordinate</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Calculate the new position after movement.</p>
-
-<p>This method should be implemented by subclasses to calculate
-the character's new position based on current movement state,
-speed, and time delta. The returned coordinate will be used
-if no collision is detected.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code>time_delta</code>:</strong>  The time that has passed since the last update
-in milliseconds.</li>
-</ul>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p><code>Coordinate</code>: The updated character position after the move step.</p>
-</blockquote>
-</div>
-
+    
 
                             </div>
                             <div class="inherited">

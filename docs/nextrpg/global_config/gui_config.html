@@ -106,121 +106,48 @@
                     <h1 class="modulename">
 <a href="./../../nextrpg.html">nextrpg</a><wbr>.<a href="./../global_config.html">global_config</a><wbr>.gui_config    </h1>
 
-                        <div class="docstring"><p>GUI configuration system for <code><a href="../../nextrpg.html">nextrpg</a></code>.</p>
-
-<p>This module provides configuration options for the graphical user interface in
-<code><a href="../../nextrpg.html">nextrpg</a></code> games. It includes enums for resize and GUI modes, and the
-<code><a href="#GuiConfig">GuiConfig</a></code> class for window and rendering settings.</p>
-
-<h6 id="features">Features:</h6>
-
-<blockquote>
-  <ul>
-  <li>Resize mode and GUI mode enums</li>
-  <li>Window size, title, and background color configuration</li>
-  <li>Frame rate and double buffering options</li>
-  <li>Windowed/fullscreen and scaling options</li>
-  </ul>
-</blockquote>
-</div>
-
+                
                         <input id="mod-gui_config-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-gui_config-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">GUI configuration system for `nextrpg`.</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">This module provides configuration options for the graphical user interface in</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">`nextrpg` games. It includes enums for resize and GUI modes, and the</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">`GuiConfig` class for window and rendering settings.</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">Rgba</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">Features:</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">    - Resize mode and GUI mode enums</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">    - Window size, title, and background color configuration</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">    - Frame rate and double buffering options</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">    - Windowed/fullscreen and scaling options</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">Rgba</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ResizeMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="n">SCALE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">KEEP_NATIVE_SIZE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">GuiMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">WINDOWED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">FULL_SCREEN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="nd">@property</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">opposite</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GuiMode</span><span class="p">:</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_GUI_MODE</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ResizeMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    Resize mode enum.</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">        SCALE: Scale the images to fit the GUI size.</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">        KEEP_NATIVE_SIZE: Keep the native image size.</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="n">SCALE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="n">KEEP_NATIVE_SIZE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="k">class</span><span class="w"> </span><span class="nc">GuiConfig</span><span class="p">:</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nextrpg&quot;</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">1280</span><span class="p">,</span> <span class="mi">720</span><span class="p">)</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">background_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">BLACK</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">gui_mode</span><span class="p">:</span> <span class="n">GuiMode</span> <span class="o">=</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="n">resize_mode</span><span class="p">:</span> <span class="n">ResizeMode</span> <span class="o">=</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">SCALE</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="n">allow_window_resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
 </span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="k">class</span><span class="w"> </span><span class="nc">GuiMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">    Gui mode enum.</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">        WINDOWED: Windowed GUI.</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">        FULL_SCREEN: Full screen GUI.</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">WINDOWED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">FULL_SCREEN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="nd">@property</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">opposite</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GuiMode</span><span class="p">:</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">        Get the opposite gui mode.</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">        Returns:</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">            The opposite gui mode.</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_GUI_MODE</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="k">class</span><span class="w"> </span><span class="nc">GuiConfig</span><span class="p">:</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="sd">    Configuration class for Graphical User Interface (GUI).</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="sd">    This is used by `nextrpg.gui.Gui` to initialize the pygame window and by the</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="sd">    rendering system to control display properties.</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="sd">    Attributes:</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="sd">        title: The title of the GUI window.</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="sd">        size: The resolution or dimensions of the GUI window defined by width</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">            and height. This also defines the aspect ratio of the game.</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">        frames_per_second: FPS. The target frame rate for the application&#39;s</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">            rendering performance.</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="sd">        background_color: The background color of the GUI window.</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="sd">        gui_mode: Whether to start the game in windowed or full screen mode.</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="sd">        resize_mode: Whether to scale the images to fit the GUI size, or keep</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="sd">            the native image size.</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="sd">        allow_window_resize: Whether to allow the user to resize the window in</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="sd">            windowed mode.</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nextrpg&quot;</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">1280</span><span class="p">,</span> <span class="mi">720</span><span class="p">)</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>    <span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="n">background_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">BLACK</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>    <span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>    <span class="n">gui_mode</span><span class="p">:</span> <span class="n">GuiMode</span> <span class="o">=</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>    <span class="n">resize_mode</span><span class="p">:</span> <span class="n">ResizeMode</span> <span class="o">=</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">SCALE</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>    <span class="n">allow_window_resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a>
-</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>
-</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a><span class="n">_OPPOSITE_GUI_MODE</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a>    <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span><span class="p">:</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">,</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a>    <span class="n">GuiMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">:</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span><span class="p">,</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a><span class="p">}</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="n">_OPPOSITE_GUI_MODE</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span><span class="p">:</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">,</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="n">GuiMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">:</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span><span class="p">,</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="p">}</span>
 </span></pre></div>
 
 
@@ -236,30 +163,13 @@
 
     </div>
     <a class="headerlink" href="#ResizeMode"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ResizeMode-23"><a href="#ResizeMode-23"><span class="linenos">23</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ResizeMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="ResizeMode-24"><a href="#ResizeMode-24"><span class="linenos">24</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="ResizeMode-25"><a href="#ResizeMode-25"><span class="linenos">25</span></a><span class="sd">    Resize mode enum.</span>
-</span><span id="ResizeMode-26"><a href="#ResizeMode-26"><span class="linenos">26</span></a>
-</span><span id="ResizeMode-27"><a href="#ResizeMode-27"><span class="linenos">27</span></a><span class="sd">    Attributes:</span>
-</span><span id="ResizeMode-28"><a href="#ResizeMode-28"><span class="linenos">28</span></a><span class="sd">        SCALE: Scale the images to fit the GUI size.</span>
-</span><span id="ResizeMode-29"><a href="#ResizeMode-29"><span class="linenos">29</span></a><span class="sd">        KEEP_NATIVE_SIZE: Keep the native image size.</span>
-</span><span id="ResizeMode-30"><a href="#ResizeMode-30"><span class="linenos">30</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="ResizeMode-31"><a href="#ResizeMode-31"><span class="linenos">31</span></a>
-</span><span id="ResizeMode-32"><a href="#ResizeMode-32"><span class="linenos">32</span></a>    <span class="n">SCALE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="ResizeMode-33"><a href="#ResizeMode-33"><span class="linenos">33</span></a>    <span class="n">KEEP_NATIVE_SIZE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ResizeMode-9"><a href="#ResizeMode-9"><span class="linenos"> 9</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ResizeMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="ResizeMode-10"><a href="#ResizeMode-10"><span class="linenos">10</span></a>    <span class="n">SCALE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="ResizeMode-11"><a href="#ResizeMode-11"><span class="linenos">11</span></a>    <span class="n">KEEP_NATIVE_SIZE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Resize mode enum.</p>
-
-<h6 id="attributes">Attributes:</h6>
-
-<ul>
-<li><strong>SCALE:</strong>  Scale the images to fit the GUI size.</li>
-<li><strong>KEEP_NATIVE_SIZE:</strong>  Keep the native image size.</li>
-</ul>
-</div>
-
+    
 
                             <div id="ResizeMode.SCALE" class="classattr">
                                 <div class="attr variable">
@@ -297,40 +207,17 @@
 
     </div>
     <a class="headerlink" href="#GuiMode"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="GuiMode-36"><a href="#GuiMode-36"><span class="linenos">36</span></a><span class="k">class</span><span class="w"> </span><span class="nc">GuiMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="GuiMode-37"><a href="#GuiMode-37"><span class="linenos">37</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="GuiMode-38"><a href="#GuiMode-38"><span class="linenos">38</span></a><span class="sd">    Gui mode enum.</span>
-</span><span id="GuiMode-39"><a href="#GuiMode-39"><span class="linenos">39</span></a>
-</span><span id="GuiMode-40"><a href="#GuiMode-40"><span class="linenos">40</span></a><span class="sd">    Attributes:</span>
-</span><span id="GuiMode-41"><a href="#GuiMode-41"><span class="linenos">41</span></a><span class="sd">        WINDOWED: Windowed GUI.</span>
-</span><span id="GuiMode-42"><a href="#GuiMode-42"><span class="linenos">42</span></a><span class="sd">        FULL_SCREEN: Full screen GUI.</span>
-</span><span id="GuiMode-43"><a href="#GuiMode-43"><span class="linenos">43</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="GuiMode-44"><a href="#GuiMode-44"><span class="linenos">44</span></a>
-</span><span id="GuiMode-45"><a href="#GuiMode-45"><span class="linenos">45</span></a>    <span class="n">WINDOWED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="GuiMode-46"><a href="#GuiMode-46"><span class="linenos">46</span></a>    <span class="n">FULL_SCREEN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="GuiMode-47"><a href="#GuiMode-47"><span class="linenos">47</span></a>
-</span><span id="GuiMode-48"><a href="#GuiMode-48"><span class="linenos">48</span></a>    <span class="nd">@property</span>
-</span><span id="GuiMode-49"><a href="#GuiMode-49"><span class="linenos">49</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">opposite</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GuiMode</span><span class="p">:</span>
-</span><span id="GuiMode-50"><a href="#GuiMode-50"><span class="linenos">50</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="GuiMode-51"><a href="#GuiMode-51"><span class="linenos">51</span></a><span class="sd">        Get the opposite gui mode.</span>
-</span><span id="GuiMode-52"><a href="#GuiMode-52"><span class="linenos">52</span></a>
-</span><span id="GuiMode-53"><a href="#GuiMode-53"><span class="linenos">53</span></a><span class="sd">        Returns:</span>
-</span><span id="GuiMode-54"><a href="#GuiMode-54"><span class="linenos">54</span></a><span class="sd">            The opposite gui mode.</span>
-</span><span id="GuiMode-55"><a href="#GuiMode-55"><span class="linenos">55</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="GuiMode-56"><a href="#GuiMode-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_GUI_MODE</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="GuiMode-14"><a href="#GuiMode-14"><span class="linenos">14</span></a><span class="k">class</span><span class="w"> </span><span class="nc">GuiMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="GuiMode-15"><a href="#GuiMode-15"><span class="linenos">15</span></a>    <span class="n">WINDOWED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="GuiMode-16"><a href="#GuiMode-16"><span class="linenos">16</span></a>    <span class="n">FULL_SCREEN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="GuiMode-17"><a href="#GuiMode-17"><span class="linenos">17</span></a>
+</span><span id="GuiMode-18"><a href="#GuiMode-18"><span class="linenos">18</span></a>    <span class="nd">@property</span>
+</span><span id="GuiMode-19"><a href="#GuiMode-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">opposite</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GuiMode</span><span class="p">:</span>
+</span><span id="GuiMode-20"><a href="#GuiMode-20"><span class="linenos">20</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_GUI_MODE</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Gui mode enum.</p>
-
-<h6 id="attributes">Attributes:</h6>
-
-<ul>
-<li><strong>WINDOWED:</strong>  Windowed GUI.</li>
-<li><strong>FULL_SCREEN:</strong>  Full screen GUI.</li>
-</ul>
-</div>
-
+    
 
                             <div id="GuiMode.WINDOWED" class="classattr">
                                 <div class="attr variable">
@@ -365,27 +252,13 @@
 
     </div>
     <a class="headerlink" href="#GuiMode.opposite"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="GuiMode.opposite-48"><a href="#GuiMode.opposite-48"><span class="linenos">48</span></a>    <span class="nd">@property</span>
-</span><span id="GuiMode.opposite-49"><a href="#GuiMode.opposite-49"><span class="linenos">49</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">opposite</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GuiMode</span><span class="p">:</span>
-</span><span id="GuiMode.opposite-50"><a href="#GuiMode.opposite-50"><span class="linenos">50</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="GuiMode.opposite-51"><a href="#GuiMode.opposite-51"><span class="linenos">51</span></a><span class="sd">        Get the opposite gui mode.</span>
-</span><span id="GuiMode.opposite-52"><a href="#GuiMode.opposite-52"><span class="linenos">52</span></a>
-</span><span id="GuiMode.opposite-53"><a href="#GuiMode.opposite-53"><span class="linenos">53</span></a><span class="sd">        Returns:</span>
-</span><span id="GuiMode.opposite-54"><a href="#GuiMode.opposite-54"><span class="linenos">54</span></a><span class="sd">            The opposite gui mode.</span>
-</span><span id="GuiMode.opposite-55"><a href="#GuiMode.opposite-55"><span class="linenos">55</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="GuiMode.opposite-56"><a href="#GuiMode.opposite-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_GUI_MODE</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="GuiMode.opposite-18"><a href="#GuiMode.opposite-18"><span class="linenos">18</span></a>    <span class="nd">@property</span>
+</span><span id="GuiMode.opposite-19"><a href="#GuiMode.opposite-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">opposite</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GuiMode</span><span class="p">:</span>
+</span><span id="GuiMode.opposite-20"><a href="#GuiMode.opposite-20"><span class="linenos">20</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_GUI_MODE</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Get the opposite gui mode.</p>
-
-<h6 id="returns">Returns:</h6>
-
-<blockquote>
-  <p>The opposite gui mode.</p>
-</blockquote>
-</div>
-
+    
 
                             </div>
                 </section>
@@ -401,66 +274,25 @@
 
     </div>
     <a class="headerlink" href="#GuiConfig"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="GuiConfig-59"><a href="#GuiConfig-59"><span class="linenos">59</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="GuiConfig-60"><a href="#GuiConfig-60"><span class="linenos">60</span></a><span class="k">class</span><span class="w"> </span><span class="nc">GuiConfig</span><span class="p">:</span>
-</span><span id="GuiConfig-61"><a href="#GuiConfig-61"><span class="linenos">61</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="GuiConfig-62"><a href="#GuiConfig-62"><span class="linenos">62</span></a><span class="sd">    Configuration class for Graphical User Interface (GUI).</span>
-</span><span id="GuiConfig-63"><a href="#GuiConfig-63"><span class="linenos">63</span></a>
-</span><span id="GuiConfig-64"><a href="#GuiConfig-64"><span class="linenos">64</span></a><span class="sd">    This is used by `nextrpg.gui.Gui` to initialize the pygame window and by the</span>
-</span><span id="GuiConfig-65"><a href="#GuiConfig-65"><span class="linenos">65</span></a><span class="sd">    rendering system to control display properties.</span>
-</span><span id="GuiConfig-66"><a href="#GuiConfig-66"><span class="linenos">66</span></a>
-</span><span id="GuiConfig-67"><a href="#GuiConfig-67"><span class="linenos">67</span></a><span class="sd">    Attributes:</span>
-</span><span id="GuiConfig-68"><a href="#GuiConfig-68"><span class="linenos">68</span></a><span class="sd">        title: The title of the GUI window.</span>
-</span><span id="GuiConfig-69"><a href="#GuiConfig-69"><span class="linenos">69</span></a><span class="sd">        size: The resolution or dimensions of the GUI window defined by width</span>
-</span><span id="GuiConfig-70"><a href="#GuiConfig-70"><span class="linenos">70</span></a><span class="sd">            and height. This also defines the aspect ratio of the game.</span>
-</span><span id="GuiConfig-71"><a href="#GuiConfig-71"><span class="linenos">71</span></a><span class="sd">        frames_per_second: FPS. The target frame rate for the application&#39;s</span>
-</span><span id="GuiConfig-72"><a href="#GuiConfig-72"><span class="linenos">72</span></a><span class="sd">            rendering performance.</span>
-</span><span id="GuiConfig-73"><a href="#GuiConfig-73"><span class="linenos">73</span></a><span class="sd">        background_color: The background color of the GUI window.</span>
-</span><span id="GuiConfig-74"><a href="#GuiConfig-74"><span class="linenos">74</span></a><span class="sd">        gui_mode: Whether to start the game in windowed or full screen mode.</span>
-</span><span id="GuiConfig-75"><a href="#GuiConfig-75"><span class="linenos">75</span></a><span class="sd">        resize_mode: Whether to scale the images to fit the GUI size, or keep</span>
-</span><span id="GuiConfig-76"><a href="#GuiConfig-76"><span class="linenos">76</span></a><span class="sd">            the native image size.</span>
-</span><span id="GuiConfig-77"><a href="#GuiConfig-77"><span class="linenos">77</span></a><span class="sd">        allow_window_resize: Whether to allow the user to resize the window in</span>
-</span><span id="GuiConfig-78"><a href="#GuiConfig-78"><span class="linenos">78</span></a><span class="sd">            windowed mode.</span>
-</span><span id="GuiConfig-79"><a href="#GuiConfig-79"><span class="linenos">79</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="GuiConfig-80"><a href="#GuiConfig-80"><span class="linenos">80</span></a>
-</span><span id="GuiConfig-81"><a href="#GuiConfig-81"><span class="linenos">81</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nextrpg&quot;</span>
-</span><span id="GuiConfig-82"><a href="#GuiConfig-82"><span class="linenos">82</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">1280</span><span class="p">,</span> <span class="mi">720</span><span class="p">)</span>
-</span><span id="GuiConfig-83"><a href="#GuiConfig-83"><span class="linenos">83</span></a>    <span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
-</span><span id="GuiConfig-84"><a href="#GuiConfig-84"><span class="linenos">84</span></a>    <span class="n">background_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">BLACK</span>
-</span><span id="GuiConfig-85"><a href="#GuiConfig-85"><span class="linenos">85</span></a>    <span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="GuiConfig-86"><a href="#GuiConfig-86"><span class="linenos">86</span></a>    <span class="n">gui_mode</span><span class="p">:</span> <span class="n">GuiMode</span> <span class="o">=</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span>
-</span><span id="GuiConfig-87"><a href="#GuiConfig-87"><span class="linenos">87</span></a>    <span class="n">resize_mode</span><span class="p">:</span> <span class="n">ResizeMode</span> <span class="o">=</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">SCALE</span>
-</span><span id="GuiConfig-88"><a href="#GuiConfig-88"><span class="linenos">88</span></a>    <span class="n">allow_window_resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="GuiConfig-23"><a href="#GuiConfig-23"><span class="linenos">23</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="GuiConfig-24"><a href="#GuiConfig-24"><span class="linenos">24</span></a><span class="k">class</span><span class="w"> </span><span class="nc">GuiConfig</span><span class="p">:</span>
+</span><span id="GuiConfig-25"><a href="#GuiConfig-25"><span class="linenos">25</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nextrpg&quot;</span>
+</span><span id="GuiConfig-26"><a href="#GuiConfig-26"><span class="linenos">26</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">1280</span><span class="p">,</span> <span class="mi">720</span><span class="p">)</span>
+</span><span id="GuiConfig-27"><a href="#GuiConfig-27"><span class="linenos">27</span></a>    <span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
+</span><span id="GuiConfig-28"><a href="#GuiConfig-28"><span class="linenos">28</span></a>    <span class="n">background_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">BLACK</span>
+</span><span id="GuiConfig-29"><a href="#GuiConfig-29"><span class="linenos">29</span></a>    <span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="GuiConfig-30"><a href="#GuiConfig-30"><span class="linenos">30</span></a>    <span class="n">gui_mode</span><span class="p">:</span> <span class="n">GuiMode</span> <span class="o">=</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span>
+</span><span id="GuiConfig-31"><a href="#GuiConfig-31"><span class="linenos">31</span></a>    <span class="n">resize_mode</span><span class="p">:</span> <span class="n">ResizeMode</span> <span class="o">=</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">SCALE</span>
+</span><span id="GuiConfig-32"><a href="#GuiConfig-32"><span class="linenos">32</span></a>    <span class="n">allow_window_resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Configuration class for Graphical User Interface (GUI).</p>
-
-<p>This is used by <code>nextrpg.gui.Gui</code> to initialize the pygame window and by the
-rendering system to control display properties.</p>
-
-<h6 id="attributes">Attributes:</h6>
-
-<ul>
-<li><strong>title:</strong>  The title of the GUI window.</li>
-<li><strong>size:</strong>  The resolution or dimensions of the GUI window defined by width
-and height. This also defines the aspect ratio of the game.</li>
-<li><strong>frames_per_second:</strong>  FPS. The target frame rate for the application's
-rendering performance.</li>
-<li><strong>background_color:</strong>  The background color of the GUI window.</li>
-<li><strong>gui_mode:</strong>  Whether to start the game in windowed or full screen mode.</li>
-<li><strong>resize_mode:</strong>  Whether to scale the images to fit the GUI size, or keep
-the native image size.</li>
-<li><strong>allow_window_resize:</strong>  Whether to allow the user to resize the window in
-windowed mode.</li>
-</ul>
-</div>
-
+    
 
                             <div id="GuiConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">GuiConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;nextrpg&#39;</span>,</span><span class="param">	<span class="n">size</span><span class="p">:</span> <span class="n"><a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a></span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">720</span><span class="p">)</span>,</span><span class="param">	<span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>,</span><span class="param">	<span class="n">background_color</span><span class="p">:</span> <span class="n"><a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">gui_mode</span><span class="p">:</span> <span class="n"><a href="#GuiMode">GuiMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#GuiMode.WINDOWED">GuiMode.WINDOWED</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">resize_mode</span><span class="p">:</span> <span class="n"><a href="#ResizeMode">ResizeMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#ResizeMode.SCALE">ResizeMode.SCALE</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">allow_window_resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
+        <span class="name">GuiConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;nextrpg&#39;</span>,</span><span class="param">	<span class="n">size</span><span class="p">:</span> <span class="n"><a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a></span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">720</span><span class="p">)</span>,</span><span class="param">	<span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>,</span><span class="param">	<span class="n">background_color</span><span class="p">:</span> <span class="n"><a href="../core/color.html#Rgba">nextrpg.core.color.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">gui_mode</span><span class="p">:</span> <span class="n"><a href="#GuiMode">GuiMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#GuiMode.WINDOWED">GuiMode.WINDOWED</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">resize_mode</span><span class="p">:</span> <span class="n"><a href="#ResizeMode">ResizeMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#ResizeMode.SCALE">ResizeMode.SCALE</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">allow_window_resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
 
         
     </div>
@@ -507,7 +339,7 @@ windowed mode.</li>
                             </div>
                             <div id="GuiConfig.background_color" class="classattr">
                                 <div class="attr variable">
-            <span class="name">background_color</span><span class="annotation">: <a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span>        =
+            <span class="name">background_color</span><span class="annotation">: <a href="../core/color.html#Rgba">nextrpg.core.color.Rgba</a></span>        =
 <span class="default_value">Rgba(red=0, green=0, blue=0, alpha=255)</span>
 
         

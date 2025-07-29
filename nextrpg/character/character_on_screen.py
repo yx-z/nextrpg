@@ -1,18 +1,3 @@
-"""
-Character on-screen representation for `nextrpg`.
-
-This module provides the base classes for characters that can be displayed and
-interacted with on screen. It includes character specifications, on-screen
-character management, and event handling for character interactions.
-
-Features:
-    - Character specification and configuration
-    - On-screen character positioning and drawing
-    - Event interaction handling
-    - Character state management
-    - Visual representation management
-"""
-
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
@@ -32,22 +17,6 @@ from nextrpg.event.event_as_attr import event_as_attr
 
 @dataclass_with_instance_init(frozen=True)
 class CharacterSpec:
-    """
-    Specification for a character's properties and configuration.
-
-    This class defines the basic properties of a character including its object
-    name, display name, and character drawing. It serves as a template for
-    creating character instances.
-
-    Arguments:
-        object_name: The unique identifier for the character object. Used for
-            map object references and event triggers.
-        display_name: The name displayed to the player for this character.
-            Defaults to the object_name if not specified.
-        character: The character drawing that defines the visual representation
-            and animation of the character.
-    """
-
     object_name: str
     character: CharacterDraw
     avatar: Draw | Group | None = None
@@ -57,29 +26,6 @@ class CharacterSpec:
 @dataclass_with_instance_init(frozen=True, kw_only=True)
 @event_as_attr
 class CharacterOnScreen(Moving, AnimatedOnScreen):
-    """
-    Represents a character that can be displayed and interacted with on screen.
-
-    This class provides the foundation for all on-screen characters, including
-    positioning, drawing management, event handling, and state management. It
-    serves as the base class for both player characters and NPCs.
-
-    The character maintains its position, visual representation, and event
-    interaction capabilities. It can be updated over time and can participate
-    in event-driven interactions with other characters or game elements.
-
-    Arguments:
-        spec: The character specification defining the character's properties
-            and visual representation.
-        coordinate: The current position of the character on screen.
-        name: The display name of the character. Defaults to the specification's
-            display name.
-        character: The character drawing that defines the visual representation.
-            Defaults to the specification's character.
-        _event_triggered: Internal flag indicating if the character is currently
-            participating in an event.
-    """
-
     spec: CharacterSpec
     coordinate: Coordinate
     _: KW_ONLY = not_constructor_below()
@@ -102,44 +48,13 @@ class CharacterOnScreen(Moving, AnimatedOnScreen):
 
     @property
     def draw_on_screen(self) -> DrawOnScreen:
-        """
-        Get the character's main drawing representation.
-
-        Creates a drawable representation of the character at its current
-        position with its current visual state.
-
-        Returns:
-            The character's drawing at its current position.
-        """
         return DrawOnScreen(self.coordinate, self.character.draw)
 
-    def start_event(self, character: CharacterOnScreen) -> Self:
-        """
-        Start an event interaction with another character.
-
-        When starting an event, the character turns to face the other character
-        and enters an event-triggered state. This ensures proper positioning
-        for dialogue or interactions.
-
-        Arguments:
-            character: The character to start an event with.
-
-        Returns:
-            The updated character state for the event.
-        """
+    def start_event(self, character: Self) -> Self:
         direction = character.coordinate.relative_to(self.coordinate)
         turned_character = self.character.turn(direction)
         return replace(self, character=turned_character, _event_triggered=True)
 
     @property
     def complete_event(self) -> Self:
-        """
-        Complete the current event and return to normal state.
-
-        Resets the event-triggered flag and returns the character to its normal
-        interaction state.
-
-        Returns:
-            The character state after completing the event.
-        """
         return replace(self, _event_triggered=False)

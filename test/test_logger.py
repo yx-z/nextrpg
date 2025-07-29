@@ -11,6 +11,3 @@ def test_logger():
     logger.warning(t"Warning {i}")
     logger.error(t"Error {i}", duration=123)
     logger.error(t"Error {i}", duration=123)
-
-    with raises(ValueError):
-        Logger("TestLogger")

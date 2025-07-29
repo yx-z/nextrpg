@@ -67,73 +67,24 @@
                     <h1 class="modulename">
 <a href="./../../nextrpg.html">nextrpg</a><wbr>.<a href="./../global_config.html">global_config</a><wbr>.character_config    </h1>
 
-                        <div class="docstring"><p>Character configuration system for <code><a href="../../nextrpg.html">nextrpg</a></code>.</p>
-
-<p>This module provides configuration options for character behavior in
-<code><a href="../../nextrpg.html">nextrpg</a></code> games. It includes the <code><a href="#CharacterConfig">CharacterConfig</a></code> class which defines
-movement, timing, and directional parameters for characters.</p>
-
-<h6 id="features">Features:</h6>
-
-<blockquote>
-  <ul>
-  <li>Movement speed configuration</li>
-  <li>Idle and move duration settings</li>
-  <li>Directional movement constraints</li>
-  <li>Integration with character systems</li>
-  </ul>
-</blockquote>
-</div>
-
+                
                         <input id="mod-character_config-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-character_config-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">Character configuration system for `nextrpg`.</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">This module provides configuration options for character behavior in</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">`nextrpg` games. It includes the `CharacterConfig` class which defines</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">movement, timing, and directional parameters for characters.</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">PixelPerMillisecond</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.direction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">Features:</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">    - Movement speed configuration</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">    - Idle and move duration settings</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">    - Directional movement constraints</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">    - Integration with character systems</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">PixelPerMillisecond</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.direction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterConfig</span><span class="p">:</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">    Configuration class for characters.</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">    This global_config is used by `nextrpg.character.character.Character` to define</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">    movement behavior, timing, and directional constraints.</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">        move_speed: The default speed of the character&#39;s movement in pixels</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">            per millisecond. The number of pixels is consumed before screen</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">            scaling, if any. Defaults to 0.2.</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">        idle_duration: The duration of the NPC&#39;s idle state in milliseconds.</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">            Defaults to 500.</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">        move_duration: The duration of the NPC&#39;s move state in milliseconds.</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">            Defaults to 1000.</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">        directions: The set of directions that the character can move.</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">            Defaults to all directions (up, left, right, down, and diagonals).</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">500</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">1000</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">directions</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">Direction</span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">Direction</span><span class="p">)</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterConfig</span><span class="p">:</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">500</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">1000</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">directions</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">Direction</span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">Direction</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -150,58 +101,21 @@ movement, timing, and directional parameters for characters.</p>
 
     </div>
     <a class="headerlink" href="#CharacterConfig"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterConfig-23"><a href="#CharacterConfig-23"><span class="linenos">23</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="CharacterConfig-24"><a href="#CharacterConfig-24"><span class="linenos">24</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterConfig</span><span class="p">:</span>
-</span><span id="CharacterConfig-25"><a href="#CharacterConfig-25"><span class="linenos">25</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CharacterConfig-26"><a href="#CharacterConfig-26"><span class="linenos">26</span></a><span class="sd">    Configuration class for characters.</span>
-</span><span id="CharacterConfig-27"><a href="#CharacterConfig-27"><span class="linenos">27</span></a>
-</span><span id="CharacterConfig-28"><a href="#CharacterConfig-28"><span class="linenos">28</span></a><span class="sd">    This global_config is used by `nextrpg.character.character.Character` to define</span>
-</span><span id="CharacterConfig-29"><a href="#CharacterConfig-29"><span class="linenos">29</span></a><span class="sd">    movement behavior, timing, and directional constraints.</span>
-</span><span id="CharacterConfig-30"><a href="#CharacterConfig-30"><span class="linenos">30</span></a>
-</span><span id="CharacterConfig-31"><a href="#CharacterConfig-31"><span class="linenos">31</span></a><span class="sd">    Arguments:</span>
-</span><span id="CharacterConfig-32"><a href="#CharacterConfig-32"><span class="linenos">32</span></a><span class="sd">        move_speed: The default speed of the character&#39;s movement in pixels</span>
-</span><span id="CharacterConfig-33"><a href="#CharacterConfig-33"><span class="linenos">33</span></a><span class="sd">            per millisecond. The number of pixels is consumed before screen</span>
-</span><span id="CharacterConfig-34"><a href="#CharacterConfig-34"><span class="linenos">34</span></a><span class="sd">            scaling, if any. Defaults to 0.2.</span>
-</span><span id="CharacterConfig-35"><a href="#CharacterConfig-35"><span class="linenos">35</span></a><span class="sd">        idle_duration: The duration of the NPC&#39;s idle state in milliseconds.</span>
-</span><span id="CharacterConfig-36"><a href="#CharacterConfig-36"><span class="linenos">36</span></a><span class="sd">            Defaults to 500.</span>
-</span><span id="CharacterConfig-37"><a href="#CharacterConfig-37"><span class="linenos">37</span></a><span class="sd">        move_duration: The duration of the NPC&#39;s move state in milliseconds.</span>
-</span><span id="CharacterConfig-38"><a href="#CharacterConfig-38"><span class="linenos">38</span></a><span class="sd">            Defaults to 1000.</span>
-</span><span id="CharacterConfig-39"><a href="#CharacterConfig-39"><span class="linenos">39</span></a><span class="sd">        directions: The set of directions that the character can move.</span>
-</span><span id="CharacterConfig-40"><a href="#CharacterConfig-40"><span class="linenos">40</span></a><span class="sd">            Defaults to all directions (up, left, right, down, and diagonals).</span>
-</span><span id="CharacterConfig-41"><a href="#CharacterConfig-41"><span class="linenos">41</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="CharacterConfig-42"><a href="#CharacterConfig-42"><span class="linenos">42</span></a>
-</span><span id="CharacterConfig-43"><a href="#CharacterConfig-43"><span class="linenos">43</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>
-</span><span id="CharacterConfig-44"><a href="#CharacterConfig-44"><span class="linenos">44</span></a>    <span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">500</span>
-</span><span id="CharacterConfig-45"><a href="#CharacterConfig-45"><span class="linenos">45</span></a>    <span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">1000</span>
-</span><span id="CharacterConfig-46"><a href="#CharacterConfig-46"><span class="linenos">46</span></a>    <span class="n">directions</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">Direction</span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">Direction</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterConfig-9"><a href="#CharacterConfig-9"><span class="linenos"> 9</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="CharacterConfig-10"><a href="#CharacterConfig-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterConfig</span><span class="p">:</span>
+</span><span id="CharacterConfig-11"><a href="#CharacterConfig-11"><span class="linenos">11</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>
+</span><span id="CharacterConfig-12"><a href="#CharacterConfig-12"><span class="linenos">12</span></a>    <span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">500</span>
+</span><span id="CharacterConfig-13"><a href="#CharacterConfig-13"><span class="linenos">13</span></a>    <span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">1000</span>
+</span><span id="CharacterConfig-14"><a href="#CharacterConfig-14"><span class="linenos">14</span></a>    <span class="n">directions</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">Direction</span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">Direction</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Configuration class for characters.</p>
-
-<p>This global_config is used by <code>nextrpg.character.character.Character</code> to define
-movement behavior, timing, and directional constraints.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong>move_speed:</strong>  The default speed of the character's movement in pixels
-per millisecond. The number of pixels is consumed before screen
-scaling, if any. Defaults to 0.2.</li>
-<li><strong>idle_duration:</strong>  The duration of the NPC's idle state in milliseconds.
-Defaults to 500.</li>
-<li><strong>move_duration:</strong>  The duration of the NPC's move state in milliseconds.
-Defaults to 1000.</li>
-<li><strong>directions:</strong>  The set of directions that the character can move.
-Defaults to all directions (up, left, right, down, and diagonals).</li>
-</ul>
-</div>
-
+    
 
                             <div id="CharacterConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">CharacterConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>,</span><span class="param">	<span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">500</span>,</span><span class="param">	<span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">1000</span>,</span><span class="param">	<span class="n">directions</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n"><a href="../core/direction.html#Direction">nextrpg.core.direction.Direction</a></span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span> <span class="mi">4</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">:</span> <span class="mi">5</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">:</span> <span class="mi">7</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">:</span> <span class="mi">6</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span> <span class="mi">8</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">})</span></span>)</span>
+        <span class="name">CharacterConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>,</span><span class="param">	<span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">500</span>,</span><span class="param">	<span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">1000</span>,</span><span class="param">	<span class="n">directions</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n"><a href="../core/direction.html#Direction">nextrpg.core.direction.Direction</a></span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">:</span> <span class="mi">6</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">:</span> <span class="mi">5</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">:</span> <span class="mi">7</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span> <span class="mi">8</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span> <span class="mi">4</span><span class="o">&gt;</span><span class="p">})</span></span>)</span>
 
         
     </div>
@@ -250,7 +164,7 @@ Defaults to all directions (up, left, right, down, and diagonals).</li>
                                 <div class="attr variable">
             <span class="name">directions</span><span class="annotation">: frozenset[<a href="../core/direction.html#Direction">nextrpg.core.direction.Direction</a>]</span>        =
 <input id="CharacterConfig.directions-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-            <label class="view-value-button pdoc-button" for="CharacterConfig.directions-view-value"></label><span class="default_value">frozenset({&lt;Direction.LEFT: 2&gt;, &lt;Direction.UP: 4&gt;, &lt;Direction.UP_LEFT: 5&gt;, &lt;Direction.DOWN: 1&gt;, &lt;Direction.DOWN_LEFT: 7&gt;, &lt;Direction.UP_RIGHT: 6&gt;, &lt;Direction.DOWN_RIGHT: 8&gt;, &lt;Direction.RIGHT: 3&gt;})</span>
+            <label class="view-value-button pdoc-button" for="CharacterConfig.directions-view-value"></label><span class="default_value">frozenset({&lt;Direction.LEFT: 2&gt;, &lt;Direction.DOWN: 1&gt;, &lt;Direction.UP_RIGHT: 6&gt;, &lt;Direction.UP_LEFT: 5&gt;, &lt;Direction.RIGHT: 3&gt;, &lt;Direction.DOWN_LEFT: 7&gt;, &lt;Direction.DOWN_RIGHT: 8&gt;, &lt;Direction.UP: 4&gt;})</span>
 
         
     </div>

@@ -58,57 +58,19 @@
                     <h1 class="modulename">
 <a href="./../../nextrpg.html">nextrpg</a><wbr>.<a href="./../global_config.html">global_config</a><wbr>.transition_config    </h1>
 
-                        <div class="docstring"><p>Transition configuration system for <code>NextRPG</code>.</p>
-
-<p>This module provides configuration options for scene transitions in <code>NextRPG</code>
-games. It includes the <code><a href="#TransitionConfig">TransitionConfig</a></code> class which defines timing parameters
-for smooth scene transitions.</p>
-
-<p>The transition configuration features:</p>
-
-<ul>
-<li>Configurable transition duration</li>
-<li>Integration with transition scene system</li>
-<li>Timing control for smooth animations</li>
-</ul>
-</div>
-
+                
                         <input id="mod-transition_config-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-transition_config-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">Transition configuration system for `NextRPG`.</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">This module provides configuration options for scene transitions in `NextRPG`</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">games. It includes the `TransitionConfig` class which defines timing parameters</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">for smooth scene transitions.</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">The transition configuration features:</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">- Configurable transition duration</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">- Integration with transition scene system</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">- Timing control for smooth animations</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TransitionConfig</span><span class="p">:</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">    Configuration class for transition scenes.</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">    This global_config is used by `nextrpg.scene.transition_scene.TransitionScene` to</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="sd">    control the timing and behavior of scene transitions.</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">        `duration`: The total duration of the transition in milliseconds.</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">            Defaults to 500ms.</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">500</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">4</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">5</span></a>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">6</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TransitionConfig</span><span class="p">:</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">8</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">500</span>
 </span></pre></div>
 
 
@@ -125,36 +87,13 @@ for smooth scene transitions.</p>
 
     </div>
     <a class="headerlink" href="#TransitionConfig"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TransitionConfig-20"><a href="#TransitionConfig-20"><span class="linenos">20</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="TransitionConfig-21"><a href="#TransitionConfig-21"><span class="linenos">21</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TransitionConfig</span><span class="p">:</span>
-</span><span id="TransitionConfig-22"><a href="#TransitionConfig-22"><span class="linenos">22</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="TransitionConfig-23"><a href="#TransitionConfig-23"><span class="linenos">23</span></a><span class="sd">    Configuration class for transition scenes.</span>
-</span><span id="TransitionConfig-24"><a href="#TransitionConfig-24"><span class="linenos">24</span></a>
-</span><span id="TransitionConfig-25"><a href="#TransitionConfig-25"><span class="linenos">25</span></a><span class="sd">    This global_config is used by `nextrpg.scene.transition_scene.TransitionScene` to</span>
-</span><span id="TransitionConfig-26"><a href="#TransitionConfig-26"><span class="linenos">26</span></a><span class="sd">    control the timing and behavior of scene transitions.</span>
-</span><span id="TransitionConfig-27"><a href="#TransitionConfig-27"><span class="linenos">27</span></a>
-</span><span id="TransitionConfig-28"><a href="#TransitionConfig-28"><span class="linenos">28</span></a><span class="sd">    Arguments:</span>
-</span><span id="TransitionConfig-29"><a href="#TransitionConfig-29"><span class="linenos">29</span></a><span class="sd">        `duration`: The total duration of the transition in milliseconds.</span>
-</span><span id="TransitionConfig-30"><a href="#TransitionConfig-30"><span class="linenos">30</span></a><span class="sd">            Defaults to 500ms.</span>
-</span><span id="TransitionConfig-31"><a href="#TransitionConfig-31"><span class="linenos">31</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="TransitionConfig-32"><a href="#TransitionConfig-32"><span class="linenos">32</span></a>
-</span><span id="TransitionConfig-33"><a href="#TransitionConfig-33"><span class="linenos">33</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">500</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TransitionConfig-7"><a href="#TransitionConfig-7"><span class="linenos">7</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="TransitionConfig-8"><a href="#TransitionConfig-8"><span class="linenos">8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TransitionConfig</span><span class="p">:</span>
+</span><span id="TransitionConfig-9"><a href="#TransitionConfig-9"><span class="linenos">9</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">500</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Configuration class for transition scenes.</p>
-
-<p>This global_config is used by <code><a href="../scene/transition_scene.html#TransitionScene">nextrpg.scene.transition_scene.TransitionScene</a></code> to
-control the timing and behavior of scene transitions.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code><a href="#TransitionConfig.duration">duration</a></code>:</strong>  The total duration of the transition in milliseconds.
-Defaults to 500ms.</li>
-</ul>
-</div>
-
+    
 
                             <div id="TransitionConfig.__init__" class="classattr">
                                 <div class="attr function">

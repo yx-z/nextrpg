@@ -1,18 +1,3 @@
-"""
-Map helper system for `nextrpg`.
-
-This module provides helper classes and functions for loading and processing TMX
-tile maps in `nextrpg` games. It includes utilities for tile grouping, polygon
-creation, collision detection, and map rendering.
-
-Features:
-    - Tile grouping and bottom pixel calculation
-    - Polygon and rectangle creation from Tiled objects
-    - Foreground/background/above-character layer management
-    - Collision detection and debug visualization
-    - Map object and layer access utilities
-"""
-
 from dataclasses import dataclass
 from functools import cached_property
 from os import PathLike
@@ -44,55 +29,18 @@ logger = Logger("MapLoader")
 
 
 class TileBottomAndDrawOnScreen(NamedTuple):
-    """
-    Represents a foreground tile of the bottommost pixel from its tile class,
-    and a `DrawOnScreen` of the tile itself.
-
-    This is particularly useful for foreground tiles when performing y-sorting
-    to determine the laying between the character and the tile: bigger y-axis
-    (closer to the bottom) means closer to the camera and hence obstructing
-    tiles/characters above it.
-
-    We need to group the tiles given a single graphical object may be split
-    into multiple tiles in a Tiled tmx map.
-
-    Attributes:
-        `bottom`: The bottommost pixel for the tile group that this tile is in.
-
-        `draw`: The `DrawOnScreen` of the tile itself.
-    """
 
     bottom: Pixel
     draw: DrawOnScreen
 
 
 class LayerTileBottomAndDrawOnScreen(NamedTuple):
-    """
-    Similar to `TileBottomAndDrawOnScreen`, but with a foreground layer.
-
-    Arguments:
-        `layer`: The foreground layer index.
-
-        `bottom`: The bottommost pixel for the tile group that this tile is in.
-
-        `draw_on_screen`: The `DrawOnScreen` of the tile itself.
-    """
-
     layer: int
     bottom: Pixel
     draw_on_screen: DrawOnScreen
 
 
 def get_polygon(obj: TiledObject) -> PolygonOnScreen | None:
-    """
-    Create a polygon from a Tiled object on a map.
-
-    Arguments:
-        `obj`: The Tiled object to create a polygon from.
-
-    Returns:
-        `PolygonOnScreen`: The polygon created from the Tiled object.
-    """
     if hasattr(obj, "points"):
         return PolygonOnScreen(
             tuple(Coordinate(x, y) for x, y in obj.points), obj.closed
@@ -107,20 +55,11 @@ def get_polygon(obj: TiledObject) -> PolygonOnScreen | None:
 @cached(lambda: config().resource.map_cache_size)
 @dataclass(frozen=True)
 class MapLoader:
-    """
-    Tiled tmx map helper class for loading the tiles.
-    """
 
     tmx_file: PathLike | str
 
     @cached_property
     def map_size(self) -> Size:
-        """
-        Return the full map size in pixels.
-
-        Returns:
-            `Size`: The map size.
-        """
         tile_width, tile_height = self._tile_size
         width = self._tmx.width * tile_width
         height = self._tmx.height * tile_height
@@ -128,34 +67,12 @@ class MapLoader:
 
     @cached_property
     def background(self) -> tuple[DrawOnScreen, ...]:
-        """
-        The tuple of background drawings.
-
-        The background layers are ones marked with the class name
-        `global_config().map.background`.
-
-        Returns:
-            `tuple[DrawOnScreen, ...]`: The tuple of background drawings.
-        """
         return self._draw_layers(config().map.background)
 
     @cached_property
     def foreground(
         self,
     ) -> tuple[tuple[LayerTileBottomAndDrawOnScreen, ...], ...]:
-        """
-        The tuple of foreground drawings with bottom pixel info.
-
-        The foreground layers are ones marked with the class name
-        `global_config().map.foreground`.
-
-        The tuple is in increasing order of layer index, meaning the layer
-        shall obstruct previous tiles.
-
-        Returns:
-            `tuple[tuple[TileBottomAndDrawOnScreen, ...], ...]`: The tuple of
-                foreground drawings.
-        """
         return tuple(
             _foreground_layer(i, tiles)
             for i, layer in enumerate(
@@ -166,26 +83,10 @@ class MapLoader:
 
     @cached_property
     def above_character(self) -> tuple[DrawOnScreen, ...]:
-        """
-        Get the tuple of above-character drawings, which are all layers
-        with the class name `global_config().map.above_character`.
-
-        Returns:
-            `tuple[DrawOnScreen, ...]`: The tuple of above-character drawings.
-        """
         return self._draw_layers(config().map.above_character)
 
     @cached_property
     def collisions(self) -> tuple[PolygonOnScreen, ...]:
-        """
-        Retrieve collision polygons from the tiles and objects.
-        1. From tiles: mark the tile collision polygon/rectangle in tileset.
-        2. From objects: mark the polygon/rectangle object class as
-            `global_config().map.collision`.
-
-        Returns:
-            `tuple[Polygon, ...]`: Tuple of collision polygons.
-        """
         from_tiles = tuple(
             self._polygon(coord, obj) for coord, obj in self._colliders
         )
@@ -198,22 +99,13 @@ class MapLoader:
 
     @cached_property
     def collision_visuals(self) -> tuple[DrawOnScreen, ...]:
-        if (debug := config().debug) and (
-            color := debug.collision_rectangle_color
+        if config().debug and (
+            color := config().debug.collision_rectangle_color
         ):
             return tuple(c.fill(color) for c in self.collisions)
         return ()
 
     def get_object(self, name: str) -> TiledObject:
-        """
-        Get the first object of the given name from all visible object layers.
-
-        Arguments:
-            `name`: The unique name to retrieve the object by.
-
-        Returns:
-            `TiledObject`: The tile object with the given name.
-        """
         for obj in self._all_objects:
             if obj.name == name:
                 return obj
@@ -222,30 +114,11 @@ class MapLoader:
     def get_objects_by_class_name(
         self, class_name: str
     ) -> tuple[TiledObject, ...]:
-        """
-        Get objects of the given class name from all visible object layers.
-
-        Arguments:
-            `class_name`: The class name to retrieve objects by.
-
-        Returns:
-            `tuple[TiledObject, ...]`: The tile objects with the given name.
-        """
         return tuple(obj for obj in self._all_objects if obj.type == class_name)
 
     def layer_bottom_and_draw(
         self, character: CharacterOnScreen
     ) -> tuple[LayerTileBottomAndDrawOnScreen, ...]:
-        """
-        Retrieve the character foreground layer, bottom pixel, and the draw.
-
-        Arguments:
-            `character`: The character to retrieve the foreground layer for.
-
-        Returns:
-            `LayerTileBottomAndDrawOnScreen`: The foreground layer,
-                bottom pixel, and the draw.
-        """
         character_layer = self._character_layer(character)
         character_bottom = (
             character.draw_on_screen.visible_rectangle_on_screen.bottom

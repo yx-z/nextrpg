@@ -21,19 +21,6 @@ logger = Logger("Game")
 
 @dataclass_with_instance_init(frozen=True)
 class GameLoop:
-    """Internal game loop implementation.
-
-    This class handles the core game loop logic including event processing,
-    scene updates, GUI management, and frame rate control. It's designed
-    to be used internally by the Game class.
-
-    Args:
-        entry_scene: Function that creates the initial scene.
-        running: Whether the game loop should continue running.
-        _clock: Pygame clock for frame rate control.
-        _gui: GUI manager for window and drawing operations.
-        _scene: Current active scene being rendered and updated.
-    """
 
     entry_scene: Callable[[], Scene]
     _: KW_ONLY = not_constructor_below()
@@ -44,17 +31,6 @@ class GameLoop:
 
     @property
     def tick(self) -> Self:
-        """Execute one tick of the game loop.
-
-        This method processes the game loop for one frame, including:
-        - Frame rate control and timing
-        - Scene drawing and updates
-        - GUI updates
-        - Event processing
-
-        Returns:
-            GameLoop: Updated game loop state.
-        """
         logger.debug(t"FPS: {self._clock.get_fps():.0f}", duration=None)
         self._clock.tick(config().gui.frames_per_second)
         time_delta = self._clock.get_time()

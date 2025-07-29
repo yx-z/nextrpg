@@ -8,10 +8,8 @@ from nextrpg.draw.group import Group
 
 class Animated(ABC):
     @abstractmethod
-    def tick(self, time_delta: Millisecond) -> Self:
-        """"""
+    def tick(self, time_delta: Millisecond) -> Self: ...
 
     @property
     @abstractmethod
-    def draw(self) -> Draw | Group:
-        """"""
+    def draw(self) -> Draw | Group: ...

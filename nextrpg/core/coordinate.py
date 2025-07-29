@@ -1,20 +1,3 @@
-"""
-2D coordinate system for `nextrpg`.
-
-This module provides a comprehensive 2D coordinate system for positioning and
-movement in `nextrpg` games. It includes the `Coordinate` class which
-represents positions in 2D space with support for directional movement,
-scaling, and mathematical operations.
-
-Features:
-    - Immutable coordinate representation
-    - Directional movement with `DirectionalOffset`
-    - Distance calculations between coordinates
-    - Direction calculation between two points
-    - Coordinate arithmetic (addition, negation)
-    - Support for both orthogonal and diagonal movement
-"""
-
 from abc import ABC, abstractmethod
 from collections import namedtuple
 from math import atan2, degrees, hypot, sqrt
@@ -26,24 +9,6 @@ from nextrpg.core.time import Millisecond
 
 
 class Coordinate(namedtuple("Coordinate", "left top")):
-    """
-    Represents a 2D coordinate with immutability and mathematical operations.
-
-    This class provides a comprehensive 2D coordinate system with support for
-    directional movement, distance calculations, and coordinate arithmetic. It's
-    designed to be immutable for thread safety and predictable behavior.
-
-    The coordinate system uses a top-left origin where (0, 0) is the top-left
-    corner of the screen, with positive x extending right and positive y
-    extending down.
-
-    Arguments:
-        left: The horizontal position of the coordinate, measured by the number
-            of pixels from the left edge of the game window.
-        top: The vertical position of the coordinate, measured by the number of
-            pixels from the top edge of the game window.
-    """
-
     left: Pixel
     top: Pixel
 
@@ -88,19 +53,6 @@ class Coordinate(namedtuple("Coordinate", "left top")):
         return self + -offset
 
     def relative_to(self, other: Self) -> Direction:
-        """
-        Calculate the direction from another coordinate to this one.
-
-        Determines the primary direction from the other coordinate to this
-        coordinate by calculating the angle and mapping it to the nearest of the
-        eight possible directions.
-
-        Arguments:
-            other: The reference coordinate to calculate direction from.
-
-        Returns:
-            The direction from the other coordinate to this one.
-        """
         dx = self.left - other.left
         dy = self.top - other.top
         angle = (degrees(atan2(-dy, dx)) + 360) % 360
@@ -114,15 +66,6 @@ class Coordinate(namedtuple("Coordinate", "left top")):
         return f"({self.left:.0f}, {self.top:.0f})"
 
     def distance(self, other: Self) -> Pixel:
-        """
-        Calculate the Euclidean distance to another coordinate.
-
-        Arguments:
-            other: The coordinate to calculate distance to.
-
-        Returns:
-            The distance between the two coordinates.
-        """
         dx = self.left - other.left
         dy = self.top - other.top
         return hypot(dx, dy)
@@ -132,8 +75,7 @@ class Moving(ABC):
     coordinate: Coordinate
 
     @abstractmethod
-    def tick(self, time_delta: Millisecond) -> Self:
-        """"""
+    def tick(self, time_delta: Millisecond) -> Self: ...
 
 
 def _angle_difference(a1: float, a2: float) -> float:

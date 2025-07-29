@@ -18,33 +18,6 @@ logger = Logger("RpgEventScene")
 @dataclass(frozen=True)
 @event_as_attr
 class EventfulScene(Scene):
-    """Scene that supports event execution via coroutines/generators.
-
-    This scene type allows for complex event sequences to be executed
-    using Python generators. It manages the state of ongoing events
-    and provides methods for event continuation and completion.
-
-    Attributes:
-        player: The player character on screen.
-        npcs: Tuple of NPCs present in the scene.
-        npc: Currently active NPC (if any).
-        _event_generator: Current event generator being executed.
-        _event_result: Result from the previous event step.
-
-    Example:
-        ```python
-        scene = EventfulScene(
-            player=player,
-            npcs=(npc1, npc2)
-        )
-
-        # Handle events
-        scene = scene.event(key_press_event)
-
-        # Update scene over time
-        scene = scene.tick(time_delta)
-        ```
-    """
 
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...]
@@ -81,14 +54,6 @@ class EventfulScene(Scene):
         return self.tick_without_event(time_delta)
 
     def tick_without_event(self, time_delta: Millisecond) -> Self:
-        """Update scene state without processing events.
-
-        Args:
-            time_delta: Time elapsed since last update in milliseconds.
-
-        Returns:
-            Updated scene with player and NPCs updated.
-        """
         return replace(
             self,
             player=self.player.tick(time_delta),
@@ -96,18 +61,6 @@ class EventfulScene(Scene):
         )
 
     def send(self, event: RpgEventGenerator, result: Any = None) -> Self:
-        """Continue event execution and optionally send the result of the current event.
-
-        This method is used to continue the execution of an event generator
-        and can pass a result value to the generator.
-
-        Args:
-            event: The generator to generate the next event.
-            result: Result of the current event, passing to the generator.
-
-        Returns:
-            Scene that shall continue with the next event.
-        """
         return replace(self, _event_generator=event, _event_result=result)
 
     @cached_property
@@ -162,23 +115,5 @@ class EventfulScene(Scene):
 
 @dataclass(frozen=True)
 class RpgEventScene(Scene):
-    """Scene wrapper for RPG events.
-
-    This class represents a scene that is part of an RPG event sequence.
-    It contains the event generator and the underlying scene context.
-
-    Attributes:
-        generator: The generator to continue after the event.
-        scene: The scene to continue.
-
-    Example:
-        ```python
-        event_scene = RpgEventScene(
-            generator=event_generator,
-            scene=base_scene
-        )
-        ```
-    """
-
     generator: RpgEventGenerator
     scene: EventfulScene

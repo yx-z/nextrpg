@@ -1,17 +1,3 @@
-"""
-Event attribute system for `nextrpg`.
-
-This module provides a proxy class that allows RPG events to be accessed as
-attributes on scenes and other objects. It includes the `EventAsAttr` class
-which dynamically resolves event names to registered event handlers.
-
-Features:
-    - Dynamic event resolution
-    - Attribute-style event access
-    - Integration with registered events
-    - Error handling for missing events
-"""
-
 from collections.abc import Callable
 
 from nextrpg.event.rpg_event import registered_events

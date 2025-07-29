@@ -1,9 +1,3 @@
-"""
-Web entry point.
-
-The import comments below are required for pygbag.
-"""
-
 # /// script
 # dependencies = [
 #   "nextrpg",

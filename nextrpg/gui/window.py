@@ -1,19 +1,3 @@
-"""
-Game window and Graphical User Interface (GUI) management for `nextrpg`.
-
-This module provides the core GUI system for `nextrpg` games, handling window
-management, screen rendering, and user interface interactions. It includes the
-`Gui` class which manages the game window, screen scaling, and drawing
-operations.
-
-Features:
-    - Window management with fullscreen and windowed modes
-    - Automatic screen scaling and centering
-    - Event handling for window resizing and mode switching
-    - Drawing surface management and rendering
-    - Integration with the logging system for debug output
-"""
-
 from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self
@@ -42,50 +26,11 @@ from nextrpg.event.pygame_event import (
 from nextrpg.global_config.global_config import config, set_config
 from nextrpg.global_config.gui_config import GuiConfig, GuiMode, ResizeMode
 
-logger = Logger("GUI")
+logger = Logger("Window")
 
 
 @dataclass(frozen=True)
 class Window:
-    """
-    Game window and GUI management system.
-
-    This class handles the game window, screen rendering, and user
-    interface interactions. It manages window modes (fullscreen/windowed),
-    screen scaling, and drawing operations.
-
-    The GUI system automatically initializes pygame display and font
-    systems, manages window configuration, and provides methods for
-    drawing and event handling.
-
-    Arguments:
-        `current_config`: The current GUI configuration settings.
-            Defaults to the global GUI configuration.
-
-        `last_config`: The previous GUI configuration for change detection.
-            Defaults to the global GUI configuration.
-
-        `initial_config`: The initial GUI configuration for scaling.
-            Defaults to the global GUI configuration.
-
-        `_screen`: Internal pygame surface for the game window.
-            Initialized automatically if not provided.
-
-        `_title`: Internal window title cache for optimization.
-
-    Example:
-        ```python
-        from nextrpg.window import Gui
-        from nextrpg.gui_config import GuiConfig, GuiMode
-
-        # Create GUI with custom global_config
-        global_config = GuiConfig(size=Size(800, 600), gui_mode=GuiMode.WINDOWED)
-        gui = Gui(current_config=global_config)
-
-        # Draw game elements
-        gui.draw(drawings, time_delta)
-        ```
-    """
 
     _: KW_ONLY = not_constructor_below()
     current_config: GuiConfig = field(default_factory=lambda: config().gui)
@@ -96,16 +41,6 @@ class Window:
 
     @property
     def update(self) -> Self:
-        """
-        Update GUI configuration if needed.
-
-        Checks if the current GUI configuration matches the global global_config
-        and updates it if necessary. This ensures GUI settings are
-        synchronized with configuration changes.
-
-        Returns:
-            `Window`: Updated GUI instance with current configuration.
-        """
         if config().gui is self.current_config:
             return self
         return replace(
@@ -113,31 +48,6 @@ class Window:
         )
 
     def event(self, e: PygameEvent) -> Self:
-        """
-        Handle GUI-related events.
-
-        Processes events that affect the GUI system, including:
-        - `GuiResize`: Handles window resize events and updates scaling
-        - `KeyPressDown`: Toggles between windowed and fullscreen modes
-            when `KeyboardKey.GUI_MODE_TOGGLE` is pressed
-
-        Arguments:
-            `e`: The pygame event to process.
-
-        Returns:
-            `Window`: An updated GUI instance reflecting any changes.
-
-        Example:
-            ```python
-            from nextrpg.pygame_event import GuiResize, KeyPressDown
-
-            # Handle window resize
-            gui = gui.event(GuiResize(Size(1024, 768)))
-
-            # Handle mode toggle
-            gui = gui.event(KeyPressDown(KeyboardKey.GUI_MODE_TOGGLE))
-            ```
-        """
         match e:
             case GuiResize():
                 return self._resize(e.size)
@@ -149,28 +59,6 @@ class Window:
     def draw(
         self, draw_on_screens: tuple[DrawOnScreen, ...], time_delta: Millisecond
     ) -> None:
-        """
-        Draw the given drawings to the screen.
-
-        Renders all provided drawings to the game window, handling
-        screen scaling and centering based on the current GUI
-        configuration. Also renders debug log messages if available.
-
-        Arguments:
-            `draw_on_screens`: The drawings to render to the screen.
-
-            `time_delta`: The time elapsed since the last update
-                in milliseconds.
-
-        Example:
-            ```python
-            from nextrpg import DrawOnScreen
-
-            # Draw game elements
-            drawings = (player_sprite, background, ui_elements)
-            gui.draw(drawings, time_delta)
-            ```
-        """
         logger.debug(
             t"Size {self.current_config.size} Shift {self._center_shift}",
             duration=None,

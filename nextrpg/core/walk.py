@@ -1,23 +1,3 @@
-"""
-Path-based walking system for `NextRPG`.
-
-This module provides a sophisticated walking system that allows characters and
-objects to follow predefined paths with configurable movement speeds. The system
-supports both linear and cyclic paths, with smooth movement interpolation
-between path points.
-
-The walking system includes:
-- Path-based movement along polygon paths
-- Configurable movement speed
-- Support for cyclic (looping) and linear paths
-- Smooth interpolation between path points
-- Direction calculation based on movement
-- Completion detection for linear paths
-
-The system is designed to work seamlessly with the character movement and
-animation systems, providing realistic path-following behavior.
-"""
-
 from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Self
@@ -36,31 +16,6 @@ from nextrpg.draw.draw import PolygonOnScreen
 
 @dataclass_with_instance_init(frozen=True)
 class Walk:
-    """
-    Path-based walking system for characters and objects.
-
-    This class provides a complete walking system that allows entities to follow
-    predefined paths with smooth movement. It supports both linear paths (with
-    completion) and cyclic paths (looping).
-
-    The walking system calculates movement based on time deltas and movement
-    speed, providing smooth interpolation between path points. It also tracks
-    direction changes for animation purposes.
-
-    Arguments:
-        `path`: The polygon path to follow.
-        `move_speed`: Movement speed in pixels per millisecond.
-        `cyclic`: Whether the path should loop continuously. If `True`, the walk
-            will restart from the beginning when reaching the end. If `False`,
-            the walk will complete when reaching the end.
-        `coordinate`: Current position on the path. Automatically initialized to
-            the path's starting point.
-        `_last_coordinate`: Previous position for direction calculation.
-            Automatically initialized to the path's starting point.
-        `_index`: Current path point index.
-        `_last_index`: Previous path point index.
-    """
-
     path: PolygonOnScreen
     move_speed: PixelPerMillisecond
     cyclic: bool
@@ -70,23 +25,6 @@ class Walk:
 
     @cached_property
     def direction(self) -> Direction:
-        """
-        Get the current movement direction.
-
-        Calculates the direction based on the current position
-        relative to the previous position.
-
-        Returns:
-            `Direction`: The current movement direction.
-
-        Example:
-            ```python
-            direction = walk.direction
-            if direction == Direction.UP:
-                # Character is moving upward
-                pass
-            ```
-        """
         if self._target_index is None:
             if self.path.closed:
                 penultimate = self.path.points[-1]
@@ -100,37 +38,9 @@ class Walk:
 
     @property
     def reset(self) -> Self:
-        """
-        Reset the walk to its starting position.
-
-        Returns a new walk instance with all internal state
-        reset to the beginning of the path.
-
-        Returns:
-            `Walk`: A new walk instance reset to the start.
-
-        Example:
-            ```python
-            # Reset walk to beginning
-            walk = walk.reset
-            ```
-        """
         return replace(self, coordinate=self._initial_point, _target_index=1)
 
     def tick(self, time_delta: Millisecond) -> Self:
-        """
-        Update the walk state based on elapsed time.
-
-        Optimized to:
-        - Immediately jump to the final position if a non-cyclic walk exceeds total distance.
-        - Use modulo on distance if a cyclic walk exceeds one full path length.
-
-        Arguments:
-            `time_delta`: The elapsed time in milliseconds.
-
-        Returns:
-            `Walk`: A new walk instance with updated position.
-        """
         if self.complete:
             return self
 
@@ -162,23 +72,6 @@ class Walk:
 
     @property
     def complete(self) -> bool:
-        """
-        Check if the walk has completed.
-
-        For linear paths, returns `True` when the walk has reached
-        the end of the path. For cyclic paths, always returns `False`
-        since they loop indefinitely.
-
-        Returns:
-            `bool`: Whether the walk has completed.
-
-        Example:
-            ```python
-            if walk.completed:
-                print("Walk finished!")
-                # Handle completion logic
-            ```
-        """
         return self._target_index is None
 
     def _next_index(self, index: int) -> int:

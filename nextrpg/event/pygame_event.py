@@ -1,18 +1,3 @@
-"""
-Typed event system for pygame events in `NextRPG`.
-
-This module provides a type-safe wrapper system for pygame events,
-converting raw pygame events into strongly-typed event objects. It includes
-classes for keyboard input, window management, and game control events.
-
-The event system features:
-- Type-safe event wrappers for all pygame events
-- Keyboard key mapping and enumeration
-- Window resize event handling
-- Quit event processing
-- Integration with the key mapping configuration system
-"""
-
 from dataclasses import dataclass
 from enum import Enum, auto
 

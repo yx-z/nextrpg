@@ -67,74 +67,24 @@
                     <h1 class="modulename">
 <a href="./../../nextrpg.html">nextrpg</a><wbr>.<a href="./../global_config.html">global_config</a><wbr>.text_config    </h1>
 
-                        <div class="docstring"><p>Text configuration system for <code>NextRPG</code>.</p>
-
-<p>This module provides configuration options for text rendering in <code>NextRPG</code>
-games. It includes the <code><a href="#TextConfig">TextConfig</a></code> class which defines font, color, spacing,
-and rendering options for text display.</p>
-
-<p>The text configuration system features:</p>
-
-<ul>
-<li>Font selection and sizing</li>
-<li>Color and transparency settings</li>
-<li>Line spacing control for multi-line text</li>
-<li>Antialiasing options for smooth text rendering</li>
-<li>Integration with the global configuration system</li>
-</ul>
-</div>
-
+                
                         <input id="mod-text_config-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 
                         <label class="view-source-button" for="mod-text_config-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">Text configuration system for `NextRPG`.</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">This module provides configuration options for text rendering in `NextRPG`</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">games. It includes the `TextConfig` class which defines font, color, spacing,</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">and rendering options for text display.</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pixel</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">WHITE</span><span class="p">,</span> <span class="n">Rgba</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.font</span><span class="w"> </span><span class="kn">import</span> <span class="n">Font</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">The text configuration system features:</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">- Font selection and sizing</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">- Color and transparency settings</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">- Line spacing control for multi-line text</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">- Antialiasing options for smooth text rendering</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">- Integration with the global configuration system</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pixel</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">WHITE</span><span class="p">,</span> <span class="n">Rgba</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.font</span><span class="w"> </span><span class="kn">import</span> <span class="n">Font</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TextConfig</span><span class="p">:</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="sd">    Configuration class for text rendering.</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">    This class defines all parameters needed for text rendering, including font</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">    selection, color, spacing, and rendering quality. It&#39;s designed to be</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">    immutable for consistent text appearance across the application.</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">    Arguments:</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">        `font`: The font to use for rendering text. Controls the typeface, size,</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">            and style of the text.</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">        `color`: The color to use for rendering text. Includes RGB values and</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="sd">            alpha transparency.</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="sd">        `line_spacing`: The vertical spacing between lines in multi-line text,</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">            measured in pixels.</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">        `antialias`: Whether to use antialiasing for rendering text.</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">            Antialiasing creates smoother text edges but may be slightly slower</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">            to render.</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">font</span><span class="p">:</span> <span class="n">Font</span> <span class="o">=</span> <span class="n">Font</span><span class="p">(</span><span class="mi">28</span><span class="p">)</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">WHITE</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">line_spacing</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">8</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="n">antialias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TextConfig</span><span class="p">:</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">font</span><span class="p">:</span> <span class="n">Font</span> <span class="o">=</span> <span class="n">Font</span><span class="p">(</span><span class="mi">28</span><span class="p">)</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">WHITE</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">line_spacing</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">8</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">antialias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span></pre></div>
 
 
@@ -151,60 +101,21 @@ and rendering options for text display.</p>
 
     </div>
     <a class="headerlink" href="#TextConfig"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TextConfig-24"><a href="#TextConfig-24"><span class="linenos">24</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="TextConfig-25"><a href="#TextConfig-25"><span class="linenos">25</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TextConfig</span><span class="p">:</span>
-</span><span id="TextConfig-26"><a href="#TextConfig-26"><span class="linenos">26</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="TextConfig-27"><a href="#TextConfig-27"><span class="linenos">27</span></a><span class="sd">    Configuration class for text rendering.</span>
-</span><span id="TextConfig-28"><a href="#TextConfig-28"><span class="linenos">28</span></a>
-</span><span id="TextConfig-29"><a href="#TextConfig-29"><span class="linenos">29</span></a><span class="sd">    This class defines all parameters needed for text rendering, including font</span>
-</span><span id="TextConfig-30"><a href="#TextConfig-30"><span class="linenos">30</span></a><span class="sd">    selection, color, spacing, and rendering quality. It&#39;s designed to be</span>
-</span><span id="TextConfig-31"><a href="#TextConfig-31"><span class="linenos">31</span></a><span class="sd">    immutable for consistent text appearance across the application.</span>
-</span><span id="TextConfig-32"><a href="#TextConfig-32"><span class="linenos">32</span></a>
-</span><span id="TextConfig-33"><a href="#TextConfig-33"><span class="linenos">33</span></a><span class="sd">    Arguments:</span>
-</span><span id="TextConfig-34"><a href="#TextConfig-34"><span class="linenos">34</span></a><span class="sd">        `font`: The font to use for rendering text. Controls the typeface, size,</span>
-</span><span id="TextConfig-35"><a href="#TextConfig-35"><span class="linenos">35</span></a><span class="sd">            and style of the text.</span>
-</span><span id="TextConfig-36"><a href="#TextConfig-36"><span class="linenos">36</span></a><span class="sd">        `color`: The color to use for rendering text. Includes RGB values and</span>
-</span><span id="TextConfig-37"><a href="#TextConfig-37"><span class="linenos">37</span></a><span class="sd">            alpha transparency.</span>
-</span><span id="TextConfig-38"><a href="#TextConfig-38"><span class="linenos">38</span></a><span class="sd">        `line_spacing`: The vertical spacing between lines in multi-line text,</span>
-</span><span id="TextConfig-39"><a href="#TextConfig-39"><span class="linenos">39</span></a><span class="sd">            measured in pixels.</span>
-</span><span id="TextConfig-40"><a href="#TextConfig-40"><span class="linenos">40</span></a><span class="sd">        `antialias`: Whether to use antialiasing for rendering text.</span>
-</span><span id="TextConfig-41"><a href="#TextConfig-41"><span class="linenos">41</span></a><span class="sd">            Antialiasing creates smoother text edges but may be slightly slower</span>
-</span><span id="TextConfig-42"><a href="#TextConfig-42"><span class="linenos">42</span></a><span class="sd">            to render.</span>
-</span><span id="TextConfig-43"><a href="#TextConfig-43"><span class="linenos">43</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="TextConfig-44"><a href="#TextConfig-44"><span class="linenos">44</span></a>
-</span><span id="TextConfig-45"><a href="#TextConfig-45"><span class="linenos">45</span></a>    <span class="n">font</span><span class="p">:</span> <span class="n">Font</span> <span class="o">=</span> <span class="n">Font</span><span class="p">(</span><span class="mi">28</span><span class="p">)</span>
-</span><span id="TextConfig-46"><a href="#TextConfig-46"><span class="linenos">46</span></a>    <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">WHITE</span>
-</span><span id="TextConfig-47"><a href="#TextConfig-47"><span class="linenos">47</span></a>    <span class="n">line_spacing</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">8</span>
-</span><span id="TextConfig-48"><a href="#TextConfig-48"><span class="linenos">48</span></a>    <span class="n">antialias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TextConfig-9"><a href="#TextConfig-9"><span class="linenos"> 9</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="TextConfig-10"><a href="#TextConfig-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TextConfig</span><span class="p">:</span>
+</span><span id="TextConfig-11"><a href="#TextConfig-11"><span class="linenos">11</span></a>    <span class="n">font</span><span class="p">:</span> <span class="n">Font</span> <span class="o">=</span> <span class="n">Font</span><span class="p">(</span><span class="mi">28</span><span class="p">)</span>
+</span><span id="TextConfig-12"><a href="#TextConfig-12"><span class="linenos">12</span></a>    <span class="n">color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">WHITE</span>
+</span><span id="TextConfig-13"><a href="#TextConfig-13"><span class="linenos">13</span></a>    <span class="n">line_spacing</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">8</span>
+</span><span id="TextConfig-14"><a href="#TextConfig-14"><span class="linenos">14</span></a>    <span class="n">antialias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Configuration class for text rendering.</p>
-
-<p>This class defines all parameters needed for text rendering, including font
-selection, color, spacing, and rendering quality. It's designed to be
-immutable for consistent text appearance across the application.</p>
-
-<h6 id="arguments">Arguments:</h6>
-
-<ul>
-<li><strong><code><a href="#TextConfig.font">font</a></code>:</strong>  The font to use for rendering text. Controls the typeface, size,
-and style of the text.</li>
-<li><strong><code><a href="#TextConfig.color">color</a></code>:</strong>  The color to use for rendering text. Includes RGB values and
-alpha transparency.</li>
-<li><strong><code><a href="#TextConfig.line_spacing">line_spacing</a></code>:</strong>  The vertical spacing between lines in multi-line text,
-measured in pixels.</li>
-<li><strong><code><a href="#TextConfig.antialias">antialias</a></code>:</strong>  Whether to use antialiasing for rendering text.
-Antialiasing creates smoother text edges but may be slightly slower
-to render.</li>
-</ul>
-</div>
-
+    
 
                             <div id="TextConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">TextConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">font</span><span class="p">:</span> <span class="n"><a href="../draw/font.html#Font">nextrpg.draw.font.Font</a></span> <span class="o">=</span> <span class="n">Font</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>,</span><span class="param">	<span class="n">color</span><span class="p">:</span> <span class="n"><a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">line_spacing</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">8</span>,</span><span class="param">	<span class="n">antialias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
+        <span class="name">TextConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">font</span><span class="p">:</span> <span class="n"><a href="../draw/font.html#Font">nextrpg.draw.font.Font</a></span> <span class="o">=</span> <span class="n">Font</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>,</span><span class="param">	<span class="n">color</span><span class="p">:</span> <span class="n"><a href="../core/color.html#Rgba">nextrpg.core.color.Rgba</a></span> <span class="o">=</span> <span class="n">Rgba</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">line_spacing</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">8</span>,</span><span class="param">	<span class="n">antialias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
 
         
     </div>
@@ -227,7 +138,7 @@ to render.</li>
                             </div>
                             <div id="TextConfig.color" class="classattr">
                                 <div class="attr variable">
-            <span class="name">color</span><span class="annotation">: <a href="../draw/color.html#Rgba">nextrpg.draw.color.Rgba</a></span>        =
+            <span class="name">color</span><span class="annotation">: <a href="../core/color.html#Rgba">nextrpg.core.color.Rgba</a></span>        =
 <span class="default_value">Rgba(red=255, green=255, blue=255, alpha=255)</span>
 
         

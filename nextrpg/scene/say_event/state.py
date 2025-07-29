@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dataclasses import KW_ONLY, dataclass, replace
+from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import override
 
@@ -14,7 +14,7 @@ from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.draw.typewriter import Typewriter
-from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
+from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.scene.rpg_event_scene import RpgEventScene
 from nextrpg.scene.scene import Scene
@@ -35,8 +35,7 @@ class State(RpgEventScene, ABC):
 
     @property
     @abstractmethod
-    def add_ons(self) -> tuple[DrawOnScreen, ...]:
-        """"""
+    def add_ons(self) -> tuple[DrawOnScreen, ...]: ...
 
     @override
     @cached_property
