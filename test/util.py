@@ -16,7 +16,6 @@ from nextrpg import (
     EventfulScene,
     Millisecond,
     NpcOnScreen,
-    NpcSpec,
     PlayerOnScreen,
     PygameEvent,
     Scene,

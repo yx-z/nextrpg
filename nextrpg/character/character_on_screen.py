@@ -12,7 +12,7 @@ from nextrpg.core.dataclass_with_instance_init import (
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.draw.draw import Draw, DrawOnScreen
-from nextrpg.event.event_as_attr import event_as_attr
+from nextrpg.event.event_as_attr import EventAsAttr
 
 
 @dataclass_with_instance_init(frozen=True)
@@ -24,8 +24,7 @@ class CharacterSpec:
 
 
 @dataclass_with_instance_init(frozen=True, kw_only=True)
-@event_as_attr
-class CharacterOnScreen(Moving, AnimatedOnScreen):
+class CharacterOnScreen(EventAsAttr, Moving, AnimatedOnScreen):
     spec: CharacterSpec
     coordinate: Coordinate
     _: KW_ONLY = not_constructor_below()

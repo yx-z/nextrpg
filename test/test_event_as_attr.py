@@ -1,9 +1,8 @@
-from nextrpg import event_as_attr, register_rpg_event
+from nextrpg import EventAsAttr, register_rpg_event
 
 
 def test_event_as_attr() -> None:
-    @event_as_attr
-    class A:
+    class A(EventAsAttr):
         pass
 
     @register_rpg_event

@@ -8,7 +8,7 @@ from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.dataclass_with_instance_init import not_constructor_below
 from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond
-from nextrpg.event.event_as_attr import event_as_attr
+from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.scene.scene import Scene
 
@@ -16,8 +16,7 @@ logger = Logger("RpgEventScene")
 
 
 @dataclass(frozen=True)
-@event_as_attr
-class EventfulScene(Scene):
+class EventfulScene(EventAsAttr, Scene):
 
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...]
