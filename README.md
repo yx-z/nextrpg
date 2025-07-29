@@ -16,3 +16,7 @@ player: f"Hello {npc.display_name}! I am {player.display_name}."
 
 into an RPG game scene!
 ![interior](example/screenshot/interior.png)
+
+Take a look at [
+`interior_scene.py`](https://github.com/yx-z/nextrpg/blob/main/example/interior_scene.py#L24)
+for details :)
