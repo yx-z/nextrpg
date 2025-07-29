@@ -1,4 +1,4 @@
-__version__ = "0.1.12"
+__version__ = "0.1.13"
 
 from nextrpg.character.character_draw import *
 from nextrpg.character.character_on_screen import *
