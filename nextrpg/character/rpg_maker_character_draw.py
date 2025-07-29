@@ -1,8 +1,11 @@
 from dataclasses import KW_ONLY, dataclass, field, replace
 from enum import IntEnum
+from functools import cached_property
+from pathlib import Path
 from typing import Self, override
 
-from nextrpg import Draw
+from nextrpg.draw.sprite_sheet import SpriteSheet
+from nextrpg.draw.draw import Draw, Trim
 from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_instance_init import (
@@ -14,6 +17,8 @@ from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.cyclic_frames import CyclicFrames
+
+from nextrpg.draw.sprite_sheet import Selection
 from nextrpg.global_config.global_config import config
 
 
@@ -46,33 +51,18 @@ class XpFrameType(IntEnum):
 type FrameType = type[DefaultFrameType | XpFrameType]
 
 
-@dataclass(frozen=True)
-class SpriteSheetSelection:
-    row: int
-    column: int
-    max_rows: int = 2
-    max_columns: int = 4
-
-
-@dataclass(frozen=True)
-class Trim:
-    top: Pixel = 0
-    left: Pixel = 0
-    bottom: Pixel = 0
-    right: Pixel = 0
-
-
-@dataclass(frozen=True)
-class SpriteSheet:
-    draw: Draw
+@dataclass(frozen=True, kw_only=True)
+class RpgMakerSpriteSheet(SpriteSheet):
     trim: Trim | None = None
+    num_column: int = 4
+    num_row: int = 2
     style: FrameType = DefaultFrameType
 
 
 @dataclass_with_instance_init(frozen=True)
 class RpgMakerCharacterDraw(CharacterDraw):
-    sprite_sheet: SpriteSheet
-    sprite_sheet_selection: SpriteSheetSelection | None = None
+    sprite_sheet: RpgMakerSpriteSheet
+    selection: Selection | None = None
     animate_on_idle: bool = False
     duration_per_frame: Millisecond = field(
         default_factory=lambda: config().rpg_maker_character.duration_per_frame
@@ -117,13 +107,10 @@ class RpgMakerCharacterDraw(CharacterDraw):
             return frames.tick(time_delta)
         return frames
 
-    def _crop_by_selection(self, selection: SpriteSheetSelection) -> Draw:
-        draw = self.sprite_sheet.draw
-        width = draw.width / selection.max_columns
-        height = draw.height / selection.max_rows
-        top_left = Coordinate(width * selection.column, height * selection.row)
-        size = Size(width, height)
-        return draw.crop(top_left, size)
+    def _trim(self, draw: Draw) -> Draw:
+        if self.sprite_sheet.trim:
+            return draw.trim(self.sprite_sheet.trim)
+        return draw
 
     def _load_frames_row(self, draw: Draw, row: int) -> CyclicFrames:
         frames = tuple(
@@ -147,19 +134,10 @@ class RpgMakerCharacterDraw(CharacterDraw):
             for i in range(num_frames)
         )
 
-    def _trim(self, draw: Draw) -> Draw:
-        if not (trim := self.sprite_sheet.trim):
-            return draw
-        coord = Coordinate(trim.left, trim.top)
-        width = draw.width - coord.left - trim.right
-        height = draw.height - coord.top - trim.bottom
-        size = Size(width, height)
-        return draw.crop(coord, size)
-
     @property
     def _init_frames(self) -> dict[Direction, CyclicFrames]:
-        if select := self.sprite_sheet_selection:
-            draw = self._crop_by_selection(select)
+        if self.selection:
+            draw = self.sprite_sheet.select(self.selection)
         else:
             draw = self.sprite_sheet.draw
         return {

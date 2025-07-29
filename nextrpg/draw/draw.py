@@ -19,6 +19,14 @@ from nextrpg.global_config.global_config import config
 logger = Logger("Draw")
 
 
+@dataclass(frozen=True, kw_only=True)
+class Trim:
+    top: Pixel = 0
+    left: Pixel = 0
+    bottom: Pixel = 0
+    right: Pixel = 0
+
+
 @cached(
     lambda: config().resource.draw_cache_size,
     lambda resource: None if isinstance(resource, Surface) else resource,
@@ -47,6 +55,13 @@ class Draw:
         left, top = top_left
         width, height = size
         return Draw(self.pygame.subsurface((left, top, width, height)))
+
+    def trim(self, trim: Trim) -> Self:
+        coord = Coordinate(trim.left, trim.top)
+        width = self.width - coord.left - trim.right
+        height = self.height - coord.top - trim.bottom
+        size = Size(width, height)
+        return self.crop(coord, size)
 
     def set_alpha(self, alpha: Alpha) -> Self:
         surf = self._surface.copy()

@@ -2,17 +2,16 @@ from nextrpg import (
     CharacterDraw,
     CharacterSpec,
     Direction,
-    Draw,
+    EventfulScene,
     MapScene,
     Move,
     NpcOnScreen,
     NpcSpec,
     PlayerOnScreen,
     RpgMakerCharacterDraw,
-    SpriteSheet,
-    SpriteSheetSelection,
+    RpgMakerSpriteSheet,
+    Selection,
     Trim,
-    EventfulScene,
 )
 
 
@@ -50,8 +49,10 @@ def greet(
     # fmt: on
 
 
-def sprite_sheet() -> SpriteSheet:
-    return SpriteSheet(Draw("example/assets/Characters_MV.png"), Trim(top=25))
+def sprite_sheet() -> RpgMakerSpriteSheet:
+    return RpgMakerSpriteSheet(
+        resource="example/assets/Characters_MV.png", trim=Trim(top=25)
+    )
 
 
 def init_player() -> CharacterSpec:
@@ -61,18 +62,18 @@ def init_player() -> CharacterSpec:
         character=RpgMakerCharacterDraw(
             Direction.DOWN,
             sprite_sheet(),
-            SpriteSheetSelection(row=0, column=0),
+            Selection(row=0, column=0),
         ),
     )
 
 
 def alisa() -> CharacterDraw:
     return RpgMakerCharacterDraw(
-        Direction.RIGHT, sprite_sheet(), SpriteSheetSelection(0, 1)
+        Direction.RIGHT, sprite_sheet(), Selection(row=0, column=1)
     )
 
 
 def david() -> CharacterDraw:
     return RpgMakerCharacterDraw(
-        Direction.DOWN, sprite_sheet(), SpriteSheetSelection(0, 2)
+        Direction.DOWN, sprite_sheet(), Selection(row=0, column=2)
     )
