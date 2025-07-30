@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
 from functools import cached_property
+from pprint import pprint
 from typing import Self
 
 from nextrpg.core.coordinate import Coordinate
@@ -46,12 +47,11 @@ class Text:
         if isinstance(other, TextGroup):
             return replace(other, texts=(self,) + other.texts)
 
-        cfg = replace(config().text_group, auto_wrap=self.config.auto_wrap)
         if isinstance(other, str):
             txt = replace(self, message=other)
         else:
             txt = other
-        return TextGroup((self, txt), cfg)
+        return TextGroup((self, txt))
 
     @cached_property
     def line_texts(self) -> tuple[Self, ...]:
@@ -127,13 +127,10 @@ class TextGroup:
 
     @cached_property
     def group(self) -> Group:
-        lines = [[t] for t in self._texts[0].line_texts]
-        if wrap := self.config.auto_wrap:
-            self._build_wrap_lines(lines, wrap)
-        else:
-            for text in self._texts[1:]:
-                lines[-1].append(text.line_texts[0])
-                lines += [[t] for t in text.line_texts[1:]]
+        lines = [[t] for t in self._no_wrap[0].line_texts]
+        for text in self._no_wrap[1:]:
+            lines[-1].append(text.line_texts[0])
+            lines += [[t] for t in text.line_texts[1:]]
 
         res: list[RelativeDraw] = []
         curr_height = 0
@@ -155,34 +152,8 @@ class TextGroup:
         return widths + margins
 
     @cached_property
-    def _texts(self) -> tuple[Text, ...]:
+    def _no_wrap(self) -> tuple[Text, ...]:
         return tuple(_no_wrap(t) for t in self.texts)
-
-    def _build_wrap_lines(self, lines: list[list[Text]], wrap: Pixel) -> None:
-        for text in self._texts[1:]:
-            line_buffer = lines[-1]
-            for line_text in text.line_texts:
-                for word in line_text.message.split():
-                    word_text = line_text.text(word)
-                    if (
-                        line_buffer
-                        and line_buffer[-1].config == word_text.config
-                    ):
-                        joined = f"{line_buffer[-1].message} {word}"
-                        joined_lines = line_buffer[:-1] + [
-                            word_text.text(joined)
-                        ]
-                    else:
-                        joined_lines = line_buffer + [word_text]
-
-                    if self._width(joined_lines) <= wrap:
-                        line_buffer = joined_lines
-                    else:
-                        lines.append(line_buffer)
-                        line_buffer = [word_text]
-                if line_buffer:
-                    lines.append(line_buffer)
-                    line_buffer = []
 
 
 def _no_wrap(text: Text) -> Text:
