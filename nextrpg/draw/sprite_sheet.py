@@ -2,10 +2,10 @@ from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
 
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.draw.draw import Draw
-from nextrpg.core.dimension import Size
 from nextrpg.core.color import Rgb
+from nextrpg.core.coordinate import Coordinate
+from nextrpg.core.dimension import Size
+from nextrpg.draw.draw import Draw
 
 
 @dataclass(frozen=True, kw_only=True)

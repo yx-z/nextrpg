@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
-from nextrpg.draw.group import Group
 from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.core.coordinate import Coordinate, Moving
 from nextrpg.core.dataclass_with_instance_init import (
@@ -12,6 +13,7 @@ from nextrpg.core.dataclass_with_instance_init import (
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.draw.draw import Draw, DrawOnScreen
+from nextrpg.draw.group import Group
 from nextrpg.event.event_as_attr import EventAsAttr
 
 
@@ -49,8 +51,8 @@ class CharacterOnScreen(EventAsAttr, Moving, AnimatedOnScreen):
     def draw_on_screen(self) -> DrawOnScreen:
         return DrawOnScreen(self.coordinate, self.character.draw)
 
-    def start_event(self, character: Self) -> Self:
-        direction = character.coordinate.relative_to(self.coordinate)
+    def start_event(self, other_character: CharacterOnScreen) -> Self:
+        direction = other_character.coordinate.relative_to(self.coordinate)
         turned_character = self.character.turn(direction)
         return replace(self, character=turned_character, _event_triggered=True)
 

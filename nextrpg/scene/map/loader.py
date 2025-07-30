@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from functools import cached_property
 from os import PathLike
@@ -12,13 +14,13 @@ from pytmx import (
     load_pygame,
 )
 
-from nextrpg.draw.draw import Draw
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.logger import Logger
 from nextrpg.draw.draw import (
+    Draw,
     DrawOnScreen,
     PolygonOnScreen,
     RectangleOnScreen,
@@ -299,7 +301,7 @@ class MapLoader:
             if (cls := tile.get("type"))
         }
 
-    def _layer(self, index: LayerIndex) -> TiledTileLayer | TiledObjectGroup:
+    def _layer(self, index: int) -> TiledTileLayer | TiledObjectGroup:
         return self._tmx.layers[index]
 
     @cached_property

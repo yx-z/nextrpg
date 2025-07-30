@@ -1,6 +1,8 @@
+from __future__ import annotations
+
+from collections.abc import Callable
 from dataclasses import KW_ONLY, field, replace
 from typing import Self
-from collections.abc import Callable
 
 import pygame
 from pygame import Clock
@@ -21,7 +23,6 @@ logger = Logger("Game")
 
 @dataclass_with_instance_init(frozen=True)
 class GameLoop:
-
     entry_scene: Callable[[], Scene]
     _: KW_ONLY = not_constructor_below()
     running: bool = True
@@ -30,7 +31,7 @@ class GameLoop:
     _scene: Scene = instance_init(lambda self: self.entry_scene())
 
     @property
-    def tick(self) -> Self:
+    def tick(self) -> GameLoop:
         logger.debug(t"FPS: {self._clock.get_fps():.0f}", duration=None)
         self._clock.tick(config().gui.frames_per_second)
         time_delta = self._clock.get_time()

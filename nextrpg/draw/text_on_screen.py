@@ -3,13 +3,13 @@ from functools import cached_property
 
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.draw.draw import DrawOnScreen
-from nextrpg.draw.text import Text
+from nextrpg.draw.text import Text, TextGroup
 
 
 @dataclass(frozen=True)
 class TextOnScreen:
     top_left: Coordinate
-    text: Text
+    text: Text | TextGroup
 
     @cached_property
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:

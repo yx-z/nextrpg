@@ -8,12 +8,12 @@ from nextrpg.character.npc_on_screen import *
 from nextrpg.character.player_on_screen import *
 from nextrpg.character.rpg_maker_character_draw import *
 from nextrpg.core.cached_decorator import *
+from nextrpg.core.color import *
 from nextrpg.core.coordinate import *
 from nextrpg.core.dataclass_with_instance_init import *
 from nextrpg.core.dimension import *
 from nextrpg.core.logger import *
 from nextrpg.core.walk import *
-from nextrpg.core.color import *
 from nextrpg.draw.cyclic_frames import *
 from nextrpg.draw.draw import *
 from nextrpg.draw.fade import *
@@ -46,7 +46,7 @@ from nextrpg.scene import *
 from nextrpg.scene.map.loader import *
 from nextrpg.scene.map.map_scene import *
 from nextrpg.scene.map.shift import *
+from nextrpg.scene.say_event.add_on import *
 from nextrpg.scene.say_event.say_event_scene import *
 from nextrpg.scene.say_event.state import *
-from nextrpg.scene.say_event.add_on import *
 from nextrpg.scene.transition_scene import *

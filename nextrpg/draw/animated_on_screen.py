@@ -3,12 +3,11 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Self
 
-from nextrpg.draw.draw import Draw
-from nextrpg.draw.group import GroupOnScreen
 from nextrpg.core.coordinate import Moving
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animated import Animated
-from nextrpg.draw.draw import DrawOnScreen
+from nextrpg.draw.draw import Draw, DrawOnScreen
+from nextrpg.draw.group import GroupOnScreen
 
 
 class AnimatedOnScreen(ABC):

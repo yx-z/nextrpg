@@ -1,6 +1,6 @@
 from asyncio import sleep
-from dataclasses import KW_ONLY
 from collections.abc import Callable
+from dataclasses import KW_ONLY
 
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,

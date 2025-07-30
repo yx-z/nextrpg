@@ -14,6 +14,7 @@ from nextrpg.global_config.rpg_maker_character_draw_config import (
 )
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.global_config.text_config import TextConfig
+from nextrpg.global_config.text_group_config import TextGroupConfig
 from nextrpg.global_config.tile_map_config import TileMapConfig
 from nextrpg.global_config.transition_config import TransitionConfig
 
@@ -30,6 +31,7 @@ class Config:
     resource: ResourceConfig = ResourceConfig()
     transition: TransitionConfig = TransitionConfig()
     text: TextConfig = TextConfig()
+    text_group: TextGroupConfig = TextGroupConfig()
     draw_on_screen: DrawOnScreenConfig = DrawOnScreenConfig()
     event: EventConfig = EventConfig()
     say_event: SayEventConfig = SayEventConfig()

@@ -2,17 +2,22 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Literal, override
 
-from nextrpg.global_config.text_config import TextConfig
-from nextrpg.draw.draw import Draw, PolygonOnScreen
-from nextrpg.core.dimension import Size
-from nextrpg.gui.area import gui_width, top_screen, left_screen
-from nextrpg.core.coordinate import Coordinate
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.draw.draw import DrawOnScreen, RectangleDraw, RectangleOnScreen
-from nextrpg.draw.group import Group, GroupOnScreen, DrawRelativeTo
+from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.dimension import Size
+from nextrpg.draw.draw import (
+    Draw,
+    DrawOnScreen,
+    PolygonOnScreen,
+    RectangleDraw,
+    RectangleOnScreen,
+)
+from nextrpg.draw.group import Group, GroupOnScreen, RelativeDraw
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.global_config.say_event_config import SayEventConfig
+from nextrpg.global_config.text_config import TextConfig
+from nextrpg.gui.area import gui_width, left_screen, top_screen
 from nextrpg.scene.scene import Scene
 
 
@@ -32,7 +37,7 @@ class AddOn:
 
     @cached_property
     def text_on_screen(self) -> TextOnScreen:
-        coord = self.background_top_left + self._background.relative_to
+        coord = self.background_top_left + self._background.shift
         return TextOnScreen(coord, self._text)
 
     @cached_property
@@ -46,60 +51,61 @@ class AddOn:
 
     @cached_property
     def _group(self) -> Group:
-        leader = self._text.group
-        followers = tuple(
+        optionals = tuple(
             d for d in (self._avatar_relative, self._name_relative) if d
         )
-        content = Group(leader, followers)
+        content = Group((RelativeDraw(self._text.group, ORIGIN),) + optionals)
         background, shift = self._background
-        return Group(background, DrawRelativeTo(content, shift))
+        return Group(
+            (RelativeDraw(background, ORIGIN), RelativeDraw(content, shift))
+        )
 
     @cached_property
-    def _background(self) -> DrawRelativeTo:
+    def _background(self) -> RelativeDraw:
         padding = self.config.padding
         text_width, text_height = self._text.size
-        relative_to_width = padding
-        relative_to_height = padding
+        width_shift = padding
+        height_shift = padding
 
         rect_height = text_height + 2 * padding
         if self._name:
             extra_height = self._name_relative.draw.size.height + padding
-            relative_to_height += extra_height
+            height_shift += extra_height
             rect_height += extra_height
 
         rect_width = text_width + 2 * padding
         if self._avatar:
             extra_width = self._avatar.size.width + padding
-            relative_to_width += extra_width
+            width_shift += extra_width
             rect_width += extra_width
 
         size = Size(rect_width, rect_height)
         rect = RectangleDraw(
             size, self.config.background, self.config.border_radius
         )
-        shift = Size(relative_to_width, relative_to_height)
-        return DrawRelativeTo(rect, shift)
+        shift = Size(width_shift, height_shift)
+        return RelativeDraw(rect, shift)
 
     @cached_property
     def _avatar(self) -> Draw | Group | None:
         return self.config.avatar
 
     @cached_property
-    def _avatar_relative(self) -> DrawRelativeTo | None:
+    def _avatar_relative(self) -> RelativeDraw | None:
         if not self._avatar:
             return None
         width, height = self._avatar.size
         left_shift = -self.config.padding - width
         top_shift = self._text.size.height - height
         shift = Size(left_shift, top_shift)
-        return DrawRelativeTo(self._avatar, shift)
+        return RelativeDraw(self._avatar, shift)
 
     @cached_property
     def _name(self) -> str | None:
         return self.config.name_override
 
     @cached_property
-    def _name_relative(self) -> DrawRelativeTo | None:
+    def _name_relative(self) -> RelativeDraw | None:
         if not self._name:
             return None
 
@@ -107,7 +113,7 @@ class AddOn:
         text = Text(self._name, text_config)
         name_height = text.size.height
         shift = Size(0, -name_height - self.config.padding)
-        return DrawRelativeTo(text.group, shift)
+        return RelativeDraw(text.group, shift)
 
     @cached_property
     def _text(self) -> Text:

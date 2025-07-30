@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Self
 
-from nextrpg.core.time import Millisecond
 from nextrpg import Draw
+from nextrpg.core.time import Millisecond
 from nextrpg.draw.group import Group
 
 

@@ -1,8 +1,8 @@
+from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from os import PathLike
 from typing import NamedTuple, OrderedDict, override
-from collections.abc import Callable
 
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen

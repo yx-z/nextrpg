@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, replace
 from enum import Enum, auto
 from typing import Self
@@ -15,7 +17,7 @@ class Direction(Enum):
     DOWN_LEFT = auto()
     DOWN_RIGHT = auto()
 
-    def __neg__(self) -> Self:
+    def __neg__(self) -> Direction:
         return _OPPOSITE_DIRECTION[self]
 
 

@@ -11,10 +11,22 @@ from nextrpg.core.dimension import Pixel, Size
 class Font:
     size: int
     name: str | None = None
+    bold: bool = False
+    italic: bool = False
+    underline: bool = False
+    strike_through: bool = False
+    script: str | None = None
 
     @cached_property
     def pygame(self) -> pygame.Font:
-        return SysFont(self.name, self.size)
+        font = SysFont(self.name, self.size, self.bold, self.italic)
+        if self.underline:
+            font.set_underline(True)
+        if self.strike_through:
+            font.set_strikethrough(True)
+        if self.script:
+            font.set_script(self.script)
+        return font
 
     def text_size(self, text: str) -> Size:
         width, height = self.pygame.size(text)

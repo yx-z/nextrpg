@@ -4,8 +4,6 @@ from functools import cached_property
 from pathlib import Path
 from typing import Self, override
 
-from nextrpg.draw.sprite_sheet import SpriteSheet
-from nextrpg.draw.draw import Draw, Trim
 from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_instance_init import (
@@ -17,8 +15,8 @@ from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.cyclic_frames import CyclicFrames
-
-from nextrpg.draw.sprite_sheet import Selection
+from nextrpg.draw.draw import Draw, Trim
+from nextrpg.draw.sprite_sheet import Selection, SpriteSheet
 from nextrpg.global_config.global_config import config
 
 

@@ -1,7 +1,6 @@
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
-from nextrpg.draw.draw import Draw
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
@@ -9,6 +8,7 @@ from nextrpg.core.dataclass_with_instance_init import (
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.animated import Animated
+from nextrpg.draw.draw import Draw
 
 
 @dataclass_with_instance_init(frozen=True)

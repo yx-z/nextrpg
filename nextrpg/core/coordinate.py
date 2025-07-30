@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from collections import namedtuple
 from math import atan2, degrees, hypot, sqrt
@@ -13,17 +15,19 @@ class Coordinate(namedtuple("Coordinate", "left top")):
     top: Pixel
 
     @property
-    def negate_left(self) -> Self:
+    def negate_left(self) -> Coordinate:
         return Coordinate(-self.left, self.top)
 
     @property
-    def negate_top(self) -> Self:
+    def negate_top(self) -> Coordinate:
         return Coordinate(self.left, -self.top)
 
-    def __neg__(self) -> Self:
+    def __neg__(self) -> Coordinate:
         return Coordinate(-self.left, -self.top)
 
-    def __add__(self, offset: DirectionalOffset | Size | Self) -> Self:
+    def __add__(
+        self, offset: DirectionalOffset | Size | Coordinate
+    ) -> Coordinate:
         if isinstance(offset, (Coordinate, Size)):
             x, y = offset
             return Coordinate(self.left + x, self.top + y)
@@ -49,10 +53,12 @@ class Coordinate(namedtuple("Coordinate", "left top")):
             case Direction.DOWN_RIGHT:
                 return Coordinate(self.left + diag, self.top + diag)
 
-    def __sub__(self, offset: DirectionalOffset | Size | Self) -> Self:
+    def __sub__(
+        self, offset: DirectionalOffset | Size | Coordinate
+    ) -> Coordinate:
         return self + -offset
 
-    def relative_to(self, other: Self) -> Direction:
+    def relative_to(self, other: Coordinate) -> Direction:
         dx = self.left - other.left
         dy = self.top - other.top
         angle = (degrees(atan2(-dy, dx)) + 360) % 360
@@ -65,10 +71,13 @@ class Coordinate(namedtuple("Coordinate", "left top")):
     def __str__(self) -> str:
         return f"({self.left:.0f}, {self.top:.0f})"
 
-    def distance(self, other: Self) -> Pixel:
+    def distance(self, other: Coordinate) -> Pixel:
         dx = self.left - other.left
         dy = self.top - other.top
         return hypot(dx, dy)
+
+
+ORIGIN = Coordinate(0, 0)
 
 
 class Moving(ABC):

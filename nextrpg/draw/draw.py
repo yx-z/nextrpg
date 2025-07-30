@@ -1,21 +1,22 @@
+from __future__ import annotations
+
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 from functools import cached_property
-from math import ceil
 from os import PathLike
 from typing import Self, override
 
-from pygame import Mask, Rect, SRCALPHA, Surface
+from pygame import SRCALPHA, Mask, Rect, Surface
 from pygame.draw import lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
 from pygame.transform import smoothscale
 
 from nextrpg.core.cached_decorator import cached
+from nextrpg.core.color import BLACK, Alpha, Rgb, Rgba
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.logger import Logger
-from nextrpg.core.color import Alpha, BLACK, Rgb, Rgba
 from nextrpg.global_config.global_config import config
 
 logger = Logger("Draw")
@@ -54,19 +55,19 @@ class Draw:
     def pygame(self) -> Surface:
         return self._debug_surface or self._surface
 
-    def crop(self, top_left: Coordinate, size: Size) -> Self:
+    def crop(self, top_left: Coordinate, size: Size) -> Draw:
         left, top = top_left
         width, height = size
         return Draw(self.pygame.subsurface((left, top, width, height)))
 
-    def trim(self, trim: Trim) -> Self:
+    def trim(self, trim: Trim) -> Draw:
         coord = Coordinate(trim.left, trim.top)
         width = self.width - coord.left - trim.right
         height = self.height - coord.top - trim.bottom
         size = Size(width, height)
         return self.crop(coord, size)
 
-    def set_alpha(self, alpha: Alpha) -> Self:
+    def set_alpha(self, alpha: Alpha) -> Draw:
         surf = self._surface.copy()
         surf.set_alpha(alpha)
         return Draw(surf)
@@ -74,7 +75,7 @@ class Draw:
     def draw_on_screen(self, coord: Coordinate) -> DrawOnScreen:
         return DrawOnScreen(coord, self)
 
-    def __mul__(self, scale: float) -> Self:
+    def __mul__(self, scale: float) -> Draw:
         surf = smoothscale(self._surface, self.size.all_dimension_scale(scale))
         return Draw(surf)
 
@@ -132,13 +133,13 @@ class DrawOnScreen:
     def pygame(self) -> tuple[Surface, Coordinate]:
         return self.draw.pygame, self.top_left
 
-    def __add__(self, coord: Coordinate) -> Self:
+    def __add__(self, coord: Coordinate) -> DrawOnScreen:
         return DrawOnScreen(self.top_left + coord, self.draw)
 
-    def __sub__(self, coord: Coordinate) -> Self:
+    def __sub__(self, coord: Coordinate) -> DrawOnScreen:
         return self + -coord
 
-    def set_alpha(self, alpha: Alpha) -> Self:
+    def set_alpha(self, alpha: Alpha) -> DrawOnScreen:
         return DrawOnScreen(self.top_left, self.draw.set_alpha(alpha))
 
 
@@ -187,7 +188,7 @@ class PolygonOnScreen:
 
         return self._draw(_line)
 
-    def collide(self, poly: Self) -> bool:
+    def collide(self, poly: PolygonOnScreen) -> bool:
         if not self.bounding_rectangle.collide(poly.bounding_rectangle):
             return False
         offset = (
@@ -310,7 +311,7 @@ class RectangleOnScreen(PolygonOnScreen):
         )
 
     @override
-    def __add__(self, coordinate: Coordinate) -> Self:
+    def __add__(self, coordinate: Coordinate) -> RectangleOnScreen:
         return RectangleOnScreen(self.top_left + coordinate, self.size)
 
     def fill(

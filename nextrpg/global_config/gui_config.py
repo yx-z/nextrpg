@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from enum import Enum, auto
 
-from nextrpg.core.dimension import Size
 from nextrpg.core.color import BLACK, Rgba
+from nextrpg.core.dimension import Size
 
 
 class ResizeMode(Enum):

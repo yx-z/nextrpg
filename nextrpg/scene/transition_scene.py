@@ -2,13 +2,13 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import override
 
+from nextrpg.core.color import Rgba
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.core.color import Rgba
 from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.global_config.global_config import config

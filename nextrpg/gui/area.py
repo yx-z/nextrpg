@@ -1,5 +1,5 @@
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Size, Pixel
+from nextrpg.core.dimension import Pixel, Size
 from nextrpg.draw.draw import RectangleOnScreen
 from nextrpg.global_config.global_config import config, initial_config
 from nextrpg.global_config.gui_config import ResizeMode
