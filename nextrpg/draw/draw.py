@@ -172,11 +172,11 @@ class PolygonOnScreen:
     def _mask(self) -> Mask:
         return from_surface(self.fill(BLACK).draw.pygame)
 
-    def fill(self, color: Rgba) -> DrawOnScreen:
+    def fill(self, color: Rgba | Rgb) -> DrawOnScreen:
         return self._draw(_fill_polygon(color))
 
     def line(
-        self, color: Rgba, stroke_width: Pixel | None = None
+        self, color: Rgba | Rgb, stroke_width: Pixel | None = None
     ) -> DrawOnScreen:
         if stroke_width is None:
             stroke = config().draw_on_screen.stroke_width
@@ -315,7 +315,7 @@ class RectangleOnScreen(PolygonOnScreen):
         return RectangleOnScreen(self.top_left + coordinate, self.size)
 
     def fill(
-        self, color: Rgba, border_radius: Pixel | None = None
+        self, color: Rgba | Rgb, border_radius: Pixel | None = None
     ) -> DrawOnScreen:
         return DrawOnScreen(
             self.top_left, RectangleDraw(self.size, color, border_radius)

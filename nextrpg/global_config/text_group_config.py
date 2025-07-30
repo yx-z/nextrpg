@@ -5,5 +5,6 @@ from nextrpg.core.dimension import Pixel
 
 @dataclass(frozen=True)
 class TextGroupConfig:
-    margin: Pixel = 0
+    line_spacing: Pixel = 8
+    margin: Pixel = 2
     auto_wrap: Pixel | None = None

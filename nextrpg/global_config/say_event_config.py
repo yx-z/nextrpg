@@ -1,6 +1,6 @@
 from dataclasses import dataclass, replace
 
-from nextrpg.core.color import BLACK, WHITE, Rgba
+from nextrpg.core.color import BLACK, WHITE, Rgb, Rgba
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.time import Millisecond
@@ -17,12 +17,12 @@ class AddOnConfig:
 
 @dataclass(frozen=True)
 class SayEventConfig:
-    background: Rgba = WHITE
+    background: Rgba | Rgb = WHITE
     border_radius: Pixel = 16
     fade_duration: Millisecond = 200
     padding: Pixel = 12
     text_delay: Millisecond = 20
-    name_color: Rgba = Rgba(0, 0, 255, 255)
+    name_color: Rgba | Rgb = Rgba(0, 0, 255, 255)
     add_on: AddOnConfig = AddOnConfig()
     name_override: str | None = None
     coordinate: Coordinate | None = None
@@ -40,3 +40,7 @@ class SayEventConfig:
         from nextrpg.gui.area import screen
 
         return screen().center
+
+    @property
+    def text_config(self) -> TextConfig:
+        return self.text or self.default_text_config

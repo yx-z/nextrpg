@@ -2,7 +2,7 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import override
 
-from nextrpg.core.color import Rgba
+from nextrpg.core.color import Rgb, Rgba
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
@@ -20,7 +20,7 @@ from nextrpg.scene.scene import Scene
 class TransitionScene(Scene):
     from_scene: Scene
     to_scene: Scene
-    intermediary: DrawOnScreen | tuple[DrawOnScreen, ...] | Rgba = field(
+    intermediary: DrawOnScreen | tuple[DrawOnScreen, ...] | Rgba | Rgb = field(
         default_factory=lambda: config().gui.background_color
     )
     duration: Millisecond = field(
@@ -64,6 +64,6 @@ class TransitionScene(Scene):
 
     @property
     def _intermediary(self) -> DrawOnScreen | tuple[DrawOnScreen, ...]:
-        if isinstance(self.intermediary, Rgba):
+        if isinstance(self.intermediary, (Rgba, Rgb)):
             return screen().fill(self.intermediary)
         return self.intermediary

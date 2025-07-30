@@ -13,7 +13,7 @@ from nextrpg.draw.draw import (
     RectangleOnScreen,
 )
 from nextrpg.draw.group import Group, GroupOnScreen, RelativeDraw
-from nextrpg.draw.text import Text
+from nextrpg.draw.text import Text, TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.global_config.text_config import TextConfig
@@ -24,7 +24,7 @@ from nextrpg.scene.scene import Scene
 @dataclass(frozen=True)
 class AddOn:
     config: SayEventConfig
-    message: str
+    message: str | Text | TextGroup
 
     @cached_property
     def background(self) -> tuple[DrawOnScreen, ...]:
@@ -109,19 +109,19 @@ class AddOn:
         if not self._name:
             return None
 
-        text_config = replace(self._text_config, color=self.config.name_color)
+        text_config = replace(
+            self.config.text_config, color=self.config.name_color
+        )
         text = Text(self._name, text_config)
         name_height = text.size.height
         shift = Size(0, -name_height - self.config.padding)
         return RelativeDraw(text.group, shift)
 
     @cached_property
-    def _text(self) -> Text:
-        return Text(self.message, self._text_config)
-
-    @cached_property
-    def _text_config(self) -> TextConfig:
-        return self.config.text or self.config.default_text_config
+    def _text(self) -> Text | TextGroup:
+        if isinstance(self.message, str):
+            return Text(self.message, self.config.text_config)
+        return self.message
 
 
 @dataclass(frozen=True)

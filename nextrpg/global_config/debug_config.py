@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import IntEnum, auto
 
-from nextrpg.core.color import Rgba
+from nextrpg.core.color import Rgb, Rgba
 from nextrpg.core.time import Millisecond
 
 
@@ -14,9 +14,9 @@ class LogLevel(IntEnum):
 
 @dataclass(frozen=True)
 class DebugConfig:
-    draw_background_color: Rgba | None = Rgba(0, 0, 255, 16)
-    collision_rectangle_color: Rgba | None = Rgba(255, 0, 0, 64)
-    npc_path_color: Rgba | None = Rgba(0, 255, 0, 64)
+    draw_background_color: Rgba | Rgb | None = Rgba(0, 0, 255, 16)
+    collision_rectangle_color: Rgba | Rgb | None = Rgba(255, 0, 0, 64)
+    npc_path_color: Rgba | Rgb | None = Rgba(0, 255, 0, 64)
     ignore_map_collisions: bool = False
     log_level: LogLevel = LogLevel.DEBUG
     log_duration: Millisecond = 3000

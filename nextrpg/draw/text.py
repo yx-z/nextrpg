@@ -18,6 +18,9 @@ class Text:
     message: str
     config: TextConfig = field(default_factory=lambda: config().text)
 
+    def __getitem__(self, s: slice) -> Self:
+        return replace(self, message=self.message[s])
+
     @cached_property
     def size(self) -> Size:
         return self.group.size
@@ -32,7 +35,7 @@ class Text:
 
     def draw(self, line: str) -> Draw:
         surface = self.config.font.pygame.render(
-            line, self.config.antialias, self.config.color
+            line, self.config.anti_alias, self.config.color
         )
         return Draw(surface)
 
@@ -60,15 +63,13 @@ class Text:
     @cached_property
     def lines(self) -> tuple[str, ...]:
         if not (wrap := self.config.auto_wrap):
-            # split("\n") retains last new line as empty line
-            # whereas splitlines() doesn't.
-            return tuple(self.message.split("\n"))
+            return tuple(self.message.splitlines(keepends=True))
 
         # wrap lines
         lines: list[str] = []
         line_buffer: list[str] = []
-        for line in self.message.split("\n"):
-            for word in line.split(" "):
+        for line in self.message.splitlines(keepends=True):
+            for word in line.split():
                 joined = " ".join(line_buffer + [word])
                 if self.config.font.text_size(joined).width <= wrap:
                     line_buffer.append(word)
@@ -92,6 +93,24 @@ class TextGroup:
     texts: tuple[Text, ...]
     config: TextGroupConfig = field(default_factory=lambda: config().text_group)
 
+    def __getitem__(self, item: slice) -> Self:
+        if item.step not in (None, 1):
+            raise ValueError("TextGroup slicing only supports step=1")
+        texts: list[Text] = []
+        start = item.start or 0
+        stop = item.stop
+        i = 0
+        for text in self.texts:
+            msg_len = len(text.message)
+            if stop is not None and i >= stop:
+                break
+            text_start = max(start - i, 0)
+            if text_start < msg_len:
+                text_stop = stop - i if stop is not None else msg_len
+                texts.append(text[text_start:text_stop])
+            i += msg_len
+        return replace(self, texts=tuple(texts))
+
     def __radd__(self, other: str) -> TextGroup:
         return self + other
 
@@ -101,6 +120,10 @@ class TextGroup:
         else:
             txt = other
         return replace(self, texts=self.texts + (txt,))
+
+    @cached_property
+    def size(self) -> Size:
+        return self.group.size
 
     @cached_property
     def group(self) -> Group:
@@ -113,6 +136,17 @@ class TextGroup:
                 lines += [[t] for t in text.line_texts[1:]]
 
         res: list[RelativeDraw] = []
+        curr_height = 0
+        for line in lines:
+            curr_width = 0
+            line_height = max(word.size.height for word in line)
+            for word in line:
+                word_width, word_height = word.size
+                height_diff = line_height - word_height
+                shift = Coordinate(curr_width, curr_height + height_diff)
+                res.append(RelativeDraw(word.group, shift))
+                curr_width += word_width + self.config.margin
+            curr_height += line_height + self.config.line_spacing
         return Group(tuple(res))
 
     def _width(self, line: list[Text]) -> Pixel:
@@ -128,7 +162,7 @@ class TextGroup:
         for text in self._texts[1:]:
             line_buffer = lines[-1]
             for line_text in text.line_texts:
-                for word in line_text.message.split(" "):
+                for word in line_text.message.split():
                     word_text = line_text.text(word)
                     if (
                         line_buffer

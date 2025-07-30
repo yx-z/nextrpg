@@ -7,6 +7,7 @@ from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import Draw, DrawOnScreen
+from nextrpg.draw.text import Text, TextGroup
 from nextrpg.event.rpg_event import register_rpg_event
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.say_event_config import SayEventConfig
@@ -21,7 +22,7 @@ type SayEventArg = str | Coordinate | Size | Draw | SayEventConfig
 @register_rpg_event
 def say(
     character_or_scene: CharacterOnScreen | Scene,
-    message: str,
+    message: str | Text | TextGroup,
     *args: SayEventArg,
 ) -> None:
     return lambda generator, scene: SayEventScene(
@@ -32,7 +33,7 @@ def say(
 @dataclass(frozen=True)
 class SayEventScene(RpgEventScene):
     character_or_scene: CharacterOnScreen | Scene
-    message: str
+    message: str | Text | TextGroup
     args: tuple[SayEventArg, ...] = field(default_factory=tuple)
 
     @override

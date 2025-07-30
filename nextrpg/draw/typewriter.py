@@ -24,9 +24,7 @@ class Typewriter(AnimatedOnScreen):
     @cached_property
     @override
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        index = min(len(self.text_on_screen.text.message), self._index + 1)
-        message = self.text_on_screen.text.message[:index]
-        text = replace(self.text_on_screen.text, message=message)
+        text = self.text_on_screen.text[: self._index + 1]
         return replace(self.text_on_screen, text=text).draw_on_screens
 
     @override
@@ -35,15 +33,5 @@ class Typewriter(AnimatedOnScreen):
         if not timer.complete:
             return replace(self, _timer=timer)
 
-        index = self._tick(timer.elapsed // self.delay)
+        index = self._index + timer.elapsed // self.delay
         return replace(self, _index=index, _timer=timer.modulo)
-
-    def _tick(self, steps: int) -> int:
-        message = self.text_on_screen.text.message
-        index = self._index + 1
-        for _ in range(steps):
-            if index == len(message):
-                break
-            while index < len(message) and message[index].isspace():
-                index += 1
-        return index

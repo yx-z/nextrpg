@@ -1,7 +1,6 @@
 from nextrpg import (
     CharacterDraw,
     CharacterSpec,
-    Coordinate,
     Direction,
     Draw,
     EventfulScene,
@@ -10,10 +9,13 @@ from nextrpg import (
     NpcOnScreen,
     NpcSpec,
     PlayerOnScreen,
+    Rgb,
     RpgMakerCharacterDraw,
     RpgMakerSpriteSheet,
     Selection,
+    Text,
     Trim,
+    config,
 )
 
 
@@ -43,12 +45,17 @@ def greet(
     other_npc = scene.get_npc(other_name)
     other_npc: f"Hello! I am {other_npc.display_name}!"
 
-    # fmt: off
-    scene["Name"]: """Greetings!
-    This is...
+    cfg = config().say_event.text_config
+    scene["Interior Scene"]: (
+        Text("Greetings!", cfg.sized(40))
+        + Text(
+            """This is...
 
-    a sample nextrpg event. :)"""
-    # fmt: on
+a sample """,
+            cfg,
+        )
+        + Text("nextrpg event", cfg.colored(Rgb(128, 0, 255)))
+    )
 
 
 def sprite_sheet() -> RpgMakerSpriteSheet:

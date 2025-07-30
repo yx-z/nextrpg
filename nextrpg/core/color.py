@@ -16,8 +16,8 @@ class Rgba(namedtuple("Rgba", "red green blue alpha")):
     alpha: Alpha
 
 
-BLACK = Rgba(0, 0, 0, 255)
-WHITE = Rgba(255, 255, 255, 255)
+BLACK = Rgb(0, 0, 0)
+WHITE = Rgb(255, 255, 255)
 
 
 def alpha_from_percentage(percentage: float) -> Alpha:
