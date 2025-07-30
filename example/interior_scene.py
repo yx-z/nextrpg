@@ -46,16 +46,12 @@ def greet(
     other_npc: f"Hello! I am {other_npc.display_name}!"
 
     cfg = config().say_event.text_config
-    scene["Interior Scene"]: (
-        Text("Greetings!", cfg.sized(40))
-        + Text(
-            """This is...
+    # fmt: off
+    scene["Interior Scene"]: Text("Greetings!", cfg.sized(40)) + Text(
+"""This is...
 
-a sample """,
-            cfg,
-        )
-        + Text("nextrpg event", cfg.colored(Rgb(128, 0, 255)))
-    )
+a sample """, cfg) + Text("nextrpg event", cfg.colored(Rgb(128, 0, 255)))
+    # fmt: on
 
 
 def sprite_sheet() -> RpgMakerSpriteSheet:
