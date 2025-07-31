@@ -1,7 +1,7 @@
 from dataclasses import dataclass, replace
 from typing import Self
 
-from nextrpg.core.color import WHITE, Rgb, Rgba
+from nextrpg.core.color import WHITE, Color
 from nextrpg.core.dimension import Pixel
 from nextrpg.draw.font import Font
 
@@ -9,7 +9,7 @@ from nextrpg.draw.font import Font
 @dataclass(frozen=True)
 class TextConfig:
     font: Font = Font(28)
-    color: Rgba | Rgb = WHITE
+    color: Color = WHITE
     line_spacing: Pixel = 8
     anti_alias: bool = True
     wrap: Pixel | None = None
@@ -24,7 +24,7 @@ class TextConfig:
         font = replace(self.font, size=size)
         return replace(self, font=font)
 
-    def colored(self, color: Rgba | Rgb) -> Self:
+    def colored(self, color: Color) -> Self:
         return replace(self, color=color)
 
     def scripted(self, script: str) -> Self:

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
 
-from nextrpg.core.color import Rgb
+from nextrpg.core.color import Color
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.draw.draw import Draw
@@ -19,7 +19,7 @@ class SpriteSheet:
     resource: Draw | str | Path
     num_row: int
     num_column: int
-    color_key: Rgb | None = None
+    color_key: Color | None = None
 
     def select(self, selection: Selection) -> Draw:
         width = self.draw.width / self.num_column

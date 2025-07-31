@@ -63,7 +63,7 @@ class Window:
             t"Size {self.current_config.size} Shift {self._center_shift}",
             duration=None,
         )
-        self._screen.fill(self.current_config.background_color)
+        self._screen.fill(self.current_config.background)
         match self.current_config.resize_mode:
             case ResizeMode.SCALE:
                 self._screen.blit(*self._scale(draw_on_screens).pygame)

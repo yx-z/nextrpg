@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum, auto
 
-from nextrpg.core.color import BLACK, Rgba
+from nextrpg.core.color import BLACK, Color
 from nextrpg.core.dimension import Size
 
 
@@ -24,7 +24,7 @@ class GuiConfig:
     title: str = "nextrpg"
     size: Size = Size(1280, 720)
     frames_per_second: int = 60
-    background_color: Rgba = BLACK
+    background: Color = BLACK
     double_buffer: bool = True
     gui_mode: GuiMode = GuiMode.WINDOWED
     resize_mode: ResizeMode = ResizeMode.SCALE

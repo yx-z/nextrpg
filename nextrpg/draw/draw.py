@@ -13,7 +13,7 @@ from pygame.mask import from_surface
 from pygame.transform import smoothscale
 
 from nextrpg.core.cached_decorator import cached
-from nextrpg.core.color import BLACK, Alpha, Rgb, Rgba
+from nextrpg.core.color import BLACK, Alpha, Color
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.logger import Logger
@@ -37,7 +37,7 @@ class Trim:
 @dataclass(frozen=True)
 class Draw:
     resource: str | PathLike | Surface
-    color_key: Rgb | Coordinate | None = None
+    color_key: Color | Coordinate | None = None
 
     @property
     def width(self) -> Pixel:
@@ -144,7 +144,7 @@ class DrawOnScreen:
 
 
 class PolygonDraw:
-    def __init__(self, points: tuple[Coordinate, ...], color: Rgba) -> None:
+    def __init__(self, points: tuple[Coordinate, ...], color: Color) -> None:
         surf = _draw_polygon(points, _fill_polygon(color))
         _set_resource_and_color_key(self, surf)
 
@@ -172,11 +172,11 @@ class PolygonOnScreen:
     def _mask(self) -> Mask:
         return from_surface(self.fill(BLACK).draw.pygame)
 
-    def fill(self, color: Rgba | Rgb) -> DrawOnScreen:
+    def fill(self, color: Color) -> DrawOnScreen:
         return self._draw(_fill_polygon(color))
 
     def line(
-        self, color: Rgba | Rgb, stroke_width: Pixel | None = None
+        self, color: Color, stroke_width: Pixel | None = None
     ) -> DrawOnScreen:
         if stroke_width is None:
             stroke = config().draw_on_screen.stroke_width
@@ -219,7 +219,7 @@ class PolygonOnScreen:
 
 class RectangleDraw(Draw):
     def __init__(
-        self, size: Size, color: Rgba, border_radius: Pixel | None = None
+        self, size: Size, color: Color, border_radius: Pixel | None = None
     ) -> None:
         surface = Surface(size, SRCALPHA)
         rectangle = Rect(Coordinate(0, 0), size)
@@ -315,7 +315,7 @@ class RectangleOnScreen(PolygonOnScreen):
         return RectangleOnScreen(self.top_left + coordinate, self.size)
 
     def fill(
-        self, color: Rgba | Rgb, border_radius: Pixel | None = None
+        self, color: Color, border_radius: Pixel | None = None
     ) -> DrawOnScreen:
         return DrawOnScreen(
             self.top_left, RectangleDraw(self.size, color, border_radius)
@@ -350,7 +350,7 @@ def _set_resource_and_color_key[T](self: T, surface: Surface) -> None:
 
 
 def _fill_polygon(
-    color: Rgba,
+    color: Color,
 ) -> Callable[[Surface, tuple[Coordinate, ...]], None]:
     def fill(surface: Surface, points: tuple[Coordinate, ...]) -> None:
         polygon(surface, color, points)

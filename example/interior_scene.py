@@ -1,6 +1,7 @@
 from nextrpg import (
     CharacterDraw,
     CharacterSpec,
+    Color,
     Direction,
     Draw,
     EventfulScene,
@@ -9,7 +10,6 @@ from nextrpg import (
     NpcOnScreen,
     NpcSpec,
     PlayerOnScreen,
-    Rgb,
     RpgMakerCharacterDraw,
     RpgMakerSpriteSheet,
     Selection,
@@ -50,7 +50,7 @@ def greet(
     scene["Interior Scene"]: Text("Greetings!", cfg.sized(40)) + Text(
 """This is...
 
-a sample """, cfg) + Text("nextrpg event", cfg.colored(Rgb(128, 0, 255)))
+a sample """, cfg) + Text("nextrpg event", cfg.colored(Color(128, 0, 255)))
     # fmt: on
 
 
