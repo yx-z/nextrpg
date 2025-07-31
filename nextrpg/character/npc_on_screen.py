@@ -8,9 +8,8 @@ from nextrpg.character.character_on_screen import (
     CharacterSpec,
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.core.dimension import PixelPerMillisecond
-from nextrpg.core.time import Millisecond
 from nextrpg.event.event_transformer import transform_and_compile
+from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.global_config import config
 
 type RpgEventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
@@ -22,18 +21,10 @@ type RpgEventCallable = Callable[
 type RpgEventGenerator = Generator[RpgEventCallable, Any, None]
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class NpcSpec(CharacterSpec):
-    event: RpgEventSpec
-    move_speed: PixelPerMillisecond = field(
-        default_factory=lambda: config().character.move_speed
-    )
-    idle_duration: Millisecond = field(
-        default_factory=lambda: config().character.idle_duration
-    )
-    move_duration: Millisecond = field(
-        default_factory=lambda: config().character.move_duration
-    )
+    event: RpgEventSpec | None = None
+    config: CharacterConfig = field(default_factory=lambda: config().character)
     cyclic_walk: bool = True
 
     @cached_property

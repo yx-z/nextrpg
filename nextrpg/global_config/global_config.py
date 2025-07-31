@@ -8,6 +8,7 @@ from nextrpg.global_config.draw_on_screen_config import DrawOnScreenConfig
 from nextrpg.global_config.event_config import EventConfig
 from nextrpg.global_config.gui_config import GuiConfig
 from nextrpg.global_config.key_mapping_config import KeyMappingConfig
+from nextrpg.global_config.player_config import PlayerConfig
 from nextrpg.global_config.resource_config import ResourceConfig
 from nextrpg.global_config.rpg_maker_character_draw_config import (
     RpgMakerCharacterDrawConfig,
@@ -24,6 +25,7 @@ class Config:
     gui: GuiConfig = GuiConfig()
     map: TileMapConfig = TileMapConfig()
     character: CharacterConfig = CharacterConfig()
+    player: PlayerConfig = PlayerConfig()
     rpg_maker_character: RpgMakerCharacterDrawConfig = (
         RpgMakerCharacterDrawConfig()
     )

@@ -1,5 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from functools import cached_property
+from typing import Self
 
 import pygame
 from pygame.font import SysFont
@@ -16,6 +17,28 @@ class Font:
     underline: bool = False
     strikethrough: bool = False
     script: str | None = None
+
+    @property
+    def bolded(self) -> Self:
+        return replace(self, bold=True)
+
+    @property
+    def italicized(self) -> Self:
+        return replace(self, italic=True)
+
+    @property
+    def underlined(self) -> Self:
+        return replace(self, underline=True)
+
+    @property
+    def strikethroughed(self) -> Self:
+        return replace(self, strikethrough=True)
+
+    def scripted(self, script: str) -> Self:
+        return replace(self, script=script)
+
+    def sized(self, size: Pixel) -> Self:
+        return replace(self, size=size)
 
     @cached_property
     def pygame(self) -> pygame.Font:

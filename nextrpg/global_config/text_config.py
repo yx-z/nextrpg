@@ -21,32 +21,26 @@ class TextConfig:
         return replace(self, wrap=wrap)
 
     def sized(self, size: Pixel) -> Self:
-        font = replace(self.font, size=size)
-        return replace(self, font=font)
+        return replace(self, font=self.font.sized(size))
 
     def colored(self, color: Color) -> Self:
         return replace(self, color=color)
 
     def scripted(self, script: str) -> Self:
-        font = replace(self.font, script=script)
-        return replace(self, font=font)
+        return replace(self, font=self.font.scripted(script))
 
     @property
     def italicized(self) -> Self:
-        font = replace(self.font, italic=True)
-        return replace(self, font=font)
+        return replace(self, font=self.font.italicized)
 
     @property
     def bolded(self) -> Self:
-        font = replace(self.font, bold=True)
-        return replace(self, font=font)
+        return replace(self, font=self.font.bolded)
 
     @property
     def underlined(self) -> Self:
-        font = replace(self.font, underline=True)
-        return replace(self, font=font)
+        return replace(self, font=self.font.underlined)
 
     @property
     def strikethroughed(self) -> Self:
-        font = replace(self.font, strikethrough=True)
-        return replace(self, font=font)
+        return replace(self, font=self.font.strikethroughed)

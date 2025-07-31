@@ -34,14 +34,11 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     path: PolygonOnScreen
     spec: NpcSpec
     collisions: tuple[PolygonOnScreen, ...] = field(default_factory=tuple)
-    move_speed: PixelPerMillisecond = instance_init(
-        lambda self: self.spec.move_speed
-    )
     _: KW_ONLY = not_constructor_below()
     _walk: Walk = instance_init(
         lambda self: Walk(
             self.path,
-            self.move_speed,
+            self.spec.config.move_speed,
             self.spec.cyclic_walk and self.path.closed,
         )
     )

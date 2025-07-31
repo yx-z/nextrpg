@@ -36,7 +36,7 @@ class PlayerOnScreen(MovingCharacterOnScreen):
         direction = _key_to_dir(updated_keys)
         character = (
             self.character.turn(direction)
-            if direction in config().character.directions
+            if direction in config().player.directions
             else self.character
         )
         return replace(self, character=character, _movement_keys=updated_keys)

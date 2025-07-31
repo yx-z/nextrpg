@@ -19,7 +19,6 @@ logger = Logger("RpgEventScene")
 
 @dataclass(frozen=True)
 class EventfulScene(EventAsAttr, Scene):
-
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...]
     _: KW_ONLY = not_constructor_below()
@@ -30,9 +29,6 @@ class EventfulScene(EventAsAttr, Scene):
     def get_character(self, object_name: str) -> CharacterOnScreen:
         if object_name == self.player.spec.object_name:
             return self.player
-        return self.get_npc(object_name)
-
-    def get_npc(self, object_name: str) -> NpcOnScreen:
         return self._npc_dict[object_name]
 
     def event(self, event: PygameEvent) -> Scene:
@@ -41,6 +37,7 @@ class EventfulScene(EventAsAttr, Scene):
             and isinstance(event, KeyPressDown)
             and event.key is KeyboardKey.CONFIRM
             and (npc := self._collided_npc)
+            and npc.spec.event
         ):
             logger.debug(t"Collided with {npc.spec.object_name}")
             scene = self._trigger(npc)

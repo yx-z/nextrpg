@@ -28,8 +28,8 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
         player_spec or init_player(),
         Move("from_interior", "to_exterior", exterior_scene),
         (
-            NpcSpec(object_name="david", character=david(), event=greet),
-            NpcSpec(object_name="alisa", character=alisa(), event=greet),
+            NpcSpec("david", david(), event=greet),
+            NpcSpec("alisa", alisa(), event=greet),
         ),
     )
 
@@ -42,7 +42,7 @@ def greet(
     npc: f"Hello {player.display_name}!"
 
     other_name = "david" if npc.display_name == "alisa" else "alisa"
-    other_npc = scene.get_npc(other_name)
+    other_npc = scene.get_character(other_name)
     other_npc: f"Hello! I am {other_npc.display_name}!"
 
     cfg = config().say_event.text_config
