@@ -39,15 +39,6 @@
                         <li>
                                 <a class="variable" href="#CharacterConfig.move_speed">move_speed</a>
                         </li>
-                        <li>
-                                <a class="variable" href="#CharacterConfig.idle_duration">idle_duration</a>
-                        </li>
-                        <li>
-                                <a class="variable" href="#CharacterConfig.move_duration">move_duration</a>
-                        </li>
-                        <li>
-                                <a class="variable" href="#CharacterConfig.directions">directions</a>
-                        </li>
                 </ul>
 
             </li>
@@ -72,19 +63,14 @@
 
                         <label class="view-source-button" for="mod-character_config-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">PixelPerMillisecond</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.direction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterConfig</span><span class="p">:</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">500</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">1000</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">directions</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">Direction</span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">Direction</span><span class="p">)</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">PixelPerMillisecond</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">4</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">5</span></a>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">6</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterConfig</span><span class="p">:</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">8</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>
 </span></pre></div>
 
 
@@ -101,12 +87,9 @@
 
     </div>
     <a class="headerlink" href="#CharacterConfig"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterConfig-9"><a href="#CharacterConfig-9"><span class="linenos"> 9</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="CharacterConfig-10"><a href="#CharacterConfig-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterConfig</span><span class="p">:</span>
-</span><span id="CharacterConfig-11"><a href="#CharacterConfig-11"><span class="linenos">11</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>
-</span><span id="CharacterConfig-12"><a href="#CharacterConfig-12"><span class="linenos">12</span></a>    <span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">500</span>
-</span><span id="CharacterConfig-13"><a href="#CharacterConfig-13"><span class="linenos">13</span></a>    <span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">1000</span>
-</span><span id="CharacterConfig-14"><a href="#CharacterConfig-14"><span class="linenos">14</span></a>    <span class="n">directions</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n">Direction</span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span><span class="n">Direction</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterConfig-7"><a href="#CharacterConfig-7"><span class="linenos">7</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="CharacterConfig-8"><a href="#CharacterConfig-8"><span class="linenos">8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterConfig</span><span class="p">:</span>
+</span><span id="CharacterConfig-9"><a href="#CharacterConfig-9"><span class="linenos">9</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>
 </span></pre></div>
 
 
@@ -115,7 +98,7 @@
                             <div id="CharacterConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">CharacterConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>,</span><span class="param">	<span class="n">idle_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">500</span>,</span><span class="param">	<span class="n">move_duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="mi">1000</span>,</span><span class="param">	<span class="n">directions</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="n"><a href="../core/direction.html#Direction">nextrpg.core.direction.Direction</a></span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span> <span class="mi">8</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="mi">3</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">:</span> <span class="mi">5</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="mi">2</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">:</span> <span class="mi">6</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span> <span class="mi">4</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">:</span> <span class="mi">7</span><span class="o">&gt;</span><span class="p">})</span></span>)</span>
+        <span class="name">CharacterConfig</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span></span>)</span>
 
         
     </div>
@@ -132,43 +115,6 @@
         
     </div>
     <a class="headerlink" href="#CharacterConfig.move_speed"></a>
-    
-    
-
-                            </div>
-                            <div id="CharacterConfig.idle_duration" class="classattr">
-                                <div class="attr variable">
-            <span class="name">idle_duration</span><span class="annotation">: <a href="../core/time.html#Millisecond">nextrpg.core.time.Millisecond</a></span>        =
-<span class="default_value">500</span>
-
-        
-    </div>
-    <a class="headerlink" href="#CharacterConfig.idle_duration"></a>
-    
-    
-
-                            </div>
-                            <div id="CharacterConfig.move_duration" class="classattr">
-                                <div class="attr variable">
-            <span class="name">move_duration</span><span class="annotation">: <a href="../core/time.html#Millisecond">nextrpg.core.time.Millisecond</a></span>        =
-<span class="default_value">1000</span>
-
-        
-    </div>
-    <a class="headerlink" href="#CharacterConfig.move_duration"></a>
-    
-    
-
-                            </div>
-                            <div id="CharacterConfig.directions" class="classattr">
-                                <div class="attr variable">
-            <span class="name">directions</span><span class="annotation">: frozenset[<a href="../core/direction.html#Direction">nextrpg.core.direction.Direction</a>]</span>        =
-<input id="CharacterConfig.directions-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-            <label class="view-value-button pdoc-button" for="CharacterConfig.directions-view-value"></label><span class="default_value">frozenset({&lt;Direction.DOWN_RIGHT: 8&gt;, &lt;Direction.DOWN: 1&gt;, &lt;Direction.RIGHT: 3&gt;, &lt;Direction.UP_LEFT: 5&gt;, &lt;Direction.LEFT: 2&gt;, &lt;Direction.UP_RIGHT: 6&gt;, &lt;Direction.UP: 4&gt;, &lt;Direction.DOWN_LEFT: 7&gt;})</span>
-
-        
-    </div>
-    <a class="headerlink" href="#CharacterConfig.directions"></a>
     
     
 

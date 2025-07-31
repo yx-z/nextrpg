@@ -16,7 +16,7 @@ type RpgEventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
 type RpgEventSpec = Callable[[*RpgEventSpecParams], None | RpgEventGenerator]
 
 type RpgEventCallable = Callable[
-    [RpgEventGenerator, EventfulScene], RpgEventScene
+    [RpgEventGenerator, "EventfulScene"], "RpgEventScene"
 ]
 type RpgEventGenerator = Generator[RpgEventCallable, Any, None]
 

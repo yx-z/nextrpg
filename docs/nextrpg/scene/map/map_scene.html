@@ -137,9 +137,9 @@
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">get_timepoint</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.map.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">MapLoader</span><span class="p">,</span> <span class="n">get_polygon</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.map.shift</span><span class="w"> </span><span class="kn">import</span> <span class="n">center_player</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.rpg_event_scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventfulScene</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.eventful_scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventfulScene</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.map.loader</span><span class="w"> </span><span class="kn">import</span> <span class="n">MapLoader</span><span class="p">,</span> <span class="n">get_polygon</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.map.shift</span><span class="w"> </span><span class="kn">import</span> <span class="n">center_player</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.transition_scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">TransitionScene</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>
@@ -316,7 +316,7 @@
                     <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init(frozen=True)</div>
 
     <span class="def">class</span>
-    <span class="name">MapScene</span><wbr>(<span class="base"><a href="../rpg_event_scene.html#EventfulScene">nextrpg.scene.rpg_event_scene.EventfulScene</a></span>):
+    <span class="name">MapScene</span><wbr>(<span class="base"><a href="../eventful_scene.html#EventfulScene">nextrpg.scene.eventful_scene.EventfulScene</a></span>):
 
                 <label class="view-source-button" for="MapScene-view-source"><span>View Source</span></label>
 
@@ -619,13 +619,12 @@
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
-                                    <div><dt><a href="../rpg_event_scene.html#EventfulScene">nextrpg.scene.rpg_event_scene.EventfulScene</a></dt>
-                                <dd id="MapScene.npc" class="variable"><a href="../rpg_event_scene.html#EventfulScene.npc">npc</a></dd>
-                <dd id="MapScene.get_character" class="function"><a href="../rpg_event_scene.html#EventfulScene.get_character">get_character</a></dd>
-                <dd id="MapScene.get_npc" class="function"><a href="../rpg_event_scene.html#EventfulScene.get_npc">get_npc</a></dd>
-                <dd id="MapScene.event" class="function"><a href="../rpg_event_scene.html#EventfulScene.event">event</a></dd>
-                <dd id="MapScene.tick_without_event" class="function"><a href="../rpg_event_scene.html#EventfulScene.tick_without_event">tick_without_event</a></dd>
-                <dd id="MapScene.send" class="function"><a href="../rpg_event_scene.html#EventfulScene.send">send</a></dd>
+                                    <div><dt><a href="../eventful_scene.html#EventfulScene">nextrpg.scene.eventful_scene.EventfulScene</a></dt>
+                                <dd id="MapScene.npc" class="variable"><a href="../eventful_scene.html#EventfulScene.npc">npc</a></dd>
+                <dd id="MapScene.get_character" class="function"><a href="../eventful_scene.html#EventfulScene.get_character">get_character</a></dd>
+                <dd id="MapScene.event" class="function"><a href="../eventful_scene.html#EventfulScene.event">event</a></dd>
+                <dd id="MapScene.tick_without_event" class="function"><a href="../eventful_scene.html#EventfulScene.tick_without_event">tick_without_event</a></dd>
+                <dd id="MapScene.send" class="function"><a href="../eventful_scene.html#EventfulScene.send">send</a></dd>
 
             </div>
             <div><dt><a href="../scene.html#Scene">nextrpg.scene.scene.Scene</a></dt>

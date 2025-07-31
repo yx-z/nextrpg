@@ -34,40 +34,22 @@
                     <a class="variable" href="#Alpha">Alpha</a>
             </li>
             <li>
-                    <a class="class" href="#Rgb">Rgb</a>
+                    <a class="class" href="#Color">Color</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#Rgb.__init__">Rgb</a>
+                                <a class="function" href="#Color.__init__">Color</a>
                         </li>
                         <li>
-                                <a class="variable" href="#Rgb.red">red</a>
+                                <a class="variable" href="#Color.red">red</a>
                         </li>
                         <li>
-                                <a class="variable" href="#Rgb.green">green</a>
+                                <a class="variable" href="#Color.green">green</a>
                         </li>
                         <li>
-                                <a class="variable" href="#Rgb.blue">blue</a>
-                        </li>
-                </ul>
-
-            </li>
-            <li>
-                    <a class="class" href="#Rgba">Rgba</a>
-                            <ul class="memberlist">
-                        <li>
-                                <a class="function" href="#Rgba.__init__">Rgba</a>
+                                <a class="variable" href="#Color.blue">blue</a>
                         </li>
                         <li>
-                                <a class="variable" href="#Rgba.red">red</a>
-                        </li>
-                        <li>
-                                <a class="variable" href="#Rgba.green">green</a>
-                        </li>
-                        <li>
-                                <a class="variable" href="#Rgba.blue">blue</a>
-                        </li>
-                        <li>
-                                <a class="variable" href="#Rgba.alpha">alpha</a>
+                                <a class="variable" href="#Color.alpha">alpha</a>
                         </li>
                 </ul>
 
@@ -103,29 +85,25 @@
                         <label class="view-source-button" for="mod-color-view-source"><span>View Source</span></label>
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">namedtuple</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="nb">type</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="nb">int</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Rgb</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;Rgb&quot;</span><span class="p">,</span> <span class="s2">&quot;red green blue&quot;</span><span class="p">)):</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">red</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="n">green</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="n">blue</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Rgba</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;Rgba&quot;</span><span class="p">,</span> <span class="s2">&quot;red green blue alpha&quot;</span><span class="p">)):</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">red</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">green</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">blue</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">alpha</span><span class="p">:</span> <span class="n">Alpha</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="nb">type</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="nb">int</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Color</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="n">red</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">green</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">blue</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">alpha</span><span class="p">:</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="mi">255</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="n">BLACK</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="n">WHITE</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="n">BLACK</span> <span class="o">=</span> <span class="n">Rgb</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="n">WHITE</span> <span class="o">=</span> <span class="n">Rgb</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="k">def</span><span class="w"> </span><span class="nf">alpha_from_percentage</span><span class="p">(</span><span class="n">percentage</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alpha</span><span class="p">:</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">percentage</span><span class="p">)</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="k">def</span><span class="w"> </span><span class="nf">alpha_from_percentage</span><span class="p">(</span><span class="n">percentage</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alpha</span><span class="p">:</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">percentage</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -142,165 +120,89 @@
     
 
                 </section>
-                <section id="Rgb">
-                            <input id="Rgb-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                <section id="Color">
+                            <input id="Color-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">Rgb</span><wbr>(<span class="base"><a href="#Rgb">Rgb</a></span>):
+    <span class="name">Color</span><wbr>(<span class="base">typing.NamedTuple</span>):
 
-                <label class="view-source-button" for="Rgb-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="Color-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Rgb"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Rgb-7"><a href="#Rgb-7"><span class="linenos"> 7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Rgb</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;Rgb&quot;</span><span class="p">,</span> <span class="s2">&quot;red green blue&quot;</span><span class="p">)):</span>
-</span><span id="Rgb-8"><a href="#Rgb-8"><span class="linenos"> 8</span></a>    <span class="n">red</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Rgb-9"><a href="#Rgb-9"><span class="linenos"> 9</span></a>    <span class="n">green</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Rgb-10"><a href="#Rgb-10"><span class="linenos">10</span></a>    <span class="n">blue</span><span class="p">:</span> <span class="nb">int</span>
+    <a class="headerlink" href="#Color"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Color-9"><a href="#Color-9"><span class="linenos"> 9</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Color</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+</span><span id="Color-10"><a href="#Color-10"><span class="linenos">10</span></a>    <span class="n">red</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Color-11"><a href="#Color-11"><span class="linenos">11</span></a>    <span class="n">green</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Color-12"><a href="#Color-12"><span class="linenos">12</span></a>    <span class="n">blue</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Color-13"><a href="#Color-13"><span class="linenos">13</span></a>    <span class="n">alpha</span><span class="p">:</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="mi">255</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Rgb(red, green, blue)</p>
+            <div class="docstring"><p>Color(red, green, blue, alpha)</p>
 </div>
 
 
-                            <div id="Rgb.__init__" class="classattr">
+                            <div id="Color.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">Rgb</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">red</span>, </span><span class="param"><span class="n">green</span>, </span><span class="param"><span class="n">blue</span></span>)</span>
+        <span class="name">Color</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">red</span><span class="p">:</span> <span class="nb">int</span>, </span><span class="param"><span class="n">green</span><span class="p">:</span> <span class="nb">int</span>, </span><span class="param"><span class="n">blue</span><span class="p">:</span> <span class="nb">int</span>, </span><span class="param"><span class="n">alpha</span><span class="p">:</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="mi">255</span></span>)</span>
 
         
     </div>
-    <a class="headerlink" href="#Rgb.__init__"></a>
+    <a class="headerlink" href="#Color.__init__"></a>
     
-            <div class="docstring"><p>Create new instance of Rgb(red, green, blue)</p>
+            <div class="docstring"><p>Create new instance of Color(red, green, blue, alpha)</p>
 </div>
 
 
                             </div>
-                            <div id="Rgb.red" class="classattr">
+                            <div id="Color.red" class="classattr">
                                 <div class="attr variable">
             <span class="name">red</span><span class="annotation">: int</span>
 
         
     </div>
-    <a class="headerlink" href="#Rgb.red"></a>
+    <a class="headerlink" href="#Color.red"></a>
     
             <div class="docstring"><p>Alias for field number 0</p>
 </div>
 
 
                             </div>
-                            <div id="Rgb.green" class="classattr">
+                            <div id="Color.green" class="classattr">
                                 <div class="attr variable">
             <span class="name">green</span><span class="annotation">: int</span>
 
         
     </div>
-    <a class="headerlink" href="#Rgb.green"></a>
+    <a class="headerlink" href="#Color.green"></a>
     
             <div class="docstring"><p>Alias for field number 1</p>
 </div>
 
 
                             </div>
-                            <div id="Rgb.blue" class="classattr">
+                            <div id="Color.blue" class="classattr">
                                 <div class="attr variable">
             <span class="name">blue</span><span class="annotation">: int</span>
 
         
     </div>
-    <a class="headerlink" href="#Rgb.blue"></a>
+    <a class="headerlink" href="#Color.blue"></a>
     
             <div class="docstring"><p>Alias for field number 2</p>
 </div>
 
 
                             </div>
-                </section>
-                <section id="Rgba">
-                            <input id="Rgba-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr class">
-            
-    <span class="def">class</span>
-    <span class="name">Rgba</span><wbr>(<span class="base"><a href="#Rgba">Rgba</a></span>):
-
-                <label class="view-source-button" for="Rgba-view-source"><span>View Source</span></label>
-
-    </div>
-    <a class="headerlink" href="#Rgba"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Rgba-13"><a href="#Rgba-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Rgba</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;Rgba&quot;</span><span class="p">,</span> <span class="s2">&quot;red green blue alpha&quot;</span><span class="p">)):</span>
-</span><span id="Rgba-14"><a href="#Rgba-14"><span class="linenos">14</span></a>    <span class="n">red</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Rgba-15"><a href="#Rgba-15"><span class="linenos">15</span></a>    <span class="n">green</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Rgba-16"><a href="#Rgba-16"><span class="linenos">16</span></a>    <span class="n">blue</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Rgba-17"><a href="#Rgba-17"><span class="linenos">17</span></a>    <span class="n">alpha</span><span class="p">:</span> <span class="n">Alpha</span>
-</span></pre></div>
-
-
-            <div class="docstring"><p>Rgba(red, green, blue, alpha)</p>
-</div>
-
-
-                            <div id="Rgba.__init__" class="classattr">
-                                <div class="attr function">
-            
-        <span class="name">Rgba</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">red</span>, </span><span class="param"><span class="n">green</span>, </span><span class="param"><span class="n">blue</span>, </span><span class="param"><span class="n">alpha</span></span>)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#Rgba.__init__"></a>
-    
-            <div class="docstring"><p>Create new instance of Rgba(red, green, blue, alpha)</p>
-</div>
-
-
-                            </div>
-                            <div id="Rgba.red" class="classattr">
-                                <div class="attr variable">
-            <span class="name">red</span><span class="annotation">: int</span>
-
-        
-    </div>
-    <a class="headerlink" href="#Rgba.red"></a>
-    
-            <div class="docstring"><p>Alias for field number 0</p>
-</div>
-
-
-                            </div>
-                            <div id="Rgba.green" class="classattr">
-                                <div class="attr variable">
-            <span class="name">green</span><span class="annotation">: int</span>
-
-        
-    </div>
-    <a class="headerlink" href="#Rgba.green"></a>
-    
-            <div class="docstring"><p>Alias for field number 1</p>
-</div>
-
-
-                            </div>
-                            <div id="Rgba.blue" class="classattr">
-                                <div class="attr variable">
-            <span class="name">blue</span><span class="annotation">: int</span>
-
-        
-    </div>
-    <a class="headerlink" href="#Rgba.blue"></a>
-    
-            <div class="docstring"><p>Alias for field number 2</p>
-</div>
-
-
-                            </div>
-                            <div id="Rgba.alpha" class="classattr">
+                            <div id="Color.alpha" class="classattr">
                                 <div class="attr variable">
             <span class="name">alpha</span><span class="annotation">: <a href="#Alpha">Alpha</a></span>
 
         
     </div>
-    <a class="headerlink" href="#Rgba.alpha"></a>
+    <a class="headerlink" href="#Color.alpha"></a>
     
             <div class="docstring"><p>Alias for field number 3</p>
 </div>
@@ -311,7 +213,7 @@
                 <section id="BLACK">
                     <div class="attr variable">
             <span class="name">BLACK</span>        =
-<span class="default_value">Rgb(red=0, green=0, blue=0)</span>
+<span class="default_value">Color(red=0, green=0, blue=0, alpha=255)</span>
 
         
     </div>
@@ -323,7 +225,7 @@
                 <section id="WHITE">
                     <div class="attr variable">
             <span class="name">WHITE</span>        =
-<span class="default_value">Rgb(red=255, green=255, blue=255)</span>
+<span class="default_value">Color(red=255, green=255, blue=255, alpha=255)</span>
 
         
     </div>
@@ -343,8 +245,8 @@
 
     </div>
     <a class="headerlink" href="#alpha_from_percentage"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="alpha_from_percentage-24"><a href="#alpha_from_percentage-24"><span class="linenos">24</span></a><span class="k">def</span><span class="w"> </span><span class="nf">alpha_from_percentage</span><span class="p">(</span><span class="n">percentage</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alpha</span><span class="p">:</span>
-</span><span id="alpha_from_percentage-25"><a href="#alpha_from_percentage-25"><span class="linenos">25</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">percentage</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="alpha_from_percentage-20"><a href="#alpha_from_percentage-20"><span class="linenos">20</span></a><span class="k">def</span><span class="w"> </span><span class="nf">alpha_from_percentage</span><span class="p">(</span><span class="n">percentage</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alpha</span><span class="p">:</span>
+</span><span id="alpha_from_percentage-21"><a href="#alpha_from_percentage-21"><span class="linenos">21</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">percentage</span><span class="p">)</span>
 </span></pre></div>
 
 

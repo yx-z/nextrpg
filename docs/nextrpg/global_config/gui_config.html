@@ -73,7 +73,7 @@
                                 <a class="variable" href="#GuiConfig.frames_per_second">frames_per_second</a>
                         </li>
                         <li>
-                                <a class="variable" href="#GuiConfig.background_color">background_color</a>
+                                <a class="variable" href="#GuiConfig.background">background</a>
                         </li>
                         <li>
                                 <a class="variable" href="#GuiConfig.double_buffer">double_buffer</a>
@@ -114,7 +114,7 @@
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">Rgba</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">Color</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
@@ -137,7 +137,7 @@
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nextrpg&quot;</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">1280</span><span class="p">,</span> <span class="mi">720</span><span class="p">)</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">background_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">BLACK</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">background</span><span class="p">:</span> <span class="n">Color</span> <span class="o">=</span> <span class="n">BLACK</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">gui_mode</span><span class="p">:</span> <span class="n">GuiMode</span> <span class="o">=</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="n">resize_mode</span><span class="p">:</span> <span class="n">ResizeMode</span> <span class="o">=</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">SCALE</span>
@@ -279,7 +279,7 @@
 </span><span id="GuiConfig-25"><a href="#GuiConfig-25"><span class="linenos">25</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nextrpg&quot;</span>
 </span><span id="GuiConfig-26"><a href="#GuiConfig-26"><span class="linenos">26</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">1280</span><span class="p">,</span> <span class="mi">720</span><span class="p">)</span>
 </span><span id="GuiConfig-27"><a href="#GuiConfig-27"><span class="linenos">27</span></a>    <span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
-</span><span id="GuiConfig-28"><a href="#GuiConfig-28"><span class="linenos">28</span></a>    <span class="n">background_color</span><span class="p">:</span> <span class="n">Rgba</span> <span class="o">=</span> <span class="n">BLACK</span>
+</span><span id="GuiConfig-28"><a href="#GuiConfig-28"><span class="linenos">28</span></a>    <span class="n">background</span><span class="p">:</span> <span class="n">Color</span> <span class="o">=</span> <span class="n">BLACK</span>
 </span><span id="GuiConfig-29"><a href="#GuiConfig-29"><span class="linenos">29</span></a>    <span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="GuiConfig-30"><a href="#GuiConfig-30"><span class="linenos">30</span></a>    <span class="n">gui_mode</span><span class="p">:</span> <span class="n">GuiMode</span> <span class="o">=</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span>
 </span><span id="GuiConfig-31"><a href="#GuiConfig-31"><span class="linenos">31</span></a>    <span class="n">resize_mode</span><span class="p">:</span> <span class="n">ResizeMode</span> <span class="o">=</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">SCALE</span>
@@ -292,7 +292,7 @@
                             <div id="GuiConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">GuiConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;nextrpg&#39;</span>,</span><span class="param">	<span class="n">size</span><span class="p">:</span> <span class="n"><a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a></span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">720</span><span class="p">)</span>,</span><span class="param">	<span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>,</span><span class="param">	<span class="n">background_color</span><span class="p">:</span> <span class="n"><a href="../core/color.html#Rgba">nextrpg.core.color.Rgba</a></span> <span class="o">=</span> <span class="n">Rgb</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>,</span><span class="param">	<span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">gui_mode</span><span class="p">:</span> <span class="n"><a href="#GuiMode">GuiMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#GuiMode.WINDOWED">GuiMode.WINDOWED</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">resize_mode</span><span class="p">:</span> <span class="n"><a href="#ResizeMode">ResizeMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#ResizeMode.SCALE">ResizeMode.SCALE</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">allow_window_resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
+        <span class="name">GuiConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;nextrpg&#39;</span>,</span><span class="param">	<span class="n">size</span><span class="p">:</span> <span class="n"><a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a></span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">720</span><span class="p">)</span>,</span><span class="param">	<span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>,</span><span class="param">	<span class="n">background</span><span class="p">:</span> <span class="n"><a href="../core/color.html#Color">nextrpg.core.color.Color</a></span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="n">red</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>,</span><span class="param">	<span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">gui_mode</span><span class="p">:</span> <span class="n"><a href="#GuiMode">GuiMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#GuiMode.WINDOWED">GuiMode.WINDOWED</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">resize_mode</span><span class="p">:</span> <span class="n"><a href="#ResizeMode">ResizeMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#ResizeMode.SCALE">ResizeMode.SCALE</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">allow_window_resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
 
         
     </div>
@@ -337,14 +337,14 @@
     
 
                             </div>
-                            <div id="GuiConfig.background_color" class="classattr">
+                            <div id="GuiConfig.background" class="classattr">
                                 <div class="attr variable">
-            <span class="name">background_color</span><span class="annotation">: <a href="../core/color.html#Rgba">nextrpg.core.color.Rgba</a></span>        =
-<span class="default_value">Rgb(red=0, green=0, blue=0)</span>
+            <span class="name">background</span><span class="annotation">: <a href="../core/color.html#Color">nextrpg.core.color.Color</a></span>        =
+<span class="default_value">Color(red=0, green=0, blue=0, alpha=255)</span>
 
         
     </div>
-    <a class="headerlink" href="#GuiConfig.background_color"></a>
+    <a class="headerlink" href="#GuiConfig.background"></a>
     
     
 

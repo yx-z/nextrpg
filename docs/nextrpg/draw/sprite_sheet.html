@@ -97,7 +97,7 @@
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">Rgb</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">Color</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">Draw</span>
@@ -114,7 +114,7 @@
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Draw</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">num_row</span><span class="p">:</span> <span class="nb">int</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="n">num_column</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="n">color_key</span><span class="p">:</span> <span class="n">Rgb</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="n">color_key</span><span class="p">:</span> <span class="n">Color</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">:</span> <span class="n">Selection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_column</span>
@@ -203,7 +203,7 @@
 </span><span id="SpriteSheet-20"><a href="#SpriteSheet-20"><span class="linenos">20</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Draw</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span>
 </span><span id="SpriteSheet-21"><a href="#SpriteSheet-21"><span class="linenos">21</span></a>    <span class="n">num_row</span><span class="p">:</span> <span class="nb">int</span>
 </span><span id="SpriteSheet-22"><a href="#SpriteSheet-22"><span class="linenos">22</span></a>    <span class="n">num_column</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="SpriteSheet-23"><a href="#SpriteSheet-23"><span class="linenos">23</span></a>    <span class="n">color_key</span><span class="p">:</span> <span class="n">Rgb</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="SpriteSheet-23"><a href="#SpriteSheet-23"><span class="linenos">23</span></a>    <span class="n">color_key</span><span class="p">:</span> <span class="n">Color</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="SpriteSheet-24"><a href="#SpriteSheet-24"><span class="linenos">24</span></a>
 </span><span id="SpriteSheet-25"><a href="#SpriteSheet-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">:</span> <span class="n">Selection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
 </span><span id="SpriteSheet-26"><a href="#SpriteSheet-26"><span class="linenos">26</span></a>        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_column</span>
@@ -223,7 +223,7 @@
                             <div id="SpriteSheet.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">SpriteSheet</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">resource</span><span class="p">:</span> <span class="n"><a href="draw.html#Draw">nextrpg.draw.draw.Draw</a></span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span>,</span><span class="param">	<span class="n">num_row</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">num_column</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">color_key</span><span class="p">:</span> <span class="n"><a href="../core/color.html#Rgb">nextrpg.core.color.Rgb</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
+        <span class="name">SpriteSheet</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">resource</span><span class="p">:</span> <span class="n"><a href="draw.html#Draw">nextrpg.draw.draw.Draw</a></span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span>,</span><span class="param">	<span class="n">num_row</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">num_column</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">color_key</span><span class="p">:</span> <span class="n"><a href="../core/color.html#Color">nextrpg.core.color.Color</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
 
         
     </div>
@@ -267,7 +267,7 @@
                             </div>
                             <div id="SpriteSheet.color_key" class="classattr">
                                 <div class="attr variable">
-            <span class="name">color_key</span><span class="annotation">: <a href="../core/color.html#Rgb">nextrpg.core.color.Rgb</a> | None</span>        =
+            <span class="name">color_key</span><span class="annotation">: <a href="../core/color.html#Color">nextrpg.core.color.Color</a> | None</span>        =
 <span class="default_value">None</span>
 
         
