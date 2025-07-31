@@ -10,7 +10,7 @@ class Color(
     red: int
     green: int
     blue: int
-    alpha: Alpha = 255
+    alpha: Alpha
 
 
 BLACK = Color(0, 0, 0)
