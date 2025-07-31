@@ -15,12 +15,9 @@ from nextrpg.global_config.global_config import config
 logger = Logger("MovingCharacterOnScreen")
 
 
-@dataclass(kw_only=True, frozen=True)
+@dataclass(frozen=True)
 class MovingCharacterOnScreen(CharacterOnScreen, ABC):
-    collisions: tuple[PolygonOnScreen, ...]
-    move_speed: PixelPerMillisecond = field(
-        default_factory=lambda: config().character.move_speed
-    )
+    collisions: tuple[PolygonOnScreen, ...] = ()
     _: KW_ONLY = not_constructor_below()
     _move_toggle: bool = True
 

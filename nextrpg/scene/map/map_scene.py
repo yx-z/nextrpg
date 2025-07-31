@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from dataclasses import KW_ONLY, dataclass, field, replace
+from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from os import PathLike
 from typing import NamedTuple, OrderedDict, override
@@ -32,8 +32,8 @@ class MapScene(EventfulScene):
 
     tmx_file: PathLike | str
     player_spec: CharacterSpec
-    moves: Move | tuple[Move, ...] = field(default_factory=tuple)
-    npc_specs: tuple[NpcSpec, ...] = field(default_factory=tuple)
+    moves: Move | tuple[Move, ...] = ()
+    npc_specs: tuple[NpcSpec, ...] = ()
     _: KW_ONLY = not_constructor_below()
     npcs: tuple[NpcOnScreen, ...] = instance_init(
         lambda self: tuple(self._init_npc(n) for n in self.npc_specs)
@@ -53,10 +53,9 @@ class MapScene(EventfulScene):
         logger.debug(t"Spawn player at {player_spec.object_name}.")
         player = self.map_helper.get_object(player_spec.object_name)
         return PlayerOnScreen(
-            character=player_spec.character,
-            coordinate=Coordinate(player.x, player.y),
+            player_spec,
+            Coordinate(player.x, player.y),
             collisions=self.map_helper.collisions,
-            spec=player_spec,
         )
 
     @override

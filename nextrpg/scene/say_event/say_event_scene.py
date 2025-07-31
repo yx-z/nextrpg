@@ -34,7 +34,7 @@ def say(
 class SayEventScene(RpgEventScene):
     character_or_scene: CharacterOnScreen | Scene
     message: str | Text | TextGroup
-    args: tuple[SayEventArg, ...] = field(default_factory=tuple)
+    args: tuple[SayEventArg, ...] = ()
 
     @override
     @cached_property

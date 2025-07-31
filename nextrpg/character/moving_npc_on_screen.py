@@ -23,7 +23,6 @@ from nextrpg.core.dataclass_with_instance_init import (
     instance_init,
     not_constructor_below,
 )
-from nextrpg.core.dimension import PixelPerMillisecond
 from nextrpg.core.time import Millisecond
 from nextrpg.core.walk import Walk
 from nextrpg.draw.draw import PolygonOnScreen
@@ -33,7 +32,7 @@ from nextrpg.draw.draw import PolygonOnScreen
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     path: PolygonOnScreen
     spec: NpcSpec
-    collisions: tuple[PolygonOnScreen, ...] = field(default_factory=tuple)
+    collisions: tuple[PolygonOnScreen, ...] = ()
     _: KW_ONLY = not_constructor_below()
     _walk: Walk = instance_init(
         lambda self: Walk(

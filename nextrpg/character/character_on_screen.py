@@ -15,6 +15,7 @@ from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.draw.draw import Draw, DrawOnScreen
 from nextrpg.draw.group import Group
 from nextrpg.event.event_as_attr import EventAsAttr
+from nextrpg.global_config.character_config import CharacterConfig
 
 
 @dataclass_with_instance_init(frozen=True)
@@ -25,10 +26,11 @@ class CharacterSpec:
     display_name: str = instance_init(lambda self: self.object_name)
 
 
-@dataclass_with_instance_init(frozen=True, kw_only=True)
+@dataclass_with_instance_init(frozen=True)
 class CharacterOnScreen(EventAsAttr, Moving, AnimatedOnScreen):
     spec: CharacterSpec
     coordinate: Coordinate
+    config: CharacterConfig = CharacterConfig()
     _: KW_ONLY = not_constructor_below()
     character: CharacterDraw = instance_init(lambda self: self.spec.character)
     _event_triggered: bool = False

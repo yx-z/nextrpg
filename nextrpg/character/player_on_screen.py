@@ -16,7 +16,7 @@ from nextrpg.event.pygame_event import (
 from nextrpg.global_config.global_config import config
 
 
-@dataclass(kw_only=True, frozen=True)
+@dataclass(frozen=True)
 class PlayerOnScreen(MovingCharacterOnScreen):
     _: KW_ONLY = not_constructor_below()
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
@@ -58,7 +58,7 @@ class PlayerOnScreen(MovingCharacterOnScreen):
     @override
     def move(self, time_delta: Millisecond) -> Coordinate | None:
         directional_offset = DirectionalOffset(
-            self.character.direction, self.move_speed * time_delta
+            self.character.direction, self.config.move_speed * time_delta
         )
         return self.coordinate + directional_offset
 

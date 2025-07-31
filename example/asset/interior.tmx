@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="21" nextobjectid="99">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="21" nextobjectid="100">
  <tileset firstgid="1" source="base.tsx"/>
  <tileset firstgid="169" source="object.tsx"/>
  <layer id="1" name="floor" class="background" width="30" height="20">
@@ -137,8 +137,8 @@
   <object id="95" name="alisa" x="1016.67" y="386">
    <polygon points="0,0 -174,118.667 92.6667,146"/>
   </object>
-  <object id="98" name="david" x="577" y="446">
-   <polyline points="0.666667,-1.33333 -172,203.333 17.3333,234"/>
+  <object id="99" name="david" x="497.333" y="628">
+   <point/>
   </object>
  </objectgroup>
  <objectgroup id="20" name="collision">
