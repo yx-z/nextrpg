@@ -62,7 +62,7 @@ class Text:
 
     @cached_property
     def lines(self) -> tuple[str, ...]:
-        if not (wrap := self.config.auto_wrap):
+        if not (wrap := self.config.wrap):
             return tuple(self.message.splitlines(keepends=True))
 
         # wrap lines

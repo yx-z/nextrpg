@@ -96,46 +96,48 @@
 
                         <label class="view-source-button" for="mod-direction-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">replace</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pixel</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">replace</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">auto</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Direction</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="n">DOWN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">UP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">UP_LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">UP_RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">DOWN_LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">DOWN_RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_DIRECTION</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="n">_OPPOSITE_DIRECTION</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="p">}</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DirectionalOffset</span><span class="p">:</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="n">offset</span><span class="p">:</span> <span class="n">Pixel</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pixel</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Direction</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">DOWN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">UP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">UP_LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">UP_RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">DOWN_LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">DOWN_RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_DIRECTION</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="n">_OPPOSITE_DIRECTION</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="p">}</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DirectionalOffset</span><span class="p">:</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="n">offset</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -151,18 +153,18 @@
 
     </div>
     <a class="headerlink" href="#Direction"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Direction-9"><a href="#Direction-9"><span class="linenos"> 9</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Direction</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-</span><span id="Direction-10"><a href="#Direction-10"><span class="linenos">10</span></a>    <span class="n">DOWN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="Direction-11"><a href="#Direction-11"><span class="linenos">11</span></a>    <span class="n">LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="Direction-12"><a href="#Direction-12"><span class="linenos">12</span></a>    <span class="n">RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="Direction-13"><a href="#Direction-13"><span class="linenos">13</span></a>    <span class="n">UP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="Direction-14"><a href="#Direction-14"><span class="linenos">14</span></a>    <span class="n">UP_LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="Direction-15"><a href="#Direction-15"><span class="linenos">15</span></a>    <span class="n">UP_RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="Direction-16"><a href="#Direction-16"><span class="linenos">16</span></a>    <span class="n">DOWN_LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="Direction-17"><a href="#Direction-17"><span class="linenos">17</span></a>    <span class="n">DOWN_RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="Direction-18"><a href="#Direction-18"><span class="linenos">18</span></a>
-</span><span id="Direction-19"><a href="#Direction-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Direction-20"><a href="#Direction-20"><span class="linenos">20</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_DIRECTION</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Direction-11"><a href="#Direction-11"><span class="linenos">11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Direction</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+</span><span id="Direction-12"><a href="#Direction-12"><span class="linenos">12</span></a>    <span class="n">DOWN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="Direction-13"><a href="#Direction-13"><span class="linenos">13</span></a>    <span class="n">LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="Direction-14"><a href="#Direction-14"><span class="linenos">14</span></a>    <span class="n">RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="Direction-15"><a href="#Direction-15"><span class="linenos">15</span></a>    <span class="n">UP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="Direction-16"><a href="#Direction-16"><span class="linenos">16</span></a>    <span class="n">UP_LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="Direction-17"><a href="#Direction-17"><span class="linenos">17</span></a>    <span class="n">UP_RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="Direction-18"><a href="#Direction-18"><span class="linenos">18</span></a>    <span class="n">DOWN_LEFT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="Direction-19"><a href="#Direction-19"><span class="linenos">19</span></a>    <span class="n">DOWN_RIGHT</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="Direction-20"><a href="#Direction-20"><span class="linenos">20</span></a>
+</span><span id="Direction-21"><a href="#Direction-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Direction</span><span class="p">:</span>
+</span><span id="Direction-22"><a href="#Direction-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_DIRECTION</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
 </span></pre></div>
 
 
@@ -277,13 +279,13 @@
 
     </div>
     <a class="headerlink" href="#DirectionalOffset"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DirectionalOffset-35"><a href="#DirectionalOffset-35"><span class="linenos">35</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="DirectionalOffset-36"><a href="#DirectionalOffset-36"><span class="linenos">36</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DirectionalOffset</span><span class="p">:</span>
-</span><span id="DirectionalOffset-37"><a href="#DirectionalOffset-37"><span class="linenos">37</span></a>    <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span>
-</span><span id="DirectionalOffset-38"><a href="#DirectionalOffset-38"><span class="linenos">38</span></a>    <span class="n">offset</span><span class="p">:</span> <span class="n">Pixel</span>
-</span><span id="DirectionalOffset-39"><a href="#DirectionalOffset-39"><span class="linenos">39</span></a>
-</span><span id="DirectionalOffset-40"><a href="#DirectionalOffset-40"><span class="linenos">40</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="DirectionalOffset-41"><a href="#DirectionalOffset-41"><span class="linenos">41</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DirectionalOffset-37"><a href="#DirectionalOffset-37"><span class="linenos">37</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="DirectionalOffset-38"><a href="#DirectionalOffset-38"><span class="linenos">38</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DirectionalOffset</span><span class="p">:</span>
+</span><span id="DirectionalOffset-39"><a href="#DirectionalOffset-39"><span class="linenos">39</span></a>    <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span>
+</span><span id="DirectionalOffset-40"><a href="#DirectionalOffset-40"><span class="linenos">40</span></a>    <span class="n">offset</span><span class="p">:</span> <span class="n">Pixel</span>
+</span><span id="DirectionalOffset-41"><a href="#DirectionalOffset-41"><span class="linenos">41</span></a>
+</span><span id="DirectionalOffset-42"><a href="#DirectionalOffset-42"><span class="linenos">42</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="DirectionalOffset-43"><a href="#DirectionalOffset-43"><span class="linenos">43</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="o">=-</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -292,7 +294,7 @@
                             <div id="DirectionalOffset.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">DirectionalOffset</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">direction</span><span class="p">:</span> <span class="n"><a href="#Direction">Direction</a></span>, </span><span class="param"><span class="n">offset</span><span class="p">:</span> <span class="n">Pixel</span></span>)</span>
+        <span class="name">DirectionalOffset</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">direction</span><span class="p">:</span> <span class="s1">&#39;Direction&#39;</span>, </span><span class="param"><span class="n">offset</span><span class="p">:</span> <span class="s1">&#39;Pixel&#39;</span></span>)</span>
 
         
     </div>
@@ -303,7 +305,7 @@
                             </div>
                             <div id="DirectionalOffset.direction" class="classattr">
                                 <div class="attr variable">
-            <span class="name">direction</span><span class="annotation">: <a href="#Direction">Direction</a></span>
+            <span class="name">direction</span><span class="annotation">: &#39;Direction&#39;</span>
 
         
     </div>
@@ -314,7 +316,7 @@
                             </div>
                             <div id="DirectionalOffset.offset" class="classattr">
                                 <div class="attr variable">
-            <span class="name">offset</span><span class="annotation">: <a href="dimension.html#Pixel">nextrpg.core.dimension.Pixel</a></span>
+            <span class="name">offset</span><span class="annotation">: &#39;Pixel&#39;</span>
 
         
     </div>

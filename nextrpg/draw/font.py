@@ -14,7 +14,7 @@ class Font:
     bold: bool = False
     italic: bool = False
     underline: bool = False
-    strike_through: bool = False
+    strikethrough: bool = False
     script: str | None = None
 
     @cached_property
@@ -22,7 +22,7 @@ class Font:
         font = SysFont(self.name, self.size, self.bold, self.italic)
         if self.underline:
             font.set_underline(True)
-        if self.strike_through:
+        if self.strikethrough:
             font.set_strikethrough(True)
         if self.script:
             font.set_script(self.script)
