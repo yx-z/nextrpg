@@ -14,14 +14,12 @@ from nextrpg.event.event_transformer import transform_and_compile
 from nextrpg.global_config.global_config import config
 
 type RpgEventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
-
 type RpgEventSpec = Callable[[*RpgEventSpecParams], None | RpgEventGenerator]
 
-type RpgEventGenerator = Generator[RpgEventCallable, Any, None]
-
 type RpgEventCallable = Callable[
-    [RpgEventGenerator, "EventfulScene"], "RpgEventScene"
+    [RpgEventGenerator, EventfulScene], RpgEventScene
 ]
+type RpgEventGenerator = Generator[RpgEventCallable, Any, None]
 
 
 @dataclass(frozen=True, kw_only=True)
