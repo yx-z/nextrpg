@@ -17,8 +17,8 @@ class TextConfig:
     def line_spaced(self, line_spacing: Pixel) -> Self:
         return replace(self, line_spacing=line_spacing)
 
-    def wrapped(self, auto_wrap: Pixel) -> Self:
-        return replace(self, auto_wrap=auto_wrap)
+    def wrapped(self, wrap: Pixel) -> Self:
+        return replace(self, wrap=wrap)
 
     def sized(self, size: Pixel) -> Self:
         font = replace(self.font, size=size)

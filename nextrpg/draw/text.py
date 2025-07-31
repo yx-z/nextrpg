@@ -157,5 +157,5 @@ class TextGroup:
 
 
 def _no_wrap(text: Text) -> Text:
-    cfg = replace(text.config, auto_wrap=None)
+    cfg = replace(text.config, wrap=None)
     return replace(text, config=cfg)

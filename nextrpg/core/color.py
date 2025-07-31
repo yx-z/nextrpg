@@ -1,16 +1,15 @@
 from collections import namedtuple
 from dataclasses import dataclass
+from typing import NamedTuple
 
 type Alpha = int
 
 
-class Color(
-    namedtuple("Color", "red green blue alpha", defaults=(255,)),
-):
+class Color(NamedTuple):
     red: int
     green: int
     blue: int
-    alpha: Alpha
+    alpha: Alpha = 255
 
 
 BLACK = Color(0, 0, 0)
