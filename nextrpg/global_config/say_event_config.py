@@ -25,22 +25,24 @@ class SayEventConfig:
     name_color: Rgba | Rgb = Rgba(0, 0, 255, 255)
     add_on: AddOnConfig = AddOnConfig()
     name_override: str | None = None
-    coordinate: Coordinate | None = None
+    coordinate_override: Coordinate | None = None
+    text_config_override: TextConfig | None = None
     avatar: "Draw | Group | None" = None
-    text: TextConfig | None = None
 
     @property
-    def default_text_config(self) -> TextConfig:
-        from nextrpg.global_config.global_config import config
+    def coordinate(self) -> Coordinate:
+        if self.coordinate_override:
+            return self.coordinate_override
 
-        return replace(config().text, color=BLACK)
-
-    @property
-    def default_scene_coordinate(self) -> Coordinate:
         from nextrpg.gui.area import screen
 
         return screen().center
 
     @property
     def text_config(self) -> TextConfig:
-        return self.text or self.default_text_config
+        if self.text_config_override:
+            return self.text_config_override
+
+        from nextrpg.global_config.global_config import config
+
+        return replace(config().text, color=BLACK)

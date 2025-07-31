@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Literal, override
@@ -42,8 +44,7 @@ class AddOn:
 
     @cached_property
     def background_top_left(self) -> Coordinate:
-        center = self.config.coordinate or self.config.default_scene_coordinate
-        return self._center_to_top_left(center)
+        return self._center_to_top_left(self.config.coordinate)
 
     def _center_to_top_left(self, center: Coordinate) -> Coordinate:
         size = self._background.draw.size.all_dimension_scale(0.5)
@@ -166,7 +167,7 @@ class CharacterAddOn(AddOn):
     @cached_property
     @override
     def background_top_left(self) -> Coordinate:
-        if center := self.config.coordinate:
+        if center := self.config.coordinate_override:
             return self._center_to_top_left(center)
 
         character_left, character_top = self._character_edge.coordinate
