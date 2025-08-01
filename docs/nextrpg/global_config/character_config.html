@@ -39,6 +39,9 @@
                         <li>
                                 <a class="variable" href="#CharacterConfig.move_speed">move_speed</a>
                         </li>
+                        <li>
+                                <a class="variable" href="#CharacterConfig.bounding_rectangle_height_percentage">bounding_rectangle_height_percentage</a>
+                        </li>
                 </ul>
 
             </li>
@@ -71,6 +74,7 @@
 </span><span id="L-6"><a href="#L-6"><span class="linenos">6</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterConfig</span><span class="p">:</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">8</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">9</span></a>    <span class="n">bounding_rectangle_height_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.25</span>
 </span></pre></div>
 
 
@@ -87,9 +91,10 @@
 
     </div>
     <a class="headerlink" href="#CharacterConfig"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterConfig-7"><a href="#CharacterConfig-7"><span class="linenos">7</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="CharacterConfig-8"><a href="#CharacterConfig-8"><span class="linenos">8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterConfig</span><span class="p">:</span>
-</span><span id="CharacterConfig-9"><a href="#CharacterConfig-9"><span class="linenos">9</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterConfig-7"><a href="#CharacterConfig-7"><span class="linenos"> 7</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="CharacterConfig-8"><a href="#CharacterConfig-8"><span class="linenos"> 8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CharacterConfig</span><span class="p">:</span>
+</span><span id="CharacterConfig-9"><a href="#CharacterConfig-9"><span class="linenos"> 9</span></a>    <span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>
+</span><span id="CharacterConfig-10"><a href="#CharacterConfig-10"><span class="linenos">10</span></a>    <span class="n">bounding_rectangle_height_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.25</span>
 </span></pre></div>
 
 
@@ -98,7 +103,7 @@
                             <div id="CharacterConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">CharacterConfig</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span></span>)</span>
+        <span class="name">CharacterConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">move_speed</span><span class="p">:</span> <span class="n">PixelPerMillisecond</span> <span class="o">=</span> <span class="mf">0.2</span>,</span><span class="param">	<span class="n">bounding_rectangle_height_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.25</span></span>)</span>
 
         
     </div>
@@ -115,6 +120,18 @@
         
     </div>
     <a class="headerlink" href="#CharacterConfig.move_speed"></a>
+    
+    
+
+                            </div>
+                            <div id="CharacterConfig.bounding_rectangle_height_percentage" class="classattr">
+                                <div class="attr variable">
+            <span class="name">bounding_rectangle_height_percentage</span><span class="annotation">: float</span>        =
+<span class="default_value">0.25</span>
+
+        
+    </div>
+    <a class="headerlink" href="#CharacterConfig.bounding_rectangle_height_percentage"></a>
     
     
 

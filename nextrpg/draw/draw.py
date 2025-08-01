@@ -39,7 +39,6 @@ class Draw:
     resource: str | PathLike | Surface
     color_key: Color | Coordinate | None = None
 
-
     @property
     def width(self) -> Pixel:
         return self._surface.width

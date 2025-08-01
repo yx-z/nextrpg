@@ -62,9 +62,10 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
             return False
         return True
 
-    def _collide(self, bounding_rect: RectangleOnScreen) -> PolygonOnScreen | None:
+    def _collide(
+        self, bounding_rect: RectangleOnScreen
+    ) -> PolygonOnScreen | None:
         for collision in self.collisions:
             if collision.collide(bounding_rect):
                 return collision
         return None
-
