@@ -1,15 +1,14 @@
 from abc import ABC, abstractmethod
-from dataclasses import KW_ONLY, dataclass, field, replace
-from typing import NamedTuple, Self, override
+from dataclasses import KW_ONLY, dataclass, replace
+from typing import Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_instance_init import not_constructor_below
-from nextrpg.core.dimension import PixelPerMillisecond
-from nextrpg.core.direction import Direction
+from nextrpg.core.dimension import Size
 from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw import DrawOnScreen, PolygonOnScreen
+from nextrpg.draw.draw import DrawOnScreen, PolygonOnScreen, RectangleOnScreen
 from nextrpg.global_config.global_config import config
 
 logger = Logger("MovingCharacterOnScreen")
@@ -58,46 +57,14 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         if (debug := config().debug) and debug.ignore_map_collisions:
             return True
 
-        rect = DrawOnScreen(coordinate, self.character.draw).rectangle_on_screen
-        hit_coords = {
-            Direction.LEFT: {rect.bottom_left, rect.center_left},
-            Direction.RIGHT: {rect.bottom_right, rect.center_right},
-            Direction.DOWN: {
-                rect.bottom_right,
-                rect.bottom_center,
-                rect.bottom_left,
-            },
-            Direction.UP: {rect.center_right, rect.center, rect.center_left},
-            Direction.UP_LEFT: {rect.center_left},
-            Direction.UP_RIGHT: {rect.center_right},
-            Direction.DOWN_LEFT: {
-                rect.bottom_left,
-                rect.center_left,
-                rect.bottom_center,
-            },
-            Direction.DOWN_RIGHT: {
-                rect.bottom_right,
-                rect.center_right,
-                rect.bottom_center,
-            },
-        }[self.character.direction]
-
-        if collision_and_coord := self._collide(hit_coords):
-            collision, coord = collision_and_coord
-            logger.debug(t"Collision {coord} and {collision.points}")
+        if collision := self._collide(self._collision_rectangle(coordinate)):
+            logger.debug(t"Collided {collision.points}")
             return False
         return True
 
-    def _collide(
-        self, hit_coords: set[Coordinate]
-    ) -> _CollisionAndCoord | None:
+    def _collide(self, bounding_rect: RectangleOnScreen) -> PolygonOnScreen | None:
         for collision in self.collisions:
-            for coord in hit_coords:
-                if coord in collision:
-                    return _CollisionAndCoord(collision, coord)
+            if collision.collide(bounding_rect):
+                return collision
         return None
 
-
-class _CollisionAndCoord(NamedTuple):
-    polygon: PolygonOnScreen
-    coord: Coordinate

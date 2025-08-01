@@ -39,6 +39,7 @@ class Draw:
     resource: str | PathLike | Surface
     color_key: Color | Coordinate | None = None
 
+
     @property
     def width(self) -> Pixel:
         return self._surface.width
@@ -105,6 +106,7 @@ class Draw:
         else:
             logger.debug(t"Loading {self.resource}")
             res = load(self.resource).convert_alpha()
+
         if self.color_key:
             if isinstance(self.color_key, Coordinate):
                 color = res.get_at(self.color_key)
@@ -118,6 +120,11 @@ class Draw:
 class DrawOnScreen:
     top_left: Coordinate
     draw: Draw
+
+    def __lt__(self, other: DrawOnScreen) -> bool:
+        if self.rectangle_on_screen.bottom < other.rectangle_on_screen.bottom:
+            return self.rectangle_on_screen.top < other.rectangle_on_screen.top
+        return other.rectangle_on_screen.top < self.rectangle_on_screen.top
 
     @property
     def rectangle_on_screen(self) -> RectangleOnScreen:

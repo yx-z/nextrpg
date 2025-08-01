@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import KW_ONLY, replace
+from dataclasses import KW_ONLY, field, replace
+from functools import cached_property
 from typing import Self, override
 
+from nextrpg.core.dimension import Size
+from nextrpg.global_config.global_config import config
 from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.core.coordinate import Coordinate, Moving
 from nextrpg.core.dataclass_with_instance_init import (
@@ -12,7 +15,7 @@ from nextrpg.core.dataclass_with_instance_init import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
-from nextrpg.draw.draw import Draw, DrawOnScreen
+from nextrpg.draw.draw import Draw, DrawOnScreen, RectangleOnScreen
 from nextrpg.draw.group import Group
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.global_config.character_config import CharacterConfig
@@ -30,7 +33,7 @@ class CharacterSpec:
 class CharacterOnScreen(EventAsAttr, Moving, AnimatedOnScreen):
     spec: CharacterSpec
     coordinate: Coordinate
-    config: CharacterConfig = CharacterConfig()
+    config: CharacterConfig = field(default_factory=lambda: config().character)
     _: KW_ONLY = not_constructor_below()
     character: CharacterDraw = instance_init(lambda self: self.spec.character)
     _event_triggered: bool = False
@@ -46,8 +49,26 @@ class CharacterOnScreen(EventAsAttr, Moving, AnimatedOnScreen):
     @property
     @override
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        # TODO: Add visuals.
+        if self._collision_visual:
+            return self.draw_on_screen, self._collision_visual
         return (self.draw_on_screen,)
+
+    @cached_property
+    def _collision_visual(self) -> DrawOnScreen | None:
+        if config().debug and (
+            color := config().debug.collision_rectangle_color
+        ):
+            return self._collision_rectangle(self.coordinate).fill(color)
+        return None
+
+    def _collision_rectangle(self, coordinate: Coordinate) -> RectangleOnScreen:
+        rect = DrawOnScreen(coordinate, self.character.draw).rectangle_on_screen
+        width, height = rect.size
+        rect_height = height * self.config.bounding_rectangle_height_percentage
+        bounding_size = Size(width, rect_height)
+        left, top = rect.top_left
+        coord = Coordinate(left, top + (height - rect_height) / 2)
+        return RectangleOnScreen(coord, bounding_size)
 
     @property
     def draw_on_screen(self) -> DrawOnScreen:
