@@ -4,8 +4,6 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.core.dimension import Size
-from nextrpg.global_config.global_config import config
 from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.core.coordinate import Coordinate, Moving
 from nextrpg.core.dataclass_with_instance_init import (
@@ -13,12 +11,14 @@ from nextrpg.core.dataclass_with_instance_init import (
     instance_init,
     not_constructor_below,
 )
+from nextrpg.core.dimension import Size
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.draw.draw import Draw, DrawOnScreen, RectangleOnScreen
 from nextrpg.draw.group import Group
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.global_config.character_config import CharacterConfig
+from nextrpg.global_config.global_config import config
 
 
 @dataclass_with_instance_init(frozen=True)

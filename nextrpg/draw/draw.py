@@ -120,11 +120,6 @@ class DrawOnScreen:
     top_left: Coordinate
     draw: Draw
 
-    def __lt__(self, other: DrawOnScreen) -> bool:
-        if self.rectangle_on_screen.bottom < other.rectangle_on_screen.bottom:
-            return self.rectangle_on_screen.top < other.rectangle_on_screen.top
-        return other.rectangle_on_screen.top < self.rectangle_on_screen.top
-
     @property
     def rectangle_on_screen(self) -> RectangleOnScreen:
         return RectangleOnScreen(self.top_left, self.draw.size)
