@@ -1,20 +1,7 @@
-"""
-Moving NPC implementation for `nextrpg`.
-
-This module provides the implementation for non-player characters (NPCs) that can
-move along paths in `nextrpg` games. It extends the moving character system with
-NPC-specific pathing, idle/move timers, and walk cycles.
-
-Features:
-    - Path-based NPC movement
-    - Idle and move state timers
-    - Cyclic walk support
-    - Integration with walk and timer systems
-"""
-
-from dataclasses import KW_ONLY, field, replace
+from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
+from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec
 from nextrpg.core.coordinate import Coordinate
@@ -43,14 +30,10 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     )
 
     @override
-    def tick(self, time_delta: Millisecond) -> Self:
-        if not self.moving:
-            return super().tick(time_delta)
-
+    def post_tick(self, time_delta: Millisecond, ticked: Self) -> Self:
         walk = self._walk.tick(time_delta)
-        moved = MovingCharacterOnScreen.tick(self, time_delta)
         return replace(
-            moved, character=moved.character.turn(walk.direction), _walk=walk
+            ticked, character=ticked.character.turn(walk.direction), _walk=walk
         )
 
     @property

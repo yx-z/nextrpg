@@ -5,7 +5,7 @@ from functools import cached_property
 from typing import Self, override
 
 from nextrpg.character.character_draw import CharacterDraw
-from nextrpg.core.coordinate import Coordinate, Moving
+from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
@@ -13,7 +13,6 @@ from nextrpg.core.dataclass_with_instance_init import (
 )
 from nextrpg.core.dimension import Size
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.draw.draw import Draw, DrawOnScreen, RectangleOnScreen
 from nextrpg.draw.group import Group
 from nextrpg.event.event_as_attr import EventAsAttr
@@ -30,7 +29,7 @@ class CharacterSpec:
 
 
 @dataclass_with_instance_init(frozen=True)
-class CharacterOnScreen(EventAsAttr, Moving, AnimatedOnScreen):
+class CharacterOnScreen(EventAsAttr):
     spec: CharacterSpec
     coordinate: Coordinate
     config: CharacterConfig = field(default_factory=lambda: config().character)
@@ -42,12 +41,12 @@ class CharacterOnScreen(EventAsAttr, Moving, AnimatedOnScreen):
     def display_name(self) -> str:
         return self.spec.display_name
 
-    @override
-    def tick(self, time_delta: Millisecond) -> Self:
+    def tick(
+        self, time_delta: Millisecond, others: tuple[CharacterOnScreen, ...]
+    ) -> Self:
         return replace(self, character=self.character.tick_idle(time_delta))
 
     @property
-    @override
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         if self._collision_visual:
             return self.draw_on_screen, self._collision_visual
@@ -58,8 +57,12 @@ class CharacterOnScreen(EventAsAttr, Moving, AnimatedOnScreen):
         if config().debug and (
             color := config().debug.collision_rectangle_color
         ):
-            return self._collision_rectangle(self.coordinate).fill(color)
+            return self.collision_rectangle.fill(color)
         return None
+
+    @cached_property
+    def collision_rectangle(self) -> RectangleOnScreen:
+        return self._collision_rectangle(self.coordinate)
 
     def _collision_rectangle(self, coordinate: Coordinate) -> RectangleOnScreen:
         rect = DrawOnScreen(coordinate, self.character.draw).rectangle_on_screen
@@ -74,8 +77,8 @@ class CharacterOnScreen(EventAsAttr, Moving, AnimatedOnScreen):
     def draw_on_screen(self) -> DrawOnScreen:
         return DrawOnScreen(self.coordinate, self.character.draw)
 
-    def start_event(self, other_character: CharacterOnScreen) -> Self:
-        direction = other_character.coordinate.relative_to(self.coordinate)
+    def start_event(self, other: CharacterOnScreen) -> Self:
+        direction = other.coordinate.relative_to(self.coordinate)
         turned_character = self.character.turn(direction)
         return replace(self, character=turned_character, _event_triggered=True)
 

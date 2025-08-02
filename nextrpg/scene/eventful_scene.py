@@ -52,14 +52,15 @@ class EventfulScene(EventAsAttr, Scene):
         return self.tick_without_event(time_delta)
 
     def tick_without_event(self, time_delta: Millisecond) -> Self:
-        return replace(
-            self,
-            player=self.player.tick(time_delta),
-            npcs=tuple(n.tick(time_delta) for n in self.npcs),
-        )
+        player = self.player.tick(time_delta, self.npcs)
+        npcs = tuple(n.tick(time_delta, self._others(n)) for n in self.npcs)
+        return replace(self, player=player, npcs=npcs)
 
     def send(self, event: RpgEventGenerator, result: Any = None) -> Self:
         return replace(self, _event_generator=event, _event_result=result)
+
+    def _others(self, npc: NpcOnScreen) -> tuple[NpcOnScreen, ...]:
+        return (self.player,) + tuple(n for n in self.npcs if n is not npc)
 
     @cached_property
     def _npc_dict(self) -> dict[str, NpcOnScreen]:
