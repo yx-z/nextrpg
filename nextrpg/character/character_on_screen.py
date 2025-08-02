@@ -35,7 +35,7 @@ class CharacterOnScreen(EventAsAttr):
     config: CharacterConfig = field(default_factory=lambda: config().character)
     _: KW_ONLY = not_constructor_below()
     character: CharacterDraw = instance_init(lambda self: self.spec.character)
-    _event_triggered: bool = False
+    _event_started: bool = False
 
     @property
     def display_name(self) -> str:
@@ -48,9 +48,10 @@ class CharacterOnScreen(EventAsAttr):
 
     @property
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        if self._collision_visual:
-            return self.draw_on_screen, self._collision_visual
-        return (self.draw_on_screen,)
+        debug_visuals = tuple(
+            d for d in (self._collision_visual, self._start_event_visual) if d
+        )
+        return (self.draw_on_screen,) + debug_visuals
 
     @cached_property
     def _collision_visual(self) -> DrawOnScreen | None:
@@ -61,8 +62,26 @@ class CharacterOnScreen(EventAsAttr):
         return None
 
     @cached_property
+    def _start_event_visual(self) -> DrawOnScreen | None:
+        if config().debug and (
+            color := config().debug.start_event_rectangle_color
+        ):
+            return self.start_event_rectangle.fill(color)
+        return None
+
+    @cached_property
     def collision_rectangle(self) -> RectangleOnScreen:
         return self._collision_rectangle(self.coordinate)
+
+    @cached_property
+    def start_event_rectangle(self) -> RectangleOnScreen:
+        width, height = self.draw_on_screen.rectangle_on_screen.size
+        rect_width = width * self.config.start_event_width_percentage
+        left, top = self.draw_on_screen.top_left
+        rect_left = left - (rect_width - width) / 2
+        coord = Coordinate(rect_left, top)
+        size = Size(rect_width, height)
+        return RectangleOnScreen(coord, size)
 
     def _collision_rectangle(self, coordinate: Coordinate) -> RectangleOnScreen:
         rect = DrawOnScreen(coordinate, self.character.draw).rectangle_on_screen
@@ -80,8 +99,8 @@ class CharacterOnScreen(EventAsAttr):
     def start_event(self, other: CharacterOnScreen) -> Self:
         direction = other.coordinate.relative_to(self.coordinate)
         turned_character = self.character.turn(direction)
-        return replace(self, character=turned_character, _event_triggered=True)
+        return replace(self, character=turned_character, _event_started=True)
 
     @property
     def complete_event(self) -> Self:
-        return replace(self, _event_triggered=False)
+        return replace(self, _event_started=False)

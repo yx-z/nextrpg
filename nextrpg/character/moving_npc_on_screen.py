@@ -39,7 +39,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     @property
     @override
     def moving(self) -> bool:
-        return not self._event_triggered and not self._walk.complete
+        return not self._event_started and not self._walk.complete
 
     @override
     def move(self, time_delta: Millisecond) -> Coordinate:

@@ -7,3 +7,4 @@ from nextrpg.core.dimension import PixelPerMillisecond
 class CharacterConfig:
     move_speed: PixelPerMillisecond = 0.2
     bounding_rectangle_height_percentage: float = 0.5
+    start_event_width_percentage: float = 1.2

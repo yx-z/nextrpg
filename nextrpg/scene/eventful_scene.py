@@ -40,7 +40,7 @@ class EventfulScene(EventAsAttr, Scene):
             and npc.spec.event
         ):
             logger.debug(t"Collided with {npc.spec.object_name}")
-            scene = self._trigger(npc)
+            scene = self._start_event(npc)
             generator = scene.npc.spec.generator(scene.player, scene.npc, scene)
             logger.debug(t"Event {generator.__name__} started.")
             return next(generator)(generator, scene)
@@ -69,22 +69,22 @@ class EventfulScene(EventAsAttr, Scene):
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:
         for npc in self.npcs:
-            if npc.draw_on_screen.rectangle_on_screen.collide(
-                self.player.draw_on_screen.rectangle_on_screen
+            if npc.start_event_rectangle.collide(
+                self.player.start_event_rectangle
             ):
                 return npc
         return None
 
-    def _trigger(self, npc: NpcOnScreen) -> Self:
-        triggered_npc = npc.start_event(self.player)
+    def _start_event(self, npc: NpcOnScreen) -> Self:
+        started_npc = npc.start_event(self.player)
         npcs = tuple(
-            triggered_npc if n.spec.object_name == npc.spec.object_name else n
+            started_npc if n.spec.object_name == npc.spec.object_name else n
             for n in self.npcs
         )
         return replace(
             self,
-            player=self.player.start_event(triggered_npc),
-            npc=triggered_npc,
+            player=self.player.start_event(started_npc),
+            npc=started_npc,
             npcs=npcs,
         )
 

@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from os import PathLike
 from typing import NamedTuple, OrderedDict, override
 
+from nextrpg import PolygonOnScreen
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec
@@ -29,10 +32,9 @@ logger = Logger("MapScene")
 
 @dataclass_with_instance_init(frozen=True)
 class MapScene(EventfulScene):
-
     tmx_file: PathLike | str
     player_spec: CharacterSpec
-    moves: Move | tuple[Move, ...] = ()
+    move: Move | tuple[Move, ...] = ()
     npc_specs: tuple[NpcSpec, ...] = ()
     _: KW_ONLY = not_constructor_below()
     npcs: tuple[NpcOnScreen, ...] = instance_init(
@@ -42,7 +44,9 @@ class MapScene(EventfulScene):
         lambda self: self.init_player(self.player_spec)
     )
     _debug_visuals: tuple[DrawOnScreen, ...] = instance_init(
-        lambda self: self.map_helper.collision_visuals + self._npc_paths
+        lambda self: self.map_helper.collision_visuals
+        + self._npc_paths
+        + self._move_visuals
     )
 
     @property
@@ -96,11 +100,29 @@ class MapScene(EventfulScene):
 
     @cached_property
     def _move_to_scene(self) -> TransitionScene | None:
-        moves = self.moves if isinstance(self.moves, tuple) else (self.moves,)
-        for move in moves:
+        for move in self._moves:
             if m := self._move(move):
                 return m
         return None
+
+    @cached_property
+    def _moves(self) -> tuple[Move, ...]:
+        if isinstance(self.move, tuple):
+            return self.move
+        return (self.move,)
+
+    @cached_property
+    def _move_visuals(self) -> tuple[DrawOnScreen, ...]:
+        if config().debug and (color := config().debug.move_object_color):
+            return tuple(m.fill(color) for m in self._move_polys)
+        return ()
+
+    @cached_property
+    def _move_polys(self) -> tuple[PolygonOnScreen, ...]:
+        return tuple(
+            get_polygon(self.map_helper.get_object(m.trigger_object))
+            for m in self._moves
+        )
 
     def _move(self, move: Move) -> TransitionScene | None:
         move_poly = get_polygon(self.map_helper.get_object(move.trigger_object))
@@ -128,7 +150,6 @@ class MapScene(EventfulScene):
 
 @dataclass(frozen=True)
 class Move:
-
     to_object: str
     trigger_object: str
     next_scene: (

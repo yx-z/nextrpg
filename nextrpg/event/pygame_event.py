@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from enum import Enum, auto
 
@@ -11,68 +13,20 @@ from nextrpg.global_config.key_mapping_config import KeyCode
 
 @dataclass(frozen=True)
 class PygameEvent:
-    """
-    Base class for all pygame events.
-
-    This class provides a type-safe wrapper around pygame events, allowing for
-    better type checking and event handling in the `NextRPG` framework.
-
-    Arguments:
-        `event`: The pygame event object to wrap.
-    """
-
     event: Event
 
 
 class Quit(PygameEvent):
-    """
-    Represents a quit event from pygame.
-
-    This event is triggered when the user attempts to close the game window or
-    when the game is requested to terminate.
-    """
+    pass
 
 
 class GuiResize(PygameEvent):
-    """
-    Represents a window resize event from pygame.
-
-    This event is triggered when the game window is resized by the user or
-    programmatically.
-
-    Attributes:
-        `size`: The new size of the window.
-    """
-
     @property
     def size(self) -> Size:
-        """
-        Get the new window size from the resize event.
-
-        Returns:
-            `Size`: The new width and height of the window.
-        """
         return Size(self.event.w, self.event.h)
 
 
 class KeyboardKey(Enum):
-    """
-    Enumeration of supported keyboard keys.
-
-    This enum provides a standardized set of keyboard keys that are supported
-    by the `NextRPG` framework. It maps pygame key constants to internal key
-    representations.
-
-    Attributes:
-        `UNKNOWN`: Represents an unrecognized key.
-        `LEFT`: Represents the left arrow key.
-        `RIGHT`: Represents the right arrow key.
-        `UP`: Represents the up arrow key.
-        `DOWN`: Represents the down arrow key.
-        `CONFIRM`: Represents the space key or enter key.
-        `GUI_MODE_TOGGLE`: Represents the key to toggle GUI mode.
-    """
-
     UNKNOWN = auto()
     LEFT = auto()
     RIGHT = auto()
@@ -83,21 +37,6 @@ class KeyboardKey(Enum):
 
     @classmethod
     def from_pygame(cls, key: KeyCode) -> KeyboardKey | KeyCode:
-        """
-        Map a pygame key constant to an internal `KeyboardKey` representation.
-
-        Converts pygame key constants to the standardized keyboard key
-        enumeration. If the key is not recognized, returns the raw key code for
-        custom handling.
-
-        Arguments:
-            `key`: The pygame key constant to convert.
-
-        Returns:
-            `KeyboardKey | KeyCode`: The corresponding internal key
-            representation. If the key is not supported, returns the raw key
-            code.
-        """
         return {
             config().key_mapping.left: cls.LEFT,
             config().key_mapping.right: cls.RIGHT,
@@ -111,50 +50,18 @@ class KeyboardKey(Enum):
 class _KeyPressEvent(PygameEvent):
     @property
     def key(self) -> KeyboardKey | KeyCode:
-        """
-        Get the key associated with this event.
-
-        Returns:
-            `KeyboardKey | KeyCode`: The key that was pressed or released.
-        """
         return KeyboardKey.from_pygame(self.event.key)
 
 
 class KeyPressDown(_KeyPressEvent):
-    """
-    Represents a key press down event.
-
-    This event is triggered when a key is first pressed down.
-
-    Attributes:
-        `key`: The key that was pressed down.
-    """
+    pass
 
 
 class KeyPressUp(_KeyPressEvent):
-    """
-    Represents a key release event.
-
-    This event is triggered when a key is released after being pressed down.
-
-    Attributes:
-        `key`: The key that was released.
-    """
+    pass
 
 
 def to_typed_event(event: Event) -> PygameEvent:
-    """
-    Create a typed event wrapper for pygame events.
-
-    Converts raw pygame events into strongly-typed event objects that provide
-    better type safety and easier event handling.
-
-    Arguments:
-        `event`: The pygame event to wrap.
-
-    Returns:
-        `PygameEvent`: A subclass instance based on the event type.
-    """
     return {
         QUIT: Quit,
         VIDEORESIZE: GuiResize,

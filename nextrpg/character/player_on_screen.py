@@ -27,7 +27,7 @@ class PlayerOnScreen(MovingCharacterOnScreen):
         return replace(start_event, _movement_keys=frozenset())
 
     def event(self, event: PygameEvent) -> Self:
-        if self._event_triggered or not isinstance(
+        if self._event_started or not isinstance(
             event, (KeyPressDown, KeyPressUp)
         ):
             return self

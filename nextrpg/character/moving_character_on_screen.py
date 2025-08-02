@@ -49,13 +49,17 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         if (debug := config().debug) and debug.ignore_map_collisions:
             return True
 
-        if collision := self._collide(self._collision_rectangle(coordinate), others):
+        if collision := self._collide(
+            self._collision_rectangle(coordinate), others
+        ):
             logger.debug(t"Collided {collision.points}")
             return False
         return True
 
     def _collide(
-        self, bounding_rect: RectangleOnScreen, others: tuple[CharacterOnScreen, ...]
+        self,
+        bounding_rect: RectangleOnScreen,
+        others: tuple[CharacterOnScreen, ...],
     ) -> PolygonOnScreen | None:
         other_rects = tuple(c.collision_rectangle for c in others)
         for collision in self.collisions + other_rects:
