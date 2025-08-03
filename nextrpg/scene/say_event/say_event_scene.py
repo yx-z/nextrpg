@@ -14,8 +14,8 @@ from nextrpg.global_config.global_config import config
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.scene.eventful_scene import EventfulScene, NpcEventGenerator
 from nextrpg.scene.rpg_event_scene import RpgEventScene
-from nextrpg.scene.say_event.add_on import AddOn, CharacterAddOn
-from nextrpg.scene.say_event.state import FadeInState
+from nextrpg.scene.say_event.say_event_add_on import AddOn, CharacterAddOn
+from nextrpg.scene.say_event.say_event_state import FadeInState
 from nextrpg.scene.scene import Scene
 
 type SayEventArg = str | Coordinate | Size | Draw | SayEventConfig

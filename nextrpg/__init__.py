@@ -43,10 +43,10 @@ from nextrpg.gui import *
 from nextrpg.gui.area import *
 from nextrpg.gui.window import *
 from nextrpg.scene import *
-from nextrpg.scene.map.loader import *
+from nextrpg.scene.map.map_loader import *
 from nextrpg.scene.map.map_scene import *
-from nextrpg.scene.map.shift import *
-from nextrpg.scene.say_event.add_on import *
+from nextrpg.scene.map.map_shift import *
+from nextrpg.scene.say_event.say_event_add_on import *
 from nextrpg.scene.say_event.say_event_scene import *
-from nextrpg.scene.say_event.state import *
+from nextrpg.scene.say_event.say_event_state import *
 from nextrpg.scene.transition_scene import *

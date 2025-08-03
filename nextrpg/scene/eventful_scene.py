@@ -5,7 +5,7 @@ from functools import cached_property
 from typing import Any, Self
 
 from nextrpg import CharacterOnScreen
-from nextrpg.character.npc_on_screen import NpcOnScreen, NpcEventGenerator
+from nextrpg.character.npc_on_screen import NpcEventGenerator, NpcOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.dataclass_with_instance_init import not_constructor_below
 from nextrpg.core.logger import Logger
