@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from typing import Any, Self
@@ -17,6 +18,18 @@ from nextrpg.scene.scene import Scene
 logger = Logger("RpgEventScene")
 
 
+class SceneContext(ABC):
+    @abstractmethod
+    def apply[T](self, scene: T) -> T: ...
+
+    @abstractmethod
+    def tick(self, scene: EventfulScene, time_delta: Millisecond) -> Self: ...
+
+    @property
+    @abstractmethod
+    def complete(self) -> bool: ...
+
+
 @dataclass(frozen=True)
 class EventfulScene(EventAsAttr, Scene):
     player: PlayerOnScreen
@@ -25,6 +38,7 @@ class EventfulScene(EventAsAttr, Scene):
     started_npc: NpcOnScreen | None = None
     _event_generator: NpcEventGenerator | None = None
     _event_result: Any = None
+    _contexts: tuple[SceneContext, ...] = ()
 
     def get_character(self, object_name: str) -> CharacterOnScreen:
         if object_name == self.player.spec.object_name:
@@ -57,7 +71,17 @@ class EventfulScene(EventAsAttr, Scene):
     def tick_without_event(self, time_delta: Millisecond) -> Self:
         player = self.player.tick(time_delta, self.npcs)
         npcs = tuple(n.tick(time_delta, self._others(n)) for n in self.npcs)
-        return replace(self, player=player, npcs=npcs)
+        ticked = replace(self, player=player, npcs=npcs)
+
+        ticked_contexts = tuple(
+            c.tick(self, time_delta) for c in self._contexts
+        )
+        not_complete_contexts = tuple(
+            c for c in ticked_contexts if not c.complete
+        )
+        for context in not_complete_contexts:
+            ticked = context.apply(ticked)
+        return replace(ticked, _contexts=not_complete_contexts)
 
     def send(self, event: NpcEventGenerator, result: Any = None) -> Self:
         return replace(self, _event_generator=event, _event_result=result)

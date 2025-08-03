@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import KW_ONLY, replace
 from functools import cached_property
-from typing import override
+from typing import Self, override
 
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_instance_init import (
@@ -35,21 +35,18 @@ class State(RpgEventScene, ABC):
         )
     )
 
-    @property
-    @abstractmethod
-    def add_ons(self) -> tuple[DrawOnScreen, ...]: ...
-
     @override
     @cached_property
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+    def add_ons(self) -> tuple[DrawOnScreen, ...]:
         if self.object_name:
             character = self.scene.get_character(self.object_name)
             diff = character.coordinate - self.initial_coord
-            add_on = tuple(a + diff for a in self.add_ons)
-        else:
-            add_on = self.add_ons
+            return tuple(a + diff for a in self._add_ons)
+        return self._add_ons
 
-        return self.scene.draw_on_screens + add_on
+    @property
+    @abstractmethod
+    def _add_ons(self) -> tuple[DrawOnScreen, ...]: ...
 
 
 @dataclass_with_instance_init(frozen=True, kw_only=True)
@@ -64,18 +61,17 @@ class FadeInState(State):
 
     @property
     @override
-    def add_ons(self) -> tuple[DrawOnScreen, ...]:
+    def _add_ons(self) -> tuple[DrawOnScreen, ...]:
         return self._fade_in.draw_on_screens
 
     @override
-    def tick(self, time_delta: Millisecond) -> Scene:
+    def post_tick(self, time_delta: Millisecond, ticked: Self) -> Scene:
         fade_in = self._fade_in.tick(time_delta)
-        scene = self.scene.tick_without_event(time_delta)
         if not fade_in.complete:
-            return replace(self, scene=scene, _fade_in=fade_in)
+            return replace(ticked, _fade_in=fade_in)
         return TypingState(
             generator=self.generator,
-            scene=scene,
+            scene=ticked.scene,
             object_name=self.object_name,
             initial_coord=self.initial_coord,
             background=self.background,
@@ -99,7 +95,7 @@ class TypingState(State):
 
     @override
     @property
-    def add_ons(self) -> tuple[DrawOnScreen, ...]:
+    def _add_ons(self) -> tuple[DrawOnScreen, ...]:
         if self._typewriter:
             text = self._typewriter.draw_on_screens
         else:
@@ -107,14 +103,13 @@ class TypingState(State):
         return self.background + text
 
     @override
-    def tick(self, time_delta: Millisecond) -> Scene:
+    def post_tick(self, time_delta: Millisecond, ticked: Self) -> Scene:
         if self._typewriter:
             typewriter = self._typewriter.tick(time_delta)
         else:
             typewriter = None
 
-        scene = self.scene.tick_without_event(time_delta)
-        return replace(self, scene=scene, _typewriter=typewriter)
+        return replace(ticked, _typewriter=typewriter)
 
     @override
     def event(self, event: PygameEvent) -> Scene:
@@ -144,13 +139,12 @@ class FadeOutState(State):
 
     @override
     @property
-    def add_ons(self) -> tuple[DrawOnScreen, ...]:
+    def _add_ons(self) -> tuple[DrawOnScreen, ...]:
         return self._fade_out.draw_on_screens
 
     @override
-    def tick(self, time_delta: Millisecond) -> Scene:
+    def post_tick(self, time_delta: Millisecond, ticked: Self) -> Scene:
         fade_out = self._fade_out.tick(time_delta)
-        scene = self.scene.tick_without_event(time_delta)
         if fade_out.complete:
-            return scene.send(self.generator)
-        return replace(self, scene=scene, _fade_out=fade_out)
+            return ticked.scene.send(self.generator)
+        return replace(ticked, _fade_out=fade_out)
