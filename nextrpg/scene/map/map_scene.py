@@ -26,7 +26,7 @@ from nextrpg.scene.map.map_shift import center_player
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 
-logger = Logger("MapScene")
+logger = Logger()
 
 
 @dataclass_with_instance_init(frozen=True)

@@ -27,7 +27,7 @@ from nextrpg.draw.draw import (
 )
 from nextrpg.global_config.global_config import config
 
-logger = Logger("MapLoader")
+logger = Logger()
 
 
 class TileBottomAndDrawOnScreen(NamedTuple):

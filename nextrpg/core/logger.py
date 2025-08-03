@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field, replace
 from functools import cached_property
 from inspect import stack
+from pathlib import Path
 from string.templatelib import Interpolation, Template
 from typing import NamedTuple
 
@@ -17,8 +18,9 @@ _FROM_CONFIG = _DurationFromConfig()
 
 
 def _logger_name() -> str:
-    # /path/to/file.py -> "file"
-    return stack()[2].filename.split("/")[-1].split(".")[0]
+    file = Path(stack()[2].filename)
+    # "file.py" -> "file"
+    return file.name.split(".")[0]
 
 
 @dataclass(frozen=True)

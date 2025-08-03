@@ -9,7 +9,7 @@ from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import PolygonOnScreen, RectangleOnScreen
 from nextrpg.global_config.global_config import config
 
-logger = Logger("MovingCharacterOnScreen")
+logger = Logger()
 
 
 @dataclass(frozen=True)

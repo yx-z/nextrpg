@@ -18,7 +18,7 @@ from nextrpg.global_config.global_config import config
 from nextrpg.gui.window import Window
 from nextrpg.scene.scene import Scene
 
-logger = Logger("Game")
+logger = Logger()
 
 
 @dataclass_with_instance_init(frozen=True)
@@ -39,7 +39,9 @@ class GameLoop:
         window = self._window.update
         window.draw(self._scene.draw_on_screens, time_delta)
 
-        logger.debug(t"Current scene {type(self._scene)}", duration=None)
+        # "<'package.my_class'>" -> "my_class"
+        scene_type = str(type(self._scene))[2:-2].split(".")[-1]
+        logger.debug(t"Current scene {scene_type}", duration=None)
         loop = replace(
             self, _scene=self._scene.tick(time_delta), _window=window
         )

@@ -25,7 +25,7 @@ from nextrpg.event.pygame_event import (
 from nextrpg.global_config.global_config import config, set_config
 from nextrpg.global_config.gui_config import GuiConfig, GuiMode, ResizeMode
 
-logger = Logger("Window")
+logger = Logger()
 
 
 @dataclass(frozen=True)

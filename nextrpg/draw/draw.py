@@ -19,7 +19,7 @@ from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.logger import Logger
 from nextrpg.global_config.global_config import config
 
-logger = Logger("Draw")
+logger = Logger()
 
 
 @dataclass(frozen=True, kw_only=True)

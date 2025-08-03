@@ -15,7 +15,7 @@ from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.scene.scene import Scene
 
-logger = Logger("RpgEventScene")
+logger = Logger()
 
 
 class SceneContext(ABC):
