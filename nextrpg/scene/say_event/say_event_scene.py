@@ -12,11 +12,11 @@ from nextrpg.draw.text import Text, TextGroup
 from nextrpg.event.rpg_event import register_rpg_event
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.say_event_config import SayEventConfig
+from nextrpg.scene.eventful_scene import EventfulScene, NpcEventGenerator
 from nextrpg.scene.rpg_event_scene import RpgEventScene
 from nextrpg.scene.say_event.add_on import AddOn, CharacterAddOn
 from nextrpg.scene.say_event.state import FadeInState
 from nextrpg.scene.scene import Scene
-from nextrpg.scene.eventful_scene import RpgEventGenerator, EventfulScene
 
 type SayEventArg = str | Coordinate | Size | Draw | SayEventConfig
 
@@ -26,7 +26,7 @@ def say(
     character_or_scene: CharacterOnScreen | Scene,
     message: str | Text | TextGroup,
     *args: SayEventArg,
-) -> Callable[[RpgEventGenerator, EventfulScene], RpgEventScene]:
+) -> Callable[[NpcEventGenerator, EventfulScene], RpgEventScene]:
     return lambda generator, scene: SayEventScene(
         generator, scene, character_or_scene, message, args
     )

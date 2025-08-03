@@ -5,7 +5,7 @@ from functools import cached_property
 from typing import Any, Self
 
 from nextrpg import CharacterOnScreen
-from nextrpg.character.npc_on_screen import NpcOnScreen, RpgEventGenerator
+from nextrpg.character.npc_on_screen import NpcOnScreen, NpcEventGenerator
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.dataclass_with_instance_init import not_constructor_below
 from nextrpg.core.logger import Logger
@@ -22,8 +22,8 @@ class EventfulScene(EventAsAttr, Scene):
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...]
     _: KW_ONLY = not_constructor_below()
-    npc: NpcOnScreen | None = None
-    _event_generator: RpgEventGenerator | None = None
+    started_npc: NpcOnScreen | None = None
+    _event_generator: NpcEventGenerator | None = None
     _event_result: Any = None
 
     def get_character(self, object_name: str) -> CharacterOnScreen:
@@ -33,22 +33,25 @@ class EventfulScene(EventAsAttr, Scene):
 
     def event(self, event: PygameEvent) -> Scene:
         if (
-            not self.npc
-            and isinstance(event, KeyPressDown)
-            and event.key is KeyboardKey.CONFIRM
-            and (npc := self._collided_npc)
-            and npc.spec.event
+            self.started_npc
+            or not isinstance(event, KeyPressDown)
+            or event.key is not KeyboardKey.CONFIRM
+            or not (npc := self._collided_npc)
+            or not npc.spec.event
         ):
-            logger.debug(t"Collided with {npc.spec.object_name}")
-            scene = self._start_event(npc)
-            generator = scene.npc.spec.generator(scene.player, scene.npc, scene)
-            logger.debug(t"Event {generator.__name__} started.")
-            return next(generator)(generator, scene)
-        return replace(self, player=self.player.event(event))
+            return replace(self, player=self.player.event(event))
+
+        logger.debug(t"Collided with {npc.spec.object_name}")
+        started_scene = self._start_event(npc)
+        generator = npc.spec.generator(
+            started_scene.player, started_scene.started_npc, started_scene
+        )
+        logger.debug(t"Event {generator.__name__} started.")
+        return next(generator)(generator, started_scene)
 
     def tick(self, time_delta: Millisecond) -> Scene:
-        if self._next_event:
-            return self._next_event
+        if next_event_scene := self._next_event(time_delta):
+            return next_event_scene
         return self.tick_without_event(time_delta)
 
     def tick_without_event(self, time_delta: Millisecond) -> Self:
@@ -56,7 +59,7 @@ class EventfulScene(EventAsAttr, Scene):
         npcs = tuple(n.tick(time_delta, self._others(n)) for n in self.npcs)
         return replace(self, player=player, npcs=npcs)
 
-    def send(self, event: RpgEventGenerator, result: Any = None) -> Self:
+    def send(self, event: NpcEventGenerator, result: Any = None) -> Self:
         return replace(self, _event_generator=event, _event_result=result)
 
     def _others(self, npc: NpcOnScreen) -> tuple[NpcOnScreen, ...]:
@@ -84,25 +87,25 @@ class EventfulScene(EventAsAttr, Scene):
         return replace(
             self,
             player=self.player.start_event(started_npc),
-            npc=started_npc,
+            started_npc=started_npc,
             npcs=npcs,
         )
 
-    @cached_property
-    def _next_event(self) -> Scene | None:
+    def _next_event(self, time_delta: Millisecond) -> Scene | None:
         if not self._event_generator:
             return None
 
+        ticked = self.tick_without_event(time_delta)
         try:
             create_next_scene = self._event_generator.send(self._event_result)
-            return create_next_scene(self._event_generator, self)
+            return create_next_scene(self._event_generator, ticked)
         except StopIteration:
             logger.debug(t"Event {self._event_generator.__name__} completed.")
             return replace(
                 self,
-                player=self.player.complete_event,
-                npcs=self._completed_npcs,
-                npc=None,
+                player=ticked.player.complete_event,
+                npcs=ticked._completed_npcs,
+                started_npc=None,
                 _event_generator=None,
                 _event_result=None,
             )

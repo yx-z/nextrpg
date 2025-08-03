@@ -12,23 +12,23 @@ from nextrpg.event.event_transformer import transform_and_compile
 from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.global_config import config
 
-type RpgEventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
-type RpgEventSpec = Callable[[*RpgEventSpecParams], None | RpgEventGenerator]
+type NpcEventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
+type NpcEventSpec = Callable[[*NpcEventSpecParams], None | NpcEventGenerator]
 
-type RpgEventCallable = Callable[
-    [RpgEventGenerator, "EventfulScene"], "RpgEventScene"
+type NpcEventCallable = Callable[
+    [NpcEventGenerator, "EventfulScene"], "RpgEventScene"
 ]
-type RpgEventGenerator = Generator[RpgEventCallable, Any, None]
+type NpcEventGenerator = Generator[NpcEventCallable, Any, None]
 
 
 @dataclass(frozen=True)
 class NpcSpec(CharacterSpec):
-    event: RpgEventSpec | None = None
+    event: NpcEventSpec | None = None
     config: CharacterConfig = field(default_factory=lambda: config().character)
     cyclic_walk: bool = True
 
     @cached_property
-    def generator(self) -> Callable[[*RpgEventSpecParams], RpgEventGenerator]:
+    def generator(self) -> Callable[[*NpcEventSpecParams], NpcEventGenerator]:
         fun = self.event
         ctx = fun.__globals__ | {
             v: c.cell_contents
