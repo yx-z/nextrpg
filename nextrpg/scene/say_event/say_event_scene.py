@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import override
@@ -15,6 +16,7 @@ from nextrpg.scene.rpg_event_scene import RpgEventScene
 from nextrpg.scene.say_event.add_on import AddOn, CharacterAddOn
 from nextrpg.scene.say_event.state import FadeInState
 from nextrpg.scene.scene import Scene
+from nextrpg.scene.eventful_scene import RpgEventGenerator, EventfulScene
 
 type SayEventArg = str | Coordinate | Size | Draw | SayEventConfig
 
@@ -24,7 +26,7 @@ def say(
     character_or_scene: CharacterOnScreen | Scene,
     message: str | Text | TextGroup,
     *args: SayEventArg,
-) -> None:
+) -> Callable[[RpgEventGenerator, EventfulScene], RpgEventScene]:
     return lambda generator, scene: SayEventScene(
         generator, scene, character_or_scene, message, args
     )
