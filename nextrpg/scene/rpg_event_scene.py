@@ -4,8 +4,9 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg import DrawOnScreen, Millisecond
 from nextrpg.character.npc_on_screen import NpcEventGenerator
+from nextrpg.core.time import Millisecond
+from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.scene.eventful_scene import EventfulScene
 from nextrpg.scene.scene import Scene
 

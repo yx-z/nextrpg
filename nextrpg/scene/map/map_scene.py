@@ -6,7 +6,6 @@ from functools import cached_property
 from os import PathLike
 from typing import NamedTuple, OrderedDict, override
 
-from nextrpg import PolygonOnScreen
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec
@@ -19,7 +18,7 @@ from nextrpg.core.dataclass_with_instance_init import (
 )
 from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond, get_timepoint
-from nextrpg.draw.draw import DrawOnScreen
+from nextrpg.draw.draw import DrawOnScreen, PolygonOnScreen
 from nextrpg.global_config.global_config import config
 from nextrpg.scene.eventful_scene import EventfulScene
 from nextrpg.scene.map.map_loader import MapLoader, get_polygon

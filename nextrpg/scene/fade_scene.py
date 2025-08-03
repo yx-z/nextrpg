@@ -1,7 +1,8 @@
 from dataclasses import dataclass, replace
 from typing import Self, override
 
-from nextrpg import DrawOnScreen, Millisecond
+from nextrpg.core.time import Millisecond
+from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.fade import FadeIn
 from nextrpg.scene.rpg_event_scene import RpgEventScene
 

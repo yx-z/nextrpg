@@ -8,13 +8,12 @@ from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
-from nextrpg import Draw
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_instance_init import not_constructor_below
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.logger import ComponentAndMessage, Logger, pop_messages
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw import DrawOnScreen
+from nextrpg.draw.draw import Draw, DrawOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
