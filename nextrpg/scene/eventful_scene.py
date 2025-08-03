@@ -83,7 +83,7 @@ class EventfulScene(EventAsAttr, Scene):
             ticked = context.apply(ticked)
         return replace(ticked, _contexts=not_complete_contexts)
 
-    def send(self, event: NpcEventGenerator, result: Any = None) -> Self:
+    def complete(self, event: NpcEventGenerator, result: Any = None) -> Self:
         return replace(self, _event_generator=event, _event_result=result)
 
     def _others(self, npc: NpcOnScreen) -> tuple[NpcOnScreen, ...]:
