@@ -3,13 +3,13 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
-from typing import Any, Callable, Generator, Self, TypeVar, override
+from typing import Any, Callable, Generator, Self, override
 
-from nextrpg import dataclass_with_instance_init
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.dataclass_with_instance_init import (
+    dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )

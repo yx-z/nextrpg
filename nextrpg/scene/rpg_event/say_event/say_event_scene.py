@@ -17,8 +17,11 @@ from nextrpg.scene.eventful_scene import (
     EventGenerator,
     RpgEventScene,
 )
-from nextrpg.scene.say_event.say_event_add_on import AddOn, CharacterAddOn
-from nextrpg.scene.say_event.say_event_state import FadeInState
+from nextrpg.scene.rpg_event.say_event.say_event_add_on import (
+    AddOn,
+    CharacterAddOn,
+)
+from nextrpg.scene.rpg_event.say_event.say_event_state import FadeInState
 from nextrpg.scene.scene import Scene
 
 type SayEventArg = str | Coordinate | Size | Draw | SayEventConfig

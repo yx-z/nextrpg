@@ -46,9 +46,8 @@ class Fade(AnimatedOnScreen, ABC):
     def tick(self, time_delta: Millisecond) -> Self:
         timer = self._timer.tick(time_delta)
         if isinstance(self.resource, AnimatedOnScreen):
-            return replace(
-                self, resource=self.resource.tick(time_delta), _timer=timer
-            )
+            animation = self.resource.tick(time_delta)
+            return replace(self, resource=animation, _timer=timer)
         if _is_animated_tuple(self.resource):
             animations = tuple(a.tick(time_delta) for a in self.resource)
             return replace(self, resource=animations, _timer=timer)

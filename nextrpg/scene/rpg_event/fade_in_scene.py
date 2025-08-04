@@ -1,28 +1,41 @@
 from dataclasses import KW_ONLY, dataclass, replace
-from typing import Self, override
+from typing import Any, Self, override
 
+from nextrpg import (
+    dataclass_with_instance_init,
+    instance_init,
+    not_constructor_below,
+)
+from nextrpg.event.rpg_event import register_rpg_event
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import DrawOnScreen
-from nextrpg.draw.fade import FadeIn
-from nextrpg.event.rpg_event import register_rpg_event
+from nextrpg.draw.fade import FadeIn, Resource
 from nextrpg.scene.eventful_scene import BackgroundEvent, RpgEventScene
 from nextrpg.scene.scene import Scene
 
 
-@dataclass(frozen=True)
+@dataclass_with_instance_init(frozen=True)
 class FadeInScene(RpgEventScene):
-    fade: FadeIn
-    _: KW_ONLY
-    wait: bool
+    resource: Resource
+    wait: bool = True
+    duration: Millisecond | None = None
+    _: KW_ONLY = not_constructor_below()
+    _fade: FadeIn = instance_init(
+        lambda self: (
+            FadeIn(self.resource)
+            if self.duration is None
+            else FadeIn(self.resource, self.duration)
+        )
+    )
 
     @property
     @override
     def add_ons(self) -> tuple[DrawOnScreen, ...]:
-        return self.fade.draw_on_screens
+        return self._fade.draw_on_screens
 
     @override
     def post_tick(self, time_delta: Millisecond, ticked: Self) -> Scene:
-        fade = self.fade.tick(time_delta)
+        fade = self._fade.tick(time_delta)
         if self.wait and not fade.complete:
             return replace(ticked, fade=fade)
 
@@ -54,7 +67,9 @@ class BackgroundFadeIn(BackgroundEvent):
 
 
 @register_rpg_event
-def fade_in(fade: FadeIn, /, *, wait: bool) -> None:
+def fade_in(
+    resource: Resource, duration: Millisecond | None = None, wait: bool = True
+) -> None:
     return lambda generator, scene: FadeInScene(
-        generator, scene, fade, wait=wait
+        generator, scene, resource, duration, wait=wait
     )

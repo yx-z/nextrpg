@@ -1,5 +1,5 @@
-from dataclasses import KW_ONLY, dataclass, field, replace
-from typing import Any, Self, override
+from dataclasses import KW_ONLY, dataclass, replace
+from typing import Self, override
 
 from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
@@ -10,7 +10,6 @@ from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.fade import FadeOut
 from nextrpg.event.rpg_event import register_rpg_event
-from nextrpg.global_config.global_config import config
 from nextrpg.scene.eventful_scene import (
     BackgroundEvent,
     BackgroundEventSentinel,
@@ -22,18 +21,10 @@ from nextrpg.scene.scene import Scene
 @dataclass_with_instance_init(frozen=True)
 class FadeOutScene(RpgEventScene):
     sentinel: BackgroundEventSentinel
-    _: KW_ONLY
-    wait: bool
-    duration: Millisecond = field(
-        default_factory=lambda: config().transition.duration
-    )
-    __: Any = not_constructor_below()
-    _fade: FadeOut = instance_init(
-        lambda self: FadeOut(
-            self.scene.get_background_event(self.sentinel).draw_on_screens,
-            self.duration,
-        )
-    )
+    wait: bool = True
+    duration: Millisecond | None = None
+    _: KW_ONLY = not_constructor_below()
+    _fade: FadeOut = instance_init(lambda self: self._init_fade)
 
     @property
     @override
@@ -55,6 +46,13 @@ class FadeOutScene(RpgEventScene):
 
         ticking = replace(ticked, scene=background_removed)
         return replace(ticking, _fade=fade)
+
+    @property
+    def _init_fade(self) -> FadeOut:
+        res = self.scene.get_background_event(self.sentinel).draw_on_screens
+        if self.duration is None:
+            return FadeOut(res)
+        return FadeOut(res, self.duration)
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -78,15 +76,9 @@ class BackgroundFadeOut(BackgroundEvent):
 @register_rpg_event
 def fade_out(
     sentinel: BackgroundEventSentinel,
-    /,
-    *,
-    wait: bool,
+    wait: bool = True,
     duration: Millisecond | None = None,
 ) -> None:
     return lambda generator, scene: FadeOutScene(
-        generator,
-        scene,
-        sentinel,
-        wait=wait,
-        duration=duration or config().transition.duration,
+        generator, scene, sentinel, wait=wait, duration=duration
     )
