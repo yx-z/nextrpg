@@ -43,6 +43,8 @@ from nextrpg.gui import *
 from nextrpg.gui.area import *
 from nextrpg.gui.window import *
 from nextrpg.scene import *
+from nextrpg.scene.eventful_scene import *
+from nextrpg.scene.fade_in_scene import *
 from nextrpg.scene.map.map_loader import *
 from nextrpg.scene.map.map_scene import *
 from nextrpg.scene.map.map_shift import *

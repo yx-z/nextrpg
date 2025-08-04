@@ -14,15 +14,17 @@ from nextrpg.draw.animated_on_screen import AnimatedOnScreen
 from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.global_config.global_config import config
 
+type Resource = (
+    DrawOnScreen
+    | tuple[DrawOnScreen, ...]
+    | AnimatedOnScreen
+    | tuple[AnimatedOnScreen, ...]
+)
+
 
 @dataclass_with_instance_init(frozen=True)
 class Fade(AnimatedOnScreen, ABC):
-    resource: (
-        DrawOnScreen
-        | tuple[DrawOnScreen, ...]
-        | AnimatedOnScreen
-        | tuple[AnimatedOnScreen, ...]
-    )
+    resource: Resource
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
     )
@@ -114,12 +116,7 @@ class FadeOut(Fade):
 
 
 def _is_animated_tuple(
-    resource: (
-        DrawOnScreen
-        | tuple[DrawOnScreen, ...]
-        | AnimatedOnScreen
-        | tuple[AnimatedOnScreen, ...]
-    ),
+    resource: Resource,
 ) -> TypeIs[tuple[AnimatedOnScreen, ...]]:
     if not resource:
         return False

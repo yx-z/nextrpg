@@ -1,10 +1,12 @@
 from nextrpg import (
+    BLACK,
     CharacterDraw,
     CharacterSpec,
     Color,
     Direction,
     Draw,
     EventfulScene,
+    FadeIn,
     MapScene,
     Move,
     NpcOnScreen,
@@ -16,7 +18,10 @@ from nextrpg import (
     Text,
     Trim,
     config,
+    fade_in,
+    top_left_screen,
 )
+from nextrpg.scene.fade_out_scene import fade_out
 
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
@@ -37,9 +42,11 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
 def greet(
     player: PlayerOnScreen, npc: NpcOnScreen, scene: EventfulScene
 ) -> None:
+    sentinel = fade_in(FadeIn(top_left_screen().fill(BLACK)), wait=False)
     npc: "Nice to meet you! What's your name?"
     player: f"Hello {npc.display_name}! I am {player.display_name}."
     npc: f"Hello {player.display_name}!"
+    fade_out(sentinel, wait=True)
 
     other_name = "david" if npc.display_name == "alisa" else "alisa"
     other_npc = scene.get_character(other_name)

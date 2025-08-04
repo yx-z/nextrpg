@@ -1,7 +1,6 @@
-from collections.abc import Callable, Generator
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import Any
 
 from nextrpg.character.character_on_screen import (
     CharacterOnScreen,
@@ -13,12 +12,7 @@ from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.global_config import config
 
 type NpcEventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
-type NpcEventSpec = Callable[[*NpcEventSpecParams], None | NpcEventGenerator]
-
-type NpcEventCallable = Callable[
-    [NpcEventGenerator, "EventfulScene"], "RpgEventScene"
-]
-type NpcEventGenerator = Generator[NpcEventCallable, Any, None]
+type NpcEventSpec = Callable[[*NpcEventSpecParams], "EventGenerator | None"]
 
 
 @dataclass(frozen=True)
@@ -28,7 +22,7 @@ class NpcSpec(CharacterSpec):
     cyclic_walk: bool = True
 
     @cached_property
-    def generator(self) -> Callable[[*NpcEventSpecParams], NpcEventGenerator]:
+    def generator(self) -> Callable[[*NpcEventSpecParams], EventGenerator]:
         fun = self.event
         ctx = fun.__globals__ | {
             v: c.cell_contents

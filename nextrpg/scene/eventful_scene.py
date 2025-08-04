@@ -3,31 +3,24 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
-from typing import Any, Self
+from typing import Any, Callable, Generator, Self, TypeVar, override
 
+from nextrpg import dataclass_with_instance_init
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.character.npc_on_screen import NpcEventGenerator, NpcOnScreen
+from nextrpg.character.npc_on_screen import NpcOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.core.dataclass_with_instance_init import not_constructor_below
+from nextrpg.core.dataclass_with_instance_init import (
+    instance_init,
+    not_constructor_below,
+)
 from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond
+from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.scene.scene import Scene
 
 logger = Logger()
-
-
-class SceneContext(ABC):
-    @abstractmethod
-    def apply[T](self, scene: T) -> T: ...
-
-    @abstractmethod
-    def tick(self, scene: EventfulScene, time_delta: Millisecond) -> Self: ...
-
-    @property
-    @abstractmethod
-    def complete(self) -> bool: ...
 
 
 @dataclass(frozen=True)
@@ -36,9 +29,9 @@ class EventfulScene(EventAsAttr, Scene):
     npcs: tuple[NpcOnScreen, ...]
     _: KW_ONLY = not_constructor_below()
     started_npc: NpcOnScreen | None = None
-    _event_generator: NpcEventGenerator | None = None
+    _event: EventGenerator | None = None
     _event_result: Any = None
-    _contexts: tuple[SceneContext, ...] = ()
+    _background_events: tuple[BackgroundEvent, ...] = ()
 
     def get_character(self, object_name: str) -> CharacterOnScreen:
         if object_name == self.player.spec.object_name:
@@ -73,18 +66,34 @@ class EventfulScene(EventAsAttr, Scene):
         npcs = tuple(n.tick(time_delta, self._others(n)) for n in self.npcs)
         ticked = replace(self, player=player, npcs=npcs)
 
-        ticked_contexts = tuple(
-            c.tick(self, time_delta) for c in self._contexts
+        ticked_background_events = tuple(
+            c.tick(time_delta) for c in self._background_events
         )
-        not_complete_contexts = tuple(
-            c for c in ticked_contexts if not c.complete
+        not_completed_background_events = tuple(
+            c for c in ticked_background_events if not c.complete
         )
-        for context in not_complete_contexts:
-            ticked = context.apply(ticked)
-        return replace(ticked, _contexts=not_complete_contexts)
+        for background_event in not_completed_background_events:
+            ticked = background_event.apply(ticked)
+        return replace(
+            ticked, _background_events=not_completed_background_events
+        )
 
-    def complete(self, event: NpcEventGenerator, result: Any = None) -> Self:
-        return replace(self, _event_generator=event, _event_result=result)
+    def complete(
+        self,
+        event: EventGenerator,
+        event_result: Any = None,
+        background_event: BackgroundEvent | None = None,
+    ) -> Self:
+        if background_event:
+            background_events = self._background_events + (background_event,)
+        else:
+            background_events = self._background_events
+        return replace(
+            self,
+            _event=event,
+            _event_result=event_result,
+            _background_events=background_events,
+        )
 
     def _others(self, npc: NpcOnScreen) -> tuple[NpcOnScreen, ...]:
         return (self.player,) + tuple(n for n in self.npcs if n is not npc)
@@ -116,13 +125,13 @@ class EventfulScene(EventAsAttr, Scene):
         )
 
     def _next_event(self, time_delta: Millisecond) -> Scene | None:
-        if not self._event_generator:
+        if not self._event:
             return None
 
         ticked = self.tick_without_event(time_delta)
         try:
-            create_next_scene = self._event_generator.send(self._event_result)
-            return create_next_scene(self._event_generator, ticked)
+            create_next_scene = self._event.send(self._event_result)
+            return create_next_scene(self._event, ticked)
         except StopIteration:
             logger.debug(t"Event {self._event_generator.__name__} completed.")
             return replace(
@@ -130,10 +139,88 @@ class EventfulScene(EventAsAttr, Scene):
                 player=ticked.player.complete_event,
                 npcs=ticked._completed_npcs,
                 started_npc=None,
-                _event_generator=None,
+                _event=None,
                 _event_result=None,
             )
 
     @cached_property
     def _completed_npcs(self) -> tuple[NpcOnScreen, ...]:
         return tuple(n.complete_event for n in self.npcs)
+
+    @cached_property
+    @override
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+        context_draws = tuple(
+            d for c in self._background_events for d in c.draw_on_screens
+        )
+        return super().draw_on_screens + context_draws
+
+    def get_background_event(
+        self, sentinel: BackgroundEventSentinel
+    ) -> BackgroundEvent:
+        for background_event in self._background_events:
+            if background_event.sentinel is sentinel:
+                return background_event
+        raise ValueError(f"No background event with sentinel {sentinel.cls}")
+
+    def remove_background_event(
+        self, sentinel: BackgroundEventSentinel
+    ) -> Self:
+        background_events = tuple(
+            e for e in self._background_events if e.sentinel is not sentinel
+        )
+        return replace(self, _background_events=background_events)
+
+
+@dataclass(frozen=True)
+class BackgroundEventSentinel:
+    cls: type
+
+
+@dataclass_with_instance_init(frozen=True)
+class BackgroundEvent(ABC):
+    _: KW_ONLY = not_constructor_below()
+    sentinel: BackgroundEventSentinel = instance_init(
+        lambda self: BackgroundEventSentinel(type(self))
+    )
+
+    @property
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+        return ()
+
+    def apply(self, scene: EventfulScene) -> EventfulScene:
+        return scene
+
+    @abstractmethod
+    def tick(self, time_delta: Millisecond) -> Self: ...
+
+    @property
+    @abstractmethod
+    def complete(self) -> bool: ...
+
+
+@dataclass(frozen=True)
+class RpgEventScene(Scene):
+    generator: EventGenerator
+    scene: EventfulScene
+
+    @cached_property
+    @override
+    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+        return self.scene.draw_on_screens + self.add_ons
+
+    @override
+    def tick(self, time_delta: Millisecond) -> Scene:
+        ticked = replace(self, scene=self.scene.tick_without_event(time_delta))
+        return self.post_tick(time_delta, ticked)
+
+    def post_tick(self, time_delta: Millisecond, ticked: Self) -> Scene:
+        return ticked
+
+    @property
+    def add_ons(self) -> tuple[DrawOnScreen, ...]:
+        return ()
+
+
+type EventCallable = Callable[[EventGenerator, EventfulScene], RpgEventScene]
+type EventGenerator = Generator[EventCallable, Any, None]

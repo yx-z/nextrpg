@@ -4,7 +4,7 @@ from typing import Any, dataclass_transform
 
 
 def not_constructor_below() -> Any:
-    return field()
+    return field(default=None)
 
 
 def instance_init(init: Callable[[Any], Any]) -> Any:
