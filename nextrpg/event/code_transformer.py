@@ -82,12 +82,7 @@ class AnnotateSay(NodeTransformer):
         if node.value is not None:
             return node
         target, args = _get_target_and_arg(node.target)
-        say = Attribute(
-            Name(
-                target,
-            ),
-            self.say_event_name,
-        )
+        say = Attribute(Name(target), self.say_event_name)
         return Expr(Call(say, [node.annotation] + args))
 
 
