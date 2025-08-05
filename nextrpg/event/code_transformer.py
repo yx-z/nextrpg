@@ -46,9 +46,8 @@ class _TransformEvent(NodeTransformer):
     def visit_Call(self, node):
         if not isinstance(node.func, Name) or not _is_rpg_event(node.func.id):
             return node
-        transform_fun = Call(
-            Name(_NEXTRPG_TRANSFORM, Load()), [Name(node.func.id, Load())]
-        )
+        args = [Name(node.func.id, Load())]
+        transform_fun = Call(Name(_NEXTRPG_TRANSFORM, Load()), args)
         return Call(transform_fun, node.args, node.keywords)
 
 
