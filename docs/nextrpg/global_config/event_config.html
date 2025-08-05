@@ -63,15 +63,25 @@
 
                         <label class="view-source-button" for="mod-event_config-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">ast</span><span class="w"> </span><span class="kn">import</span> <span class="n">NodeTransformer</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.code_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ADD_PARENT</span><span class="p">,</span> <span class="n">ADD_YIELD</span><span class="p">,</span> <span class="n">ANNOTATE_SAY</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">5</span></a>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">6</span></a>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">7</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">EventConfig</span><span class="p">:</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">9</span></a>    <span class="n">transformers</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">NodeTransformer</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">ADD_PARENT</span><span class="p">,</span> <span class="n">ANNOTATE_SAY</span><span class="p">,</span> <span class="n">ADD_YIELD</span><span class="p">)</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">ast</span><span class="w"> </span><span class="kn">import</span> <span class="n">NodeTransformer</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.code_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>    <span class="n">ADD_PARENT</span><span class="p">,</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">ADD_YIELD</span><span class="p">,</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">ANNOTATE_SAY</span><span class="p">,</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="n">TRANSFORM_EVENT</span><span class="p">,</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="p">)</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">EventConfig</span><span class="p">:</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">transformers</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">NodeTransformer</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>        <span class="n">ADD_PARENT</span><span class="p">,</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>        <span class="n">ANNOTATE_SAY</span><span class="p">,</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>        <span class="n">ADD_YIELD</span><span class="p">,</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>        <span class="n">TRANSFORM_EVENT</span><span class="p">,</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -88,9 +98,14 @@
 
     </div>
     <a class="headerlink" href="#EventConfig"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="EventConfig-8"><a href="#EventConfig-8"><span class="linenos"> 8</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="EventConfig-9"><a href="#EventConfig-9"><span class="linenos"> 9</span></a><span class="k">class</span><span class="w"> </span><span class="nc">EventConfig</span><span class="p">:</span>
-</span><span id="EventConfig-10"><a href="#EventConfig-10"><span class="linenos">10</span></a>    <span class="n">transformers</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">NodeTransformer</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">ADD_PARENT</span><span class="p">,</span> <span class="n">ANNOTATE_SAY</span><span class="p">,</span> <span class="n">ADD_YIELD</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="EventConfig-13"><a href="#EventConfig-13"><span class="linenos">13</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="EventConfig-14"><a href="#EventConfig-14"><span class="linenos">14</span></a><span class="k">class</span><span class="w"> </span><span class="nc">EventConfig</span><span class="p">:</span>
+</span><span id="EventConfig-15"><a href="#EventConfig-15"><span class="linenos">15</span></a>    <span class="n">transformers</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">NodeTransformer</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="EventConfig-16"><a href="#EventConfig-16"><span class="linenos">16</span></a>        <span class="n">ADD_PARENT</span><span class="p">,</span>
+</span><span id="EventConfig-17"><a href="#EventConfig-17"><span class="linenos">17</span></a>        <span class="n">ANNOTATE_SAY</span><span class="p">,</span>
+</span><span id="EventConfig-18"><a href="#EventConfig-18"><span class="linenos">18</span></a>        <span class="n">ADD_YIELD</span><span class="p">,</span>
+</span><span id="EventConfig-19"><a href="#EventConfig-19"><span class="linenos">19</span></a>        <span class="n">TRANSFORM_EVENT</span><span class="p">,</span>
+</span><span id="EventConfig-20"><a href="#EventConfig-20"><span class="linenos">20</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -99,7 +114,7 @@
                             <div id="EventConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">EventConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">transformers</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">NodeTransformer</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">nextrpg</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">code_transformer</span><span class="o">.</span><span class="n">_AddParent</span> <span class="nb">object</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">AnnotateSay</span><span class="p">(</span><span class="n">say_event_name</span><span class="o">=</span><span class="s1">&#39;say&#39;</span><span class="p">),</span> <span class="o">&lt;</span><span class="n">nextrpg</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">code_transformer</span><span class="o">.</span><span class="n">_AddYield</span> <span class="nb">object</span><span class="o">&gt;</span><span class="p">)</span></span>)</span>
+        <span class="name">EventConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">transformers</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">NodeTransformer</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">nextrpg</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">code_transformer</span><span class="o">.</span><span class="n">_AddParent</span> <span class="nb">object</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">AnnotateSay</span><span class="p">(</span><span class="n">say_event_name</span><span class="o">=</span><span class="s1">&#39;say&#39;</span><span class="p">),</span> <span class="o">&lt;</span><span class="n">nextrpg</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">code_transformer</span><span class="o">.</span><span class="n">_AddYield</span> <span class="nb">object</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">nextrpg</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">code_transformer</span><span class="o">.</span><span class="n">_TransformEvent</span> <span class="nb">object</span><span class="o">&gt;</span><span class="p">)</span></span>)</span>
 
         
     </div>
@@ -112,7 +127,7 @@
                                 <div class="attr variable">
             <span class="name">transformers</span><span class="annotation">: tuple[ast.NodeTransformer]</span>        =
 <input id="EventConfig.transformers-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-            <label class="view-value-button pdoc-button" for="EventConfig.transformers-view-value"></label><span class="default_value">(&lt;nextrpg.event.code_transformer._AddParent object&gt;, AnnotateSay(say_event_name=&#39;say&#39;), &lt;nextrpg.event.code_transformer._AddYield object&gt;)</span>
+            <label class="view-value-button pdoc-button" for="EventConfig.transformers-view-value"></label><span class="default_value">(&lt;nextrpg.event.code_transformer._AddParent object&gt;, AnnotateSay(say_event_name=&#39;say&#39;), &lt;nextrpg.event.code_transformer._AddYield object&gt;, &lt;nextrpg.event.code_transformer._TransformEvent object&gt;)</span>
 
         
     </div>

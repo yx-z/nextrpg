@@ -4,9 +4,8 @@ from ast import (
     Attribute,
     Call,
     Expr,
-    ImportFrom,
+    Import,
     Index,
-    Load,
     Name,
     NodeTransformer,
     Subscript,
@@ -32,22 +31,19 @@ class _AddParent(NodeTransformer):
 ADD_PARENT = _AddParent()
 
 
-@dataclass
 class _TransformEvent(NodeTransformer):
     def visit_Module(self, node):
         self.generic_visit(node)
-        import_node = ImportFrom(
-            module="nextrpg",
-            names=[alias(name="transform", asname=_NEXTRPG_TRANSFORM)],
-        )
+        import_node = Import([alias("nextrpg")])
         node.body.insert(0, import_node)
         return node
 
     def visit_Call(self, node):
         if not isinstance(node.func, Name) or not _is_rpg_event(node.func.id):
             return node
-        args = [Name(node.func.id, Load())]
-        transform_fun = Call(Name(_NEXTRPG_TRANSFORM, Load()), args)
+        args = [Name(node.func.id)]
+        transform = Attribute(Name("nextrpg"), "transform")
+        transform_fun = Call(transform, args)
         return Call(transform_fun, node.args, node.keywords)
 
 
@@ -86,7 +82,12 @@ class AnnotateSay(NodeTransformer):
         if node.value is not None:
             return node
         target, args = _get_target_and_arg(node.target)
-        say = Attribute(Name(target, Load()), self.say_event_name, Load())
+        say = Attribute(
+            Name(
+                target,
+            ),
+            self.say_event_name,
+        )
         return Expr(Call(say, [node.annotation] + args))
 
 
@@ -133,6 +134,3 @@ def _get_target_and_arg(target: Name | Attribute | Subscript) -> _TargetAndArg:
     raise ValueError(
         f'Expect var[arg1, arg2, ...]: "...", where var is player/npc and arg is the ad-hoc config. Got unexpected expression {unparse(target)}'
     )
-
-
-_NEXTRPG_TRANSFORM = "_nextrpg_transform"
