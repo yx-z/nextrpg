@@ -18,7 +18,7 @@ from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.draw.typewriter import Typewriter
 from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.global_config.say_event_config import SayEventConfig
-from nextrpg.scene.eventful_scene import RpgEventScene
+from nextrpg.scene.rpg_event.eventful_scene import RpgEventScene
 from nextrpg.scene.scene import Scene
 
 

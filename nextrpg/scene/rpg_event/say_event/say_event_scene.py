@@ -1,4 +1,3 @@
-from collections.abc import Callable
 from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import override
@@ -9,13 +8,11 @@ from nextrpg.core.dimension import Size
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import Draw, DrawOnScreen
 from nextrpg.draw.text import Text, TextGroup
-from nextrpg.event.rpg_event import register_rpg_event
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.say_event_config import SayEventConfig
-from nextrpg.scene.eventful_scene import (
-    EventfulScene,
-    EventGenerator,
+from nextrpg.scene.rpg_event.eventful_scene import (
     RpgEventScene,
+    register_rpg_event_scene,
 )
 from nextrpg.scene.rpg_event.say_event.say_event_add_on import (
     AddOn,
@@ -25,17 +22,6 @@ from nextrpg.scene.rpg_event.say_event.say_event_state import FadeInState
 from nextrpg.scene.scene import Scene
 
 type SayEventArg = str | Coordinate | Size | Draw | SayEventConfig
-
-
-@register_rpg_event
-def say(
-    character_or_scene: CharacterOnScreen | Scene,
-    message: str | Text | TextGroup,
-    *args: SayEventArg,
-) -> Callable[[EventGenerator, EventfulScene], RpgEventScene]:
-    return lambda generator, scene: SayEventScene(
-        generator, scene, character_or_scene, message, args
-    )
 
 
 @dataclass(frozen=True)
@@ -56,8 +42,11 @@ class SayEventScene(RpgEventScene):
     @cached_property
     def config(self) -> SayEventConfig:
         cfg = config().say_event
-        for arg in self.args:
-            cfg = _update_config(cfg, arg)
+        if isinstance(self.args, str):
+            cfg = _update_config(cfg, self.args)
+        else:
+            for arg in self.args:
+                cfg = _update_config(cfg, arg)
         return cfg
 
     @cached_property
@@ -87,12 +76,20 @@ class SayEventScene(RpgEventScene):
         )
 
 
+@register_rpg_event_scene(SayEventScene)
+def say(
+    character_or_scene: CharacterOnScreen | Scene,
+    message: str | Text | TextGroup,
+    args: tuple[SayEventArg, ...],
+) -> Scene: ...
+
+
 def _update_config(cfg: SayEventConfig, arg: SayEventArg) -> SayEventConfig:
     match arg:
         case SayEventConfig():
             return arg
         case Coordinate():
-            return replace(cfg, coordinate=arg)
+            return replace(cfg, coordinate_override=arg)
         case Draw():
             return replace(cfg, avatar=arg)
         case str():

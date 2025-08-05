@@ -24,7 +24,6 @@ from nextrpg.event.code_transformer import *
 from nextrpg.event.event_as_attr import *
 from nextrpg.event.event_transformer import *
 from nextrpg.event.pygame_event import *
-from nextrpg.event.rpg_event import *
 from nextrpg.game import *
 from nextrpg.global_config.character_config import *
 from nextrpg.global_config.debug_config import *
@@ -43,11 +42,12 @@ from nextrpg.gui import *
 from nextrpg.gui.area import *
 from nextrpg.gui.window import *
 from nextrpg.scene import *
-from nextrpg.scene.eventful_scene import *
 from nextrpg.scene.map.map_loader import *
 from nextrpg.scene.map.map_scene import *
 from nextrpg.scene.map.map_shift import *
+from nextrpg.scene.rpg_event.eventful_scene import *
 from nextrpg.scene.rpg_event.fade_in_scene import *
+from nextrpg.scene.rpg_event.fade_out_scene import *
 from nextrpg.scene.rpg_event.say_event.say_event_add_on import *
 from nextrpg.scene.rpg_event.say_event.say_event_scene import *
 from nextrpg.scene.rpg_event.say_event.say_event_state import *

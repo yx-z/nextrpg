@@ -9,11 +9,11 @@ from nextrpg.core.dataclass_with_instance_init import (
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.fade import FadeOut
-from nextrpg.event.rpg_event import register_rpg_event
-from nextrpg.scene.eventful_scene import (
+from nextrpg.scene.rpg_event.eventful_scene import (
     BackgroundEvent,
     BackgroundEventSentinel,
     RpgEventScene,
+    register_rpg_event_scene,
 )
 from nextrpg.scene.scene import Scene
 
@@ -73,12 +73,9 @@ class BackgroundFadeOut(BackgroundEvent):
         return self.fade.complete
 
 
-@register_rpg_event
+@register_rpg_event_scene(FadeOutScene)
 def fade_out(
     sentinel: BackgroundEventSentinel,
     wait: bool = True,
     duration: Millisecond | None = None,
-) -> None:
-    return lambda generator, scene: FadeOutScene(
-        generator, scene, sentinel, wait=wait, duration=duration
-    )
+) -> None: ...

@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Generator
 
 from nextrpg.global_config.character_config import CharacterConfig
+from nextrpg.global_config.cutscene_config import CutsceneConfig
 from nextrpg.global_config.debug_config import DebugConfig
 from nextrpg.global_config.draw_on_screen_config import DrawOnScreenConfig
 from nextrpg.global_config.event_config import EventConfig
@@ -37,6 +38,7 @@ class Config:
     draw_on_screen: DrawOnScreenConfig = DrawOnScreenConfig()
     event: EventConfig = EventConfig()
     say_event: SayEventConfig = SayEventConfig()
+    cutscene: CutsceneConfig = CutsceneConfig()
     debug: DebugConfig | None = None
 
 

@@ -1,26 +1,29 @@
 from nextrpg import (
-    BLACK,
+    ORIGIN,
     CharacterDraw,
     CharacterSpec,
     Color,
+    Coordinate,
     Direction,
     Draw,
     EventfulScene,
-    FadeIn,
     MapScene,
     Move,
     NpcOnScreen,
     NpcSpec,
     PlayerOnScreen,
+    RectangleOnScreen,
     RpgMakerCharacterDraw,
     RpgMakerSpriteSheet,
     Selection,
+    Size,
     Text,
     Trim,
     config,
     fade_in,
+    fade_out,
+    gui_size,
     register_rpg_event,
-    top_left_screen,
 )
 
 
@@ -33,12 +36,30 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
         player_spec or init_player(),
         Move("from_interior", "to_exterior", exterior_scene),
         (
-            NpcSpec("david", david(), event=greet),
-            NpcSpec("alisa", alisa(), event=greet),
+            NpcSpec("david", david(), event=greet_with_cutscene),
+            NpcSpec("alisa", alisa(), event=greet_with_cutscene),
         ),
     )
 
 
+def greet_with_cutscene(
+    player: PlayerOnScreen, npc: NpcOnScreen, scene: EventfulScene
+) -> None:
+    gui_width, gui_height = gui_size()
+    cfg = config().cutscene
+    rect_height = gui_height * cfg.screen_height_percentage
+    size = Size(gui_width, rect_height)
+    top_border = RectangleOnScreen(ORIGIN, size)
+    bottom_coord = Coordinate(0, gui_height - rect_height)
+    bottom_border = RectangleOnScreen(bottom_coord, size)
+    borders = tuple(r.fill(cfg.background) for r in (top_border, bottom_border))
+
+    sentinel = fade_in(borders, cfg.wait, cfg.duration)
+    greet(player, npc, scene)
+    fade_out(sentinel, cfg.wait, cfg.duration)
+
+
+@register_rpg_event
 def greet(
     player: PlayerOnScreen, npc: NpcOnScreen, scene: EventfulScene
 ) -> None:
@@ -54,7 +75,6 @@ def greet(
     # fmt: off
     scene["Interior Scene"]: Text("Greetings!", cfg.sized(40)) + Text(
 """This is...
-
 a sample """, cfg) + Text("nextrpg event", cfg.colored(Color(128, 0, 255)))
     # fmt: on
 

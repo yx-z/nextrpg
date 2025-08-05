@@ -18,7 +18,6 @@ from nextrpg.draw.group import Group, GroupOnScreen, RelativeDraw
 from nextrpg.draw.text import Text, TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.global_config.say_event_config import SayEventConfig
-from nextrpg.global_config.text_config import TextConfig
 from nextrpg.gui.area import gui_width, left_screen, top_screen
 from nextrpg.scene.scene import Scene
 

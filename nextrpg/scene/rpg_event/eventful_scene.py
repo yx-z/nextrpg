@@ -133,7 +133,7 @@ class EventfulScene(EventAsAttr, Scene):
             create_next_scene = self._event.send(self._event_result)
             return create_next_scene(self._event, ticked)
         except StopIteration:
-            logger.debug(t"Event {self._event_generator.__name__} completed.")
+            logger.debug(t"Event {self._event.__name__} completed.")
             return replace(
                 self,
                 player=ticked.player.complete_event,
@@ -200,7 +200,7 @@ class BackgroundEvent(ABC):
 
 
 @dataclass(frozen=True)
-class RpgEventScene(Scene):
+class RpgEventScene[R = None](Scene):
     generator: EventGenerator
     scene: EventfulScene
 
@@ -221,6 +221,23 @@ class RpgEventScene(Scene):
     def add_ons(self) -> tuple[DrawOnScreen, ...]:
         return ()
 
+
+def register_rpg_event_scene[R, **P](
+    cls: RpgEventScene[R],
+) -> Callable[[Callable[P, R]], Callable[P, R]]:
+    def decorate(f: Callable[P, R]) -> Callable[P, R]:
+        def decorated(*args: P.args, **kwargs: P.kwargs) -> R:
+            return lambda generator, scene: cls(
+                generator, scene, *args, **kwargs
+            )
+
+        registered_rpg_event_scenes[f.__name__] = decorated
+        return decorated
+
+    return decorate
+
+
+registered_rpg_event_scenes: dict[str, Callable[..., None]] = {}
 
 type EventCallable = Callable[[EventGenerator, EventfulScene], RpgEventScene]
 type EventGenerator = Generator[EventCallable, Any, None]

@@ -1,21 +1,25 @@
 from dataclasses import KW_ONLY, dataclass, replace
-from typing import Any, Self, override
+from typing import Self, override
 
-from nextrpg import (
+from nextrpg.core.dataclass_with_instance_init import (
     dataclass_with_instance_init,
     instance_init,
     not_constructor_below,
 )
-from nextrpg.event.rpg_event import register_rpg_event
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.fade import FadeIn, Resource
-from nextrpg.scene.eventful_scene import BackgroundEvent, RpgEventScene
+from nextrpg.scene.rpg_event.eventful_scene import (
+    BackgroundEvent,
+    BackgroundEventSentinel,
+    RpgEventScene,
+    register_rpg_event_scene,
+)
 from nextrpg.scene.scene import Scene
 
 
 @dataclass_with_instance_init(frozen=True)
-class FadeInScene(RpgEventScene):
+class FadeInScene(RpgEventScene[BackgroundEventSentinel]):
     resource: Resource
     wait: bool = True
     duration: Millisecond | None = None
@@ -37,13 +41,11 @@ class FadeInScene(RpgEventScene):
     def post_tick(self, time_delta: Millisecond, ticked: Self) -> Scene:
         fade = self._fade.tick(time_delta)
         if self.wait and not fade.complete:
-            return replace(ticked, fade=fade)
+            return replace(ticked, _fade=fade)
 
         background_fade_in = BackgroundFadeIn(fade=fade)
         return ticked.scene.complete(
-            self.generator,
-            event_result=background_fade_in.sentinel,
-            background_event=background_fade_in,
+            self.generator, background_fade_in.sentinel, background_fade_in
         )
 
 
@@ -66,10 +68,7 @@ class BackgroundFadeIn(BackgroundEvent):
         return False
 
 
-@register_rpg_event
+@register_rpg_event_scene(FadeInScene)
 def fade_in(
-    resource: Resource, duration: Millisecond | None = None, wait: bool = True
-) -> None:
-    return lambda generator, scene: FadeInScene(
-        generator, scene, resource, duration, wait=wait
-    )
+    resource: Resource, wait: bool = True, duration: Millisecond | None = None
+) -> BackgroundEventSentinel: ...
