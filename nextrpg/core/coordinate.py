@@ -1,16 +1,15 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from collections import namedtuple
 from math import atan2, degrees, hypot, sqrt
-from typing import Self
+from typing import NamedTuple, Self
 
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.direction import Direction, DirectionalOffset
 from nextrpg.core.time import Millisecond
 
 
-class Coordinate(namedtuple("Coordinate", "left top")):
+class Coordinate(NamedTuple):
     left: Pixel
     top: Pixel
 

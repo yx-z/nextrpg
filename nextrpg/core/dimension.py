@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from collections import namedtuple
 from math import sqrt
+from typing import NamedTuple
 
 type Pixel = int | float
 
 type PixelPerMillisecond = int | float
 
 
-class Size(namedtuple("Size", "width height")):
+class Size(NamedTuple):
     width: Pixel
     height: Pixel
 

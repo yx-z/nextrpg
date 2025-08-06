@@ -1,6 +1,6 @@
 from dataclasses import dataclass, replace
 
-from nextrpg.core.color import BLACK, WHITE, Color
+from nextrpg.core.color import BLACK, Color
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
 from nextrpg.core.time import Millisecond
@@ -17,7 +17,7 @@ class AddOnConfig:
 
 @dataclass(frozen=True)
 class SayEventConfig:
-    background: Color = WHITE
+    background: Color = Color(255, 255, 255, 200)
     border_radius: Pixel = 16
     fade_duration: Millisecond = 200
     padding: Pixel = 12

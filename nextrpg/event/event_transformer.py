@@ -24,7 +24,6 @@ def transform[**P](
         for v, c in zip(fun.__code__.co_freevars, fun.__closure__ or ())
     }
     exec(code, ctx)
-    print(sorted(k for k in ctx if k == k.lower() and not k.startswith("_")))
     return ctx[name_override or fun.__name__]
 
 
