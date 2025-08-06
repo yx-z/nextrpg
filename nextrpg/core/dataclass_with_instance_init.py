@@ -22,14 +22,16 @@ def dataclass_with_instance_init[T](
         if getattr(self, _NEXTRPG_INSTANCE_INIT, None):
             return
 
-        for f in fields(self):
+        for f in cls_fields:
             if isinstance(attr := getattr(self, f.name, None), _Init):
                 object.__setattr__(self, f.name, attr.init(self))
         object.__setattr__(self, _NEXTRPG_INSTANCE_INIT, True)
 
     cls.__post_init__ = post_init
 
-    return dataclass(cls, **kwargs)
+    datacls = dataclass(cls, **kwargs)
+    cls_fields = fields(datacls)
+    return datacls
 
 
 _NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"
