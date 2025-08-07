@@ -11,6 +11,8 @@ from nextrpg.core.dataclass_with_instance_init import (
     instance_init,
     not_constructor_below,
 )
+from nextrpg.core.dimension import Size
+from nextrpg.core.sizeable import Sizeable
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import Draw, DrawOnScreen, RectangleOnScreen
 from nextrpg.draw.group import Group
@@ -28,13 +30,21 @@ class CharacterSpec:
 
 
 @dataclass_with_instance_init(frozen=True)
-class CharacterOnScreen(EventAsAttr):
+class CharacterOnScreen(EventAsAttr, Sizeable):
     spec: CharacterSpec
     coordinate: Coordinate
     config: CharacterConfig = field(default_factory=lambda: config().character)
     _: KW_ONLY = not_constructor_below()
     character: CharacterDraw = instance_init(lambda self: self.spec.character)
     _event_started: bool = False
+
+    @property
+    def top_left(self) -> Coordinate:
+        return self.coordinate
+
+    @property
+    def size(self) -> Size:
+        return self.draw_on_screen.size
 
     @property
     def display_name(self) -> str:
@@ -75,18 +85,16 @@ class CharacterOnScreen(EventAsAttr):
     @cached_property
     def start_event_rectangle(self) -> RectangleOnScreen:
         coord = self.coordinate - (
-            self.draw_on_screen.width * (self.config.start_event_scaling - 1)
+            self.width * (self.config.start_event_scaling - 1)
         )
-        size = self.draw_on_screen.size * self.config.start_event_scaling
+        size = self.size * self.config.start_event_scaling
         return RectangleOnScreen(coord, size)
 
     def _collision_rectangle(self, coordinate: Coordinate) -> RectangleOnScreen:
         coord = (
-            coordinate
-            + self.draw_on_screen.height
-            * self.config.bounding_rectangle_scaling
+            coordinate + self.height * self.config.bounding_rectangle_scaling
         )
-        size = self.draw_on_screen.size * self.config.bounding_rectangle_scaling
+        size = self.size * self.config.bounding_rectangle_scaling
         return RectangleOnScreen(coord, size)
 
     @property

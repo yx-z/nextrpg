@@ -68,7 +68,7 @@ class MapScene(EventfulScene):
     @cached_property
     @override
     def draw_on_screen_shift(self) -> Coordinate:
-        player_coord = self.player.draw_on_screen.rectangle_on_screen.center
+        player_coord = self.player.center
         shift = center_player(player_coord, self.map_helper.map_size)
         logger.debug(
             t"Player center coord {player_coord}. Shift {shift}", duration=100

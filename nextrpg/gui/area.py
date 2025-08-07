@@ -1,10 +1,10 @@
-from nextrpg import WidthAndHeightScaling
 from nextrpg.core.coordinate import ORIGIN
 from nextrpg.core.dimension import (
     Height,
     HeightScaling,
     Size,
     Width,
+    WidthAndHeightScaling,
     WidthScaling,
 )
 from nextrpg.draw.draw import RectangleOnScreen
