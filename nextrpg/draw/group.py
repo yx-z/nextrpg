@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import NamedTuple
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dimension import Size
 from nextrpg.core.sizeable import Sizeable
 from nextrpg.draw.draw import Draw, DrawOnScreen, SizedDrawOnScreens
@@ -19,7 +19,7 @@ class RelativeDraw(NamedTuple):
 class Group(Sizeable):
     draw: RelativeDraw | tuple[RelativeDraw, ...]
 
-    @cached_property
+    @property
     def draws(self) -> tuple[RelativeDraw, ...]:
         if isinstance(self.draw, RelativeDraw):
             return (self.draw,)

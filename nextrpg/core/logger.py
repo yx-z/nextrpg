@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field, replace
-from functools import cached_property
 from inspect import stack
 from pathlib import Path
 from string.templatelib import Interpolation, Template
@@ -91,7 +90,7 @@ class _LogEntry:
     level: LogLevel
     message: Template
 
-    @cached_property
+    @property
     def formatted(self) -> str:
         return "".join(_format(m) for m in self.message)
 
