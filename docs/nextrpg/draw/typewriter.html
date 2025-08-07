@@ -43,6 +43,12 @@
                                 <a class="variable" href="#Typewriter.delay">delay</a>
                         </li>
                         <li>
+                                <a class="variable" href="#Typewriter.size">size</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Typewriter.top_left">top_left</a>
+                        </li>
+                        <li>
                                 <a class="variable" href="#Typewriter.draw_on_screens">draw_on_screens</a>
                         </li>
                         <li>
@@ -76,39 +82,50 @@
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">override</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_instance_init</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">dataclass_with_instance_init</span><span class="p">,</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">instance_init</span><span class="p">,</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="n">not_constructor_below</span><span class="p">,</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="p">)</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Timer</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.animated_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnimatedOnScreen</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.text_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextOnScreen</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Typewriter</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">):</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">text_on_screen</span><span class="p">:</span> <span class="n">TextOnScreen</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">delay</span><span class="p">:</span> <span class="n">Millisecond</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="n">_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="n">_timer</span><span class="p">:</span> <span class="n">Timer</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">))</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="nd">@override</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">draw_on_screens</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="nd">@override</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>        <span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">timer</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer</span><span class="p">)</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="n">timer</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer</span><span class="o">.</span><span class="n">modulo</span><span class="p">)</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_instance_init</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">dataclass_with_instance_init</span><span class="p">,</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="n">instance_init</span><span class="p">,</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="n">not_constructor_below</span><span class="p">,</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="p">)</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.sizeable</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sizeable</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Timer</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.animated_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnimatedOnScreen</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.text_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextOnScreen</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Typewriter</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">,</span> <span class="n">Sizeable</span><span class="p">):</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="n">text_on_screen</span><span class="p">:</span> <span class="n">TextOnScreen</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="n">delay</span><span class="p">:</span> <span class="n">Millisecond</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="n">_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">_timer</span><span class="p">:</span> <span class="n">Timer</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">))</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="nd">@property</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="nd">@property</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="o">.</span><span class="n">top_left</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="nd">@override</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="nd">@override</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>        <span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">timer</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer</span><span class="p">)</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="n">timer</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer</span><span class="o">.</span><span class="n">modulo</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -119,34 +136,42 @@
                     <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init(frozen=True)</div>
 
     <span class="def">class</span>
-    <span class="name">Typewriter</span><wbr>(<span class="base"><a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a></span>):
+    <span class="name">Typewriter</span><wbr>(<span class="base"><a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a></span>, <span class="base"><a href="../core/sizeable.html#Sizeable">nextrpg.core.sizeable.Sizeable</a></span>):
 
                 <label class="view-source-button" for="Typewriter-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Typewriter"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Typewriter-17"><a href="#Typewriter-17"><span class="linenos">17</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="Typewriter-18"><a href="#Typewriter-18"><span class="linenos">18</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Typewriter</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">):</span>
-</span><span id="Typewriter-19"><a href="#Typewriter-19"><span class="linenos">19</span></a>    <span class="n">text_on_screen</span><span class="p">:</span> <span class="n">TextOnScreen</span>
-</span><span id="Typewriter-20"><a href="#Typewriter-20"><span class="linenos">20</span></a>    <span class="n">delay</span><span class="p">:</span> <span class="n">Millisecond</span>
-</span><span id="Typewriter-21"><a href="#Typewriter-21"><span class="linenos">21</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
-</span><span id="Typewriter-22"><a href="#Typewriter-22"><span class="linenos">22</span></a>    <span class="n">_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="Typewriter-23"><a href="#Typewriter-23"><span class="linenos">23</span></a>    <span class="n">_timer</span><span class="p">:</span> <span class="n">Timer</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">))</span>
-</span><span id="Typewriter-24"><a href="#Typewriter-24"><span class="linenos">24</span></a>
-</span><span id="Typewriter-25"><a href="#Typewriter-25"><span class="linenos">25</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Typewriter-26"><a href="#Typewriter-26"><span class="linenos">26</span></a>    <span class="nd">@override</span>
-</span><span id="Typewriter-27"><a href="#Typewriter-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="Typewriter-28"><a href="#Typewriter-28"><span class="linenos">28</span></a>        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-</span><span id="Typewriter-29"><a href="#Typewriter-29"><span class="linenos">29</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">draw_on_screens</span>
-</span><span id="Typewriter-30"><a href="#Typewriter-30"><span class="linenos">30</span></a>
-</span><span id="Typewriter-31"><a href="#Typewriter-31"><span class="linenos">31</span></a>    <span class="nd">@override</span>
-</span><span id="Typewriter-32"><a href="#Typewriter-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Typewriter-33"><a href="#Typewriter-33"><span class="linenos">33</span></a>        <span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="Typewriter-34"><a href="#Typewriter-34"><span class="linenos">34</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">timer</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
-</span><span id="Typewriter-35"><a href="#Typewriter-35"><span class="linenos">35</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer</span><span class="p">)</span>
-</span><span id="Typewriter-36"><a href="#Typewriter-36"><span class="linenos">36</span></a>
-</span><span id="Typewriter-37"><a href="#Typewriter-37"><span class="linenos">37</span></a>        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="n">timer</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span>
-</span><span id="Typewriter-38"><a href="#Typewriter-38"><span class="linenos">38</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer</span><span class="o">.</span><span class="n">modulo</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Typewriter-20"><a href="#Typewriter-20"><span class="linenos">20</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="Typewriter-21"><a href="#Typewriter-21"><span class="linenos">21</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Typewriter</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">,</span> <span class="n">Sizeable</span><span class="p">):</span>
+</span><span id="Typewriter-22"><a href="#Typewriter-22"><span class="linenos">22</span></a>    <span class="n">text_on_screen</span><span class="p">:</span> <span class="n">TextOnScreen</span>
+</span><span id="Typewriter-23"><a href="#Typewriter-23"><span class="linenos">23</span></a>    <span class="n">delay</span><span class="p">:</span> <span class="n">Millisecond</span>
+</span><span id="Typewriter-24"><a href="#Typewriter-24"><span class="linenos">24</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
+</span><span id="Typewriter-25"><a href="#Typewriter-25"><span class="linenos">25</span></a>    <span class="n">_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="Typewriter-26"><a href="#Typewriter-26"><span class="linenos">26</span></a>    <span class="n">_timer</span><span class="p">:</span> <span class="n">Timer</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">))</span>
+</span><span id="Typewriter-27"><a href="#Typewriter-27"><span class="linenos">27</span></a>
+</span><span id="Typewriter-28"><a href="#Typewriter-28"><span class="linenos">28</span></a>    <span class="nd">@property</span>
+</span><span id="Typewriter-29"><a href="#Typewriter-29"><span class="linenos">29</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="Typewriter-30"><a href="#Typewriter-30"><span class="linenos">30</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="o">.</span><span class="n">size</span>
+</span><span id="Typewriter-31"><a href="#Typewriter-31"><span class="linenos">31</span></a>
+</span><span id="Typewriter-32"><a href="#Typewriter-32"><span class="linenos">32</span></a>    <span class="nd">@property</span>
+</span><span id="Typewriter-33"><a href="#Typewriter-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Typewriter-34"><a href="#Typewriter-34"><span class="linenos">34</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="o">.</span><span class="n">top_left</span>
+</span><span id="Typewriter-35"><a href="#Typewriter-35"><span class="linenos">35</span></a>
+</span><span id="Typewriter-36"><a href="#Typewriter-36"><span class="linenos">36</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Typewriter-37"><a href="#Typewriter-37"><span class="linenos">37</span></a>    <span class="nd">@override</span>
+</span><span id="Typewriter-38"><a href="#Typewriter-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="Typewriter-39"><a href="#Typewriter-39"><span class="linenos">39</span></a>        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="Typewriter-40"><a href="#Typewriter-40"><span class="linenos">40</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="Typewriter-41"><a href="#Typewriter-41"><span class="linenos">41</span></a>
+</span><span id="Typewriter-42"><a href="#Typewriter-42"><span class="linenos">42</span></a>    <span class="nd">@override</span>
+</span><span id="Typewriter-43"><a href="#Typewriter-43"><span class="linenos">43</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Typewriter-44"><a href="#Typewriter-44"><span class="linenos">44</span></a>        <span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="Typewriter-45"><a href="#Typewriter-45"><span class="linenos">45</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">timer</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
+</span><span id="Typewriter-46"><a href="#Typewriter-46"><span class="linenos">46</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer</span><span class="p">)</span>
+</span><span id="Typewriter-47"><a href="#Typewriter-47"><span class="linenos">47</span></a>
+</span><span id="Typewriter-48"><a href="#Typewriter-48"><span class="linenos">48</span></a>        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="n">timer</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span>
+</span><span id="Typewriter-49"><a href="#Typewriter-49"><span class="linenos">49</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer</span><span class="o">.</span><span class="n">modulo</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -186,6 +211,42 @@
     
 
                             </div>
+                            <div id="Typewriter.size" class="classattr">
+                                        <input id="Typewriter.size-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">size</span><span class="annotation">: <a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a></span>
+
+                <label class="view-source-button" for="Typewriter.size-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Typewriter.size"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Typewriter.size-28"><a href="#Typewriter.size-28"><span class="linenos">28</span></a>    <span class="nd">@property</span>
+</span><span id="Typewriter.size-29"><a href="#Typewriter.size-29"><span class="linenos">29</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="Typewriter.size-30"><a href="#Typewriter.size-30"><span class="linenos">30</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="o">.</span><span class="n">size</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="Typewriter.top_left" class="classattr">
+                                        <input id="Typewriter.top_left-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">top_left</span><span class="annotation">: <a href="../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a></span>
+
+                <label class="view-source-button" for="Typewriter.top_left-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Typewriter.top_left"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Typewriter.top_left-32"><a href="#Typewriter.top_left-32"><span class="linenos">32</span></a>    <span class="nd">@property</span>
+</span><span id="Typewriter.top_left-33"><a href="#Typewriter.top_left-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Typewriter.top_left-34"><a href="#Typewriter.top_left-34"><span class="linenos">34</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="o">.</span><span class="n">top_left</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
                             <div id="Typewriter.draw_on_screens" class="classattr">
                                         <input id="Typewriter.draw_on_screens-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
@@ -195,11 +256,11 @@
 
     </div>
     <a class="headerlink" href="#Typewriter.draw_on_screens"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Typewriter.draw_on_screens-25"><a href="#Typewriter.draw_on_screens-25"><span class="linenos">25</span></a>    <span class="nd">@cached_property</span>
-</span><span id="Typewriter.draw_on_screens-26"><a href="#Typewriter.draw_on_screens-26"><span class="linenos">26</span></a>    <span class="nd">@override</span>
-</span><span id="Typewriter.draw_on_screens-27"><a href="#Typewriter.draw_on_screens-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="Typewriter.draw_on_screens-28"><a href="#Typewriter.draw_on_screens-28"><span class="linenos">28</span></a>        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-</span><span id="Typewriter.draw_on_screens-29"><a href="#Typewriter.draw_on_screens-29"><span class="linenos">29</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">draw_on_screens</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Typewriter.draw_on_screens-36"><a href="#Typewriter.draw_on_screens-36"><span class="linenos">36</span></a>    <span class="nd">@cached_property</span>
+</span><span id="Typewriter.draw_on_screens-37"><a href="#Typewriter.draw_on_screens-37"><span class="linenos">37</span></a>    <span class="nd">@override</span>
+</span><span id="Typewriter.draw_on_screens-38"><a href="#Typewriter.draw_on_screens-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="Typewriter.draw_on_screens-39"><a href="#Typewriter.draw_on_screens-39"><span class="linenos">39</span></a>        <span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="Typewriter.draw_on_screens-40"><a href="#Typewriter.draw_on_screens-40"><span class="linenos">40</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">draw_on_screens</span>
 </span></pre></div>
 
 
@@ -218,19 +279,41 @@
 
     </div>
     <a class="headerlink" href="#Typewriter.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Typewriter.tick-31"><a href="#Typewriter.tick-31"><span class="linenos">31</span></a>    <span class="nd">@override</span>
-</span><span id="Typewriter.tick-32"><a href="#Typewriter.tick-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="Typewriter.tick-33"><a href="#Typewriter.tick-33"><span class="linenos">33</span></a>        <span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="Typewriter.tick-34"><a href="#Typewriter.tick-34"><span class="linenos">34</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">timer</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
-</span><span id="Typewriter.tick-35"><a href="#Typewriter.tick-35"><span class="linenos">35</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer</span><span class="p">)</span>
-</span><span id="Typewriter.tick-36"><a href="#Typewriter.tick-36"><span class="linenos">36</span></a>
-</span><span id="Typewriter.tick-37"><a href="#Typewriter.tick-37"><span class="linenos">37</span></a>        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="n">timer</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span>
-</span><span id="Typewriter.tick-38"><a href="#Typewriter.tick-38"><span class="linenos">38</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer</span><span class="o">.</span><span class="n">modulo</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Typewriter.tick-42"><a href="#Typewriter.tick-42"><span class="linenos">42</span></a>    <span class="nd">@override</span>
+</span><span id="Typewriter.tick-43"><a href="#Typewriter.tick-43"><span class="linenos">43</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="Typewriter.tick-44"><a href="#Typewriter.tick-44"><span class="linenos">44</span></a>        <span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="Typewriter.tick-45"><a href="#Typewriter.tick-45"><span class="linenos">45</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">timer</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
+</span><span id="Typewriter.tick-46"><a href="#Typewriter.tick-46"><span class="linenos">46</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer</span><span class="p">)</span>
+</span><span id="Typewriter.tick-47"><a href="#Typewriter.tick-47"><span class="linenos">47</span></a>
+</span><span id="Typewriter.tick-48"><a href="#Typewriter.tick-48"><span class="linenos">48</span></a>        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+</span> <span class="n">timer</span><span class="o">.</span><span class="n">elapsed</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span>
+</span><span id="Typewriter.tick-49"><a href="#Typewriter.tick-49"><span class="linenos">49</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer</span><span class="o">.</span><span class="n">modulo</span><span class="p">)</span>
 </span></pre></div>
 
 
     
 
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="../core/sizeable.html#Sizeable">nextrpg.core.sizeable.Sizeable</a></dt>
+                                <dd id="Typewriter.width" class="variable"><a href="../core/sizeable.html#Sizeable.width">width</a></dd>
+                <dd id="Typewriter.height" class="variable"><a href="../core/sizeable.html#Sizeable.height">height</a></dd>
+                <dd id="Typewriter.top" class="variable"><a href="../core/sizeable.html#Sizeable.top">top</a></dd>
+                <dd id="Typewriter.left" class="variable"><a href="../core/sizeable.html#Sizeable.left">left</a></dd>
+                <dd id="Typewriter.bottom" class="variable"><a href="../core/sizeable.html#Sizeable.bottom">bottom</a></dd>
+                <dd id="Typewriter.right" class="variable"><a href="../core/sizeable.html#Sizeable.right">right</a></dd>
+                <dd id="Typewriter.top_right" class="variable"><a href="../core/sizeable.html#Sizeable.top_right">top_right</a></dd>
+                <dd id="Typewriter.bottom_left" class="variable"><a href="../core/sizeable.html#Sizeable.bottom_left">bottom_left</a></dd>
+                <dd id="Typewriter.bottom_right" class="variable"><a href="../core/sizeable.html#Sizeable.bottom_right">bottom_right</a></dd>
+                <dd id="Typewriter.top_center" class="variable"><a href="../core/sizeable.html#Sizeable.top_center">top_center</a></dd>
+                <dd id="Typewriter.bottom_center" class="variable"><a href="../core/sizeable.html#Sizeable.bottom_center">bottom_center</a></dd>
+                <dd id="Typewriter.center_left" class="variable"><a href="../core/sizeable.html#Sizeable.center_left">center_left</a></dd>
+                <dd id="Typewriter.center_right" class="variable"><a href="../core/sizeable.html#Sizeable.center_right">center_right</a></dd>
+                <dd id="Typewriter.center" class="variable"><a href="../core/sizeable.html#Sizeable.center">center</a></dd>
+
+            </div>
+                                </dl>
                             </div>
                 </section>
     </main>

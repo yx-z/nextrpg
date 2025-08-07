@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self
@@ -8,9 +10,10 @@ from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
+from nextrpg import Height, WidthAndHeightScaling
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_instance_init import not_constructor_below
-from nextrpg.core.dimension import Pixel, Size
+from nextrpg.core.dimension import Size
 from nextrpg.core.logger import ComponentAndMessage, Logger, pop_messages
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import Draw, DrawOnScreen
@@ -86,30 +89,28 @@ class Window:
             )
 
     def _scale(self, draws: tuple[DrawOnScreen, ...]) -> DrawOnScreen:
-        screen = Surface(self.initial_config.size)
+        screen = Surface(self.initial_config.size.tuple)
         screen.blits(d.pygame for d in draws)
-        scaled_draw = Draw(
-            smoothscale(
-                screen,
-                self.initial_config.size.all_dimension_scale(self._scaling),
-            )
-        )
+        scaled = (self.initial_config.size * self._scaling).tuple
+        scaled_draw = Draw(smoothscale(screen, scaled))
         return DrawOnScreen(self._center_shift, scaled_draw)
 
     @cached_property
-    def _scaling(self) -> float:
+    def _scaling(self) -> WidthAndHeightScaling:
         current_width, current_height = self.current_config.size
         initial_width, initial_height = self.initial_config.size
-        width_ratio = current_width / initial_width
-        height_ratio = current_height / initial_height
-        return min(width_ratio, height_ratio)
+        width_ratio = current_width / initial_width.value
+        height_ratio = current_height / initial_height.value
+        return WidthAndHeightScaling(min(width_ratio, height_ratio))
 
     @cached_property
     def _center_shift(self) -> Coordinate:
         current_width, current_height = self.current_config.size
         initial_width, initial_height = self.initial_config.size
-        width_shift = (current_width - self._scaling * initial_width) / 2
-        height_shift = (current_height - self._scaling * initial_height) / 2
+        width_shift = (current_width - self._scaling.value * initial_width) / 2
+        height_shift = (
+            current_height - self._scaling.value * initial_height
+        ) / 2
         return Coordinate(width_shift, height_shift)
 
     @cached_property
@@ -139,7 +140,9 @@ class Window:
             or self.last_config.double_buffer
             != self.current_config.double_buffer
         ):
-            screen = set_mode(self.current_config.size, self._current_gui_flag)
+            screen = set_mode(
+                self.current_config.size.tuple, self._current_gui_flag
+            )
             object.__setattr__(self, "_screen", screen)
 
     @cached_property
@@ -165,7 +168,7 @@ def _log_text(
     msgs: tuple[ComponentAndMessage, ...],
 ) -> tuple[TextOnScreen, ...]:
     text_config = config().text
-    spacing = text_config.line_spacing
+    spacing = text_config.line_spacing.value
     max_width = max(text_config.font.text_size(m.component).width for m in msgs)
     msg_spacing = max_width + 2 * spacing
     return tuple(
@@ -178,7 +181,7 @@ def _log_text(
     )
 
 
-def _line_height(line_index: int) -> Pixel:
+def _line_height(line_index: int) -> Height:
     spacing = config().text.line_spacing
     return spacing + line_index * (spacing + config().text.font.text_height)
 

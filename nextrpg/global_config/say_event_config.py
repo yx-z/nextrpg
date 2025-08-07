@@ -2,7 +2,7 @@ from dataclasses import dataclass, replace
 
 from nextrpg.core.color import BLACK, Color
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Pixel, Size
+from nextrpg.core.dimension import Pixel, Size, Width
 from nextrpg.core.time import Millisecond
 from nextrpg.global_config.text_config import TextConfig
 
@@ -10,8 +10,8 @@ from nextrpg.global_config.text_config import TextConfig
 @dataclass(frozen=True)
 class AddOnConfig:
     add_on_shift: Size = Size(0, 100)
-    tail_base1_shift: Pixel = 10
-    tail_base2_shift: Pixel = 30
+    tail_base1_shift: Width = Width(10)
+    tail_base2_shift: Width = Width(30)
     tail_tip_shift: Size = Size(0, 0)
 
 

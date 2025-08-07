@@ -2,12 +2,11 @@ from collections.abc import Callable
 from functools import wraps
 from types import FunctionType
 
-from nextrpg.core.coordinate import Coordinate, ORIGIN
-from nextrpg.core.dimension import Size
+from nextrpg.core.coordinate import ORIGIN
 from nextrpg.draw.draw import RectangleOnScreen
 from nextrpg.global_config.cutscene_config import CutsceneConfig
 from nextrpg.global_config.global_config import config
-from nextrpg.gui.area import gui_size
+from nextrpg.gui.area import gui_height, gui_size
 from nextrpg.scene.rpg_event.eventful_scene import EventGenerator
 from nextrpg.scene.rpg_event.fade_in_scene import fade_in
 from nextrpg.scene.rpg_event.fade_out_scene import fade_out
@@ -28,12 +27,9 @@ def _cutscene[R, **P](
     cfg: CutsceneConfig, fun: Callable[P, R]
 ) -> Callable[P, EventGenerator]:
     def decorated(*args: P.args, **kwargs: P.kwargs) -> EventGenerator:
-        gui_width, gui_height = gui_size()
-        rect_height = gui_height * cfg.screen_height_percentage
-        size = Size(gui_width, rect_height)
+        size = gui_size() * cfg.screen_height_scaling
         top_border = RectangleOnScreen(ORIGIN, size)
-        bottom_coord = Coordinate(0, gui_height - rect_height)
-        bottom_border = RectangleOnScreen(bottom_coord, size)
+        bottom_border = top_border + gui_height() - size.height
         borders = tuple(
             r.fill(cfg.background) for r in (top_border, bottom_border)
         )

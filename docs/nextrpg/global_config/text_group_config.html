@@ -68,13 +68,13 @@
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pixel</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Height</span><span class="p">,</span> <span class="n">Width</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">4</span></a>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">5</span></a>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">6</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TextGroupConfig</span><span class="p">:</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">8</span></a>    <span class="n">line_spacing</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">8</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">9</span></a>    <span class="n">margin</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">8</span></a>    <span class="n">line_spacing</span><span class="p">:</span> <span class="n">Height</span> <span class="o">=</span> <span class="mi">8</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">9</span></a>    <span class="n">margin</span><span class="p">:</span> <span class="n">Width</span> <span class="o">=</span> <span class="mi">2</span>
 </span></pre></div>
 
 
@@ -93,8 +93,8 @@
     <a class="headerlink" href="#TextGroupConfig"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="TextGroupConfig-7"><a href="#TextGroupConfig-7"><span class="linenos"> 7</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="TextGroupConfig-8"><a href="#TextGroupConfig-8"><span class="linenos"> 8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TextGroupConfig</span><span class="p">:</span>
-</span><span id="TextGroupConfig-9"><a href="#TextGroupConfig-9"><span class="linenos"> 9</span></a>    <span class="n">line_spacing</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">8</span>
-</span><span id="TextGroupConfig-10"><a href="#TextGroupConfig-10"><span class="linenos">10</span></a>    <span class="n">margin</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="TextGroupConfig-9"><a href="#TextGroupConfig-9"><span class="linenos"> 9</span></a>    <span class="n">line_spacing</span><span class="p">:</span> <span class="n">Height</span> <span class="o">=</span> <span class="mi">8</span>
+</span><span id="TextGroupConfig-10"><a href="#TextGroupConfig-10"><span class="linenos">10</span></a>    <span class="n">margin</span><span class="p">:</span> <span class="n">Width</span> <span class="o">=</span> <span class="mi">2</span>
 </span></pre></div>
 
 
@@ -103,7 +103,7 @@
                             <div id="TextGroupConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">TextGroupConfig</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">line_spacing</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">8</span>, </span><span class="param"><span class="n">margin</span><span class="p">:</span> <span class="n">Pixel</span> <span class="o">=</span> <span class="mi">2</span></span>)</span>
+        <span class="name">TextGroupConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">line_spacing</span><span class="p">:</span> <span class="n"><a href="../core/dimension.html#Height">nextrpg.core.dimension.Height</a></span> <span class="o">=</span> <span class="mi">8</span>,</span><span class="param">	<span class="n">margin</span><span class="p">:</span> <span class="n"><a href="../core/dimension.html#Width">nextrpg.core.dimension.Width</a></span> <span class="o">=</span> <span class="mi">2</span></span>)</span>
 
         
     </div>
@@ -114,7 +114,7 @@
                             </div>
                             <div id="TextGroupConfig.line_spacing" class="classattr">
                                 <div class="attr variable">
-            <span class="name">line_spacing</span><span class="annotation">: <a href="../core/dimension.html#Pixel">nextrpg.core.dimension.Pixel</a></span>        =
+            <span class="name">line_spacing</span><span class="annotation">: <a href="../core/dimension.html#Height">nextrpg.core.dimension.Height</a></span>        =
 <span class="default_value">8</span>
 
         
@@ -126,7 +126,7 @@
                             </div>
                             <div id="TextGroupConfig.margin" class="classattr">
                                 <div class="attr variable">
-            <span class="name">margin</span><span class="annotation">: <a href="../core/dimension.html#Pixel">nextrpg.core.dimension.Pixel</a></span>        =
+            <span class="name">margin</span><span class="annotation">: <a href="../core/dimension.html#Width">nextrpg.core.dimension.Width</a></span>        =
 <span class="default_value">2</span>
 
         

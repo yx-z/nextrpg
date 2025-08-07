@@ -1,7 +1,5 @@
 from dataclasses import KW_ONLY, dataclass, field, replace
 from enum import IntEnum
-from functools import cached_property
-from pathlib import Path
 from typing import Self, override
 
 from nextrpg.character.character_draw import CharacterDraw
@@ -11,7 +9,7 @@ from nextrpg.core.dataclass_with_instance_init import (
     instance_init,
     not_constructor_below,
 )
-from nextrpg.core.dimension import Pixel, Size
+from nextrpg.core.dimension import Size
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.cyclic_frames import CyclicFrames
@@ -126,9 +124,10 @@ class RpgMakerCharacterDraw(CharacterDraw):
     ) -> tuple[Draw, ...]:
         num_frames = len(self.sprite_sheet.style)
         width = draw.width / num_frames
-        height = draw.height / 4
+        height = draw.height / len(_DIR_TO_ROW)
+        size = Size(width, height)
         return tuple(
-            draw.crop(Coordinate(width * i, height * row), Size(width, height))
+            draw.crop(Coordinate(width * i, height * row), size)
             for i in range(num_frames)
         )
 

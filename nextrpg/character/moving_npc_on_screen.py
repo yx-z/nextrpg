@@ -1,7 +1,6 @@
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
-from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec
 from nextrpg.core.coordinate import Coordinate

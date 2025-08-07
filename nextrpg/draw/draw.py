@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass, replace
+from dataclasses import KW_ONLY, dataclass
 from functools import cached_property
 from os import PathLike
-from typing import Self, override
+from typing import override
 
 from pygame import SRCALPHA, Mask, Rect, Surface
 from pygame.draw import lines, polygon, rect
@@ -14,9 +14,21 @@ from pygame.transform import smoothscale
 
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.color import BLACK, Alpha, Color
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Pixel, Size
+from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.dataclass_with_instance_init import (
+    dataclass_with_instance_init,
+    instance_init,
+    not_constructor_below,
+)
+from nextrpg.core.dimension import (
+    Height,
+    Pixel,
+    Size,
+    Width,
+    WidthAndHeightScaling,
+)
 from nextrpg.core.logger import Logger
+from nextrpg.core.sizeable import Sizeable
 from nextrpg.global_config.global_config import config
 
 logger = Logger()
@@ -35,35 +47,25 @@ class Trim:
     lambda resource, *_: None if isinstance(resource, Surface) else resource,
 )
 @dataclass(frozen=True)
-class Draw:
+class Draw(Sizeable):
     resource: str | PathLike | Surface
     color_key: Color | Coordinate | None = None
 
     @property
-    def width(self) -> Pixel:
-        return self._surface.width
-
-    @property
-    def height(self) -> Pixel:
-        return self._surface.height
-
-    @property
     def size(self) -> Size:
-        return Size(self.width, self.height)
+        return Size(self._surface.width, self._surface.height)
 
     @property
     def pygame(self) -> Surface:
         return self._debug_surface or self._surface
 
     def crop(self, top_left: Coordinate, size: Size) -> Draw:
-        left, top = top_left
-        width, height = size
-        return Draw(self.pygame.subsurface((left, top, width, height)))
+        return Draw(self.pygame.subsurface((top_left.tuple, size.tuple)))
 
     def trim(self, trim: Trim) -> Draw:
         coord = Coordinate(trim.left, trim.top)
-        width = self.width - coord.left - trim.right
-        height = self.height - coord.top - trim.bottom
+        width = self.width - trim.left - trim.right
+        height = self.height - trim.top - trim.bottom
         size = Size(width, height)
         return self.crop(coord, size)
 
@@ -72,19 +74,28 @@ class Draw:
         surf.set_alpha(alpha)
         return Draw(surf)
 
-    def draw_on_screen(self, coord: Coordinate) -> DrawOnScreen:
-        return DrawOnScreen(coord, self)
+    def draw_on_screen(self, coordinate: Coordinate) -> DrawOnScreen:
+        return DrawOnScreen(coordinate, self)
 
-    def __mul__(self, scale: float) -> Draw:
-        surf = smoothscale(self._surface, self.size.all_dimension_scale(scale))
+    def __mul__(self, scaling: int | float | WidthAndHeightScaling) -> Draw:
+        size = self.size * WidthAndHeightScaling(scaling)
+        surf = smoothscale(self._surface, size.tuple)
         return Draw(surf)
 
     @cached_property
-    def _visible_rectangle(self) -> RectangleOnScreen:
+    def visible_rectangle(self) -> RectangleOnScreen:
         rectangle = self._surface.get_bounding_rect()
         coord = Coordinate(rectangle.x, rectangle.y)
         size = Size(rectangle.width, rectangle.height)
         return RectangleOnScreen(coord, size)
+
+    @property
+    def rectangle(self) -> RectangleOnScreen:
+        return RectangleOnScreen(ORIGIN, self.size)
+
+    @property
+    def top_left(self) -> Coordinate:
+        return ORIGIN
 
     @cached_property
     def _debug_surface(self) -> Surface | None:
@@ -93,7 +104,7 @@ class Draw:
         ):
             return None
 
-        surface = Surface(self.size, SRCALPHA)
+        surface = Surface(self.size.tuple, SRCALPHA)
         surface.fill(color)
         surface.blit(self._surface, (0, 0))
         return surface
@@ -108,7 +119,7 @@ class Draw:
 
         if self.color_key:
             if isinstance(self.color_key, Coordinate):
-                color = res.get_at(self.color_key)
+                color = res.get_at(self.color_key.tuple)
                 res.set_colorkey(color)
             else:
                 res.set_colorkey(self.color_key)
@@ -116,7 +127,7 @@ class Draw:
 
 
 @dataclass(frozen=True)
-class DrawOnScreen:
+class DrawOnScreen(Sizeable):
     top_left: Coordinate
     draw: Draw
 
@@ -126,22 +137,30 @@ class DrawOnScreen:
 
     @cached_property
     def visible_rectangle_on_screen(self) -> RectangleOnScreen:
-        coord = self.draw._visible_rectangle.top_left
-        size = self.draw._visible_rectangle.size
-        return RectangleOnScreen(self.top_left + coord, size)
+        shift = self.draw.visible_rectangle.top_left
+        size = self.draw.visible_rectangle.size
+        return RectangleOnScreen(self.top_left + shift, size)
 
     @property
-    def pygame(self) -> tuple[Surface, Coordinate]:
-        return self.draw.pygame, self.top_left
-
-    def __add__(self, coord: Coordinate) -> DrawOnScreen:
-        return DrawOnScreen(self.top_left + coord, self.draw)
-
-    def __sub__(self, coord: Coordinate) -> DrawOnScreen:
-        return self + -coord
+    def pygame(self) -> tuple[Surface, tuple[Pixel, Pixel]]:
+        return self.draw.pygame, self.top_left.tuple
 
     def set_alpha(self, alpha: Alpha) -> DrawOnScreen:
         return DrawOnScreen(self.top_left, self.draw.set_alpha(alpha))
+
+    @property
+    def size(self) -> Size:
+        return self.draw.size
+
+    def __add__(
+        self, other: Coordinate | Size | Width | Height
+    ) -> DrawOnScreen:
+        return DrawOnScreen(self.top_left + other, self.draw)
+
+    def __sub__(
+        self, other: Coordinate | Size | Width | Height
+    ) -> DrawOnScreen:
+        return self + -other
 
 
 class PolygonDraw:
@@ -150,11 +169,15 @@ class PolygonDraw:
         _set_resource_and_color_key(self, surf)
 
 
-@dataclass(frozen=True)
-class PolygonOnScreen:
-
+@dataclass_with_instance_init(frozen=True)
+class PolygonOnScreen(Sizeable):
     points: tuple[Coordinate, ...]
     closed: bool = True
+    _: KW_ONLY = not_constructor_below()
+    top_left: Coordinate = instance_init(
+        lambda self: self.bounding_rectangle.top_left
+    )
+    size: Size = instance_init(lambda self: self.bounding_rectangle.size)
 
     @cached_property
     def length(self) -> Pixel:
@@ -169,10 +192,6 @@ class PolygonOnScreen:
     def bounding_rectangle(self) -> RectangleOnScreen:
         return _bounding_rectangle(self.points)
 
-    @cached_property
-    def _mask(self) -> Mask:
-        return from_surface(self.fill(BLACK).draw.pygame)
-
     def fill(self, color: Color) -> DrawOnScreen:
         return self._draw(_fill_polygon(color))
 
@@ -180,12 +199,13 @@ class PolygonOnScreen:
         self, color: Color, stroke_width: Pixel | None = None
     ) -> DrawOnScreen:
         if stroke_width is None:
-            stroke = config().draw_on_screen.stroke_width
+            stroke = config().draw_on_screen.stroke_thickness
         else:
             stroke = stroke_width
 
         def _line(surface: Surface, points: tuple[Coordinate, ...]) -> None:
-            lines(surface, color, self.closed, points, stroke)
+            point_tuples = tuple(p.tuple for p in points)
+            lines(surface, color, self.closed, point_tuples, stroke)
 
         return self._draw(_line)
 
@@ -195,14 +215,29 @@ class PolygonOnScreen:
         offset = (
             self.bounding_rectangle.top_left - poly.bounding_rectangle.top_left
         )
-        return bool(self._mask.overlap(poly._mask, offset))
+        return bool(self._mask.overlap(poly._mask, offset.tuple))
 
     def __contains__(self, coordinate: Coordinate) -> bool:
-        x, y = coordinate - self.bounding_rectangle.top_left
+        x, y = (coordinate - self.bounding_rectangle.top_left).tuple
         width, height = self._mask.get_size()
         if 0 <= x < width and 0 <= y < height:
             return bool(self._mask.get_at((x, y)))
         return False
+
+    def __add__(
+        self, other: Coordinate | Size | Width | Height
+    ) -> PolygonOnScreen:
+        points = tuple(p + other for p in self.points)
+        return PolygonOnScreen(points, self.closed)
+
+    def __sub__(
+        self, other: Coordinate | Size | Width | Height
+    ) -> PolygonOnScreen:
+        return self + -other
+
+    @cached_property
+    def _mask(self) -> Mask:
+        return from_surface(self.fill(BLACK).draw.pygame)
 
     def _draw(
         self, method: Callable[[Surface, tuple[Coordinate, ...]], None]
@@ -210,78 +245,21 @@ class PolygonOnScreen:
         surf = _draw_polygon(self.points, method, self.bounding_rectangle)
         return DrawOnScreen(self.bounding_rectangle.top_left, Draw(surf))
 
-    def __add__(self, coordinate: Coordinate) -> Self:
-        points = tuple(t + coordinate for t in self.points)
-        return replace(self, points=points)
-
-    def __sub__(self, coordinate: Coordinate) -> Self:
-        return self + -coordinate
-
 
 class RectangleDraw(Draw):
     def __init__(
         self, size: Size, color: Color, border_radius: Pixel | None = None
     ) -> None:
-        surface = Surface(size, SRCALPHA)
-        rectangle = Rect(Coordinate(0, 0), size)
+        surface = Surface(size.tuple, SRCALPHA)
+        rectangle = Rect(ORIGIN.tuple, size.tuple)
         rect(surface, color, rectangle, border_radius=border_radius or -1)
         _set_resource_and_color_key(self, surface)
 
 
 class RectangleOnScreen(PolygonOnScreen):
-
     def __init__(self, top_left: Coordinate, size: Size) -> None:
-        self.top_left = top_left
-        self.size = size
-
-    @property
-    def left(self) -> Pixel:
-        return self.top_left.left
-
-    @property
-    def right(self) -> Pixel:
-        return self.left + self.size.width
-
-    @property
-    def top(self) -> Pixel:
-        return self.top_left.top
-
-    @property
-    def bottom(self) -> Pixel:
-        return self.top + self.size.height
-
-    @property
-    def top_right(self) -> Coordinate:
-        return Coordinate(self.right, self.top)
-
-    @property
-    def bottom_left(self) -> Coordinate:
-        return Coordinate(self.left, self.bottom)
-
-    @property
-    def bottom_right(self) -> Coordinate:
-        return Coordinate(self.right, self.bottom)
-
-    @property
-    def top_center(self) -> Coordinate:
-        return Coordinate(self.left + self.size.width / 2, self.top)
-
-    @property
-    def bottom_center(self) -> Coordinate:
-        return Coordinate(self.left + self.size.width / 2, self.bottom)
-
-    @property
-    def center_left(self) -> Coordinate:
-        return Coordinate(self.left, self.top + self.size.height / 2)
-
-    @property
-    def center_right(self) -> Coordinate:
-        return Coordinate(self.right, self.top + self.size.height / 2)
-
-    @property
-    def center(self) -> Coordinate:
-        width, height = self.size
-        return Coordinate(self.left + width / 2, self.top + height / 2)
+        object.__setattr__(self, "top_left", top_left)
+        object.__setattr__(self, "size", size)
 
     @property
     def points(self) -> tuple[Coordinate, ...]:
@@ -311,9 +289,15 @@ class RectangleOnScreen(PolygonOnScreen):
             and self.top < coordinate.top < self.bottom
         )
 
-    @override
-    def __add__(self, coordinate: Coordinate) -> RectangleOnScreen:
-        return RectangleOnScreen(self.top_left + coordinate, self.size)
+    def __add__(
+        self, other: Coordinate | Size | Width | Height
+    ) -> RectangleOnScreen:
+        return RectangleOnScreen(self.top_left + other, self.size)
+
+    def __sub__(
+        self, other: Coordinate | Size | Width | Height
+    ) -> RectangleOnScreen:
+        return RectangleOnScreen(self.top_left - other, self.size)
 
     def fill(
         self, color: Color, border_radius: Pixel | None = None
@@ -321,6 +305,27 @@ class RectangleOnScreen(PolygonOnScreen):
         return DrawOnScreen(
             self.top_left, RectangleDraw(self.size, color, border_radius)
         )
+
+
+@dataclass(frozen=True)
+class SizedDrawOnScreens(Sizeable):
+    draw_on_screens: tuple[DrawOnScreen, ...]
+
+    @cached_property
+    def top_left(self) -> Coordinate:
+        min_left = min(d.top_left.left for d in self.draw_on_screens)
+        min_top = min(d.top_left.top for d in self.draw_on_screens)
+        return Coordinate(min_left, min_top)
+
+    @cached_property
+    def size(self) -> Size:
+        min_left = min(d.top_left.left for d in self.draw_on_screens)
+        min_top = min(d.top_left.top for d in self.draw_on_screens)
+        max_left = max(d.bottom_right.left for d in self.draw_on_screens)
+        max_top = max(d.bottom_right.top for d in self.draw_on_screens)
+        width = max_left - min_left
+        height = max_top - min_top
+        return Size(width, height)
 
 
 def _bounding_rectangle(points: tuple[Coordinate, ...]) -> RectangleOnScreen:
@@ -339,7 +344,7 @@ def _draw_polygon(
     bounding_rectangle: RectangleOnScreen | None = None,
 ) -> Surface:
     bounding_rectangle = bounding_rectangle or _bounding_rectangle(points)
-    surf = Surface(bounding_rectangle.size, SRCALPHA)
+    surf = Surface(bounding_rectangle.size.tuple, SRCALPHA)
     negated = tuple(p - bounding_rectangle.top_left for p in points)
     method(surf, negated)
     return surf
@@ -354,6 +359,7 @@ def _fill_polygon(
     color: Color,
 ) -> Callable[[Surface, tuple[Coordinate, ...]], None]:
     def fill(surface: Surface, points: tuple[Coordinate, ...]) -> None:
-        polygon(surface, color, points)
+        point_tuples = tuple(p.tuple for p in points)
+        polygon(surface, color, point_tuples)
 
     return fill

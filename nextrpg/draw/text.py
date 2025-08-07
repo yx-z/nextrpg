@@ -4,8 +4,9 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import Self
 
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Pixel, Size
+from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.dimension import Size, Width
+from nextrpg.core.sizeable import Sizeable
 from nextrpg.draw.draw import Draw
 from nextrpg.draw.group import Group, RelativeDraw
 from nextrpg.global_config.global_config import config
@@ -14,16 +15,20 @@ from nextrpg.global_config.text_group_config import TextGroupConfig
 
 
 @dataclass(frozen=True)
-class Text:
+class Text(Sizeable):
     message: str
     config: TextConfig = field(default_factory=lambda: config().text)
 
     def __getitem__(self, s: slice) -> Self:
         return replace(self, message=self.message[s])
 
-    @cached_property
+    @property
     def size(self) -> Size:
         return self.group.size
+
+    @property
+    def top_left(self) -> Coordinate:
+        return ORIGIN
 
     @cached_property
     def group(self) -> Group:
@@ -81,20 +86,21 @@ class Text:
                 line_buffer = []
         return tuple(lines)
 
-    def _line_shift(self, index: int) -> Coordinate:
+    def _line_shift(self, index: int) -> Size:
         height = self.config.font.text_height + self.config.line_spacing
         shift = height * index
-        return Coordinate(0, shift)
+        return Size(0, shift)
 
 
 @dataclass(frozen=True)
-class TextGroup:
+class TextGroup(Sizeable):
     texts: tuple[Text, ...]
     config: TextGroupConfig = field(default_factory=lambda: config().text_group)
 
     def __getitem__(self, item: slice) -> Self:
         if item.step not in (None, 1):
             raise ValueError("TextGroup slicing only supports step=1")
+
         texts: list[Text] = []
         start = item.start or 0
         stop = item.stop
@@ -120,7 +126,11 @@ class TextGroup:
             txt = other
         return replace(self, texts=self.texts + (txt,))
 
-    @cached_property
+    @property
+    def top_left(self) -> Coordinate:
+        return ORIGIN
+
+    @property
     def size(self) -> Size:
         return self.group.size
 
@@ -139,16 +149,16 @@ class TextGroup:
             for word in line:
                 word_width, word_height = word.size
                 height_diff = line_height - word_height
-                shift = Coordinate(curr_width, curr_height + height_diff)
+                shift = Size(curr_width, curr_height + height_diff)
                 res.append(RelativeDraw(word.group, shift))
                 curr_width += word_width + self.config.margin
             curr_height += line_height + self.config.line_spacing
         return Group(tuple(res))
 
-    def _width(self, line: list[Text]) -> Pixel:
+    def _width(self, line: list[Text]) -> Width:
         widths = sum(t.size.width for t in line)
         margins = (len(line) - 1) * self.config.margin
-        return widths + margins
+        return Width(widths + margins)
 
     @cached_property
     def _no_wrap(self) -> tuple[Text, ...]:

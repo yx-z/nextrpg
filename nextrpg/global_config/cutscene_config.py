@@ -1,13 +1,14 @@
 from dataclasses import dataclass
 
 from nextrpg.core.color import Color
+from nextrpg.core.dimension import HeightScaling
 from nextrpg.core.time import Millisecond
 
 
 @dataclass(frozen=True)
 class CutsceneConfig:
     background_override: Color | None = None
-    screen_height_percentage: float = 0.1
+    screen_height_scaling: HeightScaling = HeightScaling(0.1)
     wait: bool = True
     duration_override: Millisecond | None = None
 

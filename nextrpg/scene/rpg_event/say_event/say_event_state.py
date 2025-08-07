@@ -27,7 +27,7 @@ class State(RpgEventScene, ABC):
     object_name: str | None
     config: SayEventConfig
     _: KW_ONLY = not_constructor_below()
-    initial_coord: Coordinate | None = instance_init(
+    initial_coordinate: Coordinate | None = instance_init(
         lambda self: (
             self.scene.get_character(n).coordinate
             if (n := self.object_name)
@@ -40,7 +40,7 @@ class State(RpgEventScene, ABC):
     def add_ons(self) -> tuple[DrawOnScreen, ...]:
         if self.object_name:
             character = self.scene.get_character(self.object_name)
-            diff = character.coordinate - self.initial_coord
+            diff = character.coordinate - self.initial_coordinate
             return tuple(a + diff for a in self._add_ons)
         return self._add_ons
 
@@ -73,7 +73,7 @@ class FadeInState(State):
             generator=self.generator,
             scene=ticked.scene,
             object_name=self.object_name,
-            initial_coord=self.initial_coord,
+            initial_coordinate=self.initial_coordinate,
             background=self.background,
             text_on_screen=self.text_on_screen,
             config=self.config,
@@ -122,7 +122,7 @@ class TypingState(State):
             generator=self.generator,
             scene=self.scene,
             object_name=self.object_name,
-            initial_coord=self.initial_coord,
+            initial_coordinate=self.initial_coordinate,
             draws=self.background + self.text_on_screen.draw_on_screens,
             config=self.config,
         )

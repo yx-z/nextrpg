@@ -2,7 +2,7 @@ from dataclasses import dataclass, replace
 from typing import Self
 
 from nextrpg.core.color import WHITE, Color
-from nextrpg.core.dimension import Pixel
+from nextrpg.core.dimension import Height, Pixel, Width
 from nextrpg.draw.font import Font
 
 
@@ -10,14 +10,14 @@ from nextrpg.draw.font import Font
 class TextConfig:
     font: Font = Font(28)
     color: Color = WHITE
-    line_spacing: Pixel = 8
+    line_spacing: Height = Height(8)
     anti_alias: bool = True
-    wrap: Pixel | None = None
+    wrap: Width | None = None
 
-    def line_spaced(self, line_spacing: Pixel) -> Self:
+    def line_spaced(self, line_spacing: Height) -> Self:
         return replace(self, line_spacing=line_spacing)
 
-    def wrapped(self, wrap: Pixel) -> Self:
+    def wrapped(self, wrap: Width) -> Self:
         return replace(self, wrap=wrap)
 
     def sized(self, size: Pixel) -> Self:

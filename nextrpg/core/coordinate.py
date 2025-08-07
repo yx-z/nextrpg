@@ -1,17 +1,38 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from math import atan2, degrees, hypot, sqrt
-from typing import NamedTuple, Self
+from typing import Iterator, Self
 
-from nextrpg.core.dimension import Pixel, Size
+from nextrpg.core.dimension import Height, Pixel, Size, Width
 from nextrpg.core.direction import Direction, DirectionalOffset
 from nextrpg.core.time import Millisecond
 
 
-class Coordinate(NamedTuple):
-    left: Pixel
-    top: Pixel
+@dataclass(frozen=True)
+class Coordinate:
+    input_left: Pixel | Width
+    input_top: Pixel | Height
+
+    @property
+    def left(self) -> Width:
+        if isinstance(self.input_left, Width):
+            return self.input_left
+        return Width(self.input_left)
+
+    @property
+    def top(self) -> Height:
+        if isinstance(self.input_top, Height):
+            return self.input_top
+        return Height(self.input_top)
+
+    @property
+    def tuple(self) -> tuple[Pixel, Pixel]:
+        return self.left.value, self.top.value
+
+    def __iter__(self) -> Iterator[Width | Height]:
+        return iter((self.left, self.top))
 
     @property
     def negate_left(self) -> Coordinate:
@@ -25,24 +46,32 @@ class Coordinate(NamedTuple):
         return Coordinate(-self.left, -self.top)
 
     def __add__(
-        self, offset: DirectionalOffset | Size | Coordinate
+        self, arg: Coordinate | DirectionalOffset | Size | Width | Height
     ) -> Coordinate:
-        if isinstance(offset, (Coordinate, Size)):
-            x, y = offset
-            return Coordinate(self.left + x, self.top + y)
+        if isinstance(arg, Width):
+            return Coordinate(self.left + arg, self.top)
 
-        match offset.direction:
+        if isinstance(arg, Height):
+            return Coordinate(self.left, self.top + arg)
+
+        if isinstance(arg, Size):
+            return Coordinate(self.left + arg.width, self.top + arg.height)
+
+        if isinstance(arg, Coordinate):
+            return Coordinate(self.left + arg.left, self.top + arg.top)
+
+        match arg.direction:
             case Direction.UP:
-                return Coordinate(self.left, self.top - offset.offset)
+                return Coordinate(self.left, self.top - arg.offset)
             case Direction.DOWN:
-                return Coordinate(self.left, self.top + offset.offset)
+                return Coordinate(self.left, self.top + arg.offset)
             case Direction.LEFT:
-                return Coordinate(self.left - offset.offset, self.top)
+                return Coordinate(self.left - arg.offset, self.top)
             case Direction.RIGHT:
-                return Coordinate(self.left + offset.offset, self.top)
+                return Coordinate(self.left + arg.offset, self.top)
 
-        diag = offset.offset / sqrt(2)
-        match offset.direction:
+        diag = arg.offset / sqrt(2)
+        match arg.direction:
             case Direction.UP_LEFT:
                 return Coordinate(self.left - diag, self.top - diag)
             case Direction.UP_RIGHT:
@@ -53,14 +82,14 @@ class Coordinate(NamedTuple):
                 return Coordinate(self.left + diag, self.top + diag)
 
     def __sub__(
-        self, offset: DirectionalOffset | Size | Coordinate
+        self, arg: DirectionalOffset | Size | Width | Height | Coordinate
     ) -> Coordinate:
-        return self + -offset
+        return self + -arg
 
     def relative_to(self, other: Coordinate) -> Direction:
         dx = self.left - other.left
         dy = self.top - other.top
-        angle = (degrees(atan2(-dy, dx)) + 360) % 360
+        angle = (degrees(atan2(-dy.value, dx.value)) + 360) % 360
         closest = min(
             _ANGLE_TO_DIRECTION.items(),
             key=lambda a: _angle_difference(angle, a[0]),
@@ -68,12 +97,12 @@ class Coordinate(NamedTuple):
         return closest[1]
 
     def __str__(self) -> str:
-        return f"({self.left:.0f}, {self.top:.0f})"
+        return f"({self.left.value:.0f}, {self.top.value:.0f})"
 
     def distance(self, other: Coordinate) -> Pixel:
         dx = self.left - other.left
         dy = self.top - other.top
-        return hypot(dx, dy)
+        return hypot(dx.value, dy.value)
 
 
 ORIGIN = Coordinate(0, 0)

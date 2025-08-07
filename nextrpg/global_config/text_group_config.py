@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from nextrpg.core.dimension import Pixel
+from nextrpg.core.dimension import Height, Width
 
 
 @dataclass(frozen=True)
 class TextGroupConfig:
-    line_spacing: Pixel = 8
-    margin: Pixel = 2
+    line_spacing: Height = 8
+    margin: Width = 2

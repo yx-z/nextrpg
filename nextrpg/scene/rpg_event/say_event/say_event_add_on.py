@@ -6,7 +6,7 @@ from typing import Literal, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import ORIGIN, Coordinate
-from nextrpg.core.dimension import Size
+from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.draw.draw import (
     Draw,
     DrawOnScreen,
@@ -46,8 +46,7 @@ class AddOn:
         return self._center_to_top_left(self.config.coordinate)
 
     def _center_to_top_left(self, center: Coordinate) -> Coordinate:
-        size = self._background.draw.size.all_dimension_scale(0.5)
-        return center - size
+        return center - self._background.draw.size / WidthAndHeightScaling(2)
 
     @cached_property
     def _group(self) -> Group:
@@ -186,7 +185,7 @@ class CharacterAddOn(AddOn):
         center = character_left - background_shift_width
         left = center - background_width / 2
         padding = self.config.padding
-        if left < padding:
+        if left.value < padding:
             left = padding
         elif center + background_width / 2 > gui_width() - padding:
             left = gui_width() - background_width - padding

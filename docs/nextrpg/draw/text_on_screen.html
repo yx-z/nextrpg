@@ -43,6 +43,9 @@
                                 <a class="variable" href="#TextOnScreen.text">text</a>
                         </li>
                         <li>
+                                <a class="variable" href="#TextOnScreen.size">size</a>
+                        </li>
+                        <li>
                                 <a class="variable" href="#TextOnScreen.draw_on_screens">draw_on_screens</a>
                         </li>
                 </ul>
@@ -73,18 +76,24 @@
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">Text</span><span class="p">,</span> <span class="n">TextGroup</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TextOnScreen</span><span class="p">:</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">text</span><span class="p">:</span> <span class="n">Text</span> <span class="o">|</span> <span class="n">TextGroup</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.sizeable</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sizeable</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">Text</span><span class="p">,</span> <span class="n">TextGroup</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TextOnScreen</span><span class="p">(</span><span class="n">Sizeable</span><span class="p">):</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">text</span><span class="p">:</span> <span class="n">Text</span> <span class="o">|</span> <span class="n">TextGroup</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="nd">@property</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -95,20 +104,24 @@
                     <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
 
     <span class="def">class</span>
-    <span class="name">TextOnScreen</span>:
+    <span class="name">TextOnScreen</span><wbr>(<span class="base"><a href="../core/sizeable.html#Sizeable">nextrpg.core.sizeable.Sizeable</a></span>):
 
                 <label class="view-source-button" for="TextOnScreen-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#TextOnScreen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TextOnScreen-10"><a href="#TextOnScreen-10"><span class="linenos">10</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="TextOnScreen-11"><a href="#TextOnScreen-11"><span class="linenos">11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TextOnScreen</span><span class="p">:</span>
-</span><span id="TextOnScreen-12"><a href="#TextOnScreen-12"><span class="linenos">12</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="TextOnScreen-13"><a href="#TextOnScreen-13"><span class="linenos">13</span></a>    <span class="n">text</span><span class="p">:</span> <span class="n">Text</span> <span class="o">|</span> <span class="n">TextGroup</span>
-</span><span id="TextOnScreen-14"><a href="#TextOnScreen-14"><span class="linenos">14</span></a>
-</span><span id="TextOnScreen-15"><a href="#TextOnScreen-15"><span class="linenos">15</span></a>    <span class="nd">@cached_property</span>
-</span><span id="TextOnScreen-16"><a href="#TextOnScreen-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="TextOnScreen-17"><a href="#TextOnScreen-17"><span class="linenos">17</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TextOnScreen-12"><a href="#TextOnScreen-12"><span class="linenos">12</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="TextOnScreen-13"><a href="#TextOnScreen-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">TextOnScreen</span><span class="p">(</span><span class="n">Sizeable</span><span class="p">):</span>
+</span><span id="TextOnScreen-14"><a href="#TextOnScreen-14"><span class="linenos">14</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="TextOnScreen-15"><a href="#TextOnScreen-15"><span class="linenos">15</span></a>    <span class="n">text</span><span class="p">:</span> <span class="n">Text</span> <span class="o">|</span> <span class="n">TextGroup</span>
+</span><span id="TextOnScreen-16"><a href="#TextOnScreen-16"><span class="linenos">16</span></a>
+</span><span id="TextOnScreen-17"><a href="#TextOnScreen-17"><span class="linenos">17</span></a>    <span class="nd">@property</span>
+</span><span id="TextOnScreen-18"><a href="#TextOnScreen-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="TextOnScreen-19"><a href="#TextOnScreen-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">size</span>
+</span><span id="TextOnScreen-20"><a href="#TextOnScreen-20"><span class="linenos">20</span></a>
+</span><span id="TextOnScreen-21"><a href="#TextOnScreen-21"><span class="linenos">21</span></a>    <span class="nd">@cached_property</span>
+</span><span id="TextOnScreen-22"><a href="#TextOnScreen-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="TextOnScreen-23"><a href="#TextOnScreen-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -148,6 +161,24 @@
     
 
                             </div>
+                            <div id="TextOnScreen.size" class="classattr">
+                                        <input id="TextOnScreen.size-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">size</span><span class="annotation">: <a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a></span>
+
+                <label class="view-source-button" for="TextOnScreen.size-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#TextOnScreen.size"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TextOnScreen.size-17"><a href="#TextOnScreen.size-17"><span class="linenos">17</span></a>    <span class="nd">@property</span>
+</span><span id="TextOnScreen.size-18"><a href="#TextOnScreen.size-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="TextOnScreen.size-19"><a href="#TextOnScreen.size-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">size</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
                             <div id="TextOnScreen.draw_on_screens" class="classattr">
                                         <input id="TextOnScreen.draw_on_screens-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
@@ -157,14 +188,36 @@
 
     </div>
     <a class="headerlink" href="#TextOnScreen.draw_on_screens"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TextOnScreen.draw_on_screens-15"><a href="#TextOnScreen.draw_on_screens-15"><span class="linenos">15</span></a>    <span class="nd">@cached_property</span>
-</span><span id="TextOnScreen.draw_on_screens-16"><a href="#TextOnScreen.draw_on_screens-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="TextOnScreen.draw_on_screens-17"><a href="#TextOnScreen.draw_on_screens-17"><span class="linenos">17</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TextOnScreen.draw_on_screens-21"><a href="#TextOnScreen.draw_on_screens-21"><span class="linenos">21</span></a>    <span class="nd">@cached_property</span>
+</span><span id="TextOnScreen.draw_on_screens-22"><a href="#TextOnScreen.draw_on_screens-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="TextOnScreen.draw_on_screens-23"><a href="#TextOnScreen.draw_on_screens-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span>
 </span></pre></div>
 
 
     
 
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="../core/sizeable.html#Sizeable">nextrpg.core.sizeable.Sizeable</a></dt>
+                                <dd id="TextOnScreen.width" class="variable"><a href="../core/sizeable.html#Sizeable.width">width</a></dd>
+                <dd id="TextOnScreen.height" class="variable"><a href="../core/sizeable.html#Sizeable.height">height</a></dd>
+                <dd id="TextOnScreen.top" class="variable"><a href="../core/sizeable.html#Sizeable.top">top</a></dd>
+                <dd id="TextOnScreen.left" class="variable"><a href="../core/sizeable.html#Sizeable.left">left</a></dd>
+                <dd id="TextOnScreen.bottom" class="variable"><a href="../core/sizeable.html#Sizeable.bottom">bottom</a></dd>
+                <dd id="TextOnScreen.right" class="variable"><a href="../core/sizeable.html#Sizeable.right">right</a></dd>
+                <dd id="TextOnScreen.top_right" class="variable"><a href="../core/sizeable.html#Sizeable.top_right">top_right</a></dd>
+                <dd id="TextOnScreen.bottom_left" class="variable"><a href="../core/sizeable.html#Sizeable.bottom_left">bottom_left</a></dd>
+                <dd id="TextOnScreen.bottom_right" class="variable"><a href="../core/sizeable.html#Sizeable.bottom_right">bottom_right</a></dd>
+                <dd id="TextOnScreen.top_center" class="variable"><a href="../core/sizeable.html#Sizeable.top_center">top_center</a></dd>
+                <dd id="TextOnScreen.bottom_center" class="variable"><a href="../core/sizeable.html#Sizeable.bottom_center">bottom_center</a></dd>
+                <dd id="TextOnScreen.center_left" class="variable"><a href="../core/sizeable.html#Sizeable.center_left">center_left</a></dd>
+                <dd id="TextOnScreen.center_right" class="variable"><a href="../core/sizeable.html#Sizeable.center_right">center_right</a></dd>
+                <dd id="TextOnScreen.center" class="variable"><a href="../core/sizeable.html#Sizeable.center">center</a></dd>
+
+            </div>
+                                </dl>
                             </div>
                 </section>
     </main>

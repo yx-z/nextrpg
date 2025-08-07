@@ -4,9 +4,10 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import NamedTuple
 
-from nextrpg.core.coordinate import Coordinate
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size
-from nextrpg.draw.draw import Draw, DrawOnScreen
+from nextrpg.core.sizeable import Sizeable
+from nextrpg.draw.draw import Draw, DrawOnScreen, SizedDrawOnScreens
 
 
 class RelativeDraw(NamedTuple):
@@ -15,7 +16,7 @@ class RelativeDraw(NamedTuple):
 
 
 @dataclass(frozen=True)
-class Group:
+class Group(Sizeable):
     draw: RelativeDraw | tuple[RelativeDraw, ...]
 
     @cached_property
@@ -32,24 +33,25 @@ class Group:
 
     @cached_property
     def size(self) -> Size:
-        draw_on_screens = GroupOnScreen(Coordinate(0, 0), self).draw_on_screens
-        min_left = min(d.top_left.left for d in draw_on_screens)
-        min_top = min(d.top_left.top for d in draw_on_screens)
-        max_left = max(
-            d.rectangle_on_screen.bottom_right.left for d in draw_on_screens
-        )
-        max_top = max(
-            d.rectangle_on_screen.bottom_right.top for d in draw_on_screens
-        )
-        width = max_left - min_left
-        height = max_top - min_top
-        return Size(width, height)
+        return GroupOnScreen(ORIGIN, self).size
+
+    @property
+    def top_left(self) -> Coordinate:
+        return GroupOnScreen(ORIGIN, self).top_left
 
 
 @dataclass(frozen=True)
 class GroupOnScreen:
-    top_left: Coordinate
+    origin: Coordinate
     group: Group
+
+    @property
+    def size(self) -> Size:
+        return self._sized.size
+
+    @property
+    def top_left(self) -> Coordinate:
+        return self._sized.top_left
 
     def coordinate(self, group: Group) -> Coordinate:
         if coord := self._coordinate(group):
@@ -60,7 +62,7 @@ class GroupOnScreen:
     def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
         res: list[DrawOnScreen] = []
         for draw, shift in self.group.draws:
-            coord = self.top_left + shift
+            coord = self.origin + shift
             if isinstance(draw, Draw):
                 res.append(DrawOnScreen(coord, draw))
             else:
@@ -70,9 +72,9 @@ class GroupOnScreen:
 
     def _coordinate(self, group: Group) -> Coordinate | None:
         if group == self.group:
-            return self.top_left
+            return self.origin
         for draw, shift in self.group.draws:
-            coord = self.top_left + shift
+            coord = self.origin + shift
             if isinstance(draw, Draw):
                 continue
             if draw == group:
@@ -80,3 +82,7 @@ class GroupOnScreen:
             if res := GroupOnScreen(coord, draw)._coordinate(group):
                 return res
         return None
+
+    @cached_property
+    def _sized(self) -> SizedDrawOnScreens:
+        return SizedDrawOnScreens(self.draw_on_screens)

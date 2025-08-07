@@ -5,4 +5,4 @@ from nextrpg.core.dimension import Pixel
 
 @dataclass(frozen=True)
 class DrawOnScreenConfig:
-    stroke_width: Pixel = 2
+    stroke_thickness: Pixel = 2

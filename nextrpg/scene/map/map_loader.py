@@ -17,7 +17,7 @@ from pytmx import (
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Pixel, Size
+from nextrpg.core.dimension import Height, Size
 from nextrpg.core.logger import Logger
 from nextrpg.draw.draw import (
     Draw,
@@ -31,14 +31,13 @@ logger = Logger()
 
 
 class TileBottomAndDrawOnScreen(NamedTuple):
-
-    bottom: Pixel
+    bottom: Height
     draw: DrawOnScreen
 
 
 class LayerTileBottomAndDrawOnScreen(NamedTuple):
     layer: int
-    bottom: Pixel
+    bottom: Height
     draw_on_screen: DrawOnScreen
 
 
@@ -261,8 +260,8 @@ class MapLoader:
         layer: TiledTileLayer,
         coord: _TileCoordinate,
         draw: DrawOnScreen,
-        coord_to_bottom: dict[_TileCoordinate, Pixel],
-    ) -> Pixel:
+        coord_to_bottom: dict[_TileCoordinate, Height],
+    ) -> Height:
         return (
             max(coord_to_bottom[c] for c in self._component(layer, coord, cls))
             if (cls := self._class(layer, coord))

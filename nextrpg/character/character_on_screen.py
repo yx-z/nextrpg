@@ -11,7 +11,6 @@ from nextrpg.core.dataclass_with_instance_init import (
     instance_init,
     not_constructor_below,
 )
-from nextrpg.core.dimension import Size
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import Draw, DrawOnScreen, RectangleOnScreen
 from nextrpg.draw.group import Group
@@ -75,22 +74,20 @@ class CharacterOnScreen(EventAsAttr):
 
     @cached_property
     def start_event_rectangle(self) -> RectangleOnScreen:
-        width, height = self.draw_on_screen.rectangle_on_screen.size
-        rect_width = width * self.config.start_event_width_percentage
-        left, top = self.draw_on_screen.top_left
-        rect_left = left - (rect_width - width) / 2
-        coord = Coordinate(rect_left, top)
-        size = Size(rect_width, height)
+        coord = self.coordinate - (
+            self.draw_on_screen.width * (self.config.start_event_scaling - 1)
+        )
+        size = self.draw_on_screen.size * self.config.start_event_scaling
         return RectangleOnScreen(coord, size)
 
     def _collision_rectangle(self, coordinate: Coordinate) -> RectangleOnScreen:
-        rect = DrawOnScreen(coordinate, self.character.draw).rectangle_on_screen
-        width, height = rect.size
-        rect_height = height * self.config.bounding_rectangle_height_percentage
-        bounding_size = Size(width, rect_height)
-        left, top = rect.top_left
-        coord = Coordinate(left, top + (height - rect_height) / 2)
-        return RectangleOnScreen(coord, bounding_size)
+        coord = (
+            coordinate
+            + self.draw_on_screen.height
+            * self.config.bounding_rectangle_scaling
+        )
+        size = self.draw_on_screen.size * self.config.bounding_rectangle_scaling
+        return RectangleOnScreen(coord, size)
 
     @property
     def draw_on_screen(self) -> DrawOnScreen:

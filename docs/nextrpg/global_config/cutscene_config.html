@@ -40,7 +40,7 @@
                                 <a class="variable" href="#CutsceneConfig.background_override">background_override</a>
                         </li>
                         <li>
-                                <a class="variable" href="#CutsceneConfig.screen_height_percentage">screen_height_percentage</a>
+                                <a class="variable" href="#CutsceneConfig.screen_height_scaling">screen_height_scaling</a>
                         </li>
                         <li>
                                 <a class="variable" href="#CutsceneConfig.wait">wait</a>
@@ -81,27 +81,28 @@
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">Color</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">HeightScaling</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CutsceneConfig</span><span class="p">:</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="n">background_override</span><span class="p">:</span> <span class="n">Color</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">screen_height_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">wait</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">duration_override</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="nd">@property</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_override</span> <span class="ow">or</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">background</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="nd">@property</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration_override</span> <span class="ow">or</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CutsceneConfig</span><span class="p">:</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">background_override</span><span class="p">:</span> <span class="n">Color</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">screen_height_scaling</span><span class="p">:</span> <span class="n">HeightScaling</span> <span class="o">=</span> <span class="n">HeightScaling</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">wait</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">duration_override</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="nd">@property</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_override</span> <span class="ow">or</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">background</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="nd">@property</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration_override</span> <span class="ow">or</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
@@ -118,24 +119,24 @@
 
     </div>
     <a class="headerlink" href="#CutsceneConfig"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CutsceneConfig-8"><a href="#CutsceneConfig-8"><span class="linenos"> 8</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="CutsceneConfig-9"><a href="#CutsceneConfig-9"><span class="linenos"> 9</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CutsceneConfig</span><span class="p">:</span>
-</span><span id="CutsceneConfig-10"><a href="#CutsceneConfig-10"><span class="linenos">10</span></a>    <span class="n">background_override</span><span class="p">:</span> <span class="n">Color</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="CutsceneConfig-11"><a href="#CutsceneConfig-11"><span class="linenos">11</span></a>    <span class="n">screen_height_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span>
-</span><span id="CutsceneConfig-12"><a href="#CutsceneConfig-12"><span class="linenos">12</span></a>    <span class="n">wait</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="CutsceneConfig-13"><a href="#CutsceneConfig-13"><span class="linenos">13</span></a>    <span class="n">duration_override</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="CutsceneConfig-14"><a href="#CutsceneConfig-14"><span class="linenos">14</span></a>
-</span><span id="CutsceneConfig-15"><a href="#CutsceneConfig-15"><span class="linenos">15</span></a>    <span class="nd">@property</span>
-</span><span id="CutsceneConfig-16"><a href="#CutsceneConfig-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
-</span><span id="CutsceneConfig-17"><a href="#CutsceneConfig-17"><span class="linenos">17</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="CutsceneConfig-18"><a href="#CutsceneConfig-18"><span class="linenos">18</span></a>
-</span><span id="CutsceneConfig-19"><a href="#CutsceneConfig-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_override</span> <span class="ow">or</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">background</span>
-</span><span id="CutsceneConfig-20"><a href="#CutsceneConfig-20"><span class="linenos">20</span></a>
-</span><span id="CutsceneConfig-21"><a href="#CutsceneConfig-21"><span class="linenos">21</span></a>    <span class="nd">@property</span>
-</span><span id="CutsceneConfig-22"><a href="#CutsceneConfig-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
-</span><span id="CutsceneConfig-23"><a href="#CutsceneConfig-23"><span class="linenos">23</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="CutsceneConfig-24"><a href="#CutsceneConfig-24"><span class="linenos">24</span></a>
-</span><span id="CutsceneConfig-25"><a href="#CutsceneConfig-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration_override</span> <span class="ow">or</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CutsceneConfig-9"><a href="#CutsceneConfig-9"><span class="linenos"> 9</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="CutsceneConfig-10"><a href="#CutsceneConfig-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CutsceneConfig</span><span class="p">:</span>
+</span><span id="CutsceneConfig-11"><a href="#CutsceneConfig-11"><span class="linenos">11</span></a>    <span class="n">background_override</span><span class="p">:</span> <span class="n">Color</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="CutsceneConfig-12"><a href="#CutsceneConfig-12"><span class="linenos">12</span></a>    <span class="n">screen_height_scaling</span><span class="p">:</span> <span class="n">HeightScaling</span> <span class="o">=</span> <span class="n">HeightScaling</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+</span><span id="CutsceneConfig-13"><a href="#CutsceneConfig-13"><span class="linenos">13</span></a>    <span class="n">wait</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="CutsceneConfig-14"><a href="#CutsceneConfig-14"><span class="linenos">14</span></a>    <span class="n">duration_override</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="CutsceneConfig-15"><a href="#CutsceneConfig-15"><span class="linenos">15</span></a>
+</span><span id="CutsceneConfig-16"><a href="#CutsceneConfig-16"><span class="linenos">16</span></a>    <span class="nd">@property</span>
+</span><span id="CutsceneConfig-17"><a href="#CutsceneConfig-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+</span><span id="CutsceneConfig-18"><a href="#CutsceneConfig-18"><span class="linenos">18</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="CutsceneConfig-19"><a href="#CutsceneConfig-19"><span class="linenos">19</span></a>
+</span><span id="CutsceneConfig-20"><a href="#CutsceneConfig-20"><span class="linenos">20</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_override</span> <span class="ow">or</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">background</span>
+</span><span id="CutsceneConfig-21"><a href="#CutsceneConfig-21"><span class="linenos">21</span></a>
+</span><span id="CutsceneConfig-22"><a href="#CutsceneConfig-22"><span class="linenos">22</span></a>    <span class="nd">@property</span>
+</span><span id="CutsceneConfig-23"><a href="#CutsceneConfig-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
+</span><span id="CutsceneConfig-24"><a href="#CutsceneConfig-24"><span class="linenos">24</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="CutsceneConfig-25"><a href="#CutsceneConfig-25"><span class="linenos">25</span></a>
+</span><span id="CutsceneConfig-26"><a href="#CutsceneConfig-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration_override</span> <span class="ow">or</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
@@ -144,7 +145,7 @@
                             <div id="CutsceneConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">CutsceneConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">background_override</span><span class="p">:</span> <span class="n"><a href="../core/color.html#Color">nextrpg.core.color.Color</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">screen_height_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span>,</span><span class="param">	<span class="n">wait</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">duration_override</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
+        <span class="name">CutsceneConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">background_override</span><span class="p">:</span> <span class="n"><a href="../core/color.html#Color">nextrpg.core.color.Color</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">screen_height_scaling</span><span class="p">:</span> <span class="n"><a href="../core/dimension.html#HeightScaling">nextrpg.core.dimension.HeightScaling</a></span> <span class="o">=</span> <span class="n">HeightScaling</span><span class="p">(</span><span class="n">input_value</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>,</span><span class="param">	<span class="n">wait</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">duration_override</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
 
         
     </div>
@@ -165,14 +166,14 @@
     
 
                             </div>
-                            <div id="CutsceneConfig.screen_height_percentage" class="classattr">
+                            <div id="CutsceneConfig.screen_height_scaling" class="classattr">
                                 <div class="attr variable">
-            <span class="name">screen_height_percentage</span><span class="annotation">: float</span>        =
-<span class="default_value">0.1</span>
+            <span class="name">screen_height_scaling</span><span class="annotation">: <a href="../core/dimension.html#HeightScaling">nextrpg.core.dimension.HeightScaling</a></span>        =
+<span class="default_value">HeightScaling(input_value=0.1)</span>
 
         
     </div>
-    <a class="headerlink" href="#CutsceneConfig.screen_height_percentage"></a>
+    <a class="headerlink" href="#CutsceneConfig.screen_height_scaling"></a>
     
     
 
@@ -210,11 +211,11 @@
 
     </div>
     <a class="headerlink" href="#CutsceneConfig.background"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CutsceneConfig.background-15"><a href="#CutsceneConfig.background-15"><span class="linenos">15</span></a>    <span class="nd">@property</span>
-</span><span id="CutsceneConfig.background-16"><a href="#CutsceneConfig.background-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
-</span><span id="CutsceneConfig.background-17"><a href="#CutsceneConfig.background-17"><span class="linenos">17</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="CutsceneConfig.background-18"><a href="#CutsceneConfig.background-18"><span class="linenos">18</span></a>
-</span><span id="CutsceneConfig.background-19"><a href="#CutsceneConfig.background-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_override</span> <span class="ow">or</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">background</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CutsceneConfig.background-16"><a href="#CutsceneConfig.background-16"><span class="linenos">16</span></a>    <span class="nd">@property</span>
+</span><span id="CutsceneConfig.background-17"><a href="#CutsceneConfig.background-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">background</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+</span><span id="CutsceneConfig.background-18"><a href="#CutsceneConfig.background-18"><span class="linenos">18</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="CutsceneConfig.background-19"><a href="#CutsceneConfig.background-19"><span class="linenos">19</span></a>
+</span><span id="CutsceneConfig.background-20"><a href="#CutsceneConfig.background-20"><span class="linenos">20</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_override</span> <span class="ow">or</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">background</span>
 </span></pre></div>
 
 
@@ -230,11 +231,11 @@
 
     </div>
     <a class="headerlink" href="#CutsceneConfig.duration"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CutsceneConfig.duration-21"><a href="#CutsceneConfig.duration-21"><span class="linenos">21</span></a>    <span class="nd">@property</span>
-</span><span id="CutsceneConfig.duration-22"><a href="#CutsceneConfig.duration-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
-</span><span id="CutsceneConfig.duration-23"><a href="#CutsceneConfig.duration-23"><span class="linenos">23</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
-</span><span id="CutsceneConfig.duration-24"><a href="#CutsceneConfig.duration-24"><span class="linenos">24</span></a>
-</span><span id="CutsceneConfig.duration-25"><a href="#CutsceneConfig.duration-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration_override</span> <span class="ow">or</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CutsceneConfig.duration-22"><a href="#CutsceneConfig.duration-22"><span class="linenos">22</span></a>    <span class="nd">@property</span>
+</span><span id="CutsceneConfig.duration-23"><a href="#CutsceneConfig.duration-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Millisecond</span><span class="p">:</span>
+</span><span id="CutsceneConfig.duration-24"><a href="#CutsceneConfig.duration-24"><span class="linenos">24</span></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</span><span id="CutsceneConfig.duration-25"><a href="#CutsceneConfig.duration-25"><span class="linenos">25</span></a>
+</span><span id="CutsceneConfig.duration-26"><a href="#CutsceneConfig.duration-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration_override</span> <span class="ow">or</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
 </span></pre></div>
 
 
