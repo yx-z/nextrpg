@@ -160,5 +160,5 @@ class Size:
     ) -> Size:
         return self * type(scaling)(1 / scaling.value)
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         return f"({self.width.value:.0f}, {self.height.value:.0f})"

@@ -96,7 +96,7 @@ class Coordinate:
         )
         return closest[1]
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         return f"({self.left.value:.0f}, {self.top.value:.0f})"
 
     def distance(self, other: Coordinate) -> Pixel:
