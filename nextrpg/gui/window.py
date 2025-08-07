@@ -10,21 +10,16 @@ from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
-from nextrpg import Height, WidthAndHeightScaling
-from nextrpg.core.coordinate import Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dataclass_with_instance_init import not_constructor_below
-from nextrpg.core.dimension import Size
+from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.core.logger import ComponentAndMessage, Logger, pop_messages
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import Draw, DrawOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.event.pygame_event import (
-    GuiResize,
-    KeyboardKey,
-    KeyPressDown,
-    PygameEvent,
-)
+from nextrpg.event.pygame_event import (GuiResize, KeyPressDown, KeyboardKey,
+                                        PygameEvent)
 from nextrpg.global_config.global_config import config, set_config
 from nextrpg.global_config.gui_config import GuiConfig, GuiMode, ResizeMode
 
@@ -167,23 +162,11 @@ class Window:
 def _log_text(
     msgs: tuple[ComponentAndMessage, ...],
 ) -> tuple[TextOnScreen, ...]:
-    text_config = config().text
-    spacing = text_config.line_spacing.value
-    max_width = max(text_config.font.text_size(m.component).width for m in msgs)
-    msg_spacing = max_width + 2 * spacing
-    return tuple(
-        text
-        for i, (component, msg) in enumerate(msgs)
-        for text in (
-            TextOnScreen(Coordinate(spacing, _line_height(i)), Text(component)),
-            TextOnScreen(Coordinate(msg_spacing, _line_height(i)), Text(msg)),
-        )
-    )
-
-
-def _line_height(line_index: int) -> Height:
-    spacing = config().text.line_spacing
-    return spacing + line_index * (spacing + config().text.font.text_height)
+    components = Text("\n".join(m.component for m in msgs))
+    components_on_screen = TextOnScreen(ORIGIN, components)
+    msgs = Text("\n".join(m.message for m in msgs))
+    msgs_on_screen = TextOnScreen(ORIGIN + components.width, msgs)
+    return components_on_screen, msgs_on_screen
 
 
 type _GuiFlag = int
