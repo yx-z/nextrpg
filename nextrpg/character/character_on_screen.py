@@ -84,17 +84,15 @@ class CharacterOnScreen(EventAsAttr, Sizeable):
 
     @cached_property
     def start_event_rectangle(self) -> RectangleOnScreen:
-        coord = self.coordinate - (
-            self.width * (self.config.start_event_scaling - 1)
-        )
-        size = self.size * self.config.start_event_scaling
+        scaling = self.config.start_event_scaling
+        coord = self.coordinate - self.width * (scaling - 1) / 2
+        size = self.size * scaling
         return RectangleOnScreen(coord, size)
 
     def _collision_rectangle(self, coordinate: Coordinate) -> RectangleOnScreen:
-        coord = (
-            coordinate + self.height * self.config.bounding_rectangle_scaling
-        )
-        size = self.size * self.config.bounding_rectangle_scaling
+        scaling = self.config.bounding_rectangle_scaling
+        coord = coordinate + self.height * (scaling / 2)
+        size = self.size * scaling
         return RectangleOnScreen(coord, size)
 
     @property
