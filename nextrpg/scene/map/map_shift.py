@@ -1,13 +1,15 @@
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size
-from nextrpg.gui.area import gui_size
+from nextrpg.gui.area import gui_height, gui_width
 
 
 def center_player(player_coordinate: Coordinate, map_size: Size) -> Coordinate:
-    map_width, map_height = map_size
-    gui_width, gui_height = gui_size()
-    left_shift = _center_player(player_coordinate.left, gui_width, map_width)
-    top_shift = _center_player(player_coordinate.top, gui_height, map_height)
+    left_shift = _center_player(
+        player_coordinate.left, gui_width(), map_size.width
+    )
+    top_shift = _center_player(
+        player_coordinate.top, gui_height(), map_size.height
+    )
     return Coordinate(left_shift, top_shift)
 
 

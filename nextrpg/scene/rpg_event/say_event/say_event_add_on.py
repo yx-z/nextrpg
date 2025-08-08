@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 from functools import cached_property
 from typing import Literal, override
 
@@ -29,7 +29,19 @@ class AddOn:
 
     @cached_property
     def background(self) -> tuple[DrawOnScreen, ...]:
-        add_on_on_screen = GroupOnScreen(self.background_top_left, self._group)
+        contents = [RelativeDraw(self._text.group, ORIGIN)]
+        if self._name_relative_to_text:
+            contents.append(self._name_relative_to_text)
+        if self._avatar_relative_to_text:
+            contents.append(self._avatar_relative_to_text)
+        content = Group(tuple(contents))
+
+        background, shift = self._background_relative_to_text
+        add_on = Group(
+            (RelativeDraw(background, ORIGIN), RelativeDraw(content, -shift))
+        )
+        add_on_on_screen = GroupOnScreen(self.add_on_top_left, add_on)
+
         text_coord = add_on_on_screen.coordinate(self._text.group)
         text_add_on = TextOnScreen(text_coord, self._text).draw_on_screens
         return tuple(
@@ -38,82 +50,70 @@ class AddOn:
 
     @cached_property
     def text_on_screen(self) -> TextOnScreen:
-        coord = self.background_top_left + self._background.shift
+        coord = self.add_on_top_left - self._background_relative_to_text.shift
         return TextOnScreen(coord, self._text)
 
     @cached_property
-    def background_top_left(self) -> Coordinate:
-        return self._center_to_top_left(self.config.coordinate)
+    def add_on_top_left(self) -> Coordinate:
+        return self._center_to_top_left(self.config.scene_coordinate)
 
     def _center_to_top_left(self, center: Coordinate) -> Coordinate:
-        return center - self._background.draw.size / WidthAndHeightScaling(2)
-
-    @cached_property
-    def _group(self) -> Group:
-        optionals = tuple(
-            d for d in (self._avatar_relative, self._name_relative) if d
-        )
-        content = Group((RelativeDraw(self._text.group, ORIGIN),) + optionals)
-        background, shift = self._background
-        return Group(
-            (RelativeDraw(background, ORIGIN), RelativeDraw(content, shift))
+        return (
+            center
+            - self._background_relative_to_text.draw.size
+            / WidthAndHeightScaling(2)
         )
 
     @cached_property
-    def _background(self) -> RelativeDraw:
-        padding = self.config.padding
-        text_width, text_height = self._text.size
-        width_shift = padding
-        height_shift = padding
-
-        rect_height = text_height + 2 * padding
-        if self._name:
-            extra_height = self._name_relative.draw.size.height + padding
-            height_shift += extra_height
-            rect_height += extra_height
-
-        rect_width = text_width + 2 * padding
-        if self._avatar:
-            extra_width = self._avatar.size.width + padding
-            width_shift += extra_width
-            rect_width += extra_width
-
-        size = Size(rect_width, rect_height)
+    def _background_relative_to_text(self) -> RelativeDraw:
+        shift = -self.config.padding
+        size = self._text.size + self.config.padding * WidthAndHeightScaling(2)
+        if self._name_relative_to_text:
+            extra_height = (
+                self._name_relative_to_text.draw.height
+                + self.config.padding.height
+            )
+            shift -= extra_height
+            size += extra_height
+        if self._avatar_relative_to_text:
+            extra_width = (
+                self._avatar_relative_to_text.draw.size.width
+                + self.config.padding.width
+            )
+            shift -= extra_width
+            size += extra_width
         rect = RectangleDraw(
             size, self.config.background, self.config.border_radius
         )
-        shift = Size(width_shift, height_shift)
         return RelativeDraw(rect, shift)
 
-    @cached_property
+    @property
     def _avatar(self) -> Draw | Group | None:
         return self.config.avatar
 
     @cached_property
-    def _avatar_relative(self) -> RelativeDraw | None:
+    def _avatar_relative_to_text(self) -> RelativeDraw | None:
         if not self._avatar:
             return None
-        width, height = self._avatar.size
-        left_shift = -self.config.padding - width
-        top_shift = self._text.size.height - height
-        shift = Size(left_shift, top_shift)
-        return RelativeDraw(self._avatar, shift)
+        shift = (
+            self._text.bottom_left
+            - self.config.padding.width
+            - self._avatar.size
+        )
+        return RelativeDraw(self._avatar, shift.size)
 
-    @cached_property
+    @property
     def _name(self) -> str | None:
-        return self.config.name_override
+        if name := self.config.name_override:
+            return name
+        return None
 
     @cached_property
-    def _name_relative(self) -> RelativeDraw | None:
+    def _name_relative_to_text(self) -> RelativeDraw | None:
         if not self._name:
             return None
-
-        text_config = replace(
-            self.config.text_config, color=self.config.name_color
-        )
-        text = Text(self._name, text_config)
-        name_height = text.size.height
-        shift = Size(0, -name_height - self.config.padding)
+        text = Text(self._name, self.config.name_text_config)
+        shift = Size(0, -text.height - self.config.padding.height)
         return RelativeDraw(text.group, shift)
 
     @cached_property
@@ -135,7 +135,7 @@ class CharacterAddOn(AddOn):
 
     @cached_property
     def _background_tick(self) -> DrawOnScreen:
-        if self._character_on_screen.center in left_screen():
+        if self._character_rectangle_on_screen.center in left_screen():
             width_sign = 1
         else:
             width_sign = -1
@@ -149,12 +149,9 @@ class CharacterAddOn(AddOn):
         base_coord1_left = tip_left + width_sign * cfg.tail_base1_shift
         base_coord2_left = tip_left + width_sign * cfg.tail_base2_shift
 
-        if self._character_edge.is_top:
-            base_coord_top = self.background_top_left.top
-        else:
-            base_coord_top = (
-                self.background_top_left.top + self._background.draw.height
-            )
+        base_coord_top = self.add_on_top_left.top
+        if not self._character_edge.is_top:
+            base_coord_top += self._background_relative_to_text.draw.height
 
         tip_coord = Coordinate(tip_left, tip_top)
         base_coord1 = Coordinate(base_coord1_left, base_coord_top)
@@ -164,43 +161,43 @@ class CharacterAddOn(AddOn):
 
     @cached_property
     @override
-    def background_top_left(self) -> Coordinate:
-        if center := self.config.coordinate_override:
+    def add_on_top_left(self) -> Coordinate:
+        if center := self.config.character_coordinate_override:
             return self._center_to_top_left(center)
 
+        shift_width, shift_height = self.config.add_on.add_on_shift
         character_left, character_top = self._character_edge.coordinate
-        background_shift_width, background_shift_height = (
-            self.config.add_on.add_on_shift
-        )
-        edge = (
-            character_top
-            + self._character_edge.height_sign * background_shift_height
-        )
-        background_width, background_height = self._background.draw.size
-        if self._character_edge.is_top:
-            top = edge - background_height
-        else:
-            top = edge
+        center = character_left - shift_width
 
-        center = character_left - background_shift_width
+        # Clamp add-on within screen width.
+        background_width = self._background_relative_to_text.draw.width
         left = center - background_width / 2
-        padding = self.config.padding
-        if left.value < padding:
-            left = padding
-        elif center + background_width / 2 > gui_width() - padding:
-            left = gui_width() - background_width - padding
+        pad_width = self.config.padding.width
+        if left < pad_width:
+            left = pad_width
+        elif left + background_width > gui_width() - pad_width:
+            left = gui_width() - background_width - pad_width
+
+        top = character_top + self._character_edge.height_sign * shift_height
+        if self._character_edge.is_top:
+            top -= self._background_relative_to_text.draw.height
 
         return Coordinate(left, top)
 
     @cached_property
     def _character_edge(self) -> _CharacterPosition:
-        rect = self._character_on_screen
-        if rect.center in top_screen():
-            return _CharacterPosition(rect.bottom_center, True, 1)
-        return _CharacterPosition(rect.top_center, False, -1)
+        if self._character_rectangle_on_screen.center in top_screen():
+            return _CharacterPosition(
+                coordinate=self._character_rectangle_on_screen.bottom_center,
+                is_top=True,
+            )
+        return _CharacterPosition(
+            coordinate=self._character_rectangle_on_screen.top_center,
+            is_top=False,
+        )
 
     @cached_property
-    def _character_on_screen(self) -> RectangleOnScreen:
+    def _character_rectangle_on_screen(self) -> RectangleOnScreen:
         rect = self.character.draw_on_screen.visible_rectangle_on_screen
         if self.scene.draw_on_screen_shift:
             return rect + self.scene.draw_on_screen_shift
@@ -221,8 +218,13 @@ class CharacterAddOn(AddOn):
         return self.character.display_name
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class _CharacterPosition:
     coordinate: Coordinate
     is_top: bool
-    height_sign: Literal[1, -1]
+
+    @property
+    def height_sign(self) -> Literal[-1, 1]:
+        if self.is_top:
+            return 1
+        return -1

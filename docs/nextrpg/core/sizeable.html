@@ -105,69 +105,72 @@
 
                         <label class="view-source-button" for="mod-sizeable-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Height</span><span class="p">,</span> <span class="n">Size</span><span class="p">,</span> <span class="n">Width</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Sizeable</span><span class="p">:</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="nd">@property</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="nd">@property</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="nd">@property</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="nd">@property</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="nd">@property</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="nd">@property</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="nd">@property</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="nd">@property</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="nd">@property</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="nd">@property</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="nd">@property</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="nd">@property</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="nd">@property</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="nd">@property</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_center</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Height</span><span class="p">,</span> <span class="n">Size</span><span class="p">,</span> <span class="n">Width</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Sizeable</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="c1"># Subclass shall implement these.</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="nd">@property</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="nd">@property</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="nd">@property</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="nd">@property</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="nd">@property</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="nd">@property</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="nd">@property</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="nd">@property</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="nd">@property</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="nd">@property</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="nd">@property</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="nd">@property</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="nd">@property</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="nd">@property</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_center</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
 </span></pre></div>
 
 
@@ -177,75 +180,79 @@
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">Sizeable</span>:
+    <span class="name">Sizeable</span><wbr>(<span class="base">abc.ABC</span>):
 
                 <label class="view-source-button" for="Sizeable-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Sizeable"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable-6"><a href="#Sizeable-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Sizeable</span><span class="p">:</span>
-</span><span id="Sizeable-7"><a href="#Sizeable-7"><span class="linenos"> 7</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="Sizeable-8"><a href="#Sizeable-8"><span class="linenos"> 8</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span>
-</span><span id="Sizeable-9"><a href="#Sizeable-9"><span class="linenos"> 9</span></a>
-</span><span id="Sizeable-10"><a href="#Sizeable-10"><span class="linenos">10</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-11"><a href="#Sizeable-11"><span class="linenos">11</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
-</span><span id="Sizeable-12"><a href="#Sizeable-12"><span class="linenos">12</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
-</span><span id="Sizeable-13"><a href="#Sizeable-13"><span class="linenos">13</span></a>
-</span><span id="Sizeable-14"><a href="#Sizeable-14"><span class="linenos">14</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-15"><a href="#Sizeable-15"><span class="linenos">15</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
-</span><span id="Sizeable-16"><a href="#Sizeable-16"><span class="linenos">16</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
-</span><span id="Sizeable-17"><a href="#Sizeable-17"><span class="linenos">17</span></a>
-</span><span id="Sizeable-18"><a href="#Sizeable-18"><span class="linenos">18</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-19"><a href="#Sizeable-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
-</span><span id="Sizeable-20"><a href="#Sizeable-20"><span class="linenos">20</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
-</span><span id="Sizeable-21"><a href="#Sizeable-21"><span class="linenos">21</span></a>
-</span><span id="Sizeable-22"><a href="#Sizeable-22"><span class="linenos">22</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-23"><a href="#Sizeable-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
-</span><span id="Sizeable-24"><a href="#Sizeable-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
-</span><span id="Sizeable-25"><a href="#Sizeable-25"><span class="linenos">25</span></a>
-</span><span id="Sizeable-26"><a href="#Sizeable-26"><span class="linenos">26</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-27"><a href="#Sizeable-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
-</span><span id="Sizeable-28"><a href="#Sizeable-28"><span class="linenos">28</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
-</span><span id="Sizeable-29"><a href="#Sizeable-29"><span class="linenos">29</span></a>
-</span><span id="Sizeable-30"><a href="#Sizeable-30"><span class="linenos">30</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-31"><a href="#Sizeable-31"><span class="linenos">31</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
-</span><span id="Sizeable-32"><a href="#Sizeable-32"><span class="linenos">32</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
-</span><span id="Sizeable-33"><a href="#Sizeable-33"><span class="linenos">33</span></a>
-</span><span id="Sizeable-34"><a href="#Sizeable-34"><span class="linenos">34</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-35"><a href="#Sizeable-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable-36"><a href="#Sizeable-36"><span class="linenos">36</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
-</span><span id="Sizeable-37"><a href="#Sizeable-37"><span class="linenos">37</span></a>
-</span><span id="Sizeable-38"><a href="#Sizeable-38"><span class="linenos">38</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-39"><a href="#Sizeable-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable-40"><a href="#Sizeable-40"><span class="linenos">40</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
-</span><span id="Sizeable-41"><a href="#Sizeable-41"><span class="linenos">41</span></a>
-</span><span id="Sizeable-42"><a href="#Sizeable-42"><span class="linenos">42</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-43"><a href="#Sizeable-43"><span class="linenos">43</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable-44"><a href="#Sizeable-44"><span class="linenos">44</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
-</span><span id="Sizeable-45"><a href="#Sizeable-45"><span class="linenos">45</span></a>
-</span><span id="Sizeable-46"><a href="#Sizeable-46"><span class="linenos">46</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-47"><a href="#Sizeable-47"><span class="linenos">47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable-48"><a href="#Sizeable-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span>
-</span><span id="Sizeable-49"><a href="#Sizeable-49"><span class="linenos">49</span></a>
-</span><span id="Sizeable-50"><a href="#Sizeable-50"><span class="linenos">50</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-51"><a href="#Sizeable-51"><span class="linenos">51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable-52"><a href="#Sizeable-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
-</span><span id="Sizeable-53"><a href="#Sizeable-53"><span class="linenos">53</span></a>
-</span><span id="Sizeable-54"><a href="#Sizeable-54"><span class="linenos">54</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-55"><a href="#Sizeable-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable-56"><a href="#Sizeable-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
-</span><span id="Sizeable-57"><a href="#Sizeable-57"><span class="linenos">57</span></a>
-</span><span id="Sizeable-58"><a href="#Sizeable-58"><span class="linenos">58</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-59"><a href="#Sizeable-59"><span class="linenos">59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable-60"><a href="#Sizeable-60"><span class="linenos">60</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
-</span><span id="Sizeable-61"><a href="#Sizeable-61"><span class="linenos">61</span></a>
-</span><span id="Sizeable-62"><a href="#Sizeable-62"><span class="linenos">62</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable-63"><a href="#Sizeable-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable-64"><a href="#Sizeable-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_center</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable-8"><a href="#Sizeable-8"><span class="linenos"> 8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Sizeable</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+</span><span id="Sizeable-9"><a href="#Sizeable-9"><span class="linenos"> 9</span></a>    <span class="c1"># Subclass shall implement these.</span>
+</span><span id="Sizeable-10"><a href="#Sizeable-10"><span class="linenos">10</span></a>    <span class="n">top_left</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="Sizeable-11"><a href="#Sizeable-11"><span class="linenos">11</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span>
+</span><span id="Sizeable-12"><a href="#Sizeable-12"><span class="linenos">12</span></a>
+</span><span id="Sizeable-13"><a href="#Sizeable-13"><span class="linenos">13</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-14"><a href="#Sizeable-14"><span class="linenos">14</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
+</span><span id="Sizeable-15"><a href="#Sizeable-15"><span class="linenos">15</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
+</span><span id="Sizeable-16"><a href="#Sizeable-16"><span class="linenos">16</span></a>
+</span><span id="Sizeable-17"><a href="#Sizeable-17"><span class="linenos">17</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-18"><a href="#Sizeable-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
+</span><span id="Sizeable-19"><a href="#Sizeable-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
+</span><span id="Sizeable-20"><a href="#Sizeable-20"><span class="linenos">20</span></a>
+</span><span id="Sizeable-21"><a href="#Sizeable-21"><span class="linenos">21</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-22"><a href="#Sizeable-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
+</span><span id="Sizeable-23"><a href="#Sizeable-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
+</span><span id="Sizeable-24"><a href="#Sizeable-24"><span class="linenos">24</span></a>
+</span><span id="Sizeable-25"><a href="#Sizeable-25"><span class="linenos">25</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-26"><a href="#Sizeable-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
+</span><span id="Sizeable-27"><a href="#Sizeable-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
+</span><span id="Sizeable-28"><a href="#Sizeable-28"><span class="linenos">28</span></a>
+</span><span id="Sizeable-29"><a href="#Sizeable-29"><span class="linenos">29</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-30"><a href="#Sizeable-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
+</span><span id="Sizeable-31"><a href="#Sizeable-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
+</span><span id="Sizeable-32"><a href="#Sizeable-32"><span class="linenos">32</span></a>
+</span><span id="Sizeable-33"><a href="#Sizeable-33"><span class="linenos">33</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-34"><a href="#Sizeable-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
+</span><span id="Sizeable-35"><a href="#Sizeable-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
+</span><span id="Sizeable-36"><a href="#Sizeable-36"><span class="linenos">36</span></a>
+</span><span id="Sizeable-37"><a href="#Sizeable-37"><span class="linenos">37</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-38"><a href="#Sizeable-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable-39"><a href="#Sizeable-39"><span class="linenos">39</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+</span><span id="Sizeable-40"><a href="#Sizeable-40"><span class="linenos">40</span></a>
+</span><span id="Sizeable-41"><a href="#Sizeable-41"><span class="linenos">41</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-42"><a href="#Sizeable-42"><span class="linenos">42</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable-43"><a href="#Sizeable-43"><span class="linenos">43</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+</span><span id="Sizeable-44"><a href="#Sizeable-44"><span class="linenos">44</span></a>
+</span><span id="Sizeable-45"><a href="#Sizeable-45"><span class="linenos">45</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-46"><a href="#Sizeable-46"><span class="linenos">46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable-47"><a href="#Sizeable-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+</span><span id="Sizeable-48"><a href="#Sizeable-48"><span class="linenos">48</span></a>
+</span><span id="Sizeable-49"><a href="#Sizeable-49"><span class="linenos">49</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-50"><a href="#Sizeable-50"><span class="linenos">50</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable-51"><a href="#Sizeable-51"><span class="linenos">51</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span>
+</span><span id="Sizeable-52"><a href="#Sizeable-52"><span class="linenos">52</span></a>
+</span><span id="Sizeable-53"><a href="#Sizeable-53"><span class="linenos">53</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-54"><a href="#Sizeable-54"><span class="linenos">54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable-55"><a href="#Sizeable-55"><span class="linenos">55</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+</span><span id="Sizeable-56"><a href="#Sizeable-56"><span class="linenos">56</span></a>
+</span><span id="Sizeable-57"><a href="#Sizeable-57"><span class="linenos">57</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-58"><a href="#Sizeable-58"><span class="linenos">58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable-59"><a href="#Sizeable-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+</span><span id="Sizeable-60"><a href="#Sizeable-60"><span class="linenos">60</span></a>
+</span><span id="Sizeable-61"><a href="#Sizeable-61"><span class="linenos">61</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-62"><a href="#Sizeable-62"><span class="linenos">62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable-63"><a href="#Sizeable-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+</span><span id="Sizeable-64"><a href="#Sizeable-64"><span class="linenos">64</span></a>
+</span><span id="Sizeable-65"><a href="#Sizeable-65"><span class="linenos">65</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable-66"><a href="#Sizeable-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable-67"><a href="#Sizeable-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_center</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
 </span></pre></div>
 
 
-    
+            <div class="docstring"><p>Helper class that provides a standard way to create an ABC using
+inheritance.</p>
+</div>
+
 
                             <div id="Sizeable.top_left" class="classattr">
                                 <div class="attr variable">
@@ -278,9 +285,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.width"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.width-10"><a href="#Sizeable.width-10"><span class="linenos">10</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.width-11"><a href="#Sizeable.width-11"><span class="linenos">11</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
-</span><span id="Sizeable.width-12"><a href="#Sizeable.width-12"><span class="linenos">12</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.width-13"><a href="#Sizeable.width-13"><span class="linenos">13</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.width-14"><a href="#Sizeable.width-14"><span class="linenos">14</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
+</span><span id="Sizeable.width-15"><a href="#Sizeable.width-15"><span class="linenos">15</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
 </span></pre></div>
 
 
@@ -296,9 +303,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.height"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.height-14"><a href="#Sizeable.height-14"><span class="linenos">14</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.height-15"><a href="#Sizeable.height-15"><span class="linenos">15</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
-</span><span id="Sizeable.height-16"><a href="#Sizeable.height-16"><span class="linenos">16</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.height-17"><a href="#Sizeable.height-17"><span class="linenos">17</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.height-18"><a href="#Sizeable.height-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
+</span><span id="Sizeable.height-19"><a href="#Sizeable.height-19"><span class="linenos">19</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
 </span></pre></div>
 
 
@@ -314,9 +321,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.top"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.top-18"><a href="#Sizeable.top-18"><span class="linenos">18</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.top-19"><a href="#Sizeable.top-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
-</span><span id="Sizeable.top-20"><a href="#Sizeable.top-20"><span class="linenos">20</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.top-21"><a href="#Sizeable.top-21"><span class="linenos">21</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.top-22"><a href="#Sizeable.top-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
+</span><span id="Sizeable.top-23"><a href="#Sizeable.top-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span>
 </span></pre></div>
 
 
@@ -332,9 +339,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.left"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.left-22"><a href="#Sizeable.left-22"><span class="linenos">22</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.left-23"><a href="#Sizeable.left-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
-</span><span id="Sizeable.left-24"><a href="#Sizeable.left-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.left-25"><a href="#Sizeable.left-25"><span class="linenos">25</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.left-26"><a href="#Sizeable.left-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
+</span><span id="Sizeable.left-27"><a href="#Sizeable.left-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span>
 </span></pre></div>
 
 
@@ -350,9 +357,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.bottom"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.bottom-26"><a href="#Sizeable.bottom-26"><span class="linenos">26</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.bottom-27"><a href="#Sizeable.bottom-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
-</span><span id="Sizeable.bottom-28"><a href="#Sizeable.bottom-28"><span class="linenos">28</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.bottom-29"><a href="#Sizeable.bottom-29"><span class="linenos">29</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.bottom-30"><a href="#Sizeable.bottom-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Height</span><span class="p">:</span>
+</span><span id="Sizeable.bottom-31"><a href="#Sizeable.bottom-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">top</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span>
 </span></pre></div>
 
 
@@ -368,9 +375,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.right"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.right-30"><a href="#Sizeable.right-30"><span class="linenos">30</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.right-31"><a href="#Sizeable.right-31"><span class="linenos">31</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
-</span><span id="Sizeable.right-32"><a href="#Sizeable.right-32"><span class="linenos">32</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.right-33"><a href="#Sizeable.right-33"><span class="linenos">33</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.right-34"><a href="#Sizeable.right-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Width</span><span class="p">:</span>
+</span><span id="Sizeable.right-35"><a href="#Sizeable.right-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span><span class="o">.</span><span class="n">left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
 </span></pre></div>
 
 
@@ -386,9 +393,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.top_right"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.top_right-34"><a href="#Sizeable.top_right-34"><span class="linenos">34</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.top_right-35"><a href="#Sizeable.top_right-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable.top_right-36"><a href="#Sizeable.top_right-36"><span class="linenos">36</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.top_right-37"><a href="#Sizeable.top_right-37"><span class="linenos">37</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.top_right-38"><a href="#Sizeable.top_right-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable.top_right-39"><a href="#Sizeable.top_right-39"><span class="linenos">39</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
 </span></pre></div>
 
 
@@ -404,9 +411,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.bottom_left"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.bottom_left-38"><a href="#Sizeable.bottom_left-38"><span class="linenos">38</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.bottom_left-39"><a href="#Sizeable.bottom_left-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable.bottom_left-40"><a href="#Sizeable.bottom_left-40"><span class="linenos">40</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.bottom_left-41"><a href="#Sizeable.bottom_left-41"><span class="linenos">41</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.bottom_left-42"><a href="#Sizeable.bottom_left-42"><span class="linenos">42</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable.bottom_left-43"><a href="#Sizeable.bottom_left-43"><span class="linenos">43</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
 </span></pre></div>
 
 
@@ -422,9 +429,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.bottom_right"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.bottom_right-42"><a href="#Sizeable.bottom_right-42"><span class="linenos">42</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.bottom_right-43"><a href="#Sizeable.bottom_right-43"><span class="linenos">43</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable.bottom_right-44"><a href="#Sizeable.bottom_right-44"><span class="linenos">44</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.bottom_right-45"><a href="#Sizeable.bottom_right-45"><span class="linenos">45</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.bottom_right-46"><a href="#Sizeable.bottom_right-46"><span class="linenos">46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable.bottom_right-47"><a href="#Sizeable.bottom_right-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
 </span></pre></div>
 
 
@@ -440,9 +447,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.top_center"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.top_center-46"><a href="#Sizeable.top_center-46"><span class="linenos">46</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.top_center-47"><a href="#Sizeable.top_center-47"><span class="linenos">47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable.top_center-48"><a href="#Sizeable.top_center-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.top_center-49"><a href="#Sizeable.top_center-49"><span class="linenos">49</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.top_center-50"><a href="#Sizeable.top_center-50"><span class="linenos">50</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable.top_center-51"><a href="#Sizeable.top_center-51"><span class="linenos">51</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span>
 </span></pre></div>
 
 
@@ -458,9 +465,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.bottom_center"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.bottom_center-50"><a href="#Sizeable.bottom_center-50"><span class="linenos">50</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.bottom_center-51"><a href="#Sizeable.bottom_center-51"><span class="linenos">51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable.bottom_center-52"><a href="#Sizeable.bottom_center-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.bottom_center-53"><a href="#Sizeable.bottom_center-53"><span class="linenos">53</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.bottom_center-54"><a href="#Sizeable.bottom_center-54"><span class="linenos">54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">bottom_center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable.bottom_center-55"><a href="#Sizeable.bottom_center-55"><span class="linenos">55</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
 </span></pre></div>
 
 
@@ -476,9 +483,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.center_left"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.center_left-54"><a href="#Sizeable.center_left-54"><span class="linenos">54</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.center_left-55"><a href="#Sizeable.center_left-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable.center_left-56"><a href="#Sizeable.center_left-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.center_left-57"><a href="#Sizeable.center_left-57"><span class="linenos">57</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.center_left-58"><a href="#Sizeable.center_left-58"><span class="linenos">58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable.center_left-59"><a href="#Sizeable.center_left-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
 </span></pre></div>
 
 
@@ -494,9 +501,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.center_right"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.center_right-58"><a href="#Sizeable.center_right-58"><span class="linenos">58</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.center_right-59"><a href="#Sizeable.center_right-59"><span class="linenos">59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable.center_right-60"><a href="#Sizeable.center_right-60"><span class="linenos">60</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.center_right-61"><a href="#Sizeable.center_right-61"><span class="linenos">61</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.center_right-62"><a href="#Sizeable.center_right-62"><span class="linenos">62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center_right</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable.center_right-63"><a href="#Sizeable.center_right-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_right</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
 </span></pre></div>
 
 
@@ -512,9 +519,9 @@
 
     </div>
     <a class="headerlink" href="#Sizeable.center"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.center-62"><a href="#Sizeable.center-62"><span class="linenos">62</span></a>    <span class="nd">@property</span>
-</span><span id="Sizeable.center-63"><a href="#Sizeable.center-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Sizeable.center-64"><a href="#Sizeable.center-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_center</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Sizeable.center-65"><a href="#Sizeable.center-65"><span class="linenos">65</span></a>    <span class="nd">@property</span>
+</span><span id="Sizeable.center-66"><a href="#Sizeable.center-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Sizeable.center-67"><a href="#Sizeable.center-67"><span class="linenos">67</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">top_center</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
 </span></pre></div>
 
 

@@ -28,6 +28,10 @@ class Coordinate:
         return Height(self.input_top)
 
     @property
+    def size(self) -> Size:
+        return Size(self.left, self.top)
+
+    @property
     def tuple(self) -> tuple[Pixel, Pixel]:
         return self.left.value, self.top.value
 

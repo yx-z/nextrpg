@@ -145,7 +145,7 @@ class TextGroup(Sizeable):
         curr_height = 0
         for line in lines:
             curr_width = 0
-            line_height = max(word.size.height for word in line)
+            line_height = max(word.height for word in line)
             for word in line:
                 word_width, word_height = word.size
                 height_diff = line_height - word_height
