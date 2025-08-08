@@ -11,7 +11,7 @@ from pygame.surface import Surface
 from pygame.transform import smoothscale
 
 from nextrpg.core.coordinate import ORIGIN, Coordinate
-from nextrpg.core.dataclass_with_instance_init import not_constructor_below
+from nextrpg.core.dataclass_with_init import not_constructor_below
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.core.logger import ComponentAndMessage, Logger, pop_messages
 from nextrpg.core.time import Millisecond

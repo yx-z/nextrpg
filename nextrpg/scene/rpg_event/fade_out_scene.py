@@ -1,9 +1,9 @@
 from dataclasses import KW_ONLY, dataclass, replace
 from typing import Self, override
 
-from nextrpg.core.dataclass_with_instance_init import (
-    dataclass_with_instance_init,
-    instance_init,
+from nextrpg.core.dataclass_with_init import (
+    dataclass_with_init,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
@@ -18,13 +18,13 @@ from nextrpg.scene.rpg_event.eventful_scene import (
 from nextrpg.scene.scene import Scene
 
 
-@dataclass_with_instance_init(frozen=True)
+@dataclass_with_init(frozen=True)
 class FadeOutScene(RpgEventScene):
     sentinel: BackgroundEventSentinel
     wait: bool = True
     duration: Millisecond | None = None
     _: KW_ONLY = not_constructor_below()
-    _fade: FadeOut = instance_init(lambda self: self._init_fade)
+    _fade: FadeOut = default(lambda self: self._init_fade)
 
     @property
     @override

@@ -99,9 +99,9 @@
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">KW_ONLY</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">replace</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">override</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_instance_init</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>    <span class="n">dataclass_with_instance_init</span><span class="p">,</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">instance_init</span><span class="p">,</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_init</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>    <span class="n">dataclass_with_init</span><span class="p">,</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">default</span><span class="p">,</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">not_constructor_below</span><span class="p">,</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="p">)</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
@@ -116,13 +116,13 @@
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FadeInScene</span><span class="p">(</span><span class="n">RpgEventScene</span><span class="p">[</span><span class="n">BackgroundEventSentinel</span><span class="p">]):</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="n">wait</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">_fade</span><span class="p">:</span> <span class="n">FadeIn</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">_fade</span><span class="p">:</span> <span class="n">FadeIn</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="p">(</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>            <span class="n">FadeIn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">)</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="ow">is</span> <span class="kc">None</span>
@@ -177,7 +177,7 @@
                 <section id="FadeInScene">
                             <input id="FadeInScene-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init(frozen=True)</div>
+                    <div class="decorator decorator-dataclass_with_init">@dataclass_with_init(frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">FadeInScene</span><wbr>(<span class="base"><a href="eventful_scene.html#RpgEventScene">nextrpg.scene.rpg_event.eventful_scene.RpgEventScene[nextrpg.scene.rpg_event.eventful_scene.BackgroundEventSentinel]</a></span>):
@@ -186,13 +186,13 @@
 
     </div>
     <a class="headerlink" href="#FadeInScene"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FadeInScene-22"><a href="#FadeInScene-22"><span class="linenos">22</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FadeInScene-22"><a href="#FadeInScene-22"><span class="linenos">22</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="FadeInScene-23"><a href="#FadeInScene-23"><span class="linenos">23</span></a><span class="k">class</span><span class="w"> </span><span class="nc">FadeInScene</span><span class="p">(</span><span class="n">RpgEventScene</span><span class="p">[</span><span class="n">BackgroundEventSentinel</span><span class="p">]):</span>
 </span><span id="FadeInScene-24"><a href="#FadeInScene-24"><span class="linenos">24</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span>
 </span><span id="FadeInScene-25"><a href="#FadeInScene-25"><span class="linenos">25</span></a>    <span class="n">wait</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 </span><span id="FadeInScene-26"><a href="#FadeInScene-26"><span class="linenos">26</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="FadeInScene-27"><a href="#FadeInScene-27"><span class="linenos">27</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
-</span><span id="FadeInScene-28"><a href="#FadeInScene-28"><span class="linenos">28</span></a>    <span class="n">_fade</span><span class="p">:</span> <span class="n">FadeIn</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="FadeInScene-28"><a href="#FadeInScene-28"><span class="linenos">28</span></a>    <span class="n">_fade</span><span class="p">:</span> <span class="n">FadeIn</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span>
 </span><span id="FadeInScene-29"><a href="#FadeInScene-29"><span class="linenos">29</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="p">(</span>
 </span><span id="FadeInScene-30"><a href="#FadeInScene-30"><span class="linenos">30</span></a>            <span class="n">FadeIn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">)</span>
 </span><span id="FadeInScene-31"><a href="#FadeInScene-31"><span class="linenos">31</span></a>            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="ow">is</span> <span class="kc">None</span>

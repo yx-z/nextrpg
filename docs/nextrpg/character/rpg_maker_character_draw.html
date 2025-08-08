@@ -126,9 +126,9 @@
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDraw</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_instance_init</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>    <span class="n">dataclass_with_instance_init</span><span class="p">,</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>    <span class="n">instance_init</span><span class="p">,</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_init</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>    <span class="n">dataclass_with_init</span><span class="p">,</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>    <span class="n">default</span><span class="p">,</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>    <span class="n">not_constructor_below</span><span class="p">,</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="p">)</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
@@ -177,7 +177,7 @@
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>    <span class="n">style</span><span class="p">:</span> <span class="n">FrameType</span> <span class="o">=</span> <span class="n">DefaultFrameType</span>
 </span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RpgMakerCharacterDraw</span><span class="p">(</span><span class="n">CharacterDraw</span><span class="p">):</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>    <span class="n">sprite_sheet</span><span class="p">:</span> <span class="n">RpgMakerSpriteSheet</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>    <span class="n">selection</span><span class="p">:</span> <span class="n">Selection</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
@@ -186,7 +186,7 @@
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">rpg_maker_character</span><span class="o">.</span><span class="n">duration_per_frame</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>    <span class="p">)</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="n">_frames</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Direction</span><span class="p">,</span> <span class="n">CyclicFrames</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="n">_frames</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Direction</span><span class="p">,</span> <span class="n">CyclicFrames</span><span class="p">]</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_frames</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>    <span class="p">)</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>
@@ -451,7 +451,7 @@
                 <section id="RpgMakerCharacterDraw">
                             <input id="RpgMakerCharacterDraw-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init(frozen=True)</div>
+                    <div class="decorator decorator-dataclass_with_init">@dataclass_with_init(frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">RpgMakerCharacterDraw</span><wbr>(<span class="base"><a href="character_draw.html#CharacterDraw">nextrpg.character.character_draw.CharacterDraw</a></span>):
@@ -460,7 +460,7 @@
 
     </div>
     <a class="headerlink" href="#RpgMakerCharacterDraw"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="RpgMakerCharacterDraw-59"><a href="#RpgMakerCharacterDraw-59"><span class="linenos"> 59</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="RpgMakerCharacterDraw-59"><a href="#RpgMakerCharacterDraw-59"><span class="linenos"> 59</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="RpgMakerCharacterDraw-60"><a href="#RpgMakerCharacterDraw-60"><span class="linenos"> 60</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RpgMakerCharacterDraw</span><span class="p">(</span><span class="n">CharacterDraw</span><span class="p">):</span>
 </span><span id="RpgMakerCharacterDraw-61"><a href="#RpgMakerCharacterDraw-61"><span class="linenos"> 61</span></a>    <span class="n">sprite_sheet</span><span class="p">:</span> <span class="n">RpgMakerSpriteSheet</span>
 </span><span id="RpgMakerCharacterDraw-62"><a href="#RpgMakerCharacterDraw-62"><span class="linenos"> 62</span></a>    <span class="n">selection</span><span class="p">:</span> <span class="n">Selection</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
@@ -469,7 +469,7 @@
 </span><span id="RpgMakerCharacterDraw-65"><a href="#RpgMakerCharacterDraw-65"><span class="linenos"> 65</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">rpg_maker_character</span><span class="o">.</span><span class="n">duration_per_frame</span>
 </span><span id="RpgMakerCharacterDraw-66"><a href="#RpgMakerCharacterDraw-66"><span class="linenos"> 66</span></a>    <span class="p">)</span>
 </span><span id="RpgMakerCharacterDraw-67"><a href="#RpgMakerCharacterDraw-67"><span class="linenos"> 67</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
-</span><span id="RpgMakerCharacterDraw-68"><a href="#RpgMakerCharacterDraw-68"><span class="linenos"> 68</span></a>    <span class="n">_frames</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Direction</span><span class="p">,</span> <span class="n">CyclicFrames</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span>
+</span><span id="RpgMakerCharacterDraw-68"><a href="#RpgMakerCharacterDraw-68"><span class="linenos"> 68</span></a>    <span class="n">_frames</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Direction</span><span class="p">,</span> <span class="n">CyclicFrames</span><span class="p">]</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span>
 </span><span id="RpgMakerCharacterDraw-69"><a href="#RpgMakerCharacterDraw-69"><span class="linenos"> 69</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_init_frames</span>
 </span><span id="RpgMakerCharacterDraw-70"><a href="#RpgMakerCharacterDraw-70"><span class="linenos"> 70</span></a>    <span class="p">)</span>
 </span><span id="RpgMakerCharacterDraw-71"><a href="#RpgMakerCharacterDraw-71"><span class="linenos"> 71</span></a>

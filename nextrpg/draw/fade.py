@@ -4,9 +4,9 @@ from functools import cached_property
 from typing import Self, TypeIs, override
 
 from nextrpg.core.color import alpha_from_percentage
-from nextrpg.core.dataclass_with_instance_init import (
-    dataclass_with_instance_init,
-    instance_init,
+from nextrpg.core.dataclass_with_init import (
+    dataclass_with_init,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond, Timer
@@ -22,14 +22,14 @@ type Resource = (
 )
 
 
-@dataclass_with_instance_init(frozen=True)
+@dataclass_with_init(frozen=True)
 class Fade(AnimatedOnScreen, ABC):
     resource: Resource
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
     )
     _: KW_ONLY = not_constructor_below()
-    _timer: Timer = instance_init(lambda self: Timer(self.duration))
+    _timer: Timer = default(lambda self: Timer(self.duration))
 
     @cached_property
     @override

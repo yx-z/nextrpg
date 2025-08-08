@@ -10,7 +10,7 @@ from nextrpg.character.rpg_maker_character_draw import *
 from nextrpg.core.cached_decorator import *
 from nextrpg.core.color import *
 from nextrpg.core.coordinate import *
-from nextrpg.core.dataclass_with_instance_init import *
+from nextrpg.core.dataclass_with_init import *
 from nextrpg.core.dimension import *
 from nextrpg.core.logger import *
 from nextrpg.core.walk import *

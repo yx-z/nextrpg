@@ -15,9 +15,9 @@ from pygame.transform import smoothscale
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.color import BLACK, Alpha, Color
 from nextrpg.core.coordinate import ORIGIN, Coordinate
-from nextrpg.core.dataclass_with_instance_init import (
-    dataclass_with_instance_init,
-    instance_init,
+from nextrpg.core.dataclass_with_init import (
+    dataclass_with_init,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.dimension import (
@@ -169,15 +169,15 @@ class PolygonDraw:
         _set_resource_and_color_key(self, surf)
 
 
-@dataclass_with_instance_init(frozen=True)
+@dataclass_with_init(frozen=True)
 class PolygonOnScreen(Sizeable):
     points: tuple[Coordinate, ...]
     closed: bool = True
     _: KW_ONLY = not_constructor_below()
-    top_left: Coordinate = instance_init(
+    top_left: Coordinate = default(
         lambda self: self.bounding_rectangle.top_left
     )
-    size: Size = instance_init(lambda self: self.bounding_rectangle.size)
+    size: Size = default(lambda self: self.bounding_rectangle.size)
 
     @cached_property
     def length(self) -> Pixel:

@@ -3,9 +3,9 @@ from functools import cached_property
 from typing import Self
 
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dataclass_with_instance_init import (
-    dataclass_with_instance_init,
-    instance_init,
+from nextrpg.core.dataclass_with_init import (
+    dataclass_with_init,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.dimension import Pixel, PixelPerMillisecond
@@ -14,13 +14,13 @@ from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import PolygonOnScreen
 
 
-@dataclass_with_instance_init(frozen=True)
+@dataclass_with_init(frozen=True)
 class Walk:
     path: PolygonOnScreen
     move_speed: PixelPerMillisecond
     cyclic: bool
     _: KW_ONLY = not_constructor_below()
-    coordinate: Coordinate = instance_init(lambda self: self._initial_point)
+    coordinate: Coordinate = default(lambda self: self._initial_point)
     _target_index: int | None = 1
 
     @cached_property

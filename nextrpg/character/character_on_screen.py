@@ -6,9 +6,9 @@ from typing import Self
 
 from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dataclass_with_instance_init import (
-    dataclass_with_instance_init,
-    instance_init,
+from nextrpg.core.dataclass_with_init import (
+    dataclass_with_init,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.dimension import Size
@@ -21,21 +21,21 @@ from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.global_config import config
 
 
-@dataclass_with_instance_init(frozen=True)
+@dataclass_with_init(frozen=True)
 class CharacterSpec:
     object_name: str
     character: CharacterDraw
     avatar: Draw | Group | None = None
-    display_name: str = instance_init(lambda self: self.object_name)
+    display_name: str = default(lambda self: self.object_name)
 
 
-@dataclass_with_instance_init(frozen=True)
+@dataclass_with_init(frozen=True)
 class CharacterOnScreen(EventAsAttr, Sizeable):
     spec: CharacterSpec
     coordinate: Coordinate
     config: CharacterConfig = field(default_factory=lambda: config().character)
     _: KW_ONLY = not_constructor_below()
-    character: CharacterDraw = instance_init(lambda self: self.spec.character)
+    character: CharacterDraw = default(lambda self: self.spec.character)
     _event_started: bool = False
 
     @property

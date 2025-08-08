@@ -2,9 +2,9 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.core.dataclass_with_instance_init import (
-    dataclass_with_instance_init,
-    instance_init,
+from nextrpg.core.dataclass_with_init import (
+    dataclass_with_init,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond, Timer
@@ -13,13 +13,13 @@ from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.text_on_screen import TextOnScreen
 
 
-@dataclass_with_instance_init(frozen=True)
+@dataclass_with_init(frozen=True)
 class Typewriter(AnimatedOnScreen):
     text_on_screen: TextOnScreen
     delay: Millisecond
     _: KW_ONLY = not_constructor_below()
     _index: int = 0
-    _timer: Timer = instance_init(lambda self: Timer(self.delay))
+    _timer: Timer = default(lambda self: Timer(self.delay))
 
     @cached_property
     @override

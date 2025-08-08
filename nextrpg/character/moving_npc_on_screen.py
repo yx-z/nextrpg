@@ -4,9 +4,9 @@ from typing import Self, override
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dataclass_with_instance_init import (
-    dataclass_with_instance_init,
-    instance_init,
+from nextrpg.core.dataclass_with_init import (
+    dataclass_with_init,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
@@ -14,13 +14,13 @@ from nextrpg.core.walk import Walk
 from nextrpg.draw.draw import PolygonOnScreen
 
 
-@dataclass_with_instance_init(frozen=True, kw_only=True)
+@dataclass_with_init(frozen=True, kw_only=True)
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     path: PolygonOnScreen
     spec: NpcSpec
     collisions: tuple[PolygonOnScreen, ...] = ()
     _: KW_ONLY = not_constructor_below()
-    _walk: Walk = instance_init(
+    _walk: Walk = default(
         lambda self: Walk(
             self.path,
             self.spec.config.move_speed,

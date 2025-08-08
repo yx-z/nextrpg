@@ -78,9 +78,9 @@
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">KW_ONLY</span><span class="p">,</span> <span class="n">replace</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">override</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_instance_init</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>    <span class="n">dataclass_with_instance_init</span><span class="p">,</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">instance_init</span><span class="p">,</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_init</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>    <span class="n">dataclass_with_init</span><span class="p">,</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">default</span><span class="p">,</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">not_constructor_below</span><span class="p">,</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="p">)</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Timer</span>
@@ -88,13 +88,13 @@
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">Draw</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CyclicFrames</span><span class="p">(</span><span class="n">Animated</span><span class="p">):</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">frames</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Draw</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">duration_per_frame</span><span class="p">:</span> <span class="n">Millisecond</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">_timer</span><span class="p">:</span> <span class="n">Timer</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration_per_frame</span><span class="p">))</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">_timer</span><span class="p">:</span> <span class="n">Timer</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration_per_frame</span><span class="p">))</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="nd">@property</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="nd">@override</span>
@@ -118,7 +118,7 @@
                 <section id="CyclicFrames">
                             <input id="CyclicFrames-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init(frozen=True)</div>
+                    <div class="decorator decorator-dataclass_with_init">@dataclass_with_init(frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">CyclicFrames</span><wbr>(<span class="base"><a href="animated.html#Animated">nextrpg.draw.animated.Animated</a></span>):
@@ -127,13 +127,13 @@
 
     </div>
     <a class="headerlink" href="#CyclicFrames"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CyclicFrames-15"><a href="#CyclicFrames-15"><span class="linenos">15</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CyclicFrames-15"><a href="#CyclicFrames-15"><span class="linenos">15</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="CyclicFrames-16"><a href="#CyclicFrames-16"><span class="linenos">16</span></a><span class="k">class</span><span class="w"> </span><span class="nc">CyclicFrames</span><span class="p">(</span><span class="n">Animated</span><span class="p">):</span>
 </span><span id="CyclicFrames-17"><a href="#CyclicFrames-17"><span class="linenos">17</span></a>    <span class="n">frames</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Draw</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 </span><span id="CyclicFrames-18"><a href="#CyclicFrames-18"><span class="linenos">18</span></a>    <span class="n">duration_per_frame</span><span class="p">:</span> <span class="n">Millisecond</span>
 </span><span id="CyclicFrames-19"><a href="#CyclicFrames-19"><span class="linenos">19</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
 </span><span id="CyclicFrames-20"><a href="#CyclicFrames-20"><span class="linenos">20</span></a>    <span class="n">_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span id="CyclicFrames-21"><a href="#CyclicFrames-21"><span class="linenos">21</span></a>    <span class="n">_timer</span><span class="p">:</span> <span class="n">Timer</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration_per_frame</span><span class="p">))</span>
+</span><span id="CyclicFrames-21"><a href="#CyclicFrames-21"><span class="linenos">21</span></a>    <span class="n">_timer</span><span class="p">:</span> <span class="n">Timer</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration_per_frame</span><span class="p">))</span>
 </span><span id="CyclicFrames-22"><a href="#CyclicFrames-22"><span class="linenos">22</span></a>
 </span><span id="CyclicFrames-23"><a href="#CyclicFrames-23"><span class="linenos">23</span></a>    <span class="nd">@property</span>
 </span><span id="CyclicFrames-24"><a href="#CyclicFrames-24"><span class="linenos">24</span></a>    <span class="nd">@override</span>

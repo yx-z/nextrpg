@@ -8,9 +8,9 @@ from typing import Any, Callable, Generator, Self, override
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.core.dataclass_with_instance_init import (
-    dataclass_with_instance_init,
-    instance_init,
+from nextrpg.core.dataclass_with_init import (
+    dataclass_with_init,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.logger import Logger
@@ -177,10 +177,10 @@ class BackgroundEventSentinel:
     cls: type
 
 
-@dataclass_with_instance_init(frozen=True)
+@dataclass_with_init(frozen=True)
 class BackgroundEvent(ABC):
     _: KW_ONLY = not_constructor_below()
-    sentinel: BackgroundEventSentinel = instance_init(
+    sentinel: BackgroundEventSentinel = default(
         lambda self: BackgroundEventSentinel(type(self))
     )
 

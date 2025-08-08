@@ -7,16 +7,16 @@ def not_constructor_below() -> Any:
     return None
 
 
-def instance_init(init: Callable[[Any], Any]) -> Any:
+def default(init: Callable[[Any], Any]) -> Any:
     return field(repr=False, default_factory=lambda: _Init(init))
 
 
-@dataclass_transform(field_descriptors=(not_constructor_below, instance_init))
-def dataclass_with_instance_init[T](
+@dataclass_transform(field_descriptors=(not_constructor_below, default))
+def dataclass_with_init[T](
     cls: type[T] | None = None, /, **kwargs: Any
 ) -> Callable[[type[T]], type[T]] | type[T]:
     if cls is None:
-        return lambda c: dataclass_with_instance_init(c, **kwargs)
+        return lambda c: dataclass_with_init(c, **kwargs)
 
     def post_init(self) -> None:
         if getattr(self, _NEXTRPG_INSTANCE_INIT, None):

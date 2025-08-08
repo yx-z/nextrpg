@@ -93,9 +93,9 @@
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">TypeIs</span><span class="p">,</span> <span class="n">override</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">alpha_from_percentage</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_instance_init</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>    <span class="n">dataclass_with_instance_init</span><span class="p">,</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>    <span class="n">instance_init</span><span class="p">,</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_init</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>    <span class="n">dataclass_with_init</span><span class="p">,</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>    <span class="n">default</span><span class="p">,</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>    <span class="n">not_constructor_below</span><span class="p">,</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="p">)</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Timer</span>
@@ -111,14 +111,14 @@
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="p">)</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Fade</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>    <span class="p">)</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>    <span class="n">_timer</span><span class="p">:</span> <span class="n">Timer</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">))</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>    <span class="n">_timer</span><span class="p">:</span> <span class="n">Timer</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">))</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>    <span class="nd">@override</span>
@@ -233,7 +233,7 @@
                 <section id="Fade">
                             <input id="Fade-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-dataclass_with_instance_init">@dataclass_with_instance_init(frozen=True)</div>
+                    <div class="decorator decorator-dataclass_with_init">@dataclass_with_init(frozen=True)</div>
 
     <span class="def">class</span>
     <span class="name">Fade</span><wbr>(<span class="base"><a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a></span>, <span class="base">abc.ABC</span>):
@@ -242,14 +242,14 @@
 
     </div>
     <a class="headerlink" href="#Fade"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Fade-26"><a href="#Fade-26"><span class="linenos">26</span></a><span class="nd">@dataclass_with_instance_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Fade-26"><a href="#Fade-26"><span class="linenos">26</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="Fade-27"><a href="#Fade-27"><span class="linenos">27</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Fade</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
 </span><span id="Fade-28"><a href="#Fade-28"><span class="linenos">28</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span>
 </span><span id="Fade-29"><a href="#Fade-29"><span class="linenos">29</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
 </span><span id="Fade-30"><a href="#Fade-30"><span class="linenos">30</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
 </span><span id="Fade-31"><a href="#Fade-31"><span class="linenos">31</span></a>    <span class="p">)</span>
 </span><span id="Fade-32"><a href="#Fade-32"><span class="linenos">32</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
-</span><span id="Fade-33"><a href="#Fade-33"><span class="linenos">33</span></a>    <span class="n">_timer</span><span class="p">:</span> <span class="n">Timer</span> <span class="o">=</span> <span class="n">instance_init</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">))</span>
+</span><span id="Fade-33"><a href="#Fade-33"><span class="linenos">33</span></a>    <span class="n">_timer</span><span class="p">:</span> <span class="n">Timer</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">))</span>
 </span><span id="Fade-34"><a href="#Fade-34"><span class="linenos">34</span></a>
 </span><span id="Fade-35"><a href="#Fade-35"><span class="linenos">35</span></a>    <span class="nd">@cached_property</span>
 </span><span id="Fade-36"><a href="#Fade-36"><span class="linenos">36</span></a>    <span class="nd">@override</span>
