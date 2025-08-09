@@ -29,8 +29,14 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
         player_spec or init_player(),
         Move("from_interior", "to_exterior", exterior_scene),
         (
-            NpcSpec("david", david(), event=greet),
-            NpcSpec("alisa", alisa(), event=greet),
+            NpcSpec("david", david()),
+            NpcSpec(
+                "alisa",
+                alisa(),
+                obstruct_player=False,
+                collide_with_others=False,
+                event=greet,
+            ),
         ),
     )
 

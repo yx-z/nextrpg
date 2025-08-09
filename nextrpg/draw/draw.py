@@ -99,8 +99,8 @@ class Draw(Sizeable):
 
     @cached_property
     def _debug_surface(self) -> Surface | None:
-        if not config().debug or not (
-            color := config().debug.draw_background_color
+        if not (debug := config().debug) or not (
+            color := debug.draw_background_color
         ):
             return None
 

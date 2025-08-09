@@ -28,7 +28,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         self, time_delta: Millisecond, others: tuple[CharacterOnScreen, ...]
     ) -> Self:
         if not self.moving or (
-            not self._can_move(moved_coord := self.move(time_delta), others)
+            not self.can_move(moved_coord := self.move(time_delta), others)
         ):
             return super().tick(time_delta, others)
 
@@ -43,7 +43,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
     def post_tick(self, time_delta: Millisecond, ticked: Self) -> Self:
         return ticked
 
-    def _can_move(
+    def can_move(
         self, coordinate: Coordinate, others: tuple[CharacterOnScreen, ...]
     ) -> bool:
         if (debug := config().debug) and debug.ignore_map_collisions:
@@ -61,7 +61,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         bounding_rect: RectangleOnScreen,
         others: tuple[CharacterOnScreen, ...],
     ) -> PolygonOnScreen | None:
-        other_rects = tuple(c.collision_rectangle for c in others)
+        other_rects = tuple(r for c in others if (r := c.collision_rectangle))
         for collision in self.collisions + other_rects:
             if collision.collide(bounding_rect):
                 return collision

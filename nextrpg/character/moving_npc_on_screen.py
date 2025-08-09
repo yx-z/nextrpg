@@ -1,6 +1,7 @@
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
+from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec
 from nextrpg.core.coordinate import Coordinate
@@ -43,3 +44,11 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     @override
     def move(self, time_delta: Millisecond) -> Coordinate:
         return self._walk.tick(time_delta).coordinate
+
+    @override
+    def can_move(
+        self, coordinate: Coordinate, others: tuple[CharacterOnScreen, ...]
+    ) -> bool:
+        if self.spec.collide_with_others:
+            return super().can_move(coordinate, others)
+        return True

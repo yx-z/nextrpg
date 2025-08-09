@@ -1,5 +1,7 @@
 from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass, field
+from functools import cached_property
+from typing import override
 
 from nextrpg.character.character_on_screen import (
     CharacterOnScreen,
@@ -11,6 +13,7 @@ from nextrpg.core.dataclass_with_init import (
     default,
     not_constructor_below,
 )
+from nextrpg.draw.draw import RectangleOnScreen
 from nextrpg.event.event_transformer import transform
 from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.global_config import config
@@ -24,6 +27,7 @@ class NpcSpec(CharacterSpec):
     event: NpcEventSpec | None = None
     config: CharacterConfig = field(default_factory=lambda: config().character)
     cyclic_walk: bool = True
+    collide_with_others: bool = False
     _: KW_ONLY = not_constructor_below()
     generator: Callable[[*NpcEventSpecParams], "EventGenerator"] | None = (
         default(lambda self: transform(self.event) if self.event else None)
@@ -33,3 +37,10 @@ class NpcSpec(CharacterSpec):
 @dataclass(frozen=True, kw_only=True)
 class NpcOnScreen(CharacterOnScreen):
     spec: NpcSpec
+
+    @override
+    @cached_property
+    def start_event_rectangle(self) -> RectangleOnScreen | None:
+        if self.spec.event:
+            return super().start_event_rectangle
+        return None

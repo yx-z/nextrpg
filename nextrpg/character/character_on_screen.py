@@ -25,6 +25,7 @@ from nextrpg.global_config.global_config import config
 class CharacterSpec:
     object_name: str
     character: CharacterDraw
+    obstruct_player: bool = True
     avatar: Draw | Group | None = None
     display_name: str = default(lambda self: self.object_name)
 
@@ -64,26 +65,32 @@ class CharacterOnScreen(EventAsAttr, Sizeable):
 
     @cached_property
     def _collision_visual(self) -> DrawOnScreen | None:
-        if config().debug and (
-            color := config().debug.collision_rectangle_color
+        if (
+            (debug := config().debug)
+            and (color := debug.collision_rectangle_color)
+            and self.collision_rectangle
         ):
             return self.collision_rectangle.fill(color)
         return None
 
     @cached_property
     def _start_event_visual(self) -> DrawOnScreen | None:
-        if config().debug and (
-            color := config().debug.start_event_rectangle_color
+        if (
+            (debug := config().debug)
+            and (color := debug.start_event_rectangle_color)
+            and self.start_event_rectangle
         ):
             return self.start_event_rectangle.fill(color)
         return None
 
     @cached_property
-    def collision_rectangle(self) -> RectangleOnScreen:
-        return self._collision_rectangle(self.coordinate)
+    def collision_rectangle(self) -> RectangleOnScreen | None:
+        if self.spec.obstruct_player:
+            return self._collision_rectangle(self.coordinate)
+        return None
 
     @cached_property
-    def start_event_rectangle(self) -> RectangleOnScreen:
+    def start_event_rectangle(self) -> RectangleOnScreen | None:
         scaling = self.config.start_event_scaling
         coord = self.coordinate - self.width * (scaling - 1) / 2
         size = self.size * scaling
