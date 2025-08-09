@@ -57,6 +57,16 @@ class AddOn:
     def add_on_top_left(self) -> Coordinate:
         return self._center_to_top_left(self.config.scene_coordinate)
 
+    @property
+    def avatar(self) -> Draw | Group | None:
+        return self.config.avatar
+
+    @property
+    def name(self) -> str | None:
+        if name := self.config.name_override:
+            return name
+        return None
+
     def _center_to_top_left(self, center: Coordinate) -> Coordinate:
         return (
             center
@@ -87,32 +97,22 @@ class AddOn:
         )
         return RelativeDraw(rect, shift)
 
-    @property
-    def _avatar(self) -> Draw | Group | None:
-        return self.config.avatar
-
     @cached_property
     def _avatar_relative_to_text(self) -> RelativeDraw | None:
-        if not self._avatar:
+        if not self.avatar:
             return None
         shift = (
             self._text.bottom_left
             - self.config.padding.width
-            - self._avatar.size
+            - self.avatar.size
         )
-        return RelativeDraw(self._avatar, shift.size)
-
-    @property
-    def _name(self) -> str | None:
-        if name := self.config.name_override:
-            return name
-        return None
+        return RelativeDraw(self.avatar, shift.size)
 
     @cached_property
     def _name_relative_to_text(self) -> RelativeDraw | None:
-        if not self._name:
+        if not self.name:
             return None
-        text = Text(self._name, self.config.name_text_config)
+        text = Text(self.name, self.config.name_text_config)
         shift = Size(0, -text.height - self.config.padding.height)
         return RelativeDraw(text.group, shift)
 
@@ -185,6 +185,20 @@ class CharacterAddOn(AddOn):
         return Coordinate(left, top)
 
     @cached_property
+    @override
+    def avatar(self) -> Draw | Group | None:
+        if self.config.avatar:
+            return self.config.avatar
+        return self.character.spec.avatar
+
+    @cached_property
+    @override
+    def name(self) -> str:
+        if self.config.name_override:
+            return self.config.name_override
+        return self.character.display_name
+
+    @cached_property
     def _character_edge(self) -> _CharacterPosition:
         if self._character_rectangle_on_screen.center in top_screen():
             return _CharacterPosition(
@@ -202,20 +216,6 @@ class CharacterAddOn(AddOn):
         if self.scene.draw_on_screen_shift:
             return rect + self.scene.draw_on_screen_shift
         return rect
-
-    @cached_property
-    @override
-    def _avatar(self) -> Draw | Group | None:
-        if self.config.avatar:
-            return self.config.avatar
-        return self.character.spec.avatar
-
-    @cached_property
-    @override
-    def _name(self) -> str:
-        if self.config.name_override:
-            return self.config.name_override
-        return self.character.display_name
 
 
 @dataclass(frozen=True, kw_only=True)
