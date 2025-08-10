@@ -7,6 +7,8 @@ from nextrpg import (
     EventfulScene,
     MapScene,
     Move,
+    NpcEventSpec,
+    NpcEventStartMode,
     NpcOnScreen,
     NpcSpec,
     PlayerOnScreen,
@@ -29,13 +31,15 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
         player_spec or init_player(),
         Move("from_interior", "to_exterior", exterior_scene),
         (
-            NpcSpec("david", david()),
+            NpcSpec(object_name="david", character=david()),
             NpcSpec(
-                "alisa",
-                alisa(),
-                obstruct_player=False,
-                collide_with_others=False,
+                object_name="alisa",
+                character=alisa(),
                 event=greet,
+            ),
+            NpcSpec(
+                object_name="auto",
+                event=NpcEventSpec(greet, NpcEventStartMode.COLLIDE),
             ),
         ),
     )

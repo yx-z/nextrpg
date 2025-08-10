@@ -6,19 +6,29 @@ from functools import cached_property
 from os import PathLike
 from typing import NamedTuple, OrderedDict, override
 
+from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
-from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec
+from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec, to_strict
 from nextrpg.character.player_on_screen import PlayerOnScreen
+from nextrpg.character.polygon_character_draw import PolygonCharacterDraw
+from nextrpg.core.color import TRANSPARENT
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
     not_constructor_below,
 )
+from nextrpg.core.direction import Direction
 from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond, get_timepoint
-from nextrpg.draw.draw import DrawOnScreen, PolygonOnScreen
+from nextrpg.draw.draw import (
+    DrawOnScreen,
+    PolygonDraw,
+    PolygonOnScreen,
+    RectangleDraw,
+    RectangleOnScreen,
+)
 from nextrpg.global_config.global_config import config
 from nextrpg.scene.map.map_loader import MapLoader, get_polygon
 from nextrpg.scene.map.map_shift import center_player
@@ -34,10 +44,10 @@ class MapScene(EventfulScene):
     tmx_file: PathLike | str
     player_spec: CharacterSpec
     move: Move | tuple[Move, ...] = ()
-    npc_specs: tuple[NpcSpec, ...] = ()
+    npc_specs: NpcSpec | tuple[NpcSpec, ...] = ()
     _: KW_ONLY = not_constructor_below()
     npcs: tuple[NpcOnScreen, ...] = default(
-        lambda self: tuple(self._init_npc(n) for n in self.npc_specs)
+        lambda self: tuple(self._init_npc(n) for n in self._npc_specs)
     )
     player: PlayerOnScreen = default(
         lambda self: self.init_player(self.player_spec)
@@ -142,9 +152,31 @@ class MapScene(EventfulScene):
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
         obj = self.map_helper.get_object(spec.object_name)
         coord = Coordinate(obj.x, obj.y)
-        if poly := get_polygon(obj):
-            return MovingNpcOnScreen(coordinate=coord, path=poly, spec=spec)
-        return NpcOnScreen(coordinate=coord, spec=spec)
+        if not (poly := get_polygon(obj)):
+            return NpcOnScreen(coordinate=coord, spec=to_strict(spec))
+
+        if isinstance(spec.character, CharacterDraw):
+            return MovingNpcOnScreen(
+                coordinate=coord, path=poly, spec=to_strict(spec)
+            )
+
+        color = spec.character or TRANSPARENT
+        if isinstance(poly, RectangleOnScreen):
+            poly_draw = RectangleDraw(poly.size, color)
+        else:
+            points = tuple(p - coord for p in poly.points)
+            poly_draw = PolygonDraw(points, color)
+
+        poly_spec = to_strict(
+            spec, PolygonCharacterDraw(Direction.DOWN, poly_draw)
+        )
+        return NpcOnScreen(coordinate=coord, spec=poly_spec)
+
+    @cached_property
+    def _npc_specs(self) -> tuple[NpcSpec, ...]:
+        if isinstance(self.npc_specs, NpcSpec):
+            return (self.npc_specs,)
+        return self.npc_specs
 
 
 @dataclass(frozen=True)

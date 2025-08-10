@@ -51,6 +51,12 @@
                         <li>
                                 <a class="variable" href="#AddOn.add_on_top_left">add_on_top_left</a>
                         </li>
+                        <li>
+                                <a class="variable" href="#AddOn.avatar">avatar</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#AddOn.name">name</a>
+                        </li>
                 </ul>
 
             </li>
@@ -71,6 +77,12 @@
                         </li>
                         <li>
                                 <a class="variable" href="#CharacterAddOn.add_on_top_left">add_on_top_left</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#CharacterAddOn.avatar">avatar</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#CharacterAddOn.name">name</a>
                         </li>
                 </ul>
 
@@ -155,62 +167,62 @@
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_on_top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_center_to_top_left</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">scene_coordinate</span><span class="p">)</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_center_to_top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>            <span class="n">center</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_background_relative_to_text</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">size</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>            <span class="o">/</span> <span class="n">WidthAndHeightScaling</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>        <span class="p">)</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_background_relative_to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RelativeDraw</span><span class="p">:</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>        <span class="n">shift</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span> <span class="o">*</span> <span class="n">WidthAndHeightScaling</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_relative_to_text</span><span class="p">:</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>            <span class="n">extra_height</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_name_relative_to_text</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">height</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">height</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>            <span class="p">)</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>            <span class="n">shift</span> <span class="o">-=</span> <span class="n">extra_height</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>            <span class="n">size</span> <span class="o">+=</span> <span class="n">extra_height</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_avatar_relative_to_text</span><span class="p">:</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>            <span class="n">extra_width</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_avatar_relative_to_text</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">width</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>            <span class="p">)</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>            <span class="n">shift</span> <span class="o">-=</span> <span class="n">extra_width</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>            <span class="n">size</span> <span class="o">+=</span> <span class="n">extra_width</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>        <span class="n">rect</span> <span class="o">=</span> <span class="n">RectangleDraw</span><span class="p">(</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>            <span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">background</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">border_radius</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>        <span class="p">)</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>        <span class="k">return</span> <span class="n">RelativeDraw</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>    <span class="nd">@property</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_avatar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">Group</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_avatar_relative_to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RelativeDraw</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_avatar</span><span class="p">:</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>            <span class="k">return</span> <span class="kc">None</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="n">shift</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">bottom_left</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">width</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_avatar</span><span class="o">.</span><span class="n">size</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>        <span class="p">)</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>        <span class="k">return</span> <span class="n">RelativeDraw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_avatar</span><span class="p">,</span> <span class="n">shift</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>    <span class="nd">@property</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>        <span class="k">if</span> <span class="n">name</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span><span class="p">:</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>            <span class="k">return</span> <span class="n">name</span>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>        <span class="k">return</span> <span class="kc">None</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>    <span class="nd">@property</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">avatar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">Group</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>    <span class="nd">@property</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="k">if</span> <span class="n">name</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span><span class="p">:</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>            <span class="k">return</span> <span class="n">name</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>        <span class="k">return</span> <span class="kc">None</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_center_to_top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>            <span class="n">center</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_background_relative_to_text</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>            <span class="o">/</span> <span class="n">WidthAndHeightScaling</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>        <span class="p">)</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_background_relative_to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RelativeDraw</span><span class="p">:</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>        <span class="n">shift</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span> <span class="o">*</span> <span class="n">WidthAndHeightScaling</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_relative_to_text</span><span class="p">:</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>            <span class="n">extra_height</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_name_relative_to_text</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">height</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">height</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>            <span class="p">)</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>            <span class="n">shift</span> <span class="o">-=</span> <span class="n">extra_height</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>            <span class="n">size</span> <span class="o">+=</span> <span class="n">extra_height</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_avatar_relative_to_text</span><span class="p">:</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>            <span class="n">extra_width</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_avatar_relative_to_text</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">width</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>            <span class="p">)</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>            <span class="n">shift</span> <span class="o">-=</span> <span class="n">extra_width</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>            <span class="n">size</span> <span class="o">+=</span> <span class="n">extra_width</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="n">rect</span> <span class="o">=</span> <span class="n">RectangleDraw</span><span class="p">(</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>            <span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">background</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">border_radius</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>        <span class="p">)</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="k">return</span> <span class="n">RelativeDraw</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_avatar_relative_to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RelativeDraw</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">avatar</span><span class="p">:</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="n">shift</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">bottom_left</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">width</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">avatar</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>        <span class="p">)</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>        <span class="k">return</span> <span class="n">RelativeDraw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">avatar</span><span class="p">,</span> <span class="n">shift</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 </span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_name_relative_to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RelativeDraw</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">:</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
 </span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>            <span class="k">return</span> <span class="kc">None</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>        <span class="n">text</span> <span class="o">=</span> <span class="n">Text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_text_config</span><span class="p">)</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>        <span class="n">text</span> <span class="o">=</span> <span class="n">Text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_text_config</span><span class="p">)</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>        <span class="n">shift</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">text</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>        <span class="k">return</span> <span class="n">RelativeDraw</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
 </span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>
@@ -283,37 +295,37 @@
 </span><span id="L-185"><a href="#L-185"><span class="linenos">185</span></a>        <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">)</span>
 </span><span id="L-186"><a href="#L-186"><span class="linenos">186</span></a>
 </span><span id="L-187"><a href="#L-187"><span class="linenos">187</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_character_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_CharacterPosition</span><span class="p">:</span>
-</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_character_rectangle_on_screen</span><span class="o">.</span><span class="n">center</span> <span class="ow">in</span> <span class="n">top_screen</span><span class="p">():</span>
-</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>            <span class="k">return</span> <span class="n">_CharacterPosition</span><span class="p">(</span>
-</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>                <span class="n">coordinate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_character_rectangle_on_screen</span><span class="o">.</span><span class="n">bottom_center</span><span class="p">,</span>
-</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>                <span class="n">is_top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>            <span class="p">)</span>
-</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>        <span class="k">return</span> <span class="n">_CharacterPosition</span><span class="p">(</span>
-</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>            <span class="n">coordinate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_character_rectangle_on_screen</span><span class="o">.</span><span class="n">top_center</span><span class="p">,</span>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>            <span class="n">is_top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>        <span class="p">)</span>
-</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_character_rectangle_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RectangleOnScreen</span><span class="p">:</span>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>        <span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="o">.</span><span class="n">visible_rectangle_on_screen</span>
-</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">:</span>
-</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>            <span class="k">return</span> <span class="n">rect</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screen_shift</span>
-</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>        <span class="k">return</span> <span class="n">rect</span>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>
-</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>    <span class="nd">@override</span>
-</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_avatar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">Group</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span><span class="p">:</span>
-</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span>
-</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">avatar</span>
+</span><span id="L-188"><a href="#L-188"><span class="linenos">188</span></a>    <span class="nd">@override</span>
+</span><span id="L-189"><a href="#L-189"><span class="linenos">189</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">avatar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">Group</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-190"><a href="#L-190"><span class="linenos">190</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span><span class="p">:</span>
+</span><span id="L-191"><a href="#L-191"><span class="linenos">191</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span>
+</span><span id="L-192"><a href="#L-192"><span class="linenos">192</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">avatar</span>
+</span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>
+</span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a>    <span class="nd">@override</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span><span class="p">:</span>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">display_name</span>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_character_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_CharacterPosition</span><span class="p">:</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_character_rectangle_on_screen</span><span class="o">.</span><span class="n">center</span> <span class="ow">in</span> <span class="n">top_screen</span><span class="p">():</span>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>            <span class="k">return</span> <span class="n">_CharacterPosition</span><span class="p">(</span>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>                <span class="n">coordinate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_character_rectangle_on_screen</span><span class="o">.</span><span class="n">bottom_center</span><span class="p">,</span>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a>                <span class="n">is_top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a>            <span class="p">)</span>
+</span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a>        <span class="k">return</span> <span class="n">_CharacterPosition</span><span class="p">(</span>
+</span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>            <span class="n">coordinate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_character_rectangle_on_screen</span><span class="o">.</span><span class="n">top_center</span><span class="p">,</span>
+</span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>            <span class="n">is_top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="L-211"><a href="#L-211"><span class="linenos">211</span></a>        <span class="p">)</span>
 </span><span id="L-212"><a href="#L-212"><span class="linenos">212</span></a>
 </span><span id="L-213"><a href="#L-213"><span class="linenos">213</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>    <span class="nd">@override</span>
-</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span><span class="p">:</span>
-</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span>
-</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">display_name</span>
+</span><span id="L-214"><a href="#L-214"><span class="linenos">214</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_character_rectangle_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RectangleOnScreen</span><span class="p">:</span>
+</span><span id="L-215"><a href="#L-215"><span class="linenos">215</span></a>        <span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="o">.</span><span class="n">visible_rectangle_on_screen</span>
+</span><span id="L-216"><a href="#L-216"><span class="linenos">216</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">:</span>
+</span><span id="L-217"><a href="#L-217"><span class="linenos">217</span></a>            <span class="k">return</span> <span class="n">rect</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screen_shift</span>
+</span><span id="L-218"><a href="#L-218"><span class="linenos">218</span></a>        <span class="k">return</span> <span class="n">rect</span>
 </span><span id="L-219"><a href="#L-219"><span class="linenos">219</span></a>
 </span><span id="L-220"><a href="#L-220"><span class="linenos">220</span></a>
 </span><span id="L-221"><a href="#L-221"><span class="linenos">221</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -377,62 +389,62 @@
 </span><span id="AddOn-58"><a href="#AddOn-58"><span class="linenos"> 58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_on_top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
 </span><span id="AddOn-59"><a href="#AddOn-59"><span class="linenos"> 59</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_center_to_top_left</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">scene_coordinate</span><span class="p">)</span>
 </span><span id="AddOn-60"><a href="#AddOn-60"><span class="linenos"> 60</span></a>
-</span><span id="AddOn-61"><a href="#AddOn-61"><span class="linenos"> 61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_center_to_top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="AddOn-62"><a href="#AddOn-62"><span class="linenos"> 62</span></a>        <span class="k">return</span> <span class="p">(</span>
-</span><span id="AddOn-63"><a href="#AddOn-63"><span class="linenos"> 63</span></a>            <span class="n">center</span>
-</span><span id="AddOn-64"><a href="#AddOn-64"><span class="linenos"> 64</span></a>            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_background_relative_to_text</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">size</span>
-</span><span id="AddOn-65"><a href="#AddOn-65"><span class="linenos"> 65</span></a>            <span class="o">/</span> <span class="n">WidthAndHeightScaling</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</span><span id="AddOn-66"><a href="#AddOn-66"><span class="linenos"> 66</span></a>        <span class="p">)</span>
-</span><span id="AddOn-67"><a href="#AddOn-67"><span class="linenos"> 67</span></a>
-</span><span id="AddOn-68"><a href="#AddOn-68"><span class="linenos"> 68</span></a>    <span class="nd">@cached_property</span>
-</span><span id="AddOn-69"><a href="#AddOn-69"><span class="linenos"> 69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_background_relative_to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RelativeDraw</span><span class="p">:</span>
-</span><span id="AddOn-70"><a href="#AddOn-70"><span class="linenos"> 70</span></a>        <span class="n">shift</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span>
-</span><span id="AddOn-71"><a href="#AddOn-71"><span class="linenos"> 71</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span> <span class="o">*</span> <span class="n">WidthAndHeightScaling</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</span><span id="AddOn-72"><a href="#AddOn-72"><span class="linenos"> 72</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_relative_to_text</span><span class="p">:</span>
-</span><span id="AddOn-73"><a href="#AddOn-73"><span class="linenos"> 73</span></a>            <span class="n">extra_height</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="AddOn-74"><a href="#AddOn-74"><span class="linenos"> 74</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_name_relative_to_text</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">height</span>
-</span><span id="AddOn-75"><a href="#AddOn-75"><span class="linenos"> 75</span></a>                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">height</span>
-</span><span id="AddOn-76"><a href="#AddOn-76"><span class="linenos"> 76</span></a>            <span class="p">)</span>
-</span><span id="AddOn-77"><a href="#AddOn-77"><span class="linenos"> 77</span></a>            <span class="n">shift</span> <span class="o">-=</span> <span class="n">extra_height</span>
-</span><span id="AddOn-78"><a href="#AddOn-78"><span class="linenos"> 78</span></a>            <span class="n">size</span> <span class="o">+=</span> <span class="n">extra_height</span>
-</span><span id="AddOn-79"><a href="#AddOn-79"><span class="linenos"> 79</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_avatar_relative_to_text</span><span class="p">:</span>
-</span><span id="AddOn-80"><a href="#AddOn-80"><span class="linenos"> 80</span></a>            <span class="n">extra_width</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="AddOn-81"><a href="#AddOn-81"><span class="linenos"> 81</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_avatar_relative_to_text</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
-</span><span id="AddOn-82"><a href="#AddOn-82"><span class="linenos"> 82</span></a>                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">width</span>
-</span><span id="AddOn-83"><a href="#AddOn-83"><span class="linenos"> 83</span></a>            <span class="p">)</span>
-</span><span id="AddOn-84"><a href="#AddOn-84"><span class="linenos"> 84</span></a>            <span class="n">shift</span> <span class="o">-=</span> <span class="n">extra_width</span>
-</span><span id="AddOn-85"><a href="#AddOn-85"><span class="linenos"> 85</span></a>            <span class="n">size</span> <span class="o">+=</span> <span class="n">extra_width</span>
-</span><span id="AddOn-86"><a href="#AddOn-86"><span class="linenos"> 86</span></a>        <span class="n">rect</span> <span class="o">=</span> <span class="n">RectangleDraw</span><span class="p">(</span>
-</span><span id="AddOn-87"><a href="#AddOn-87"><span class="linenos"> 87</span></a>            <span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">background</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">border_radius</span>
-</span><span id="AddOn-88"><a href="#AddOn-88"><span class="linenos"> 88</span></a>        <span class="p">)</span>
-</span><span id="AddOn-89"><a href="#AddOn-89"><span class="linenos"> 89</span></a>        <span class="k">return</span> <span class="n">RelativeDraw</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
-</span><span id="AddOn-90"><a href="#AddOn-90"><span class="linenos"> 90</span></a>
-</span><span id="AddOn-91"><a href="#AddOn-91"><span class="linenos"> 91</span></a>    <span class="nd">@property</span>
-</span><span id="AddOn-92"><a href="#AddOn-92"><span class="linenos"> 92</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_avatar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">Group</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="AddOn-93"><a href="#AddOn-93"><span class="linenos"> 93</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span>
-</span><span id="AddOn-94"><a href="#AddOn-94"><span class="linenos"> 94</span></a>
-</span><span id="AddOn-95"><a href="#AddOn-95"><span class="linenos"> 95</span></a>    <span class="nd">@cached_property</span>
-</span><span id="AddOn-96"><a href="#AddOn-96"><span class="linenos"> 96</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_avatar_relative_to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RelativeDraw</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="AddOn-97"><a href="#AddOn-97"><span class="linenos"> 97</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_avatar</span><span class="p">:</span>
-</span><span id="AddOn-98"><a href="#AddOn-98"><span class="linenos"> 98</span></a>            <span class="k">return</span> <span class="kc">None</span>
-</span><span id="AddOn-99"><a href="#AddOn-99"><span class="linenos"> 99</span></a>        <span class="n">shift</span> <span class="o">=</span> <span class="p">(</span>
-</span><span id="AddOn-100"><a href="#AddOn-100"><span class="linenos">100</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">bottom_left</span>
-</span><span id="AddOn-101"><a href="#AddOn-101"><span class="linenos">101</span></a>            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">width</span>
-</span><span id="AddOn-102"><a href="#AddOn-102"><span class="linenos">102</span></a>            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_avatar</span><span class="o">.</span><span class="n">size</span>
-</span><span id="AddOn-103"><a href="#AddOn-103"><span class="linenos">103</span></a>        <span class="p">)</span>
-</span><span id="AddOn-104"><a href="#AddOn-104"><span class="linenos">104</span></a>        <span class="k">return</span> <span class="n">RelativeDraw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_avatar</span><span class="p">,</span> <span class="n">shift</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-</span><span id="AddOn-105"><a href="#AddOn-105"><span class="linenos">105</span></a>
-</span><span id="AddOn-106"><a href="#AddOn-106"><span class="linenos">106</span></a>    <span class="nd">@property</span>
-</span><span id="AddOn-107"><a href="#AddOn-107"><span class="linenos">107</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="AddOn-108"><a href="#AddOn-108"><span class="linenos">108</span></a>        <span class="k">if</span> <span class="n">name</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span><span class="p">:</span>
-</span><span id="AddOn-109"><a href="#AddOn-109"><span class="linenos">109</span></a>            <span class="k">return</span> <span class="n">name</span>
-</span><span id="AddOn-110"><a href="#AddOn-110"><span class="linenos">110</span></a>        <span class="k">return</span> <span class="kc">None</span>
+</span><span id="AddOn-61"><a href="#AddOn-61"><span class="linenos"> 61</span></a>    <span class="nd">@property</span>
+</span><span id="AddOn-62"><a href="#AddOn-62"><span class="linenos"> 62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">avatar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">Group</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AddOn-63"><a href="#AddOn-63"><span class="linenos"> 63</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span>
+</span><span id="AddOn-64"><a href="#AddOn-64"><span class="linenos"> 64</span></a>
+</span><span id="AddOn-65"><a href="#AddOn-65"><span class="linenos"> 65</span></a>    <span class="nd">@property</span>
+</span><span id="AddOn-66"><a href="#AddOn-66"><span class="linenos"> 66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AddOn-67"><a href="#AddOn-67"><span class="linenos"> 67</span></a>        <span class="k">if</span> <span class="n">name</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span><span class="p">:</span>
+</span><span id="AddOn-68"><a href="#AddOn-68"><span class="linenos"> 68</span></a>            <span class="k">return</span> <span class="n">name</span>
+</span><span id="AddOn-69"><a href="#AddOn-69"><span class="linenos"> 69</span></a>        <span class="k">return</span> <span class="kc">None</span>
+</span><span id="AddOn-70"><a href="#AddOn-70"><span class="linenos"> 70</span></a>
+</span><span id="AddOn-71"><a href="#AddOn-71"><span class="linenos"> 71</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_center_to_top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">center</span><span class="p">:</span> <span class="n">Coordinate</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="AddOn-72"><a href="#AddOn-72"><span class="linenos"> 72</span></a>        <span class="k">return</span> <span class="p">(</span>
+</span><span id="AddOn-73"><a href="#AddOn-73"><span class="linenos"> 73</span></a>            <span class="n">center</span>
+</span><span id="AddOn-74"><a href="#AddOn-74"><span class="linenos"> 74</span></a>            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_background_relative_to_text</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">size</span>
+</span><span id="AddOn-75"><a href="#AddOn-75"><span class="linenos"> 75</span></a>            <span class="o">/</span> <span class="n">WidthAndHeightScaling</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="AddOn-76"><a href="#AddOn-76"><span class="linenos"> 76</span></a>        <span class="p">)</span>
+</span><span id="AddOn-77"><a href="#AddOn-77"><span class="linenos"> 77</span></a>
+</span><span id="AddOn-78"><a href="#AddOn-78"><span class="linenos"> 78</span></a>    <span class="nd">@cached_property</span>
+</span><span id="AddOn-79"><a href="#AddOn-79"><span class="linenos"> 79</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_background_relative_to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RelativeDraw</span><span class="p">:</span>
+</span><span id="AddOn-80"><a href="#AddOn-80"><span class="linenos"> 80</span></a>        <span class="n">shift</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span>
+</span><span id="AddOn-81"><a href="#AddOn-81"><span class="linenos"> 81</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span> <span class="o">*</span> <span class="n">WidthAndHeightScaling</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="AddOn-82"><a href="#AddOn-82"><span class="linenos"> 82</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_relative_to_text</span><span class="p">:</span>
+</span><span id="AddOn-83"><a href="#AddOn-83"><span class="linenos"> 83</span></a>            <span class="n">extra_height</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="AddOn-84"><a href="#AddOn-84"><span class="linenos"> 84</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_name_relative_to_text</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">height</span>
+</span><span id="AddOn-85"><a href="#AddOn-85"><span class="linenos"> 85</span></a>                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">height</span>
+</span><span id="AddOn-86"><a href="#AddOn-86"><span class="linenos"> 86</span></a>            <span class="p">)</span>
+</span><span id="AddOn-87"><a href="#AddOn-87"><span class="linenos"> 87</span></a>            <span class="n">shift</span> <span class="o">-=</span> <span class="n">extra_height</span>
+</span><span id="AddOn-88"><a href="#AddOn-88"><span class="linenos"> 88</span></a>            <span class="n">size</span> <span class="o">+=</span> <span class="n">extra_height</span>
+</span><span id="AddOn-89"><a href="#AddOn-89"><span class="linenos"> 89</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_avatar_relative_to_text</span><span class="p">:</span>
+</span><span id="AddOn-90"><a href="#AddOn-90"><span class="linenos"> 90</span></a>            <span class="n">extra_width</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="AddOn-91"><a href="#AddOn-91"><span class="linenos"> 91</span></a>                <span class="bp">self</span><span class="o">.</span><span class="n">_avatar_relative_to_text</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
+</span><span id="AddOn-92"><a href="#AddOn-92"><span class="linenos"> 92</span></a>                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">width</span>
+</span><span id="AddOn-93"><a href="#AddOn-93"><span class="linenos"> 93</span></a>            <span class="p">)</span>
+</span><span id="AddOn-94"><a href="#AddOn-94"><span class="linenos"> 94</span></a>            <span class="n">shift</span> <span class="o">-=</span> <span class="n">extra_width</span>
+</span><span id="AddOn-95"><a href="#AddOn-95"><span class="linenos"> 95</span></a>            <span class="n">size</span> <span class="o">+=</span> <span class="n">extra_width</span>
+</span><span id="AddOn-96"><a href="#AddOn-96"><span class="linenos"> 96</span></a>        <span class="n">rect</span> <span class="o">=</span> <span class="n">RectangleDraw</span><span class="p">(</span>
+</span><span id="AddOn-97"><a href="#AddOn-97"><span class="linenos"> 97</span></a>            <span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">background</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">border_radius</span>
+</span><span id="AddOn-98"><a href="#AddOn-98"><span class="linenos"> 98</span></a>        <span class="p">)</span>
+</span><span id="AddOn-99"><a href="#AddOn-99"><span class="linenos"> 99</span></a>        <span class="k">return</span> <span class="n">RelativeDraw</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
+</span><span id="AddOn-100"><a href="#AddOn-100"><span class="linenos">100</span></a>
+</span><span id="AddOn-101"><a href="#AddOn-101"><span class="linenos">101</span></a>    <span class="nd">@cached_property</span>
+</span><span id="AddOn-102"><a href="#AddOn-102"><span class="linenos">102</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_avatar_relative_to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RelativeDraw</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AddOn-103"><a href="#AddOn-103"><span class="linenos">103</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">avatar</span><span class="p">:</span>
+</span><span id="AddOn-104"><a href="#AddOn-104"><span class="linenos">104</span></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="AddOn-105"><a href="#AddOn-105"><span class="linenos">105</span></a>        <span class="n">shift</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="AddOn-106"><a href="#AddOn-106"><span class="linenos">106</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">bottom_left</span>
+</span><span id="AddOn-107"><a href="#AddOn-107"><span class="linenos">107</span></a>            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">width</span>
+</span><span id="AddOn-108"><a href="#AddOn-108"><span class="linenos">108</span></a>            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">avatar</span><span class="o">.</span><span class="n">size</span>
+</span><span id="AddOn-109"><a href="#AddOn-109"><span class="linenos">109</span></a>        <span class="p">)</span>
+</span><span id="AddOn-110"><a href="#AddOn-110"><span class="linenos">110</span></a>        <span class="k">return</span> <span class="n">RelativeDraw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">avatar</span><span class="p">,</span> <span class="n">shift</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 </span><span id="AddOn-111"><a href="#AddOn-111"><span class="linenos">111</span></a>
 </span><span id="AddOn-112"><a href="#AddOn-112"><span class="linenos">112</span></a>    <span class="nd">@cached_property</span>
 </span><span id="AddOn-113"><a href="#AddOn-113"><span class="linenos">113</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_name_relative_to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RelativeDraw</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="AddOn-114"><a href="#AddOn-114"><span class="linenos">114</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">:</span>
+</span><span id="AddOn-114"><a href="#AddOn-114"><span class="linenos">114</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
 </span><span id="AddOn-115"><a href="#AddOn-115"><span class="linenos">115</span></a>            <span class="k">return</span> <span class="kc">None</span>
-</span><span id="AddOn-116"><a href="#AddOn-116"><span class="linenos">116</span></a>        <span class="n">text</span> <span class="o">=</span> <span class="n">Text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_text_config</span><span class="p">)</span>
+</span><span id="AddOn-116"><a href="#AddOn-116"><span class="linenos">116</span></a>        <span class="n">text</span> <span class="o">=</span> <span class="n">Text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_text_config</span><span class="p">)</span>
 </span><span id="AddOn-117"><a href="#AddOn-117"><span class="linenos">117</span></a>        <span class="n">shift</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">text</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">padding</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
 </span><span id="AddOn-118"><a href="#AddOn-118"><span class="linenos">118</span></a>        <span class="k">return</span> <span class="n">RelativeDraw</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
 </span><span id="AddOn-119"><a href="#AddOn-119"><span class="linenos">119</span></a>
@@ -552,6 +564,44 @@
     
 
                             </div>
+                            <div id="AddOn.avatar" class="classattr">
+                                        <input id="AddOn.avatar-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">avatar</span><span class="annotation">: &#39;Draw | Group | None&#39;</span>
+
+                <label class="view-source-button" for="AddOn.avatar-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#AddOn.avatar"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AddOn.avatar-61"><a href="#AddOn.avatar-61"><span class="linenos">61</span></a>    <span class="nd">@property</span>
+</span><span id="AddOn.avatar-62"><a href="#AddOn.avatar-62"><span class="linenos">62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">avatar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">Group</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AddOn.avatar-63"><a href="#AddOn.avatar-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="AddOn.name" class="classattr">
+                                        <input id="AddOn.name-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">name</span><span class="annotation">: &#39;str | None&#39;</span>
+
+                <label class="view-source-button" for="AddOn.name-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#AddOn.name"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="AddOn.name-65"><a href="#AddOn.name-65"><span class="linenos">65</span></a>    <span class="nd">@property</span>
+</span><span id="AddOn.name-66"><a href="#AddOn.name-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="AddOn.name-67"><a href="#AddOn.name-67"><span class="linenos">67</span></a>        <span class="k">if</span> <span class="n">name</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span><span class="p">:</span>
+</span><span id="AddOn.name-68"><a href="#AddOn.name-68"><span class="linenos">68</span></a>            <span class="k">return</span> <span class="n">name</span>
+</span><span id="AddOn.name-69"><a href="#AddOn.name-69"><span class="linenos">69</span></a>        <span class="k">return</span> <span class="kc">None</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
                 </section>
                 <section id="CharacterAddOn">
                             <input id="CharacterAddOn-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -627,37 +677,37 @@
 </span><span id="CharacterAddOn-186"><a href="#CharacterAddOn-186"><span class="linenos">186</span></a>        <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">)</span>
 </span><span id="CharacterAddOn-187"><a href="#CharacterAddOn-187"><span class="linenos">187</span></a>
 </span><span id="CharacterAddOn-188"><a href="#CharacterAddOn-188"><span class="linenos">188</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterAddOn-189"><a href="#CharacterAddOn-189"><span class="linenos">189</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_character_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_CharacterPosition</span><span class="p">:</span>
-</span><span id="CharacterAddOn-190"><a href="#CharacterAddOn-190"><span class="linenos">190</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_character_rectangle_on_screen</span><span class="o">.</span><span class="n">center</span> <span class="ow">in</span> <span class="n">top_screen</span><span class="p">():</span>
-</span><span id="CharacterAddOn-191"><a href="#CharacterAddOn-191"><span class="linenos">191</span></a>            <span class="k">return</span> <span class="n">_CharacterPosition</span><span class="p">(</span>
-</span><span id="CharacterAddOn-192"><a href="#CharacterAddOn-192"><span class="linenos">192</span></a>                <span class="n">coordinate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_character_rectangle_on_screen</span><span class="o">.</span><span class="n">bottom_center</span><span class="p">,</span>
-</span><span id="CharacterAddOn-193"><a href="#CharacterAddOn-193"><span class="linenos">193</span></a>                <span class="n">is_top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-</span><span id="CharacterAddOn-194"><a href="#CharacterAddOn-194"><span class="linenos">194</span></a>            <span class="p">)</span>
-</span><span id="CharacterAddOn-195"><a href="#CharacterAddOn-195"><span class="linenos">195</span></a>        <span class="k">return</span> <span class="n">_CharacterPosition</span><span class="p">(</span>
-</span><span id="CharacterAddOn-196"><a href="#CharacterAddOn-196"><span class="linenos">196</span></a>            <span class="n">coordinate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_character_rectangle_on_screen</span><span class="o">.</span><span class="n">top_center</span><span class="p">,</span>
-</span><span id="CharacterAddOn-197"><a href="#CharacterAddOn-197"><span class="linenos">197</span></a>            <span class="n">is_top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-</span><span id="CharacterAddOn-198"><a href="#CharacterAddOn-198"><span class="linenos">198</span></a>        <span class="p">)</span>
-</span><span id="CharacterAddOn-199"><a href="#CharacterAddOn-199"><span class="linenos">199</span></a>
-</span><span id="CharacterAddOn-200"><a href="#CharacterAddOn-200"><span class="linenos">200</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterAddOn-201"><a href="#CharacterAddOn-201"><span class="linenos">201</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_character_rectangle_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RectangleOnScreen</span><span class="p">:</span>
-</span><span id="CharacterAddOn-202"><a href="#CharacterAddOn-202"><span class="linenos">202</span></a>        <span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="o">.</span><span class="n">visible_rectangle_on_screen</span>
-</span><span id="CharacterAddOn-203"><a href="#CharacterAddOn-203"><span class="linenos">203</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">:</span>
-</span><span id="CharacterAddOn-204"><a href="#CharacterAddOn-204"><span class="linenos">204</span></a>            <span class="k">return</span> <span class="n">rect</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screen_shift</span>
-</span><span id="CharacterAddOn-205"><a href="#CharacterAddOn-205"><span class="linenos">205</span></a>        <span class="k">return</span> <span class="n">rect</span>
-</span><span id="CharacterAddOn-206"><a href="#CharacterAddOn-206"><span class="linenos">206</span></a>
-</span><span id="CharacterAddOn-207"><a href="#CharacterAddOn-207"><span class="linenos">207</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterAddOn-208"><a href="#CharacterAddOn-208"><span class="linenos">208</span></a>    <span class="nd">@override</span>
-</span><span id="CharacterAddOn-209"><a href="#CharacterAddOn-209"><span class="linenos">209</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_avatar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">Group</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="CharacterAddOn-210"><a href="#CharacterAddOn-210"><span class="linenos">210</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span><span class="p">:</span>
-</span><span id="CharacterAddOn-211"><a href="#CharacterAddOn-211"><span class="linenos">211</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span>
-</span><span id="CharacterAddOn-212"><a href="#CharacterAddOn-212"><span class="linenos">212</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">avatar</span>
+</span><span id="CharacterAddOn-189"><a href="#CharacterAddOn-189"><span class="linenos">189</span></a>    <span class="nd">@override</span>
+</span><span id="CharacterAddOn-190"><a href="#CharacterAddOn-190"><span class="linenos">190</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">avatar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">Group</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="CharacterAddOn-191"><a href="#CharacterAddOn-191"><span class="linenos">191</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span><span class="p">:</span>
+</span><span id="CharacterAddOn-192"><a href="#CharacterAddOn-192"><span class="linenos">192</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span>
+</span><span id="CharacterAddOn-193"><a href="#CharacterAddOn-193"><span class="linenos">193</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">avatar</span>
+</span><span id="CharacterAddOn-194"><a href="#CharacterAddOn-194"><span class="linenos">194</span></a>
+</span><span id="CharacterAddOn-195"><a href="#CharacterAddOn-195"><span class="linenos">195</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterAddOn-196"><a href="#CharacterAddOn-196"><span class="linenos">196</span></a>    <span class="nd">@override</span>
+</span><span id="CharacterAddOn-197"><a href="#CharacterAddOn-197"><span class="linenos">197</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="CharacterAddOn-198"><a href="#CharacterAddOn-198"><span class="linenos">198</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span><span class="p">:</span>
+</span><span id="CharacterAddOn-199"><a href="#CharacterAddOn-199"><span class="linenos">199</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span>
+</span><span id="CharacterAddOn-200"><a href="#CharacterAddOn-200"><span class="linenos">200</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">display_name</span>
+</span><span id="CharacterAddOn-201"><a href="#CharacterAddOn-201"><span class="linenos">201</span></a>
+</span><span id="CharacterAddOn-202"><a href="#CharacterAddOn-202"><span class="linenos">202</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterAddOn-203"><a href="#CharacterAddOn-203"><span class="linenos">203</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_character_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_CharacterPosition</span><span class="p">:</span>
+</span><span id="CharacterAddOn-204"><a href="#CharacterAddOn-204"><span class="linenos">204</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_character_rectangle_on_screen</span><span class="o">.</span><span class="n">center</span> <span class="ow">in</span> <span class="n">top_screen</span><span class="p">():</span>
+</span><span id="CharacterAddOn-205"><a href="#CharacterAddOn-205"><span class="linenos">205</span></a>            <span class="k">return</span> <span class="n">_CharacterPosition</span><span class="p">(</span>
+</span><span id="CharacterAddOn-206"><a href="#CharacterAddOn-206"><span class="linenos">206</span></a>                <span class="n">coordinate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_character_rectangle_on_screen</span><span class="o">.</span><span class="n">bottom_center</span><span class="p">,</span>
+</span><span id="CharacterAddOn-207"><a href="#CharacterAddOn-207"><span class="linenos">207</span></a>                <span class="n">is_top</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="CharacterAddOn-208"><a href="#CharacterAddOn-208"><span class="linenos">208</span></a>            <span class="p">)</span>
+</span><span id="CharacterAddOn-209"><a href="#CharacterAddOn-209"><span class="linenos">209</span></a>        <span class="k">return</span> <span class="n">_CharacterPosition</span><span class="p">(</span>
+</span><span id="CharacterAddOn-210"><a href="#CharacterAddOn-210"><span class="linenos">210</span></a>            <span class="n">coordinate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_character_rectangle_on_screen</span><span class="o">.</span><span class="n">top_center</span><span class="p">,</span>
+</span><span id="CharacterAddOn-211"><a href="#CharacterAddOn-211"><span class="linenos">211</span></a>            <span class="n">is_top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+</span><span id="CharacterAddOn-212"><a href="#CharacterAddOn-212"><span class="linenos">212</span></a>        <span class="p">)</span>
 </span><span id="CharacterAddOn-213"><a href="#CharacterAddOn-213"><span class="linenos">213</span></a>
 </span><span id="CharacterAddOn-214"><a href="#CharacterAddOn-214"><span class="linenos">214</span></a>    <span class="nd">@cached_property</span>
-</span><span id="CharacterAddOn-215"><a href="#CharacterAddOn-215"><span class="linenos">215</span></a>    <span class="nd">@override</span>
-</span><span id="CharacterAddOn-216"><a href="#CharacterAddOn-216"><span class="linenos">216</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="CharacterAddOn-217"><a href="#CharacterAddOn-217"><span class="linenos">217</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span><span class="p">:</span>
-</span><span id="CharacterAddOn-218"><a href="#CharacterAddOn-218"><span class="linenos">218</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span>
-</span><span id="CharacterAddOn-219"><a href="#CharacterAddOn-219"><span class="linenos">219</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">display_name</span>
+</span><span id="CharacterAddOn-215"><a href="#CharacterAddOn-215"><span class="linenos">215</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_character_rectangle_on_screen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RectangleOnScreen</span><span class="p">:</span>
+</span><span id="CharacterAddOn-216"><a href="#CharacterAddOn-216"><span class="linenos">216</span></a>        <span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="o">.</span><span class="n">visible_rectangle_on_screen</span>
+</span><span id="CharacterAddOn-217"><a href="#CharacterAddOn-217"><span class="linenos">217</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screen_shift</span><span class="p">:</span>
+</span><span id="CharacterAddOn-218"><a href="#CharacterAddOn-218"><span class="linenos">218</span></a>            <span class="k">return</span> <span class="n">rect</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screen_shift</span>
+</span><span id="CharacterAddOn-219"><a href="#CharacterAddOn-219"><span class="linenos">219</span></a>        <span class="k">return</span> <span class="n">rect</span>
 </span></pre></div>
 
 
@@ -749,6 +799,48 @@
 </span><span id="CharacterAddOn.add_on_top_left-184"><a href="#CharacterAddOn.add_on_top_left-184"><span class="linenos">184</span></a>            <span class="n">top</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_background_relative_to_text</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">height</span>
 </span><span id="CharacterAddOn.add_on_top_left-185"><a href="#CharacterAddOn.add_on_top_left-185"><span class="linenos">185</span></a>
 </span><span id="CharacterAddOn.add_on_top_left-186"><a href="#CharacterAddOn.add_on_top_left-186"><span class="linenos">186</span></a>        <span class="k">return</span> <span class="n">Coordinate</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">)</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="CharacterAddOn.avatar" class="classattr">
+                                        <input id="CharacterAddOn.avatar-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">avatar</span><span class="annotation">: &#39;Draw | Group | None&#39;</span>
+
+                <label class="view-source-button" for="CharacterAddOn.avatar-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#CharacterAddOn.avatar"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterAddOn.avatar-188"><a href="#CharacterAddOn.avatar-188"><span class="linenos">188</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterAddOn.avatar-189"><a href="#CharacterAddOn.avatar-189"><span class="linenos">189</span></a>    <span class="nd">@override</span>
+</span><span id="CharacterAddOn.avatar-190"><a href="#CharacterAddOn.avatar-190"><span class="linenos">190</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">avatar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">Group</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="CharacterAddOn.avatar-191"><a href="#CharacterAddOn.avatar-191"><span class="linenos">191</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span><span class="p">:</span>
+</span><span id="CharacterAddOn.avatar-192"><a href="#CharacterAddOn.avatar-192"><span class="linenos">192</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">avatar</span>
+</span><span id="CharacterAddOn.avatar-193"><a href="#CharacterAddOn.avatar-193"><span class="linenos">193</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">avatar</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="CharacterAddOn.name" class="classattr">
+                                        <input id="CharacterAddOn.name-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">name</span><span class="annotation">: &#39;str&#39;</span>
+
+                <label class="view-source-button" for="CharacterAddOn.name-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#CharacterAddOn.name"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CharacterAddOn.name-195"><a href="#CharacterAddOn.name-195"><span class="linenos">195</span></a>    <span class="nd">@cached_property</span>
+</span><span id="CharacterAddOn.name-196"><a href="#CharacterAddOn.name-196"><span class="linenos">196</span></a>    <span class="nd">@override</span>
+</span><span id="CharacterAddOn.name-197"><a href="#CharacterAddOn.name-197"><span class="linenos">197</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="CharacterAddOn.name-198"><a href="#CharacterAddOn.name-198"><span class="linenos">198</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span><span class="p">:</span>
+</span><span id="CharacterAddOn.name-199"><a href="#CharacterAddOn.name-199"><span class="linenos">199</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">name_override</span>
+</span><span id="CharacterAddOn.name-200"><a href="#CharacterAddOn.name-200"><span class="linenos">200</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">display_name</span>
 </span></pre></div>
 
 

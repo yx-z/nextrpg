@@ -7,7 +7,6 @@ from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import PolygonOnScreen, RectangleOnScreen
-from nextrpg.global_config.global_config import config
 
 logger = Logger()
 
@@ -46,7 +45,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
     def can_move(
         self, coordinate: Coordinate, others: tuple[CharacterOnScreen, ...]
     ) -> bool:
-        if (debug := config().debug) and debug.ignore_map_collisions:
+        if not self.spec.collide_with_others:
             return True
 
         if collision := self._collide(

@@ -62,6 +62,14 @@ class PlayerOnScreen(MovingCharacterOnScreen):
         )
         return self.coordinate + directional_offset
 
+    @override
+    def can_move(
+        self, coordinate: Coordinate, others: tuple[CharacterOnScreen, ...]
+    ) -> bool:
+        if (debug := config().debug) and not debug.collide_with_others:
+            return True
+        return super().can_move(coordinate, others)
+
 
 _MOVEMENT_KEYS = {
     KeyboardKey.LEFT,

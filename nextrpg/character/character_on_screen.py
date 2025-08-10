@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import KW_ONLY, field, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self
 
@@ -22,12 +22,18 @@ from nextrpg.global_config.global_config import config
 
 
 @dataclass_with_init(frozen=True)
-class CharacterSpec:
+class _BaseCharacterSpec:
     object_name: str
-    character: CharacterDraw
-    obstruct_player: bool = True
+    obstruct_others: bool = True
+    collide_with_others: bool = True
     avatar: Draw | Group | None = None
     display_name: str = default(lambda self: self.object_name)
+    config: CharacterConfig = field(default_factory=lambda: config().character)
+
+
+@dataclass(frozen=True, kw_only=True)
+class CharacterSpec(_BaseCharacterSpec):
+    character: CharacterDraw
 
 
 @dataclass_with_init(frozen=True)
@@ -85,7 +91,7 @@ class CharacterOnScreen(EventAsAttr, Sizeable):
 
     @cached_property
     def collision_rectangle(self) -> RectangleOnScreen | None:
-        if self.spec.obstruct_player:
+        if self.spec.obstruct_others:
             return self._collision_rectangle(self.coordinate)
         return None
 

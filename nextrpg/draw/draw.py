@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import ABC
 from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass
 from functools import cached_property
@@ -13,7 +14,7 @@ from pygame.mask import from_surface
 from pygame.transform import smoothscale
 
 from nextrpg.core.cached_decorator import cached
-from nextrpg.core.color import BLACK, Alpha, Color
+from nextrpg.core.color import BLACK, TRANSPARENT, Alpha, Color
 from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
@@ -53,11 +54,11 @@ class Draw(Sizeable):
 
     @property
     def size(self) -> Size:
-        return Size(self._surface.width, self._surface.height)
+        return Size(self.surface.width, self.surface.height)
 
     @property
     def pygame(self) -> Surface:
-        return self._debug_surface or self._surface
+        return self._debug_surface or self.surface
 
     def crop(self, top_left: Coordinate, size: Size) -> Draw:
         return Draw(self.pygame.subsurface((top_left.tuple, size.tuple)))
@@ -70,7 +71,7 @@ class Draw(Sizeable):
         return self.crop(coord, size)
 
     def set_alpha(self, alpha: Alpha) -> Draw:
-        surf = self._surface.copy()
+        surf = self.surface.copy()
         surf.set_alpha(alpha)
         return Draw(surf)
 
@@ -79,12 +80,12 @@ class Draw(Sizeable):
 
     def __mul__(self, scaling: int | float | WidthAndHeightScaling) -> Draw:
         size = self.size * WidthAndHeightScaling(scaling)
-        surf = smoothscale(self._surface, size.tuple)
+        surf = smoothscale(self.surface, size.tuple)
         return Draw(surf)
 
     @cached_property
     def visible_rectangle(self) -> RectangleOnScreen:
-        rectangle = self._surface.get_bounding_rect()
+        rectangle = self.surface.get_bounding_rect()
         coord = Coordinate(rectangle.x, rectangle.y)
         size = Size(rectangle.width, rectangle.height)
         return RectangleOnScreen(coord, size)
@@ -98,19 +99,7 @@ class Draw(Sizeable):
         return ORIGIN
 
     @cached_property
-    def _debug_surface(self) -> Surface | None:
-        if not (debug := config().debug) or not (
-            color := debug.draw_background_color
-        ):
-            return None
-
-        surface = Surface(self.size.tuple, SRCALPHA)
-        surface.fill(color)
-        surface.blit(self._surface, (0, 0))
-        return surface
-
-    @cached_property
-    def _surface(self) -> Surface:
+    def surface(self) -> Surface:
         if isinstance(self.resource, Surface):
             res = self.resource
         else:
@@ -124,6 +113,18 @@ class Draw(Sizeable):
             else:
                 res.set_colorkey(self.color_key)
         return res
+
+    @cached_property
+    def _debug_surface(self) -> Surface | None:
+        if not (debug := config().debug) or not (
+            color := debug.draw_background_color
+        ):
+            return None
+
+        surface = Surface(self.size.tuple, SRCALPHA)
+        surface.fill(color)
+        surface.blit(self.surface, (0, 0))
+        return surface
 
 
 @dataclass(frozen=True)
@@ -163,10 +164,28 @@ class DrawOnScreen(Sizeable):
         return self + -other
 
 
-class PolygonDraw:
+class TransparentCapableDraw(Draw, ABC):
+    color: Color
+
+    @override
+    @cached_property
+    def surface(self) -> Surface:
+        if self.color == TRANSPARENT:
+            return Surface((0, 0))
+        return super().surface
+
+    @override
+    @cached_property
+    def size(self) -> Size:
+        if self.color != TRANSPARENT:
+            return super().size
+        return Draw(self.resource).size
+
+
+class PolygonDraw(TransparentCapableDraw):
     def __init__(self, points: tuple[Coordinate, ...], color: Color) -> None:
         surf = _draw_polygon(points, _fill_polygon(color))
-        _set_resource_and_color_key(self, surf)
+        _set_resource_color_and_color_key(self, surf, color)
 
 
 @dataclass_with_init(frozen=True)
@@ -246,14 +265,14 @@ class PolygonOnScreen(Sizeable):
         return DrawOnScreen(self.bounding_rectangle.top_left, Draw(surf))
 
 
-class RectangleDraw(Draw):
+class RectangleDraw(TransparentCapableDraw):
     def __init__(
         self, size: Size, color: Color, border_radius: Pixel | None = None
     ) -> None:
         surface = Surface(size.tuple, SRCALPHA)
         rectangle = Rect(ORIGIN.tuple, size.tuple)
         rect(surface, color, rectangle, border_radius=border_radius or -1)
-        _set_resource_and_color_key(self, surface)
+        _set_resource_color_and_color_key(self, surface, color)
 
 
 class RectangleOnScreen(PolygonOnScreen):
@@ -350,8 +369,11 @@ def _draw_polygon(
     return surf
 
 
-def _set_resource_and_color_key[T](self: T, surface: Surface) -> None:
+def _set_resource_color_and_color_key[T](
+    self: T, surface: Surface, color: Color
+) -> None:
     object.__setattr__(self, "resource", surface)
+    object.__setattr__(self, "color", color)
     object.__setattr__(self, "color_key", None)
 
 
