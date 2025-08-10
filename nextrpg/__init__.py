@@ -45,6 +45,7 @@ from nextrpg.scene import *
 from nextrpg.scene.map.map_loader import *
 from nextrpg.scene.map.map_scene import *
 from nextrpg.scene.map.map_shift import *
+from nextrpg.scene.rpg_event.cutscene import *
 from nextrpg.scene.rpg_event.eventful_scene import *
 from nextrpg.scene.rpg_event.fade_in_scene import *
 from nextrpg.scene.rpg_event.fade_out_scene import *

@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import KW_ONLY, dataclass
 from enum import Enum, auto
 from functools import cached_property
 from typing import override
@@ -12,8 +12,13 @@ from nextrpg.character.character_on_screen import (
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.color import Color
-from nextrpg.core.dataclass_with_init import dataclass_with_init, default
+from nextrpg.core.dataclass_with_init import (
+    dataclass_with_init,
+    default,
+    not_constructor_below,
+)
 from nextrpg.draw.draw import RectangleOnScreen
+from nextrpg.event.event_transformer import transform
 
 type NpcEventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
 
@@ -25,15 +30,16 @@ class NpcEventStartMode(Enum):
     COLLIDE = auto()
 
 
-@dataclass(frozen=True)
+@dataclass_with_init(frozen=True)
 class NpcEventSpec:
-    function: NpcEvent
+    event: NpcEvent
     start_mode: NpcEventStartMode = NpcEventStartMode.CONFIRM
+    _: KW_ONLY = not_constructor_below()
+    generator: "EventGenerator" = default(lambda self: transform(self.event))
 
 
 @dataclass_with_init(frozen=True, kw_only=True)
 class NpcSpec(_BaseCharacterSpec):
-    # This field is not conformant with CharacterSpec
     character: CharacterDraw | Color | None = None
     event: NpcEventSpec | NpcEvent | None = None
     cyclic_walk: bool = True
@@ -42,19 +48,17 @@ class NpcSpec(_BaseCharacterSpec):
     )
 
     @property
-    def _generator(
-        self,
-    ) -> Callable[[*NpcEventSpecParams], "EventGenerator"] | None:
+    def _event_spec(self) -> NpcEventSpec | None:
         if not self.event:
             return None
         if isinstance(self.event, NpcEventSpec):
-            return self.event.function
-        return self.event
+            return self.event
+        return NpcEventSpec(self.event)
 
 
 @dataclass(frozen=True, kw_only=True)
 class StrictNpcSpec(NpcSpec, CharacterSpec):
-    generator: Callable[[*NpcEventSpecParams], "EventGenerator"] | None
+    event: NpcEventSpec | None
 
 
 def to_strict(
@@ -70,10 +74,9 @@ def to_strict(
         collide_with_others=spec.collide_with_others,
         avatar=spec.avatar,
         display_name=spec.display_name,
-        event=spec.event,
+        event=spec._event_spec,
         config=spec.config,
         cyclic_walk=spec.cyclic_walk,
-        generator=spec._generator,
     )
 
 

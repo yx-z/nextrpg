@@ -18,8 +18,8 @@ from nextrpg import (
     Text,
     Trim,
     config,
+    cutscene,
 )
-from nextrpg.scene.rpg_event.cutscene import cutscene
 
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
@@ -31,7 +31,7 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
         player_spec or init_player(),
         Move("from_interior", "to_exterior", exterior_scene),
         (
-            NpcSpec(object_name="david", character=david()),
+            NpcSpec(object_name="david", character=david(), event=greet),
             NpcSpec(
                 object_name="alisa",
                 character=alisa(),

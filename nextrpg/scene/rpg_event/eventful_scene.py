@@ -50,7 +50,7 @@ class EventfulScene(EventAsAttr, Scene):
 
         logger.debug(t"Collided with {npc.spec.object_name}")
         started_scene = self._start_event(npc)
-        generator = npc.spec.generator(
+        generator = npc.spec.event.generator(
             started_scene.player, started_scene.started_npc, started_scene
         )
         logger.debug(t"Event {generator.__name__} started.")
@@ -106,9 +106,7 @@ class EventfulScene(EventAsAttr, Scene):
     def _collided_npc(self) -> NpcOnScreen | None:
         for npc in self.npcs:
             rect = npc.start_event_rectangle
-            if rect and rect.collide(
-                self.player.start_event_rectangle
-            ):
+            if rect and rect.collide(self.player.start_event_rectangle):
                 return npc
         return None
 
