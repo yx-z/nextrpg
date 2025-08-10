@@ -73,7 +73,7 @@ class MapScene(EventfulScene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
-        return self._move_to_scene or super().tick(time_delta)
+        return self._move_to_scene(time_delta) or super().tick(time_delta)
 
     @cached_property
     @override
@@ -107,10 +107,9 @@ class MapScene(EventfulScene):
         layers = sorted(foregrounds + layer_bottom_draws, key=lambda x: x[:2])
         return tuple(draw for _, _, draw in layers)
 
-    @cached_property
-    def _move_to_scene(self) -> TransitionScene | None:
+    def _move_to_scene(self, time_delta: Millisecond) -> Scene | None:
         for move in self._moves:
-            if m := self._move(move):
+            if m := self._move(move, time_delta):
                 return m
         return None
 
@@ -133,10 +132,11 @@ class MapScene(EventfulScene):
             for m in self._moves
         )
 
-    def _move(self, move: Move) -> TransitionScene | None:
+    def _move(self, move: Move, time_delta: Millisecond) -> Scene | None:
         move_poly = get_polygon(self.map_helper.get_object(move.trigger_object))
         if self.player.draw_on_screen.rectangle_on_screen.collide(move_poly):
-            return move.to_scene(self, self.player)
+            to_scene = move.to_scene(self, self.player)
+            return to_scene.tick(time_delta)
         return None
 
     @cached_property

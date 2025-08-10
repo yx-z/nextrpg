@@ -28,26 +28,22 @@ class TransitionScene(Scene):
     )
     _: KW_ONLY = not_constructor_below()
     _fade_in: FadeIn = default(
-        lambda self: FadeIn(self._intermediary, self._half_duration)
+        lambda self: FadeIn(self._intermediary, self.duration // 2)
     )
     _fade_out: FadeOut = default(
-        lambda self: FadeOut(self._intermediary, self._half_duration)
+        lambda self: FadeOut(self._intermediary, self.duration // 2)
     )
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
         fade_in = self._fade_in.tick(time_delta)
         if not fade_in.complete:
-            from_scene = self.from_scene.tick(time_delta)
-            return replace(self, from_scene=from_scene, _fade_in=fade_in)
+            return replace(self, _fade_in=fade_in)
 
         fade_out = self._fade_out.tick(time_delta)
-        to_scene = self.to_scene.tick(time_delta)
         if fade_out.complete:
-            return to_scene
-        return replace(
-            self, to_scene=to_scene, _fade_in=fade_in, _fade_out=fade_out
-        )
+            return self.to_scene
+        return replace(self, _fade_in=fade_in, _fade_out=fade_out)
 
     @cached_property
     @override
@@ -57,10 +53,6 @@ class TransitionScene(Scene):
                 self.to_scene.draw_on_screens + self._fade_out.draw_on_screens
             )
         return self.from_scene.draw_on_screens + self._fade_in.draw_on_screens
-
-    @property
-    def _half_duration(self) -> Millisecond:
-        return self.duration // 2
 
     @property
     def _intermediary(self) -> DrawOnScreen | tuple[DrawOnScreen, ...]:
