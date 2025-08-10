@@ -109,8 +109,8 @@ class MapScene(EventfulScene):
 
     def _move_to_scene(self, time_delta: Millisecond) -> Scene | None:
         for move in self._moves:
-            if m := self._move(move, time_delta):
-                return m
+            if to_scene := self._move(move, time_delta):
+                return to_scene
         return None
 
     @cached_property
