@@ -104,7 +104,7 @@ class CharacterOnScreen(EventAsAttr, Sizeable):
 
     def _collision_rectangle(self, coordinate: Coordinate) -> RectangleOnScreen:
         scaling = self.config.bounding_rectangle_scaling
-        coord = coordinate + self.height * (scaling / 2)
+        coord = coordinate + self.height * (1 - scaling) / 2
         size = self.size * scaling
         return RectangleOnScreen(coord, size)
 

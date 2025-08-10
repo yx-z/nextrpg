@@ -14,7 +14,7 @@ class EventAsAttr:
             return lambda *args, **kwargs: event(self, *args, **kwargs)
 
         try:
-            return object.__getattribute__(self, attr)
+            return self.__getattribute__(attr)
         except AttributeError:
             raise
 
