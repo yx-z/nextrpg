@@ -10,5 +10,5 @@ from nextrpg.core.dimension import (
 @dataclass(frozen=True)
 class CharacterConfig:
     move_speed: PixelPerMillisecond = 0.2
-    bounding_rectangle_scaling: HeightScaling = HeightScaling(0.25)
+    bounding_rectangle_scaling: HeightScaling = HeightScaling(0.4)
     start_event_scaling: WidthScaling = WidthScaling(1.2)

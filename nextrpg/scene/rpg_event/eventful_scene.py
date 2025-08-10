@@ -40,6 +40,7 @@ class EventfulScene(EventAsAttr, Scene):
         return self._npc_dict[object_name]
 
     def event(self, event: PygameEvent) -> Scene:
+        player = self.player.event(event)
         if (
             not self._started_npc
             and isinstance(event, KeyPressDown)
@@ -48,8 +49,8 @@ class EventfulScene(EventAsAttr, Scene):
             and (event := npc.spec.event)
             and event.start_mode is NpcEventStartMode.CONFIRM
         ):
-            return replace(self, _started_npc=npc)
-        return replace(self, player=self.player.event(event))
+            return replace(self, player=player, _started_npc=npc)
+        return replace(self, player=player)
 
     def tick(self, time_delta: Millisecond) -> Scene:
         if next_event_scene := self._next_event(time_delta):
