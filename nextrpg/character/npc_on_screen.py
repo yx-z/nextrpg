@@ -12,6 +12,7 @@ from nextrpg.character.character_on_screen import (
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.color import Color
+from nextrpg.core.dataclass_with_init import dataclass_with_init, default
 from nextrpg.draw.draw import RectangleOnScreen
 
 type NpcEventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
@@ -30,15 +31,18 @@ class NpcEventSpec:
     start_mode: NpcEventStartMode = NpcEventStartMode.CONFIRM
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass_with_init(frozen=True, kw_only=True)
 class NpcSpec(_BaseCharacterSpec):
     # This field is not conformant with CharacterSpec
     character: CharacterDraw | Color | None = None
     event: NpcEventSpec | NpcEvent | None = None
     cyclic_walk: bool = True
+    obstruct_others: bool = default(
+        lambda self: isinstance(self.character, CharacterDraw)
+    )
 
     @property
-    def init_generator(
+    def _generator(
         self,
     ) -> Callable[[*NpcEventSpecParams], "EventGenerator"] | None:
         if not self.event:
@@ -69,7 +73,7 @@ def to_strict(
         event=spec.event,
         config=spec.config,
         cyclic_walk=spec.cyclic_walk,
-        generator=spec.init_generator,
+        generator=spec._generator,
     )
 
 

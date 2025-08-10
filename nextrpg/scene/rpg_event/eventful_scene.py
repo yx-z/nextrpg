@@ -17,7 +17,7 @@ from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.event.event_as_attr import EventAsAttr
-from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
+from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.scene.scene import Scene
 
 logger = Logger()
@@ -105,7 +105,8 @@ class EventfulScene(EventAsAttr, Scene):
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:
         for npc in self.npcs:
-            if npc.start_event_rectangle.collide(
+            rect = npc.start_event_rectangle
+            if rect and rect.collide(
                 self.player.start_event_rectangle
             ):
                 return npc
