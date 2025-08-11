@@ -69,11 +69,11 @@ def to_strict(
     spec: NpcSpec, character_draw: CharacterDraw | None = None
 ) -> StrictNpcSpec:
     assert (
-        character_draw or spec.character
+        character := character_draw or spec.character
     ), f"'{spec.object_name}' is missing CharacterDraw."
     return StrictNpcSpec(
         object_name=spec.object_name,
-        character=character_draw or spec.character,
+        character=character,
         collide_with_others=spec.collide_with_others,
         avatar=spec.avatar,
         display_name=spec.display_name,
