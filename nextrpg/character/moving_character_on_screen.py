@@ -37,9 +37,11 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
             else self.character.tick_idle(time_delta)
         )
         ticked = replace(self, character=character, coordinate=moved_coord)
-        return self.post_tick(time_delta, ticked)
+        return self.tick_after_character_and_coordinate(time_delta, ticked)
 
-    def post_tick(self, time_delta: Millisecond, ticked: Self) -> Self:
+    def tick_after_character_and_coordinate(
+        self, time_delta: Millisecond, ticked: Self
+    ) -> Self:
         return ticked
 
     def can_move(

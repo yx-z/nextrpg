@@ -5,9 +5,9 @@ from nextrpg import (
     Direction,
     Draw,
     EventfulScene,
+    EventSpec,
     MapScene,
     Move,
-    NpcEventSpec,
     NpcEventStartMode,
     NpcOnScreen,
     NpcSpec,
@@ -39,7 +39,7 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
             ),
             NpcSpec(
                 object_name="auto",
-                event=NpcEventSpec(greet, NpcEventStartMode.COLLIDE),
+                event=EventSpec(greet, NpcEventStartMode.COLLIDE),
             ),
         ),
     )

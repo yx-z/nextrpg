@@ -65,7 +65,7 @@ class FadeInState(State):
         return self._fade_in.draw_on_screens
 
     @override
-    def post_tick(self, time_delta: Millisecond, ticked: Self) -> Scene:
+    def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
         fade_in = self._fade_in.tick(time_delta)
         if not fade_in.complete:
             return replace(ticked, _fade_in=fade_in)
@@ -103,7 +103,7 @@ class TypingState(State):
         return self.background + text
 
     @override
-    def post_tick(self, time_delta: Millisecond, ticked: Self) -> Scene:
+    def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
         if self._typewriter:
             typewriter = self._typewriter.tick(time_delta)
         else:
@@ -143,7 +143,7 @@ class FadeOutState(State):
         return self._fade_out.draw_on_screens
 
     @override
-    def post_tick(self, time_delta: Millisecond, ticked: Self) -> Scene:
+    def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
         fade_out = self._fade_out.tick(time_delta)
         if fade_out.complete:
             return ticked.scene.complete(self.generator)

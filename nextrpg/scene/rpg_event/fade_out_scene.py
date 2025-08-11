@@ -32,7 +32,7 @@ class FadeOutScene(RpgEventScene):
         return self._fade.draw_on_screens
 
     @override
-    def post_tick(self, time_delta: Millisecond, ticked: Self) -> Scene:
+    def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
         fade = self._fade.tick(time_delta)
         background_removed = ticked.scene.remove_background_event(self.sentinel)
         if not self.wait:

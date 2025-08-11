@@ -38,7 +38,7 @@ class FadeInScene(RpgEventScene[BackgroundEventSentinel]):
         return self._fade.draw_on_screens
 
     @override
-    def post_tick(self, time_delta: Millisecond, ticked: Self) -> Scene:
+    def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
         fade = self._fade.tick(time_delta)
         if self.wait and not fade.complete:
             return replace(ticked, _fade=fade)

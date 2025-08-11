@@ -164,7 +164,7 @@ class DrawOnScreen(Sizeable):
         return self + -other
 
 
-class TransparentCapableDraw(Draw, ABC):
+class TransparentDraw(Draw, ABC):
     color: Color
 
     @override
@@ -174,15 +174,19 @@ class TransparentCapableDraw(Draw, ABC):
             return Surface((0, 0))
         return super().surface
 
+    @property
+    def transparent(self) -> bool:
+        return self.color == TRANSPARENT
+
     @override
     @cached_property
     def size(self) -> Size:
-        if self.color != TRANSPARENT:
+        if self.transparent:
             return super().size
         return Draw(self.resource).size
 
 
-class PolygonDraw(TransparentCapableDraw):
+class PolygonDraw(TransparentDraw):
     def __init__(self, points: tuple[Coordinate, ...], color: Color) -> None:
         surf = _draw_polygon(points, _fill_polygon(color))
         _set_resource_color_and_color_key(self, surf, color)
@@ -265,7 +269,7 @@ class PolygonOnScreen(Sizeable):
         return DrawOnScreen(self.bounding_rectangle.top_left, Draw(surf))
 
 
-class RectangleDraw(TransparentCapableDraw):
+class RectangleDraw(TransparentDraw):
     def __init__(
         self, size: Size, color: Color, border_radius: Pixel | None = None
     ) -> None:

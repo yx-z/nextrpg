@@ -24,7 +24,6 @@ from nextrpg.global_config.global_config import config
 @dataclass_with_init(frozen=True)
 class _BaseCharacterSpec:
     object_name: str
-    obstruct_others: bool = True
     collide_with_others: bool = True
     avatar: Draw | Group | None = None
     display_name: str = default(lambda self: self.object_name)
@@ -70,6 +69,38 @@ class CharacterOnScreen(EventAsAttr, Sizeable):
         return (self.draw_on_screen,) + debug_visuals
 
     @cached_property
+    def collision_rectangle(self) -> RectangleOnScreen | None:
+        if self.spec.collide_with_others:
+            return self._collision_rectangle(self.coordinate)
+        return None
+
+    @cached_property
+    def start_event_rectangle(self) -> RectangleOnScreen | None:
+        scaling = self.config.start_event_scaling
+        coord = self.coordinate - self.width * (scaling - 1) / 2
+        size = self.size * scaling
+        return RectangleOnScreen(coord, size)
+
+    @property
+    def draw_on_screen(self) -> DrawOnScreen:
+        return DrawOnScreen(self.coordinate, self.character.draw)
+
+    def start_event(self, other: CharacterOnScreen) -> Self:
+        direction = other.coordinate.relative_to(self.coordinate)
+        turned_character = self.character.turn(direction)
+        return replace(self, character=turned_character, _event_started=True)
+
+    @property
+    def complete_event(self) -> Self:
+        return replace(self, _event_started=False)
+
+    def _collision_rectangle(self, coordinate: Coordinate) -> RectangleOnScreen:
+        scaling = self.config.bounding_rectangle_scaling
+        coord = coordinate + self.height * (1 - scaling) / 2
+        size = self.size * scaling
+        return RectangleOnScreen(coord, size)
+
+    @cached_property
     def _collision_visual(self) -> DrawOnScreen | None:
         if (
             (debug := config().debug)
@@ -88,35 +119,3 @@ class CharacterOnScreen(EventAsAttr, Sizeable):
         ):
             return self.start_event_rectangle.fill(color)
         return None
-
-    @cached_property
-    def collision_rectangle(self) -> RectangleOnScreen | None:
-        if self.spec.obstruct_others:
-            return self._collision_rectangle(self.coordinate)
-        return None
-
-    @cached_property
-    def start_event_rectangle(self) -> RectangleOnScreen | None:
-        scaling = self.config.start_event_scaling
-        coord = self.coordinate - self.width * (scaling - 1) / 2
-        size = self.size * scaling
-        return RectangleOnScreen(coord, size)
-
-    def _collision_rectangle(self, coordinate: Coordinate) -> RectangleOnScreen:
-        scaling = self.config.bounding_rectangle_scaling
-        coord = coordinate + self.height * (1 - scaling) / 2
-        size = self.size * scaling
-        return RectangleOnScreen(coord, size)
-
-    @property
-    def draw_on_screen(self) -> DrawOnScreen:
-        return DrawOnScreen(self.coordinate, self.character.draw)
-
-    def start_event(self, other: CharacterOnScreen) -> Self:
-        direction = other.coordinate.relative_to(self.coordinate)
-        turned_character = self.character.turn(direction)
-        return replace(self, character=turned_character, _event_started=True)
-
-    @property
-    def complete_event(self) -> Self:
-        return replace(self, _event_started=False)

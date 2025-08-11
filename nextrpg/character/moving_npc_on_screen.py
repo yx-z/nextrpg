@@ -27,7 +27,9 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     )
 
     @override
-    def post_tick(self, time_delta: Millisecond, ticked: Self) -> Self:
+    def tick_after_character_and_coordinate(
+        self, time_delta: Millisecond, ticked: Self
+    ) -> Self:
         walk = self._walk.tick(time_delta)
         return replace(
             ticked, character=ticked.character.turn(walk.direction), _walk=walk
