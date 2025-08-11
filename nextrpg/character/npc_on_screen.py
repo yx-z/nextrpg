@@ -47,8 +47,8 @@ class NpcSpec(_BaseCharacterSpec):
     collide_with_others: bool = default(
         lambda self: isinstance(self.character, CharacterDraw)
         and (
-            not isinstance(self.character, TransparentDraw)
-            or not self.character.transparent
+            not isinstance(draw := self.character.draw, TransparentDraw)
+            or not draw.transparent
         )
     )
 
