@@ -1,7 +1,5 @@
 # /// script
-# dependencies = [
-#   "nextrpg"
-# ]
+# dependencies = ["nextrpg"]
 # ///
 
 from asyncio import run
