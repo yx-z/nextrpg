@@ -8,9 +8,9 @@ from nextrpg.core.dataclass_with_init import not_constructor_below
 from nextrpg.core.direction import Direction, DirectionalOffset
 from nextrpg.core.time import Millisecond
 from nextrpg.event.pygame_event import (
+    KeyboardKey,
     KeyPressDown,
     KeyPressUp,
-    KeyboardKey,
     PygameEvent,
 )
 from nextrpg.global_config.global_config import config

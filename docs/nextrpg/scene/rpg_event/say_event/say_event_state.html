@@ -64,7 +64,7 @@
                                 <a class="variable" href="#FadeInState.config">config</a>
                         </li>
                         <li>
-                                <a class="function" href="#FadeInState.post_tick">post_tick</a>
+                                <a class="function" href="#FadeInState.tick_after_scene">tick_after_scene</a>
                         </li>
                 </ul>
 
@@ -82,7 +82,7 @@
                                 <a class="variable" href="#TypingState.text_on_screen">text_on_screen</a>
                         </li>
                         <li>
-                                <a class="function" href="#TypingState.post_tick">post_tick</a>
+                                <a class="function" href="#TypingState.tick_after_scene">tick_after_scene</a>
                         </li>
                 </ul>
 
@@ -100,7 +100,7 @@
                                 <a class="variable" href="#FadeOutState.config">config</a>
                         </li>
                         <li>
-                                <a class="function" href="#FadeOutState.post_tick">post_tick</a>
+                                <a class="function" href="#FadeOutState.tick_after_scene">tick_after_scene</a>
                         </li>
                 </ul>
 
@@ -193,7 +193,7 @@
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade_in</span><span class="o">.</span><span class="n">draw_on_screens</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="nd">@override</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">post_tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_after_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>        <span class="n">fade_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade_in</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">fade_in</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">ticked</span><span class="p">,</span> <span class="n">_fade_in</span><span class="o">=</span><span class="n">fade_in</span><span class="p">)</span>
@@ -231,7 +231,7 @@
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">+</span> <span class="n">text</span>
 </span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>    <span class="nd">@override</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">post_tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_after_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
 </span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_typewriter</span><span class="p">:</span>
 </span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>            <span class="n">typewriter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_typewriter</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
 </span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>        <span class="k">else</span><span class="p">:</span>
@@ -271,7 +271,7 @@
 </span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade_out</span><span class="o">.</span><span class="n">draw_on_screens</span>
 </span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
 </span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a>    <span class="nd">@override</span>
-</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">post_tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_after_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
 </span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>        <span class="n">fade_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade_out</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
 </span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>        <span class="k">if</span> <span class="n">fade_out</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
 </span><span id="L-149"><a href="#L-149"><span class="linenos">149</span></a>            <span class="k">return</span> <span class="n">ticked</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">complete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">)</span>
@@ -392,7 +392,7 @@
                                 <dd id="State.generator" class="variable"><a href="../eventful_scene.html#RpgEventScene.generator">generator</a></dd>
                 <dd id="State.scene" class="variable"><a href="../eventful_scene.html#RpgEventScene.scene">scene</a></dd>
                 <dd id="State.tick" class="function"><a href="../eventful_scene.html#RpgEventScene.tick">tick</a></dd>
-                <dd id="State.post_tick" class="function"><a href="../eventful_scene.html#RpgEventScene.post_tick">post_tick</a></dd>
+                <dd id="State.tick_after_scene" class="function"><a href="../eventful_scene.html#RpgEventScene.tick_after_scene">tick_after_scene</a></dd>
 
             </div>
             <div><dt><a href="../../../draw/animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a></dt>
@@ -448,7 +448,7 @@
 </span><span id="FadeInState-66"><a href="#FadeInState-66"><span class="linenos">66</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade_in</span><span class="o">.</span><span class="n">draw_on_screens</span>
 </span><span id="FadeInState-67"><a href="#FadeInState-67"><span class="linenos">67</span></a>
 </span><span id="FadeInState-68"><a href="#FadeInState-68"><span class="linenos">68</span></a>    <span class="nd">@override</span>
-</span><span id="FadeInState-69"><a href="#FadeInState-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">post_tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="FadeInState-69"><a href="#FadeInState-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_after_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
 </span><span id="FadeInState-70"><a href="#FadeInState-70"><span class="linenos">70</span></a>        <span class="n">fade_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade_in</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
 </span><span id="FadeInState-71"><a href="#FadeInState-71"><span class="linenos">71</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">fade_in</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
 </span><span id="FadeInState-72"><a href="#FadeInState-72"><span class="linenos">72</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">ticked</span><span class="p">,</span> <span class="n">_fade_in</span><span class="o">=</span><span class="n">fade_in</span><span class="p">)</span>
@@ -511,32 +511,32 @@
     
 
                             </div>
-                            <div id="FadeInState.post_tick" class="classattr">
-                                        <input id="FadeInState.post_tick-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="FadeInState.tick_after_scene" class="classattr">
+                                        <input id="FadeInState.tick_after_scene-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator decorator-override">@override</div>
 
         <span class="def">def</span>
-        <span class="name">post_tick</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="s1">&#39;Millisecond&#39;</span>, </span><span class="param"><span class="n">ticked</span><span class="p">:</span> <span class="s1">&#39;Self&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Scene&#39;</span>:</span></span>
+        <span class="name">tick_after_scene</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="s1">&#39;Millisecond&#39;</span>, </span><span class="param"><span class="n">ticked</span><span class="p">:</span> <span class="s1">&#39;Self&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Scene&#39;</span>:</span></span>
 
-                <label class="view-source-button" for="FadeInState.post_tick-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="FadeInState.tick_after_scene-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#FadeInState.post_tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FadeInState.post_tick-68"><a href="#FadeInState.post_tick-68"><span class="linenos">68</span></a>    <span class="nd">@override</span>
-</span><span id="FadeInState.post_tick-69"><a href="#FadeInState.post_tick-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">post_tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="FadeInState.post_tick-70"><a href="#FadeInState.post_tick-70"><span class="linenos">70</span></a>        <span class="n">fade_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade_in</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="FadeInState.post_tick-71"><a href="#FadeInState.post_tick-71"><span class="linenos">71</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">fade_in</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
-</span><span id="FadeInState.post_tick-72"><a href="#FadeInState.post_tick-72"><span class="linenos">72</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">ticked</span><span class="p">,</span> <span class="n">_fade_in</span><span class="o">=</span><span class="n">fade_in</span><span class="p">)</span>
-</span><span id="FadeInState.post_tick-73"><a href="#FadeInState.post_tick-73"><span class="linenos">73</span></a>        <span class="k">return</span> <span class="n">TypingState</span><span class="p">(</span>
-</span><span id="FadeInState.post_tick-74"><a href="#FadeInState.post_tick-74"><span class="linenos">74</span></a>            <span class="n">generator</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">,</span>
-</span><span id="FadeInState.post_tick-75"><a href="#FadeInState.post_tick-75"><span class="linenos">75</span></a>            <span class="n">scene</span><span class="o">=</span><span class="n">ticked</span><span class="o">.</span><span class="n">scene</span><span class="p">,</span>
-</span><span id="FadeInState.post_tick-76"><a href="#FadeInState.post_tick-76"><span class="linenos">76</span></a>            <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">object_name</span><span class="p">,</span>
-</span><span id="FadeInState.post_tick-77"><a href="#FadeInState.post_tick-77"><span class="linenos">77</span></a>            <span class="n">initial_coordinate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_coordinate</span><span class="p">,</span>
-</span><span id="FadeInState.post_tick-78"><a href="#FadeInState.post_tick-78"><span class="linenos">78</span></a>            <span class="n">background</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="p">,</span>
-</span><span id="FadeInState.post_tick-79"><a href="#FadeInState.post_tick-79"><span class="linenos">79</span></a>            <span class="n">text_on_screen</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="p">,</span>
-</span><span id="FadeInState.post_tick-80"><a href="#FadeInState.post_tick-80"><span class="linenos">80</span></a>            <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
-</span><span id="FadeInState.post_tick-81"><a href="#FadeInState.post_tick-81"><span class="linenos">81</span></a>        <span class="p">)</span>
+    <a class="headerlink" href="#FadeInState.tick_after_scene"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FadeInState.tick_after_scene-68"><a href="#FadeInState.tick_after_scene-68"><span class="linenos">68</span></a>    <span class="nd">@override</span>
+</span><span id="FadeInState.tick_after_scene-69"><a href="#FadeInState.tick_after_scene-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_after_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="FadeInState.tick_after_scene-70"><a href="#FadeInState.tick_after_scene-70"><span class="linenos">70</span></a>        <span class="n">fade_in</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade_in</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="FadeInState.tick_after_scene-71"><a href="#FadeInState.tick_after_scene-71"><span class="linenos">71</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">fade_in</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
+</span><span id="FadeInState.tick_after_scene-72"><a href="#FadeInState.tick_after_scene-72"><span class="linenos">72</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">ticked</span><span class="p">,</span> <span class="n">_fade_in</span><span class="o">=</span><span class="n">fade_in</span><span class="p">)</span>
+</span><span id="FadeInState.tick_after_scene-73"><a href="#FadeInState.tick_after_scene-73"><span class="linenos">73</span></a>        <span class="k">return</span> <span class="n">TypingState</span><span class="p">(</span>
+</span><span id="FadeInState.tick_after_scene-74"><a href="#FadeInState.tick_after_scene-74"><span class="linenos">74</span></a>            <span class="n">generator</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">,</span>
+</span><span id="FadeInState.tick_after_scene-75"><a href="#FadeInState.tick_after_scene-75"><span class="linenos">75</span></a>            <span class="n">scene</span><span class="o">=</span><span class="n">ticked</span><span class="o">.</span><span class="n">scene</span><span class="p">,</span>
+</span><span id="FadeInState.tick_after_scene-76"><a href="#FadeInState.tick_after_scene-76"><span class="linenos">76</span></a>            <span class="n">object_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">object_name</span><span class="p">,</span>
+</span><span id="FadeInState.tick_after_scene-77"><a href="#FadeInState.tick_after_scene-77"><span class="linenos">77</span></a>            <span class="n">initial_coordinate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_coordinate</span><span class="p">,</span>
+</span><span id="FadeInState.tick_after_scene-78"><a href="#FadeInState.tick_after_scene-78"><span class="linenos">78</span></a>            <span class="n">background</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="p">,</span>
+</span><span id="FadeInState.tick_after_scene-79"><a href="#FadeInState.tick_after_scene-79"><span class="linenos">79</span></a>            <span class="n">text_on_screen</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">text_on_screen</span><span class="p">,</span>
+</span><span id="FadeInState.tick_after_scene-80"><a href="#FadeInState.tick_after_scene-80"><span class="linenos">80</span></a>            <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
+</span><span id="FadeInState.tick_after_scene-81"><a href="#FadeInState.tick_after_scene-81"><span class="linenos">81</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -625,7 +625,7 @@
 </span><span id="TypingState-104"><a href="#TypingState-104"><span class="linenos">104</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">+</span> <span class="n">text</span>
 </span><span id="TypingState-105"><a href="#TypingState-105"><span class="linenos">105</span></a>
 </span><span id="TypingState-106"><a href="#TypingState-106"><span class="linenos">106</span></a>    <span class="nd">@override</span>
-</span><span id="TypingState-107"><a href="#TypingState-107"><span class="linenos">107</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">post_tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="TypingState-107"><a href="#TypingState-107"><span class="linenos">107</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_after_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
 </span><span id="TypingState-108"><a href="#TypingState-108"><span class="linenos">108</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_typewriter</span><span class="p">:</span>
 </span><span id="TypingState-109"><a href="#TypingState-109"><span class="linenos">109</span></a>            <span class="n">typewriter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_typewriter</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
 </span><span id="TypingState-110"><a href="#TypingState-110"><span class="linenos">110</span></a>        <span class="k">else</span><span class="p">:</span>
@@ -687,26 +687,26 @@
     
 
                             </div>
-                            <div id="TypingState.post_tick" class="classattr">
-                                        <input id="TypingState.post_tick-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="TypingState.tick_after_scene" class="classattr">
+                                        <input id="TypingState.tick_after_scene-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator decorator-override">@override</div>
 
         <span class="def">def</span>
-        <span class="name">post_tick</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="s1">&#39;Millisecond&#39;</span>, </span><span class="param"><span class="n">ticked</span><span class="p">:</span> <span class="s1">&#39;Self&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Scene&#39;</span>:</span></span>
+        <span class="name">tick_after_scene</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="s1">&#39;Millisecond&#39;</span>, </span><span class="param"><span class="n">ticked</span><span class="p">:</span> <span class="s1">&#39;Self&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Scene&#39;</span>:</span></span>
 
-                <label class="view-source-button" for="TypingState.post_tick-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="TypingState.tick_after_scene-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#TypingState.post_tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="TypingState.post_tick-106"><a href="#TypingState.post_tick-106"><span class="linenos">106</span></a>    <span class="nd">@override</span>
-</span><span id="TypingState.post_tick-107"><a href="#TypingState.post_tick-107"><span class="linenos">107</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">post_tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="TypingState.post_tick-108"><a href="#TypingState.post_tick-108"><span class="linenos">108</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_typewriter</span><span class="p">:</span>
-</span><span id="TypingState.post_tick-109"><a href="#TypingState.post_tick-109"><span class="linenos">109</span></a>            <span class="n">typewriter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_typewriter</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="TypingState.post_tick-110"><a href="#TypingState.post_tick-110"><span class="linenos">110</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="TypingState.post_tick-111"><a href="#TypingState.post_tick-111"><span class="linenos">111</span></a>            <span class="n">typewriter</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="TypingState.post_tick-112"><a href="#TypingState.post_tick-112"><span class="linenos">112</span></a>
-</span><span id="TypingState.post_tick-113"><a href="#TypingState.post_tick-113"><span class="linenos">113</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">ticked</span><span class="p">,</span> <span class="n">_typewriter</span><span class="o">=</span><span class="n">typewriter</span><span class="p">)</span>
+    <a class="headerlink" href="#TypingState.tick_after_scene"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="TypingState.tick_after_scene-106"><a href="#TypingState.tick_after_scene-106"><span class="linenos">106</span></a>    <span class="nd">@override</span>
+</span><span id="TypingState.tick_after_scene-107"><a href="#TypingState.tick_after_scene-107"><span class="linenos">107</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_after_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="TypingState.tick_after_scene-108"><a href="#TypingState.tick_after_scene-108"><span class="linenos">108</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_typewriter</span><span class="p">:</span>
+</span><span id="TypingState.tick_after_scene-109"><a href="#TypingState.tick_after_scene-109"><span class="linenos">109</span></a>            <span class="n">typewriter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_typewriter</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="TypingState.tick_after_scene-110"><a href="#TypingState.tick_after_scene-110"><span class="linenos">110</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="TypingState.tick_after_scene-111"><a href="#TypingState.tick_after_scene-111"><span class="linenos">111</span></a>            <span class="n">typewriter</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="TypingState.tick_after_scene-112"><a href="#TypingState.tick_after_scene-112"><span class="linenos">112</span></a>
+</span><span id="TypingState.tick_after_scene-113"><a href="#TypingState.tick_after_scene-113"><span class="linenos">113</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">ticked</span><span class="p">,</span> <span class="n">_typewriter</span><span class="o">=</span><span class="n">typewriter</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -788,7 +788,7 @@
 </span><span id="FadeOutState-144"><a href="#FadeOutState-144"><span class="linenos">144</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade_out</span><span class="o">.</span><span class="n">draw_on_screens</span>
 </span><span id="FadeOutState-145"><a href="#FadeOutState-145"><span class="linenos">145</span></a>
 </span><span id="FadeOutState-146"><a href="#FadeOutState-146"><span class="linenos">146</span></a>    <span class="nd">@override</span>
-</span><span id="FadeOutState-147"><a href="#FadeOutState-147"><span class="linenos">147</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">post_tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="FadeOutState-147"><a href="#FadeOutState-147"><span class="linenos">147</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_after_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
 </span><span id="FadeOutState-148"><a href="#FadeOutState-148"><span class="linenos">148</span></a>        <span class="n">fade_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade_out</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
 </span><span id="FadeOutState-149"><a href="#FadeOutState-149"><span class="linenos">149</span></a>        <span class="k">if</span> <span class="n">fade_out</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
 </span><span id="FadeOutState-150"><a href="#FadeOutState-150"><span class="linenos">150</span></a>            <span class="k">return</span> <span class="n">ticked</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">complete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">)</span>
@@ -832,24 +832,24 @@
     
 
                             </div>
-                            <div id="FadeOutState.post_tick" class="classattr">
-                                        <input id="FadeOutState.post_tick-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="FadeOutState.tick_after_scene" class="classattr">
+                                        <input id="FadeOutState.tick_after_scene-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator decorator-override">@override</div>
 
         <span class="def">def</span>
-        <span class="name">post_tick</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="s1">&#39;Millisecond&#39;</span>, </span><span class="param"><span class="n">ticked</span><span class="p">:</span> <span class="s1">&#39;Self&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Scene&#39;</span>:</span></span>
+        <span class="name">tick_after_scene</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="s1">&#39;Millisecond&#39;</span>, </span><span class="param"><span class="n">ticked</span><span class="p">:</span> <span class="s1">&#39;Self&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Scene&#39;</span>:</span></span>
 
-                <label class="view-source-button" for="FadeOutState.post_tick-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="FadeOutState.tick_after_scene-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#FadeOutState.post_tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="FadeOutState.post_tick-146"><a href="#FadeOutState.post_tick-146"><span class="linenos">146</span></a>    <span class="nd">@override</span>
-</span><span id="FadeOutState.post_tick-147"><a href="#FadeOutState.post_tick-147"><span class="linenos">147</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">post_tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
-</span><span id="FadeOutState.post_tick-148"><a href="#FadeOutState.post_tick-148"><span class="linenos">148</span></a>        <span class="n">fade_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade_out</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="FadeOutState.post_tick-149"><a href="#FadeOutState.post_tick-149"><span class="linenos">149</span></a>        <span class="k">if</span> <span class="n">fade_out</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
-</span><span id="FadeOutState.post_tick-150"><a href="#FadeOutState.post_tick-150"><span class="linenos">150</span></a>            <span class="k">return</span> <span class="n">ticked</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">complete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">)</span>
-</span><span id="FadeOutState.post_tick-151"><a href="#FadeOutState.post_tick-151"><span class="linenos">151</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">ticked</span><span class="p">,</span> <span class="n">_fade_out</span><span class="o">=</span><span class="n">fade_out</span><span class="p">)</span>
+    <a class="headerlink" href="#FadeOutState.tick_after_scene"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="FadeOutState.tick_after_scene-146"><a href="#FadeOutState.tick_after_scene-146"><span class="linenos">146</span></a>    <span class="nd">@override</span>
+</span><span id="FadeOutState.tick_after_scene-147"><a href="#FadeOutState.tick_after_scene-147"><span class="linenos">147</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_after_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
+</span><span id="FadeOutState.tick_after_scene-148"><a href="#FadeOutState.tick_after_scene-148"><span class="linenos">148</span></a>        <span class="n">fade_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade_out</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="FadeOutState.tick_after_scene-149"><a href="#FadeOutState.tick_after_scene-149"><span class="linenos">149</span></a>        <span class="k">if</span> <span class="n">fade_out</span><span class="o">.</span><span class="n">complete</span><span class="p">:</span>
+</span><span id="FadeOutState.tick_after_scene-150"><a href="#FadeOutState.tick_after_scene-150"><span class="linenos">150</span></a>            <span class="k">return</span> <span class="n">ticked</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">complete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">)</span>
+</span><span id="FadeOutState.tick_after_scene-151"><a href="#FadeOutState.tick_after_scene-151"><span class="linenos">151</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">ticked</span><span class="p">,</span> <span class="n">_fade_out</span><span class="o">=</span><span class="n">fade_out</span><span class="p">)</span>
 </span></pre></div>
 
 

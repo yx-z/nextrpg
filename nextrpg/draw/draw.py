@@ -167,23 +167,23 @@ class DrawOnScreen(Sizeable):
 class TransparentDraw(Draw, ABC):
     color: Color
 
-    @override
-    @cached_property
-    def surface(self) -> Surface:
-        if self.color == TRANSPARENT:
-            return Surface((0, 0))
-        return super().surface
-
     @property
     def transparent(self) -> bool:
         return self.color == TRANSPARENT
 
     @override
     @cached_property
+    def surface(self) -> Surface:
+        if self.transparent:
+            return Surface((0, 0))
+        return super().surface
+
+    @override
+    @cached_property
     def size(self) -> Size:
         if self.transparent:
-            return super().size
-        return Draw(self.resource).size
+            return Draw(self.resource).size
+        return super().size
 
 
 class PolygonDraw(TransparentDraw):

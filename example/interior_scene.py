@@ -4,8 +4,8 @@ from nextrpg import (
     Color,
     Direction,
     Draw,
-    EventfulScene,
     EventSpec,
+    EventfulScene,
     MapScene,
     Move,
     NpcEventStartMode,
@@ -31,12 +31,8 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
         player_spec or init_player(),
         Move("from_interior", "to_exterior", exterior_scene),
         (
-            NpcSpec(object_name="david", character=david(), event=greet),
-            NpcSpec(
-                object_name="alisa",
-                character=alisa(),
-                event=greet,
-            ),
+            NpcSpec(object_name="david", character=david()),
+            NpcSpec(object_name="alisa", character=alisa(), event=greet),
             NpcSpec(
                 object_name="auto",
                 event=EventSpec(greet, NpcEventStartMode.COLLIDE),

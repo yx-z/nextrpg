@@ -4,7 +4,6 @@ from enum import Enum, auto
 from functools import cached_property
 from typing import override
 
-from nextrpg import TransparentDraw
 from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.character.character_on_screen import (
     CharacterOnScreen,
@@ -18,7 +17,7 @@ from nextrpg.core.dataclass_with_init import (
     default,
     not_constructor_below,
 )
-from nextrpg.draw.draw import RectangleOnScreen
+from nextrpg.draw.draw import RectangleOnScreen, TransparentDraw
 from nextrpg.event.event_transformer import transform
 
 type EventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]

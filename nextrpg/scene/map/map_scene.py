@@ -68,7 +68,7 @@ class MapScene(EventfulScene):
         return PlayerOnScreen(
             player_spec,
             Coordinate(player.x, player.y),
-            collisions=self.map_helper.collisions,
+            map_collisions=self.map_helper.collisions,
         )
 
     @override

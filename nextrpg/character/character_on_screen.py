@@ -69,13 +69,11 @@ class CharacterOnScreen(EventAsAttr, Sizeable):
         return (self.draw_on_screen,) + debug_visuals
 
     @cached_property
-    def collision_rectangle(self) -> RectangleOnScreen | None:
-        if self.spec.collide_with_others:
-            return self._collision_rectangle(self.coordinate)
-        return None
+    def collision_rectangle(self) -> RectangleOnScreen:
+        return self._collision_rectangle(self.coordinate)
 
     @cached_property
-    def start_event_rectangle(self) -> RectangleOnScreen | None:
+    def start_event_rectangle(self) -> RectangleOnScreen:
         scaling = self.config.start_event_scaling
         coord = self.coordinate - self.width * (scaling - 1) / 2
         size = self.size * scaling
@@ -102,20 +100,16 @@ class CharacterOnScreen(EventAsAttr, Sizeable):
 
     @cached_property
     def _collision_visual(self) -> DrawOnScreen | None:
-        if (
-            (debug := config().debug)
-            and (color := debug.collision_rectangle_color)
-            and self.collision_rectangle
+        if (debug := config().debug) and (
+            color := debug.collision_rectangle_color
         ):
             return self.collision_rectangle.fill(color)
         return None
 
     @cached_property
     def _start_event_visual(self) -> DrawOnScreen | None:
-        if (
-            (debug := config().debug)
-            and (color := debug.start_event_rectangle_color)
-            and self.start_event_rectangle
+        if (debug := config().debug) and (
+            color := debug.start_event_rectangle_color
         ):
             return self.start_event_rectangle.fill(color)
         return None

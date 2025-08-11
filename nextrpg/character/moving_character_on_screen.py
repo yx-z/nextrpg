@@ -13,7 +13,7 @@ logger = Logger()
 
 @dataclass(frozen=True)
 class MovingCharacterOnScreen(CharacterOnScreen, ABC):
-    collisions: tuple[PolygonOnScreen, ...] = ()
+    map_collisions: tuple[PolygonOnScreen, ...] = ()
 
     @property
     @abstractmethod
@@ -62,8 +62,10 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         bounding_rect: RectangleOnScreen,
         others: tuple[CharacterOnScreen, ...],
     ) -> PolygonOnScreen | None:
-        other_rects = tuple(r for c in others if (r := c.collision_rectangle))
-        for collision in self.collisions + other_rects:
+        other_rects = tuple(
+            c.collision_rectangle for c in others if c.spec.collide_with_others
+        )
+        for collision in self.map_collisions + other_rects:
             if collision.collide(bounding_rect):
                 return collision
         return None

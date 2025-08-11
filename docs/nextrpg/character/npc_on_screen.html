@@ -31,10 +31,10 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
-                    <a class="variable" href="#NpcEventSpecParams">NpcEventSpecParams</a>
+                    <a class="variable" href="#EventSpecParams">EventSpecParams</a>
             </li>
             <li>
-                    <a class="variable" href="#NpcEvent">NpcEvent</a>
+                    <a class="variable" href="#RpgEvent">RpgEvent</a>
             </li>
             <li>
                     <a class="class" href="#NpcEventStartMode">NpcEventStartMode</a>
@@ -49,19 +49,19 @@
 
             </li>
             <li>
-                    <a class="class" href="#NpcEventSpec">NpcEventSpec</a>
+                    <a class="class" href="#EventSpec">EventSpec</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#NpcEventSpec.__init__">NpcEventSpec</a>
+                                <a class="function" href="#EventSpec.__init__">EventSpec</a>
                         </li>
                         <li>
-                                <a class="variable" href="#NpcEventSpec.event">event</a>
+                                <a class="variable" href="#EventSpec.event">event</a>
                         </li>
                         <li>
-                                <a class="variable" href="#NpcEventSpec.start_mode">start_mode</a>
+                                <a class="variable" href="#EventSpec.start_mode">start_mode</a>
                         </li>
                         <li>
-                                <a class="variable" href="#NpcEventSpec.generator">generator</a>
+                                <a class="variable" href="#EventSpec.generator">generator</a>
                         </li>
                 </ul>
 
@@ -82,7 +82,10 @@
                                 <a class="variable" href="#NpcSpec.cyclic_walk">cyclic_walk</a>
                         </li>
                         <li>
-                                <a class="variable" href="#NpcSpec.obstruct_others">obstruct_others</a>
+                                <a class="variable" href="#NpcSpec.collide_with_others">collide_with_others</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#NpcSpec.event_spec">event_spec</a>
                         </li>
                 </ul>
 
@@ -157,12 +160,12 @@
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">default</span><span class="p">,</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">not_constructor_below</span><span class="p">,</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="p">)</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">RectangleOnScreen</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">RectangleOnScreen</span><span class="p">,</span> <span class="n">TransparentDraw</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.event_transformer</span><span class="w"> </span><span class="kn">import</span> <span class="n">transform</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="nb">type</span> <span class="n">NpcEventSpecParams</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PlayerOnScreen</span><span class="p">,</span> <span class="n">NpcOnScreen</span><span class="p">,</span> <span class="s2">&quot;EventfulScene&quot;</span><span class="p">]</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="nb">type</span> <span class="n">EventSpecParams</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">PlayerOnScreen</span><span class="p">,</span> <span class="n">NpcOnScreen</span><span class="p">,</span> <span class="s2">&quot;EventfulScene&quot;</span><span class="p">]</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="nb">type</span> <span class="n">NpcEvent</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">*</span><span class="n">NpcEventSpecParams</span><span class="p">],</span> <span class="s2">&quot;EventGenerator | None&quot;</span><span class="p">]</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="nb">type</span> <span class="n">RpgEvent</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="o">*</span><span class="n">EventSpecParams</span><span class="p">],</span> <span class="s2">&quot;EventGenerator | None&quot;</span><span class="p">]</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
 </span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NpcEventStartMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -171,8 +174,8 @@
 </span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
 </span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
 </span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NpcEventSpec</span><span class="p">:</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">NpcEvent</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="k">class</span><span class="w"> </span><span class="nc">EventSpec</span><span class="p">:</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">RpgEvent</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="n">start_mode</span><span class="p">:</span> <span class="n">NpcEventStartMode</span> <span class="o">=</span> <span class="n">NpcEventStartMode</span><span class="o">.</span><span class="n">CONFIRM</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="n">generator</span><span class="p">:</span> <span class="s2">&quot;EventGenerator&quot;</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">))</span>
@@ -181,80 +184,83 @@
 </span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NpcSpec</span><span class="p">(</span><span class="n">_BaseCharacterSpec</span><span class="p">):</span>
 </span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDraw</span> <span class="o">|</span> <span class="n">Color</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">NpcEventSpec</span> <span class="o">|</span> <span class="n">NpcEvent</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">EventSpec</span> <span class="o">|</span> <span class="n">RpgEvent</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="n">cyclic_walk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">obstruct_others</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="n">collide_with_others</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="p">,</span> <span class="n">CharacterDraw</span><span class="p">)</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="p">)</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="nd">@property</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_event_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NpcEventSpec</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">:</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>            <span class="k">return</span> <span class="kc">None</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">,</span> <span class="n">NpcEventSpec</span><span class="p">):</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>        <span class="k">return</span> <span class="n">NpcEventSpec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StrictNpcSpec</span><span class="p">(</span><span class="n">NpcSpec</span><span class="p">,</span> <span class="n">CharacterSpec</span><span class="p">):</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">NpcEventSpec</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="ow">and</span> <span class="p">(</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>            <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">draw</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">draw</span><span class="p">,</span> <span class="n">TransparentDraw</span><span class="p">)</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>            <span class="ow">or</span> <span class="ow">not</span> <span class="n">draw</span><span class="o">.</span><span class="n">transparent</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>        <span class="p">)</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="p">)</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="nd">@property</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventSpec</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">:</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">,</span> <span class="n">EventSpec</span><span class="p">):</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>        <span class="k">return</span> <span class="n">EventSpec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
 </span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="k">def</span><span class="w"> </span><span class="nf">to_strict</span><span class="p">(</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">NpcSpec</span><span class="p">,</span> <span class="n">character_draw</span><span class="p">:</span> <span class="n">CharacterDraw</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StrictNpcSpec</span><span class="p">:</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="k">assert</span> <span class="p">(</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>        <span class="n">character_draw</span> <span class="ow">or</span> <span class="n">spec</span><span class="o">.</span><span class="n">character</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">object_name</span><span class="si">}</span><span class="s2">&#39; is missing CharacterDraw.&quot;</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="k">return</span> <span class="n">StrictNpcSpec</span><span class="p">(</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>        <span class="n">object_name</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">object_name</span><span class="p">,</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="n">character</span><span class="o">=</span><span class="n">character_draw</span> <span class="ow">or</span> <span class="n">spec</span><span class="o">.</span><span class="n">character</span><span class="p">,</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>        <span class="n">obstruct_others</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">obstruct_others</span><span class="p">,</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>        <span class="n">collide_with_others</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">collide_with_others</span><span class="p">,</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>        <span class="n">avatar</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">avatar</span><span class="p">,</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>        <span class="n">display_name</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span><span class="p">,</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>        <span class="n">event</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">_event_spec</span><span class="p">,</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>        <span class="n">config</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>        <span class="n">cyclic_walk</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">cyclic_walk</span><span class="p">,</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>    <span class="p">)</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NpcOnScreen</span><span class="p">(</span><span class="n">CharacterOnScreen</span><span class="p">):</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">StrictNpcSpec</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>
-</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>    <span class="nd">@override</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RectangleOnScreen</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">event</span><span class="p">:</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start_event_rectangle</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a>        <span class="k">return</span> <span class="kc">None</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StrictNpcSpec</span><span class="p">(</span><span class="n">NpcSpec</span><span class="p">,</span> <span class="n">CharacterSpec</span><span class="p">):</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">EventSpec</span> <span class="o">|</span> <span class="kc">None</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="k">def</span><span class="w"> </span><span class="nf">to_strict</span><span class="p">(</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">NpcSpec</span><span class="p">,</span> <span class="n">character_draw</span><span class="p">:</span> <span class="n">CharacterDraw</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StrictNpcSpec</span><span class="p">:</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="k">assert</span> <span class="p">(</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="n">character_draw</span> <span class="ow">or</span> <span class="n">spec</span><span class="o">.</span><span class="n">character</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">object_name</span><span class="si">}</span><span class="s2">&#39; is missing CharacterDraw.&quot;</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>    <span class="k">return</span> <span class="n">StrictNpcSpec</span><span class="p">(</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>        <span class="n">object_name</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">object_name</span><span class="p">,</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>        <span class="n">character</span><span class="o">=</span><span class="n">character_draw</span> <span class="ow">or</span> <span class="n">spec</span><span class="o">.</span><span class="n">character</span><span class="p">,</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>        <span class="n">collide_with_others</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">collide_with_others</span><span class="p">,</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>        <span class="n">avatar</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">avatar</span><span class="p">,</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>        <span class="n">display_name</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span><span class="p">,</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>        <span class="n">event</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">event_spec</span><span class="p">,</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="n">config</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>        <span class="n">cyclic_walk</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">cyclic_walk</span><span class="p">,</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="p">)</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>
+</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>
+</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NpcOnScreen</span><span class="p">(</span><span class="n">CharacterOnScreen</span><span class="p">):</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">StrictNpcSpec</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>
+</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>    <span class="nd">@override</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos">91</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos">92</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RectangleOnScreen</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos">93</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">event</span><span class="p">:</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos">94</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start_event_rectangle</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos">95</span></a>        <span class="k">return</span> <span class="kc">None</span>
 </span></pre></div>
 
 
             </section>
-                <section id="NpcEventSpecParams">
+                <section id="EventSpecParams">
                     <div class="attr variable">
-            <span class="def">type</span> <span class="name">NpcEventSpecParams</span>        =
-<input id="NpcEventSpecParams-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-            <label class="view-value-button pdoc-button" for="NpcEventSpecParams-view-value"></label><span class="default_value">tuple[<a href="player_on_screen.html#PlayerOnScreen">nextrpg.character.player_on_screen.PlayerOnScreen</a>, <a href="#NpcOnScreen">NpcOnScreen</a>, &#39;EventfulScene&#39;]</span>
+            <span class="def">type</span> <span class="name">EventSpecParams</span>        =
+<input id="EventSpecParams-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+            <label class="view-value-button pdoc-button" for="EventSpecParams-view-value"></label><span class="default_value">tuple[<a href="player_on_screen.html#PlayerOnScreen">nextrpg.character.player_on_screen.PlayerOnScreen</a>, <a href="#NpcOnScreen">NpcOnScreen</a>, &#39;EventfulScene&#39;]</span>
 
         
     </div>
-    <a class="headerlink" href="#NpcEventSpecParams"></a>
+    <a class="headerlink" href="#EventSpecParams"></a>
     
     
 
                 </section>
-                <section id="NpcEvent">
+                <section id="RpgEvent">
                     <div class="attr variable">
-            <span class="def">type</span> <span class="name">NpcEvent</span>        =
-<span class="default_value">Callable[[typing.Unpack[NpcEventSpecParams]], &#39;EventGenerator | None&#39;]</span>
+            <span class="def">type</span> <span class="name">RpgEvent</span>        =
+<span class="default_value">Callable[[typing.Unpack[EventSpecParams]], &#39;EventGenerator | None&#39;]</span>
 
         
     </div>
-    <a class="headerlink" href="#NpcEvent"></a>
+    <a class="headerlink" href="#RpgEvent"></a>
     
     
 
@@ -303,71 +309,71 @@
 
                             </div>
                 </section>
-                <section id="NpcEventSpec">
-                            <input id="NpcEventSpec-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                <section id="EventSpec">
+                            <input id="EventSpec-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
                     <div class="decorator decorator-dataclass_with_init">@dataclass_with_init(frozen=True)</div>
 
     <span class="def">class</span>
-    <span class="name">NpcEventSpec</span>:
+    <span class="name">EventSpec</span>:
 
-                <label class="view-source-button" for="NpcEventSpec-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="EventSpec-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#NpcEventSpec"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="NpcEventSpec-34"><a href="#NpcEventSpec-34"><span class="linenos">34</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="NpcEventSpec-35"><a href="#NpcEventSpec-35"><span class="linenos">35</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NpcEventSpec</span><span class="p">:</span>
-</span><span id="NpcEventSpec-36"><a href="#NpcEventSpec-36"><span class="linenos">36</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">NpcEvent</span>
-</span><span id="NpcEventSpec-37"><a href="#NpcEventSpec-37"><span class="linenos">37</span></a>    <span class="n">start_mode</span><span class="p">:</span> <span class="n">NpcEventStartMode</span> <span class="o">=</span> <span class="n">NpcEventStartMode</span><span class="o">.</span><span class="n">CONFIRM</span>
-</span><span id="NpcEventSpec-38"><a href="#NpcEventSpec-38"><span class="linenos">38</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
-</span><span id="NpcEventSpec-39"><a href="#NpcEventSpec-39"><span class="linenos">39</span></a>    <span class="n">generator</span><span class="p">:</span> <span class="s2">&quot;EventGenerator&quot;</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">))</span>
+    <a class="headerlink" href="#EventSpec"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="EventSpec-34"><a href="#EventSpec-34"><span class="linenos">34</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="EventSpec-35"><a href="#EventSpec-35"><span class="linenos">35</span></a><span class="k">class</span><span class="w"> </span><span class="nc">EventSpec</span><span class="p">:</span>
+</span><span id="EventSpec-36"><a href="#EventSpec-36"><span class="linenos">36</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">RpgEvent</span>
+</span><span id="EventSpec-37"><a href="#EventSpec-37"><span class="linenos">37</span></a>    <span class="n">start_mode</span><span class="p">:</span> <span class="n">NpcEventStartMode</span> <span class="o">=</span> <span class="n">NpcEventStartMode</span><span class="o">.</span><span class="n">CONFIRM</span>
+</span><span id="EventSpec-38"><a href="#EventSpec-38"><span class="linenos">38</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
+</span><span id="EventSpec-39"><a href="#EventSpec-39"><span class="linenos">39</span></a>    <span class="n">generator</span><span class="p">:</span> <span class="s2">&quot;EventGenerator&quot;</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">))</span>
 </span></pre></div>
 
 
     
 
-                            <div id="NpcEventSpec.__init__" class="classattr">
+                            <div id="EventSpec.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">NpcEventSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">event</span><span class="p">:</span> <span class="n">NpcEvent</span>,</span><span class="param">	<span class="n">start_mode</span><span class="p">:</span> <span class="n"><a href="#NpcEventStartMode">NpcEventStartMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#NpcEventStartMode.CONFIRM">NpcEventStartMode.CONFIRM</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">generator</span><span class="p">:</span> <span class="s1">&#39;EventGenerator&#39;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
+        <span class="name">EventSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">event</span><span class="p">:</span> <span class="n">RpgEvent</span>,</span><span class="param">	<span class="n">start_mode</span><span class="p">:</span> <span class="n"><a href="#NpcEventStartMode">NpcEventStartMode</a></span> <span class="o">=</span> <span class="o">&lt;</span><span class="n"><a href="#NpcEventStartMode.CONFIRM">NpcEventStartMode.CONFIRM</a></span><span class="p">:</span> <span class="mi">1</span><span class="o">&gt;</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">generator</span><span class="p">:</span> <span class="s1">&#39;EventGenerator&#39;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span></span>)</span>
 
         
     </div>
-    <a class="headerlink" href="#NpcEventSpec.__init__"></a>
+    <a class="headerlink" href="#EventSpec.__init__"></a>
     
     
 
                             </div>
-                            <div id="NpcEventSpec.event" class="classattr">
+                            <div id="EventSpec.event" class="classattr">
                                 <div class="attr variable">
-            <span class="name">event</span><span class="annotation">: <a href="#NpcEvent">NpcEvent</a></span>
+            <span class="name">event</span><span class="annotation">: <a href="#RpgEvent">RpgEvent</a></span>
 
         
     </div>
-    <a class="headerlink" href="#NpcEventSpec.event"></a>
+    <a class="headerlink" href="#EventSpec.event"></a>
     
     
 
                             </div>
-                            <div id="NpcEventSpec.start_mode" class="classattr">
+                            <div id="EventSpec.start_mode" class="classattr">
                                 <div class="attr variable">
             <span class="name">start_mode</span><span class="annotation">: <a href="#NpcEventStartMode">NpcEventStartMode</a></span>        =
 <span class="default_value">&lt;<a href="#NpcEventStartMode.CONFIRM">NpcEventStartMode.CONFIRM</a>: 1&gt;</span>
 
         
     </div>
-    <a class="headerlink" href="#NpcEventSpec.start_mode"></a>
+    <a class="headerlink" href="#EventSpec.start_mode"></a>
     
     
 
                             </div>
-                            <div id="NpcEventSpec.generator" class="classattr">
+                            <div id="EventSpec.generator" class="classattr">
                                 <div class="attr variable">
             <span class="name">generator</span><span class="annotation">: &#39;EventGenerator&#39;</span>
 
         
     </div>
-    <a class="headerlink" href="#NpcEventSpec.generator"></a>
+    <a class="headerlink" href="#EventSpec.generator"></a>
     
     
 
@@ -388,19 +394,23 @@
             <div class="pdoc-code codehilite"><pre><span></span><span id="NpcSpec-42"><a href="#NpcSpec-42"><span class="linenos">42</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="NpcSpec-43"><a href="#NpcSpec-43"><span class="linenos">43</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NpcSpec</span><span class="p">(</span><span class="n">_BaseCharacterSpec</span><span class="p">):</span>
 </span><span id="NpcSpec-44"><a href="#NpcSpec-44"><span class="linenos">44</span></a>    <span class="n">character</span><span class="p">:</span> <span class="n">CharacterDraw</span> <span class="o">|</span> <span class="n">Color</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="NpcSpec-45"><a href="#NpcSpec-45"><span class="linenos">45</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">NpcEventSpec</span> <span class="o">|</span> <span class="n">NpcEvent</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="NpcSpec-45"><a href="#NpcSpec-45"><span class="linenos">45</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">EventSpec</span> <span class="o">|</span> <span class="n">RpgEvent</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="NpcSpec-46"><a href="#NpcSpec-46"><span class="linenos">46</span></a>    <span class="n">cyclic_walk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="NpcSpec-47"><a href="#NpcSpec-47"><span class="linenos">47</span></a>    <span class="n">obstruct_others</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span>
+</span><span id="NpcSpec-47"><a href="#NpcSpec-47"><span class="linenos">47</span></a>    <span class="n">collide_with_others</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">default</span><span class="p">(</span>
 </span><span id="NpcSpec-48"><a href="#NpcSpec-48"><span class="linenos">48</span></a>        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="p">,</span> <span class="n">CharacterDraw</span><span class="p">)</span>
-</span><span id="NpcSpec-49"><a href="#NpcSpec-49"><span class="linenos">49</span></a>    <span class="p">)</span>
-</span><span id="NpcSpec-50"><a href="#NpcSpec-50"><span class="linenos">50</span></a>
-</span><span id="NpcSpec-51"><a href="#NpcSpec-51"><span class="linenos">51</span></a>    <span class="nd">@property</span>
-</span><span id="NpcSpec-52"><a href="#NpcSpec-52"><span class="linenos">52</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_event_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NpcEventSpec</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="NpcSpec-53"><a href="#NpcSpec-53"><span class="linenos">53</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">:</span>
-</span><span id="NpcSpec-54"><a href="#NpcSpec-54"><span class="linenos">54</span></a>            <span class="k">return</span> <span class="kc">None</span>
-</span><span id="NpcSpec-55"><a href="#NpcSpec-55"><span class="linenos">55</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">,</span> <span class="n">NpcEventSpec</span><span class="p">):</span>
-</span><span id="NpcSpec-56"><a href="#NpcSpec-56"><span class="linenos">56</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span>
-</span><span id="NpcSpec-57"><a href="#NpcSpec-57"><span class="linenos">57</span></a>        <span class="k">return</span> <span class="n">NpcEventSpec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
+</span><span id="NpcSpec-49"><a href="#NpcSpec-49"><span class="linenos">49</span></a>        <span class="ow">and</span> <span class="p">(</span>
+</span><span id="NpcSpec-50"><a href="#NpcSpec-50"><span class="linenos">50</span></a>            <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">draw</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">draw</span><span class="p">,</span> <span class="n">TransparentDraw</span><span class="p">)</span>
+</span><span id="NpcSpec-51"><a href="#NpcSpec-51"><span class="linenos">51</span></a>            <span class="ow">or</span> <span class="ow">not</span> <span class="n">draw</span><span class="o">.</span><span class="n">transparent</span>
+</span><span id="NpcSpec-52"><a href="#NpcSpec-52"><span class="linenos">52</span></a>        <span class="p">)</span>
+</span><span id="NpcSpec-53"><a href="#NpcSpec-53"><span class="linenos">53</span></a>    <span class="p">)</span>
+</span><span id="NpcSpec-54"><a href="#NpcSpec-54"><span class="linenos">54</span></a>
+</span><span id="NpcSpec-55"><a href="#NpcSpec-55"><span class="linenos">55</span></a>    <span class="nd">@property</span>
+</span><span id="NpcSpec-56"><a href="#NpcSpec-56"><span class="linenos">56</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventSpec</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="NpcSpec-57"><a href="#NpcSpec-57"><span class="linenos">57</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">:</span>
+</span><span id="NpcSpec-58"><a href="#NpcSpec-58"><span class="linenos">58</span></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="NpcSpec-59"><a href="#NpcSpec-59"><span class="linenos">59</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">,</span> <span class="n">EventSpec</span><span class="p">):</span>
+</span><span id="NpcSpec-60"><a href="#NpcSpec-60"><span class="linenos">60</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span>
+</span><span id="NpcSpec-61"><a href="#NpcSpec-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="n">EventSpec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -409,7 +419,7 @@
                             <div id="NpcSpec.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">NpcSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">object_name</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span>,</span><span class="param">	<span class="n">collide_with_others</span><span class="p">:</span> <span class="s1">&#39;bool&#39;</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">avatar</span><span class="p">:</span> <span class="s1">&#39;Draw | Group | None&#39;</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">display_name</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="s1">&#39;CharacterConfig&#39;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">obstruct_others</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="character_draw.html#CharacterDraw">nextrpg.character.character_draw.CharacterDraw</a></span> <span class="o">|</span> <span class="n"><a href="../core/color.html#Color">nextrpg.core.color.Color</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">event</span><span class="p">:</span> <span class="n"><a href="#NpcEventSpec">NpcEventSpec</a></span> <span class="o">|</span> <span class="n">NpcEvent</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">cyclic_walk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
+        <span class="name">NpcSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">object_name</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span>,</span><span class="param">	<span class="n">avatar</span><span class="p">:</span> <span class="s1">&#39;Draw | Group | None&#39;</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">display_name</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="s1">&#39;CharacterConfig&#39;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">collide_with_others</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="character_draw.html#CharacterDraw">nextrpg.character.character_draw.CharacterDraw</a></span> <span class="o">|</span> <span class="n"><a href="../core/color.html#Color">nextrpg.core.color.Color</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">event</span><span class="p">:</span> <span class="n"><a href="#EventSpec">EventSpec</a></span> <span class="o">|</span> <span class="n">RpgEvent</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">cyclic_walk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
 
         
     </div>
@@ -432,7 +442,7 @@
                             </div>
                             <div id="NpcSpec.event" class="classattr">
                                 <div class="attr variable">
-            <span class="name">event</span><span class="annotation">: <a href="#NpcEventSpec">NpcEventSpec</a> | NpcEvent | None</span>        =
+            <span class="name">event</span><span class="annotation">: <a href="#EventSpec">EventSpec</a> | RpgEvent | None</span>        =
 <span class="default_value">None</span>
 
         
@@ -454,15 +464,37 @@
     
 
                             </div>
-                            <div id="NpcSpec.obstruct_others" class="classattr">
+                            <div id="NpcSpec.collide_with_others" class="classattr">
                                 <div class="attr variable">
-            <span class="name">obstruct_others</span><span class="annotation">: bool</span>        =
+            <span class="name">collide_with_others</span><span class="annotation">: bool</span>        =
 <span class="default_value">True</span>
 
         
     </div>
-    <a class="headerlink" href="#NpcSpec.obstruct_others"></a>
+    <a class="headerlink" href="#NpcSpec.collide_with_others"></a>
     
+    
+
+                            </div>
+                            <div id="NpcSpec.event_spec" class="classattr">
+                                        <input id="NpcSpec.event_spec-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">event_spec</span><span class="annotation">: <a href="#EventSpec">EventSpec</a> | None</span>
+
+                <label class="view-source-button" for="NpcSpec.event_spec-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#NpcSpec.event_spec"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="NpcSpec.event_spec-55"><a href="#NpcSpec.event_spec-55"><span class="linenos">55</span></a>    <span class="nd">@property</span>
+</span><span id="NpcSpec.event_spec-56"><a href="#NpcSpec.event_spec-56"><span class="linenos">56</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">event_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventSpec</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="NpcSpec.event_spec-57"><a href="#NpcSpec.event_spec-57"><span class="linenos">57</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">:</span>
+</span><span id="NpcSpec.event_spec-58"><a href="#NpcSpec.event_spec-58"><span class="linenos">58</span></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="NpcSpec.event_spec-59"><a href="#NpcSpec.event_spec-59"><span class="linenos">59</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">,</span> <span class="n">EventSpec</span><span class="p">):</span>
+</span><span id="NpcSpec.event_spec-60"><a href="#NpcSpec.event_spec-60"><span class="linenos">60</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span>
+</span><span id="NpcSpec.event_spec-61"><a href="#NpcSpec.event_spec-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="n">EventSpec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
+</span></pre></div>
+
+
     
 
                             </div>
@@ -471,7 +503,6 @@
                                 <dl>
                                     <div><dt><a href="character_on_screen.html#_BaseCharacterSpec">nextrpg.character.character_on_screen._BaseCharacterSpec</a></dt>
                                 <dd id="NpcSpec.object_name" class="variable"><a href="character_on_screen.html#_BaseCharacterSpec.object_name">object_name</a></dd>
-                <dd id="NpcSpec.collide_with_others" class="variable"><a href="character_on_screen.html#_BaseCharacterSpec.collide_with_others">collide_with_others</a></dd>
                 <dd id="NpcSpec.avatar" class="variable"><a href="character_on_screen.html#_BaseCharacterSpec.avatar">avatar</a></dd>
                 <dd id="NpcSpec.display_name" class="variable"><a href="character_on_screen.html#_BaseCharacterSpec.display_name">display_name</a></dd>
                 <dd id="NpcSpec.config" class="variable"><a href="character_on_screen.html#_BaseCharacterSpec.config">config</a></dd>
@@ -492,9 +523,9 @@
 
     </div>
     <a class="headerlink" href="#StrictNpcSpec"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="StrictNpcSpec-60"><a href="#StrictNpcSpec-60"><span class="linenos">60</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="StrictNpcSpec-61"><a href="#StrictNpcSpec-61"><span class="linenos">61</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StrictNpcSpec</span><span class="p">(</span><span class="n">NpcSpec</span><span class="p">,</span> <span class="n">CharacterSpec</span><span class="p">):</span>
-</span><span id="StrictNpcSpec-62"><a href="#StrictNpcSpec-62"><span class="linenos">62</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">NpcEventSpec</span> <span class="o">|</span> <span class="kc">None</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="StrictNpcSpec-64"><a href="#StrictNpcSpec-64"><span class="linenos">64</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="StrictNpcSpec-65"><a href="#StrictNpcSpec-65"><span class="linenos">65</span></a><span class="k">class</span><span class="w"> </span><span class="nc">StrictNpcSpec</span><span class="p">(</span><span class="n">NpcSpec</span><span class="p">,</span> <span class="n">CharacterSpec</span><span class="p">):</span>
+</span><span id="StrictNpcSpec-66"><a href="#StrictNpcSpec-66"><span class="linenos">66</span></a>    <span class="n">event</span><span class="p">:</span> <span class="n">EventSpec</span> <span class="o">|</span> <span class="kc">None</span>
 </span></pre></div>
 
 
@@ -503,7 +534,7 @@
                             <div id="StrictNpcSpec.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">StrictNpcSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">object_name</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span>,</span><span class="param">	<span class="n">collide_with_others</span><span class="p">:</span> <span class="s1">&#39;bool&#39;</span> <span class="o">=</span> <span class="kc">True</span>,</span><span class="param">	<span class="n">avatar</span><span class="p">:</span> <span class="s1">&#39;Draw | Group | None&#39;</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">display_name</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="s1">&#39;CharacterConfig&#39;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">obstruct_others</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="character_draw.html#CharacterDraw">nextrpg.character.character_draw.CharacterDraw</a></span> <span class="o">|</span> <span class="n"><a href="../core/color.html#Color">nextrpg.core.color.Color</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">event</span><span class="p">:</span> <span class="n"><a href="#NpcEventSpec">NpcEventSpec</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">cyclic_walk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
+        <span class="name">StrictNpcSpec</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">object_name</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span>,</span><span class="param">	<span class="n">avatar</span><span class="p">:</span> <span class="s1">&#39;Draw | Group | None&#39;</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">display_name</span><span class="p">:</span> <span class="s1">&#39;str&#39;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">config</span><span class="p">:</span> <span class="s1">&#39;CharacterConfig&#39;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="o">*</span>,</span><span class="param">	<span class="n">collide_with_others</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">factory</span><span class="o">&gt;</span>,</span><span class="param">	<span class="n">character</span><span class="p">:</span> <span class="n"><a href="character_draw.html#CharacterDraw">nextrpg.character.character_draw.CharacterDraw</a></span> <span class="o">|</span> <span class="n"><a href="../core/color.html#Color">nextrpg.core.color.Color</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">event</span><span class="p">:</span> <span class="n"><a href="#EventSpec">EventSpec</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">cyclic_walk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></span>)</span>
 
         
     </div>
@@ -514,7 +545,7 @@
                             </div>
                             <div id="StrictNpcSpec.event" class="classattr">
                                 <div class="attr variable">
-            <span class="name">event</span><span class="annotation">: <a href="#NpcEventSpec">NpcEventSpec</a> | None</span>        =
+            <span class="name">event</span><span class="annotation">: <a href="#EventSpec">EventSpec</a> | None</span>        =
 <span class="default_value">None</span>
 
         
@@ -530,12 +561,12 @@
                                     <div><dt><a href="#NpcSpec">NpcSpec</a></dt>
                                 <dd id="StrictNpcSpec.character" class="variable"><a href="#NpcSpec.character">character</a></dd>
                 <dd id="StrictNpcSpec.cyclic_walk" class="variable"><a href="#NpcSpec.cyclic_walk">cyclic_walk</a></dd>
-                <dd id="StrictNpcSpec.obstruct_others" class="variable"><a href="#NpcSpec.obstruct_others">obstruct_others</a></dd>
+                <dd id="StrictNpcSpec.collide_with_others" class="variable"><a href="#NpcSpec.collide_with_others">collide_with_others</a></dd>
+                <dd id="StrictNpcSpec.event_spec" class="variable"><a href="#NpcSpec.event_spec">event_spec</a></dd>
 
             </div>
             <div><dt><a href="character_on_screen.html#_BaseCharacterSpec">nextrpg.character.character_on_screen._BaseCharacterSpec</a></dt>
                                 <dd id="StrictNpcSpec.object_name" class="variable"><a href="character_on_screen.html#_BaseCharacterSpec.object_name">object_name</a></dd>
-                <dd id="StrictNpcSpec.collide_with_others" class="variable"><a href="character_on_screen.html#_BaseCharacterSpec.collide_with_others">collide_with_others</a></dd>
                 <dd id="StrictNpcSpec.avatar" class="variable"><a href="character_on_screen.html#_BaseCharacterSpec.avatar">avatar</a></dd>
                 <dd id="StrictNpcSpec.display_name" class="variable"><a href="character_on_screen.html#_BaseCharacterSpec.display_name">display_name</a></dd>
                 <dd id="StrictNpcSpec.config" class="variable"><a href="character_on_screen.html#_BaseCharacterSpec.config">config</a></dd>
@@ -555,23 +586,22 @@
 
     </div>
     <a class="headerlink" href="#to_strict"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="to_strict-65"><a href="#to_strict-65"><span class="linenos">65</span></a><span class="k">def</span><span class="w"> </span><span class="nf">to_strict</span><span class="p">(</span>
-</span><span id="to_strict-66"><a href="#to_strict-66"><span class="linenos">66</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">NpcSpec</span><span class="p">,</span> <span class="n">character_draw</span><span class="p">:</span> <span class="n">CharacterDraw</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="to_strict-67"><a href="#to_strict-67"><span class="linenos">67</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StrictNpcSpec</span><span class="p">:</span>
-</span><span id="to_strict-68"><a href="#to_strict-68"><span class="linenos">68</span></a>    <span class="k">assert</span> <span class="p">(</span>
-</span><span id="to_strict-69"><a href="#to_strict-69"><span class="linenos">69</span></a>        <span class="n">character_draw</span> <span class="ow">or</span> <span class="n">spec</span><span class="o">.</span><span class="n">character</span>
-</span><span id="to_strict-70"><a href="#to_strict-70"><span class="linenos">70</span></a>    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">object_name</span><span class="si">}</span><span class="s2">&#39; is missing CharacterDraw.&quot;</span>
-</span><span id="to_strict-71"><a href="#to_strict-71"><span class="linenos">71</span></a>    <span class="k">return</span> <span class="n">StrictNpcSpec</span><span class="p">(</span>
-</span><span id="to_strict-72"><a href="#to_strict-72"><span class="linenos">72</span></a>        <span class="n">object_name</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">object_name</span><span class="p">,</span>
-</span><span id="to_strict-73"><a href="#to_strict-73"><span class="linenos">73</span></a>        <span class="n">character</span><span class="o">=</span><span class="n">character_draw</span> <span class="ow">or</span> <span class="n">spec</span><span class="o">.</span><span class="n">character</span><span class="p">,</span>
-</span><span id="to_strict-74"><a href="#to_strict-74"><span class="linenos">74</span></a>        <span class="n">obstruct_others</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">obstruct_others</span><span class="p">,</span>
-</span><span id="to_strict-75"><a href="#to_strict-75"><span class="linenos">75</span></a>        <span class="n">collide_with_others</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">collide_with_others</span><span class="p">,</span>
-</span><span id="to_strict-76"><a href="#to_strict-76"><span class="linenos">76</span></a>        <span class="n">avatar</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">avatar</span><span class="p">,</span>
-</span><span id="to_strict-77"><a href="#to_strict-77"><span class="linenos">77</span></a>        <span class="n">display_name</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span><span class="p">,</span>
-</span><span id="to_strict-78"><a href="#to_strict-78"><span class="linenos">78</span></a>        <span class="n">event</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">_event_spec</span><span class="p">,</span>
-</span><span id="to_strict-79"><a href="#to_strict-79"><span class="linenos">79</span></a>        <span class="n">config</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
-</span><span id="to_strict-80"><a href="#to_strict-80"><span class="linenos">80</span></a>        <span class="n">cyclic_walk</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">cyclic_walk</span><span class="p">,</span>
-</span><span id="to_strict-81"><a href="#to_strict-81"><span class="linenos">81</span></a>    <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="to_strict-69"><a href="#to_strict-69"><span class="linenos">69</span></a><span class="k">def</span><span class="w"> </span><span class="nf">to_strict</span><span class="p">(</span>
+</span><span id="to_strict-70"><a href="#to_strict-70"><span class="linenos">70</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">NpcSpec</span><span class="p">,</span> <span class="n">character_draw</span><span class="p">:</span> <span class="n">CharacterDraw</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="to_strict-71"><a href="#to_strict-71"><span class="linenos">71</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StrictNpcSpec</span><span class="p">:</span>
+</span><span id="to_strict-72"><a href="#to_strict-72"><span class="linenos">72</span></a>    <span class="k">assert</span> <span class="p">(</span>
+</span><span id="to_strict-73"><a href="#to_strict-73"><span class="linenos">73</span></a>        <span class="n">character_draw</span> <span class="ow">or</span> <span class="n">spec</span><span class="o">.</span><span class="n">character</span>
+</span><span id="to_strict-74"><a href="#to_strict-74"><span class="linenos">74</span></a>    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">spec</span><span class="o">.</span><span class="n">object_name</span><span class="si">}</span><span class="s2">&#39; is missing CharacterDraw.&quot;</span>
+</span><span id="to_strict-75"><a href="#to_strict-75"><span class="linenos">75</span></a>    <span class="k">return</span> <span class="n">StrictNpcSpec</span><span class="p">(</span>
+</span><span id="to_strict-76"><a href="#to_strict-76"><span class="linenos">76</span></a>        <span class="n">object_name</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">object_name</span><span class="p">,</span>
+</span><span id="to_strict-77"><a href="#to_strict-77"><span class="linenos">77</span></a>        <span class="n">character</span><span class="o">=</span><span class="n">character_draw</span> <span class="ow">or</span> <span class="n">spec</span><span class="o">.</span><span class="n">character</span><span class="p">,</span>
+</span><span id="to_strict-78"><a href="#to_strict-78"><span class="linenos">78</span></a>        <span class="n">collide_with_others</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">collide_with_others</span><span class="p">,</span>
+</span><span id="to_strict-79"><a href="#to_strict-79"><span class="linenos">79</span></a>        <span class="n">avatar</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">avatar</span><span class="p">,</span>
+</span><span id="to_strict-80"><a href="#to_strict-80"><span class="linenos">80</span></a>        <span class="n">display_name</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">display_name</span><span class="p">,</span>
+</span><span id="to_strict-81"><a href="#to_strict-81"><span class="linenos">81</span></a>        <span class="n">event</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">event_spec</span><span class="p">,</span>
+</span><span id="to_strict-82"><a href="#to_strict-82"><span class="linenos">82</span></a>        <span class="n">config</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
+</span><span id="to_strict-83"><a href="#to_strict-83"><span class="linenos">83</span></a>        <span class="n">cyclic_walk</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">cyclic_walk</span><span class="p">,</span>
+</span><span id="to_strict-84"><a href="#to_strict-84"><span class="linenos">84</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -590,16 +620,16 @@
 
     </div>
     <a class="headerlink" href="#NpcOnScreen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="NpcOnScreen-84"><a href="#NpcOnScreen-84"><span class="linenos">84</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="NpcOnScreen-85"><a href="#NpcOnScreen-85"><span class="linenos">85</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NpcOnScreen</span><span class="p">(</span><span class="n">CharacterOnScreen</span><span class="p">):</span>
-</span><span id="NpcOnScreen-86"><a href="#NpcOnScreen-86"><span class="linenos">86</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">StrictNpcSpec</span>
-</span><span id="NpcOnScreen-87"><a href="#NpcOnScreen-87"><span class="linenos">87</span></a>
-</span><span id="NpcOnScreen-88"><a href="#NpcOnScreen-88"><span class="linenos">88</span></a>    <span class="nd">@override</span>
-</span><span id="NpcOnScreen-89"><a href="#NpcOnScreen-89"><span class="linenos">89</span></a>    <span class="nd">@cached_property</span>
-</span><span id="NpcOnScreen-90"><a href="#NpcOnScreen-90"><span class="linenos">90</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RectangleOnScreen</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="NpcOnScreen-91"><a href="#NpcOnScreen-91"><span class="linenos">91</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">event</span><span class="p">:</span>
-</span><span id="NpcOnScreen-92"><a href="#NpcOnScreen-92"><span class="linenos">92</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start_event_rectangle</span>
-</span><span id="NpcOnScreen-93"><a href="#NpcOnScreen-93"><span class="linenos">93</span></a>        <span class="k">return</span> <span class="kc">None</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="NpcOnScreen-87"><a href="#NpcOnScreen-87"><span class="linenos">87</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="NpcOnScreen-88"><a href="#NpcOnScreen-88"><span class="linenos">88</span></a><span class="k">class</span><span class="w"> </span><span class="nc">NpcOnScreen</span><span class="p">(</span><span class="n">CharacterOnScreen</span><span class="p">):</span>
+</span><span id="NpcOnScreen-89"><a href="#NpcOnScreen-89"><span class="linenos">89</span></a>    <span class="n">spec</span><span class="p">:</span> <span class="n">StrictNpcSpec</span>
+</span><span id="NpcOnScreen-90"><a href="#NpcOnScreen-90"><span class="linenos">90</span></a>
+</span><span id="NpcOnScreen-91"><a href="#NpcOnScreen-91"><span class="linenos">91</span></a>    <span class="nd">@override</span>
+</span><span id="NpcOnScreen-92"><a href="#NpcOnScreen-92"><span class="linenos">92</span></a>    <span class="nd">@cached_property</span>
+</span><span id="NpcOnScreen-93"><a href="#NpcOnScreen-93"><span class="linenos">93</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RectangleOnScreen</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="NpcOnScreen-94"><a href="#NpcOnScreen-94"><span class="linenos">94</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">event</span><span class="p">:</span>
+</span><span id="NpcOnScreen-95"><a href="#NpcOnScreen-95"><span class="linenos">95</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start_event_rectangle</span>
+</span><span id="NpcOnScreen-96"><a href="#NpcOnScreen-96"><span class="linenos">96</span></a>        <span class="k">return</span> <span class="kc">None</span>
 </span></pre></div>
 
 
@@ -637,12 +667,12 @@
 
     </div>
     <a class="headerlink" href="#NpcOnScreen.start_event_rectangle"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="NpcOnScreen.start_event_rectangle-88"><a href="#NpcOnScreen.start_event_rectangle-88"><span class="linenos">88</span></a>    <span class="nd">@override</span>
-</span><span id="NpcOnScreen.start_event_rectangle-89"><a href="#NpcOnScreen.start_event_rectangle-89"><span class="linenos">89</span></a>    <span class="nd">@cached_property</span>
-</span><span id="NpcOnScreen.start_event_rectangle-90"><a href="#NpcOnScreen.start_event_rectangle-90"><span class="linenos">90</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RectangleOnScreen</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="NpcOnScreen.start_event_rectangle-91"><a href="#NpcOnScreen.start_event_rectangle-91"><span class="linenos">91</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">event</span><span class="p">:</span>
-</span><span id="NpcOnScreen.start_event_rectangle-92"><a href="#NpcOnScreen.start_event_rectangle-92"><span class="linenos">92</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start_event_rectangle</span>
-</span><span id="NpcOnScreen.start_event_rectangle-93"><a href="#NpcOnScreen.start_event_rectangle-93"><span class="linenos">93</span></a>        <span class="k">return</span> <span class="kc">None</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="NpcOnScreen.start_event_rectangle-91"><a href="#NpcOnScreen.start_event_rectangle-91"><span class="linenos">91</span></a>    <span class="nd">@override</span>
+</span><span id="NpcOnScreen.start_event_rectangle-92"><a href="#NpcOnScreen.start_event_rectangle-92"><span class="linenos">92</span></a>    <span class="nd">@cached_property</span>
+</span><span id="NpcOnScreen.start_event_rectangle-93"><a href="#NpcOnScreen.start_event_rectangle-93"><span class="linenos">93</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">start_event_rectangle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RectangleOnScreen</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="NpcOnScreen.start_event_rectangle-94"><a href="#NpcOnScreen.start_event_rectangle-94"><span class="linenos">94</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">event</span><span class="p">:</span>
+</span><span id="NpcOnScreen.start_event_rectangle-95"><a href="#NpcOnScreen.start_event_rectangle-95"><span class="linenos">95</span></a>            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">start_event_rectangle</span>
+</span><span id="NpcOnScreen.start_event_rectangle-96"><a href="#NpcOnScreen.start_event_rectangle-96"><span class="linenos">96</span></a>        <span class="k">return</span> <span class="kc">None</span>
 </span></pre></div>
 
 
