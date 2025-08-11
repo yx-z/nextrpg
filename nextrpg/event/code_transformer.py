@@ -87,11 +87,8 @@ class AnnotateSay(NodeTransformer):
 
 
 ANNOTATE_SAY = AnnotateSay("say")
-"""Global instance of the AnnotateSay transformer."""
-
 
 _NEXTRPG_PARENT = "_nextrpg_parent"
-"""Internal attribute name for parent references."""
 
 
 def _is_rpg_event(name: str) -> bool:

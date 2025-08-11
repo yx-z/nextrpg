@@ -57,7 +57,7 @@ class EventfulScene(EventAsAttr, Scene):
             return next_event_scene
 
         if self._started_npc:
-            return self._start_event(self._started_npc)
+            return self._start_event(self._started_npc, time_delta)
 
         if (
             (npc := self._collided_npc)
@@ -68,7 +68,7 @@ class EventfulScene(EventAsAttr, Scene):
             and (event := npc.spec.event)
             and event.start_mode is NpcEventStartMode.COLLIDE
         ):
-            return self._start_event(npc)
+            return self._start_event(npc, time_delta)
 
         return self.tick_without_event(time_delta)
 
@@ -152,49 +152,54 @@ class EventfulScene(EventAsAttr, Scene):
                 return npc
         return None
 
-    def _start_event(self, npc: NpcOnScreen) -> Self:
+    def _start_event(self, npc: NpcOnScreen, time_delta: Millisecond) -> Self:
         started_npc = npc.start_event(self.player)
         npcs = tuple(
             started_npc if n.spec.object_name == npc.spec.object_name else n
             for n in self.npcs
         )
         player = self.player.start_event(started_npc)
-        scene = replace(
+        ticked = replace(
             self, player=player, npcs=npcs, _started_npc=started_npc
-        )
+        ).tick_without_event(time_delta)
         event = npc.spec.event.generator(
-            scene.player, scene._started_npc, scene
+            ticked.player, ticked._started_npc, ticked
         )
-        logger.debug(
-            t"Event {event.__name__} with {npc.spec.object_name} started."
-        )
-        return next(event)(event, scene)
+        logger.debug(t"Event {event} with {npc.spec.object_name} started.")
+
+        try:
+            event_callable = next(event)
+        except StopIteration:
+            return ticked._complete_event(ticked)
+        return event_callable(event, ticked)
 
     def _next_event(self, time_delta: Millisecond) -> Scene | None:
         if not self._event:
             return None
 
         ticked = self.tick_without_event(time_delta)
-        event = ticked._event
         try:
-            create_next_scene = event.send(self._event_result)
-            return create_next_scene(event, ticked)
+            create_next_scene = ticked._event.send(self._event_result)
+            return create_next_scene(ticked._event, ticked)
         except StopIteration:
-            npc = ticked._started_npc
-            player = ticked.player.complete_event
-            npcs = tuple(n.complete_event for n in ticked.npcs)
-            logger.debug(
-                t"Event {event.__name__} with {npc.spec.object_name} completed."
-            )
-            return replace(
-                self,
-                player=player,
-                npcs=npcs,
-                _ended_npc=npc,
-                _started_npc=None,
-                _event=None,
-                _event_result=None,
-            )
+            return self._complete_event(ticked)
+
+    def _complete_event(self, ticked: Self) -> Self:
+        npc = ticked._started_npc
+        player = ticked.player.complete_event
+        npcs = tuple(n.complete_event for n in ticked.npcs)
+        logger.debug(
+            t"Event {ticked._event} with {npc.spec.object_name} completed."
+        )
+        return replace(
+            self,
+            player=player,
+            npcs=npcs,
+            _ended_npc=npc,
+            _started_npc=None,
+            _event=None,
+            _event_result=None,
+        )
 
 
 @dataclass(frozen=True)
