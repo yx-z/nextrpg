@@ -1,8 +1,6 @@
 from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass
 from enum import Enum, auto
-from functools import cached_property
-from typing import override
 
 from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.character.character_on_screen import (
@@ -17,7 +15,7 @@ from nextrpg.core.dataclass_with_init import (
     default,
     not_constructor_below,
 )
-from nextrpg.draw.draw import RectangleOnScreen, TransparentDraw
+from nextrpg.draw.draw import TransparentDraw
 from nextrpg.event.event_transformer import transform
 
 type EventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
@@ -86,10 +84,3 @@ def to_strict(
 @dataclass(frozen=True, kw_only=True)
 class NpcOnScreen(CharacterOnScreen):
     spec: StrictNpcSpec
-
-    @override
-    @cached_property
-    def start_event_rectangle(self) -> RectangleOnScreen | None:
-        if self.spec.event:
-            return super().start_event_rectangle
-        return None
