@@ -64,7 +64,7 @@ class SaveIo[_S]:
         if isinstance(arg, type):
             key = _key(arg)
         else:
-            key = arg.key
+            key = _concat(*arg.key)
         slot = slot or self.config.shared_slot
         logger.debug(t"Loading {slot=} {key=}")
         if (file := self._bytes_path(slot, key)).exists():
