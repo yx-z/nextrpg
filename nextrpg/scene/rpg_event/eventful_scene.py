@@ -15,9 +15,9 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw import DrawOnScreen
+from nextrpg.draw.draw import DrawOnScreen, TransparentDraw
 from nextrpg.event.event_as_attr import EventAsAttr
-from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
+from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.scene.scene import Scene
 
 logger = Logger()
@@ -35,7 +35,7 @@ class EventfulScene(EventAsAttr, Scene):
     _background_events: tuple[BackgroundEvent, ...] = ()
 
     def get_character(self, object_name: str) -> CharacterOnScreen:
-        if object_name == self.player.spec.object_name:
+        if object_name == self.player.spec.unique_name:
             return self.player
         return self._npc_dict[object_name]
 
@@ -61,10 +61,7 @@ class EventfulScene(EventAsAttr, Scene):
 
         if (
             (npc := self._collided_npc)
-            and (
-                not self._ended_npc
-                or self._ended_npc.spec.object_name != npc.spec.object_name
-            )
+            and (not (self._ended_npc and self._ended_npc.same_name(npc)))
             and (event := npc.spec.event)
             and event.start_mode is NpcEventStartMode.COLLIDE
         ):
@@ -141,7 +138,7 @@ class EventfulScene(EventAsAttr, Scene):
 
     @cached_property
     def _npc_dict(self) -> dict[str, NpcOnScreen]:
-        return {n.spec.object_name: n for n in self.npcs}
+        return {n.spec.unique_name: n for n in self.npcs}
 
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:
@@ -153,25 +150,26 @@ class EventfulScene(EventAsAttr, Scene):
         return None
 
     def _start_event(self, npc: NpcOnScreen, time_delta: Millisecond) -> Self:
-        started_npc = npc.start_event(self.player)
-        npcs = tuple(
-            started_npc if n.spec.object_name == npc.spec.object_name else n
-            for n in self.npcs
+        turn = not (
+            isinstance(draw := npc.draw_on_screen.draw, TransparentDraw)
+            and draw.transparent
         )
-        player = self.player.start_event(started_npc)
+        started_npc = npc.start_event(self.player, turn)
+        npcs = tuple(started_npc if n.same_name(npc) else n for n in self.npcs)
+        player = self.player.start_event(started_npc, turn)
         ticked = replace(
             self, player=player, npcs=npcs, _started_npc=started_npc
         ).tick_without_event(time_delta)
+
         event = npc.spec.event.generator(
             ticked.player, ticked._started_npc, ticked
         )
-        logger.debug(t"Event {event} with {npc.spec.object_name} started.")
-
+        logger.debug(t"Event {event} with {npc.spec.unique_name} started.")
         try:
             event_callable = next(event)
-        except StopIteration:
-            return ticked._complete_event(ticked)
-        return event_callable(event, ticked)
+            return event_callable(event, ticked)
+        except StopIteration as res:
+            return ticked._complete_event(ticked, res.value)
 
     def _next_event(self, time_delta: Millisecond) -> Scene | None:
         if not self._event:
@@ -181,15 +179,21 @@ class EventfulScene(EventAsAttr, Scene):
         try:
             create_next_scene = ticked._event.send(self._event_result)
             return create_next_scene(ticked._event, ticked)
-        except StopIteration:
-            return self._complete_event(ticked)
+        except StopIteration as res:
+            return self._complete_event(ticked, res.value)
 
-    def _complete_event(self, ticked: Self) -> Self:
-        npc = ticked._started_npc
+    def _complete_event(self, ticked: Self, restart_event: bool | None) -> Self:
+        npc = ticked._started_npc.complete_event
+        if restart_event is False:
+            spec = replace(npc.spec, event=None)
+            npc = replace(npc, spec=spec)
+
         player = ticked.player.complete_event
-        npcs = tuple(n.complete_event for n in ticked.npcs)
+        npcs = tuple(
+            (npc if n.same_name(npc) else n.complete_event) for n in ticked.npcs
+        )
         logger.debug(
-            t"Event {ticked._event} with {npc.spec.object_name} completed."
+            t"Event {ticked._event} with {npc.spec.unique_name} completed."
         )
         return replace(
             self,
@@ -270,4 +274,4 @@ def register_rpg_event_scene[R, **P](
 registered_rpg_event_scenes: dict[str, Callable[..., None]] = {}
 
 type EventCallable = Callable[[EventGenerator, EventfulScene], RpgEventScene]
-type EventGenerator = Generator[EventCallable, Any, None]
+type EventGenerator = Generator[EventCallable, Any, bool | None]

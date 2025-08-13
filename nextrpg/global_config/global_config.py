@@ -14,6 +14,7 @@ from nextrpg.global_config.resource_config import ResourceConfig
 from nextrpg.global_config.rpg_maker_character_draw_config import (
     RpgMakerCharacterDrawConfig,
 )
+from nextrpg.global_config.save_config import SaveConfig
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.global_config.text_config import TextConfig
 from nextrpg.global_config.text_group_config import TextGroupConfig
@@ -23,6 +24,7 @@ from nextrpg.global_config.transition_config import TransitionConfig
 
 @dataclass(frozen=True)
 class Config:
+    debug: DebugConfig | None = None
     gui: GuiConfig = GuiConfig()
     map: TileMapConfig = TileMapConfig()
     character: CharacterConfig = CharacterConfig()
@@ -39,7 +41,7 @@ class Config:
     event: EventConfig = EventConfig()
     say_event: SayEventConfig = SayEventConfig()
     cutscene: CutsceneConfig = CutsceneConfig()
-    debug: DebugConfig | None = None
+    save: SaveConfig = SaveConfig()
 
 
 def set_config(cfg: Config):

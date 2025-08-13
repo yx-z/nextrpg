@@ -1,6 +1,5 @@
 from ast import fix_missing_locations, parse
 from collections.abc import Callable
-from functools import lru_cache
 from inspect import getsource, isfunction
 from textwrap import dedent
 from typing import Any, Generator
@@ -8,7 +7,6 @@ from typing import Any, Generator
 from nextrpg.global_config.global_config import config
 
 
-@lru_cache
 def transform[**P](
     fun: Callable[P, None], name_override: str | None = None
 ) -> Callable[P, Generator["RpgEventScene[Any]", Any, None]]:

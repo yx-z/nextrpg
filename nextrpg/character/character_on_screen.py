@@ -23,10 +23,10 @@ from nextrpg.global_config.global_config import config
 
 @dataclass_with_init(frozen=True)
 class _BaseCharacterSpec:
-    object_name: str
+    unique_name: str
     collide_with_others: bool = True
     avatar: Draw | Group | None = None
-    display_name: str = default(lambda self: self.object_name)
+    display_name: str = default(lambda self: self.unique_name)
     config: CharacterConfig = field(default_factory=lambda: config().character)
 
 
@@ -83,10 +83,16 @@ class CharacterOnScreen(EventAsAttr, Sizeable):
     def draw_on_screen(self) -> DrawOnScreen:
         return DrawOnScreen(self.coordinate, self.character.draw)
 
-    def start_event(self, other: CharacterOnScreen) -> Self:
-        direction = other.coordinate.relative_to(self.coordinate)
-        turned_character = self.character.turn(direction)
-        return replace(self, character=turned_character, _event_started=True)
+    def same_name(self, other: CharacterOnScreen) -> bool:
+        return self.spec.unique_name == other.spec.unique_name
+
+    def start_event(self, other: CharacterOnScreen, turn: bool) -> Self:
+        if turn:
+            direction = other.coordinate.relative_to(self.coordinate)
+            character = self.character.turn(direction)
+        else:
+            character = self.character
+        return replace(self, character=character, _event_started=True)
 
     @property
     def complete_event(self) -> Self:

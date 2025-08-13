@@ -21,7 +21,7 @@ class Game:
         while self._loop.running:
             self._tick()
 
-    async def start_async(self) -> None:
+    async def start_web(self) -> None:
         while self._loop.running:
             self._tick()
             await sleep(0)

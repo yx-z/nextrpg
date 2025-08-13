@@ -52,7 +52,7 @@ class SayEventScene(RpgEventScene):
     @cached_property
     def _add_on(self) -> AddOn:
         if isinstance(self.character_or_scene, CharacterOnScreen):
-            name = self.character_or_scene.spec.object_name
+            name = self.character_or_scene.spec.unique_name
             ticked_character = self.scene.get_character(name)
             return CharacterAddOn(
                 self.config, self.message, self.scene, ticked_character
@@ -62,14 +62,14 @@ class SayEventScene(RpgEventScene):
     @cached_property
     def _state(self) -> FadeInState:
         if isinstance(self.character_or_scene, CharacterOnScreen):
-            object_name = self.character_or_scene.spec.object_name
+            unique_name = self.character_or_scene.spec.unique_name
         else:
-            object_name = None
+            unique_name = None
 
         return FadeInState(
             generator=self.generator,
             scene=self.scene,
-            object_name=object_name,
+            unique_name=unique_name,
             background=self._add_on.background,
             text_on_screen=self._add_on.text_on_screen,
             config=self.config,

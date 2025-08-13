@@ -63,8 +63,8 @@ class MapScene(EventfulScene):
         return MapLoader(self.tmx_file)
 
     def init_player(self, player_spec: CharacterSpec) -> PlayerOnScreen:
-        logger.debug(t"Spawn player at {player_spec.object_name}.")
-        player = self.map_helper.get_object(player_spec.object_name)
+        logger.debug(t"Spawn player at {player_spec.unique_name}.")
+        player = self.map_helper.get_object(player_spec.unique_name)
         return PlayerOnScreen(
             player_spec,
             Coordinate(player.x, player.y),
@@ -150,7 +150,7 @@ class MapScene(EventfulScene):
         )
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
-        obj = self.map_helper.get_object(spec.object_name)
+        obj = self.map_helper.get_object(spec.unique_name)
         coord = Coordinate(obj.x, obj.y)
         if not (poly := get_polygon(obj)):
             return NpcOnScreen(coordinate=coord, spec=to_strict(spec))

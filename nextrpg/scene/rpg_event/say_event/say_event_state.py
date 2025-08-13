@@ -16,7 +16,7 @@ from nextrpg.draw.draw import DrawOnScreen
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.draw.typewriter import Typewriter
-from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
+from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.scene.rpg_event.eventful_scene import RpgEventScene
 from nextrpg.scene.scene import Scene
@@ -24,13 +24,13 @@ from nextrpg.scene.scene import Scene
 
 @dataclass_with_init(frozen=True, kw_only=True)
 class State(RpgEventScene, ABC):
-    object_name: str | None
+    unique_name: str | None
     config: SayEventConfig
     _: KW_ONLY = not_constructor_below()
     initial_coordinate: Coordinate | None = default(
         lambda self: (
             self.scene.get_character(n).coordinate
-            if (n := self.object_name)
+            if (n := self.unique_name)
             else None
         )
     )
@@ -38,8 +38,8 @@ class State(RpgEventScene, ABC):
     @override
     @cached_property
     def add_ons(self) -> tuple[DrawOnScreen, ...]:
-        if self.object_name:
-            character = self.scene.get_character(self.object_name)
+        if self.unique_name:
+            character = self.scene.get_character(self.unique_name)
             diff = character.coordinate - self.initial_coordinate
             return tuple(a + diff for a in self._add_ons)
         return self._add_ons
@@ -72,7 +72,7 @@ class FadeInState(State):
         return TypingState(
             generator=self.generator,
             scene=ticked.scene,
-            object_name=self.object_name,
+            unique_name=self.unique_name,
             initial_coordinate=self.initial_coordinate,
             background=self.background,
             text_on_screen=self.text_on_screen,
@@ -121,7 +121,7 @@ class TypingState(State):
         return FadeOutState(
             generator=self.generator,
             scene=self.scene,
-            object_name=self.object_name,
+            unique_name=self.unique_name,
             initial_coordinate=self.initial_coordinate,
             draws=self.background + self.text_on_screen.draw_on_screens,
             config=self.config,

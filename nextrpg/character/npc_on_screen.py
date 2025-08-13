@@ -20,7 +20,7 @@ from nextrpg.event.event_transformer import transform
 
 type EventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
 
-type RpgEvent = Callable[[*EventSpecParams], "EventGenerator | None"]
+type RpgEvent = Callable[[*EventSpecParams], "EventGenerator | bool | None"]
 
 
 class NpcEventStartMode(Enum):
@@ -68,9 +68,9 @@ def to_strict(
 ) -> StrictNpcSpec:
     assert (
         character := character_draw or spec.character
-    ), f"'{spec.object_name}' is missing CharacterDraw."
+    ), f"'{spec.unique_name}' is missing CharacterDraw."
     return StrictNpcSpec(
-        object_name=spec.object_name,
+        unique_name=spec.unique_name,
         character=character,
         collide_with_others=spec.collide_with_others,
         avatar=spec.avatar,

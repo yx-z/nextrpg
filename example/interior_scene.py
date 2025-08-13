@@ -1,11 +1,10 @@
 from nextrpg import (
-    CharacterDraw,
     CharacterSpec,
     Color,
     Direction,
     Draw,
-    EventSpec,
     EventfulScene,
+    EventSpec,
     MapScene,
     Move,
     NpcEventStartMode,
@@ -23,31 +22,56 @@ from nextrpg import (
 
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
+    sprite_sheet = RpgMakerSpriteSheet(
+        resource="example/asset/Characters_MV.png", trim=Trim(top=25)
+    )
+    if player_spec:
+        player = player_spec
+    else:
+        player = CharacterSpec(
+            unique_name="player",
+            display_name="Will",
+            character=RpgMakerCharacterDraw(
+                Direction.DOWN,
+                sprite_sheet,
+                Selection(row=0, column=0),
+            ),
+            avatar=Draw("example/asset/avatar.png"),
+        )
+
+    alisa = NpcSpec(
+        unique_name="alisa",
+        character=RpgMakerCharacterDraw(
+            Direction.RIGHT, sprite_sheet, Selection(row=0, column=1)
+        ),
+        event=greet,
+    )
+    david = NpcSpec(
+        unique_name="david",
+        character=RpgMakerCharacterDraw(
+            Direction.DOWN, sprite_sheet, Selection(row=0, column=2)
+        ),
+        event=greet,
+    )
+    auto_trigger = NpcSpec(
+        unique_name="auto",
+        event=EventSpec(enter_room, NpcEventStartMode.COLLIDE),
+    )
+
     # Local import to avoid circular dependency.
     from exterior_scene import exterior_scene
 
-    return MapScene(
-        "example/asset/interior.tmx",
-        player_spec or init_player(),
-        Move("from_interior", "to_exterior", exterior_scene),
-        (
-            NpcSpec(object_name="david", character=david()),
-            NpcSpec(object_name="alisa", character=alisa(), event=Greet()),
-            NpcSpec(
-                object_name="auto",
-                event=EventSpec(greet, NpcEventStartMode.COLLIDE),
-            ),
-        ),
-    )
+    tmx = "example/asset/interior.tmx"
+    move = Move("from_interior", "to_exterior", exterior_scene)
+    npcs = (david, alisa, auto_trigger)
+    return MapScene(tmx, player, move, npcs)
 
 
-class Greet:
-    done: bool = False
-
-    def __call__(self, player, npc, scene):
-        if not self.done:
-            scene: "Hi"
-        self.done = True
+def enter_room(
+    player: PlayerOnScreen, npc: NpcOnScreen, scene: EventfulScene
+) -> bool:
+    scene: "You've entered this room!"
+    return False
 
 
 @cutscene
@@ -65,37 +89,6 @@ def greet(
     cfg = config().say_event.text_config
     # fmt: off
     scene["Interior Scene"]: Text("Greetings!", cfg.sized(40)) + Text(
-        """This is...
-        a sample """, cfg) + Text("nextrpg event", cfg.colored(Color(128, 0, 255)))
+"""This is...
+a sample """, cfg) + Text("nextrpg event", cfg.colored(Color(128, 0, 255)))
     # fmt: on
-
-
-def sprite_sheet() -> RpgMakerSpriteSheet:
-    return RpgMakerSpriteSheet(
-        resource="example/asset/Characters_MV.png", trim=Trim(top=25)
-    )
-
-
-def init_player() -> CharacterSpec:
-    return CharacterSpec(
-        object_name="player",
-        display_name="Will",
-        character=RpgMakerCharacterDraw(
-            Direction.DOWN,
-            sprite_sheet(),
-            Selection(row=0, column=0),
-        ),
-        avatar=Draw("example/asset/avatar.png"),
-    )
-
-
-def alisa() -> CharacterDraw:
-    return RpgMakerCharacterDraw(
-        Direction.RIGHT, sprite_sheet(), Selection(row=0, column=1)
-    )
-
-
-def david() -> CharacterDraw:
-    return RpgMakerCharacterDraw(
-        Direction.DOWN, sprite_sheet(), Selection(row=0, column=2)
-    )
