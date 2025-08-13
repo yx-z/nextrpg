@@ -1,10 +1,12 @@
 import json
 import sys
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import KW_ONLY
 from functools import cache
 from pathlib import Path
-from typing import Any, Self, TypeAlias
+from shutil import rmtree
+from typing import Any, Self, TypeAlias, TypeVar
 
 from cachetools import LRUCache
 
@@ -44,8 +46,12 @@ class LoadFromSave[_S](Savable[_S]):
     def load(cls, data: _S) -> Self: ...
 
 
+_L = TypeVar("_L", bound=LoadFromSave)
+_U = TypeVar("_U", bound=UpdateFromSave)
+
+
 @dataclass_with_init(frozen=True)
-class SaveIo[_S]:
+class SaveIo:
     config: SaveConfig = default(lambda self: self._config)
     _: KW_ONLY = not_constructor_below()
     _text_data_cache: LRUCache[str, dict] = default(
@@ -60,18 +66,33 @@ class SaveIo[_S]:
             return self._write_bytes(slot, key, data)
         self._write_text(slot, key, data)
 
-    def load(self, arg: _S | type[_S], slot: str | None = None) -> _S:
-        if isinstance(arg, type):
-            key = _key(arg)
-        else:
-            key = _concat(*arg.key)
+    def remove(self, slot: str) -> None:
+        self._text_data_cache.pop(slot)
+        rmtree(self.config.directory / slot, ignore_errors=True)
+
+    def update(self, arg: _U, slot: str | None = None) -> _U:
+        key = _concat(arg.key)
+        return self._load(key, slot, loader=arg.update, fallback=arg)
+
+    def load(self, arg: type[_L], slot: str | None = None) -> _L | None:
+        key = _concat(_key(arg))
+        return self._load(key, slot, loader=arg.load, fallback=None)
+
+    def _load(
+        self,
+        key: str,
+        slot: str | None,
+        loader: Callable[[SaveData], _L | _U],
+        fallback: _U | None,
+    ) -> _U | _L | None:
         slot = slot or self.config.shared_slot
         logger.debug(t"Loading {slot=} {key=}")
         if (file := self._bytes_path(slot, key)).exists():
-            return _load_or_update(arg, file.read_bytes())
-        json_like = self._read_text(slot)[key]
-        data = self._deserialize(slot, key, json_like)
-        return _load_or_update(arg, data)
+            return loader(file.read_bytes())
+        if json_like := self._read_text(slot).get(key):
+            data = self._deserialize(slot, key, json_like)
+            return loader(data)
+        return fallback
 
     @property
     def web(self) -> bool:
@@ -156,10 +177,7 @@ def save_io() -> SaveIo:
     return SaveIo()
 
 
-def _load_or_update[_S](arg: _S | type[_S], data: SaveData) -> _S:
-    if isinstance(arg, type) or isinstance(arg, LoadFromSave):
-        return arg.load(data)
-
+def _update(arg: _U, data: SaveData) -> _U:
     if res := arg.update(data):
         return res
     return arg
