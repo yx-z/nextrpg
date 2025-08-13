@@ -17,7 +17,7 @@ from nextrpg.core.logger import Logger
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import DrawOnScreen, TransparentDraw
 from nextrpg.event.event_as_attr import EventAsAttr
-from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
+from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.scene.scene import Scene
 
 logger = Logger()
@@ -34,10 +34,10 @@ class EventfulScene(EventAsAttr, Scene):
     _event_result: Any = None
     _background_events: tuple[BackgroundEvent, ...] = ()
 
-    def get_character(self, object_name: str) -> CharacterOnScreen:
-        if object_name == self.player.spec.unique_name:
+    def get_character(self, unique_name: str) -> CharacterOnScreen:
+        if unique_name == self.player.spec.unique_name:
             return self.player
-        return self._npc_dict[object_name]
+        return self._npc_dict[unique_name]
 
     def event(self, event: PygameEvent) -> Scene:
         player = self.player.event(event)

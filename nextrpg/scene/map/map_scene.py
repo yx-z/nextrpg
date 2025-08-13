@@ -192,7 +192,7 @@ class Move:
         self, from_scene: MapScene, player: PlayerOnScreen
     ) -> TransitionScene:
         spec = replace(
-            player.spec, object_name=self.to_object, character=player.character
+            player.spec, unique_name=self.to_object, character=player.character
         )
         now = get_timepoint()
 

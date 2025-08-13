@@ -49,6 +49,12 @@ def set_config(cfg: Config):
     global _cfg
     if not _initial_config:
         _initial_config = cfg
+
+    if _cfg and cfg.gui != _cfg.gui:
+        from nextrpg.save.json_save_io import json_save_io
+
+        json_save_io().save("gui_config", cfg.gui)
+
     _cfg = cfg
 
 

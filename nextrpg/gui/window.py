@@ -26,13 +26,13 @@ from nextrpg.event.pygame_event import (
 )
 from nextrpg.global_config.global_config import config, set_config
 from nextrpg.global_config.gui_config import GuiConfig, GuiMode, ResizeMode
+from nextrpg.save.json_save_io import json_save_io
 
 logger = Logger()
 
 
 @dataclass(frozen=True)
 class Window:
-
     _: KW_ONLY = not_constructor_below()
     current_config: GuiConfig = field(default_factory=lambda: config().gui)
     last_config: GuiConfig = field(default_factory=lambda: config().gui)
@@ -77,6 +77,9 @@ class Window:
         if not self._screen:
             init()
             font.init()
+
+        saved = json_save_io().load("gui_config", self.current_config)
+        set_config(replace(config(), gui=saved))
 
         self._update_title()
         self._update_screen()

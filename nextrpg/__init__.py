@@ -13,7 +13,6 @@ from nextrpg.core.coordinate import *
 from nextrpg.core.dataclass_with_init import *
 from nextrpg.core.dimension import *
 from nextrpg.core.logger import *
-from nextrpg.core.save import *
 from nextrpg.core.walk import *
 from nextrpg.draw.cyclic_frames import *
 from nextrpg.draw.draw import *
@@ -43,6 +42,7 @@ from nextrpg.global_config.transition_config import *
 from nextrpg.gui import *
 from nextrpg.gui.area import *
 from nextrpg.gui.window import *
+from nextrpg.save.json_saveable import *
 from nextrpg.scene import *
 from nextrpg.scene.map.map_loader import *
 from nextrpg.scene.map.map_scene import *
