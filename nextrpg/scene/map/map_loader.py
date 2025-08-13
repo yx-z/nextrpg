@@ -53,7 +53,7 @@ def get_polygon(obj: TiledObject) -> PolygonOnScreen | None:
     return None
 
 
-@cached(lambda: config().resource.map_cache_size)
+@cached(lambda: config().map.cache_size)
 @dataclass(frozen=True)
 class MapLoader:
 

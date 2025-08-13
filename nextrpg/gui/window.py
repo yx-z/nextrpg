@@ -26,7 +26,6 @@ from nextrpg.event.pygame_event import (
 )
 from nextrpg.global_config.global_config import config, set_config
 from nextrpg.global_config.gui_config import GuiConfig, GuiMode, ResizeMode
-from nextrpg.save.json_save_io import json_save_io
 
 logger = Logger()
 
@@ -64,7 +63,7 @@ class Window:
             t"Size {self.current_config.size} Shift {self._center_shift}",
             duration=None,
         )
-        self._screen.fill(self.current_config.background)
+        self._screen.fill(self.current_config.background.tuple)
         match self.current_config.resize_mode:
             case ResizeMode.SCALE:
                 self._screen.blit(*self._scale(draw_on_screens).pygame)
@@ -77,10 +76,6 @@ class Window:
         if not self._screen:
             init()
             font.init()
-
-        saved = json_save_io().load("gui_config", self.current_config)
-        set_config(replace(config(), gui=saved))
-
         self._update_title()
         self._update_screen()
 

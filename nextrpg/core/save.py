@@ -1,0 +1,173 @@
+import json
+import sys
+from abc import ABC, abstractmethod
+from dataclasses import KW_ONLY
+from functools import cache
+from pathlib import Path
+from typing import Any, Self, TypeAlias
+
+from cachetools import LRUCache
+
+from nextrpg.core.dataclass_with_init import (
+    dataclass_with_init,
+    default,
+    not_constructor_below,
+)
+from nextrpg.core.logger import Logger
+from nextrpg.global_config.save_config import SaveConfig
+
+_Primitive: TypeAlias = str | int | float | bool | None
+type _Json = _Primitive | list["_Json"] | dict[str, "_Json"]
+type _JsonLike = _Primitive | list["_JsonLike"] | dict[str, "SaveData"]
+type SaveData = bytes | _JsonLike
+
+logger = Logger()
+
+
+class Savable[_S](ABC):
+    @abstractmethod
+    def save(self) -> _S: ...
+
+    @property
+    def key(self) -> tuple[str, ...]:
+        return _key(self)
+
+
+class UpdateFromSave[_S](Savable[_S]):
+    @abstractmethod
+    def update(self, data: _S) -> Self | None: ...
+
+
+class LoadFromSave[_S](Savable[_S]):
+    @classmethod
+    @abstractmethod
+    def load(cls, data: _S) -> Self: ...
+
+
+@dataclass_with_init(frozen=True)
+class SaveIo[_S]:
+    config: SaveConfig = default(lambda self: self._config)
+    _: KW_ONLY = not_constructor_below()
+    _text_data_cache: LRUCache[str, dict] = default(
+        lambda self: LRUCache(self._config.cache_size)
+    )
+
+    def save(self, savable: Savable, slot: str | None = None) -> None:
+        key = _concat(*savable.key)
+        slot = slot or self.config.shared_slot
+        logger.debug(t"Saving {slot=} {key=}")
+        if isinstance(data := savable.save(), bytes):
+            return self._write_bytes(slot, key, data)
+        self._write_text(slot, key, data)
+
+    def load(self, arg: _S | type[_S], slot: str | None = None) -> _S:
+        if isinstance(arg, type):
+            key = _key(arg)
+        else:
+            key = arg.key
+        slot = slot or self.config.shared_slot
+        logger.debug(t"Loading {slot=} {key=}")
+        if (file := self._bytes_path(slot, key)).exists():
+            return _load_or_update(arg, file.read_bytes())
+        json_like = self._read_text(slot)[key]
+        data = self._deserialize(slot, key, json_like)
+        return _load_or_update(arg, data)
+
+    @property
+    def web(self) -> bool:
+        return sys.platform == "emscripten"
+
+    def _write_bytes(self, slot: str, key: str, data: bytes) -> None:
+        path = self._bytes_path(slot, key)
+        path.write_bytes(data)
+
+    def _deserialize(
+        self, slot: str, key: str, json_like: _JsonLike
+    ) -> _JsonLike:
+        if isinstance(json_like, _Primitive):
+            return json_like
+        if isinstance(json_like, list):
+            return [
+                self._deserialize(slot, _concat(key, i), j)
+                for i, j in enumerate(json_like)
+            ]
+        res: dict[str, SaveData] = {}
+        for sub_key, value in json_like.items():
+            concat_key = _concat(key, sub_key)
+            if isinstance(value, str) and (
+                (file := self._bytes_path(slot, concat_key)).exists()
+            ):
+                res[sub_key] = file.read_bytes()
+            else:
+                res[sub_key] = self._deserialize(slot, concat_key, value)
+        return res
+
+    def _write_text(self, slot: str, key: str, json_like: _JsonLike) -> None:
+        data = self._read_text(slot)
+        data[key] = self._serialize(slot, key, json_like)
+        self._text_data_cache[slot] = data
+        path = self._text_path(slot)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(data))
+
+    def _text_path(self, slot: str) -> Path:
+        return self.config.directory / slot / self.config.text_save_file
+
+    def _read_text(self, slot: str) -> dict[str, SaveData]:
+        if res := self._text_data_cache.get(slot):
+            return res
+        if (file := self._text_path(slot)).exists():
+            res = json.loads(file.read_text())
+        else:
+            res = {}
+        self._text_data_cache[slot] = res
+        return res
+
+    def _serialize(self, slot: str, key: str, json_like: _JsonLike) -> _Json:
+        if isinstance(json_like, _Primitive):
+            return json_like
+        if isinstance(json_like, list):
+            return [
+                self._serialize(slot, _concat(key, i, j))
+                for i, j in enumerate(json_like)
+            ]
+        res: dict[str, _Json] = {}
+        for sub_key, value in json_like.items():
+            concat_key = _concat(key, sub_key)
+            if isinstance(value, bytes):
+                res[sub_key] = concat_key
+                self._write_bytes(slot, concat_key, value)
+            else:
+                res[sub_key] = self._serialize(slot, concat_key, value)
+        return res
+
+    def _bytes_path(self, slot: str, key: str) -> Path:
+        return self.config.directory / slot / key
+
+    @property
+    def _config(self) -> SaveConfig:
+        from nextrpg.global_config.global_config import config
+
+        return config().save
+
+
+@cache
+def save_io() -> SaveIo:
+    return SaveIo()
+
+
+def _load_or_update[_S](arg: _S | type[_S], data: SaveData) -> _S:
+    if isinstance(arg, type) or isinstance(arg, LoadFromSave):
+        return arg.load(data)
+
+    if res := arg.update(data):
+        return res
+    return arg
+
+
+def _concat(*args: Any) -> str:
+    return "_".join(map(str, args))
+
+
+def _key(x: Any) -> tuple[str, ...]:
+    return x.__module__, x.__class__.__qualname__

@@ -44,7 +44,7 @@ class Trim:
 
 
 @cached(
-    lambda: config().resource.draw_cache_size,
+    lambda: config().draw.cache_size,
     lambda resource, *_: None if isinstance(resource, Surface) else resource,
 )
 @dataclass(frozen=True)
@@ -122,7 +122,7 @@ class Draw(Sizeable):
             return None
 
         surface = Surface(self.size.tuple, SRCALPHA)
-        surface.fill(color)
+        surface.fill(color.tuple)
         surface.blit(self.surface, (0, 0))
         return surface
 
@@ -222,13 +222,13 @@ class PolygonOnScreen(Sizeable):
         self, color: Color, stroke_width: Pixel | None = None
     ) -> DrawOnScreen:
         if stroke_width is None:
-            stroke = config().draw_on_screen.stroke_thickness
+            stroke = config().draw.stroke_thickness
         else:
             stroke = stroke_width
 
         def _line(surface: Surface, points: tuple[Coordinate, ...]) -> None:
             point_tuples = tuple(p.tuple for p in points)
-            lines(surface, color, self.closed, point_tuples, stroke)
+            lines(surface, color.tuple, self.closed, point_tuples, stroke)
 
         return self._draw(_line)
 
@@ -275,7 +275,7 @@ class RectangleDraw(TransparentDraw):
     ) -> None:
         surface = Surface(size.tuple, SRCALPHA)
         rectangle = Rect(ORIGIN.tuple, size.tuple)
-        rect(surface, color, rectangle, border_radius=border_radius or -1)
+        rect(surface, color.tuple, rectangle, border_radius=border_radius or -1)
         _set_resource_color_and_color_key(self, surface, color)
 
 
@@ -386,6 +386,6 @@ def _fill_polygon(
 ) -> Callable[[Surface, tuple[Coordinate, ...]], None]:
     def fill(surface: Surface, points: tuple[Coordinate, ...]) -> None:
         point_tuples = tuple(p.tuple for p in points)
-        polygon(surface, color, point_tuples)
+        polygon(surface, color.tuple, point_tuples)
 
     return fill

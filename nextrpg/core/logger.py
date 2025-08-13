@@ -6,7 +6,6 @@ from typing import NamedTuple
 
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.global_config.debug_config import LogLevel
-from nextrpg.global_config.global_config import config
 
 
 class _DurationFromConfig:
@@ -65,6 +64,8 @@ class ComponentAndMessage(NamedTuple):
 
 
 def pop_messages(time_delta: Millisecond) -> tuple[ComponentAndMessage, ...]:
+    from nextrpg.global_config.global_config import config
+
     if not (debug := config().debug):
         _pop(time_delta)
         return ()
@@ -116,6 +117,8 @@ def _add(
     message: Template | str,
     duration: Millisecond | _DurationFromConfig | None,
 ) -> None:
+    from nextrpg.global_config.global_config import config
+
     if not (debug := config().debug):
         return
     message = Template(message) if isinstance(message, str) else message

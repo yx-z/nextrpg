@@ -40,7 +40,7 @@ class Text(Sizeable):
 
     def draw(self, line: str) -> Draw:
         surface = self.config.font.pygame.render(
-            line, self.config.anti_alias, self.config.color
+            line, self.config.anti_alias, self.config.color.tuple
         )
         return Draw(surface)
 

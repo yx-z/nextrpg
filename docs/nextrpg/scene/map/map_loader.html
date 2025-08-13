@@ -184,7 +184,7 @@
 </span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>    <span class="k">return</span> <span class="kc">None</span>
 </span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>
 </span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="nd">@cached</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">map_cache_size</span><span class="p">)</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="nd">@cached</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">cache_size</span><span class="p">)</span>
 </span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MapLoader</span><span class="p">:</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>
@@ -659,7 +659,7 @@
                 <section id="MapLoader">
                             <input id="MapLoader-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-                    <div class="decorator decorator-cached">@cached(lambda: config().resource.map_cache_size)</div>
+                    <div class="decorator decorator-cached">@cached(lambda: config().map.cache_size)</div>
         <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
 
     <span class="def">class</span>
@@ -669,7 +669,7 @@
 
     </div>
     <a class="headerlink" href="#MapLoader"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="MapLoader-57"><a href="#MapLoader-57"><span class="linenos"> 57</span></a><span class="nd">@cached</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">map_cache_size</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="MapLoader-57"><a href="#MapLoader-57"><span class="linenos"> 57</span></a><span class="nd">@cached</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">cache_size</span><span class="p">)</span>
 </span><span id="MapLoader-58"><a href="#MapLoader-58"><span class="linenos"> 58</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="MapLoader-59"><a href="#MapLoader-59"><span class="linenos"> 59</span></a><span class="k">class</span><span class="w"> </span><span class="nc">MapLoader</span><span class="p">:</span>
 </span><span id="MapLoader-60"><a href="#MapLoader-60"><span class="linenos"> 60</span></a>

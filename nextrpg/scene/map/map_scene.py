@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass, replace
-from functools import cached_property
+from functools import cache, cached_property
 from os import PathLike
-from typing import NamedTuple, OrderedDict, override
+from typing import NamedTuple, override
+
+from cachetools import LRUCache
 
 from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.character.character_on_screen import CharacterSpec
@@ -196,11 +198,11 @@ class Move:
         )
         now = get_timepoint()
 
-        if not (tmx := _tmxs.get(self.next_scene)):
+        if not (tmx := _tmxs().get(self.next_scene)):
             next_scene = self.next_scene(spec)
             tmx = str(next_scene.tmx_file)
 
-        if timed_scene := _scenes.get(tmx):
+        if timed_scene := _scenes().get(tmx):
             timepoint, scene = timed_scene
             time_delta = now - timepoint
             scene_with_player = replace(scene, player=scene.init_player(spec))
@@ -208,13 +210,8 @@ class Move:
         else:
             to_scene = self.next_scene(spec)
 
-        while _scenes and len(_scenes) >= config().resource.map_cache_size:
-            _scenes.popitem(last=False)
-        _scenes[str(from_scene.tmx_file)] = _TimedScene(now, from_scene)
-
-        while _tmxs and len(_tmxs) >= config().resource.map_cache_size:
-            _tmxs.popitem(last=False)
-        _tmxs[self.next_scene] = tmx
+        _scenes()[str(from_scene.tmx_file)] = _TimedScene(now, from_scene)
+        _tmxs()[self.next_scene] = tmx
 
         return TransitionScene(from_scene=from_scene, to_scene=to_scene)
 
@@ -224,5 +221,11 @@ class _TimedScene(NamedTuple):
     scene: MapScene
 
 
-_scenes: OrderedDict[str, _TimedScene] = OrderedDict()
-_tmxs: OrderedDict[Callable, str] = OrderedDict()
+@cache
+def _scenes() -> LRUCache[str, _TimedScene]:
+    return LRUCache(config().map.cache_size)
+
+
+@cache
+def _tmxs() -> LRUCache[Callable, str]:
+    return LRUCache(config().map.cache_size)

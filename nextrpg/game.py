@@ -17,11 +17,15 @@ class Game:
     _: KW_ONLY = not_constructor_below()
     _loop: GameLoop = default(lambda self: GameLoop(self.entry_scene))
 
+    def init(self) -> None: ...
+
     def start(self) -> None:
+        self.init()
         while self._loop.running:
             self._tick()
 
     async def start_web(self) -> None:
+        self.init()
         while self._loop.running:
             self._tick()
             await sleep(0)

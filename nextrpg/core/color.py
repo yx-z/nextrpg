@@ -1,13 +1,20 @@
-from typing import NamedTuple
+from __future__ import annotations
+
+from dataclasses import dataclass
 
 type Alpha = int
 
 
-class Color(NamedTuple):
+@dataclass(frozen=True)
+class Color:
     red: int
     green: int
     blue: int
     alpha: Alpha = 255
+
+    @property
+    def tuple(self) -> tuple[int, int, int, Alpha]:
+        return self.red, self.green, self.blue, self.alpha
 
 
 BLACK = Color(0, 0, 0)

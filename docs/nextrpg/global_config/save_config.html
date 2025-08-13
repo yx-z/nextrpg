@@ -39,6 +39,15 @@
                         <li>
                                 <a class="variable" href="#SaveConfig.directory">directory</a>
                         </li>
+                        <li>
+                                <a class="variable" href="#SaveConfig.shared_slot">shared_slot</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#SaveConfig.text_save_file">text_save_file</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#SaveConfig.cache_size">cache_size</a>
+                        </li>
                 </ul>
 
             </li>
@@ -63,13 +72,16 @@
 
                         <label class="view-source-button" for="mod-save_config-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos">2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">3</span></a>
-</span><span id="L-4"><a href="#L-4"><span class="linenos">4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos">5</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SaveConfig</span><span class="p">:</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">7</span></a>    <span class="n">directory</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;nextrpg&quot;</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SaveConfig</span><span class="p">:</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">directory</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;nextrpg&quot;</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="n">shared_slot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;shared&quot;</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="n">text_save_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text_save_file&quot;</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">cache_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span>
 </span></pre></div>
 
 
@@ -86,9 +98,12 @@
 
     </div>
     <a class="headerlink" href="#SaveConfig"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SaveConfig-6"><a href="#SaveConfig-6"><span class="linenos">6</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="SaveConfig-7"><a href="#SaveConfig-7"><span class="linenos">7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SaveConfig</span><span class="p">:</span>
-</span><span id="SaveConfig-8"><a href="#SaveConfig-8"><span class="linenos">8</span></a>    <span class="n">directory</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;nextrpg&quot;</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SaveConfig-6"><a href="#SaveConfig-6"><span class="linenos"> 6</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="SaveConfig-7"><a href="#SaveConfig-7"><span class="linenos"> 7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SaveConfig</span><span class="p">:</span>
+</span><span id="SaveConfig-8"><a href="#SaveConfig-8"><span class="linenos"> 8</span></a>    <span class="n">directory</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;nextrpg&quot;</span>
+</span><span id="SaveConfig-9"><a href="#SaveConfig-9"><span class="linenos"> 9</span></a>    <span class="n">shared_slot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;shared&quot;</span>
+</span><span id="SaveConfig-10"><a href="#SaveConfig-10"><span class="linenos">10</span></a>    <span class="n">text_save_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text_save_file&quot;</span>
+</span><span id="SaveConfig-11"><a href="#SaveConfig-11"><span class="linenos">11</span></a>    <span class="n">cache_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span>
 </span></pre></div>
 
 
@@ -97,7 +112,7 @@
                             <div id="SaveConfig.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">SaveConfig</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">directory</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">=</span> <span class="n">WindowsPath</span><span class="p">(</span><span class="s1">&#39;C:/Users/yxz/nextrpg&#39;</span><span class="p">)</span></span>)</span>
+        <span class="name">SaveConfig</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">directory</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">=</span> <span class="n">WindowsPath</span><span class="p">(</span><span class="s1">&#39;C:/Users/yxz/nextrpg&#39;</span><span class="p">)</span>,</span><span class="param">	<span class="n">shared_slot</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;shared&#39;</span>,</span><span class="param">	<span class="n">text_save_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;text_save_file&#39;</span>,</span><span class="param">	<span class="n">cache_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span></span>)</span>
 
         
     </div>
@@ -114,6 +129,42 @@
         
     </div>
     <a class="headerlink" href="#SaveConfig.directory"></a>
+    
+    
+
+                            </div>
+                            <div id="SaveConfig.shared_slot" class="classattr">
+                                <div class="attr variable">
+            <span class="name">shared_slot</span><span class="annotation">: str</span>        =
+<span class="default_value">&#39;shared&#39;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#SaveConfig.shared_slot"></a>
+    
+    
+
+                            </div>
+                            <div id="SaveConfig.text_save_file" class="classattr">
+                                <div class="attr variable">
+            <span class="name">text_save_file</span><span class="annotation">: str</span>        =
+<span class="default_value">&#39;text_save_file&#39;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#SaveConfig.text_save_file"></a>
+    
+    
+
+                            </div>
+                            <div id="SaveConfig.cache_size" class="classattr">
+                                <div class="attr variable">
+            <span class="name">cache_size</span><span class="annotation">: int</span>        =
+<span class="default_value">8</span>
+
+        
+    </div>
+    <a class="headerlink" href="#SaveConfig.cache_size"></a>
     
     
 

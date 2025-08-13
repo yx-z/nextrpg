@@ -51,6 +51,9 @@
                         <li>
                                 <a class="variable" href="#Color.alpha">alpha</a>
                         </li>
+                        <li>
+                                <a class="variable" href="#Color.tuple">tuple</a>
+                        </li>
                 </ul>
 
             </li>
@@ -87,25 +90,32 @@
 
                         <label class="view-source-button" for="mod-color-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="nb">type</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="nb">int</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Color</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">red</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="n">green</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    <span class="n">blue</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">alpha</span><span class="p">:</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="mi">255</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="n">BLACK</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="n">WHITE</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="n">TRANSPARENT</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="k">def</span><span class="w"> </span><span class="nf">alpha_from_percentage</span><span class="p">(</span><span class="n">percentage</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alpha</span><span class="p">:</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">percentage</span><span class="p">)</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="nb">type</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="nb">int</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Color</span><span class="p">:</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>    <span class="n">red</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="n">green</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">blue</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">alpha</span><span class="p">:</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="mi">255</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="nd">@property</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Alpha</span><span class="p">]:</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">red</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">green</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="n">BLACK</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="n">WHITE</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="n">TRANSPARENT</span> <span class="o">=</span> <span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="k">def</span><span class="w"> </span><span class="nf">alpha_from_percentage</span><span class="p">(</span><span class="n">percentage</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alpha</span><span class="p">:</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">percentage</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -125,90 +135,103 @@
                 <section id="Color">
                             <input id="Color-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-            
+                    <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
+
     <span class="def">class</span>
-    <span class="name">Color</span><wbr>(<span class="base">typing.NamedTuple</span>):
+    <span class="name">Color</span>:
 
                 <label class="view-source-button" for="Color-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Color"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Color-7"><a href="#Color-7"><span class="linenos"> 7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Color</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-</span><span id="Color-8"><a href="#Color-8"><span class="linenos"> 8</span></a>    <span class="n">red</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Color-9"><a href="#Color-9"><span class="linenos"> 9</span></a>    <span class="n">green</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Color-10"><a href="#Color-10"><span class="linenos">10</span></a>    <span class="n">blue</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Color-11"><a href="#Color-11"><span class="linenos">11</span></a>    <span class="n">alpha</span><span class="p">:</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="mi">255</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Color-9"><a href="#Color-9"><span class="linenos"> 9</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="Color-10"><a href="#Color-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Color</span><span class="p">:</span>
+</span><span id="Color-11"><a href="#Color-11"><span class="linenos">11</span></a>    <span class="n">red</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Color-12"><a href="#Color-12"><span class="linenos">12</span></a>    <span class="n">green</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Color-13"><a href="#Color-13"><span class="linenos">13</span></a>    <span class="n">blue</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="Color-14"><a href="#Color-14"><span class="linenos">14</span></a>    <span class="n">alpha</span><span class="p">:</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="mi">255</span>
+</span><span id="Color-15"><a href="#Color-15"><span class="linenos">15</span></a>
+</span><span id="Color-16"><a href="#Color-16"><span class="linenos">16</span></a>    <span class="nd">@property</span>
+</span><span id="Color-17"><a href="#Color-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Alpha</span><span class="p">]:</span>
+</span><span id="Color-18"><a href="#Color-18"><span class="linenos">18</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">red</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">green</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Color(red, green, blue, alpha)</p>
-</div>
-
+    
 
                             <div id="Color.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">Color</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">red</span><span class="p">:</span> <span class="nb">int</span>, </span><span class="param"><span class="n">green</span><span class="p">:</span> <span class="nb">int</span>, </span><span class="param"><span class="n">blue</span><span class="p">:</span> <span class="nb">int</span>, </span><span class="param"><span class="n">alpha</span><span class="p">:</span> <span class="n">Alpha</span> <span class="o">=</span> <span class="mi">255</span></span>)</span>
+        <span class="name">Color</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">red</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span>, </span><span class="param"><span class="n">green</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span>, </span><span class="param"><span class="n">blue</span><span class="p">:</span> <span class="s1">&#39;int&#39;</span>, </span><span class="param"><span class="n">alpha</span><span class="p">:</span> <span class="s1">&#39;Alpha&#39;</span> <span class="o">=</span> <span class="mi">255</span></span>)</span>
 
         
     </div>
     <a class="headerlink" href="#Color.__init__"></a>
     
-            <div class="docstring"><p>Create new instance of Color(red, green, blue, alpha)</p>
-</div>
-
+    
 
                             </div>
                             <div id="Color.red" class="classattr">
                                 <div class="attr variable">
-            <span class="name">red</span><span class="annotation">: int</span>
+            <span class="name">red</span><span class="annotation">: &#39;int&#39;</span>
 
         
     </div>
     <a class="headerlink" href="#Color.red"></a>
     
-            <div class="docstring"><p>Alias for field number 0</p>
-</div>
-
+    
 
                             </div>
                             <div id="Color.green" class="classattr">
                                 <div class="attr variable">
-            <span class="name">green</span><span class="annotation">: int</span>
+            <span class="name">green</span><span class="annotation">: &#39;int&#39;</span>
 
         
     </div>
     <a class="headerlink" href="#Color.green"></a>
     
-            <div class="docstring"><p>Alias for field number 1</p>
-</div>
-
+    
 
                             </div>
                             <div id="Color.blue" class="classattr">
                                 <div class="attr variable">
-            <span class="name">blue</span><span class="annotation">: int</span>
+            <span class="name">blue</span><span class="annotation">: &#39;int&#39;</span>
 
         
     </div>
     <a class="headerlink" href="#Color.blue"></a>
     
-            <div class="docstring"><p>Alias for field number 2</p>
-</div>
-
+    
 
                             </div>
                             <div id="Color.alpha" class="classattr">
                                 <div class="attr variable">
-            <span class="name">alpha</span><span class="annotation">: <a href="#Alpha">Alpha</a></span>
+            <span class="name">alpha</span><span class="annotation">: &#39;Alpha&#39;</span>        =
+<span class="default_value">255</span>
 
         
     </div>
     <a class="headerlink" href="#Color.alpha"></a>
     
-            <div class="docstring"><p>Alias for field number 3</p>
-</div>
+    
 
+                            </div>
+                            <div id="Color.tuple" class="classattr">
+                                        <input id="Color.tuple-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">tuple</span><span class="annotation">: &#39;tuple[int, int, int, Alpha]&#39;</span>
+
+                <label class="view-source-button" for="Color.tuple-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Color.tuple"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Color.tuple-16"><a href="#Color.tuple-16"><span class="linenos">16</span></a>    <span class="nd">@property</span>
+</span><span id="Color.tuple-17"><a href="#Color.tuple-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">Alpha</span><span class="p">]:</span>
+</span><span id="Color.tuple-18"><a href="#Color.tuple-18"><span class="linenos">18</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">red</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">green</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">blue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span>
+</span></pre></div>
+
+
+    
 
                             </div>
                 </section>
@@ -253,14 +276,14 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">alpha_from_percentage</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">percentage</span><span class="p">:</span> <span class="nb">float</span></span><span class="return-annotation">) -> <span class="n">Alpha</span>:</span></span>
+        <span class="name">alpha_from_percentage</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">percentage</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Alpha&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="alpha_from_percentage-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#alpha_from_percentage"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="alpha_from_percentage-19"><a href="#alpha_from_percentage-19"><span class="linenos">19</span></a><span class="k">def</span><span class="w"> </span><span class="nf">alpha_from_percentage</span><span class="p">(</span><span class="n">percentage</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alpha</span><span class="p">:</span>
-</span><span id="alpha_from_percentage-20"><a href="#alpha_from_percentage-20"><span class="linenos">20</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">percentage</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="alpha_from_percentage-26"><a href="#alpha_from_percentage-26"><span class="linenos">26</span></a><span class="k">def</span><span class="w"> </span><span class="nf">alpha_from_percentage</span><span class="p">(</span><span class="n">percentage</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Alpha</span><span class="p">:</span>
+</span><span id="alpha_from_percentage-27"><a href="#alpha_from_percentage-27"><span class="linenos">27</span></a>    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">percentage</span><span class="p">)</span>
 </span></pre></div>
 
 
