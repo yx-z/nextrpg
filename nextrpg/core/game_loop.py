@@ -36,7 +36,7 @@ class GameLoop:
         self._clock.tick(config().gui.frames_per_second)
         time_delta = self._clock.get_time()
 
-        window = self._window.update
+        window = self._window.update()
         window.draw(self._scene.draw_on_screens, time_delta)
 
         # "<'package.my_class'>" -> "my_class"

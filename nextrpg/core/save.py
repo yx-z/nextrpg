@@ -6,7 +6,7 @@ from dataclasses import KW_ONLY
 from functools import cache
 from pathlib import Path
 from shutil import rmtree
-from typing import Any, Self, TypeAlias, TypeVar
+from typing import Any, Iterable, Self, TypeAlias, TypeVar
 
 from cachetools import LRUCache
 
@@ -59,7 +59,7 @@ class SaveIo:
     )
 
     def save(self, savable: Savable, slot: str | None = None) -> None:
-        key = _concat(*savable.key)
+        key = _concat(savable.key)
         slot = slot or self.config.shared_slot
         logger.debug(t"Saving {slot=} {key=}")
         if isinstance(data := savable.save(), bytes):
@@ -86,7 +86,6 @@ class SaveIo:
         fallback: _U | None,
     ) -> _U | _L | None:
         slot = slot or self.config.shared_slot
-        logger.debug(t"Loading {slot=} {key=}")
         if (file := self._bytes_path(slot, key)).exists():
             return loader(file.read_bytes())
         if json_like := self._read_text(slot).get(key):
@@ -109,12 +108,12 @@ class SaveIo:
             return json_like
         if isinstance(json_like, list):
             return [
-                self._deserialize(slot, _concat(key, i), j)
+                self._deserialize(slot, _concat((key, i)), j)
                 for i, j in enumerate(json_like)
             ]
         res: dict[str, SaveData] = {}
         for sub_key, value in json_like.items():
-            concat_key = _concat(key, sub_key)
+            concat_key = _concat((key, sub_key))
             if isinstance(value, str) and (
                 (file := self._bytes_path(slot, concat_key)).exists()
             ):
@@ -149,12 +148,12 @@ class SaveIo:
             return json_like
         if isinstance(json_like, list):
             return [
-                self._serialize(slot, _concat(key, i, j))
+                self._serialize(slot, _concat((key, i)), j)
                 for i, j in enumerate(json_like)
             ]
         res: dict[str, _Json] = {}
         for sub_key, value in json_like.items():
-            concat_key = _concat(key, sub_key)
+            concat_key = _concat((key, sub_key))
             if isinstance(value, bytes):
                 res[sub_key] = concat_key
                 self._write_bytes(slot, concat_key, value)
@@ -183,9 +182,11 @@ def _update(arg: _U, data: SaveData) -> _U:
     return arg
 
 
-def _concat(*args: Any) -> str:
+def _concat(args: Iterable[Any]) -> str:
     return "_".join(map(str, args))
 
 
-def _key(x: Any) -> tuple[str, ...]:
+def _key(x: type | Any) -> tuple[str, ...]:
+    if isinstance(x, type):
+        return x.__module__, x.__qualname__
     return x.__module__, x.__class__.__qualname__

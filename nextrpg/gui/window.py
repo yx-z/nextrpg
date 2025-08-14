@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import os
 from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self
 
 from pygame import DOUBLEBUF, font
-from pygame.display import flip, init, set_caption, set_mode
+from pygame.display import flip, init, set_caption, set_icon, set_mode
 from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
@@ -14,6 +15,7 @@ from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dataclass_with_init import not_constructor_below
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.core.logger import ComponentAndMessage, Logger, pop_messages
+from nextrpg.core.save import save_io
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import Draw, DrawOnScreen
 from nextrpg.draw.text import Text
@@ -38,8 +40,8 @@ class Window:
     initial_config: GuiConfig = field(default_factory=lambda: config().gui)
     _screen: Surface | None = None
     _title: str | None = None
+    _icon: Draw | None = None
 
-    @property
     def update(self) -> Self:
         if config().gui is self.current_config:
             return self
@@ -73,11 +75,42 @@ class Window:
         flip()
 
     def __post_init__(self) -> None:
+        os.environ.setdefault("SDL_VIDEO_CENTERED", "1")
         if not self._screen:
             init()
             font.init()
-        self._update_title()
-        self._update_screen()
+
+        if self.current_config.icon and (
+            self._icon is None
+            or self.current_config.icon != self.last_config.icon
+        ):
+            icon = Draw(self.current_config.icon)
+            set_icon(icon.pygame)
+            object.__setattr__(self, "_icon", icon)
+
+        if (
+            self._title is None
+            or self.current_config.title != self.last_config.title
+        ):
+            object.__setattr__(self, "_title", self.current_config.title)
+            set_caption(self._title)
+
+        if (
+            self._screen is None
+            or self.last_config.size != self.current_config.size
+            or self.last_config.gui_mode != self.current_config.gui_mode
+            or self.last_config.allow_window_resize
+            != self.current_config.allow_window_resize
+            or self.last_config.double_buffer
+            != self.current_config.double_buffer
+        ):
+            screen = set_mode(
+                self.current_config.size.tuple, self._current_gui_flag
+            )
+            object.__setattr__(self, "_screen", screen)
+
+        if gui := save_io().load(GuiConfig):
+            set_config(replace(config(), gui=gui))
 
     def _draw_log(self, time_delta: Millisecond) -> None:
         if msgs := pop_messages(time_delta):
@@ -118,29 +151,6 @@ class Window:
         if self.current_config.allow_window_resize:
             flag |= RESIZABLE
         return flag
-
-    def _update_title(self) -> None:
-        if (
-            self._title is None
-            or self.current_config.title != self.last_config.title
-        ):
-            object.__setattr__(self, "_title", self.current_config.title)
-            set_caption(self._title)
-
-    def _update_screen(self) -> None:
-        if (
-            self._screen is None
-            or self.last_config.size != self.current_config.size
-            or self.last_config.gui_mode != self.current_config.gui_mode
-            or self.last_config.allow_window_resize
-            != self.current_config.allow_window_resize
-            or self.last_config.double_buffer
-            != self.current_config.double_buffer
-        ):
-            screen = set_mode(
-                self.current_config.size.tuple, self._current_gui_flag
-            )
-            object.__setattr__(self, "_screen", screen)
 
     @cached_property
     def _toggle_gui_mode(self) -> Self:

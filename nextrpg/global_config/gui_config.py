@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from enum import Enum, auto
+from pathlib import Path
 from typing import Any, Self, override
 
 from nextrpg.core.color import BLACK, Color
@@ -33,6 +34,7 @@ class GuiConfig(LoadFromSave):
     gui_mode: GuiMode = GuiMode.WINDOWED
     resize_mode: ResizeMode = ResizeMode.SCALE
     allow_window_resize: bool = True
+    icon: Path | None = None
 
     @override
     def save(self) -> dict[str, Any]:
