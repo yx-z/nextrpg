@@ -11,7 +11,7 @@ from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dataclass_with_init import not_constructor_below
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.core.logger import ComponentAndMessage, Logger, pop_messages
@@ -22,8 +22,8 @@ from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
     GuiResize,
-    KeyPressDown,
     KeyboardKey,
+    KeyPressDown,
     PygameEvent,
 )
 from nextrpg.global_config.global_config import config, set_config
@@ -35,9 +35,15 @@ logger = Logger()
 @dataclass(frozen=True)
 class Window:
     _: KW_ONLY = not_constructor_below()
-    current_config: GuiConfig = field(default_factory=lambda: config().gui)
-    last_config: GuiConfig = field(default_factory=lambda: config().gui)
     initial_config: GuiConfig = field(default_factory=lambda: config().gui)
+    last_config: GuiConfig = field(default_factory=lambda: config().gui)
+    current_config: GuiConfig = field(
+        default_factory=lambda: (
+            set_config(replace(config(), gui=cfg)).gui
+            if (cfg := save_io().load(GuiConfig))
+            else config().gui
+        )
+    )
     _screen: Surface | None = None
     _title: str | None = None
     _icon: Draw | None = None
@@ -113,9 +119,6 @@ class Window:
                 self.current_config.size.tuple, self._current_gui_flag
             )
             object.__setattr__(self, "_screen", screen)
-
-        if gui := save_io().load(GuiConfig):
-            set_config(replace(config(), gui=gui))
 
     def _scale(self, draws: tuple[DrawOnScreen, ...]) -> DrawOnScreen:
         screen = Surface(self.initial_config.size.tuple)

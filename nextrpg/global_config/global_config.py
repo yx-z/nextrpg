@@ -42,7 +42,7 @@ class Config:
     save: SaveConfig = SaveConfig()
 
 
-def set_config(cfg: Config):
+def set_config(cfg: Config) -> Config:
     global _initial_config
     global _cfg
     if not _initial_config:
@@ -54,6 +54,7 @@ def set_config(cfg: Config):
         save_io().save(cfg.gui)
 
     _cfg = cfg
+    return _cfg
 
 
 def config() -> Config:
