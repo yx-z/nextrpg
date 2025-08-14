@@ -55,7 +55,7 @@ class SaveIo:
     config: SaveConfig = default(lambda self: self._config)
     _: KW_ONLY = not_constructor_below()
     _text_data_cache: LRUCache[str, dict] = default(
-        lambda self: LRUCache(self._config.cache_size)
+        lambda self: LRUCache(self.config.cache_size)
     )
 
     def save(self, savable: Savable, slot: str | None = None) -> None:
