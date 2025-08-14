@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
-from typing import Self
+from typing import Any, Self, override
 
 from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.core.coordinate import Coordinate
@@ -12,6 +12,8 @@ from nextrpg.core.dataclass_with_init import (
     not_constructor_below,
 )
 from nextrpg.core.dimension import Size
+from nextrpg.core.direction import Direction
+from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.sizeable import Sizeable
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import Draw, DrawOnScreen, RectangleOnScreen
@@ -36,7 +38,7 @@ class CharacterSpec(_BaseCharacterSpec):
 
 
 @dataclass_with_init(frozen=True)
-class CharacterOnScreen(EventAsAttr, Sizeable):
+class CharacterOnScreen(EventAsAttr, Sizeable, UpdateFromSave):
     spec: CharacterSpec
     coordinate: Coordinate
     config: CharacterConfig = field(default_factory=lambda: config().character)
@@ -97,6 +99,25 @@ class CharacterOnScreen(EventAsAttr, Sizeable):
     @property
     def complete_event(self) -> Self:
         return replace(self, _event_started=False)
+
+    @override
+    @property
+    def key(self) -> tuple[str, ...]:
+        return type(self).__qualname__, self.spec.unique_name
+
+    @override
+    def save(self) -> dict[str, Any]:
+        return {
+            "coordinate": list(self.coordinate.tuple),
+            "direction": self.character.direction.name,
+        }
+
+    @override
+    def update(self, save: dict[str, Any]) -> Self:
+        coordinate = Coordinate(*save["coordinate"])
+        direction = Direction[save["direction"]]
+        character = self.character.turn(direction)
+        return replace(self, coordinate=coordinate, character=character)
 
     def _collision_rectangle(self, coordinate: Coordinate) -> RectangleOnScreen:
         scaling = self.config.bounding_rectangle_scaling

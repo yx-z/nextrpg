@@ -23,6 +23,7 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.direction import Direction
 from nextrpg.core.logger import Logger
+from nextrpg.core.save import save_io
 from nextrpg.core.time import Millisecond, get_timepoint
 from nextrpg.draw.draw import (
     DrawOnScreen,
@@ -67,11 +68,12 @@ class MapScene(EventfulScene):
     def init_player(self, player_spec: CharacterSpec) -> PlayerOnScreen:
         logger.debug(t"Spawn player at {player_spec.unique_name}.")
         player = self.map_helper.get_object(player_spec.unique_name)
-        return PlayerOnScreen(
+        player = PlayerOnScreen(
             player_spec,
             Coordinate(player.x, player.y),
             map_collisions=self.map_helper.collisions,
         )
+        return save_io().update(player)
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
@@ -158,9 +160,10 @@ class MapScene(EventfulScene):
             return NpcOnScreen(coordinate=coord, spec=to_strict(spec))
 
         if isinstance(spec.character, CharacterDraw):
-            return MovingNpcOnScreen(
+            npc = MovingNpcOnScreen(
                 coordinate=coord, path=poly, spec=to_strict(spec)
             )
+            return save_io().update(npc)
 
         color = spec.character or TRANSPARENT
         if isinstance(poly, RectangleOnScreen):
@@ -172,7 +175,8 @@ class MapScene(EventfulScene):
         poly_spec = to_strict(
             spec, PolygonCharacterDraw(Direction.DOWN, poly_draw)
         )
-        return NpcOnScreen(coordinate=coord, spec=poly_spec)
+        npc = NpcOnScreen(coordinate=coord, spec=poly_spec)
+        return save_io().update(npc)
 
     @cached_property
     def _npc_specs(self) -> tuple[NpcSpec, ...]:

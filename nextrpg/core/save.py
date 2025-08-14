@@ -46,6 +46,7 @@ class LoadFromSave[_S](Savable[_S]):
     def load(cls, data: _S) -> Self: ...
 
 
+_S = TypeVar("_S", bound=Savable)
 _L = TypeVar("_L", bound=LoadFromSave)
 _U = TypeVar("_U", bound=UpdateFromSave)
 
@@ -58,13 +59,14 @@ class SaveIo:
         lambda self: LRUCache(self.config.cache_size)
     )
 
-    def save(self, savable: Savable, slot: str | None = None) -> None:
+    def save[_S](self, savable: _S, slot: str | None = None) -> _S:
         key = _concat(savable.key)
         slot = slot or self.config.shared_slot
         logger.debug(t"Saving {slot=} {key=}")
         if isinstance(data := savable.save(), bytes):
             return self._write_bytes(slot, key, data)
         self._write_text(slot, key, data)
+        return savable
 
     def remove(self, slot: str) -> None:
         self._text_data_cache.pop(slot)
