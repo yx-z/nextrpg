@@ -64,6 +64,7 @@ class GuiConfig(LoadFromSave):
             GuiMode[data["gui_mode"]],
             ResizeMode[data["resize_mode"]],
             data["allow_window_resize"],
+            Path(data["icon"]) if data["icon"] else None,
         )
 
 

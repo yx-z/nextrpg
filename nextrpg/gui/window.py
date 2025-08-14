@@ -11,7 +11,7 @@ from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dataclass_with_init import not_constructor_below
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.core.logger import ComponentAndMessage, Logger, pop_messages
@@ -22,8 +22,8 @@ from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
     GuiResize,
-    KeyboardKey,
     KeyPressDown,
+    KeyboardKey,
     PygameEvent,
 )
 from nextrpg.global_config.global_config import config, set_config
@@ -66,12 +66,17 @@ class Window:
             duration=None,
         )
         self._screen.fill(self.current_config.background.tuple)
+
+        if msgs := pop_messages(time_delta):
+            draw_on_screens += tuple(
+                d for text in _log_text(msgs) for d in text.draw_on_screens
+            )
+
         match self.current_config.resize_mode:
             case ResizeMode.SCALE:
                 self._screen.blit(*self._scale(draw_on_screens).pygame)
             case ResizeMode.KEEP_NATIVE_SIZE:
                 self._screen.blits(d.pygame for d in draw_on_screens)
-        self._draw_log(time_delta)
         flip()
 
     def __post_init__(self) -> None:
@@ -111,12 +116,6 @@ class Window:
 
         if gui := save_io().load(GuiConfig):
             set_config(replace(config(), gui=gui))
-
-    def _draw_log(self, time_delta: Millisecond) -> None:
-        if msgs := pop_messages(time_delta):
-            self._screen.blits(
-                d.pygame for t in _log_text(msgs) for d in t.draw_on_screens
-            )
 
     def _scale(self, draws: tuple[DrawOnScreen, ...]) -> DrawOnScreen:
         screen = Surface(self.initial_config.size.tuple)

@@ -186,13 +186,14 @@
 </span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>            <span class="n">GuiMode</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;gui_mode&quot;</span><span class="p">]],</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>            <span class="n">ResizeMode</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;resize_mode&quot;</span><span class="p">]],</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;allow_window_resize&quot;</span><span class="p">],</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>        <span class="p">)</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>            <span class="n">Path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;icon&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;icon&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>        <span class="p">)</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="n">_OPPOSITE_GUI_MODE</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span><span class="p">:</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">,</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="n">GuiMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">:</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span><span class="p">,</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="p">}</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="n">_OPPOSITE_GUI_MODE</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span><span class="p">:</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">,</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="n">GuiMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">:</span> <span class="n">GuiMode</span><span class="o">.</span><span class="n">WINDOWED</span><span class="p">,</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="p">}</span>
 </span></pre></div>
 
 
@@ -359,7 +360,8 @@
 </span><span id="GuiConfig-65"><a href="#GuiConfig-65"><span class="linenos">65</span></a>            <span class="n">GuiMode</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;gui_mode&quot;</span><span class="p">]],</span>
 </span><span id="GuiConfig-66"><a href="#GuiConfig-66"><span class="linenos">66</span></a>            <span class="n">ResizeMode</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;resize_mode&quot;</span><span class="p">]],</span>
 </span><span id="GuiConfig-67"><a href="#GuiConfig-67"><span class="linenos">67</span></a>            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;allow_window_resize&quot;</span><span class="p">],</span>
-</span><span id="GuiConfig-68"><a href="#GuiConfig-68"><span class="linenos">68</span></a>        <span class="p">)</span>
+</span><span id="GuiConfig-68"><a href="#GuiConfig-68"><span class="linenos">68</span></a>            <span class="n">Path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;icon&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;icon&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="GuiConfig-69"><a href="#GuiConfig-69"><span class="linenos">69</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
@@ -543,7 +545,8 @@
 </span><span id="GuiConfig.load-65"><a href="#GuiConfig.load-65"><span class="linenos">65</span></a>            <span class="n">GuiMode</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;gui_mode&quot;</span><span class="p">]],</span>
 </span><span id="GuiConfig.load-66"><a href="#GuiConfig.load-66"><span class="linenos">66</span></a>            <span class="n">ResizeMode</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;resize_mode&quot;</span><span class="p">]],</span>
 </span><span id="GuiConfig.load-67"><a href="#GuiConfig.load-67"><span class="linenos">67</span></a>            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;allow_window_resize&quot;</span><span class="p">],</span>
-</span><span id="GuiConfig.load-68"><a href="#GuiConfig.load-68"><span class="linenos">68</span></a>        <span class="p">)</span>
+</span><span id="GuiConfig.load-68"><a href="#GuiConfig.load-68"><span class="linenos">68</span></a>            <span class="n">Path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;icon&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;icon&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="GuiConfig.load-69"><a href="#GuiConfig.load-69"><span class="linenos">69</span></a>        <span class="p">)</span>
 </span></pre></div>
 
 
