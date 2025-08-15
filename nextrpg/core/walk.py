@@ -11,7 +11,7 @@ from nextrpg.core.dataclass_with_init import (
 from nextrpg.core.dimension import Pixel, PixelPerMillisecond
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw import PolygonOnScreen
+from nextrpg.draw.drawing import PolygonOnScreen
 
 
 @dataclass_with_init(frozen=True)

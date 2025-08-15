@@ -31,25 +31,25 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#PolygonCharacterDraw">PolygonCharacterDraw</a>
+                    <a class="class" href="#PolygonCharacterDrawing">PolygonCharacterDrawing</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#PolygonCharacterDraw.__init__">PolygonCharacterDraw</a>
+                                <a class="function" href="#PolygonCharacterDrawing.__init__">PolygonCharacterDrawing</a>
                         </li>
                         <li>
-                                <a class="variable" href="#PolygonCharacterDraw.arg">arg</a>
+                                <a class="variable" href="#PolygonCharacterDrawing.arg">arg</a>
                         </li>
                         <li>
-                                <a class="variable" href="#PolygonCharacterDraw.draw">draw</a>
+                                <a class="variable" href="#PolygonCharacterDrawing.drawing">drawing</a>
                         </li>
                         <li>
-                                <a class="function" href="#PolygonCharacterDraw.turn">turn</a>
+                                <a class="function" href="#PolygonCharacterDrawing.turn">turn</a>
                         </li>
                         <li>
-                                <a class="function" href="#PolygonCharacterDraw.tick_move">tick_move</a>
+                                <a class="function" href="#PolygonCharacterDrawing.tick_move">tick_move</a>
                         </li>
                         <li>
-                                <a class="function" href="#PolygonCharacterDraw.tick_idle">tick_idle</a>
+                                <a class="function" href="#PolygonCharacterDrawing.tick_idle">tick_idle</a>
                         </li>
                 </ul>
 
@@ -79,23 +79,23 @@
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">override</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDraw</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">TRANSPARENT</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.direction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">Draw</span><span class="p">,</span> <span class="n">PolygonDraw</span><span class="p">,</span> <span class="n">RectangleDraw</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span><span class="p">,</span> <span class="n">PolygonDrawing</span><span class="p">,</span> <span class="n">RectangleDrawing</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PolygonCharacterDraw</span><span class="p">(</span><span class="n">CharacterDraw</span><span class="p">):</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">arg</span><span class="p">:</span> <span class="n">Size</span> <span class="o">|</span> <span class="n">RectangleDraw</span> <span class="o">|</span> <span class="n">PolygonDraw</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PolygonCharacterDrawing</span><span class="p">(</span><span class="n">CharacterDrawing</span><span class="p">):</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">arg</span><span class="p">:</span> <span class="n">Size</span> <span class="o">|</span> <span class="n">RectangleDrawing</span> <span class="o">|</span> <span class="n">PolygonDrawing</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="nd">@override</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">Size</span><span class="p">):</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>            <span class="k">return</span> <span class="n">RectangleDraw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">TRANSPARENT</span><span class="p">)</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>            <span class="k">return</span> <span class="n">RectangleDrawing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">TRANSPARENT</span><span class="p">)</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="nd">@override</span>
@@ -113,146 +113,146 @@
 
 
             </section>
-                <section id="PolygonCharacterDraw">
-                            <input id="PolygonCharacterDraw-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                <section id="PolygonCharacterDrawing">
+                            <input id="PolygonCharacterDrawing-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
                     <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
 
     <span class="def">class</span>
-    <span class="name">PolygonCharacterDraw</span><wbr>(<span class="base"><a href="character_draw.html#CharacterDraw">nextrpg.character.character_draw.CharacterDraw</a></span>):
+    <span class="name">PolygonCharacterDrawing</span><wbr>(<span class="base"><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></span>):
 
-                <label class="view-source-button" for="PolygonCharacterDraw-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="PolygonCharacterDrawing-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#PolygonCharacterDraw"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PolygonCharacterDraw-14"><a href="#PolygonCharacterDraw-14"><span class="linenos">14</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="PolygonCharacterDraw-15"><a href="#PolygonCharacterDraw-15"><span class="linenos">15</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PolygonCharacterDraw</span><span class="p">(</span><span class="n">CharacterDraw</span><span class="p">):</span>
-</span><span id="PolygonCharacterDraw-16"><a href="#PolygonCharacterDraw-16"><span class="linenos">16</span></a>    <span class="n">arg</span><span class="p">:</span> <span class="n">Size</span> <span class="o">|</span> <span class="n">RectangleDraw</span> <span class="o">|</span> <span class="n">PolygonDraw</span>
-</span><span id="PolygonCharacterDraw-17"><a href="#PolygonCharacterDraw-17"><span class="linenos">17</span></a>
-</span><span id="PolygonCharacterDraw-18"><a href="#PolygonCharacterDraw-18"><span class="linenos">18</span></a>    <span class="nd">@override</span>
-</span><span id="PolygonCharacterDraw-19"><a href="#PolygonCharacterDraw-19"><span class="linenos">19</span></a>    <span class="nd">@cached_property</span>
-</span><span id="PolygonCharacterDraw-20"><a href="#PolygonCharacterDraw-20"><span class="linenos">20</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
-</span><span id="PolygonCharacterDraw-21"><a href="#PolygonCharacterDraw-21"><span class="linenos">21</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">Size</span><span class="p">):</span>
-</span><span id="PolygonCharacterDraw-22"><a href="#PolygonCharacterDraw-22"><span class="linenos">22</span></a>            <span class="k">return</span> <span class="n">RectangleDraw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">TRANSPARENT</span><span class="p">)</span>
-</span><span id="PolygonCharacterDraw-23"><a href="#PolygonCharacterDraw-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg</span>
-</span><span id="PolygonCharacterDraw-24"><a href="#PolygonCharacterDraw-24"><span class="linenos">24</span></a>
-</span><span id="PolygonCharacterDraw-25"><a href="#PolygonCharacterDraw-25"><span class="linenos">25</span></a>    <span class="nd">@override</span>
-</span><span id="PolygonCharacterDraw-26"><a href="#PolygonCharacterDraw-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="PolygonCharacterDraw-27"><a href="#PolygonCharacterDraw-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="PolygonCharacterDraw-28"><a href="#PolygonCharacterDraw-28"><span class="linenos">28</span></a>
-</span><span id="PolygonCharacterDraw-29"><a href="#PolygonCharacterDraw-29"><span class="linenos">29</span></a>    <span class="nd">@override</span>
-</span><span id="PolygonCharacterDraw-30"><a href="#PolygonCharacterDraw-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="PolygonCharacterDraw-31"><a href="#PolygonCharacterDraw-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="bp">self</span>
-</span><span id="PolygonCharacterDraw-32"><a href="#PolygonCharacterDraw-32"><span class="linenos">32</span></a>
-</span><span id="PolygonCharacterDraw-33"><a href="#PolygonCharacterDraw-33"><span class="linenos">33</span></a>    <span class="nd">@override</span>
-</span><span id="PolygonCharacterDraw-34"><a href="#PolygonCharacterDraw-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="PolygonCharacterDraw-35"><a href="#PolygonCharacterDraw-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="bp">self</span>
+    <a class="headerlink" href="#PolygonCharacterDrawing"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PolygonCharacterDrawing-14"><a href="#PolygonCharacterDrawing-14"><span class="linenos">14</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="PolygonCharacterDrawing-15"><a href="#PolygonCharacterDrawing-15"><span class="linenos">15</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PolygonCharacterDrawing</span><span class="p">(</span><span class="n">CharacterDrawing</span><span class="p">):</span>
+</span><span id="PolygonCharacterDrawing-16"><a href="#PolygonCharacterDrawing-16"><span class="linenos">16</span></a>    <span class="n">arg</span><span class="p">:</span> <span class="n">Size</span> <span class="o">|</span> <span class="n">RectangleDrawing</span> <span class="o">|</span> <span class="n">PolygonDrawing</span>
+</span><span id="PolygonCharacterDrawing-17"><a href="#PolygonCharacterDrawing-17"><span class="linenos">17</span></a>
+</span><span id="PolygonCharacterDrawing-18"><a href="#PolygonCharacterDrawing-18"><span class="linenos">18</span></a>    <span class="nd">@override</span>
+</span><span id="PolygonCharacterDrawing-19"><a href="#PolygonCharacterDrawing-19"><span class="linenos">19</span></a>    <span class="nd">@cached_property</span>
+</span><span id="PolygonCharacterDrawing-20"><a href="#PolygonCharacterDrawing-20"><span class="linenos">20</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
+</span><span id="PolygonCharacterDrawing-21"><a href="#PolygonCharacterDrawing-21"><span class="linenos">21</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">Size</span><span class="p">):</span>
+</span><span id="PolygonCharacterDrawing-22"><a href="#PolygonCharacterDrawing-22"><span class="linenos">22</span></a>            <span class="k">return</span> <span class="n">RectangleDrawing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">TRANSPARENT</span><span class="p">)</span>
+</span><span id="PolygonCharacterDrawing-23"><a href="#PolygonCharacterDrawing-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg</span>
+</span><span id="PolygonCharacterDrawing-24"><a href="#PolygonCharacterDrawing-24"><span class="linenos">24</span></a>
+</span><span id="PolygonCharacterDrawing-25"><a href="#PolygonCharacterDrawing-25"><span class="linenos">25</span></a>    <span class="nd">@override</span>
+</span><span id="PolygonCharacterDrawing-26"><a href="#PolygonCharacterDrawing-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="PolygonCharacterDrawing-27"><a href="#PolygonCharacterDrawing-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="PolygonCharacterDrawing-28"><a href="#PolygonCharacterDrawing-28"><span class="linenos">28</span></a>
+</span><span id="PolygonCharacterDrawing-29"><a href="#PolygonCharacterDrawing-29"><span class="linenos">29</span></a>    <span class="nd">@override</span>
+</span><span id="PolygonCharacterDrawing-30"><a href="#PolygonCharacterDrawing-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="PolygonCharacterDrawing-31"><a href="#PolygonCharacterDrawing-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="bp">self</span>
+</span><span id="PolygonCharacterDrawing-32"><a href="#PolygonCharacterDrawing-32"><span class="linenos">32</span></a>
+</span><span id="PolygonCharacterDrawing-33"><a href="#PolygonCharacterDrawing-33"><span class="linenos">33</span></a>    <span class="nd">@override</span>
+</span><span id="PolygonCharacterDrawing-34"><a href="#PolygonCharacterDrawing-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="PolygonCharacterDrawing-35"><a href="#PolygonCharacterDrawing-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 
     
 
-                            <div id="PolygonCharacterDraw.__init__" class="classattr">
+                            <div id="PolygonCharacterDrawing.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">PolygonCharacterDraw</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">direction</span><span class="p">:</span> <span class="n"><a href="../core/direction.html#Direction">nextrpg.core.direction.Direction</a></span>,</span><span class="param">	<span class="n">arg</span><span class="p">:</span> <span class="n"><a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a></span> <span class="o">|</span> <span class="n"><a href="../draw/draw.html#RectangleDraw">nextrpg.draw.draw.RectangleDraw</a></span> <span class="o">|</span> <span class="n"><a href="../draw/draw.html#PolygonDraw">nextrpg.draw.draw.PolygonDraw</a></span></span>)</span>
+        <span class="name">PolygonCharacterDrawing</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">direction</span><span class="p">:</span> <span class="n"><a href="../core/direction.html#Direction">nextrpg.core.direction.Direction</a></span>,</span><span class="param">	<span class="n">arg</span><span class="p">:</span> <span class="n"><a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a></span> <span class="o">|</span> <span class="n"><a href="../draw/drawing.html#RectangleDrawing">nextrpg.draw.drawing.RectangleDrawing</a></span> <span class="o">|</span> <span class="n"><a href="../draw/drawing.html#PolygonDrawing">nextrpg.draw.drawing.PolygonDrawing</a></span></span>)</span>
 
         
     </div>
-    <a class="headerlink" href="#PolygonCharacterDraw.__init__"></a>
+    <a class="headerlink" href="#PolygonCharacterDrawing.__init__"></a>
     
     
 
                             </div>
-                            <div id="PolygonCharacterDraw.arg" class="classattr">
+                            <div id="PolygonCharacterDrawing.arg" class="classattr">
                                 <div class="attr variable">
-            <span class="name">arg</span><span class="annotation">: <a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a> | <a href="../draw/draw.html#RectangleDraw">nextrpg.draw.draw.RectangleDraw</a> | <a href="../draw/draw.html#PolygonDraw">nextrpg.draw.draw.PolygonDraw</a></span>
+            <span class="name">arg</span><span class="annotation">: <a href="../core/dimension.html#Size">nextrpg.core.dimension.Size</a> | <a href="../draw/drawing.html#RectangleDrawing">nextrpg.draw.drawing.RectangleDrawing</a> | <a href="../draw/drawing.html#PolygonDrawing">nextrpg.draw.drawing.PolygonDrawing</a></span>
 
         
     </div>
-    <a class="headerlink" href="#PolygonCharacterDraw.arg"></a>
+    <a class="headerlink" href="#PolygonCharacterDrawing.arg"></a>
     
     
 
                             </div>
-                            <div id="PolygonCharacterDraw.draw" class="classattr">
-                                        <input id="PolygonCharacterDraw.draw-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="PolygonCharacterDrawing.drawing" class="classattr">
+                                        <input id="PolygonCharacterDrawing.drawing-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">draw</span><span class="annotation">: <a href="../draw/draw.html#Draw">nextrpg.draw.draw.Draw</a></span>
+            <span class="name">drawing</span><span class="annotation">: <a href="../draw/drawing.html#Drawing">nextrpg.draw.drawing.Drawing</a></span>
 
-                <label class="view-source-button" for="PolygonCharacterDraw.draw-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="PolygonCharacterDrawing.drawing-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#PolygonCharacterDraw.draw"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PolygonCharacterDraw.draw-18"><a href="#PolygonCharacterDraw.draw-18"><span class="linenos">18</span></a>    <span class="nd">@override</span>
-</span><span id="PolygonCharacterDraw.draw-19"><a href="#PolygonCharacterDraw.draw-19"><span class="linenos">19</span></a>    <span class="nd">@cached_property</span>
-</span><span id="PolygonCharacterDraw.draw-20"><a href="#PolygonCharacterDraw.draw-20"><span class="linenos">20</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
-</span><span id="PolygonCharacterDraw.draw-21"><a href="#PolygonCharacterDraw.draw-21"><span class="linenos">21</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">Size</span><span class="p">):</span>
-</span><span id="PolygonCharacterDraw.draw-22"><a href="#PolygonCharacterDraw.draw-22"><span class="linenos">22</span></a>            <span class="k">return</span> <span class="n">RectangleDraw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">TRANSPARENT</span><span class="p">)</span>
-</span><span id="PolygonCharacterDraw.draw-23"><a href="#PolygonCharacterDraw.draw-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg</span>
+    <a class="headerlink" href="#PolygonCharacterDrawing.drawing"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PolygonCharacterDrawing.drawing-18"><a href="#PolygonCharacterDrawing.drawing-18"><span class="linenos">18</span></a>    <span class="nd">@override</span>
+</span><span id="PolygonCharacterDrawing.drawing-19"><a href="#PolygonCharacterDrawing.drawing-19"><span class="linenos">19</span></a>    <span class="nd">@cached_property</span>
+</span><span id="PolygonCharacterDrawing.drawing-20"><a href="#PolygonCharacterDrawing.drawing-20"><span class="linenos">20</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span><span class="p">:</span>
+</span><span id="PolygonCharacterDrawing.drawing-21"><a href="#PolygonCharacterDrawing.drawing-21"><span class="linenos">21</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">Size</span><span class="p">):</span>
+</span><span id="PolygonCharacterDrawing.drawing-22"><a href="#PolygonCharacterDrawing.drawing-22"><span class="linenos">22</span></a>            <span class="k">return</span> <span class="n">RectangleDrawing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">,</span> <span class="n">TRANSPARENT</span><span class="p">)</span>
+</span><span id="PolygonCharacterDrawing.drawing-23"><a href="#PolygonCharacterDrawing.drawing-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg</span>
 </span></pre></div>
 
 
     
 
                             </div>
-                            <div id="PolygonCharacterDraw.turn" class="classattr">
-                                        <input id="PolygonCharacterDraw.turn-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="PolygonCharacterDrawing.turn" class="classattr">
+                                        <input id="PolygonCharacterDrawing.turn-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator decorator-override">@override</div>
 
         <span class="def">def</span>
         <span class="name">turn</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">direction</span><span class="p">:</span> <span class="n"><a href="../core/direction.html#Direction">nextrpg.core.direction.Direction</a></span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
-                <label class="view-source-button" for="PolygonCharacterDraw.turn-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="PolygonCharacterDrawing.turn-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#PolygonCharacterDraw.turn"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PolygonCharacterDraw.turn-25"><a href="#PolygonCharacterDraw.turn-25"><span class="linenos">25</span></a>    <span class="nd">@override</span>
-</span><span id="PolygonCharacterDraw.turn-26"><a href="#PolygonCharacterDraw.turn-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="PolygonCharacterDraw.turn-27"><a href="#PolygonCharacterDraw.turn-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span>
+    <a class="headerlink" href="#PolygonCharacterDrawing.turn"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PolygonCharacterDrawing.turn-25"><a href="#PolygonCharacterDrawing.turn-25"><span class="linenos">25</span></a>    <span class="nd">@override</span>
+</span><span id="PolygonCharacterDrawing.turn-26"><a href="#PolygonCharacterDrawing.turn-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Direction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="PolygonCharacterDrawing.turn-27"><a href="#PolygonCharacterDrawing.turn-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 
     
 
                             </div>
-                            <div id="PolygonCharacterDraw.tick_move" class="classattr">
-                                        <input id="PolygonCharacterDraw.tick_move-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="PolygonCharacterDrawing.tick_move" class="classattr">
+                                        <input id="PolygonCharacterDrawing.tick_move-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator decorator-override">@override</div>
 
         <span class="def">def</span>
         <span class="name">tick_move</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
-                <label class="view-source-button" for="PolygonCharacterDraw.tick_move-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="PolygonCharacterDrawing.tick_move-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#PolygonCharacterDraw.tick_move"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PolygonCharacterDraw.tick_move-29"><a href="#PolygonCharacterDraw.tick_move-29"><span class="linenos">29</span></a>    <span class="nd">@override</span>
-</span><span id="PolygonCharacterDraw.tick_move-30"><a href="#PolygonCharacterDraw.tick_move-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="PolygonCharacterDraw.tick_move-31"><a href="#PolygonCharacterDraw.tick_move-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="bp">self</span>
+    <a class="headerlink" href="#PolygonCharacterDrawing.tick_move"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PolygonCharacterDrawing.tick_move-29"><a href="#PolygonCharacterDrawing.tick_move-29"><span class="linenos">29</span></a>    <span class="nd">@override</span>
+</span><span id="PolygonCharacterDrawing.tick_move-30"><a href="#PolygonCharacterDrawing.tick_move-30"><span class="linenos">30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="PolygonCharacterDrawing.tick_move-31"><a href="#PolygonCharacterDrawing.tick_move-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 
     
 
                             </div>
-                            <div id="PolygonCharacterDraw.tick_idle" class="classattr">
-                                        <input id="PolygonCharacterDraw.tick_idle-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="PolygonCharacterDrawing.tick_idle" class="classattr">
+                                        <input id="PolygonCharacterDrawing.tick_idle-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
                     <div class="decorator decorator-override">@override</div>
 
         <span class="def">def</span>
         <span class="name">tick_idle</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span></span><span class="return-annotation">) -> <span class="n">Self</span>:</span></span>
 
-                <label class="view-source-button" for="PolygonCharacterDraw.tick_idle-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="PolygonCharacterDrawing.tick_idle-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#PolygonCharacterDraw.tick_idle"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PolygonCharacterDraw.tick_idle-33"><a href="#PolygonCharacterDraw.tick_idle-33"><span class="linenos">33</span></a>    <span class="nd">@override</span>
-</span><span id="PolygonCharacterDraw.tick_idle-34"><a href="#PolygonCharacterDraw.tick_idle-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="PolygonCharacterDraw.tick_idle-35"><a href="#PolygonCharacterDraw.tick_idle-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="bp">self</span>
+    <a class="headerlink" href="#PolygonCharacterDrawing.tick_idle"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PolygonCharacterDrawing.tick_idle-33"><a href="#PolygonCharacterDrawing.tick_idle-33"><span class="linenos">33</span></a>    <span class="nd">@override</span>
+</span><span id="PolygonCharacterDrawing.tick_idle-34"><a href="#PolygonCharacterDrawing.tick_idle-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_idle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="PolygonCharacterDrawing.tick_idle-35"><a href="#PolygonCharacterDrawing.tick_idle-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="bp">self</span>
 </span></pre></div>
 
 
@@ -262,8 +262,8 @@
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
-                                    <div><dt><a href="character_draw.html#CharacterDraw">nextrpg.character.character_draw.CharacterDraw</a></dt>
-                                <dd id="PolygonCharacterDraw.direction" class="variable"><a href="character_draw.html#CharacterDraw.direction">direction</a></dd>
+                                    <div><dt><a href="character_drawing.html#CharacterDrawing">nextrpg.character.character_drawing.CharacterDrawing</a></dt>
+                                <dd id="PolygonCharacterDrawing.direction" class="variable"><a href="character_drawing.html#CharacterDrawing.direction">direction</a></dd>
 
             </div>
                                 </dl>

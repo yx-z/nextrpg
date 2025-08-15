@@ -7,7 +7,7 @@ from nextrpg.core.dataclass_with_init import (
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw import DrawOnScreen
+from nextrpg.draw.drawing import DrawingOnScreen
 from nextrpg.draw.fade import FadeIn, Resource
 from nextrpg.scene.rpg_event.eventful_scene import (
     BackgroundEvent,
@@ -34,8 +34,8 @@ class FadeInScene(RpgEventScene[BackgroundEventSentinel]):
 
     @property
     @override
-    def add_ons(self) -> tuple[DrawOnScreen, ...]:
-        return self._fade.draw_on_screens
+    def add_ons(self) -> tuple[DrawingOnScreen, ...]:
+        return self._fade.drawing_on_screens
 
     @override
     def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
@@ -61,8 +61,8 @@ class BackgroundFadeIn(BackgroundEvent):
 
     @property
     @override
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return self.fade.draw_on_screens
+    def draw_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return self.fade.drawing_on_screens
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:

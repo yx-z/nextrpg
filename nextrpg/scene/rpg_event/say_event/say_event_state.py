@@ -12,7 +12,7 @@ from nextrpg.core.dataclass_with_init import (
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw import DrawOnScreen
+from nextrpg.draw.drawing import DrawingOnScreen
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.draw.typewriter import Typewriter
@@ -37,7 +37,7 @@ class SayEventState(RpgEventScene, ABC):
 
     @override
     @cached_property
-    def add_ons(self) -> tuple[DrawOnScreen, ...]:
+    def add_ons(self) -> tuple[DrawingOnScreen, ...]:
         if self.unique_name:
             character = self.scene.get_character(self.unique_name)
             diff = character.coordinate - self.initial_coordinate
@@ -46,12 +46,12 @@ class SayEventState(RpgEventScene, ABC):
 
     @property
     @abstractmethod
-    def _add_ons(self) -> tuple[DrawOnScreen, ...]: ...
+    def _add_ons(self) -> tuple[DrawingOnScreen, ...]: ...
 
 
 @dataclass_with_init(frozen=True, kw_only=True)
 class SayEventFadeInState(SayEventState):
-    background: tuple[DrawOnScreen, ...]
+    background: tuple[DrawingOnScreen, ...]
     text_on_screen: TextOnScreen
     config: SayEventConfig
     _: KW_ONLY = not_constructor_below()
@@ -61,8 +61,8 @@ class SayEventFadeInState(SayEventState):
 
     @property
     @override
-    def _add_ons(self) -> tuple[DrawOnScreen, ...]:
-        return self._fade_in.draw_on_screens
+    def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
+        return self._fade_in.drawing_on_screens
 
     @override
     def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
@@ -82,7 +82,7 @@ class SayEventFadeInState(SayEventState):
 
 @dataclass_with_init(frozen=True, kw_only=True)
 class SayEventTypingState(SayEventState):
-    background: tuple[DrawOnScreen, ...]
+    background: tuple[DrawingOnScreen, ...]
     text_on_screen: TextOnScreen
     _: KW_ONLY = not_constructor_below()
     _typewriter: Typewriter | None = default(
@@ -95,11 +95,11 @@ class SayEventTypingState(SayEventState):
 
     @override
     @property
-    def _add_ons(self) -> tuple[DrawOnScreen, ...]:
+    def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
         if self._typewriter:
-            text = self._typewriter.draw_on_screens
+            text = self._typewriter.drawing_on_screens
         else:
-            text = self.text_on_screen.draw_on_screens
+            text = self.text_on_screen.drawing_on_screens
         return self.background + text
 
     @override
@@ -123,24 +123,24 @@ class SayEventTypingState(SayEventState):
             scene=self.scene,
             unique_name=self.unique_name,
             initial_coordinate=self.initial_coordinate,
-            draws=self.background + self.text_on_screen.draw_on_screens,
+            draws=self.background + self.text_on_screen.drawing_on_screens,
             config=self.config,
         )
 
 
 @dataclass_with_init(frozen=True, kw_only=True)
 class SayEventFadeOutState(SayEventState):
-    draws: tuple[DrawOnScreen, ...]
+    draws: tuple[DrawingOnScreen, ...]
     config: SayEventConfig
     _: KW_ONLY = not_constructor_below()
     _fade_out: FadeOut = default(
-        lambda self: FadeOut(self.draws, self.config.fade_duration)
+        lambda self: FadeOut(self.drawing, self.config.fade_duration)
     )
 
     @override
     @property
-    def _add_ons(self) -> tuple[DrawOnScreen, ...]:
-        return self._fade_out.draw_on_screens
+    def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
+        return self._fade_out.drawing_on_screens
 
     @override
     def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:

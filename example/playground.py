@@ -101,7 +101,7 @@ class Scene:
                 if self.next:
                     self.game.set_scene(self.next)
 
-    def draw(self, screen: pygame.Surface):
+    def drawing(self, screen: pygame.Surface):
         pass
 
     def request_switch(self, next_scene: "Scene"):
@@ -132,7 +132,7 @@ class Button:
             if self.focused and self.enabled:
                 self.action()
 
-    def draw(self, screen: pygame.Surface, font: pygame.font.Font):
+    def drawing(self, screen: pygame.Surface, font: pygame.font.Font):
         bg = COLORS.panel
         border = COLORS.focus if self.focused and self.enabled else COLORS.panel
         label_color = COLORS.text if self.enabled else COLORS.text_muted
@@ -249,7 +249,7 @@ class TitleScene(Scene):
             b.action()
 
     # ---- Draw ----
-    def draw(self, screen: pygame.Surface):
+    def drawing(self, screen: pygame.Surface):
         screen.fill(COLORS.bg)
         w, h = screen.get_size()
 
@@ -268,7 +268,7 @@ class TitleScene(Scene):
         # Buttons
         for i, b in enumerate(self.buttons):
             b.focused = i == self.focus_index
-            b.draw(screen, self.btn_font)
+            b.drawing(screen, self.btn_font)
 
         # Footer
         foot = self.small_font.render(
@@ -299,7 +299,7 @@ class OptionsScene(Scene):
         if e.type == pygame.VIDEORESIZE:
             pass
 
-    def draw(self, screen: pygame.Surface):
+    def drawing(self, screen: pygame.Surface):
         screen.fill(COLORS.bg)
         w, h = screen.get_size()
         txt = self.font.render(
@@ -330,7 +330,7 @@ class GameScene(Scene):
         if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
             self.request_switch(TitleScene(self.game))
 
-    def draw(self, screen: pygame.Surface):
+    def drawing(self, screen: pygame.Surface):
         screen.fill((20, 24, 28))
         w, h = screen.get_size()
         msg = "Game started (press Esc to return)"
@@ -390,7 +390,7 @@ class Game:
                 self.current.handle_event(e)
 
             self.current.update(dt)
-            self.current.draw(self.screen)
+            self.current.drawing(self.screen)
             pygame.display.flip()
 
         pygame.quit()

@@ -37,7 +37,7 @@ class GameLoop:
         time_delta = self._clock.get_time()
 
         window = self._window.update()
-        window.draw(self._scene.draw_on_screens, time_delta)
+        window.blit(self._scene.drawing_on_screens, time_delta)
 
         # "<'package.my_class'>" -> "my_class"
         scene_type = str(type(self._scene))[2:-2].split(".")[-1]

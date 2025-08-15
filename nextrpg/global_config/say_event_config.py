@@ -28,7 +28,7 @@ class SayEventConfig:
     character_coordinate_override: Coordinate | None = None
     name_text_config_override: TextConfig | None = None
     text_config_override: TextConfig | None = None
-    avatar: "Draw | Group | None" = None
+    avatar: "Drawing | DrawingGroup | None" = None
 
     @property
     def scene_coordinate(self) -> Coordinate:

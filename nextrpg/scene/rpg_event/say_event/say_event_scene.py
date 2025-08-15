@@ -6,7 +6,7 @@ from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw import Draw, DrawOnScreen
+from nextrpg.draw.drawing import Drawing, DrawingOnScreen
 from nextrpg.draw.text import Text, TextGroup
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.say_event_config import SayEventConfig
@@ -23,7 +23,7 @@ from nextrpg.scene.rpg_event.say_event.say_event_state import (
 )
 from nextrpg.scene.scene import Scene
 
-type SayEventArg = str | Coordinate | Size | Draw | SayEventConfig
+type SayEventArg = str | Coordinate | Size | Drawing | SayEventConfig
 
 
 @dataclass(frozen=True)
@@ -34,8 +34,8 @@ class SayEventScene(RpgEventScene):
 
     @override
     @cached_property
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return self._state.draw_on_screens
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return self._state.drawing_on_screens
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
@@ -96,7 +96,7 @@ def _update_config(cfg: SayEventConfig, arg: SayEventArg) -> SayEventConfig:
                 scene_coordinate_override=arg,
                 character_coordinate_override=arg,
             )
-        case Draw():
+        case Drawing():
             return replace(cfg, avatar=arg)
         case str():
             return replace(cfg, name_override=arg)

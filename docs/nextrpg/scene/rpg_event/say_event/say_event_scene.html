@@ -86,7 +86,7 @@
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">Draw</span><span class="p">,</span> <span class="n">DrawOnScreen</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span><span class="p">,</span> <span class="n">DrawingOnScreen</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.text</span><span class="w"> </span><span class="kn">import</span> <span class="n">Text</span><span class="p">,</span> <span class="n">TextGroup</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.say_event_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">SayEventConfig</span>
@@ -103,7 +103,7 @@
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="p">)</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="nb">type</span> <span class="n">SayEventArg</span> <span class="o">=</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="n">Size</span> <span class="o">|</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">SayEventConfig</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="nb">type</span> <span class="n">SayEventArg</span> <span class="o">=</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="n">Size</span> <span class="o">|</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">SayEventConfig</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -114,8 +114,8 @@
 </span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>    <span class="nd">@override</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">drawing_on_screens</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>
 </span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>    <span class="nd">@override</span>
 </span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
@@ -176,7 +176,7 @@
 </span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>                <span class="n">scene_coordinate_override</span><span class="o">=</span><span class="n">arg</span><span class="p">,</span>
 </span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>                <span class="n">character_coordinate_override</span><span class="o">=</span><span class="n">arg</span><span class="p">,</span>
 </span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>            <span class="p">)</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="k">case</span> <span class="n">Draw</span><span class="p">():</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="k">case</span> <span class="n">Drawing</span><span class="p">():</span>
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">avatar</span><span class="o">=</span><span class="n">arg</span><span class="p">)</span>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>        <span class="k">case</span> <span class="nb">str</span><span class="p">():</span>
 </span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">name_override</span><span class="o">=</span><span class="n">arg</span><span class="p">)</span>
@@ -191,7 +191,7 @@
                     <div class="attr variable">
             <span class="def">type</span> <span class="name">SayEventArg</span>        =
 <input id="SayEventArg-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-            <label class="view-value-button pdoc-button" for="SayEventArg-view-value"></label><span class="default_value">str | <a href="../../../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a> | <a href="../../../core/dimension.html#Size">nextrpg.core.dimension.Size</a> | <a href="../../../draw/draw.html#Draw">nextrpg.draw.draw.Draw</a> | <a href="../../../global_config/say_event_config.html#SayEventConfig">nextrpg.global_config.say_event_config.SayEventConfig</a></span>
+            <label class="view-value-button pdoc-button" for="SayEventArg-view-value"></label><span class="default_value">str | <a href="../../../core/coordinate.html#Coordinate">nextrpg.core.coordinate.Coordinate</a> | <a href="../../../core/dimension.html#Size">nextrpg.core.dimension.Size</a> | <a href="../../../draw/drawing.html#Drawing">nextrpg.draw.drawing.Drawing</a> | <a href="../../../global_config/say_event_config.html#SayEventConfig">nextrpg.global_config.say_event_config.SayEventConfig</a></span>
 
         
     </div>
@@ -220,8 +220,8 @@
 </span><span id="SayEventScene-35"><a href="#SayEventScene-35"><span class="linenos">35</span></a>
 </span><span id="SayEventScene-36"><a href="#SayEventScene-36"><span class="linenos">36</span></a>    <span class="nd">@override</span>
 </span><span id="SayEventScene-37"><a href="#SayEventScene-37"><span class="linenos">37</span></a>    <span class="nd">@cached_property</span>
-</span><span id="SayEventScene-38"><a href="#SayEventScene-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="SayEventScene-39"><a href="#SayEventScene-39"><span class="linenos">39</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="SayEventScene-38"><a href="#SayEventScene-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="SayEventScene-39"><a href="#SayEventScene-39"><span class="linenos">39</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">drawing_on_screens</span>
 </span><span id="SayEventScene-40"><a href="#SayEventScene-40"><span class="linenos">40</span></a>
 </span><span id="SayEventScene-41"><a href="#SayEventScene-41"><span class="linenos">41</span></a>    <span class="nd">@override</span>
 </span><span id="SayEventScene-42"><a href="#SayEventScene-42"><span class="linenos">42</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
@@ -362,9 +362,9 @@
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt><a href="../../scene.html#Scene">nextrpg.scene.scene.Scene</a></dt>
-                                <dd id="SayEventScene.draw_on_screen_shift" class="variable"><a href="../../scene.html#Scene.draw_on_screen_shift">draw_on_screen_shift</a></dd>
-                <dd id="SayEventScene.draw_on_screens" class="variable"><a href="../../scene.html#Scene.draw_on_screens">draw_on_screens</a></dd>
-                <dd id="SayEventScene.draw_on_screens_before_shift" class="variable"><a href="../../scene.html#Scene.draw_on_screens_before_shift">draw_on_screens_before_shift</a></dd>
+                                <dd id="SayEventScene.drawing_on_screen_shift" class="variable"><a href="../../scene.html#Scene.drawing_on_screen_shift">drawing_on_screen_shift</a></dd>
+                <dd id="SayEventScene.drawing_on_screens" class="variable"><a href="../../scene.html#Scene.drawing_on_screens">drawing_on_screens</a></dd>
+                <dd id="SayEventScene.drawing_on_screens_before_shift" class="variable"><a href="../../scene.html#Scene.drawing_on_screens_before_shift">drawing_on_screens_before_shift</a></dd>
                 <dd id="SayEventScene.event" class="function"><a href="../../scene.html#Scene.event">event</a></dd>
 
             </div>

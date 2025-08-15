@@ -3,7 +3,7 @@ from dataclasses import KW_ONLY, dataclass, replace
 from enum import Enum, auto
 from typing import Any, Self, override
 
-from nextrpg.character.character_draw import CharacterDraw
+from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import (
     CharacterOnScreen,
     CharacterSpec,
@@ -16,7 +16,7 @@ from nextrpg.core.dataclass_with_init import (
     default,
     not_constructor_below,
 )
-from nextrpg.draw.draw import TransparentDraw
+from nextrpg.draw.drawing import TransparentDrawing
 from nextrpg.event.event_transformer import transform
 
 type EventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
@@ -39,13 +39,13 @@ class EventSpec:
 
 @dataclass_with_init(frozen=True, kw_only=True)
 class NpcSpec(_BaseCharacterSpec):
-    character: CharacterDraw | Color | None = None
+    character: CharacterDrawing | Color | None = None
     event: EventSpec | RpgEvent | None = None
     cyclic_walk: bool = True
     collide_with_others: bool = default(
-        lambda self: isinstance(self.character, CharacterDraw)
+        lambda self: isinstance(self.character, CharacterDrawing)
         and (
-            not isinstance(draw := self.character.draw, TransparentDraw)
+            not isinstance(draw := self.character.drawing, TransparentDrawing)
             or not draw.transparent
         )
     )
@@ -65,7 +65,7 @@ class StrictNpcSpec(NpcSpec, CharacterSpec):
 
 
 def to_strict(
-    spec: NpcSpec, character_draw: CharacterDraw | None = None
+    spec: NpcSpec, character_draw: CharacterDrawing | None = None
 ) -> StrictNpcSpec:
     assert (
         character := character_draw or spec.character
@@ -88,8 +88,9 @@ class NpcOnScreen(CharacterOnScreen):
     restart_event: bool = True
 
     @override
-    def save(self) -> dict[str, Any]:
-        return super().save() | {"restart_event": self.restart_event}
+    @property
+    def save_data(self) -> dict[str, Any]:
+        return super().save_data | {"restart_event": self.restart_event}
 
     @override
     def update(self, save: dict[str, Any]) -> Self:

@@ -8,12 +8,12 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.animated import Animated
-from nextrpg.draw.draw import Draw
+from nextrpg.draw.drawing import Drawing
 
 
 @dataclass_with_init(frozen=True)
 class CyclicFrames(Animated):
-    frames: tuple[Draw, ...]
+    frames: tuple[Drawing, ...]
     duration_per_frame: Millisecond
     _: KW_ONLY = not_constructor_below()
     _index: int = 0
@@ -21,7 +21,7 @@ class CyclicFrames(Animated):
 
     @property
     @override
-    def draw(self) -> Draw:
+    def drawing(self) -> Drawing:
         return self.frames[self._index]
 
     @override

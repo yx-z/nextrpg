@@ -19,9 +19,9 @@ from nextrpg.core.cached_decorator import cached
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Height, Size
 from nextrpg.core.log import Log
-from nextrpg.draw.draw import (
-    Draw,
-    DrawOnScreen,
+from nextrpg.draw.drawing import (
+    Drawing,
+    DrawingOnScreen,
     PolygonOnScreen,
     RectangleOnScreen,
 )
@@ -32,13 +32,13 @@ log = Log()
 
 class TileBottomAndDrawOnScreen(NamedTuple):
     bottom: Height
-    draw: DrawOnScreen
+    draw: DrawingOnScreen
 
 
 class LayerTileBottomAndDrawOnScreen(NamedTuple):
     layer: int
     bottom: Height
-    draw_on_screen: DrawOnScreen
+    draw_on_screen: DrawingOnScreen
 
 
 def get_polygon(obj: TiledObject) -> PolygonOnScreen | None:
@@ -67,7 +67,7 @@ class MapLoader:
         return Size(width, height)
 
     @cached_property
-    def background(self) -> tuple[DrawOnScreen, ...]:
+    def background(self) -> tuple[DrawingOnScreen, ...]:
         return self._draw_layers(config().map.background)
 
     @cached_property
@@ -79,11 +79,11 @@ class MapLoader:
             for i, layer in enumerate(
                 self._tile_layers(config().map.foreground)
             )
-            if (tiles := self._bottom_and_draw(layer))
+            if (tiles := self._bottom_and_drawing(layer))
         )
 
     @cached_property
-    def above_character(self) -> tuple[DrawOnScreen, ...]:
+    def above_character(self) -> tuple[DrawingOnScreen, ...]:
         return self._draw_layers(config().map.above_character)
 
     @cached_property
@@ -99,7 +99,7 @@ class MapLoader:
         return from_tiles + from_objects
 
     @cached_property
-    def collision_visuals(self) -> tuple[DrawOnScreen, ...]:
+    def collision_visuals(self) -> tuple[DrawingOnScreen, ...]:
         if config().debug and (
             color := config().debug.collision_rectangle_color
         ):
@@ -117,12 +117,12 @@ class MapLoader:
     ) -> tuple[TiledObject, ...]:
         return tuple(obj for obj in self._all_objects if obj.type == class_name)
 
-    def layer_bottom_and_draw(
+    def layer_bottom_and_drawing(
         self, character: CharacterOnScreen
     ) -> tuple[LayerTileBottomAndDrawOnScreen, ...]:
         character_layer = self._character_layer(character)
         character_bottom = (
-            character.draw_on_screen.visible_rectangle_on_screen.bottom
+            character.drawing_on_screen.visible_rectangle_on_screen.bottom
         )
         return tuple(
             LayerTileBottomAndDrawOnScreen(
@@ -202,17 +202,17 @@ class MapLoader:
     def _all_tile_layers(self) -> tuple[TiledTileLayer, ...]:
         return tuple(self._layer(i) for i in self._tmx.visible_tile_layers)
 
-    def _draw_layers(self, class_name: str) -> tuple[DrawOnScreen, ...]:
+    def _draw_layers(self, class_name: str) -> tuple[DrawingOnScreen, ...]:
         return tuple(
             draw
             for layer in self._tile_layers(class_name)
-            for draw in self._draw(layer).values()
+            for draw in self._drawing(layer).values()
         )
 
-    def _bottom_and_draw(
+    def _bottom_and_drawing(
         self, layer: TiledTileLayer
     ) -> tuple[TileBottomAndDrawOnScreen, ...]:
-        coord_and_draws = self._draw(layer)
+        coord_and_draws = self._drawing(layer)
         coord_to_bottom = {
             coord: draw.visible_rectangle_on_screen.bottom
             for coord, draw in coord_and_draws.items()
@@ -229,19 +229,19 @@ class MapLoader:
     def _tile_size(self) -> Size:
         return Size(self._tmx.tilewidth, self._tmx.tileheight)
 
-    def _draw(
+    def _drawing(
         self, layer: TiledTileLayer
-    ) -> dict[_TileCoordinate, DrawOnScreen]:
+    ) -> dict[_TileCoordinate, DrawingOnScreen]:
         return {
             _TileCoordinate(top, left): self._tile(left, top, surface)
             for left, top, surface in layer.tiles()
         }
 
-    def _tile(self, left: int, top: int, surface: Surface) -> DrawOnScreen:
+    def _tile(self, left: int, top: int, surface: Surface) -> DrawingOnScreen:
         width, height = self._tile_size
-        return DrawOnScreen(
+        return DrawingOnScreen(
             Coordinate(left * width, top * height),
-            Draw(surface),
+            Drawing(surface),
         )
 
     def _class(
@@ -259,7 +259,7 @@ class MapLoader:
         self,
         layer: TiledTileLayer,
         coord: _TileCoordinate,
-        draw: DrawOnScreen,
+        draw: DrawingOnScreen,
         coord_to_bottom: dict[_TileCoordinate, Height],
     ) -> Height:
         return (
@@ -313,7 +313,7 @@ def _below_character_layer(
     layer: tuple[LayerTileBottomAndDrawOnScreen, ...],
     character: CharacterOnScreen,
 ) -> bool:
-    rect = character.draw_on_screen.visible_rectangle_on_screen
+    rect = character.drawing_on_screen.visible_rectangle_on_screen
     return layer[-1].bottom < rect.bottom and any(
         bottom < rect.bottom and rect.collide(draw.visible_rectangle_on_screen)
         for _, bottom, draw in layer

@@ -64,7 +64,7 @@
                                 <a class="function" href="#EventfulScene.complete">complete</a>
                         </li>
                         <li>
-                                <a class="variable" href="#EventfulScene.draw_on_screens">draw_on_screens</a>
+                                <a class="variable" href="#EventfulScene.drawing_on_screens">drawing_on_screens</a>
                         </li>
                         <li>
                                 <a class="function" href="#EventfulScene.get_background_event">get_background_event</a>
@@ -183,7 +183,7 @@
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">Log</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.save</span><span class="w"> </span><span class="kn">import</span> <span class="n">SaveIo</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span><span class="p">,</span> <span class="n">TransparentDraw</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="n">TransparentDrawing</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.event_as_attr</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventAsAttr</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeyboardKey</span><span class="p">,</span> <span class="n">KeyPressDown</span><span class="p">,</span> <span class="n">PygameEvent</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
@@ -291,11 +291,11 @@
 </span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>
 </span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>    <span class="nd">@override</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>        <span class="n">context_draws</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
 </span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>            <span class="n">d</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_background_events</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">draw_on_screens</span>
 </span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>        <span class="p">)</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="n">context_draws</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">drawing_on_screens</span> <span class="o">+</span> <span class="n">context_draws</span>
 </span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>
 </span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_background_event</span><span class="p">(</span>
 </span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">sentinel</span><span class="p">:</span> <span class="n">BackgroundEventSentinel</span>
@@ -331,7 +331,7 @@
 </span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>
 </span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">npc</span><span class="p">:</span> <span class="n">NpcOnScreen</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>        <span class="n">turn</span> <span class="o">=</span> <span class="ow">not</span> <span class="p">(</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>            <span class="nb">isinstance</span><span class="p">(</span><span class="n">draw</span> <span class="o">:=</span> <span class="n">npc</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="o">.</span><span class="n">draw</span><span class="p">,</span> <span class="n">TransparentDraw</span><span class="p">)</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>            <span class="nb">isinstance</span><span class="p">(</span><span class="n">draw</span> <span class="o">:=</span> <span class="n">npc</span><span class="o">.</span><span class="n">drawing_on_screen</span><span class="o">.</span><span class="n">draw</span><span class="p">,</span> <span class="n">TransparentDrawing</span><span class="p">)</span>
 </span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>            <span class="ow">and</span> <span class="n">draw</span><span class="o">.</span><span class="n">transparent</span>
 </span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>        <span class="p">)</span>
 </span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>        <span class="n">started_npc</span> <span class="o">=</span> <span class="n">npc</span><span class="o">.</span><span class="n">start_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">player</span><span class="p">,</span> <span class="n">turn</span><span class="p">)</span>
@@ -398,7 +398,7 @@
 </span><span id="L-231"><a href="#L-231"><span class="linenos">231</span></a>    <span class="p">)</span>
 </span><span id="L-232"><a href="#L-232"><span class="linenos">232</span></a>
 </span><span id="L-233"><a href="#L-233"><span class="linenos">233</span></a>    <span class="nd">@property</span>
-</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-234"><a href="#L-234"><span class="linenos">234</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="L-235"><a href="#L-235"><span class="linenos">235</span></a>        <span class="k">return</span> <span class="p">()</span>
 </span><span id="L-236"><a href="#L-236"><span class="linenos">236</span></a>
 </span><span id="L-237"><a href="#L-237"><span class="linenos">237</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">EventfulScene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventfulScene</span><span class="p">:</span>
@@ -419,8 +419,8 @@
 </span><span id="L-252"><a href="#L-252"><span class="linenos">252</span></a>
 </span><span id="L-253"><a href="#L-253"><span class="linenos">253</span></a>    <span class="nd">@cached_property</span>
 </span><span id="L-254"><a href="#L-254"><span class="linenos">254</span></a>    <span class="nd">@override</span>
-</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_ons</span>
+</span><span id="L-255"><a href="#L-255"><span class="linenos">255</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-256"><a href="#L-256"><span class="linenos">256</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">drawing_on_screens</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_ons</span>
 </span><span id="L-257"><a href="#L-257"><span class="linenos">257</span></a>
 </span><span id="L-258"><a href="#L-258"><span class="linenos">258</span></a>    <span class="nd">@override</span>
 </span><span id="L-259"><a href="#L-259"><span class="linenos">259</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
@@ -431,7 +431,7 @@
 </span><span id="L-264"><a href="#L-264"><span class="linenos">264</span></a>        <span class="k">return</span> <span class="n">ticked</span>
 </span><span id="L-265"><a href="#L-265"><span class="linenos">265</span></a>
 </span><span id="L-266"><a href="#L-266"><span class="linenos">266</span></a>    <span class="nd">@property</span>
-</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_ons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-267"><a href="#L-267"><span class="linenos">267</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_ons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="L-268"><a href="#L-268"><span class="linenos">268</span></a>        <span class="k">return</span> <span class="p">()</span>
 </span><span id="L-269"><a href="#L-269"><span class="linenos">269</span></a>
 </span><span id="L-270"><a href="#L-270"><span class="linenos">270</span></a>
@@ -582,11 +582,11 @@
 </span><span id="EventfulScene-125"><a href="#EventfulScene-125"><span class="linenos">125</span></a>
 </span><span id="EventfulScene-126"><a href="#EventfulScene-126"><span class="linenos">126</span></a>    <span class="nd">@cached_property</span>
 </span><span id="EventfulScene-127"><a href="#EventfulScene-127"><span class="linenos">127</span></a>    <span class="nd">@override</span>
-</span><span id="EventfulScene-128"><a href="#EventfulScene-128"><span class="linenos">128</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="EventfulScene-128"><a href="#EventfulScene-128"><span class="linenos">128</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="EventfulScene-129"><a href="#EventfulScene-129"><span class="linenos">129</span></a>        <span class="n">context_draws</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
 </span><span id="EventfulScene-130"><a href="#EventfulScene-130"><span class="linenos">130</span></a>            <span class="n">d</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_background_events</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">draw_on_screens</span>
 </span><span id="EventfulScene-131"><a href="#EventfulScene-131"><span class="linenos">131</span></a>        <span class="p">)</span>
-</span><span id="EventfulScene-132"><a href="#EventfulScene-132"><span class="linenos">132</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="n">context_draws</span>
+</span><span id="EventfulScene-132"><a href="#EventfulScene-132"><span class="linenos">132</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">drawing_on_screens</span> <span class="o">+</span> <span class="n">context_draws</span>
 </span><span id="EventfulScene-133"><a href="#EventfulScene-133"><span class="linenos">133</span></a>
 </span><span id="EventfulScene-134"><a href="#EventfulScene-134"><span class="linenos">134</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_background_event</span><span class="p">(</span>
 </span><span id="EventfulScene-135"><a href="#EventfulScene-135"><span class="linenos">135</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">sentinel</span><span class="p">:</span> <span class="n">BackgroundEventSentinel</span>
@@ -622,7 +622,7 @@
 </span><span id="EventfulScene-165"><a href="#EventfulScene-165"><span class="linenos">165</span></a>
 </span><span id="EventfulScene-166"><a href="#EventfulScene-166"><span class="linenos">166</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_start_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">npc</span><span class="p">:</span> <span class="n">NpcOnScreen</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="EventfulScene-167"><a href="#EventfulScene-167"><span class="linenos">167</span></a>        <span class="n">turn</span> <span class="o">=</span> <span class="ow">not</span> <span class="p">(</span>
-</span><span id="EventfulScene-168"><a href="#EventfulScene-168"><span class="linenos">168</span></a>            <span class="nb">isinstance</span><span class="p">(</span><span class="n">draw</span> <span class="o">:=</span> <span class="n">npc</span><span class="o">.</span><span class="n">draw_on_screen</span><span class="o">.</span><span class="n">draw</span><span class="p">,</span> <span class="n">TransparentDraw</span><span class="p">)</span>
+</span><span id="EventfulScene-168"><a href="#EventfulScene-168"><span class="linenos">168</span></a>            <span class="nb">isinstance</span><span class="p">(</span><span class="n">draw</span> <span class="o">:=</span> <span class="n">npc</span><span class="o">.</span><span class="n">drawing_on_screen</span><span class="o">.</span><span class="n">draw</span><span class="p">,</span> <span class="n">TransparentDrawing</span><span class="p">)</span>
 </span><span id="EventfulScene-169"><a href="#EventfulScene-169"><span class="linenos">169</span></a>            <span class="ow">and</span> <span class="n">draw</span><span class="o">.</span><span class="n">transparent</span>
 </span><span id="EventfulScene-170"><a href="#EventfulScene-170"><span class="linenos">170</span></a>        <span class="p">)</span>
 </span><span id="EventfulScene-171"><a href="#EventfulScene-171"><span class="linenos">171</span></a>        <span class="n">started_npc</span> <span class="o">=</span> <span class="n">npc</span><span class="o">.</span><span class="n">start_event</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">player</span><span class="p">,</span> <span class="n">turn</span><span class="p">)</span>
@@ -891,22 +891,22 @@
     
 
                             </div>
-                            <div id="EventfulScene.draw_on_screens" class="classattr">
-                                        <input id="EventfulScene.draw_on_screens-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="EventfulScene.drawing_on_screens" class="classattr">
+                                        <input id="EventfulScene.drawing_on_screens-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">draw_on_screens</span><span class="annotation">: &#39;tuple[DrawOnScreen, ...]&#39;</span>
+            <span class="name">drawing_on_screens</span><span class="annotation">: &#39;tuple[DrawingOnScreen, ...]&#39;</span>
 
-                <label class="view-source-button" for="EventfulScene.draw_on_screens-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="EventfulScene.drawing_on_screens-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#EventfulScene.draw_on_screens"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="EventfulScene.draw_on_screens-126"><a href="#EventfulScene.draw_on_screens-126"><span class="linenos">126</span></a>    <span class="nd">@cached_property</span>
-</span><span id="EventfulScene.draw_on_screens-127"><a href="#EventfulScene.draw_on_screens-127"><span class="linenos">127</span></a>    <span class="nd">@override</span>
-</span><span id="EventfulScene.draw_on_screens-128"><a href="#EventfulScene.draw_on_screens-128"><span class="linenos">128</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="EventfulScene.draw_on_screens-129"><a href="#EventfulScene.draw_on_screens-129"><span class="linenos">129</span></a>        <span class="n">context_draws</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
-</span><span id="EventfulScene.draw_on_screens-130"><a href="#EventfulScene.draw_on_screens-130"><span class="linenos">130</span></a>            <span class="n">d</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_background_events</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">draw_on_screens</span>
-</span><span id="EventfulScene.draw_on_screens-131"><a href="#EventfulScene.draw_on_screens-131"><span class="linenos">131</span></a>        <span class="p">)</span>
-</span><span id="EventfulScene.draw_on_screens-132"><a href="#EventfulScene.draw_on_screens-132"><span class="linenos">132</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="n">context_draws</span>
+    <a class="headerlink" href="#EventfulScene.drawing_on_screens"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="EventfulScene.drawing_on_screens-126"><a href="#EventfulScene.drawing_on_screens-126"><span class="linenos">126</span></a>    <span class="nd">@cached_property</span>
+</span><span id="EventfulScene.drawing_on_screens-127"><a href="#EventfulScene.drawing_on_screens-127"><span class="linenos">127</span></a>    <span class="nd">@override</span>
+</span><span id="EventfulScene.drawing_on_screens-128"><a href="#EventfulScene.drawing_on_screens-128"><span class="linenos">128</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="EventfulScene.drawing_on_screens-129"><a href="#EventfulScene.drawing_on_screens-129"><span class="linenos">129</span></a>        <span class="n">context_draws</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="EventfulScene.drawing_on_screens-130"><a href="#EventfulScene.drawing_on_screens-130"><span class="linenos">130</span></a>            <span class="n">d</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_background_events</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="EventfulScene.drawing_on_screens-131"><a href="#EventfulScene.drawing_on_screens-131"><span class="linenos">131</span></a>        <span class="p">)</span>
+</span><span id="EventfulScene.drawing_on_screens-132"><a href="#EventfulScene.drawing_on_screens-132"><span class="linenos">132</span></a>        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">drawing_on_screens</span> <span class="o">+</span> <span class="n">context_draws</span>
 </span></pre></div>
 
 
@@ -965,8 +965,8 @@
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt><a href="../scene.html#Scene">nextrpg.scene.scene.Scene</a></dt>
-                                <dd id="EventfulScene.draw_on_screen_shift" class="variable"><a href="../scene.html#Scene.draw_on_screen_shift">draw_on_screen_shift</a></dd>
-                <dd id="EventfulScene.draw_on_screens_before_shift" class="variable"><a href="../scene.html#Scene.draw_on_screens_before_shift">draw_on_screens_before_shift</a></dd>
+                                <dd id="EventfulScene.drawing_on_screen_shift" class="variable"><a href="../scene.html#Scene.drawing_on_screen_shift">drawing_on_screen_shift</a></dd>
+                <dd id="EventfulScene.drawing_on_screens_before_shift" class="variable"><a href="../scene.html#Scene.drawing_on_screens_before_shift">drawing_on_screens_before_shift</a></dd>
 
             </div>
             <div><dt><a href="../../draw/animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a></dt>
@@ -1058,7 +1058,7 @@
 </span><span id="BackgroundEvent-232"><a href="#BackgroundEvent-232"><span class="linenos">232</span></a>    <span class="p">)</span>
 </span><span id="BackgroundEvent-233"><a href="#BackgroundEvent-233"><span class="linenos">233</span></a>
 </span><span id="BackgroundEvent-234"><a href="#BackgroundEvent-234"><span class="linenos">234</span></a>    <span class="nd">@property</span>
-</span><span id="BackgroundEvent-235"><a href="#BackgroundEvent-235"><span class="linenos">235</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="BackgroundEvent-235"><a href="#BackgroundEvent-235"><span class="linenos">235</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="BackgroundEvent-236"><a href="#BackgroundEvent-236"><span class="linenos">236</span></a>        <span class="k">return</span> <span class="p">()</span>
 </span><span id="BackgroundEvent-237"><a href="#BackgroundEvent-237"><span class="linenos">237</span></a>
 </span><span id="BackgroundEvent-238"><a href="#BackgroundEvent-238"><span class="linenos">238</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">EventfulScene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventfulScene</span><span class="p">:</span>
@@ -1089,14 +1089,14 @@
                             <div id="BackgroundEvent.draw_on_screens" class="classattr">
                                         <input id="BackgroundEvent.draw_on_screens-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">draw_on_screens</span><span class="annotation">: &#39;tuple[DrawOnScreen, ...]&#39;</span>
+            <span class="name">draw_on_screens</span><span class="annotation">: &#39;tuple[DrawingOnScreen, ...]&#39;</span>
 
                 <label class="view-source-button" for="BackgroundEvent.draw_on_screens-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#BackgroundEvent.draw_on_screens"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="BackgroundEvent.draw_on_screens-234"><a href="#BackgroundEvent.draw_on_screens-234"><span class="linenos">234</span></a>    <span class="nd">@property</span>
-</span><span id="BackgroundEvent.draw_on_screens-235"><a href="#BackgroundEvent.draw_on_screens-235"><span class="linenos">235</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="BackgroundEvent.draw_on_screens-235"><a href="#BackgroundEvent.draw_on_screens-235"><span class="linenos">235</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="BackgroundEvent.draw_on_screens-236"><a href="#BackgroundEvent.draw_on_screens-236"><span class="linenos">236</span></a>        <span class="k">return</span> <span class="p">()</span>
 </span></pre></div>
 
@@ -1181,8 +1181,8 @@
 </span><span id="RpgEventScene-253"><a href="#RpgEventScene-253"><span class="linenos">253</span></a>
 </span><span id="RpgEventScene-254"><a href="#RpgEventScene-254"><span class="linenos">254</span></a>    <span class="nd">@cached_property</span>
 </span><span id="RpgEventScene-255"><a href="#RpgEventScene-255"><span class="linenos">255</span></a>    <span class="nd">@override</span>
-</span><span id="RpgEventScene-256"><a href="#RpgEventScene-256"><span class="linenos">256</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="RpgEventScene-257"><a href="#RpgEventScene-257"><span class="linenos">257</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">draw_on_screens</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_ons</span>
+</span><span id="RpgEventScene-256"><a href="#RpgEventScene-256"><span class="linenos">256</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="RpgEventScene-257"><a href="#RpgEventScene-257"><span class="linenos">257</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">drawing_on_screens</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_ons</span>
 </span><span id="RpgEventScene-258"><a href="#RpgEventScene-258"><span class="linenos">258</span></a>
 </span><span id="RpgEventScene-259"><a href="#RpgEventScene-259"><span class="linenos">259</span></a>    <span class="nd">@override</span>
 </span><span id="RpgEventScene-260"><a href="#RpgEventScene-260"><span class="linenos">260</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
@@ -1193,7 +1193,7 @@
 </span><span id="RpgEventScene-265"><a href="#RpgEventScene-265"><span class="linenos">265</span></a>        <span class="k">return</span> <span class="n">ticked</span>
 </span><span id="RpgEventScene-266"><a href="#RpgEventScene-266"><span class="linenos">266</span></a>
 </span><span id="RpgEventScene-267"><a href="#RpgEventScene-267"><span class="linenos">267</span></a>    <span class="nd">@property</span>
-</span><span id="RpgEventScene-268"><a href="#RpgEventScene-268"><span class="linenos">268</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_ons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="RpgEventScene-268"><a href="#RpgEventScene-268"><span class="linenos">268</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_ons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="RpgEventScene-269"><a href="#RpgEventScene-269"><span class="linenos">269</span></a>        <span class="k">return</span> <span class="p">()</span>
 </span></pre></div>
 
@@ -1278,14 +1278,14 @@
                             <div id="RpgEventScene.add_ons" class="classattr">
                                         <input id="RpgEventScene.add_ons-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">add_ons</span><span class="annotation">: &#39;tuple[DrawOnScreen, ...]&#39;</span>
+            <span class="name">add_ons</span><span class="annotation">: &#39;tuple[DrawingOnScreen, ...]&#39;</span>
 
                 <label class="view-source-button" for="RpgEventScene.add_ons-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#RpgEventScene.add_ons"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="RpgEventScene.add_ons-267"><a href="#RpgEventScene.add_ons-267"><span class="linenos">267</span></a>    <span class="nd">@property</span>
-</span><span id="RpgEventScene.add_ons-268"><a href="#RpgEventScene.add_ons-268"><span class="linenos">268</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_ons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="RpgEventScene.add_ons-268"><a href="#RpgEventScene.add_ons-268"><span class="linenos">268</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_ons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="RpgEventScene.add_ons-269"><a href="#RpgEventScene.add_ons-269"><span class="linenos">269</span></a>        <span class="k">return</span> <span class="p">()</span>
 </span></pre></div>
 
@@ -1297,9 +1297,9 @@
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt><a href="../scene.html#Scene">nextrpg.scene.scene.Scene</a></dt>
-                                <dd id="RpgEventScene.draw_on_screen_shift" class="variable"><a href="../scene.html#Scene.draw_on_screen_shift">draw_on_screen_shift</a></dd>
-                <dd id="RpgEventScene.draw_on_screens" class="variable"><a href="../scene.html#Scene.draw_on_screens">draw_on_screens</a></dd>
-                <dd id="RpgEventScene.draw_on_screens_before_shift" class="variable"><a href="../scene.html#Scene.draw_on_screens_before_shift">draw_on_screens_before_shift</a></dd>
+                                <dd id="RpgEventScene.drawing_on_screen_shift" class="variable"><a href="../scene.html#Scene.drawing_on_screen_shift">drawing_on_screen_shift</a></dd>
+                <dd id="RpgEventScene.drawing_on_screens" class="variable"><a href="../scene.html#Scene.drawing_on_screens">drawing_on_screens</a></dd>
+                <dd id="RpgEventScene.drawing_on_screens_before_shift" class="variable"><a href="../scene.html#Scene.drawing_on_screens_before_shift">drawing_on_screens_before_shift</a></dd>
                 <dd id="RpgEventScene.event" class="function"><a href="../scene.html#Scene.event">event</a></dd>
 
             </div>

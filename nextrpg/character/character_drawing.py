@@ -4,16 +4,16 @@ from typing import Self
 
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw import Draw
+from nextrpg.draw.drawing import Drawing
 
 
 @dataclass(frozen=True)
-class CharacterDraw(ABC):
+class CharacterDrawing(ABC):
     direction: Direction
 
     @property
     @abstractmethod
-    def draw(self) -> Draw: ...
+    def drawing(self) -> Drawing: ...
 
     @abstractmethod
     def turn(self, direction: Direction) -> Self: ...

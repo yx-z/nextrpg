@@ -41,9 +41,10 @@ class WindowConfig(UpdateFromSave[dict[str, Any]]):
     allow_resize: bool = True
     icon: str | Path | None = None
 
+    @property
     @override
-    def save(self) -> dict[str, Any]:
-        return {"size": self.size.save(), "mode": self.mode.save()}
+    def save_data(self) -> dict[str, Any]:
+        return {"size": self.size.save_data, "mode": self.mode.save_data}
 
     @override
     def update(self, data: dict[str, Any]) -> Self:

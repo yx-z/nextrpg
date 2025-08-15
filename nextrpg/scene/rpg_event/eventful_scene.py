@@ -16,7 +16,7 @@ from nextrpg.core.dataclass_with_init import (
 from nextrpg.core.log import Log
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw import DrawOnScreen, TransparentDraw
+from nextrpg.draw.drawing import DrawingOnScreen, TransparentDrawing
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.scene.scene import Scene
@@ -124,11 +124,11 @@ class EventfulScene(EventAsAttr, Scene):
 
     @cached_property
     @override
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         context_draws = tuple(
             d for c in self._background_events for d in c.draw_on_screens
         )
-        return super().draw_on_screens + context_draws
+        return super().drawing_on_screens + context_draws
 
     def get_background_event(
         self, sentinel: BackgroundEventSentinel
@@ -164,7 +164,7 @@ class EventfulScene(EventAsAttr, Scene):
 
     def _start_event(self, npc: NpcOnScreen, time_delta: Millisecond) -> Self:
         turn = not (
-            isinstance(draw := npc.draw_on_screen.draw, TransparentDraw)
+            isinstance(draw := npc.drawing_on_screen.draw, TransparentDrawing)
             and draw.transparent
         )
         started_npc = npc.start_event(self.player, turn)
@@ -231,7 +231,7 @@ class BackgroundEvent(ABC):
     )
 
     @property
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+    def draw_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return ()
 
     def apply(self, scene: EventfulScene) -> EventfulScene:
@@ -252,8 +252,8 @@ class RpgEventScene[R = None](Scene):
 
     @cached_property
     @override
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return self.scene.draw_on_screens + self.add_ons
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return self.scene.drawing_on_screens + self.add_ons
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
@@ -264,7 +264,7 @@ class RpgEventScene[R = None](Scene):
         return ticked
 
     @property
-    def add_ons(self) -> tuple[DrawOnScreen, ...]:
+    def add_ons(self) -> tuple[DrawingOnScreen, ...]:
         return ()
 
 

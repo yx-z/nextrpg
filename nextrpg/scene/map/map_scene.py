@@ -8,12 +8,12 @@ from typing import NamedTuple, override
 
 from cachetools import LRUCache
 
-from nextrpg.character.character_draw import CharacterDraw
+from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec, to_strict
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.character.polygon_character_draw import PolygonCharacterDraw
+from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
 from nextrpg.core.color import TRANSPARENT
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_init import (
@@ -24,11 +24,11 @@ from nextrpg.core.dataclass_with_init import (
 from nextrpg.core.direction import Direction
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond, get_timepoint
-from nextrpg.draw.draw import (
-    DrawOnScreen,
-    PolygonDraw,
+from nextrpg.draw.drawing import (
+    DrawingOnScreen,
+    PolygonDrawing,
     PolygonOnScreen,
-    RectangleDraw,
+    RectangleDrawing,
     RectangleOnScreen,
 )
 from nextrpg.global_config.global_config import config
@@ -54,7 +54,7 @@ class MapScene(EventfulScene):
     player: PlayerOnScreen = default(
         lambda self: self.init_player(self.player_spec)
     )
-    _debug_visuals: tuple[DrawOnScreen, ...] = default(
+    _debug_visuals: tuple[DrawingOnScreen, ...] = default(
         lambda self: self.map_helper.collision_visuals
         + self._npc_paths
         + self._move_visuals
@@ -82,7 +82,7 @@ class MapScene(EventfulScene):
 
     @cached_property
     @override
-    def draw_on_screen_shift(self) -> Coordinate:
+    def drawing_on_screen_shift(self) -> Coordinate:
         player_coord = self.player.center
         shift = center_player(player_coord, self.map_helper.map_size)
         log.debug(
@@ -92,7 +92,7 @@ class MapScene(EventfulScene):
 
     @cached_property
     @override
-    def draw_on_screens_before_shift(self) -> tuple[DrawOnScreen, ...]:
+    def drawing_on_screens_before_shift(self) -> tuple[DrawingOnScreen, ...]:
         return (
             self.map_helper.background
             + self._foreground_and_characters
@@ -101,12 +101,12 @@ class MapScene(EventfulScene):
         )
 
     @cached_property
-    def _foreground_and_characters(self) -> tuple[DrawOnScreen, ...]:
+    def _foreground_and_characters(self) -> tuple[DrawingOnScreen, ...]:
         characters = (self.player,) + self.npcs
         layer_bottom_draws = list(
             draw
             for character in characters
-            for draw in self.map_helper.layer_bottom_and_draw(character)
+            for draw in self.map_helper.layer_bottom_and_drawing(character)
         )
         foregrounds = [t for layer in self.map_helper.foreground for t in layer]
         layers = sorted(foregrounds + layer_bottom_draws, key=lambda x: x[:2])
@@ -125,7 +125,7 @@ class MapScene(EventfulScene):
         return (self.move,)
 
     @cached_property
-    def _move_visuals(self) -> tuple[DrawOnScreen, ...]:
+    def _move_visuals(self) -> tuple[DrawingOnScreen, ...]:
         if config().debug and (color := config().debug.move_object_color):
             return tuple(m.fill(color) for m in self._move_polys)
         return ()
@@ -139,13 +139,13 @@ class MapScene(EventfulScene):
 
     def _move(self, move: Move, time_delta: Millisecond) -> Scene | None:
         move_poly = get_polygon(self.map_helper.get_object(move.trigger_object))
-        if self.player.draw_on_screen.rectangle_on_screen.collide(move_poly):
+        if self.player.drawing_on_screen.rectangle_on_screen.collide(move_poly):
             to_scene = move.to_scene(self, self.player)
             return to_scene.tick(time_delta)
         return None
 
     @cached_property
-    def _npc_paths(self) -> tuple[DrawOnScreen, ...]:
+    def _npc_paths(self) -> tuple[DrawingOnScreen, ...]:
         if not (debug := config().debug) or not (color := debug.npc_path_color):
             return ()
         return tuple(
@@ -160,7 +160,7 @@ class MapScene(EventfulScene):
         if not (poly := get_polygon(obj)):
             return NpcOnScreen(coordinate=coord, spec=to_strict(spec))
 
-        if isinstance(spec.character, CharacterDraw):
+        if isinstance(spec.character, CharacterDrawing):
             npc = MovingNpcOnScreen(
                 coordinate=coord, path=poly, spec=to_strict(spec)
             )
@@ -170,13 +170,13 @@ class MapScene(EventfulScene):
 
         color = spec.character or TRANSPARENT
         if isinstance(poly, RectangleOnScreen):
-            poly_draw = RectangleDraw(poly.size, color)
+            poly_draw = RectangleDrawing(poly.size, color)
         else:
             points = tuple(p - coord for p in poly.points)
-            poly_draw = PolygonDraw(points, color)
+            poly_draw = PolygonDrawing(points, color)
 
         poly_spec = to_strict(
-            spec, PolygonCharacterDraw(Direction.DOWN, poly_draw)
+            spec, PolygonCharacterDrawing(Direction.DOWN, poly_draw)
         )
         npc = NpcOnScreen(coordinate=coord, spec=poly_spec)
         if self.save_io:

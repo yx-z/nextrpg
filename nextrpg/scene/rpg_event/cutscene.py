@@ -3,7 +3,7 @@ from functools import wraps
 from types import FunctionType
 
 from nextrpg.core.coordinate import ORIGIN
-from nextrpg.draw.draw import RectangleOnScreen
+from nextrpg.draw.drawing import RectangleOnScreen
 from nextrpg.global_config.cutscene_config import CutsceneConfig
 from nextrpg.global_config.global_config import config
 from nextrpg.gui.area import gui_height, gui_size

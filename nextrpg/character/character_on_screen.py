@@ -4,7 +4,7 @@ from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Any, Self, override
 
-from nextrpg.character.character_draw import CharacterDraw
+from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
@@ -16,8 +16,8 @@ from nextrpg.core.direction import Direction
 from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.sizeable import Sizeable
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw import Draw, DrawOnScreen, RectangleOnScreen
-from nextrpg.draw.group import Group
+from nextrpg.draw.drawing import Drawing, DrawingOnScreen, RectangleOnScreen
+from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.global_config import config
@@ -27,14 +27,14 @@ from nextrpg.global_config.global_config import config
 class _BaseCharacterSpec:
     unique_name: str
     collide_with_others: bool = True
-    avatar: Draw | Group | None = None
+    avatar: Drawing | DrawingGroup | None = None
     display_name: str = default(lambda self: self.unique_name)
     config: CharacterConfig = field(default_factory=lambda: config().character)
 
 
 @dataclass(frozen=True, kw_only=True)
 class CharacterSpec(_BaseCharacterSpec):
-    character: CharacterDraw
+    character: CharacterDrawing
 
 
 @dataclass_with_init(frozen=True)
@@ -43,7 +43,7 @@ class CharacterOnScreen(EventAsAttr, Sizeable, UpdateFromSave):
     coordinate: Coordinate
     config: CharacterConfig = field(default_factory=lambda: config().character)
     _: KW_ONLY = not_constructor_below()
-    character: CharacterDraw = default(lambda self: self.spec.character)
+    character: CharacterDrawing = default(lambda self: self.spec.character)
     _event_started: bool = False
 
     @property
@@ -52,7 +52,7 @@ class CharacterOnScreen(EventAsAttr, Sizeable, UpdateFromSave):
 
     @property
     def size(self) -> Size:
-        return self.draw_on_screen.size
+        return self.drawing_on_screen.size
 
     @property
     def display_name(self) -> str:
@@ -64,11 +64,11 @@ class CharacterOnScreen(EventAsAttr, Sizeable, UpdateFromSave):
         return replace(self, character=self.character.tick_idle(time_delta))
 
     @property
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+    def draw_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         debug_visuals = tuple(
             d for d in (self._collision_visual, self._start_event_visual) if d
         )
-        return (self.draw_on_screen,) + debug_visuals
+        return (self.drawing_on_screen,) + debug_visuals
 
     @cached_property
     def collision_rectangle(self) -> RectangleOnScreen:
@@ -82,8 +82,8 @@ class CharacterOnScreen(EventAsAttr, Sizeable, UpdateFromSave):
         return RectangleOnScreen(coord, size)
 
     @property
-    def draw_on_screen(self) -> DrawOnScreen:
-        return DrawOnScreen(self.coordinate, self.character.draw)
+    def drawing_on_screen(self) -> DrawingOnScreen:
+        return DrawingOnScreen(self.coordinate, self.character.drawing)
 
     def same_name(self, other: CharacterOnScreen) -> bool:
         return self.spec.unique_name == other.spec.unique_name
@@ -106,10 +106,11 @@ class CharacterOnScreen(EventAsAttr, Sizeable, UpdateFromSave):
         return super().key + (self.spec.unique_name,)
 
     @override
-    def save(self) -> dict[str, Any]:
+    @property
+    def save_data(self) -> dict[str, Any]:
         return {
-            "coordinate": self.coordinate.save(),
-            "direction": self.character.direction.save(),
+            "coordinate": self.coordinate.save_data,
+            "direction": self.character.direction.save_data,
         }
 
     @override
@@ -126,7 +127,7 @@ class CharacterOnScreen(EventAsAttr, Sizeable, UpdateFromSave):
         return RectangleOnScreen(coord, size)
 
     @cached_property
-    def _collision_visual(self) -> DrawOnScreen | None:
+    def _collision_visual(self) -> DrawingOnScreen | None:
         if (debug := config().debug) and (
             color := debug.collision_rectangle_color
         ):
@@ -134,7 +135,7 @@ class CharacterOnScreen(EventAsAttr, Sizeable, UpdateFromSave):
         return None
 
     @cached_property
-    def _start_event_visual(self) -> DrawOnScreen | None:
+    def _start_event_visual(self) -> DrawingOnScreen | None:
         if (debug := config().debug) and (
             color := debug.start_event_rectangle_color
         ):

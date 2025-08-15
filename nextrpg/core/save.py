@@ -23,8 +23,9 @@ type SaveData = _Primitive | bytes | list["SaveData"] | dict[str, "SaveData"]
 
 
 class Savable[_S](ABC):
+    @property
     @abstractmethod
-    def save(self) -> _S: ...
+    def save_data(self) -> _S: ...
 
     @property
     def key(self) -> tuple[str, ...]:
@@ -54,7 +55,9 @@ class _ABCEnumMeta(ABCMeta, EnumMeta):
 
 
 class LoadFromSaveEnum(LoadFromSave[str], Enum, metaclass=_ABCEnumMeta):
-    def save(self) -> str:
+    @override
+    @property
+    def save_data(self) -> str:
         return self.name
 
     @override
@@ -90,8 +93,7 @@ class SaveIo:
 
     def save(self, savable: Savable) -> Future:
         key = _concat(savable.key)
-        data = savable.save()
-        future = self._thread.submit(self._save, key, data)
+        future = self._thread.submit(self._save, key, savable.save_data)
         future.add_done_callback(
             lambda _: self._log.debug(t"Saved {key} at {self.slot}")
         )

@@ -9,7 +9,7 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
-from nextrpg.draw.draw import DrawOnScreen
+from nextrpg.draw.drawing import DrawingOnScreen
 from nextrpg.draw.text_on_screen import TextOnScreen
 
 
@@ -23,9 +23,9 @@ class Typewriter(AnimatedOnScreen):
 
     @cached_property
     @override
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         text = self.text_on_screen.text[: self._index + 1]
-        return replace(self.text_on_screen, text=text).draw_on_screens
+        return replace(self.text_on_screen, text=text).drawing_on_screens
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:

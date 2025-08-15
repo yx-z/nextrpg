@@ -4,7 +4,7 @@ from functools import cached_property
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.sizeable import Sizeable
-from nextrpg.draw.draw import DrawOnScreen
+from nextrpg.draw.drawing import DrawingOnScreen
 from nextrpg.draw.text import Text, TextGroup
 
 
@@ -18,5 +18,5 @@ class TextOnScreen(Sizeable):
         return self.text.size
 
     @cached_property
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        return self.text.group.draw_on_screens(self.top_left)
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return self.text.group.drawing_on_screens(self.top_left)

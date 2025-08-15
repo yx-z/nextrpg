@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import override
 
 from nextrpg.core.save import LoadFromSaveList
 
@@ -18,7 +19,9 @@ class Color(LoadFromSaveList):
     def tuple(self) -> tuple[int, int, int, Alpha]:
         return self.red, self.green, self.blue, self.alpha
 
-    def save(self) -> list[int]:
+    @override
+    @property
+    def save_data(self) -> list[int]:
         return list(self.tuple)
 
 

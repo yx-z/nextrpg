@@ -67,7 +67,7 @@
                                 <a class="function" href="#Coordinate.distance">distance</a>
                         </li>
                         <li>
-                                <a class="function" href="#Coordinate.save">save</a>
+                                <a class="variable" href="#Coordinate.save_data">save_data</a>
                         </li>
                 </ul>
 
@@ -113,7 +113,7 @@
 </span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">atan2</span><span class="p">,</span> <span class="n">degrees</span><span class="p">,</span> <span class="n">hypot</span><span class="p">,</span> <span class="n">sqrt</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Self</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Self</span><span class="p">,</span> <span class="n">override</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Height</span><span class="p">,</span> <span class="n">Pixel</span><span class="p">,</span> <span class="n">Size</span><span class="p">,</span> <span class="n">Width</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.direction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">DirectionalOffset</span>
@@ -219,34 +219,36 @@
 </span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>        <span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">top</span>
 </span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="k">return</span> <span class="n">hypot</span><span class="p">(</span><span class="n">dx</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">dy</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>
-</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="n">ORIGIN</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="nd">@override</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="nd">@property</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>
-</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Moving</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>
-</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="o">...</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>
-</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>
-</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_angle_difference</span><span class="p">(</span><span class="n">a1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">a2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>    <span class="k">return</span> <span class="nb">abs</span><span class="p">((</span><span class="n">a1</span> <span class="o">-</span> <span class="n">a2</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span> <span class="o">-</span> <span class="mi">180</span><span class="p">)</span>
-</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>
-</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>
-</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a><span class="n">_ANGLE_TO_DIRECTION</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>    <span class="mi">0</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
-</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a>    <span class="mi">45</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>    <span class="mi">90</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="mi">135</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="mi">180</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>    <span class="mi">225</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>    <span class="mi">270</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>    <span class="mi">315</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="p">}</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a><span class="n">ORIGIN</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Moving</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_angle_difference</span><span class="p">(</span><span class="n">a1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">a2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>    <span class="k">return</span> <span class="nb">abs</span><span class="p">((</span><span class="n">a1</span> <span class="o">-</span> <span class="n">a2</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span> <span class="o">-</span> <span class="mi">180</span><span class="p">)</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>
+</span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="n">_ANGLE_TO_DIRECTION</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>    <span class="mi">0</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a>    <span class="mi">45</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_RIGHT</span><span class="p">,</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a>    <span class="mi">90</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a>    <span class="mi">135</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">UP_LEFT</span><span class="p">,</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a>    <span class="mi">180</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>    <span class="mi">225</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_LEFT</span><span class="p">,</span>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a>    <span class="mi">270</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a>    <span class="mi">315</span><span class="p">:</span> <span class="n">Direction</span><span class="o">.</span><span class="n">DOWN_RIGHT</span><span class="p">,</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="p">}</span>
 </span></pre></div>
 
 
@@ -361,8 +363,10 @@
 </span><span id="Coordinate-110"><a href="#Coordinate-110"><span class="linenos">110</span></a>        <span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="n">top</span>
 </span><span id="Coordinate-111"><a href="#Coordinate-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="n">hypot</span><span class="p">(</span><span class="n">dx</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">dy</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 </span><span id="Coordinate-112"><a href="#Coordinate-112"><span class="linenos">112</span></a>
-</span><span id="Coordinate-113"><a href="#Coordinate-113"><span class="linenos">113</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Coordinate-114"><a href="#Coordinate-114"><span class="linenos">114</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+</span><span id="Coordinate-113"><a href="#Coordinate-113"><span class="linenos">113</span></a>    <span class="nd">@override</span>
+</span><span id="Coordinate-114"><a href="#Coordinate-114"><span class="linenos">114</span></a>    <span class="nd">@property</span>
+</span><span id="Coordinate-115"><a href="#Coordinate-115"><span class="linenos">115</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+</span><span id="Coordinate-116"><a href="#Coordinate-116"><span class="linenos">116</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -561,19 +565,19 @@
     
 
                             </div>
-                            <div id="Coordinate.save" class="classattr">
-                                        <input id="Coordinate.save-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-            
-        <span class="def">def</span>
-        <span class="name">save</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;list[int]&#39;</span>:</span></span>
+                            <div id="Coordinate.save_data" class="classattr">
+                                        <input id="Coordinate.save_data-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">save_data</span><span class="annotation">: &#39;list[int]&#39;</span>
 
-                <label class="view-source-button" for="Coordinate.save-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="Coordinate.save_data-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Coordinate.save"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Coordinate.save-113"><a href="#Coordinate.save-113"><span class="linenos">113</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Coordinate.save-114"><a href="#Coordinate.save-114"><span class="linenos">114</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+    <a class="headerlink" href="#Coordinate.save_data"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Coordinate.save_data-113"><a href="#Coordinate.save_data-113"><span class="linenos">113</span></a>    <span class="nd">@override</span>
+</span><span id="Coordinate.save_data-114"><a href="#Coordinate.save_data-114"><span class="linenos">114</span></a>    <span class="nd">@property</span>
+</span><span id="Coordinate.save_data-115"><a href="#Coordinate.save_data-115"><span class="linenos">115</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+</span><span id="Coordinate.save_data-116"><a href="#Coordinate.save_data-116"><span class="linenos">116</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -617,11 +621,11 @@
 
     </div>
     <a class="headerlink" href="#Moving"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Moving-120"><a href="#Moving-120"><span class="linenos">120</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Moving</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-</span><span id="Moving-121"><a href="#Moving-121"><span class="linenos">121</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="Moving-122"><a href="#Moving-122"><span class="linenos">122</span></a>
-</span><span id="Moving-123"><a href="#Moving-123"><span class="linenos">123</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Moving-124"><a href="#Moving-124"><span class="linenos">124</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="o">...</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Moving-122"><a href="#Moving-122"><span class="linenos">122</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Moving</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+</span><span id="Moving-123"><a href="#Moving-123"><span class="linenos">123</span></a>    <span class="n">coordinate</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="Moving-124"><a href="#Moving-124"><span class="linenos">124</span></a>
+</span><span id="Moving-125"><a href="#Moving-125"><span class="linenos">125</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Moving-126"><a href="#Moving-126"><span class="linenos">126</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="o">...</span>
 </span></pre></div>
 
 
@@ -653,8 +657,8 @@ inheritance.</p>
 
     </div>
     <a class="headerlink" href="#Moving.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Moving.tick-123"><a href="#Moving.tick-123"><span class="linenos">123</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Moving.tick-124"><a href="#Moving.tick-124"><span class="linenos">124</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="o">...</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Moving.tick-125"><a href="#Moving.tick-125"><span class="linenos">125</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Moving.tick-126"><a href="#Moving.tick-126"><span class="linenos">126</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="o">...</span>
 </span></pre></div>
 
 

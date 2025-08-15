@@ -105,7 +105,7 @@
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>    <span class="n">not_constructor_below</span><span class="p">,</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="p">)</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawingOnScreen</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.fade</span><span class="w"> </span><span class="kn">import</span> <span class="n">FadeOut</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.rpg_event.eventful_scene</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">BackgroundEvent</span><span class="p">,</span>
@@ -126,8 +126,8 @@
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
 </span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="nd">@property</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="nd">@override</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_ons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_ons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade</span><span class="o">.</span><span class="n">drawing_on_screens</span>
 </span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>
 </span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="nd">@override</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_after_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
@@ -158,8 +158,8 @@
 </span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="n">fade</span><span class="p">:</span> <span class="n">FadeOut</span>
 </span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
 </span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="nd">@override</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">drawing_on_screens</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>
 </span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="nd">@override</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
@@ -203,8 +203,8 @@
 </span><span id="FadeOutScene-29"><a href="#FadeOutScene-29"><span class="linenos">29</span></a>
 </span><span id="FadeOutScene-30"><a href="#FadeOutScene-30"><span class="linenos">30</span></a>    <span class="nd">@property</span>
 </span><span id="FadeOutScene-31"><a href="#FadeOutScene-31"><span class="linenos">31</span></a>    <span class="nd">@override</span>
-</span><span id="FadeOutScene-32"><a href="#FadeOutScene-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_ons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="FadeOutScene-33"><a href="#FadeOutScene-33"><span class="linenos">33</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="FadeOutScene-32"><a href="#FadeOutScene-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_ons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="FadeOutScene-33"><a href="#FadeOutScene-33"><span class="linenos">33</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade</span><span class="o">.</span><span class="n">drawing_on_screens</span>
 </span><span id="FadeOutScene-34"><a href="#FadeOutScene-34"><span class="linenos">34</span></a>
 </span><span id="FadeOutScene-35"><a href="#FadeOutScene-35"><span class="linenos">35</span></a>    <span class="nd">@override</span>
 </span><span id="FadeOutScene-36"><a href="#FadeOutScene-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick_after_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">ticked</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Scene</span><span class="p">:</span>
@@ -283,7 +283,7 @@
                             <div id="FadeOutScene.add_ons" class="classattr">
                                         <input id="FadeOutScene.add_ons-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">add_ons</span><span class="annotation">: tuple[<a href="../../draw/draw.html#DrawOnScreen">nextrpg.draw.draw.DrawOnScreen</a>, ...]</span>
+            <span class="name">add_ons</span><span class="annotation">: tuple[<a href="../../draw/drawing.html#DrawingOnScreen">nextrpg.draw.drawing.DrawingOnScreen</a>, ...]</span>
 
                 <label class="view-source-button" for="FadeOutScene.add_ons-view-source"><span>View Source</span></label>
 
@@ -291,8 +291,8 @@
     <a class="headerlink" href="#FadeOutScene.add_ons"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="FadeOutScene.add_ons-30"><a href="#FadeOutScene.add_ons-30"><span class="linenos">30</span></a>    <span class="nd">@property</span>
 </span><span id="FadeOutScene.add_ons-31"><a href="#FadeOutScene.add_ons-31"><span class="linenos">31</span></a>    <span class="nd">@override</span>
-</span><span id="FadeOutScene.add_ons-32"><a href="#FadeOutScene.add_ons-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_ons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="FadeOutScene.add_ons-33"><a href="#FadeOutScene.add_ons-33"><span class="linenos">33</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="FadeOutScene.add_ons-32"><a href="#FadeOutScene.add_ons-32"><span class="linenos">32</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_ons</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="FadeOutScene.add_ons-33"><a href="#FadeOutScene.add_ons-33"><span class="linenos">33</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fade</span><span class="o">.</span><span class="n">drawing_on_screens</span>
 </span></pre></div>
 
 
@@ -336,9 +336,9 @@
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt><a href="../scene.html#Scene">nextrpg.scene.scene.Scene</a></dt>
-                                <dd id="FadeOutScene.draw_on_screen_shift" class="variable"><a href="../scene.html#Scene.draw_on_screen_shift">draw_on_screen_shift</a></dd>
-                <dd id="FadeOutScene.draw_on_screens" class="variable"><a href="../scene.html#Scene.draw_on_screens">draw_on_screens</a></dd>
-                <dd id="FadeOutScene.draw_on_screens_before_shift" class="variable"><a href="../scene.html#Scene.draw_on_screens_before_shift">draw_on_screens_before_shift</a></dd>
+                                <dd id="FadeOutScene.drawing_on_screen_shift" class="variable"><a href="../scene.html#Scene.drawing_on_screen_shift">drawing_on_screen_shift</a></dd>
+                <dd id="FadeOutScene.drawing_on_screens" class="variable"><a href="../scene.html#Scene.drawing_on_screens">drawing_on_screens</a></dd>
+                <dd id="FadeOutScene.drawing_on_screens_before_shift" class="variable"><a href="../scene.html#Scene.drawing_on_screens_before_shift">drawing_on_screens_before_shift</a></dd>
                 <dd id="FadeOutScene.event" class="function"><a href="../scene.html#Scene.event">event</a></dd>
 
             </div>
@@ -390,8 +390,8 @@
 </span><span id="BackgroundFadeOut-61"><a href="#BackgroundFadeOut-61"><span class="linenos">61</span></a>    <span class="n">fade</span><span class="p">:</span> <span class="n">FadeOut</span>
 </span><span id="BackgroundFadeOut-62"><a href="#BackgroundFadeOut-62"><span class="linenos">62</span></a>
 </span><span id="BackgroundFadeOut-63"><a href="#BackgroundFadeOut-63"><span class="linenos">63</span></a>    <span class="nd">@override</span>
-</span><span id="BackgroundFadeOut-64"><a href="#BackgroundFadeOut-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="BackgroundFadeOut-65"><a href="#BackgroundFadeOut-65"><span class="linenos">65</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="BackgroundFadeOut-64"><a href="#BackgroundFadeOut-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="BackgroundFadeOut-65"><a href="#BackgroundFadeOut-65"><span class="linenos">65</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">drawing_on_screens</span>
 </span><span id="BackgroundFadeOut-66"><a href="#BackgroundFadeOut-66"><span class="linenos">66</span></a>
 </span><span id="BackgroundFadeOut-67"><a href="#BackgroundFadeOut-67"><span class="linenos">67</span></a>    <span class="nd">@override</span>
 </span><span id="BackgroundFadeOut-68"><a href="#BackgroundFadeOut-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
@@ -435,15 +435,15 @@
                     <div class="decorator decorator-override">@override</div>
 
         <span class="def">def</span>
-        <span class="name">draw_on_screens</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="../../draw/draw.html#DrawOnScreen">nextrpg.draw.draw.DrawOnScreen</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>:</span></span>
+        <span class="name">draw_on_screens</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="nb">tuple</span><span class="p">[</span><span class="n"><a href="../../draw/drawing.html#DrawingOnScreen">nextrpg.draw.drawing.DrawingOnScreen</a></span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>:</span></span>
 
                 <label class="view-source-button" for="BackgroundFadeOut.draw_on_screens-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#BackgroundFadeOut.draw_on_screens"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="BackgroundFadeOut.draw_on_screens-63"><a href="#BackgroundFadeOut.draw_on_screens-63"><span class="linenos">63</span></a>    <span class="nd">@override</span>
-</span><span id="BackgroundFadeOut.draw_on_screens-64"><a href="#BackgroundFadeOut.draw_on_screens-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="BackgroundFadeOut.draw_on_screens-65"><a href="#BackgroundFadeOut.draw_on_screens-65"><span class="linenos">65</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="BackgroundFadeOut.draw_on_screens-64"><a href="#BackgroundFadeOut.draw_on_screens-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="BackgroundFadeOut.draw_on_screens-65"><a href="#BackgroundFadeOut.draw_on_screens-65"><span class="linenos">65</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">drawing_on_screens</span>
 </span></pre></div>
 
 

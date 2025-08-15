@@ -11,12 +11,12 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.animated_on_screen import AnimatedOnScreen
-from nextrpg.draw.draw import DrawOnScreen
+from nextrpg.draw.drawing import DrawingOnScreen
 from nextrpg.global_config.global_config import config
 
 type Resource = (
-    DrawOnScreen
-    | tuple[DrawOnScreen, ...]
+    DrawingOnScreen
+    | tuple[DrawingOnScreen, ...]
     | AnimatedOnScreen
     | tuple[AnimatedOnScreen, ...]
 )
@@ -33,14 +33,14 @@ class _Fade(AnimatedOnScreen, ABC):
 
     @cached_property
     @override
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if self._timer.complete:
             return self._complete
         if self._timer.elapsed == 0:
             return self._start
 
         alpha = alpha_from_percentage(self._percentage)
-        return tuple(d.set_alpha(alpha) for d in self._draw_on_screens)
+        return tuple(d.set_alpha(alpha) for d in self._drawing_on_screens)
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
@@ -58,22 +58,22 @@ class _Fade(AnimatedOnScreen, ABC):
         return self._timer.complete
 
     @cached_property
-    def _draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        if isinstance(self.resource, DrawOnScreen):
+    def _drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        if isinstance(self.resource, DrawingOnScreen):
             return (self.resource,)
         if isinstance(self.resource, AnimatedOnScreen):
-            return self.resource.draw_on_screens
+            return self.resource.drawing_on_screens
         if _is_animated_tuple(self.resource):
-            return tuple(d for a in self.resource for d in a.draw_on_screens)
+            return tuple(d for a in self.resource for d in a.drawing_on_screens)
         return self.resource
 
     @property
     @abstractmethod
-    def _start(self) -> tuple[DrawOnScreen, ...]: ...
+    def _start(self) -> tuple[DrawingOnScreen, ...]: ...
 
     @property
     @abstractmethod
-    def _complete(self) -> tuple[DrawOnScreen, ...]: ...
+    def _complete(self) -> tuple[DrawingOnScreen, ...]: ...
 
     @property
     @abstractmethod
@@ -83,13 +83,13 @@ class _Fade(AnimatedOnScreen, ABC):
 class FadeIn(_Fade):
     @override
     @property
-    def _start(self) -> tuple[DrawOnScreen, ...]:
+    def _start(self) -> tuple[DrawingOnScreen, ...]:
         return ()
 
     @override
     @property
-    def _complete(self) -> tuple[DrawOnScreen, ...]:
-        return self._draw_on_screens
+    def _complete(self) -> tuple[DrawingOnScreen, ...]:
+        return self._drawing_on_screens
 
     @override
     @property
@@ -105,12 +105,12 @@ class FadeOut(_Fade):
 
     @override
     @property
-    def _start(self) -> tuple[DrawOnScreen, ...]:
-        return self._draw_on_screens
+    def _start(self) -> tuple[DrawingOnScreen, ...]:
+        return self._drawing_on_screens
 
     @override
     @property
-    def _complete(self) -> tuple[DrawOnScreen, ...]:
+    def _complete(self) -> tuple[DrawingOnScreen, ...]:
         return ()
 
 

@@ -7,14 +7,18 @@ from typing import Literal, override
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
-from nextrpg.draw.draw import (
-    Draw,
-    DrawOnScreen,
+from nextrpg.draw.drawing import (
+    Drawing,
+    DrawingOnScreen,
     PolygonOnScreen,
-    RectangleDraw,
+    RectangleDrawing,
     RectangleOnScreen,
 )
-from nextrpg.draw.group import Group, GroupOnScreen, RelativeDraw
+from nextrpg.draw.drawing_group import (
+    DrawingGroup,
+    DrawingGroupOnScreen,
+    RelativeDrawing,
+)
 from nextrpg.draw.text import Text, TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.global_config.say_event_config import SayEventConfig
@@ -28,24 +32,29 @@ class SayEventAddOn:
     message: str | Text | TextGroup
 
     @cached_property
-    def background(self) -> tuple[DrawOnScreen, ...]:
-        contents = [RelativeDraw(self._text.group, ORIGIN)]
+    def background(self) -> tuple[DrawingOnScreen, ...]:
+        contents = [RelativeDrawing(self._text.group, ORIGIN)]
         if self._name_relative_to_text:
             contents.append(self._name_relative_to_text)
         if self._avatar_relative_to_text:
             contents.append(self._avatar_relative_to_text)
-        content = Group(tuple(contents))
+        content = DrawingGroup(tuple(contents))
 
         background, shift = self._background_relative_to_text
-        add_on = Group(
-            (RelativeDraw(background, ORIGIN), RelativeDraw(content, -shift))
+        add_on = DrawingGroup(
+            (
+                RelativeDrawing(background, ORIGIN),
+                RelativeDrawing(content, -shift),
+            )
         )
-        add_on_on_screen = GroupOnScreen(self.add_on_top_left, add_on)
+        add_on_on_screen = DrawingGroupOnScreen(self.add_on_top_left, add_on)
 
         text_coord = add_on_on_screen.coordinate(self._text.group)
-        text_add_on = TextOnScreen(text_coord, self._text).draw_on_screens
+        text_add_on = TextOnScreen(text_coord, self._text).drawing_on_screens
         return tuple(
-            d for d in add_on_on_screen.draw_on_screens if d not in text_add_on
+            d
+            for d in add_on_on_screen.drawing_on_screens
+            if d not in text_add_on
         )
 
     @cached_property
@@ -58,7 +67,7 @@ class SayEventAddOn:
         return self._center_to_top_left(self.config.scene_coordinate)
 
     @property
-    def avatar(self) -> Draw | Group | None:
+    def avatar(self) -> Drawing | DrawingGroup | None:
         return self.config.avatar
 
     @property
@@ -70,35 +79,35 @@ class SayEventAddOn:
     def _center_to_top_left(self, center: Coordinate) -> Coordinate:
         return (
             center
-            - self._background_relative_to_text.draw.size
+            - self._background_relative_to_text.drawing.size
             / WidthAndHeightScaling(2)
         )
 
     @cached_property
-    def _background_relative_to_text(self) -> RelativeDraw:
+    def _background_relative_to_text(self) -> RelativeDrawing:
         shift = -self.config.padding
         size = self._text.size + self.config.padding * WidthAndHeightScaling(2)
         if self._name_relative_to_text:
             extra_height = (
-                self._name_relative_to_text.draw.height
+                self._name_relative_to_text.drawing.height
                 + self.config.padding.height
             )
             shift -= extra_height
             size += extra_height
         if self._avatar_relative_to_text:
             extra_width = (
-                self._avatar_relative_to_text.draw.size.width
+                self._avatar_relative_to_text.drawing.size.width
                 + self.config.padding.width
             )
             shift -= extra_width
             size += extra_width
-        rect = RectangleDraw(
+        rect = RectangleDrawing(
             size, self.config.background, self.config.border_radius
         )
-        return RelativeDraw(rect, shift)
+        return RelativeDrawing(rect, shift)
 
     @cached_property
-    def _avatar_relative_to_text(self) -> RelativeDraw | None:
+    def _avatar_relative_to_text(self) -> RelativeDrawing | None:
         if not self.avatar:
             return None
         shift = (
@@ -106,15 +115,15 @@ class SayEventAddOn:
             - self.config.padding.width
             - self.avatar.size
         )
-        return RelativeDraw(self.avatar, shift.size)
+        return RelativeDrawing(self.avatar, shift.size)
 
     @cached_property
-    def _name_relative_to_text(self) -> RelativeDraw | None:
+    def _name_relative_to_text(self) -> RelativeDrawing | None:
         if not self.name:
             return None
         text = Text(self.name, self.config.name_text_config)
         shift = Size(0, -text.height - self.config.padding.height)
-        return RelativeDraw(text.group, shift)
+        return RelativeDrawing(text.group, shift)
 
     @cached_property
     def _text(self) -> Text | TextGroup:
@@ -130,11 +139,11 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     @override
-    def background(self) -> tuple[DrawOnScreen, ...]:
+    def background(self) -> tuple[DrawingOnScreen, ...]:
         return (self._background_tick,) + super().background
 
     @cached_property
-    def _background_tick(self) -> DrawOnScreen:
+    def _background_tick(self) -> DrawingOnScreen:
         if self._character_rectangle_on_screen.center in left_screen():
             width_sign = 1
         else:
@@ -151,7 +160,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
         base_coord_top = self.add_on_top_left.top
         if not self._character_edge.is_top:
-            base_coord_top += self._background_relative_to_text.draw.height
+            base_coord_top += self._background_relative_to_text.drawing.height
 
         tip_coord = Coordinate(tip_left, tip_top)
         base_coord1 = Coordinate(base_coord1_left, base_coord_top)
@@ -170,7 +179,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
         center = character_left - shift_width
 
         # Clamp add-on within screen width.
-        background_width = self._background_relative_to_text.draw.width
+        background_width = self._background_relative_to_text.drawing.width
         left = center - background_width / 2
         pad_width = self.config.padding.width
         if left < pad_width:
@@ -180,13 +189,13 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
         top = character_top + self._character_edge.height_sign * shift_height
         if self._character_edge.is_top:
-            top -= self._background_relative_to_text.draw.height
+            top -= self._background_relative_to_text.drawing.height
 
         return Coordinate(left, top)
 
     @cached_property
     @override
-    def avatar(self) -> Draw | Group | None:
+    def avatar(self) -> Drawing | DrawingGroup | None:
         if self.config.avatar:
             return self.config.avatar
         return self.character.spec.avatar
@@ -212,9 +221,9 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     def _character_rectangle_on_screen(self) -> RectangleOnScreen:
-        rect = self.character.draw_on_screen.visible_rectangle_on_screen
-        if self.scene.draw_on_screen_shift:
-            return rect + self.scene.draw_on_screen_shift
+        rect = self.character.drawing_on_screen.visible_rectangle_on_screen
+        if self.scene.drawing_on_screen_shift:
+            return rect + self.scene.drawing_on_screen_shift
         return rect
 
 

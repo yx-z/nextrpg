@@ -4,5 +4,5 @@ from nextrpg.core.time import Millisecond
 
 
 @dataclass(frozen=True)
-class RpgMakerCharacterDrawConfig:
+class RpgMakerCharacterDrawingConfig:
     duration_per_frame: Millisecond = 200

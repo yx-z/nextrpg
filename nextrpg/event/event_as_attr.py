@@ -12,10 +12,6 @@ class EventAsAttr:
 
         if event := registered_rpg_event_scenes.get(attr):
             return lambda *args, **kwargs: event(self, *args, **kwargs)
-
-        try:
-            return self.__getattribute__(attr)
-        except AttributeError:
-            raise
+        return self.__getattribute__(attr)
 
     def __getitem__(self, *args: Any): ...

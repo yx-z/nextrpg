@@ -7,7 +7,7 @@ from nextrpg.core.dimension import (
     WidthAndHeightScaling,
     WidthScaling,
 )
-from nextrpg.draw.draw import RectangleOnScreen
+from nextrpg.draw.drawing import RectangleOnScreen
 from nextrpg.global_config.global_config import config, initial_config
 from nextrpg.global_config.window_config import ResizeMode
 
@@ -18,7 +18,6 @@ def gui_size() -> Size:
             return initial_config().window.size
         case ResizeMode.KEEP_NATIVE_SIZE:
             return config().window.size
-    raise ValueError(f"Invalid resize mode {mode}")
 
 
 def gui_width() -> Width:

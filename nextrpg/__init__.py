@@ -1,6 +1,6 @@
 __version__ = "0.1.14"
 
-from nextrpg.character.character_draw import CharacterDraw
+from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import (
     CharacterOnScreen,
     CharacterSpec,
@@ -18,10 +18,10 @@ from nextrpg.character.npc_on_screen import (
     to_strict,
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.character.rpg_maker_character_draw import (
+from nextrpg.character.rpg_maker_character_drawing import (
     DefaultFrameType,
     FrameType,
-    RpgMakerCharacterDraw,
+    RpgMakerCharacterDrawing,
     RpgMakerSpriteSheet,
     XpFrameType,
 )
@@ -63,15 +63,15 @@ from nextrpg.core.save import (
 )
 from nextrpg.core.walk import Walk
 from nextrpg.draw.cyclic_frames import CyclicFrames
-from nextrpg.draw.draw import (
-    Draw,
-    DrawOnScreen,
-    PolygonDraw,
+from nextrpg.draw.drawing import (
+    Drawing,
+    DrawingOnScreen,
+    PolygonDrawing,
     PolygonOnScreen,
-    RectangleDraw,
+    RectangleDrawing,
     RectangleOnScreen,
     SizedDrawOnScreens,
-    TransparentDraw,
+    TransparentDrawing,
     Trim,
 )
 from nextrpg.draw.fade import FadeIn, FadeOut, Resource
@@ -99,7 +99,7 @@ from nextrpg.event.pygame_event import (
 from nextrpg.game import Game
 from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.debug_config import DebugConfig
-from nextrpg.global_config.draw_config import DrawConfig
+from nextrpg.global_config.drawing_config import DrawingConfig
 from nextrpg.global_config.event_config import EventConfig
 from nextrpg.global_config.global_config import (
     Config,
@@ -110,8 +110,8 @@ from nextrpg.global_config.global_config import (
 )
 from nextrpg.global_config.key_mapping_config import KeyMappingConfig
 from nextrpg.global_config.map_config import MapConfig
-from nextrpg.global_config.rpg_maker_character_draw_config import (
-    RpgMakerCharacterDrawConfig,
+from nextrpg.global_config.rpg_maker_character_drawing_config import (
+    RpgMakerCharacterDrawingConfig,
 )
 from nextrpg.global_config.save_config import SaveConfig
 from nextrpg.global_config.say_event_config import SayEventConfig

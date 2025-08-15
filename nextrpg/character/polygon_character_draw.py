@@ -2,23 +2,23 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.character.character_draw import CharacterDraw
+from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.color import TRANSPARENT
 from nextrpg.core.dimension import Size
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw import Draw, PolygonDraw, RectangleDraw
+from nextrpg.draw.drawing import Drawing, PolygonDrawing, RectangleDrawing
 
 
 @dataclass(frozen=True)
-class PolygonCharacterDraw(CharacterDraw):
-    arg: Size | RectangleDraw | PolygonDraw
+class PolygonCharacterDrawing(CharacterDrawing):
+    arg: Size | RectangleDrawing | PolygonDrawing
 
     @override
     @cached_property
-    def draw(self) -> Draw:
+    def drawing(self) -> Drawing:
         if isinstance(self.arg, Size):
-            return RectangleDraw(self.arg, TRANSPARENT)
+            return RectangleDrawing(self.arg, TRANSPARENT)
         return self.arg
 
     @override

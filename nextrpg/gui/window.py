@@ -20,7 +20,7 @@ from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.draw import Draw, DrawOnScreen
+from nextrpg.draw.drawing import Drawing, DrawingOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
@@ -75,8 +75,10 @@ class Window:
                     return self._toggle_mode
         return self
 
-    def draw(
-        self, draw_on_screens: tuple[DrawOnScreen, ...], time_delta: Millisecond
+    def blit(
+        self,
+        drawing_on_screens: tuple[DrawingOnScreen, ...],
+        time_delta: Millisecond,
     ) -> None:
         log.debug(
             t"Size {self.current_config.size} Shift {self._center_shift}",
@@ -85,15 +87,15 @@ class Window:
         self._screen.fill(self.current_config.background.tuple)
 
         if msgs := pop_messages(time_delta):
-            draw_on_screens += tuple(
-                d for text in _log_text(msgs) for d in text.draw_on_screens
+            drawing_on_screens += tuple(
+                d for text in _log_text(msgs) for d in text.drawing_on_screens
             )
 
         match self.current_config.resize:
             case ResizeMode.SCALE:
-                self._screen.blit(*self._scale(draw_on_screens).pygame)
+                self._screen.blit(*self._scale(drawing_on_screens).pygame)
             case ResizeMode.KEEP_NATIVE_SIZE:
-                self._screen.blits(d.pygame for d in draw_on_screens)
+                self._screen.blits(d.pygame for d in drawing_on_screens)
         flip()
 
     def _set_screen(self, cfg: WindowConfig) -> Surface:
@@ -102,16 +104,16 @@ class Window:
             font.init()
             set_caption(cfg.title)
             if cfg.icon:
-                icon = Draw(cfg.icon)
+                icon = Drawing(cfg.icon)
                 set_icon(icon.pygame)
         return set_mode(cfg.size.tuple, cfg.flag)
 
-    def _scale(self, draws: tuple[DrawOnScreen, ...]) -> DrawOnScreen:
+    def _scale(self, draws: tuple[DrawingOnScreen, ...]) -> DrawingOnScreen:
         screen = Surface(self.initial_config.size.tuple)
         screen.blits(d.pygame for d in draws)
         scaled = (self.initial_config.size * self._scaling).tuple
-        scaled_draw = Draw(smoothscale(screen, scaled))
-        return DrawOnScreen(self._center_shift, scaled_draw)
+        scaled_draw = Drawing(smoothscale(screen, scaled))
+        return DrawingOnScreen(self._center_shift, scaled_draw)
 
     @cached_property
     def _scaling(self) -> WidthAndHeightScaling:

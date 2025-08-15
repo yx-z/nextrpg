@@ -59,7 +59,7 @@ nextrpg    </h1>
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.1.14&quot;</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDraw</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterDrawing</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.character_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a>    <span class="n">CharacterOnScreen</span><span class="p">,</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a>    <span class="n">CharacterSpec</span><span class="p">,</span>
@@ -77,23 +77,23 @@ nextrpg    </h1>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>    <span class="n">to_strict</span><span class="p">,</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="p">)</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.player_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerOnScreen</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.rpg_maker_character_draw</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.rpg_maker_character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>    <span class="n">DefaultFrameType</span><span class="p">,</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>    <span class="n">FrameType</span><span class="p">,</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>    <span class="n">RpgMakerCharacterDraw</span><span class="p">,</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>    <span class="n">RpgMakerCharacterDrawing</span><span class="p">,</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>    <span class="n">RpgMakerSpriteSheet</span><span class="p">,</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="n">XpFrameType</span><span class="p">,</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="p">)</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.cached_decorator</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>    <span class="n">Alpha</span><span class="p">,</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>    <span class="n">BLACK</span><span class="p">,</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>    <span class="n">Color</span><span class="p">,</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>    <span class="n">TRANSPARENT</span><span class="p">,</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>    <span class="n">WHITE</span><span class="p">,</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>    <span class="n">BLACK</span><span class="p">,</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>    <span class="n">TRANSPARENT</span><span class="p">,</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>    <span class="n">WHITE</span><span class="p">,</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>    <span class="n">Alpha</span><span class="p">,</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>    <span class="n">Color</span><span class="p">,</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>    <span class="n">alpha_from_percentage</span><span class="p">,</span>
 </span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="p">)</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span><span class="p">,</span> <span class="n">Moving</span><span class="p">,</span> <span class="n">ORIGIN</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">ORIGIN</span><span class="p">,</span> <span class="n">Coordinate</span><span class="p">,</span> <span class="n">Moving</span>
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dataclass_with_init</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>    <span class="n">dataclass_with_init</span><span class="p">,</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>    <span class="n">default</span><span class="p">,</span>
@@ -122,15 +122,15 @@ nextrpg    </h1>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="p">)</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.walk</span><span class="w"> </span><span class="kn">import</span> <span class="n">Walk</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.cyclic_frames</span><span class="w"> </span><span class="kn">import</span> <span class="n">CyclicFrames</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="n">Draw</span><span class="p">,</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="n">DrawOnScreen</span><span class="p">,</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>    <span class="n">PolygonDraw</span><span class="p">,</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="n">Drawing</span><span class="p">,</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="n">DrawingOnScreen</span><span class="p">,</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>    <span class="n">PolygonDrawing</span><span class="p">,</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>    <span class="n">PolygonOnScreen</span><span class="p">,</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="n">RectangleDraw</span><span class="p">,</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>    <span class="n">RectangleDrawing</span><span class="p">,</span>
 </span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="n">RectangleOnScreen</span><span class="p">,</span>
 </span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>    <span class="n">SizedDrawOnScreens</span><span class="p">,</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>    <span class="n">TransparentDraw</span><span class="p">,</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>    <span class="n">TransparentDrawing</span><span class="p">,</span>
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="n">Trim</span><span class="p">,</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="p">)</span>
 </span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.fade</span><span class="w"> </span><span class="kn">import</span> <span class="n">FadeIn</span><span class="p">,</span> <span class="n">FadeOut</span><span class="p">,</span> <span class="n">Resource</span>
@@ -146,9 +146,9 @@ nextrpg    </h1>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>    <span class="n">transform</span><span class="p">,</span>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="p">)</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>    <span class="n">KeyPressDown</span><span class="p">,</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>    <span class="n">KeyPressUp</span><span class="p">,</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="n">KeyboardKey</span><span class="p">,</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>    <span class="n">KeyboardKey</span><span class="p">,</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>    <span class="n">KeyPressDown</span><span class="p">,</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>    <span class="n">KeyPressUp</span><span class="p">,</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>    <span class="n">PygameEvent</span><span class="p">,</span>
 </span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>    <span class="n">Quit</span><span class="p">,</span>
 </span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>    <span class="n">WindowResize</span><span class="p">,</span>
@@ -158,7 +158,7 @@ nextrpg    </h1>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.game</span><span class="w"> </span><span class="kn">import</span> <span class="n">Game</span>
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.character_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharacterConfig</span>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.debug_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">DebugConfig</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.draw_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawConfig</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.drawing_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawingConfig</span>
 </span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.event_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventConfig</span>
 </span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>    <span class="n">Config</span><span class="p">,</span>
@@ -169,8 +169,8 @@ nextrpg    </h1>
 </span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a><span class="p">)</span>
 </span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.key_mapping_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeyMappingConfig</span>
 </span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.map_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">MapConfig</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.rpg_maker_character_draw_config</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="n">RpgMakerCharacterDrawConfig</span><span class="p">,</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.rpg_maker_character_drawing_config</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>    <span class="n">RpgMakerCharacterDrawingConfig</span><span class="p">,</span>
 </span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a><span class="p">)</span>
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.save_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">SaveConfig</span>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.say_event_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">SayEventConfig</span>
@@ -210,8 +210,8 @@ nextrpg    </h1>
 </span><span id="L-151"><a href="#L-151"><span class="linenos">151</span></a>    <span class="n">BackgroundEvent</span><span class="p">,</span>
 </span><span id="L-152"><a href="#L-152"><span class="linenos">152</span></a>    <span class="n">BackgroundEventSentinel</span><span class="p">,</span>
 </span><span id="L-153"><a href="#L-153"><span class="linenos">153</span></a>    <span class="n">EventCallable</span><span class="p">,</span>
-</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>    <span class="n">EventGenerator</span><span class="p">,</span>
-</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>    <span class="n">EventfulScene</span><span class="p">,</span>
+</span><span id="L-154"><a href="#L-154"><span class="linenos">154</span></a>    <span class="n">EventfulScene</span><span class="p">,</span>
+</span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>    <span class="n">EventGenerator</span><span class="p">,</span>
 </span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a>    <span class="n">RpgEventScene</span><span class="p">,</span>
 </span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a>    <span class="n">register_rpg_event_scene</span><span class="p">,</span>
 </span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>    <span class="n">registered_rpg_event_scenes</span><span class="p">,</span>

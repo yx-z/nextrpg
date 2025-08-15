@@ -44,11 +44,11 @@ class Trim:
 
 
 @cached(
-    lambda: config().draw.cache_size,
+    lambda: config().drawing.cache_size,
     lambda resource, *_: None if isinstance(resource, Surface) else resource,
 )
 @dataclass(frozen=True)
-class Draw(Sizeable):
+class Drawing(Sizeable):
     resource: str | Path | Surface
     color_key: Color | Coordinate | None = None
 
@@ -60,28 +60,28 @@ class Draw(Sizeable):
     def pygame(self) -> Surface:
         return self._debug_surface or self.surface
 
-    def crop(self, top_left: Coordinate, size: Size) -> Draw:
-        return Draw(self.pygame.subsurface((top_left.tuple, size.tuple)))
+    def crop(self, top_left: Coordinate, size: Size) -> Drawing:
+        return Drawing(self.pygame.subsurface((top_left.tuple, size.tuple)))
 
-    def trim(self, trim: Trim) -> Draw:
+    def trim(self, trim: Trim) -> Drawing:
         coord = Coordinate(trim.left, trim.top)
         width = self.width - trim.left - trim.right
         height = self.height - trim.top - trim.bottom
         size = Size(width, height)
         return self.crop(coord, size)
 
-    def set_alpha(self, alpha: Alpha) -> Draw:
+    def set_alpha(self, alpha: Alpha) -> Drawing:
         surf = self.surface.copy()
         surf.set_alpha(alpha)
-        return Draw(surf)
+        return Drawing(surf)
 
-    def draw_on_screen(self, coordinate: Coordinate) -> DrawOnScreen:
-        return DrawOnScreen(coordinate, self)
+    def draw_on_screen(self, coordinate: Coordinate) -> DrawingOnScreen:
+        return DrawingOnScreen(coordinate, self)
 
-    def __mul__(self, scaling: int | float | WidthAndHeightScaling) -> Draw:
+    def __mul__(self, scaling: int | float | WidthAndHeightScaling) -> Drawing:
         size = self.size * WidthAndHeightScaling(scaling)
         surf = smoothscale(self.surface, size.tuple)
-        return Draw(surf)
+        return Drawing(surf)
 
     @cached_property
     def visible_rectangle(self) -> RectangleOnScreen:
@@ -117,7 +117,7 @@ class Draw(Sizeable):
     @cached_property
     def _debug_surface(self) -> Surface | None:
         if not (debug := config().debug) or not (
-            color := debug.draw_background_color
+            color := debug.drawing_background_color
         ):
             return None
 
@@ -128,9 +128,9 @@ class Draw(Sizeable):
 
 
 @dataclass(frozen=True)
-class DrawOnScreen(Sizeable):
+class DrawingOnScreen(Sizeable):
     top_left: Coordinate
-    draw: Draw
+    draw: Drawing
 
     @property
     def rectangle_on_screen(self) -> RectangleOnScreen:
@@ -146,8 +146,8 @@ class DrawOnScreen(Sizeable):
     def pygame(self) -> tuple[Surface, tuple[Pixel, Pixel]]:
         return self.draw.pygame, self.top_left.tuple
 
-    def set_alpha(self, alpha: Alpha) -> DrawOnScreen:
-        return DrawOnScreen(self.top_left, self.draw.set_alpha(alpha))
+    def set_alpha(self, alpha: Alpha) -> DrawingOnScreen:
+        return DrawingOnScreen(self.top_left, self.draw.set_alpha(alpha))
 
     @property
     def size(self) -> Size:
@@ -155,16 +155,16 @@ class DrawOnScreen(Sizeable):
 
     def __add__(
         self, other: Coordinate | Size | Width | Height
-    ) -> DrawOnScreen:
-        return DrawOnScreen(self.top_left + other, self.draw)
+    ) -> DrawingOnScreen:
+        return DrawingOnScreen(self.top_left + other, self.draw)
 
     def __sub__(
         self, other: Coordinate | Size | Width | Height
-    ) -> DrawOnScreen:
+    ) -> DrawingOnScreen:
         return self + -other
 
 
-class TransparentDraw(Draw, ABC):
+class TransparentDrawing(Drawing, ABC):
     color: Color
 
     @property
@@ -182,11 +182,11 @@ class TransparentDraw(Draw, ABC):
     @cached_property
     def size(self) -> Size:
         if self.transparent:
-            return Draw(self.resource).size
+            return Drawing(self.resource).size
         return super().size
 
 
-class PolygonDraw(TransparentDraw):
+class PolygonDrawing(TransparentDrawing):
     def __init__(self, points: tuple[Coordinate, ...], color: Color) -> None:
         surf = _draw_polygon(points, _fill_polygon(color))
         _set_resource_color_and_color_key(self, surf, color)
@@ -215,14 +215,14 @@ class PolygonOnScreen(Sizeable):
     def bounding_rectangle(self) -> RectangleOnScreen:
         return _bounding_rectangle(self.points)
 
-    def fill(self, color: Color) -> DrawOnScreen:
-        return self._draw(_fill_polygon(color))
+    def fill(self, color: Color) -> DrawingOnScreen:
+        return self._drawing_on_screen(_fill_polygon(color))
 
     def line(
         self, color: Color, stroke_width: Pixel | None = None
-    ) -> DrawOnScreen:
+    ) -> DrawingOnScreen:
         if stroke_width is None:
-            stroke = config().draw.stroke_thickness
+            stroke = config().drawing.stroke_thickness
         else:
             stroke = stroke_width
 
@@ -230,7 +230,7 @@ class PolygonOnScreen(Sizeable):
             point_tuples = tuple(p.tuple for p in points)
             lines(surface, color.tuple, self.closed, point_tuples, stroke)
 
-        return self._draw(_line)
+        return self._drawing_on_screen(_line)
 
     def collide(self, poly: PolygonOnScreen) -> bool:
         if not self.bounding_rectangle.collide(poly.bounding_rectangle):
@@ -262,14 +262,14 @@ class PolygonOnScreen(Sizeable):
     def _mask(self) -> Mask:
         return from_surface(self.fill(BLACK).draw.pygame)
 
-    def _draw(
+    def _drawing_on_screen(
         self, method: Callable[[Surface, tuple[Coordinate, ...]], None]
-    ) -> DrawOnScreen:
+    ) -> DrawingOnScreen:
         surf = _draw_polygon(self.points, method, self.bounding_rectangle)
-        return DrawOnScreen(self.bounding_rectangle.top_left, Draw(surf))
+        return DrawingOnScreen(self.bounding_rectangle.top_left, Drawing(surf))
 
 
-class RectangleDraw(TransparentDraw):
+class RectangleDrawing(TransparentDrawing):
     def __init__(
         self, size: Size, color: Color, border_radius: Pixel | None = None
     ) -> None:
@@ -324,15 +324,15 @@ class RectangleOnScreen(PolygonOnScreen):
 
     def fill(
         self, color: Color, border_radius: Pixel | None = None
-    ) -> DrawOnScreen:
-        return DrawOnScreen(
-            self.top_left, RectangleDraw(self.size, color, border_radius)
+    ) -> DrawingOnScreen:
+        return DrawingOnScreen(
+            self.top_left, RectangleDrawing(self.size, color, border_radius)
         )
 
 
 @dataclass(frozen=True)
 class SizedDrawOnScreens(Sizeable):
-    draw_on_screens: tuple[DrawOnScreen, ...]
+    draw_on_screens: tuple[DrawingOnScreen, ...]
 
     @cached_property
     def top_left(self) -> Coordinate:

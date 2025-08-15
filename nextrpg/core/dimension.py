@@ -166,5 +166,6 @@ class Size(LoadFromSaveList[int]):
         return f"({self.width.value:.0f}, {self.height.value:.0f})"
 
     @override
-    def save(self) -> list[int]:
+    @property
+    def save_data(self) -> list[int]:
         return list(self.tuple)

@@ -88,7 +88,7 @@
                                 <a class="variable" href="#Size.tuple">tuple</a>
                         </li>
                         <li>
-                                <a class="function" href="#Size.save">save</a>
+                                <a class="variable" href="#Size.save_data">save_data</a>
                         </li>
                 </ul>
 
@@ -282,8 +282,9 @@
 </span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">)&quot;</span>
 </span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>
 </span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a>    <span class="nd">@override</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a>    <span class="nd">@property</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -577,8 +578,9 @@
 </span><span id="Size-167"><a href="#Size-167"><span class="linenos">167</span></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">)&quot;</span>
 </span><span id="Size-168"><a href="#Size-168"><span class="linenos">168</span></a>
 </span><span id="Size-169"><a href="#Size-169"><span class="linenos">169</span></a>    <span class="nd">@override</span>
-</span><span id="Size-170"><a href="#Size-170"><span class="linenos">170</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Size-171"><a href="#Size-171"><span class="linenos">171</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+</span><span id="Size-170"><a href="#Size-170"><span class="linenos">170</span></a>    <span class="nd">@property</span>
+</span><span id="Size-171"><a href="#Size-171"><span class="linenos">171</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+</span><span id="Size-172"><a href="#Size-172"><span class="linenos">172</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -676,21 +678,19 @@
     
 
                             </div>
-                            <div id="Size.save" class="classattr">
-                                        <input id="Size.save-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-<div class="attr function">
-                    <div class="decorator decorator-override">@override</div>
+                            <div id="Size.save_data" class="classattr">
+                                        <input id="Size.save_data-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">save_data</span><span class="annotation">: &#39;list[int]&#39;</span>
 
-        <span class="def">def</span>
-        <span class="name">save</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="s1">&#39;list[int]&#39;</span>:</span></span>
-
-                <label class="view-source-button" for="Size.save-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="Size.save_data-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Size.save"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Size.save-169"><a href="#Size.save-169"><span class="linenos">169</span></a>    <span class="nd">@override</span>
-</span><span id="Size.save-170"><a href="#Size.save-170"><span class="linenos">170</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-</span><span id="Size.save-171"><a href="#Size.save-171"><span class="linenos">171</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
+    <a class="headerlink" href="#Size.save_data"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Size.save_data-169"><a href="#Size.save_data-169"><span class="linenos">169</span></a>    <span class="nd">@override</span>
+</span><span id="Size.save_data-170"><a href="#Size.save_data-170"><span class="linenos">170</span></a>    <span class="nd">@property</span>
+</span><span id="Size.save_data-171"><a href="#Size.save_data-171"><span class="linenos">171</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+</span><span id="Size.save_data-172"><a href="#Size.save_data-172"><span class="linenos">172</span></a>        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple</span><span class="p">)</span>
 </span></pre></div>
 
 

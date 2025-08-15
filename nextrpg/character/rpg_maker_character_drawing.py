@@ -2,7 +2,7 @@ from dataclasses import KW_ONLY, dataclass, field, replace
 from enum import IntEnum
 from typing import Self, override
 
-from nextrpg.character.character_draw import CharacterDraw
+from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
@@ -13,7 +13,7 @@ from nextrpg.core.dimension import Size
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.cyclic_frames import CyclicFrames
-from nextrpg.draw.draw import Draw, Trim
+from nextrpg.draw.drawing import Drawing, Trim
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.global_config.global_config import config
 
@@ -56,7 +56,7 @@ class RpgMakerSpriteSheet(SpriteSheet):
 
 
 @dataclass_with_init(frozen=True)
-class RpgMakerCharacterDraw(CharacterDraw):
+class RpgMakerCharacterDrawing(CharacterDrawing):
     sprite_sheet: RpgMakerSpriteSheet
     selection: SpriteSheetSelection | None = None
     animate_on_idle: bool = False
@@ -69,8 +69,8 @@ class RpgMakerCharacterDraw(CharacterDraw):
     )
 
     @property
-    def draw(self) -> Draw:
-        return self._frames[_adjust(self.direction)].draw
+    def drawing(self) -> Drawing:
+        return self._frames[_adjust(self.direction)].drawing
 
     @override
     def turn(self, direction: Direction) -> Self:
@@ -103,12 +103,12 @@ class RpgMakerCharacterDraw(CharacterDraw):
             return frames.tick(time_delta)
         return frames
 
-    def _trim(self, draw: Draw) -> Draw:
+    def _trim(self, draw: Drawing) -> Drawing:
         if self.sprite_sheet.trim:
             return draw.trim(self.sprite_sheet.trim)
         return draw
 
-    def _load_frames_row(self, draw: Draw, row: int) -> CyclicFrames:
+    def _load_frames_row(self, draw: Drawing, row: int) -> CyclicFrames:
         frames = tuple(
             self._trim(d) for d in self._crop_into_frames_at_row(draw, row)
         )
@@ -120,8 +120,8 @@ class RpgMakerCharacterDraw(CharacterDraw):
         )
 
     def _crop_into_frames_at_row(
-        self, draw: Draw, row: int
-    ) -> tuple[Draw, ...]:
+        self, draw: Drawing, row: int
+    ) -> tuple[Drawing, ...]:
         num_frames = len(self.sprite_sheet.style)
         width = draw.width / num_frames
         height = draw.height / len(_DIR_TO_ROW)
@@ -136,7 +136,7 @@ class RpgMakerCharacterDraw(CharacterDraw):
         if self.selection:
             draw = self.sprite_sheet.select(self.selection)
         else:
-            draw = self.sprite_sheet.draw
+            draw = self.sprite_sheet.drawing
         return {
             direction: self._load_frames_row(draw, row)
             for direction, row in _DIR_TO_ROW.items()

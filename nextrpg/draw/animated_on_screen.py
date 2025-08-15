@@ -8,14 +8,14 @@ from nextrpg.core.dimension import Size
 from nextrpg.core.sizeable import Sizeable
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animated import Animated
-from nextrpg.draw.draw import Draw, DrawOnScreen, SizedDrawOnScreens
-from nextrpg.draw.group import GroupOnScreen
+from nextrpg.draw.drawing import Drawing, DrawingOnScreen, SizedDrawOnScreens
+from nextrpg.draw.drawing_group import DrawingGroupOnScreen
 
 
 class AnimatedOnScreen(Sizeable, ABC):
     @property
     @abstractmethod
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]: ...
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]: ...
 
     @abstractmethod
     def tick(self, time_delta: Millisecond) -> Self: ...
@@ -30,7 +30,7 @@ class AnimatedOnScreen(Sizeable, ABC):
 
     @cached_property
     def _sized(self) -> SizedDrawOnScreens:
-        return SizedDrawOnScreens(self.draw_on_screens)
+        return SizedDrawOnScreens(self.drawing_on_screens)
 
 
 @dataclass(frozen=True)
@@ -39,13 +39,17 @@ class MovingAnimatedOnScreen(AnimatedOnScreen):
     animated: Animated
 
     @cached_property
-    def draw_on_screens(self) -> tuple[DrawOnScreen, ...]:
-        res: list[DrawOnScreen] = []
-        if isinstance(self.animated.draw, Draw):
-            res.append(DrawOnScreen(self.moving.coordinate, self.animated.draw))
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        res: list[DrawingOnScreen] = []
+        if isinstance(self.animated.drawing, Drawing):
+            res.append(
+                DrawingOnScreen(self.moving.coordinate, self.animated.drawing)
+            )
         else:
-            group = GroupOnScreen(self.moving.coordinate, self.animated.draw)
-            res += group.draw_on_screens
+            group = DrawingGroupOnScreen(
+                self.moving.coordinate, self.animated.drawing
+            )
+            res += group.drawing_on_screens
         return tuple(res)
 
     def tick(self, time_delta: Millisecond) -> Self:

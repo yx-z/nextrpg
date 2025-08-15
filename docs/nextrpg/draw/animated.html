@@ -37,7 +37,7 @@
                                 <a class="function" href="#Animated.tick">tick</a>
                         </li>
                         <li>
-                                <a class="variable" href="#Animated.draw">draw</a>
+                                <a class="variable" href="#Animated.drawing">drawing</a>
                         </li>
                         <li>
                                 <a class="variable" href="#Animated.top_left">top_left</a>
@@ -76,8 +76,8 @@
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.sizeable</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sizeable</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">Draw</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.group</span><span class="w"> </span><span class="kn">import</span> <span class="n">Group</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing_group</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawingGroup</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Animated</span><span class="p">(</span><span class="n">Sizeable</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
@@ -86,15 +86,15 @@
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="nd">@property</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">Group</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">:</span> <span class="o">...</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="nd">@property</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">top_left</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">top_left</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="nd">@property</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span>
 </span></pre></div>
 
 
@@ -116,15 +116,15 @@
 </span><span id="Animated-16"><a href="#Animated-16"><span class="linenos">16</span></a>
 </span><span id="Animated-17"><a href="#Animated-17"><span class="linenos">17</span></a>    <span class="nd">@property</span>
 </span><span id="Animated-18"><a href="#Animated-18"><span class="linenos">18</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Animated-19"><a href="#Animated-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">Group</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="Animated-19"><a href="#Animated-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">:</span> <span class="o">...</span>
 </span><span id="Animated-20"><a href="#Animated-20"><span class="linenos">20</span></a>
 </span><span id="Animated-21"><a href="#Animated-21"><span class="linenos">21</span></a>    <span class="nd">@property</span>
 </span><span id="Animated-22"><a href="#Animated-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Animated-23"><a href="#Animated-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">top_left</span>
+</span><span id="Animated-23"><a href="#Animated-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">top_left</span>
 </span><span id="Animated-24"><a href="#Animated-24"><span class="linenos">24</span></a>
 </span><span id="Animated-25"><a href="#Animated-25"><span class="linenos">25</span></a>    <span class="nd">@property</span>
 </span><span id="Animated-26"><a href="#Animated-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="Animated-27"><a href="#Animated-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">size</span>
+</span><span id="Animated-27"><a href="#Animated-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span>
 </span></pre></div>
 
 
@@ -153,18 +153,18 @@ inheritance.</p>
     
 
                             </div>
-                            <div id="Animated.draw" class="classattr">
-                                        <input id="Animated.draw-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="Animated.drawing" class="classattr">
+                                        <input id="Animated.drawing-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">draw</span><span class="annotation">: <a href="draw.html#Draw">nextrpg.draw.draw.Draw</a> | <a href="group.html#Group">nextrpg.draw.group.Group</a></span>
+            <span class="name">drawing</span><span class="annotation">: <a href="drawing.html#Drawing">nextrpg.draw.drawing.Drawing</a> | <a href="drawing_group.html#DrawingGroup">nextrpg.draw.drawing_group.DrawingGroup</a></span>
 
-                <label class="view-source-button" for="Animated.draw-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="Animated.drawing-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Animated.draw"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Animated.draw-17"><a href="#Animated.draw-17"><span class="linenos">17</span></a>    <span class="nd">@property</span>
-</span><span id="Animated.draw-18"><a href="#Animated.draw-18"><span class="linenos">18</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Animated.draw-19"><a href="#Animated.draw-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span> <span class="o">|</span> <span class="n">Group</span><span class="p">:</span> <span class="o">...</span>
+    <a class="headerlink" href="#Animated.drawing"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Animated.drawing-17"><a href="#Animated.drawing-17"><span class="linenos">17</span></a>    <span class="nd">@property</span>
+</span><span id="Animated.drawing-18"><a href="#Animated.drawing-18"><span class="linenos">18</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Animated.drawing-19"><a href="#Animated.drawing-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">:</span> <span class="o">...</span>
 </span></pre></div>
 
 
@@ -182,7 +182,7 @@ inheritance.</p>
     <a class="headerlink" href="#Animated.top_left"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Animated.top_left-21"><a href="#Animated.top_left-21"><span class="linenos">21</span></a>    <span class="nd">@property</span>
 </span><span id="Animated.top_left-22"><a href="#Animated.top_left-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Animated.top_left-23"><a href="#Animated.top_left-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">top_left</span>
+</span><span id="Animated.top_left-23"><a href="#Animated.top_left-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">top_left</span>
 </span></pre></div>
 
 
@@ -200,7 +200,7 @@ inheritance.</p>
     <a class="headerlink" href="#Animated.size"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Animated.size-25"><a href="#Animated.size-25"><span class="linenos">25</span></a>    <span class="nd">@property</span>
 </span><span id="Animated.size-26"><a href="#Animated.size-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="Animated.size-27"><a href="#Animated.size-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">size</span>
+</span><span id="Animated.size-27"><a href="#Animated.size-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span>
 </span></pre></div>
 
 

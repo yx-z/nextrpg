@@ -7,8 +7,8 @@ from typing import Self
 from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size, Width
 from nextrpg.core.sizeable import Sizeable
-from nextrpg.draw.draw import Draw
-from nextrpg.draw.group import Group, RelativeDraw
+from nextrpg.draw.drawing import Drawing
+from nextrpg.draw.drawing_group import DrawingGroup, RelativeDrawing
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.text_config import TextConfig
 from nextrpg.global_config.text_group_config import TextGroupConfig
@@ -31,18 +31,18 @@ class Text(Sizeable):
         return ORIGIN
 
     @cached_property
-    def group(self) -> Group:
+    def group(self) -> DrawingGroup:
         draws = tuple(
-            RelativeDraw(self.draw(line), self._line_shift(i))
+            RelativeDrawing(self.drawing(line), self._line_shift(i))
             for i, line in enumerate(self.lines)
         )
-        return Group(draws)
+        return DrawingGroup(draws)
 
-    def draw(self, line: str) -> Draw:
+    def drawing(self, line: str) -> Drawing:
         surface = self.config.font.pygame.render(
             line, self.config.anti_alias, self.config.color.tuple
         )
-        return Draw(surface)
+        return Drawing(surface)
 
     def __radd__(self, other: str) -> TextGroup:
         return self + other
@@ -135,13 +135,13 @@ class TextGroup(Sizeable):
         return self.group.size
 
     @cached_property
-    def group(self) -> Group:
+    def group(self) -> DrawingGroup:
         lines = [[t] for t in self._no_wrap[0].line_texts]
         for text in self._no_wrap[1:]:
             lines[-1].append(text.line_texts[0])
             lines += [[t] for t in text.line_texts[1:]]
 
-        res: list[RelativeDraw] = []
+        res: list[RelativeDrawing] = []
         curr_height = 0
         for line in lines:
             curr_width = 0
@@ -150,10 +150,10 @@ class TextGroup(Sizeable):
                 word_width, word_height = word.size
                 height_diff = line_height - word_height
                 shift = Size(curr_width, curr_height + height_diff)
-                res.append(RelativeDraw(word.group, shift))
+                res.append(RelativeDrawing(word.group, shift))
                 curr_width += word_width + self.config.margin
             curr_height += line_height + self.config.line_spacing
-        return Group(tuple(res))
+        return DrawingGroup(tuple(res))
 
     def _width(self, line: list[Text]) -> Width:
         widths = sum(t.size.width for t in line)

@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from math import atan2, degrees, hypot, sqrt
-from typing import Iterator, Self
+from typing import Iterator, Self, override
 
 from nextrpg.core.dimension import Height, Pixel, Size, Width
 from nextrpg.core.direction import Direction, DirectionalOffset
@@ -109,7 +109,9 @@ class Coordinate(LoadFromSaveList[int]):
         dy = self.top - other.top
         return hypot(dx.value, dy.value)
 
-    def save(self) -> list[int]:
+    @override
+    @property
+    def save_data(self) -> list[int]:
         return list(self.tuple)
 
 

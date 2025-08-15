@@ -5,7 +5,7 @@ from pathlib import Path
 from nextrpg.core.color import Color
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
-from nextrpg.draw.draw import Draw
+from nextrpg.draw.drawing import Drawing
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -16,18 +16,18 @@ class SpriteSheetSelection:
 
 @dataclass(frozen=True, kw_only=True)
 class SpriteSheet:
-    resource: Draw | str | Path
+    resource: Drawing | str | Path
     num_row: int
     num_column: int
     color_key: Color | None = None
 
-    def select(self, selection: SpriteSheetSelection) -> Draw:
-        width = self.draw.width / self.num_column
-        height = self.draw.height / self.num_row
+    def select(self, selection: SpriteSheetSelection) -> Drawing:
+        width = self.drawing.width / self.num_column
+        height = self.drawing.height / self.num_row
         top_left = Coordinate(width * selection.column, height * selection.row)
         size = Size(width, height)
-        return self.draw.crop(top_left, size)
+        return self.drawing.crop(top_left, size)
 
     @cached_property
-    def draw(self) -> Draw:
-        return Draw(self.resource, self.color_key)
+    def drawing(self) -> Drawing:
+        return Drawing(self.resource, self.color_key)

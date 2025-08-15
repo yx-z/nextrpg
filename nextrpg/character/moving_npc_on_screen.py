@@ -11,7 +11,7 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.core.walk import Walk
-from nextrpg.draw.draw import PolygonOnScreen
+from nextrpg.draw.drawing import PolygonOnScreen
 
 
 @dataclass_with_init(frozen=True, kw_only=True)
