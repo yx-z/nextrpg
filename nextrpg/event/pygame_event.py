@@ -70,5 +70,5 @@ def to_typed_event(event: Event) -> PygameEvent:
     }.get(event.type, PygameEvent)(event)
 
 
-def post_quit() -> None:
+def trigger_quit() -> None:
     post(Event(QUIT))

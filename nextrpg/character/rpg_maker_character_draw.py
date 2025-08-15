@@ -14,7 +14,7 @@ from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.cyclic_frames import CyclicFrames
 from nextrpg.draw.draw import Draw, Trim
-from nextrpg.draw.sprite_sheet import Selection, SpriteSheet
+from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.global_config.global_config import config
 
 
@@ -58,7 +58,7 @@ class RpgMakerSpriteSheet(SpriteSheet):
 @dataclass_with_init(frozen=True)
 class RpgMakerCharacterDraw(CharacterDraw):
     sprite_sheet: RpgMakerSpriteSheet
-    selection: Selection | None = None
+    selection: SpriteSheetSelection | None = None
     animate_on_idle: bool = False
     duration_per_frame: Millisecond = field(
         default_factory=lambda: config().rpg_maker_character.duration_per_frame

@@ -23,7 +23,7 @@ from nextrpg.scene.scene import Scene
 
 
 @dataclass_with_init(frozen=True, kw_only=True)
-class State(RpgEventScene, ABC):
+class SayEventState(RpgEventScene, ABC):
     unique_name: str | None
     config: SayEventConfig
     _: KW_ONLY = not_constructor_below()
@@ -50,7 +50,7 @@ class State(RpgEventScene, ABC):
 
 
 @dataclass_with_init(frozen=True, kw_only=True)
-class FadeInState(State):
+class SayEventFadeInState(SayEventState):
     background: tuple[DrawOnScreen, ...]
     text_on_screen: TextOnScreen
     config: SayEventConfig
@@ -69,7 +69,7 @@ class FadeInState(State):
         fade_in = self._fade_in.tick(time_delta)
         if not fade_in.complete:
             return replace(ticked, _fade_in=fade_in)
-        return TypingState(
+        return SayEventTypingState(
             generator=self.generator,
             scene=ticked.scene,
             unique_name=self.unique_name,
@@ -81,7 +81,7 @@ class FadeInState(State):
 
 
 @dataclass_with_init(frozen=True, kw_only=True)
-class TypingState(State):
+class SayEventTypingState(SayEventState):
     background: tuple[DrawOnScreen, ...]
     text_on_screen: TextOnScreen
     _: KW_ONLY = not_constructor_below()
@@ -118,7 +118,7 @@ class TypingState(State):
             or event.key is not KeyboardKey.CONFIRM
         ):
             return self
-        return FadeOutState(
+        return SayEventFadeOutState(
             generator=self.generator,
             scene=self.scene,
             unique_name=self.unique_name,
@@ -129,7 +129,7 @@ class TypingState(State):
 
 
 @dataclass_with_init(frozen=True, kw_only=True)
-class FadeOutState(State):
+class SayEventFadeOutState(SayEventState):
     draws: tuple[DrawOnScreen, ...]
     config: SayEventConfig
     _: KW_ONLY = not_constructor_below()

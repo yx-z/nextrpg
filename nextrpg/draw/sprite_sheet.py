@@ -9,7 +9,7 @@ from nextrpg.draw.draw import Draw
 
 
 @dataclass(frozen=True, kw_only=True)
-class Selection:
+class SpriteSheetSelection:
     row: int
     column: int
 
@@ -21,7 +21,7 @@ class SpriteSheet:
     num_column: int
     color_key: Color | None = None
 
-    def select(self, selection: Selection) -> Draw:
+    def select(self, selection: SpriteSheetSelection) -> Draw:
         width = self.draw.width / self.num_column
         height = self.draw.height / self.num_row
         top_left = Coordinate(width * selection.column, height * selection.row)

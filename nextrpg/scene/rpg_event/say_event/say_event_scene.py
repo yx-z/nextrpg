@@ -15,10 +15,12 @@ from nextrpg.scene.rpg_event.eventful_scene import (
     register_rpg_event_scene,
 )
 from nextrpg.scene.rpg_event.say_event.say_event_add_on import (
-    AddOn,
-    CharacterAddOn,
+    SayEventAddOn,
+    SayEventCharacterAddOn,
 )
-from nextrpg.scene.rpg_event.say_event.say_event_state import FadeInState
+from nextrpg.scene.rpg_event.say_event.say_event_state import (
+    SayEventFadeInState,
+)
 from nextrpg.scene.scene import Scene
 
 type SayEventArg = str | Coordinate | Size | Draw | SayEventConfig
@@ -50,23 +52,23 @@ class SayEventScene(RpgEventScene):
         return cfg
 
     @cached_property
-    def _add_on(self) -> AddOn:
+    def _add_on(self) -> SayEventAddOn:
         if isinstance(self.character_or_scene, CharacterOnScreen):
             name = self.character_or_scene.spec.unique_name
             ticked_character = self.scene.get_character(name)
-            return CharacterAddOn(
+            return SayEventCharacterAddOn(
                 self.config, self.message, self.scene, ticked_character
             )
-        return AddOn(self.config, self.message)
+        return SayEventAddOn(self.config, self.message)
 
     @cached_property
-    def _state(self) -> FadeInState:
+    def _state(self) -> SayEventFadeInState:
         if isinstance(self.character_or_scene, CharacterOnScreen):
             unique_name = self.character_or_scene.spec.unique_name
         else:
             unique_name = None
 
-        return FadeInState(
+        return SayEventFadeInState(
             generator=self.generator,
             scene=self.scene,
             unique_name=unique_name,

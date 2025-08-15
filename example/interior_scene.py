@@ -3,8 +3,8 @@ from nextrpg import (
     Color,
     Direction,
     Draw,
-    EventfulScene,
     EventSpec,
+    EventfulScene,
     MapScene,
     Move,
     NpcEventStartMode,
@@ -14,7 +14,7 @@ from nextrpg import (
     RpgMakerCharacterDraw,
     RpgMakerSpriteSheet,
     SaveIo,
-    Selection,
+    SpriteSheetSelection,
     Text,
     Trim,
     config,
@@ -35,7 +35,7 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
             character=RpgMakerCharacterDraw(
                 Direction.DOWN,
                 sprite_sheet,
-                Selection(row=0, column=0),
+                SpriteSheetSelection(row=0, column=0),
             ),
             avatar=Draw("example/asset/avatar.png"),
         )
@@ -43,14 +43,14 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
     alisa = NpcSpec(
         unique_name="alisa",
         character=RpgMakerCharacterDraw(
-            Direction.RIGHT, sprite_sheet, Selection(row=0, column=1)
+            Direction.RIGHT, sprite_sheet, SpriteSheetSelection(row=0, column=1)
         ),
         event=greet,
     )
     david = NpcSpec(
         unique_name="david",
         character=RpgMakerCharacterDraw(
-            Direction.DOWN, sprite_sheet, Selection(row=0, column=2)
+            Direction.DOWN, sprite_sheet, SpriteSheetSelection(row=0, column=2)
         ),
         event=greet,
     )

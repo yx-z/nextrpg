@@ -22,6 +22,15 @@ class Direction(LoadFromSaveEnum):
         return _OPPOSITE_DIRECTION[self]
 
 
+@dataclass(frozen=True)
+class DirectionalOffset:
+    direction: Direction
+    offset: Pixel
+
+    def __neg__(self) -> Self:
+        return replace(self, direction=-self.direction)
+
+
 _OPPOSITE_DIRECTION = {
     Direction.DOWN: Direction.UP,
     Direction.LEFT: Direction.RIGHT,
@@ -32,12 +41,3 @@ _OPPOSITE_DIRECTION = {
     Direction.DOWN_LEFT: Direction.UP_RIGHT,
     Direction.DOWN_RIGHT: Direction.UP_LEFT,
 }
-
-
-@dataclass(frozen=True)
-class DirectionalOffset:
-    direction: Direction
-    offset: Pixel
-
-    def __neg__(self) -> Self:
-        return replace(self, direction=-self.direction)

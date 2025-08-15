@@ -23,7 +23,7 @@ type Resource = (
 
 
 @dataclass_with_init(frozen=True)
-class Fade(AnimatedOnScreen, ABC):
+class _Fade(AnimatedOnScreen, ABC):
     resource: Resource
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
@@ -80,7 +80,7 @@ class Fade(AnimatedOnScreen, ABC):
     def _percentage(self) -> float: ...
 
 
-class FadeIn(Fade):
+class FadeIn(_Fade):
     @override
     @property
     def _start(self) -> tuple[DrawOnScreen, ...]:
@@ -97,7 +97,7 @@ class FadeIn(Fade):
         return self._timer.completed_percentage
 
 
-class FadeOut(Fade):
+class FadeOut(_Fade):
     @override
     @property
     def _percentage(self) -> float:

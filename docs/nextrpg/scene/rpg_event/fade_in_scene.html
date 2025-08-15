@@ -147,29 +147,29 @@
 </span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="p">)</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>
 </span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="k">class</span><span class="w"> </span><span class="nc">BackgroundFadeIn</span><span class="p">(</span><span class="n">BackgroundEvent</span><span class="p">):</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="n">fade</span><span class="p">:</span> <span class="n">FadeIn</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>    <span class="nd">@property</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>    <span class="nd">@override</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">draw_on_screens</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>    <span class="nd">@override</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fade</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="nd">@property</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="nd">@override</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>        <span class="k">return</span> <span class="kc">False</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="nd">@register_rpg_event_scene</span><span class="p">(</span><span class="n">FadeInScene</span><span class="p">)</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="k">def</span><span class="w"> </span><span class="nf">fade_in</span><span class="p">(</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">wait</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BackgroundEventSentinel</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="k">class</span><span class="w"> </span><span class="nc">BackgroundFadeIn</span><span class="p">(</span><span class="n">BackgroundEvent</span><span class="p">):</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="n">fade</span><span class="p">:</span> <span class="n">FadeIn</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="nd">@property</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>    <span class="nd">@override</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="nd">@override</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fade</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="nd">@register_rpg_event_scene</span><span class="p">(</span><span class="n">FadeInScene</span><span class="p">)</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="k">def</span><span class="w"> </span><span class="nf">fade_in</span><span class="p">(</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span><span class="p">,</span> <span class="n">wait</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BackgroundEventSentinel</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="nd">@property</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="nd">@override</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span></pre></div>
 
 
@@ -367,23 +367,23 @@
 
     </div>
     <a class="headerlink" href="#BackgroundFadeIn"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="BackgroundFadeIn-53"><a href="#BackgroundFadeIn-53"><span class="linenos">53</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="BackgroundFadeIn-54"><a href="#BackgroundFadeIn-54"><span class="linenos">54</span></a><span class="k">class</span><span class="w"> </span><span class="nc">BackgroundFadeIn</span><span class="p">(</span><span class="n">BackgroundEvent</span><span class="p">):</span>
-</span><span id="BackgroundFadeIn-55"><a href="#BackgroundFadeIn-55"><span class="linenos">55</span></a>    <span class="n">fade</span><span class="p">:</span> <span class="n">FadeIn</span>
-</span><span id="BackgroundFadeIn-56"><a href="#BackgroundFadeIn-56"><span class="linenos">56</span></a>
-</span><span id="BackgroundFadeIn-57"><a href="#BackgroundFadeIn-57"><span class="linenos">57</span></a>    <span class="nd">@property</span>
-</span><span id="BackgroundFadeIn-58"><a href="#BackgroundFadeIn-58"><span class="linenos">58</span></a>    <span class="nd">@override</span>
-</span><span id="BackgroundFadeIn-59"><a href="#BackgroundFadeIn-59"><span class="linenos">59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="BackgroundFadeIn-60"><a href="#BackgroundFadeIn-60"><span class="linenos">60</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">draw_on_screens</span>
-</span><span id="BackgroundFadeIn-61"><a href="#BackgroundFadeIn-61"><span class="linenos">61</span></a>
-</span><span id="BackgroundFadeIn-62"><a href="#BackgroundFadeIn-62"><span class="linenos">62</span></a>    <span class="nd">@override</span>
-</span><span id="BackgroundFadeIn-63"><a href="#BackgroundFadeIn-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="BackgroundFadeIn-64"><a href="#BackgroundFadeIn-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fade</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
-</span><span id="BackgroundFadeIn-65"><a href="#BackgroundFadeIn-65"><span class="linenos">65</span></a>
-</span><span id="BackgroundFadeIn-66"><a href="#BackgroundFadeIn-66"><span class="linenos">66</span></a>    <span class="nd">@property</span>
-</span><span id="BackgroundFadeIn-67"><a href="#BackgroundFadeIn-67"><span class="linenos">67</span></a>    <span class="nd">@override</span>
-</span><span id="BackgroundFadeIn-68"><a href="#BackgroundFadeIn-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="BackgroundFadeIn-69"><a href="#BackgroundFadeIn-69"><span class="linenos">69</span></a>        <span class="k">return</span> <span class="kc">False</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BackgroundFadeIn-59"><a href="#BackgroundFadeIn-59"><span class="linenos">59</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="BackgroundFadeIn-60"><a href="#BackgroundFadeIn-60"><span class="linenos">60</span></a><span class="k">class</span><span class="w"> </span><span class="nc">BackgroundFadeIn</span><span class="p">(</span><span class="n">BackgroundEvent</span><span class="p">):</span>
+</span><span id="BackgroundFadeIn-61"><a href="#BackgroundFadeIn-61"><span class="linenos">61</span></a>    <span class="n">fade</span><span class="p">:</span> <span class="n">FadeIn</span>
+</span><span id="BackgroundFadeIn-62"><a href="#BackgroundFadeIn-62"><span class="linenos">62</span></a>
+</span><span id="BackgroundFadeIn-63"><a href="#BackgroundFadeIn-63"><span class="linenos">63</span></a>    <span class="nd">@property</span>
+</span><span id="BackgroundFadeIn-64"><a href="#BackgroundFadeIn-64"><span class="linenos">64</span></a>    <span class="nd">@override</span>
+</span><span id="BackgroundFadeIn-65"><a href="#BackgroundFadeIn-65"><span class="linenos">65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="BackgroundFadeIn-66"><a href="#BackgroundFadeIn-66"><span class="linenos">66</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">draw_on_screens</span>
+</span><span id="BackgroundFadeIn-67"><a href="#BackgroundFadeIn-67"><span class="linenos">67</span></a>
+</span><span id="BackgroundFadeIn-68"><a href="#BackgroundFadeIn-68"><span class="linenos">68</span></a>    <span class="nd">@override</span>
+</span><span id="BackgroundFadeIn-69"><a href="#BackgroundFadeIn-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="BackgroundFadeIn-70"><a href="#BackgroundFadeIn-70"><span class="linenos">70</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fade</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
+</span><span id="BackgroundFadeIn-71"><a href="#BackgroundFadeIn-71"><span class="linenos">71</span></a>
+</span><span id="BackgroundFadeIn-72"><a href="#BackgroundFadeIn-72"><span class="linenos">72</span></a>    <span class="nd">@property</span>
+</span><span id="BackgroundFadeIn-73"><a href="#BackgroundFadeIn-73"><span class="linenos">73</span></a>    <span class="nd">@override</span>
+</span><span id="BackgroundFadeIn-74"><a href="#BackgroundFadeIn-74"><span class="linenos">74</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="BackgroundFadeIn-75"><a href="#BackgroundFadeIn-75"><span class="linenos">75</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span></pre></div>
 
 
@@ -421,10 +421,10 @@
 
     </div>
     <a class="headerlink" href="#BackgroundFadeIn.draw_on_screens"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="BackgroundFadeIn.draw_on_screens-57"><a href="#BackgroundFadeIn.draw_on_screens-57"><span class="linenos">57</span></a>    <span class="nd">@property</span>
-</span><span id="BackgroundFadeIn.draw_on_screens-58"><a href="#BackgroundFadeIn.draw_on_screens-58"><span class="linenos">58</span></a>    <span class="nd">@override</span>
-</span><span id="BackgroundFadeIn.draw_on_screens-59"><a href="#BackgroundFadeIn.draw_on_screens-59"><span class="linenos">59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="BackgroundFadeIn.draw_on_screens-60"><a href="#BackgroundFadeIn.draw_on_screens-60"><span class="linenos">60</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">draw_on_screens</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BackgroundFadeIn.draw_on_screens-63"><a href="#BackgroundFadeIn.draw_on_screens-63"><span class="linenos">63</span></a>    <span class="nd">@property</span>
+</span><span id="BackgroundFadeIn.draw_on_screens-64"><a href="#BackgroundFadeIn.draw_on_screens-64"><span class="linenos">64</span></a>    <span class="nd">@override</span>
+</span><span id="BackgroundFadeIn.draw_on_screens-65"><a href="#BackgroundFadeIn.draw_on_screens-65"><span class="linenos">65</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="BackgroundFadeIn.draw_on_screens-66"><a href="#BackgroundFadeIn.draw_on_screens-66"><span class="linenos">66</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">draw_on_screens</span>
 </span></pre></div>
 
 
@@ -443,9 +443,9 @@
 
     </div>
     <a class="headerlink" href="#BackgroundFadeIn.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="BackgroundFadeIn.tick-62"><a href="#BackgroundFadeIn.tick-62"><span class="linenos">62</span></a>    <span class="nd">@override</span>
-</span><span id="BackgroundFadeIn.tick-63"><a href="#BackgroundFadeIn.tick-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="BackgroundFadeIn.tick-64"><a href="#BackgroundFadeIn.tick-64"><span class="linenos">64</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fade</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BackgroundFadeIn.tick-68"><a href="#BackgroundFadeIn.tick-68"><span class="linenos">68</span></a>    <span class="nd">@override</span>
+</span><span id="BackgroundFadeIn.tick-69"><a href="#BackgroundFadeIn.tick-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="BackgroundFadeIn.tick-70"><a href="#BackgroundFadeIn.tick-70"><span class="linenos">70</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fade</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fade</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">))</span>
 </span></pre></div>
 
 
@@ -461,10 +461,10 @@
 
     </div>
     <a class="headerlink" href="#BackgroundFadeIn.complete"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="BackgroundFadeIn.complete-66"><a href="#BackgroundFadeIn.complete-66"><span class="linenos">66</span></a>    <span class="nd">@property</span>
-</span><span id="BackgroundFadeIn.complete-67"><a href="#BackgroundFadeIn.complete-67"><span class="linenos">67</span></a>    <span class="nd">@override</span>
-</span><span id="BackgroundFadeIn.complete-68"><a href="#BackgroundFadeIn.complete-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="BackgroundFadeIn.complete-69"><a href="#BackgroundFadeIn.complete-69"><span class="linenos">69</span></a>        <span class="k">return</span> <span class="kc">False</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BackgroundFadeIn.complete-72"><a href="#BackgroundFadeIn.complete-72"><span class="linenos">72</span></a>    <span class="nd">@property</span>
+</span><span id="BackgroundFadeIn.complete-73"><a href="#BackgroundFadeIn.complete-73"><span class="linenos">73</span></a>    <span class="nd">@override</span>
+</span><span id="BackgroundFadeIn.complete-74"><a href="#BackgroundFadeIn.complete-74"><span class="linenos">74</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="BackgroundFadeIn.complete-75"><a href="#BackgroundFadeIn.complete-75"><span class="linenos">75</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span></pre></div>
 
 

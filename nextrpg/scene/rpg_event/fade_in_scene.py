@@ -49,6 +49,12 @@ class FadeInScene(RpgEventScene[BackgroundEventSentinel]):
         )
 
 
+@register_rpg_event_scene(FadeInScene)
+def fade_in(
+    resource: Resource, wait: bool = True, duration: Millisecond | None = None
+) -> BackgroundEventSentinel: ...
+
+
 @dataclass(frozen=True, kw_only=True)
 class BackgroundFadeIn(BackgroundEvent):
     fade: FadeIn
@@ -66,9 +72,3 @@ class BackgroundFadeIn(BackgroundEvent):
     @override
     def complete(self) -> bool:
         return False
-
-
-@register_rpg_event_scene(FadeInScene)
-def fade_in(
-    resource: Resource, wait: bool = True, duration: Millisecond | None = None
-) -> BackgroundEventSentinel: ...

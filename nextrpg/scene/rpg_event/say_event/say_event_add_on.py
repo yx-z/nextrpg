@@ -23,7 +23,7 @@ from nextrpg.scene.scene import Scene
 
 
 @dataclass(frozen=True)
-class AddOn:
+class SayEventAddOn:
     config: SayEventConfig
     message: str | Text | TextGroup
 
@@ -124,7 +124,7 @@ class AddOn:
 
 
 @dataclass(frozen=True)
-class CharacterAddOn(AddOn):
+class SayEventCharacterAddOn(SayEventAddOn):
     scene: Scene
     character: CharacterOnScreen
 

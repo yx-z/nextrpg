@@ -31,16 +31,16 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
-                    <a class="class" href="#Selection">Selection</a>
+                    <a class="class" href="#SpriteSheetSelection">SpriteSheetSelection</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="function" href="#Selection.__init__">Selection</a>
+                                <a class="function" href="#SpriteSheetSelection.__init__">SpriteSheetSelection</a>
                         </li>
                         <li>
-                                <a class="variable" href="#Selection.row">row</a>
+                                <a class="variable" href="#SpriteSheetSelection.row">row</a>
                         </li>
                         <li>
-                                <a class="variable" href="#Selection.column">column</a>
+                                <a class="variable" href="#SpriteSheetSelection.column">column</a>
                         </li>
                 </ul>
 
@@ -104,7 +104,7 @@
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Selection</span><span class="p">:</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpriteSheetSelection</span><span class="p">:</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="n">row</span><span class="p">:</span> <span class="nb">int</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">column</span><span class="p">:</span> <span class="nb">int</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
@@ -116,7 +116,7 @@
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="n">num_column</span><span class="p">:</span> <span class="nb">int</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="n">color_key</span><span class="p">:</span> <span class="n">Color</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">:</span> <span class="n">Selection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">:</span> <span class="n">SpriteSheetSelection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_column</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_row</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>        <span class="n">top_left</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="n">selection</span><span class="o">.</span><span class="n">column</span><span class="p">,</span> <span class="n">height</span> <span class="o">*</span> <span class="n">selection</span><span class="o">.</span><span class="n">row</span><span class="p">)</span>
@@ -130,57 +130,57 @@
 
 
             </section>
-                <section id="Selection">
-                            <input id="Selection-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                <section id="SpriteSheetSelection">
+                            <input id="SpriteSheetSelection-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
                     <div class="decorator decorator-dataclass">@dataclass(frozen=True, kw_only=True)</div>
 
     <span class="def">class</span>
-    <span class="name">Selection</span>:
+    <span class="name">SpriteSheetSelection</span>:
 
-                <label class="view-source-button" for="Selection-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="SpriteSheetSelection-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#Selection"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Selection-12"><a href="#Selection-12"><span class="linenos">12</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="Selection-13"><a href="#Selection-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Selection</span><span class="p">:</span>
-</span><span id="Selection-14"><a href="#Selection-14"><span class="linenos">14</span></a>    <span class="n">row</span><span class="p">:</span> <span class="nb">int</span>
-</span><span id="Selection-15"><a href="#Selection-15"><span class="linenos">15</span></a>    <span class="n">column</span><span class="p">:</span> <span class="nb">int</span>
+    <a class="headerlink" href="#SpriteSheetSelection"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SpriteSheetSelection-12"><a href="#SpriteSheetSelection-12"><span class="linenos">12</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="SpriteSheetSelection-13"><a href="#SpriteSheetSelection-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SpriteSheetSelection</span><span class="p">:</span>
+</span><span id="SpriteSheetSelection-14"><a href="#SpriteSheetSelection-14"><span class="linenos">14</span></a>    <span class="n">row</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="SpriteSheetSelection-15"><a href="#SpriteSheetSelection-15"><span class="linenos">15</span></a>    <span class="n">column</span><span class="p">:</span> <span class="nb">int</span>
 </span></pre></div>
 
 
     
 
-                            <div id="Selection.__init__" class="classattr">
+                            <div id="SpriteSheetSelection.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">Selection</span><span class="signature pdoc-code condensed">(<span class="param"><span class="o">*</span>, </span><span class="param"><span class="n">row</span><span class="p">:</span> <span class="nb">int</span>, </span><span class="param"><span class="n">column</span><span class="p">:</span> <span class="nb">int</span></span>)</span>
+        <span class="name">SpriteSheetSelection</span><span class="signature pdoc-code condensed">(<span class="param"><span class="o">*</span>, </span><span class="param"><span class="n">row</span><span class="p">:</span> <span class="nb">int</span>, </span><span class="param"><span class="n">column</span><span class="p">:</span> <span class="nb">int</span></span>)</span>
 
         
     </div>
-    <a class="headerlink" href="#Selection.__init__"></a>
+    <a class="headerlink" href="#SpriteSheetSelection.__init__"></a>
     
     
 
                             </div>
-                            <div id="Selection.row" class="classattr">
+                            <div id="SpriteSheetSelection.row" class="classattr">
                                 <div class="attr variable">
             <span class="name">row</span><span class="annotation">: int</span>
 
         
     </div>
-    <a class="headerlink" href="#Selection.row"></a>
+    <a class="headerlink" href="#SpriteSheetSelection.row"></a>
     
     
 
                             </div>
-                            <div id="Selection.column" class="classattr">
+                            <div id="SpriteSheetSelection.column" class="classattr">
                                 <div class="attr variable">
             <span class="name">column</span><span class="annotation">: int</span>
 
         
     </div>
-    <a class="headerlink" href="#Selection.column"></a>
+    <a class="headerlink" href="#SpriteSheetSelection.column"></a>
     
     
 
@@ -205,7 +205,7 @@
 </span><span id="SpriteSheet-22"><a href="#SpriteSheet-22"><span class="linenos">22</span></a>    <span class="n">num_column</span><span class="p">:</span> <span class="nb">int</span>
 </span><span id="SpriteSheet-23"><a href="#SpriteSheet-23"><span class="linenos">23</span></a>    <span class="n">color_key</span><span class="p">:</span> <span class="n">Color</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="SpriteSheet-24"><a href="#SpriteSheet-24"><span class="linenos">24</span></a>
-</span><span id="SpriteSheet-25"><a href="#SpriteSheet-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">:</span> <span class="n">Selection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
+</span><span id="SpriteSheet-25"><a href="#SpriteSheet-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">:</span> <span class="n">SpriteSheetSelection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
 </span><span id="SpriteSheet-26"><a href="#SpriteSheet-26"><span class="linenos">26</span></a>        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_column</span>
 </span><span id="SpriteSheet-27"><a href="#SpriteSheet-27"><span class="linenos">27</span></a>        <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_row</span>
 </span><span id="SpriteSheet-28"><a href="#SpriteSheet-28"><span class="linenos">28</span></a>        <span class="n">top_left</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="n">selection</span><span class="o">.</span><span class="n">column</span><span class="p">,</span> <span class="n">height</span> <span class="o">*</span> <span class="n">selection</span><span class="o">.</span><span class="n">row</span><span class="p">)</span>
@@ -282,13 +282,13 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">select</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">selection</span><span class="p">:</span> <span class="n"><a href="#Selection">Selection</a></span></span><span class="return-annotation">) -> <span class="n"><a href="draw.html#Draw">nextrpg.draw.draw.Draw</a></span>:</span></span>
+        <span class="name">select</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">selection</span><span class="p">:</span> <span class="n"><a href="#SpriteSheetSelection">SpriteSheetSelection</a></span></span><span class="return-annotation">) -> <span class="n"><a href="draw.html#Draw">nextrpg.draw.draw.Draw</a></span>:</span></span>
 
                 <label class="view-source-button" for="SpriteSheet.select-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#SpriteSheet.select"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SpriteSheet.select-25"><a href="#SpriteSheet.select-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">:</span> <span class="n">Selection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SpriteSheet.select-25"><a href="#SpriteSheet.select-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">:</span> <span class="n">SpriteSheetSelection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Draw</span><span class="p">:</span>
 </span><span id="SpriteSheet.select-26"><a href="#SpriteSheet.select-26"><span class="linenos">26</span></a>        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_column</span>
 </span><span id="SpriteSheet.select-27"><a href="#SpriteSheet.select-27"><span class="linenos">27</span></a>        <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_row</span>
 </span><span id="SpriteSheet.select-28"><a href="#SpriteSheet.select-28"><span class="linenos">28</span></a>        <span class="n">top_left</span> <span class="o">=</span> <span class="n">Coordinate</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="n">selection</span><span class="o">.</span><span class="n">column</span><span class="p">,</span> <span class="n">height</span> <span class="o">*</span> <span class="n">selection</span><span class="o">.</span><span class="n">row</span><span class="p">)</span>
