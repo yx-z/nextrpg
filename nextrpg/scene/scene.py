@@ -2,12 +2,12 @@ from functools import cached_property
 from typing import Self, override
 
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.draw.animated_on_screen import AnimatedOnScreen
+from nextrpg.draw.animation_on_screen import AnimationOnScreen
 from nextrpg.draw.drawing import DrawingOnScreen
 from nextrpg.event.pygame_event import PygameEvent
 
 
-class Scene(AnimatedOnScreen):
+class Scene(AnimationOnScreen):
     @property
     def drawing_on_screen_shift(self) -> Coordinate | None:
         return None

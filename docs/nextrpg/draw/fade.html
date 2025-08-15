@@ -78,20 +78,20 @@
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a>    <span class="n">not_constructor_below</span><span class="p">,</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="p">)</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Timer</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.animated_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnimatedOnScreen</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.animation_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnimationOnScreen</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawingOnScreen</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.global_config.global_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="nb">type</span> <span class="n">Resource</span> <span class="o">=</span> <span class="p">(</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>    <span class="n">DrawingOnScreen</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>    <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>    <span class="o">|</span> <span class="n">AnimatedOnScreen</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>    <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">AnimatedOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>    <span class="o">|</span> <span class="n">AnimationOnScreen</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>    <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">AnimationOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="p">)</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_Fade</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="k">class</span><span class="w"> </span><span class="nc">_Fade</span><span class="p">(</span><span class="n">AnimationOnScreen</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>    <span class="n">duration</span><span class="p">:</span> <span class="n">Millisecond</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">transition</span><span class="o">.</span><span class="n">duration</span>
@@ -113,7 +113,7 @@
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>    <span class="nd">@override</span>
 </span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>        <span class="n">timer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timer</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,</span> <span class="n">AnimatedOnScreen</span><span class="p">):</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,</span> <span class="n">AnimationOnScreen</span><span class="p">):</span>
 </span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>            <span class="n">animation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
 </span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource</span><span class="o">=</span><span class="n">animation</span><span class="p">,</span> <span class="n">_timer</span><span class="o">=</span><span class="n">timer</span><span class="p">)</span>
 </span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>        <span class="k">if</span> <span class="n">_is_animated_tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">):</span>
@@ -129,7 +129,7 @@
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,</span> <span class="n">DrawingOnScreen</span><span class="p">):</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,)</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,</span> <span class="n">AnimatedOnScreen</span><span class="p">):</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">,</span> <span class="n">AnimationOnScreen</span><span class="p">):</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="o">.</span><span class="n">drawing_on_screens</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="k">if</span> <span class="n">_is_animated_tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource</span><span class="p">):</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">d</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">drawing_on_screens</span><span class="p">)</span>
@@ -184,12 +184,12 @@
 </span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>
 </span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a><span class="k">def</span><span class="w"> </span><span class="nf">_is_animated_tuple</span><span class="p">(</span>
 </span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>    <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span><span class="p">,</span>
-</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TypeIs</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">AnimatedOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TypeIs</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">AnimationOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
 </span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">resource</span><span class="p">:</span>
 </span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resource</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
 </span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>        <span class="k">return</span> <span class="kc">False</span>
-</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resource</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">AnimatedOnScreen</span><span class="p">):</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resource</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">AnimationOnScreen</span><span class="p">):</span>
 </span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>        <span class="k">return</span> <span class="kc">False</span>
 </span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>    <span class="k">return</span> <span class="kc">True</span>
 </span></pre></div>
@@ -200,7 +200,7 @@
                     <div class="attr variable">
             <span class="def">type</span> <span class="name">Resource</span>        =
 <input id="Resource-view-value" class="view-value-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
-            <label class="view-value-button pdoc-button" for="Resource-view-value"></label><span class="default_value"><a href="drawing.html#DrawingOnScreen">nextrpg.draw.drawing.DrawingOnScreen</a> | tuple[<a href="drawing.html#DrawingOnScreen">nextrpg.draw.drawing.DrawingOnScreen</a>, ...] | <a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a> | tuple[<a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a>, ...]</span>
+            <label class="view-value-button pdoc-button" for="Resource-view-value"></label><span class="default_value"><a href="drawing.html#DrawingOnScreen">nextrpg.draw.drawing.DrawingOnScreen</a> | tuple[<a href="drawing.html#DrawingOnScreen">nextrpg.draw.drawing.DrawingOnScreen</a>, ...] | <a href="animation_on_screen.html#AnimationOnScreen">nextrpg.draw.animation_on_screen.AnimationOnScreen</a> | tuple[<a href="animation_on_screen.html#AnimationOnScreen">nextrpg.draw.animation_on_screen.AnimationOnScreen</a>, ...]</span>
 
         
     </div>
@@ -254,9 +254,9 @@
                 <dd id="FadeIn.complete" class="variable"><a href="#_Fade.complete">complete</a></dd>
 
             </div>
-            <div><dt><a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a></dt>
-                                <dd id="FadeIn.size" class="variable"><a href="animated_on_screen.html#AnimatedOnScreen.size">size</a></dd>
-                <dd id="FadeIn.top_left" class="variable"><a href="animated_on_screen.html#AnimatedOnScreen.top_left">top_left</a></dd>
+            <div><dt><a href="animation_on_screen.html#AnimationOnScreen">nextrpg.draw.animation_on_screen.AnimationOnScreen</a></dt>
+                                <dd id="FadeIn.size" class="variable"><a href="animation_on_screen.html#AnimationOnScreen.size">size</a></dd>
+                <dd id="FadeIn.top_left" class="variable"><a href="animation_on_screen.html#AnimationOnScreen.top_left">top_left</a></dd>
 
             </div>
             <div><dt><a href="../core/sizeable.html#Sizeable">nextrpg.core.sizeable.Sizeable</a></dt>
@@ -324,9 +324,9 @@
                 <dd id="FadeOut.complete" class="variable"><a href="#_Fade.complete">complete</a></dd>
 
             </div>
-            <div><dt><a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a></dt>
-                                <dd id="FadeOut.size" class="variable"><a href="animated_on_screen.html#AnimatedOnScreen.size">size</a></dd>
-                <dd id="FadeOut.top_left" class="variable"><a href="animated_on_screen.html#AnimatedOnScreen.top_left">top_left</a></dd>
+            <div><dt><a href="animation_on_screen.html#AnimationOnScreen">nextrpg.draw.animation_on_screen.AnimationOnScreen</a></dt>
+                                <dd id="FadeOut.size" class="variable"><a href="animation_on_screen.html#AnimationOnScreen.size">size</a></dd>
+                <dd id="FadeOut.top_left" class="variable"><a href="animation_on_screen.html#AnimationOnScreen.top_left">top_left</a></dd>
 
             </div>
             <div><dt><a href="../core/sizeable.html#Sizeable">nextrpg.core.sizeable.Sizeable</a></dt>

@@ -78,11 +78,11 @@ nextrpg    </h1>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="p">)</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.player_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerOnScreen</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.character.rpg_maker_character_drawing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>    <span class="n">DefaultFrameType</span><span class="p">,</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>    <span class="n">DefaultCharacterDrawingType</span><span class="p">,</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>    <span class="n">FrameType</span><span class="p">,</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>    <span class="n">RpgMakerCharacterDrawing</span><span class="p">,</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>    <span class="n">RpgMakerSpriteSheet</span><span class="p">,</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="n">XpFrameType</span><span class="p">,</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="n">RpgMakerXpCharacterDrawingType</span><span class="p">,</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="p">)</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.cached_decorator</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -121,7 +121,7 @@ nextrpg    </h1>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>    <span class="n">UpdateFromSave</span><span class="p">,</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="p">)</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.walk</span><span class="w"> </span><span class="kn">import</span> <span class="n">Walk</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.cyclic_frames</span><span class="w"> </span><span class="kn">import</span> <span class="n">CyclicFrames</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.cyclic_animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">CyclicAnimation</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="n">Drawing</span><span class="p">,</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="n">DrawingOnScreen</span><span class="p">,</span>

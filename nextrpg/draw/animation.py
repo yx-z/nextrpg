@@ -9,7 +9,7 @@ from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 
 
-class Animated(Sizeable, ABC):
+class Animation(Sizeable, ABC):
     @abstractmethod
     def tick(self, time_delta: Millisecond) -> Self: ...
 

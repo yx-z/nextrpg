@@ -7,12 +7,12 @@ from nextrpg.core.dataclass_with_init import (
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond, Timer
-from nextrpg.draw.animated import Animated
+from nextrpg.draw.animation import Animation
 from nextrpg.draw.drawing import Drawing
 
 
 @dataclass_with_init(frozen=True)
-class CyclicFrames(Animated):
+class CyclicAnimation(Animation):
     frames: tuple[Drawing, ...]
     duration_per_frame: Millisecond
     _: KW_ONLY = not_constructor_below()

@@ -12,13 +12,13 @@ from nextrpg.core.dataclass_with_init import (
 from nextrpg.core.dimension import Size
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.cyclic_frames import CyclicFrames
+from nextrpg.draw.cyclic_animation import CyclicAnimation
 from nextrpg.draw.drawing import Drawing, Trim
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.global_config.global_config import config
 
 
-class DefaultFrameType(IntEnum):
+class DefaultCharacterDrawingType(IntEnum):
     _RIGHT_FOOT = 0
     _IDLE = 1
     _LEFT_FOOT = 2
@@ -26,14 +26,14 @@ class DefaultFrameType(IntEnum):
     @classmethod
     def _frame_indices(cls) -> tuple[int, ...]:
         return (
-            DefaultFrameType._IDLE,
-            DefaultFrameType._RIGHT_FOOT,
-            DefaultFrameType._IDLE,
-            DefaultFrameType._LEFT_FOOT,
+            DefaultCharacterDrawingType._IDLE,
+            DefaultCharacterDrawingType._RIGHT_FOOT,
+            DefaultCharacterDrawingType._IDLE,
+            DefaultCharacterDrawingType._LEFT_FOOT,
         )
 
 
-class XpFrameType(IntEnum):
+class RpgMakerXpCharacterDrawingType(IntEnum):
     _IDLE = 0
     _RIGHT_FOOT = 1
     _IDLE_AGAIN = 2
@@ -44,7 +44,9 @@ class XpFrameType(IntEnum):
         return tuple(cls)
 
 
-type FrameType = type[DefaultFrameType | XpFrameType]
+type FrameType = type[
+    DefaultCharacterDrawingType | RpgMakerXpCharacterDrawingType
+]
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -52,7 +54,7 @@ class RpgMakerSpriteSheet(SpriteSheet):
     trim: Trim | None = None
     num_column: int = 4
     num_row: int = 2
-    style: FrameType = DefaultFrameType
+    style: FrameType = DefaultCharacterDrawingType
 
 
 @dataclass_with_init(frozen=True)
@@ -64,64 +66,60 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         default_factory=lambda: config().rpg_maker_character.duration_per_frame
     )
     _: KW_ONLY = not_constructor_below()
-    _frames: dict[Direction, CyclicFrames] = default(
-        lambda self: self._init_frames
+    _animations: dict[Direction, CyclicAnimation] = default(
+        lambda self: self._init_animation
     )
 
     @property
     def drawing(self) -> Drawing:
-        return self._frames[_adjust(self.direction)].drawing
+        return self._animations[_adjust(self.direction)].drawing
 
     @override
     def turn(self, direction: Direction) -> Self:
-        frames = {
+        animation = {
             d: frames if d == _adjust(direction) else frames.reset
-            for d, frames in self._frames.items()
+            for d, frames in self._animations.items()
         }
-        return replace(self, direction=direction, _frames=frames)
+        return replace(self, direction=direction, _animations=animation)
 
     @override
     def tick_move(self, time_delta: Millisecond) -> Self:
-        frames = {
-            direction: self._tick_frames(time_delta, direction)
-            for direction, frames in self._frames.items()
+        animation = {
+            direction: self._tick_animation(time_delta, direction)
+            for direction, frames in self._animations.items()
         }
-        return replace(self, _frames=frames)
+        return replace(self, _animations=animation)
 
     @override
     def tick_idle(self, time_delta: Millisecond) -> Self:
         if self.animate_on_idle:
             return self.tick_move(time_delta)
-        frames = {d: frames.reset for d, frames in self._frames.items()}
-        return replace(self, _frames=frames)
+        animation = {d: frames.reset for d, frames in self._animations.items()}
+        return replace(self, _animations=animation)
 
-    def _tick_frames(
+    def _tick_animation(
         self, time_delta: Millisecond, adjusted_direction: Direction
-    ) -> CyclicFrames:
-        frames = self._frames[adjusted_direction]
+    ) -> CyclicAnimation:
+        animation = self._animations[adjusted_direction]
         if adjusted_direction == _adjust(self.direction):
-            return frames.tick(time_delta)
-        return frames
+            return animation.tick(time_delta)
+        return animation
 
     def _trim(self, draw: Drawing) -> Drawing:
         if self.sprite_sheet.trim:
             return draw.trim(self.sprite_sheet.trim)
         return draw
 
-    def _load_frames_row(self, draw: Drawing, row: int) -> CyclicFrames:
-        frames = tuple(
-            self._trim(d) for d in self._crop_into_frames_at_row(draw, row)
-        )
+    def _load_row(self, draw: Drawing, row: int) -> CyclicAnimation:
+        frames = tuple(self._trim(d) for d in self._crop_at_row(draw, row))
         ordered_frames = tuple(
             frames[i] for i in self.sprite_sheet.style._frame_indices()
         )
-        return CyclicFrames(
+        return CyclicAnimation(
             frames=ordered_frames, duration_per_frame=self.duration_per_frame
         )
 
-    def _crop_into_frames_at_row(
-        self, draw: Drawing, row: int
-    ) -> tuple[Drawing, ...]:
+    def _crop_at_row(self, draw: Drawing, row: int) -> tuple[Drawing, ...]:
         num_frames = len(self.sprite_sheet.style)
         width = draw.width / num_frames
         height = draw.height / len(_DIR_TO_ROW)
@@ -132,13 +130,13 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         )
 
     @property
-    def _init_frames(self) -> dict[Direction, CyclicFrames]:
+    def _init_animation(self) -> dict[Direction, CyclicAnimation]:
         if self.selection:
             draw = self.sprite_sheet.select(self.selection)
         else:
             draw = self.sprite_sheet.drawing
         return {
-            direction: self._load_frames_row(draw, row)
+            direction: self._load_row(draw, row)
             for direction, row in _DIR_TO_ROW.items()
         }
 

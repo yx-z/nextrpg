@@ -1,4 +1,4 @@
-__version__ = "0.1.14"
+__version__ = "0.1.15"
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import (
@@ -19,11 +19,11 @@ from nextrpg.character.npc_on_screen import (
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.rpg_maker_character_drawing import (
-    DefaultFrameType,
+    DefaultCharacterDrawingType,
     FrameType,
     RpgMakerCharacterDrawing,
     RpgMakerSpriteSheet,
-    XpFrameType,
+    RpgMakerXpCharacterDrawingType,
 )
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.color import (
@@ -62,7 +62,7 @@ from nextrpg.core.save import (
     UpdateFromSave,
 )
 from nextrpg.core.walk import Walk
-from nextrpg.draw.cyclic_frames import CyclicFrames
+from nextrpg.draw.cyclic_animation import CyclicAnimation
 from nextrpg.draw.drawing import (
     Drawing,
     DrawingOnScreen,

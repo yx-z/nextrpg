@@ -7,12 +7,12 @@ from nextrpg.core.coordinate import Coordinate, Moving
 from nextrpg.core.dimension import Size
 from nextrpg.core.sizeable import Sizeable
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.animated import Animated
+from nextrpg.draw.animation import Animation
 from nextrpg.draw.drawing import Drawing, DrawingOnScreen, SizedDrawOnScreens
 from nextrpg.draw.drawing_group import DrawingGroupOnScreen
 
 
-class AnimatedOnScreen(Sizeable, ABC):
+class AnimationOnScreen(Sizeable, ABC):
     @property
     @abstractmethod
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]: ...
@@ -34,9 +34,9 @@ class AnimatedOnScreen(Sizeable, ABC):
 
 
 @dataclass(frozen=True)
-class MovingAnimatedOnScreen(AnimatedOnScreen):
+class MovingAnimationOnScreen(AnimationOnScreen):
     moving: Moving
-    animated: Animated
+    animated: Animation
 
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:

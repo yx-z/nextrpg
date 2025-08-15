@@ -82,13 +82,13 @@
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="n">not_constructor_below</span><span class="p">,</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="p">)</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">Timer</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.animated_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnimatedOnScreen</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.animation_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnimationOnScreen</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawingOnScreen</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.text_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">TextOnScreen</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Typewriter</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">):</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Typewriter</span><span class="p">(</span><span class="n">AnimationOnScreen</span><span class="p">):</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="n">text_on_screen</span><span class="p">:</span> <span class="n">TextOnScreen</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">delay</span><span class="p">:</span> <span class="n">Millisecond</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
@@ -119,14 +119,14 @@
                     <div class="decorator decorator-dataclass_with_init">@dataclass_with_init(frozen=True)</div>
 
     <span class="def">class</span>
-    <span class="name">Typewriter</span><wbr>(<span class="base"><a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a></span>):
+    <span class="name">Typewriter</span><wbr>(<span class="base"><a href="animation_on_screen.html#AnimationOnScreen">nextrpg.draw.animation_on_screen.AnimationOnScreen</a></span>):
 
                 <label class="view-source-button" for="Typewriter-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Typewriter"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="Typewriter-17"><a href="#Typewriter-17"><span class="linenos">17</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="Typewriter-18"><a href="#Typewriter-18"><span class="linenos">18</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Typewriter</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">):</span>
+</span><span id="Typewriter-18"><a href="#Typewriter-18"><span class="linenos">18</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Typewriter</span><span class="p">(</span><span class="n">AnimationOnScreen</span><span class="p">):</span>
 </span><span id="Typewriter-19"><a href="#Typewriter-19"><span class="linenos">19</span></a>    <span class="n">text_on_screen</span><span class="p">:</span> <span class="n">TextOnScreen</span>
 </span><span id="Typewriter-20"><a href="#Typewriter-20"><span class="linenos">20</span></a>    <span class="n">delay</span><span class="p">:</span> <span class="n">Millisecond</span>
 </span><span id="Typewriter-21"><a href="#Typewriter-21"><span class="linenos">21</span></a>    <span class="n">_</span><span class="p">:</span> <span class="n">KW_ONLY</span> <span class="o">=</span> <span class="n">not_constructor_below</span><span class="p">()</span>
@@ -235,9 +235,9 @@
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
-                                    <div><dt><a href="animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a></dt>
-                                <dd id="Typewriter.size" class="variable"><a href="animated_on_screen.html#AnimatedOnScreen.size">size</a></dd>
-                <dd id="Typewriter.top_left" class="variable"><a href="animated_on_screen.html#AnimatedOnScreen.top_left">top_left</a></dd>
+                                    <div><dt><a href="animation_on_screen.html#AnimationOnScreen">nextrpg.draw.animation_on_screen.AnimationOnScreen</a></dt>
+                                <dd id="Typewriter.size" class="variable"><a href="animation_on_screen.html#AnimationOnScreen.size">size</a></dd>
+                <dd id="Typewriter.top_left" class="variable"><a href="animation_on_screen.html#AnimationOnScreen.top_left">top_left</a></dd>
 
             </div>
             <div><dt><a href="../core/sizeable.html#Sizeable">nextrpg.core.sizeable.Sizeable</a></dt>

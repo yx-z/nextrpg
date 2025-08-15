@@ -10,20 +10,20 @@ from nextrpg.core.dataclass_with_init import (
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond, Timer
-from nextrpg.draw.animated_on_screen import AnimatedOnScreen
+from nextrpg.draw.animation_on_screen import AnimationOnScreen
 from nextrpg.draw.drawing import DrawingOnScreen
 from nextrpg.global_config.global_config import config
 
 type Resource = (
     DrawingOnScreen
     | tuple[DrawingOnScreen, ...]
-    | AnimatedOnScreen
-    | tuple[AnimatedOnScreen, ...]
+    | AnimationOnScreen
+    | tuple[AnimationOnScreen, ...]
 )
 
 
 @dataclass_with_init(frozen=True)
-class _Fade(AnimatedOnScreen, ABC):
+class _Fade(AnimationOnScreen, ABC):
     resource: Resource
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
@@ -45,7 +45,7 @@ class _Fade(AnimatedOnScreen, ABC):
     @override
     def tick(self, time_delta: Millisecond) -> Self:
         timer = self._timer.tick(time_delta)
-        if isinstance(self.resource, AnimatedOnScreen):
+        if isinstance(self.resource, AnimationOnScreen):
             animation = self.resource.tick(time_delta)
             return replace(self, resource=animation, _timer=timer)
         if _is_animated_tuple(self.resource):
@@ -61,7 +61,7 @@ class _Fade(AnimatedOnScreen, ABC):
     def _drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if isinstance(self.resource, DrawingOnScreen):
             return (self.resource,)
-        if isinstance(self.resource, AnimatedOnScreen):
+        if isinstance(self.resource, AnimationOnScreen):
             return self.resource.drawing_on_screens
         if _is_animated_tuple(self.resource):
             return tuple(d for a in self.resource for d in a.drawing_on_screens)
@@ -116,11 +116,11 @@ class FadeOut(_Fade):
 
 def _is_animated_tuple(
     resource: Resource,
-) -> TypeIs[tuple[AnimatedOnScreen, ...]]:
+) -> TypeIs[tuple[AnimationOnScreen, ...]]:
     if not resource:
         return False
     if not isinstance(resource, tuple):
         return False
-    if not isinstance(resource[0], AnimatedOnScreen):
+    if not isinstance(resource[0], AnimationOnScreen):
         return False
     return True

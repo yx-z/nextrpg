@@ -73,12 +73,12 @@
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">override</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">Coordinate</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.animated_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnimatedOnScreen</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.animation_on_screen</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnimationOnScreen</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawingOnScreen</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">PygameEvent</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Scene</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">):</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Scene</span><span class="p">(</span><span class="n">AnimationOnScreen</span><span class="p">):</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="nd">@property</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screen_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>        <span class="k">return</span> <span class="kc">None</span>
@@ -107,13 +107,13 @@
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">Scene</span><wbr>(<span class="base"><a href="../draw/animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a></span>):
+    <span class="name">Scene</span><wbr>(<span class="base"><a href="../draw/animation_on_screen.html#AnimationOnScreen">nextrpg.draw.animation_on_screen.AnimationOnScreen</a></span>):
 
                 <label class="view-source-button" for="Scene-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Scene"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene-11"><a href="#Scene-11"><span class="linenos">11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Scene</span><span class="p">(</span><span class="n">AnimatedOnScreen</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Scene-11"><a href="#Scene-11"><span class="linenos">11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Scene</span><span class="p">(</span><span class="n">AnimationOnScreen</span><span class="p">):</span>
 </span><span id="Scene-12"><a href="#Scene-12"><span class="linenos">12</span></a>    <span class="nd">@property</span>
 </span><span id="Scene-13"><a href="#Scene-13"><span class="linenos">13</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screen_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Scene-14"><a href="#Scene-14"><span class="linenos">14</span></a>        <span class="k">return</span> <span class="kc">None</span>
@@ -222,10 +222,10 @@ inheritance.</p>
                             <div class="inherited">
                                 <h5>Inherited Members</h5>
                                 <dl>
-                                    <div><dt><a href="../draw/animated_on_screen.html#AnimatedOnScreen">nextrpg.draw.animated_on_screen.AnimatedOnScreen</a></dt>
-                                <dd id="Scene.tick" class="function"><a href="../draw/animated_on_screen.html#AnimatedOnScreen.tick">tick</a></dd>
-                <dd id="Scene.size" class="variable"><a href="../draw/animated_on_screen.html#AnimatedOnScreen.size">size</a></dd>
-                <dd id="Scene.top_left" class="variable"><a href="../draw/animated_on_screen.html#AnimatedOnScreen.top_left">top_left</a></dd>
+                                    <div><dt><a href="../draw/animation_on_screen.html#AnimationOnScreen">nextrpg.draw.animation_on_screen.AnimationOnScreen</a></dt>
+                                <dd id="Scene.tick" class="function"><a href="../draw/animation_on_screen.html#AnimationOnScreen.tick">tick</a></dd>
+                <dd id="Scene.size" class="variable"><a href="../draw/animation_on_screen.html#AnimationOnScreen.size">size</a></dd>
+                <dd id="Scene.top_left" class="variable"><a href="../draw/animation_on_screen.html#AnimationOnScreen.top_left">top_left</a></dd>
 
             </div>
             <div><dt><a href="../core/sizeable.html#Sizeable">nextrpg.core.sizeable.Sizeable</a></dt>
