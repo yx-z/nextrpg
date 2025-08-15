@@ -7,7 +7,6 @@ from typing import Self
 
 from pygame import font
 from pygame.display import flip, init, set_caption, set_icon, set_mode
-from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
@@ -34,7 +33,6 @@ from nextrpg.global_config.global_config import config, set_config
 from nextrpg.global_config.window_config import (
     ResizeMode,
     WindowConfig,
-    WindowMode,
 )
 
 log = Log()
@@ -60,15 +58,7 @@ class Window:
     def update(self) -> Self:
         if (updated_config := config().window) is self.current_config:
             return self
-
-        if (
-            updated_config.size != self.current_config.size
-            or updated_config.mode != self.current_config.mode
-        ):
-            screen = self._set_screen(updated_config)
-        else:
-            screen = self._screen
-
+        screen = self._set_screen(updated_config)
         return replace(
             self,
             current_config=updated_config,
@@ -114,7 +104,7 @@ class Window:
             if cfg.icon:
                 icon = Draw(cfg.icon)
                 set_icon(icon.pygame)
-        return set_mode(cfg.size.tuple, self._window_flag(cfg))
+        return set_mode(cfg.size.tuple, cfg.flag)
 
     def _scale(self, draws: tuple[DrawOnScreen, ...]) -> DrawOnScreen:
         screen = Surface(self.initial_config.size.tuple)
@@ -140,14 +130,6 @@ class Window:
             current_height - self._scaling.value * initial_height
         ) / 2
         return Coordinate(width_shift, height_shift)
-
-    def _window_flag(self, cfg: WindowConfig) -> _WindowFlag:
-        flag = cfg.double_buffer
-        if cfg.mode is WindowMode.FULL_SCREEN:
-            flag |= FULLSCREEN
-        if cfg.allow_resize:
-            flag |= RESIZABLE
-        return flag
 
     @cached_property
     def _toggle_mode(self) -> Self:
@@ -186,6 +168,3 @@ def _log_text(
     msgs = Text("\n".join(m.message for m in msgs))
     msgs_on_screen = TextOnScreen(ORIGIN + components.width, msgs)
     return components_on_screen, msgs_on_screen
-
-
-type _WindowFlag = int

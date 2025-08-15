@@ -2,6 +2,7 @@ import json
 import sys
 from abc import ABC, ABCMeta, abstractmethod
 from collections.abc import Callable
+from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import KW_ONLY, field
 from enum import Enum, EnumMeta
 from functools import cache
@@ -85,14 +86,22 @@ class SaveIo:
     slot: str = default(lambda self: self.config.shared_slot)
     _: KW_ONLY = not_constructor_below()
     _log: "Log" = field(default_factory=_log)
+    _thread = ThreadPoolExecutor(max_workers=1)
 
-    def save[_S](self, savable: _S) -> _S:
+    def save(self, savable: Savable) -> Future:
         key = _concat(savable.key)
+        data = savable.save()
+        future = self._thread.submit(self._save, key, data)
+        future.add_done_callback(
+            lambda _: self._log.debug(t"Saved {key} at {self.slot}")
+        )
+        return future
+
+    def _save(self, key: str, data: SaveData) -> None:
         self._log.debug(t"Saving {key} at {self.slot}")
-        if isinstance(data := savable.save(), bytes):
+        if isinstance(data, bytes):
             return self._write_bytes(key, data)
         self._write_text(key, data)
-        return savable
 
     def remove(self) -> None:
         rmtree(self.config.directory / self.slot, ignore_errors=True)

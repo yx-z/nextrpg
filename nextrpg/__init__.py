@@ -117,7 +117,12 @@ from nextrpg.global_config.save_config import SaveConfig
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.global_config.text_config import TextConfig
 from nextrpg.global_config.transition_config import TransitionConfig
-from nextrpg.global_config.window_config import WindowConfig
+from nextrpg.global_config.window_config import (
+    ResizeMode,
+    WindowConfig,
+    WindowFlag,
+    WindowMode,
+)
 from nextrpg.gui.area import (
     bottom_left_screen,
     bottom_right_screen,

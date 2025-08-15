@@ -58,6 +58,9 @@
 
             </li>
             <li>
+                    <a class="variable" href="#WindowFlag">WindowFlag</a>
+            </li>
+            <li>
                     <a class="class" href="#WindowConfig">WindowConfig</a>
                             <ul class="memberlist">
                         <li>
@@ -96,6 +99,9 @@
                         <li>
                                 <a class="function" href="#WindowConfig.update">update</a>
                         </li>
+                        <li>
+                                <a class="variable" href="#WindowConfig.flag">flag</a>
+                        </li>
                 </ul>
 
             </li>
@@ -127,52 +133,66 @@
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Self</span><span class="p">,</span> <span class="n">override</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">Color</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.save</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoadFromSaveEnum</span><span class="p">,</span> <span class="n">UpdateFromSave</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ResizeMode</span><span class="p">(</span><span class="n">LoadFromSaveEnum</span><span class="p">):</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">SCALE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">KEEP_NATIVE_SIZE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WindowMode</span><span class="p">(</span><span class="n">LoadFromSaveEnum</span><span class="p">):</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="n">WINDOWED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">FULL_SCREEN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="nd">@property</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">opposite</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WindowMode</span><span class="p">:</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_GUI_MODE</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WindowConfig</span><span class="p">(</span><span class="n">UpdateFromSave</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]):</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nextrpg&quot;</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">1280</span><span class="p">,</span> <span class="mi">720</span><span class="p">)</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="n">background</span><span class="p">:</span> <span class="n">Color</span> <span class="o">=</span> <span class="n">BLACK</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="n">mode</span><span class="p">:</span> <span class="n">WindowMode</span> <span class="o">=</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">WINDOWED</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">resize</span><span class="p">:</span> <span class="n">ResizeMode</span> <span class="o">=</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">SCALE</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="n">allow_resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="nd">@override</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">save</span><span class="p">(),</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">save</span><span class="p">()}</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="nd">@override</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="n">Size</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">])</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>        <span class="n">mode</span> <span class="o">=</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">])</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="n">_OPPOSITE_GUI_MODE</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="n">WindowMode</span><span class="o">.</span><span class="n">WINDOWED</span><span class="p">:</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">,</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>    <span class="n">WindowMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">:</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">WINDOWED</span><span class="p">,</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="p">}</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pygame.locals</span><span class="w"> </span><span class="kn">import</span> <span class="n">FULLSCREEN</span><span class="p">,</span> <span class="n">RESIZABLE</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.color</span><span class="w"> </span><span class="kn">import</span> <span class="n">BLACK</span><span class="p">,</span> <span class="n">Color</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.save</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoadFromSaveEnum</span><span class="p">,</span> <span class="n">UpdateFromSave</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ResizeMode</span><span class="p">(</span><span class="n">LoadFromSaveEnum</span><span class="p">):</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="n">SCALE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="n">KEEP_NATIVE_SIZE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WindowMode</span><span class="p">(</span><span class="n">LoadFromSaveEnum</span><span class="p">):</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="n">WINDOWED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="n">FULL_SCREEN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="nd">@property</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">opposite</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WindowMode</span><span class="p">:</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_GUI_MODE</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="nb">type</span> <span class="n">WindowFlag</span> <span class="o">=</span> <span class="nb">int</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WindowConfig</span><span class="p">(</span><span class="n">UpdateFromSave</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]):</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nextrpg&quot;</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">1280</span><span class="p">,</span> <span class="mi">720</span><span class="p">)</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="n">background</span><span class="p">:</span> <span class="n">Color</span> <span class="o">=</span> <span class="n">BLACK</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="n">mode</span><span class="p">:</span> <span class="n">WindowMode</span> <span class="o">=</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">WINDOWED</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>    <span class="n">resize</span><span class="p">:</span> <span class="n">ResizeMode</span> <span class="o">=</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">SCALE</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>    <span class="n">allow_resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="nd">@override</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">save</span><span class="p">(),</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">save</span><span class="p">()}</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>    <span class="nd">@override</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="n">Size</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">])</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>        <span class="n">mode</span> <span class="o">=</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">])</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="nd">@property</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">flag</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WindowFlag</span><span class="p">:</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>        <span class="n">flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">double_buffer</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="ow">is</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">:</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>            <span class="n">flag</span> <span class="o">|=</span> <span class="n">FULLSCREEN</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">allow_resize</span><span class="p">:</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>            <span class="n">flag</span> <span class="o">|=</span> <span class="n">RESIZABLE</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="n">flag</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="n">_OPPOSITE_GUI_MODE</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="n">WindowMode</span><span class="o">.</span><span class="n">WINDOWED</span><span class="p">:</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">,</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="n">WindowMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">:</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">WINDOWED</span><span class="p">,</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="p">}</span>
 </span></pre></div>
 
 
@@ -188,9 +208,9 @@
 
     </div>
     <a class="headerlink" href="#ResizeMode"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="ResizeMode-14"><a href="#ResizeMode-14"><span class="linenos">14</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ResizeMode</span><span class="p">(</span><span class="n">LoadFromSaveEnum</span><span class="p">):</span>
-</span><span id="ResizeMode-15"><a href="#ResizeMode-15"><span class="linenos">15</span></a>    <span class="n">SCALE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="ResizeMode-16"><a href="#ResizeMode-16"><span class="linenos">16</span></a>    <span class="n">KEEP_NATIVE_SIZE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="ResizeMode-16"><a href="#ResizeMode-16"><span class="linenos">16</span></a><span class="k">class</span><span class="w"> </span><span class="nc">ResizeMode</span><span class="p">(</span><span class="n">LoadFromSaveEnum</span><span class="p">):</span>
+</span><span id="ResizeMode-17"><a href="#ResizeMode-17"><span class="linenos">17</span></a>    <span class="n">SCALE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="ResizeMode-18"><a href="#ResizeMode-18"><span class="linenos">18</span></a>    <span class="n">KEEP_NATIVE_SIZE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 </span></pre></div>
 
 
@@ -249,13 +269,13 @@ inheritance.</p>
 
     </div>
     <a class="headerlink" href="#WindowMode"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="WindowMode-19"><a href="#WindowMode-19"><span class="linenos">19</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WindowMode</span><span class="p">(</span><span class="n">LoadFromSaveEnum</span><span class="p">):</span>
-</span><span id="WindowMode-20"><a href="#WindowMode-20"><span class="linenos">20</span></a>    <span class="n">WINDOWED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="WindowMode-21"><a href="#WindowMode-21"><span class="linenos">21</span></a>    <span class="n">FULL_SCREEN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="WindowMode-22"><a href="#WindowMode-22"><span class="linenos">22</span></a>
-</span><span id="WindowMode-23"><a href="#WindowMode-23"><span class="linenos">23</span></a>    <span class="nd">@property</span>
-</span><span id="WindowMode-24"><a href="#WindowMode-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">opposite</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WindowMode</span><span class="p">:</span>
-</span><span id="WindowMode-25"><a href="#WindowMode-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_GUI_MODE</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WindowMode-21"><a href="#WindowMode-21"><span class="linenos">21</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WindowMode</span><span class="p">(</span><span class="n">LoadFromSaveEnum</span><span class="p">):</span>
+</span><span id="WindowMode-22"><a href="#WindowMode-22"><span class="linenos">22</span></a>    <span class="n">WINDOWED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="WindowMode-23"><a href="#WindowMode-23"><span class="linenos">23</span></a>    <span class="n">FULL_SCREEN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="WindowMode-24"><a href="#WindowMode-24"><span class="linenos">24</span></a>
+</span><span id="WindowMode-25"><a href="#WindowMode-25"><span class="linenos">25</span></a>    <span class="nd">@property</span>
+</span><span id="WindowMode-26"><a href="#WindowMode-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">opposite</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WindowMode</span><span class="p">:</span>
+</span><span id="WindowMode-27"><a href="#WindowMode-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_GUI_MODE</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
 </span></pre></div>
 
 
@@ -297,9 +317,9 @@ inheritance.</p>
 
     </div>
     <a class="headerlink" href="#WindowMode.opposite"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="WindowMode.opposite-23"><a href="#WindowMode.opposite-23"><span class="linenos">23</span></a>    <span class="nd">@property</span>
-</span><span id="WindowMode.opposite-24"><a href="#WindowMode.opposite-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">opposite</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WindowMode</span><span class="p">:</span>
-</span><span id="WindowMode.opposite-25"><a href="#WindowMode.opposite-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_GUI_MODE</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WindowMode.opposite-25"><a href="#WindowMode.opposite-25"><span class="linenos">25</span></a>    <span class="nd">@property</span>
+</span><span id="WindowMode.opposite-26"><a href="#WindowMode.opposite-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">opposite</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WindowMode</span><span class="p">:</span>
+</span><span id="WindowMode.opposite-27"><a href="#WindowMode.opposite-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="n">_OPPOSITE_GUI_MODE</span><span class="p">[</span><span class="bp">self</span><span class="p">]</span>
 </span></pre></div>
 
 
@@ -321,6 +341,18 @@ inheritance.</p>
                                 </dl>
                             </div>
                 </section>
+                <section id="WindowFlag">
+                    <div class="attr variable">
+            <span class="def">type</span> <span class="name">WindowFlag</span>        =
+<span class="default_value">int</span>
+
+        
+    </div>
+    <a class="headerlink" href="#WindowFlag"></a>
+    
+    
+
+                </section>
                 <section id="WindowConfig">
                             <input id="WindowConfig-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
@@ -333,27 +365,36 @@ inheritance.</p>
 
     </div>
     <a class="headerlink" href="#WindowConfig"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="WindowConfig-28"><a href="#WindowConfig-28"><span class="linenos">28</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="WindowConfig-29"><a href="#WindowConfig-29"><span class="linenos">29</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WindowConfig</span><span class="p">(</span><span class="n">UpdateFromSave</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]):</span>
-</span><span id="WindowConfig-30"><a href="#WindowConfig-30"><span class="linenos">30</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nextrpg&quot;</span>
-</span><span id="WindowConfig-31"><a href="#WindowConfig-31"><span class="linenos">31</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">1280</span><span class="p">,</span> <span class="mi">720</span><span class="p">)</span>
-</span><span id="WindowConfig-32"><a href="#WindowConfig-32"><span class="linenos">32</span></a>    <span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
-</span><span id="WindowConfig-33"><a href="#WindowConfig-33"><span class="linenos">33</span></a>    <span class="n">background</span><span class="p">:</span> <span class="n">Color</span> <span class="o">=</span> <span class="n">BLACK</span>
-</span><span id="WindowConfig-34"><a href="#WindowConfig-34"><span class="linenos">34</span></a>    <span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="WindowConfig-35"><a href="#WindowConfig-35"><span class="linenos">35</span></a>    <span class="n">mode</span><span class="p">:</span> <span class="n">WindowMode</span> <span class="o">=</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">WINDOWED</span>
-</span><span id="WindowConfig-36"><a href="#WindowConfig-36"><span class="linenos">36</span></a>    <span class="n">resize</span><span class="p">:</span> <span class="n">ResizeMode</span> <span class="o">=</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">SCALE</span>
-</span><span id="WindowConfig-37"><a href="#WindowConfig-37"><span class="linenos">37</span></a>    <span class="n">allow_resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="WindowConfig-38"><a href="#WindowConfig-38"><span class="linenos">38</span></a>    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="WindowConfig-39"><a href="#WindowConfig-39"><span class="linenos">39</span></a>
-</span><span id="WindowConfig-40"><a href="#WindowConfig-40"><span class="linenos">40</span></a>    <span class="nd">@override</span>
-</span><span id="WindowConfig-41"><a href="#WindowConfig-41"><span class="linenos">41</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-</span><span id="WindowConfig-42"><a href="#WindowConfig-42"><span class="linenos">42</span></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">save</span><span class="p">(),</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">save</span><span class="p">()}</span>
-</span><span id="WindowConfig-43"><a href="#WindowConfig-43"><span class="linenos">43</span></a>
-</span><span id="WindowConfig-44"><a href="#WindowConfig-44"><span class="linenos">44</span></a>    <span class="nd">@override</span>
-</span><span id="WindowConfig-45"><a href="#WindowConfig-45"><span class="linenos">45</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="WindowConfig-46"><a href="#WindowConfig-46"><span class="linenos">46</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="n">Size</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">])</span>
-</span><span id="WindowConfig-47"><a href="#WindowConfig-47"><span class="linenos">47</span></a>        <span class="n">mode</span> <span class="o">=</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">])</span>
-</span><span id="WindowConfig-48"><a href="#WindowConfig-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WindowConfig-33"><a href="#WindowConfig-33"><span class="linenos">33</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="WindowConfig-34"><a href="#WindowConfig-34"><span class="linenos">34</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WindowConfig</span><span class="p">(</span><span class="n">UpdateFromSave</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]):</span>
+</span><span id="WindowConfig-35"><a href="#WindowConfig-35"><span class="linenos">35</span></a>    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nextrpg&quot;</span>
+</span><span id="WindowConfig-36"><a href="#WindowConfig-36"><span class="linenos">36</span></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">Size</span><span class="p">(</span><span class="mi">1280</span><span class="p">,</span> <span class="mi">720</span><span class="p">)</span>
+</span><span id="WindowConfig-37"><a href="#WindowConfig-37"><span class="linenos">37</span></a>    <span class="n">frames_per_second</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
+</span><span id="WindowConfig-38"><a href="#WindowConfig-38"><span class="linenos">38</span></a>    <span class="n">background</span><span class="p">:</span> <span class="n">Color</span> <span class="o">=</span> <span class="n">BLACK</span>
+</span><span id="WindowConfig-39"><a href="#WindowConfig-39"><span class="linenos">39</span></a>    <span class="n">double_buffer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="WindowConfig-40"><a href="#WindowConfig-40"><span class="linenos">40</span></a>    <span class="n">mode</span><span class="p">:</span> <span class="n">WindowMode</span> <span class="o">=</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">WINDOWED</span>
+</span><span id="WindowConfig-41"><a href="#WindowConfig-41"><span class="linenos">41</span></a>    <span class="n">resize</span><span class="p">:</span> <span class="n">ResizeMode</span> <span class="o">=</span> <span class="n">ResizeMode</span><span class="o">.</span><span class="n">SCALE</span>
+</span><span id="WindowConfig-42"><a href="#WindowConfig-42"><span class="linenos">42</span></a>    <span class="n">allow_resize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="WindowConfig-43"><a href="#WindowConfig-43"><span class="linenos">43</span></a>    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="WindowConfig-44"><a href="#WindowConfig-44"><span class="linenos">44</span></a>
+</span><span id="WindowConfig-45"><a href="#WindowConfig-45"><span class="linenos">45</span></a>    <span class="nd">@override</span>
+</span><span id="WindowConfig-46"><a href="#WindowConfig-46"><span class="linenos">46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="WindowConfig-47"><a href="#WindowConfig-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">save</span><span class="p">(),</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">save</span><span class="p">()}</span>
+</span><span id="WindowConfig-48"><a href="#WindowConfig-48"><span class="linenos">48</span></a>
+</span><span id="WindowConfig-49"><a href="#WindowConfig-49"><span class="linenos">49</span></a>    <span class="nd">@override</span>
+</span><span id="WindowConfig-50"><a href="#WindowConfig-50"><span class="linenos">50</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="WindowConfig-51"><a href="#WindowConfig-51"><span class="linenos">51</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="n">Size</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">])</span>
+</span><span id="WindowConfig-52"><a href="#WindowConfig-52"><span class="linenos">52</span></a>        <span class="n">mode</span> <span class="o">=</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">])</span>
+</span><span id="WindowConfig-53"><a href="#WindowConfig-53"><span class="linenos">53</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+</span><span id="WindowConfig-54"><a href="#WindowConfig-54"><span class="linenos">54</span></a>
+</span><span id="WindowConfig-55"><a href="#WindowConfig-55"><span class="linenos">55</span></a>    <span class="nd">@property</span>
+</span><span id="WindowConfig-56"><a href="#WindowConfig-56"><span class="linenos">56</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">flag</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WindowFlag</span><span class="p">:</span>
+</span><span id="WindowConfig-57"><a href="#WindowConfig-57"><span class="linenos">57</span></a>        <span class="n">flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">double_buffer</span>
+</span><span id="WindowConfig-58"><a href="#WindowConfig-58"><span class="linenos">58</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="ow">is</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">:</span>
+</span><span id="WindowConfig-59"><a href="#WindowConfig-59"><span class="linenos">59</span></a>            <span class="n">flag</span> <span class="o">|=</span> <span class="n">FULLSCREEN</span>
+</span><span id="WindowConfig-60"><a href="#WindowConfig-60"><span class="linenos">60</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">allow_resize</span><span class="p">:</span>
+</span><span id="WindowConfig-61"><a href="#WindowConfig-61"><span class="linenos">61</span></a>            <span class="n">flag</span> <span class="o">|=</span> <span class="n">RESIZABLE</span>
+</span><span id="WindowConfig-62"><a href="#WindowConfig-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="n">flag</span>
 </span></pre></div>
 
 
@@ -491,9 +532,9 @@ inheritance.</p>
 
     </div>
     <a class="headerlink" href="#WindowConfig.save"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="WindowConfig.save-40"><a href="#WindowConfig.save-40"><span class="linenos">40</span></a>    <span class="nd">@override</span>
-</span><span id="WindowConfig.save-41"><a href="#WindowConfig.save-41"><span class="linenos">41</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-</span><span id="WindowConfig.save-42"><a href="#WindowConfig.save-42"><span class="linenos">42</span></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">save</span><span class="p">(),</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">save</span><span class="p">()}</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WindowConfig.save-45"><a href="#WindowConfig.save-45"><span class="linenos">45</span></a>    <span class="nd">@override</span>
+</span><span id="WindowConfig.save-46"><a href="#WindowConfig.save-46"><span class="linenos">46</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+</span><span id="WindowConfig.save-47"><a href="#WindowConfig.save-47"><span class="linenos">47</span></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">save</span><span class="p">(),</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">save</span><span class="p">()}</span>
 </span></pre></div>
 
 
@@ -512,11 +553,34 @@ inheritance.</p>
 
     </div>
     <a class="headerlink" href="#WindowConfig.update"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="WindowConfig.update-44"><a href="#WindowConfig.update-44"><span class="linenos">44</span></a>    <span class="nd">@override</span>
-</span><span id="WindowConfig.update-45"><a href="#WindowConfig.update-45"><span class="linenos">45</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-</span><span id="WindowConfig.update-46"><a href="#WindowConfig.update-46"><span class="linenos">46</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="n">Size</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">])</span>
-</span><span id="WindowConfig.update-47"><a href="#WindowConfig.update-47"><span class="linenos">47</span></a>        <span class="n">mode</span> <span class="o">=</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">])</span>
-</span><span id="WindowConfig.update-48"><a href="#WindowConfig.update-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WindowConfig.update-49"><a href="#WindowConfig.update-49"><span class="linenos">49</span></a>    <span class="nd">@override</span>
+</span><span id="WindowConfig.update-50"><a href="#WindowConfig.update-50"><span class="linenos">50</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="WindowConfig.update-51"><a href="#WindowConfig.update-51"><span class="linenos">51</span></a>        <span class="n">size</span> <span class="o">=</span> <span class="n">Size</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">])</span>
+</span><span id="WindowConfig.update-52"><a href="#WindowConfig.update-52"><span class="linenos">52</span></a>        <span class="n">mode</span> <span class="o">=</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;mode&quot;</span><span class="p">])</span>
+</span><span id="WindowConfig.update-53"><a href="#WindowConfig.update-53"><span class="linenos">53</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+</span></pre></div>
+
+
+    
+
+                            </div>
+                            <div id="WindowConfig.flag" class="classattr">
+                                        <input id="WindowConfig.flag-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr variable">
+            <span class="name">flag</span><span class="annotation">: &#39;WindowFlag&#39;</span>
+
+                <label class="view-source-button" for="WindowConfig.flag-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#WindowConfig.flag"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WindowConfig.flag-55"><a href="#WindowConfig.flag-55"><span class="linenos">55</span></a>    <span class="nd">@property</span>
+</span><span id="WindowConfig.flag-56"><a href="#WindowConfig.flag-56"><span class="linenos">56</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">flag</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">WindowFlag</span><span class="p">:</span>
+</span><span id="WindowConfig.flag-57"><a href="#WindowConfig.flag-57"><span class="linenos">57</span></a>        <span class="n">flag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">double_buffer</span>
+</span><span id="WindowConfig.flag-58"><a href="#WindowConfig.flag-58"><span class="linenos">58</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="ow">is</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">FULL_SCREEN</span><span class="p">:</span>
+</span><span id="WindowConfig.flag-59"><a href="#WindowConfig.flag-59"><span class="linenos">59</span></a>            <span class="n">flag</span> <span class="o">|=</span> <span class="n">FULLSCREEN</span>
+</span><span id="WindowConfig.flag-60"><a href="#WindowConfig.flag-60"><span class="linenos">60</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">allow_resize</span><span class="p">:</span>
+</span><span id="WindowConfig.flag-61"><a href="#WindowConfig.flag-61"><span class="linenos">61</span></a>            <span class="n">flag</span> <span class="o">|=</span> <span class="n">RESIZABLE</span>
+</span><span id="WindowConfig.flag-62"><a href="#WindowConfig.flag-62"><span class="linenos">62</span></a>        <span class="k">return</span> <span class="n">flag</span>
 </span></pre></div>
 
 
