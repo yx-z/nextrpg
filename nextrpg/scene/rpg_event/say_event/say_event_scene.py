@@ -91,7 +91,11 @@ def _update_config(cfg: SayEventConfig, arg: SayEventArg) -> SayEventConfig:
         case SayEventConfig():
             return arg
         case Coordinate():
-            return replace(cfg, coordinate_override=arg)
+            return replace(
+                cfg,
+                scene_coordinate_override=arg,
+                character_coordinate_override=arg,
+            )
         case Draw():
             return replace(cfg, avatar=arg)
         case str():

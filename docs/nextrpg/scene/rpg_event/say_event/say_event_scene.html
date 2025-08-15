@@ -171,14 +171,18 @@
 </span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>        <span class="k">case</span> <span class="n">SayEventConfig</span><span class="p">():</span>
 </span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>            <span class="k">return</span> <span class="n">arg</span>
 </span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>        <span class="k">case</span> <span class="n">Coordinate</span><span class="p">():</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">coordinate_override</span><span class="o">=</span><span class="n">arg</span><span class="p">)</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="k">case</span> <span class="n">Draw</span><span class="p">():</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">avatar</span><span class="o">=</span><span class="n">arg</span><span class="p">)</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>        <span class="k">case</span> <span class="nb">str</span><span class="p">():</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">name_override</span><span class="o">=</span><span class="n">arg</span><span class="p">)</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>        <span class="sa">f</span><span class="s2">&quot;Expect str | Coordinate | Draw | SayEventConfig. Got </span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>    <span class="p">)</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>                <span class="n">cfg</span><span class="p">,</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>                <span class="n">scene_coordinate_override</span><span class="o">=</span><span class="n">arg</span><span class="p">,</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>                <span class="n">character_coordinate_override</span><span class="o">=</span><span class="n">arg</span><span class="p">,</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>            <span class="p">)</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="k">case</span> <span class="n">Draw</span><span class="p">():</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">avatar</span><span class="o">=</span><span class="n">arg</span><span class="p">)</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>        <span class="k">case</span> <span class="nb">str</span><span class="p">():</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>            <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">name_override</span><span class="o">=</span><span class="n">arg</span><span class="p">)</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="sa">f</span><span class="s2">&quot;Expect str | Coordinate | Draw | SayEventConfig. Got </span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 

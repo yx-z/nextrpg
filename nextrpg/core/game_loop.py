@@ -50,9 +50,7 @@ class GameLoop:
         return loop
 
     def _event(self, e: PygameEvent) -> Self:
-        return replace(
-            self,
-            _scene=self._scene.event(e),
-            _window=self._window.event(e),
-            running=not isinstance(e, Quit),
-        )
+        scene = self._scene.event(e)
+        window = self._window.event(e)
+        running = not isinstance(e, Quit)
+        return replace(self, _scene=scene, _window=window, running=running)
