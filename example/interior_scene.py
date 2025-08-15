@@ -3,8 +3,8 @@ from nextrpg import (
     Color,
     Direction,
     Draw,
-    EventfulScene,
     EventSpec,
+    EventfulScene,
     MapScene,
     Move,
     NpcEventStartMode,
@@ -13,7 +13,6 @@ from nextrpg import (
     PlayerOnScreen,
     RpgMakerCharacterDraw,
     RpgMakerSpriteSheet,
-    SaveIo,
     SpriteSheetSelection,
     Text,
     Trim,
@@ -65,13 +64,7 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
     tmx = "example/asset/interior.tmx"
     move = Move("from_interior", "to_exterior", exterior_scene)
     npcs = (david, alisa, auto_trigger)
-    return MapScene(
-        tmx_file=tmx,
-        player_spec=player,
-        save_io=SaveIo(),
-        move=move,
-        npc_specs=npcs,
-    )
+    return MapScene(tmx_file=tmx, player_spec=player, move=move, npc_specs=npcs)
 
 
 def enter_room(

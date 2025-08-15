@@ -28,7 +28,7 @@ log = Log()
 class EventfulScene(EventAsAttr, Scene):
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...]
-    save_io: SaveIo
+    save_io: SaveIo | None = None
     _: KW_ONLY = not_constructor_below()
     _started_npc: NpcOnScreen | None = None
     _ended_npc: NpcOnScreen | None = None
@@ -54,7 +54,11 @@ class EventfulScene(EventAsAttr, Scene):
         ):
             return replace(self, player=player, _started_npc=npc)
 
-        if isinstance(event, KeyPressDown) and event.key is KeyboardKey.CONFIRM:
+        if (
+            self.save_io
+            and isinstance(event, KeyPressDown)
+            and event.key is KeyboardKey.CONFIRM
+        ):
             for character in self.npcs + (player,):
                 self.save_io.save(character)
 
