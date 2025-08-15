@@ -103,19 +103,19 @@ class CharacterOnScreen(EventAsAttr, Sizeable, UpdateFromSave):
     @override
     @property
     def key(self) -> tuple[str, ...]:
-        return type(self).__qualname__, self.spec.unique_name
+        return super().key + (self.spec.unique_name,)
 
     @override
     def save(self) -> dict[str, Any]:
         return {
-            "coordinate": list(self.coordinate.tuple),
-            "direction": self.character.direction.name,
+            "coordinate": self.coordinate.save(),
+            "direction": self.character.direction.save(),
         }
 
     @override
     def update(self, save: dict[str, Any]) -> Self:
-        coordinate = Coordinate(*save["coordinate"])
-        direction = Direction[save["direction"]]
+        coordinate = Coordinate.load(save["coordinate"])
+        direction = Direction.load(save["direction"])
         character = self.character.turn(direction)
         return replace(self, coordinate=coordinate, character=character)
 

@@ -7,11 +7,12 @@ from typing import Iterator, Self
 
 from nextrpg.core.dimension import Height, Pixel, Size, Width
 from nextrpg.core.direction import Direction, DirectionalOffset
+from nextrpg.core.save import LoadFromSaveList
 from nextrpg.core.time import Millisecond
 
 
 @dataclass(frozen=True)
-class Coordinate:
+class Coordinate(LoadFromSaveList[int]):
     input_left: Pixel | Width
     input_top: Pixel | Height
 
@@ -107,6 +108,9 @@ class Coordinate:
         dx = self.left - other.left
         dy = self.top - other.top
         return hypot(dx.value, dy.value)
+
+    def save(self) -> list[int]:
+        return list(self.tuple)
 
 
 ORIGIN = Coordinate(0, 0)

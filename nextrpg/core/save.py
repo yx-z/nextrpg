@@ -18,8 +18,7 @@ from nextrpg.global_config.save_config import SaveConfig
 
 _Primitive: TypeAlias = str | int | float | bool | None
 type _Json = _Primitive | list["_Json"] | dict[str, "_Json"]
-type _JsonLike = _Primitive | list["_JsonLike"] | dict[str, "SaveData"]
-type SaveData = bytes | _JsonLike
+type SaveData = _Primitive | bytes | list["SaveData"] | dict[str, "SaveData"]
 
 
 class Savable[_S](ABC):
@@ -28,7 +27,7 @@ class Savable[_S](ABC):
 
     @property
     def key(self) -> tuple[str, ...]:
-        return _key(self)
+        return _module_and_class(self)
 
 
 class UpdateFromSave[_S](Savable[_S]):
@@ -103,8 +102,13 @@ class SaveIo:
         return self._load(key, loader=arg.update, fallback=arg)
 
     def load(self, arg: type[_L]) -> _L | None:
-        key = _concat(_key(arg))
+        module_and_class = _module_and_class(arg)
+        key = _concat(module_and_class)
         return self._load(key, loader=arg.load, fallback=None)
+
+    @property
+    def web(self) -> bool:
+        return sys.platform == "emscripten"
 
     def _load(
         self,
@@ -120,45 +124,33 @@ class SaveIo:
             return loader(data)
         return fallback
 
-    @property
-    def web(self) -> bool:
-        return sys.platform == "emscripten"
-
     def _write_bytes(self, key: str, data: bytes) -> None:
         path = self._bytes_path(key)
         path.write_bytes(data)
 
-    def _deserialize(self, key: str, json_like: _JsonLike) -> _JsonLike:
-        if isinstance(json_like, _Primitive):
-            return json_like
-        if isinstance(json_like, list):
+    def _deserialize(self, key: str, data: SaveData) -> SaveData:
+        if isinstance(data, str) and (file := self._bytes_path(data)).exists():
+            return file.read_bytes()
+        if isinstance(data, _Primitive):
+            return data
+        if isinstance(data, list):
             return [
                 self._deserialize(_concat((key, i)), j)
-                for i, j in enumerate(json_like)
+                for i, j in enumerate(data)
             ]
-        res: dict[str, SaveData] = {}
-        for sub_key, value in json_like.items():
-            concat_key = _concat((key, sub_key))
-            if isinstance(value, str) and (
-                (file := self._bytes_path(concat_key)).exists()
-            ):
-                res[sub_key] = file.read_bytes()
-            else:
-                res[sub_key] = self._deserialize(concat_key, value)
-        return res
+        return {
+            sub_key: self._deserialize(_concat((key, sub_key)), value)
+            for sub_key, value in data.items()
+        }
 
-    def _write_text(self, key: str, json_like: _JsonLike) -> None:
-        data = self._serialize(key, json_like)
+    def _write_text(self, key: str, data: SaveData) -> None:
+        data = self._serialize(key, data)
         self._text_path.parent.mkdir(parents=True, exist_ok=True)
         blob = self._read_text()
         blob[key] = data
         json_blob = json.dumps(blob)
         self._text_path.write_text(json_blob)
         self._read_text.cache_clear()
-
-    @property
-    def _text_path(self) -> Path:
-        return self.config.directory / self.slot / self.config.text_save_file
 
     @cache
     def _read_text(self) -> dict[str, SaveData]:
@@ -167,26 +159,28 @@ class SaveIo:
             return json.loads(text)
         return {}
 
-    def _serialize(self, key: str, json_like: _JsonLike) -> _Json:
-        if isinstance(json_like, _Primitive):
-            return json_like
-        if isinstance(json_like, list):
+    def _serialize(self, key: str, data: SaveData) -> _Json:
+        if isinstance(data, bytes):
+            self._write_bytes(key, data)
+            return key
+        if isinstance(data, _Primitive):
+            return data
+        if isinstance(data, list):
             return [
-                self._serialize(_concat((key, i)), j)
-                for i, j in enumerate(json_like)
+                self._serialize(_concat((key, index)), datum)
+                for index, datum in enumerate(data)
             ]
-        res: dict[str, _Json] = {}
-        for sub_key, value in json_like.items():
-            concat_key = _concat((key, sub_key))
-            if isinstance(value, bytes):
-                res[sub_key] = concat_key
-                self._write_bytes(concat_key, value)
-            else:
-                res[sub_key] = self._serialize(concat_key, value)
-        return res
+        return {
+            sub_key: self._serialize(_concat((key, sub_key)), value)
+            for sub_key, value in data.items()
+        }
 
     def _bytes_path(self, key: str) -> Path:
         return self.config.directory / self.slot / key
+
+    @property
+    def _text_path(self) -> Path:
+        return self.config.directory / self.slot / self.config.text_save_file
 
 
 def _update(arg: _U, data: SaveData) -> _U:
@@ -196,10 +190,10 @@ def _update(arg: _U, data: SaveData) -> _U:
 
 
 def _concat(args: Iterable[Any]) -> str:
-    return "_".join(map(str, args))
+    return "|".join(map(str, args))
 
 
-def _key(x: type | Any) -> tuple[str, ...]:
+def _module_and_class(x: type | Any) -> tuple[str, ...]:
     if isinstance(x, type):
         return x.__module__, x.__qualname__
     return x.__module__, x.__class__.__qualname__

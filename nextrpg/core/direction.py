@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
-from enum import Enum, auto
+from enum import auto
 from typing import Self
 
 from nextrpg.core.dimension import Pixel
+from nextrpg.core.save import LoadFromSaveEnum
 
 
-class Direction(Enum):
+class Direction(LoadFromSaveEnum):
     DOWN = auto()
     LEFT = auto()
     RIGHT = auto()
