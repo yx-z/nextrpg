@@ -71,13 +71,13 @@ class DrawingGroupOnScreen:
     def _coordinate(self, group: DrawingGroup) -> Coordinate | None:
         if group == self.group:
             return self.origin
-        for draw, shift in self.group.drawing:
+        for drawing, shift in self.group.drawing:
             coord = self.origin + shift
-            if isinstance(draw, Drawing):
+            if isinstance(drawing, Drawing):
                 continue
-            if draw == group:
+            if drawing == group:
                 return coord
-            if res := DrawingGroupOnScreen(coord, draw)._coordinate(group):
+            if res := DrawingGroupOnScreen(coord, drawing)._coordinate(group):
                 return res
         return None
 

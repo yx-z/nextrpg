@@ -164,8 +164,10 @@ class EventfulScene(EventAsAttr, Scene):
 
     def _start_event(self, npc: NpcOnScreen, time_delta: Millisecond) -> Self:
         turn = not (
-            isinstance(draw := npc.drawing_on_screen.draw, TransparentDrawing)
-            and draw.transparent
+            isinstance(
+                drawing := npc.drawing_on_screen.draw, TransparentDrawing
+            )
+            and drawing.transparent
         )
         started_npc = npc.start_event(self.player, turn)
         npcs = tuple(started_npc if n.same_name(npc) else n for n in self.npcs)

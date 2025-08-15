@@ -204,9 +204,9 @@ class MapLoader:
 
     def _draw_layers(self, class_name: str) -> tuple[DrawingOnScreen, ...]:
         return tuple(
-            draw
+            drawing
             for layer in self._tile_layers(class_name)
-            for draw in self._drawing(layer).values()
+            for drawing in self._drawing(layer).values()
         )
 
     def _bottom_and_drawing(
@@ -214,14 +214,14 @@ class MapLoader:
     ) -> tuple[TileBottomAndDrawOnScreen, ...]:
         coord_and_draws = self._drawing(layer)
         coord_to_bottom = {
-            coord: draw.visible_rectangle_on_screen.bottom
-            for coord, draw in coord_and_draws.items()
+            coord: drawing.visible_rectangle_on_screen.bottom
+            for coord, drawing in coord_and_draws.items()
         }
         bottom_and_draw = tuple(
             TileBottomAndDrawOnScreen(
-                self._bottom(layer, coord, draw, coord_to_bottom), draw
+                self._bottom(layer, coord, drawing, coord_to_bottom), drawing
             )
-            for coord, draw in coord_and_draws.items()
+            for coord, drawing in coord_and_draws.items()
         )
         return tuple(sorted(bottom_and_draw, key=lambda t: t.bottom))
 
@@ -315,8 +315,9 @@ def _below_character_layer(
 ) -> bool:
     rect = character.drawing_on_screen.visible_rectangle_on_screen
     return layer[-1].bottom < rect.bottom and any(
-        bottom < rect.bottom and rect.collide(draw.visible_rectangle_on_screen)
-        for _, bottom, draw in layer
+        bottom < rect.bottom
+        and rect.collide(drawing.visible_rectangle_on_screen)
+        for _, bottom, drawing in layer
     )
 
 
@@ -328,8 +329,8 @@ def _foreground_layer(
     idx: int, tiles: tuple[TileBottomAndDrawOnScreen, ...]
 ) -> tuple[LayerTileBottomAndDrawOnScreen, ...]:
     return tuple(
-        LayerTileBottomAndDrawOnScreen(idx, bottom, draw)
-        for bottom, draw in tiles
+        LayerTileBottomAndDrawOnScreen(idx, bottom, drawing)
+        for bottom, drawing in tiles
     )
 
 

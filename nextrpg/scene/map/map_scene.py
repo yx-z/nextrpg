@@ -104,13 +104,13 @@ class MapScene(EventfulScene):
     def _foreground_and_characters(self) -> tuple[DrawingOnScreen, ...]:
         characters = (self.player,) + self.npcs
         layer_bottom_draws = list(
-            draw
+            drawing
             for character in characters
-            for draw in self.map_helper.layer_bottom_and_drawing(character)
+            for drawing in self.map_helper.layer_bottom_and_drawing(character)
         )
         foregrounds = [t for layer in self.map_helper.foreground for t in layer]
         layers = sorted(foregrounds + layer_bottom_draws, key=lambda x: x[:2])
-        return tuple(draw for _, _, draw in layers)
+        return tuple(drawing_on_screen for _, _, drawing_on_screen in layers)
 
     def _move_to_scene(self, time_delta: Millisecond) -> Scene | None:
         for move in self._moves:

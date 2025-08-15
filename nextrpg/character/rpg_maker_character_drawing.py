@@ -105,10 +105,10 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             return animation.tick(time_delta)
         return animation
 
-    def _trim(self, draw: Drawing) -> Drawing:
+    def _trim(self, drawing: Drawing) -> Drawing:
         if self.sprite_sheet.trim:
-            return draw.trim(self.sprite_sheet.trim)
-        return draw
+            return drawing.trim(self.sprite_sheet.trim)
+        return drawing
 
     def _load_row(self, draw: Drawing, row: int) -> CyclicAnimation:
         frames = tuple(self._trim(d) for d in self._crop_at_row(draw, row))
@@ -132,11 +132,11 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     @property
     def _init_animation(self) -> dict[Direction, CyclicAnimation]:
         if self.selection:
-            draw = self.sprite_sheet.select(self.selection)
+            drawing = self.sprite_sheet.select(self.selection)
         else:
-            draw = self.sprite_sheet.drawing
+            drawing = self.sprite_sheet.drawing
         return {
-            direction: self._load_row(draw, row)
+            direction: self._load_row(drawing, row)
             for direction, row in _DIR_TO_ROW.items()
         }
 
