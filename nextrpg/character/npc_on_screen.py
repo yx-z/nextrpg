@@ -1,6 +1,7 @@
 from collections.abc import Callable
-from dataclasses import KW_ONLY, dataclass
+from dataclasses import KW_ONLY, dataclass, replace
 from enum import Enum, auto
+from typing import Any, Self, override
 
 from nextrpg.character.character_draw import CharacterDraw
 from nextrpg.character.character_on_screen import (
@@ -84,3 +85,14 @@ def to_strict(
 @dataclass(frozen=True, kw_only=True)
 class NpcOnScreen(CharacterOnScreen):
     spec: StrictNpcSpec
+    restart_event: bool = True
+
+    @override
+    def save(self) -> dict[str, Any]:
+        return super().save() | {"restart_event": self.restart_event}
+
+    @override
+    def update(self, save: dict[str, Any]) -> Self:
+        character = super().update(save)
+        restart_event = save["restart_event"]
+        return replace(character, restart_event=restart_event)

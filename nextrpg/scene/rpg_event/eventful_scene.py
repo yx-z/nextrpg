@@ -48,8 +48,9 @@ class EventfulScene(EventAsAttr, Scene):
             and isinstance(event, KeyPressDown)
             and event.key is KeyboardKey.CONFIRM
             and (npc := self._collided_npc)
-            and (event := npc.spec.event)
-            and event.start_mode is NpcEventStartMode.CONFIRM
+            and npc.restart_event
+            and (npc_event := npc.spec.event)
+            and npc_event.start_mode is NpcEventStartMode.CONFIRM
         ):
             return replace(self, player=player, _started_npc=npc)
 
@@ -68,6 +69,7 @@ class EventfulScene(EventAsAttr, Scene):
 
         if (
             (npc := self._collided_npc)
+            and npc.restart_event
             and (not (self._ended_npc and self._ended_npc.same_name(npc)))
             and (event := npc.spec.event)
             and event.start_mode is NpcEventStartMode.COLLIDE
@@ -192,8 +194,7 @@ class EventfulScene(EventAsAttr, Scene):
     def _complete_event(self, ticked: Self, restart_event: bool | None) -> Self:
         npc = ticked._started_npc.complete_event
         if restart_event is False:
-            spec = replace(npc.spec, event=None)
-            npc = replace(npc, spec=spec)
+            npc = replace(npc, restart_event=False)
 
         player = ticked.player.complete_event
         npcs = tuple(
