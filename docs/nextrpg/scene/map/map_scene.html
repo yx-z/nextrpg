@@ -31,7 +31,7 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
-                    <a class="variable" href="#logger">logger</a>
+                    <a class="variable" href="#log">log</a>
             </li>
             <li>
                     <a class="class" href="#MapScene">MapScene</a>
@@ -141,7 +141,7 @@
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>    <span class="n">not_constructor_below</span><span class="p">,</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="p">)</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.direction</span><span class="w"> </span><span class="kn">import</span> <span class="n">Direction</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logger</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">Log</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span><span class="p">,</span> <span class="n">get_timepoint</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>    <span class="n">DrawOnScreen</span><span class="p">,</span>
@@ -157,7 +157,7 @@
 </span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.transition_scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">TransitionScene</span>
 </span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">()</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="n">log</span> <span class="o">=</span> <span class="n">Log</span><span class="p">()</span>
 </span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>
 </span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>
 </span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="nd">@dataclass_with_init</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -184,7 +184,7 @@
 </span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>        <span class="k">return</span> <span class="n">MapLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmx_file</span><span class="p">)</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>
 </span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">init_player</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_spec</span><span class="p">:</span> <span class="n">CharacterSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlayerOnScreen</span><span class="p">:</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Spawn player at </span><span class="si">{player_spec.unique_name}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Spawn player at </span><span class="si">{player_spec.unique_name}</span><span class="s2">.&quot;</span><span class="p">)</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_helper</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">player_spec</span><span class="o">.</span><span class="n">unique_name</span><span class="p">)</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>        <span class="n">player</span> <span class="o">=</span> <span class="n">PlayerOnScreen</span><span class="p">(</span>
 </span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>            <span class="n">player_spec</span><span class="p">,</span>
@@ -202,7 +202,7 @@
 </span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
 </span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>        <span class="n">player_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">center</span>
 </span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>        <span class="n">shift</span> <span class="o">=</span> <span class="n">center_player</span><span class="p">(</span><span class="n">player_coord</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_helper</span><span class="o">.</span><span class="n">map_size</span><span class="p">)</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
 </span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>            <span class="n">t</span><span class="s2">&quot;Player center coord </span><span class="si">{player_coord}</span><span class="s2">. Shift </span><span class="si">{shift}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">100</span>
 </span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>        <span class="p">)</span>
 </span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>        <span class="k">return</span> <span class="n">shift</span>
@@ -355,14 +355,14 @@
 
 
             </section>
-                <section id="logger">
+                <section id="log">
                     <div class="attr variable">
-            <span class="name">logger</span>        =
-<span class="default_value">Logger(component=&#39;map_scene&#39;)</span>
+            <span class="name">log</span>        =
+<span class="default_value">Log(component=&#39;map_scene&#39;)</span>
 
         
     </div>
-    <a class="headerlink" href="#logger"></a>
+    <a class="headerlink" href="#log"></a>
     
     
 
@@ -403,7 +403,7 @@
 </span><span id="MapScene-66"><a href="#MapScene-66"><span class="linenos"> 66</span></a>        <span class="k">return</span> <span class="n">MapLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmx_file</span><span class="p">)</span>
 </span><span id="MapScene-67"><a href="#MapScene-67"><span class="linenos"> 67</span></a>
 </span><span id="MapScene-68"><a href="#MapScene-68"><span class="linenos"> 68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">init_player</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_spec</span><span class="p">:</span> <span class="n">CharacterSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlayerOnScreen</span><span class="p">:</span>
-</span><span id="MapScene-69"><a href="#MapScene-69"><span class="linenos"> 69</span></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Spawn player at </span><span class="si">{player_spec.unique_name}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</span><span id="MapScene-69"><a href="#MapScene-69"><span class="linenos"> 69</span></a>        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Spawn player at </span><span class="si">{player_spec.unique_name}</span><span class="s2">.&quot;</span><span class="p">)</span>
 </span><span id="MapScene-70"><a href="#MapScene-70"><span class="linenos"> 70</span></a>        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_helper</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">player_spec</span><span class="o">.</span><span class="n">unique_name</span><span class="p">)</span>
 </span><span id="MapScene-71"><a href="#MapScene-71"><span class="linenos"> 71</span></a>        <span class="n">player</span> <span class="o">=</span> <span class="n">PlayerOnScreen</span><span class="p">(</span>
 </span><span id="MapScene-72"><a href="#MapScene-72"><span class="linenos"> 72</span></a>            <span class="n">player_spec</span><span class="p">,</span>
@@ -421,7 +421,7 @@
 </span><span id="MapScene-84"><a href="#MapScene-84"><span class="linenos"> 84</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
 </span><span id="MapScene-85"><a href="#MapScene-85"><span class="linenos"> 85</span></a>        <span class="n">player_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">center</span>
 </span><span id="MapScene-86"><a href="#MapScene-86"><span class="linenos"> 86</span></a>        <span class="n">shift</span> <span class="o">=</span> <span class="n">center_player</span><span class="p">(</span><span class="n">player_coord</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_helper</span><span class="o">.</span><span class="n">map_size</span><span class="p">)</span>
-</span><span id="MapScene-87"><a href="#MapScene-87"><span class="linenos"> 87</span></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+</span><span id="MapScene-87"><a href="#MapScene-87"><span class="linenos"> 87</span></a>        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
 </span><span id="MapScene-88"><a href="#MapScene-88"><span class="linenos"> 88</span></a>            <span class="n">t</span><span class="s2">&quot;Player center coord </span><span class="si">{player_coord}</span><span class="s2">. Shift </span><span class="si">{shift}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">100</span>
 </span><span id="MapScene-89"><a href="#MapScene-89"><span class="linenos"> 89</span></a>        <span class="p">)</span>
 </span><span id="MapScene-90"><a href="#MapScene-90"><span class="linenos"> 90</span></a>        <span class="k">return</span> <span class="n">shift</span>
@@ -635,7 +635,7 @@
     </div>
     <a class="headerlink" href="#MapScene.init_player"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="MapScene.init_player-68"><a href="#MapScene.init_player-68"><span class="linenos">68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">init_player</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_spec</span><span class="p">:</span> <span class="n">CharacterSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlayerOnScreen</span><span class="p">:</span>
-</span><span id="MapScene.init_player-69"><a href="#MapScene.init_player-69"><span class="linenos">69</span></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Spawn player at </span><span class="si">{player_spec.unique_name}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</span><span id="MapScene.init_player-69"><a href="#MapScene.init_player-69"><span class="linenos">69</span></a>        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Spawn player at </span><span class="si">{player_spec.unique_name}</span><span class="s2">.&quot;</span><span class="p">)</span>
 </span><span id="MapScene.init_player-70"><a href="#MapScene.init_player-70"><span class="linenos">70</span></a>        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_helper</span><span class="o">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">player_spec</span><span class="o">.</span><span class="n">unique_name</span><span class="p">)</span>
 </span><span id="MapScene.init_player-71"><a href="#MapScene.init_player-71"><span class="linenos">71</span></a>        <span class="n">player</span> <span class="o">=</span> <span class="n">PlayerOnScreen</span><span class="p">(</span>
 </span><span id="MapScene.init_player-72"><a href="#MapScene.init_player-72"><span class="linenos">72</span></a>            <span class="n">player_spec</span><span class="p">,</span>
@@ -684,7 +684,7 @@
 </span><span id="MapScene.draw_on_screen_shift-84"><a href="#MapScene.draw_on_screen_shift-84"><span class="linenos">84</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">draw_on_screen_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
 </span><span id="MapScene.draw_on_screen_shift-85"><a href="#MapScene.draw_on_screen_shift-85"><span class="linenos">85</span></a>        <span class="n">player_coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">center</span>
 </span><span id="MapScene.draw_on_screen_shift-86"><a href="#MapScene.draw_on_screen_shift-86"><span class="linenos">86</span></a>        <span class="n">shift</span> <span class="o">=</span> <span class="n">center_player</span><span class="p">(</span><span class="n">player_coord</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">map_helper</span><span class="o">.</span><span class="n">map_size</span><span class="p">)</span>
-</span><span id="MapScene.draw_on_screen_shift-87"><a href="#MapScene.draw_on_screen_shift-87"><span class="linenos">87</span></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+</span><span id="MapScene.draw_on_screen_shift-87"><a href="#MapScene.draw_on_screen_shift-87"><span class="linenos">87</span></a>        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
 </span><span id="MapScene.draw_on_screen_shift-88"><a href="#MapScene.draw_on_screen_shift-88"><span class="linenos">88</span></a>            <span class="n">t</span><span class="s2">&quot;Player center coord </span><span class="si">{player_coord}</span><span class="s2">. Shift </span><span class="si">{shift}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">100</span>
 </span><span id="MapScene.draw_on_screen_shift-89"><a href="#MapScene.draw_on_screen_shift-89"><span class="linenos">89</span></a>        <span class="p">)</span>
 </span><span id="MapScene.draw_on_screen_shift-90"><a href="#MapScene.draw_on_screen_shift-90"><span class="linenos">90</span></a>        <span class="k">return</span> <span class="n">shift</span>

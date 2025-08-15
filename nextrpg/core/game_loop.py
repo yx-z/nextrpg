@@ -12,13 +12,13 @@ from nextrpg.core.dataclass_with_init import (
     default,
     not_constructor_below,
 )
-from nextrpg.core.logger import Logger
+from nextrpg.core.log import Log
 from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
 from nextrpg.global_config.global_config import config
 from nextrpg.gui.window import Window
 from nextrpg.scene.scene import Scene
 
-logger = Logger()
+log = Log()
 
 
 @dataclass_with_init(frozen=True)
@@ -32,7 +32,7 @@ class GameLoop:
 
     @property
     def tick(self) -> GameLoop:
-        logger.debug(t"FPS: {self._clock.get_fps():.0f}", duration=None)
+        log.debug(t"FPS: {self._clock.get_fps():.0f}", duration=None)
         self._clock.tick(config().window.frames_per_second)
         time_delta = self._clock.get_time()
 
@@ -41,7 +41,7 @@ class GameLoop:
 
         # "<'package.my_class'>" -> "my_class"
         scene_type = str(type(self._scene))[2:-2].split(".")[-1]
-        logger.debug(t"Current scene {scene_type}", duration=None)
+        log.debug(t"Current scene {scene_type}", duration=None)
         loop = replace(
             self, _scene=self._scene.tick(time_delta), _window=window
         )

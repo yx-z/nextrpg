@@ -22,7 +22,7 @@ from nextrpg.core.dataclass_with_init import (
     not_constructor_below,
 )
 from nextrpg.core.direction import Direction
-from nextrpg.core.logger import Logger
+from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond, get_timepoint
 from nextrpg.draw.draw import (
     DrawOnScreen,
@@ -38,7 +38,7 @@ from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 
-logger = Logger()
+log = Log()
 
 
 @dataclass_with_init(frozen=True, kw_only=True)
@@ -65,7 +65,7 @@ class MapScene(EventfulScene):
         return MapLoader(self.tmx_file)
 
     def init_player(self, player_spec: CharacterSpec) -> PlayerOnScreen:
-        logger.debug(t"Spawn player at {player_spec.unique_name}.")
+        log.debug(t"Spawn player at {player_spec.unique_name}.")
         player = self.map_helper.get_object(player_spec.unique_name)
         player = PlayerOnScreen(
             player_spec,
@@ -83,7 +83,7 @@ class MapScene(EventfulScene):
     def draw_on_screen_shift(self) -> Coordinate:
         player_coord = self.player.center
         shift = center_player(player_coord, self.map_helper.map_size)
-        logger.debug(
+        log.debug(
             t"Player center coord {player_coord}. Shift {shift}", duration=100
         )
         return shift

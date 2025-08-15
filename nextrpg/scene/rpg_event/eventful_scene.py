@@ -13,7 +13,7 @@ from nextrpg.core.dataclass_with_init import (
     default,
     not_constructor_below,
 )
-from nextrpg.core.logger import Logger
+from nextrpg.core.log import Log
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import DrawOnScreen, TransparentDraw
@@ -21,7 +21,7 @@ from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.scene.scene import Scene
 
-logger = Logger()
+log = Log()
 
 
 @dataclass(frozen=True)
@@ -171,7 +171,7 @@ class EventfulScene(EventAsAttr, Scene):
         event = npc.spec.event.generator(
             ticked.player, ticked._started_npc, ticked
         )
-        logger.debug(t"Event {event} with {npc.spec.unique_name} started.")
+        log.debug(t"Event {event} with {npc.spec.unique_name} started.")
         try:
             event_callable = next(event)
             return event_callable(event, ticked)
@@ -199,7 +199,7 @@ class EventfulScene(EventAsAttr, Scene):
         npcs = tuple(
             (npc if n.same_name(npc) else n.complete_event) for n in ticked.npcs
         )
-        logger.debug(
+        log.debug(
             t"Event {ticked._event} with {npc.spec.unique_name} completed."
         )
         return replace(

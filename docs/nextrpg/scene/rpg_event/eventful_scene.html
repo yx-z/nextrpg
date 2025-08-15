@@ -31,7 +31,7 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
-                    <a class="variable" href="#logger">logger</a>
+                    <a class="variable" href="#log">log</a>
             </li>
             <li>
                     <a class="class" href="#EventfulScene">EventfulScene</a>
@@ -180,7 +180,7 @@
 </span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>    <span class="n">default</span><span class="p">,</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>    <span class="n">not_constructor_below</span><span class="p">,</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="p">)</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.logger</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logger</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">Log</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.save</span><span class="w"> </span><span class="kn">import</span> <span class="n">SaveIo</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.draw</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawOnScreen</span><span class="p">,</span> <span class="n">TransparentDraw</span>
@@ -188,7 +188,7 @@
 </span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.event.pygame_event</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeyboardKey</span><span class="p">,</span> <span class="n">KeyPressDown</span><span class="p">,</span> <span class="n">PygameEvent</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.scene.scene</span><span class="w"> </span><span class="kn">import</span> <span class="n">Scene</span>
 </span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">()</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="n">log</span> <span class="o">=</span> <span class="n">Log</span><span class="p">()</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>
 </span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -338,7 +338,7 @@
 </span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>        <span class="n">event</span> <span class="o">=</span> <span class="n">npc</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">generator</span><span class="p">(</span>
 </span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a>            <span class="n">ticked</span><span class="o">.</span><span class="n">player</span><span class="p">,</span> <span class="n">ticked</span><span class="o">.</span><span class="n">_started_npc</span><span class="p">,</span> <span class="n">ticked</span>
 </span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a>        <span class="p">)</span>
-</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Event </span><span class="si">{event}</span><span class="s2"> with </span><span class="si">{npc.spec.unique_name}</span><span class="s2"> started.&quot;</span><span class="p">)</span>
+</span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a>        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Event </span><span class="si">{event}</span><span class="s2"> with </span><span class="si">{npc.spec.unique_name}</span><span class="s2"> started.&quot;</span><span class="p">)</span>
 </span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>        <span class="k">try</span><span class="p">:</span>
 </span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>            <span class="n">event_callable</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 </span><span id="L-177"><a href="#L-177"><span class="linenos">177</span></a>            <span class="k">return</span> <span class="n">event_callable</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">ticked</span><span class="p">)</span>
@@ -366,7 +366,7 @@
 </span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a>        <span class="n">npcs</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
 </span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>            <span class="p">(</span><span class="n">npc</span> <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">same_name</span><span class="p">(</span><span class="n">npc</span><span class="p">)</span> <span class="k">else</span> <span class="n">n</span><span class="o">.</span><span class="n">complete_event</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ticked</span><span class="o">.</span><span class="n">npcs</span>
 </span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a>        <span class="p">)</span>
-</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a>        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
 </span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a>            <span class="n">t</span><span class="s2">&quot;Event </span><span class="si">{ticked._event}</span><span class="s2"> with </span><span class="si">{npc.spec.unique_name}</span><span class="s2"> completed.&quot;</span>
 </span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a>        <span class="p">)</span>
 </span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
@@ -453,14 +453,14 @@
 
 
             </section>
-                <section id="logger">
+                <section id="log">
                     <div class="attr variable">
-            <span class="name">logger</span>        =
-<span class="default_value">Logger(component=&#39;eventful_scene&#39;)</span>
+            <span class="name">log</span>        =
+<span class="default_value">Log(component=&#39;eventful_scene&#39;)</span>
 
         
     </div>
-    <a class="headerlink" href="#logger"></a>
+    <a class="headerlink" href="#log"></a>
     
     
 
@@ -624,7 +624,7 @@
 </span><span id="EventfulScene-172"><a href="#EventfulScene-172"><span class="linenos">172</span></a>        <span class="n">event</span> <span class="o">=</span> <span class="n">npc</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">generator</span><span class="p">(</span>
 </span><span id="EventfulScene-173"><a href="#EventfulScene-173"><span class="linenos">173</span></a>            <span class="n">ticked</span><span class="o">.</span><span class="n">player</span><span class="p">,</span> <span class="n">ticked</span><span class="o">.</span><span class="n">_started_npc</span><span class="p">,</span> <span class="n">ticked</span>
 </span><span id="EventfulScene-174"><a href="#EventfulScene-174"><span class="linenos">174</span></a>        <span class="p">)</span>
-</span><span id="EventfulScene-175"><a href="#EventfulScene-175"><span class="linenos">175</span></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Event </span><span class="si">{event}</span><span class="s2"> with </span><span class="si">{npc.spec.unique_name}</span><span class="s2"> started.&quot;</span><span class="p">)</span>
+</span><span id="EventfulScene-175"><a href="#EventfulScene-175"><span class="linenos">175</span></a>        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">t</span><span class="s2">&quot;Event </span><span class="si">{event}</span><span class="s2"> with </span><span class="si">{npc.spec.unique_name}</span><span class="s2"> started.&quot;</span><span class="p">)</span>
 </span><span id="EventfulScene-176"><a href="#EventfulScene-176"><span class="linenos">176</span></a>        <span class="k">try</span><span class="p">:</span>
 </span><span id="EventfulScene-177"><a href="#EventfulScene-177"><span class="linenos">177</span></a>            <span class="n">event_callable</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 </span><span id="EventfulScene-178"><a href="#EventfulScene-178"><span class="linenos">178</span></a>            <span class="k">return</span> <span class="n">event_callable</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">ticked</span><span class="p">)</span>
@@ -652,7 +652,7 @@
 </span><span id="EventfulScene-200"><a href="#EventfulScene-200"><span class="linenos">200</span></a>        <span class="n">npcs</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
 </span><span id="EventfulScene-201"><a href="#EventfulScene-201"><span class="linenos">201</span></a>            <span class="p">(</span><span class="n">npc</span> <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">same_name</span><span class="p">(</span><span class="n">npc</span><span class="p">)</span> <span class="k">else</span> <span class="n">n</span><span class="o">.</span><span class="n">complete_event</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ticked</span><span class="o">.</span><span class="n">npcs</span>
 </span><span id="EventfulScene-202"><a href="#EventfulScene-202"><span class="linenos">202</span></a>        <span class="p">)</span>
-</span><span id="EventfulScene-203"><a href="#EventfulScene-203"><span class="linenos">203</span></a>        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+</span><span id="EventfulScene-203"><a href="#EventfulScene-203"><span class="linenos">203</span></a>        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
 </span><span id="EventfulScene-204"><a href="#EventfulScene-204"><span class="linenos">204</span></a>            <span class="n">t</span><span class="s2">&quot;Event </span><span class="si">{ticked._event}</span><span class="s2"> with </span><span class="si">{npc.spec.unique_name}</span><span class="s2"> completed.&quot;</span>
 </span><span id="EventfulScene-205"><a href="#EventfulScene-205"><span class="linenos">205</span></a>        <span class="p">)</span>
 </span><span id="EventfulScene-206"><a href="#EventfulScene-206"><span class="linenos">206</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>

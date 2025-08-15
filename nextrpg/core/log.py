@@ -15,15 +15,15 @@ class _DurationFromConfig:
 _FROM_CONFIG = _DurationFromConfig()
 
 
-def _logger_name() -> str:
+def _log_name() -> str:
     file = Path(stack()[2].filename)
     # "file.py" -> "file"
     return file.name.split(".")[0]
 
 
 @dataclass(frozen=True)
-class Logger:
-    component: str = field(default_factory=_logger_name)
+class Log:
+    component: str = field(default_factory=_log_name)
 
     def debug(
         self,

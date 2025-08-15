@@ -18,7 +18,7 @@ from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Height, Size
-from nextrpg.core.logger import Logger
+from nextrpg.core.log import Log
 from nextrpg.draw.draw import (
     Draw,
     DrawOnScreen,
@@ -27,7 +27,7 @@ from nextrpg.draw.draw import (
 )
 from nextrpg.global_config.global_config import config
 
-logger = Logger()
+log = Log()
 
 
 class TileBottomAndDrawOnScreen(NamedTuple):
@@ -305,7 +305,7 @@ class MapLoader:
 
     @cached_property
     def _tmx(self) -> TiledMap:
-        logger.debug(t"Loading {self.tmx_file}")
+        log.debug(t"Loading {self.tmx_file}")
         return load_pygame(str(self.tmx_file))
 
 

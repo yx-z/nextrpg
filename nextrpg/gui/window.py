@@ -11,22 +11,22 @@ from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
     not_constructor_below,
 )
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
-from nextrpg.core.logger import ComponentAndMessage, Logger, pop_messages
+from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import Draw, DrawOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
-    KeyboardKey,
     KeyPressDown,
+    KeyboardKey,
     PygameEvent,
     WindowResize,
 )
@@ -37,7 +37,7 @@ from nextrpg.global_config.window_config import (
     WindowMode,
 )
 
-logger = Logger()
+log = Log()
 
 
 @dataclass_with_init(frozen=True)
@@ -88,7 +88,7 @@ class Window:
     def draw(
         self, draw_on_screens: tuple[DrawOnScreen, ...], time_delta: Millisecond
     ) -> None:
-        logger.debug(
+        log.debug(
             t"Size {self.current_config.size} Shift {self._center_shift}",
             duration=None,
         )

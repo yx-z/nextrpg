@@ -73,10 +73,10 @@ def _config() -> SaveConfig:
     return config().save
 
 
-def _logger() -> "Logger":
-    from nextrpg.core.logger import Logger
+def _log() -> "Log":
+    from nextrpg.core.log import Log
 
-    return Logger()
+    return Log()
 
 
 @dataclass_with_init(frozen=True)
@@ -84,11 +84,11 @@ class SaveIo:
     config: SaveConfig = field(default_factory=_config)
     slot: str = default(lambda self: self.config.shared_slot)
     _: KW_ONLY = not_constructor_below()
-    _logger: "Logger" = field(default_factory=_logger)
+    _log: "Log" = field(default_factory=_log)
 
     def save[_S](self, savable: _S) -> _S:
         key = _concat(savable.key)
-        self._logger.debug(t"Saving {key} at {self.slot}")
+        self._log.debug(t"Saving {key} at {self.slot}")
         if isinstance(data := savable.save(), bytes):
             return self._write_bytes(key, data)
         self._write_text(key, data)
@@ -116,7 +116,7 @@ class SaveIo:
         loader: Callable[[SaveData], _L | _U],
         fallback: _U | None,
     ) -> _U | _L | None:
-        self._logger.debug(t"Loading {key} at {self.slot}")
+        self._log.debug(t"Loading {key} at {self.slot}")
         if (file := self._bytes_path(key)).exists():
             return loader(file.read_bytes())
         if json_like := self._read_text().get(key):

@@ -12,7 +12,7 @@ from nextrpg.core.color import *
 from nextrpg.core.coordinate import *
 from nextrpg.core.dataclass_with_init import *
 from nextrpg.core.dimension import *
-from nextrpg.core.logger import *
+from nextrpg.core.log import *
 from nextrpg.core.save import *
 from nextrpg.core.walk import *
 from nextrpg.draw.cyclic_frames import *
