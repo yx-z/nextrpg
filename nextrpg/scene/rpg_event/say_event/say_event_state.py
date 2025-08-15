@@ -16,7 +16,7 @@ from nextrpg.draw.drawing import DrawingOnScreen
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.draw.typewriter import Typewriter
-from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
+from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.scene.rpg_event.eventful_scene import RpgEventScene
 from nextrpg.scene.scene import Scene
@@ -123,18 +123,19 @@ class SayEventTypingState(SayEventState):
             scene=self.scene,
             unique_name=self.unique_name,
             initial_coordinate=self.initial_coordinate,
-            draws=self.background + self.text_on_screen.drawing_on_screens,
+            draw_on_screens=self.background
+            + self.text_on_screen.drawing_on_screens,
             config=self.config,
         )
 
 
 @dataclass_with_init(frozen=True, kw_only=True)
 class SayEventFadeOutState(SayEventState):
-    draws: tuple[DrawingOnScreen, ...]
+    draw_on_screens: tuple[DrawingOnScreen, ...]
     config: SayEventConfig
     _: KW_ONLY = not_constructor_below()
     _fade_out: FadeOut = default(
-        lambda self: FadeOut(self.drawing, self.config.fade_duration)
+        lambda self: FadeOut(self.draw_on_screens, self.config.fade_duration)
     )
 
     @override

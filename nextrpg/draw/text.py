@@ -24,14 +24,14 @@ class Text(Sizeable):
 
     @property
     def size(self) -> Size:
-        return self.group.size
+        return self.drawing_group.size
 
     @property
     def top_left(self) -> Coordinate:
         return ORIGIN
 
     @cached_property
-    def group(self) -> DrawingGroup:
+    def drawing_group(self) -> DrawingGroup:
         draws = tuple(
             RelativeDrawing(self.drawing(line), self._line_shift(i))
             for i, line in enumerate(self.lines)
@@ -132,10 +132,10 @@ class TextGroup(Sizeable):
 
     @property
     def size(self) -> Size:
-        return self.group.size
+        return self.drawing_group.size
 
     @cached_property
-    def group(self) -> DrawingGroup:
+    def drawing_group(self) -> DrawingGroup:
         lines = [[t] for t in self._no_wrap[0].line_texts]
         for text in self._no_wrap[1:]:
             lines[-1].append(text.line_texts[0])
@@ -150,7 +150,7 @@ class TextGroup(Sizeable):
                 word_width, word_height = word.size
                 height_diff = line_height - word_height
                 shift = Size(curr_width, curr_height + height_diff)
-                res.append(RelativeDrawing(word.group, shift))
+                res.append(RelativeDrawing(word.drawing_group, shift))
                 curr_width += word_width + self.config.margin
             curr_height += line_height + self.config.line_spacing
         return DrawingGroup(tuple(res))

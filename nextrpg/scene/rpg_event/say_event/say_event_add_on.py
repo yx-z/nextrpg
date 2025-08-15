@@ -33,7 +33,7 @@ class SayEventAddOn:
 
     @cached_property
     def background(self) -> tuple[DrawingOnScreen, ...]:
-        contents = [RelativeDrawing(self._text.group, ORIGIN)]
+        contents = [RelativeDrawing(self._text.drawing_group, ORIGIN)]
         if self._name_relative_to_text:
             contents.append(self._name_relative_to_text)
         if self._avatar_relative_to_text:
@@ -49,7 +49,7 @@ class SayEventAddOn:
         )
         add_on_on_screen = DrawingGroupOnScreen(self.add_on_top_left, add_on)
 
-        text_coord = add_on_on_screen.coordinate(self._text.group)
+        text_coord = add_on_on_screen.coordinate(self._text.drawing_group)
         text_add_on = TextOnScreen(text_coord, self._text).drawing_on_screens
         return tuple(
             d
@@ -123,7 +123,7 @@ class SayEventAddOn:
             return None
         text = Text(self.name, self.config.name_text_config)
         shift = Size(0, -text.height - self.config.padding.height)
-        return RelativeDrawing(text.group, shift)
+        return RelativeDrawing(text.drawing_group, shift)
 
     @cached_property
     def _text(self) -> Text | TextGroup:

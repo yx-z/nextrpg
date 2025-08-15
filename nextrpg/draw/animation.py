@@ -5,8 +5,6 @@ from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.sizeable import Sizeable
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup
 
 
 class Animation(Sizeable, ABC):
@@ -15,7 +13,7 @@ class Animation(Sizeable, ABC):
 
     @property
     @abstractmethod
-    def drawing(self) -> Drawing | DrawingGroup: ...
+    def drawing(self) -> "Drawing | DrawingGroup": ...
 
     @property
     def top_left(self) -> Coordinate:

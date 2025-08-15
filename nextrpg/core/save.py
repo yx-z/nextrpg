@@ -10,6 +10,7 @@ from pathlib import Path
 from shutil import rmtree
 from typing import Any, Iterable, Self, TypeAlias, TypeVar, override
 
+from nextrpg import __version__
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -168,7 +169,7 @@ class SaveIo:
         if (file := self._text_path).exists():
             text = file.read_text()
             return json.loads(text)
-        return {}
+        return {"_nextrpg_version": __version__}
 
     def _serialize(self, key: str, data: SaveData) -> _Json:
         if isinstance(data, bytes):

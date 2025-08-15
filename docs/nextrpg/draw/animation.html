@@ -76,25 +76,23 @@
 </span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.sizeable</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sizeable</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing_group</span><span class="w"> </span><span class="kn">import</span> <span class="n">DrawingGroup</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Animation</span><span class="p">(</span><span class="n">Sizeable</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="o">...</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="nd">@property</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">:</span> <span class="o">...</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="nd">@property</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">top_left</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="nd">@property</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Animation</span><span class="p">(</span><span class="n">Sizeable</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="nd">@property</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Drawing | DrawingGroup&quot;</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="nd">@property</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">top_left</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="nd">@property</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span>
 </span></pre></div>
 
 
@@ -110,21 +108,21 @@
 
     </div>
     <a class="headerlink" href="#Animation"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Animation-13"><a href="#Animation-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Animation</span><span class="p">(</span><span class="n">Sizeable</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
-</span><span id="Animation-14"><a href="#Animation-14"><span class="linenos">14</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Animation-15"><a href="#Animation-15"><span class="linenos">15</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="o">...</span>
-</span><span id="Animation-16"><a href="#Animation-16"><span class="linenos">16</span></a>
-</span><span id="Animation-17"><a href="#Animation-17"><span class="linenos">17</span></a>    <span class="nd">@property</span>
-</span><span id="Animation-18"><a href="#Animation-18"><span class="linenos">18</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Animation-19"><a href="#Animation-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">:</span> <span class="o">...</span>
-</span><span id="Animation-20"><a href="#Animation-20"><span class="linenos">20</span></a>
-</span><span id="Animation-21"><a href="#Animation-21"><span class="linenos">21</span></a>    <span class="nd">@property</span>
-</span><span id="Animation-22"><a href="#Animation-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Animation-23"><a href="#Animation-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">top_left</span>
-</span><span id="Animation-24"><a href="#Animation-24"><span class="linenos">24</span></a>
-</span><span id="Animation-25"><a href="#Animation-25"><span class="linenos">25</span></a>    <span class="nd">@property</span>
-</span><span id="Animation-26"><a href="#Animation-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="Animation-27"><a href="#Animation-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Animation-11"><a href="#Animation-11"><span class="linenos">11</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Animation</span><span class="p">(</span><span class="n">Sizeable</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+</span><span id="Animation-12"><a href="#Animation-12"><span class="linenos">12</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Animation-13"><a href="#Animation-13"><span class="linenos">13</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="Animation-14"><a href="#Animation-14"><span class="linenos">14</span></a>
+</span><span id="Animation-15"><a href="#Animation-15"><span class="linenos">15</span></a>    <span class="nd">@property</span>
+</span><span id="Animation-16"><a href="#Animation-16"><span class="linenos">16</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Animation-17"><a href="#Animation-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Drawing | DrawingGroup&quot;</span><span class="p">:</span> <span class="o">...</span>
+</span><span id="Animation-18"><a href="#Animation-18"><span class="linenos">18</span></a>
+</span><span id="Animation-19"><a href="#Animation-19"><span class="linenos">19</span></a>    <span class="nd">@property</span>
+</span><span id="Animation-20"><a href="#Animation-20"><span class="linenos">20</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Animation-21"><a href="#Animation-21"><span class="linenos">21</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">top_left</span>
+</span><span id="Animation-22"><a href="#Animation-22"><span class="linenos">22</span></a>
+</span><span id="Animation-23"><a href="#Animation-23"><span class="linenos">23</span></a>    <span class="nd">@property</span>
+</span><span id="Animation-24"><a href="#Animation-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="Animation-25"><a href="#Animation-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span>
 </span></pre></div>
 
 
@@ -145,8 +143,8 @@ inheritance.</p>
 
     </div>
     <a class="headerlink" href="#Animation.tick"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Animation.tick-14"><a href="#Animation.tick-14"><span class="linenos">14</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Animation.tick-15"><a href="#Animation.tick-15"><span class="linenos">15</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="o">...</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Animation.tick-12"><a href="#Animation.tick-12"><span class="linenos">12</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Animation.tick-13"><a href="#Animation.tick-13"><span class="linenos">13</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="o">...</span>
 </span></pre></div>
 
 
@@ -156,15 +154,15 @@ inheritance.</p>
                             <div id="Animation.drawing" class="classattr">
                                         <input id="Animation.drawing-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
-            <span class="name">drawing</span><span class="annotation">: <a href="drawing.html#Drawing">nextrpg.draw.drawing.Drawing</a> | <a href="drawing_group.html#DrawingGroup">nextrpg.draw.drawing_group.DrawingGroup</a></span>
+            <span class="name">drawing</span><span class="annotation">: &#39;Drawing | DrawingGroup&#39;</span>
 
                 <label class="view-source-button" for="Animation.drawing-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Animation.drawing"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Animation.drawing-17"><a href="#Animation.drawing-17"><span class="linenos">17</span></a>    <span class="nd">@property</span>
-</span><span id="Animation.drawing-18"><a href="#Animation.drawing-18"><span class="linenos">18</span></a>    <span class="nd">@abstractmethod</span>
-</span><span id="Animation.drawing-19"><a href="#Animation.drawing-19"><span class="linenos">19</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">:</span> <span class="o">...</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Animation.drawing-15"><a href="#Animation.drawing-15"><span class="linenos">15</span></a>    <span class="nd">@property</span>
+</span><span id="Animation.drawing-16"><a href="#Animation.drawing-16"><span class="linenos">16</span></a>    <span class="nd">@abstractmethod</span>
+</span><span id="Animation.drawing-17"><a href="#Animation.drawing-17"><span class="linenos">17</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Drawing | DrawingGroup&quot;</span><span class="p">:</span> <span class="o">...</span>
 </span></pre></div>
 
 
@@ -180,9 +178,9 @@ inheritance.</p>
 
     </div>
     <a class="headerlink" href="#Animation.top_left"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Animation.top_left-21"><a href="#Animation.top_left-21"><span class="linenos">21</span></a>    <span class="nd">@property</span>
-</span><span id="Animation.top_left-22"><a href="#Animation.top_left-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="Animation.top_left-23"><a href="#Animation.top_left-23"><span class="linenos">23</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">top_left</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Animation.top_left-19"><a href="#Animation.top_left-19"><span class="linenos">19</span></a>    <span class="nd">@property</span>
+</span><span id="Animation.top_left-20"><a href="#Animation.top_left-20"><span class="linenos">20</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="Animation.top_left-21"><a href="#Animation.top_left-21"><span class="linenos">21</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">top_left</span>
 </span></pre></div>
 
 
@@ -198,9 +196,9 @@ inheritance.</p>
 
     </div>
     <a class="headerlink" href="#Animation.size"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Animation.size-25"><a href="#Animation.size-25"><span class="linenos">25</span></a>    <span class="nd">@property</span>
-</span><span id="Animation.size-26"><a href="#Animation.size-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="Animation.size-27"><a href="#Animation.size-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Animation.size-23"><a href="#Animation.size-23"><span class="linenos">23</span></a>    <span class="nd">@property</span>
+</span><span id="Animation.size-24"><a href="#Animation.size-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="Animation.size-25"><a href="#Animation.size-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="o">.</span><span class="n">size</span>
 </span></pre></div>
 
 

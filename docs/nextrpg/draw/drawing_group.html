@@ -42,6 +42,9 @@
                         <li>
                                 <a class="variable" href="#RelativeDrawing.shift">shift</a>
                         </li>
+                        <li>
+                                <a class="function" href="#RelativeDrawing.tick">tick</a>
+                        </li>
                 </ul>
 
             </li>
@@ -52,7 +55,10 @@
                                 <a class="function" href="#DrawingGroup.__init__">DrawingGroup</a>
                         </li>
                         <li>
-                                <a class="variable" href="#DrawingGroup.drawing">drawing</a>
+                                <a class="variable" href="#DrawingGroup.relative_drawings">relative_drawings</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#DrawingGroup.tick">tick</a>
                         </li>
                         <li>
                                 <a class="function" href="#DrawingGroup.drawing_on_screens">drawing_on_screens</a>
@@ -79,7 +85,10 @@
                                 <a class="variable" href="#DrawingGroupOnScreen.origin">origin</a>
                         </li>
                         <li>
-                                <a class="variable" href="#DrawingGroupOnScreen.group">group</a>
+                                <a class="variable" href="#DrawingGroupOnScreen.drawing_group">drawing_group</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#DrawingGroupOnScreen.tick">tick</a>
                         </li>
                         <li>
                                 <a class="variable" href="#DrawingGroupOnScreen.size">size</a>
@@ -117,92 +126,120 @@
 
                         <label class="view-source-button" for="mod-drawing_group-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NamedTuple</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">ORIGIN</span><span class="p">,</span> <span class="n">Coordinate</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.sizeable</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sizeable</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span><span class="p">,</span> <span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="n">SizedDrawOnScreens</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RelativeDrawing</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">shift</span><span class="p">:</span> <span class="n">Size</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DrawingGroup</span><span class="p">(</span><span class="n">Sizeable</span><span class="p">):</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">RelativeDrawing</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">drawing_on_screens</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_group_on_screen</span><span class="p">(</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawingGroupOnScreen</span><span class="p">:</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">ORIGIN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">size</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="nd">@property</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">ORIGIN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">top_left</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DrawingGroupOnScreen</span><span class="p">:</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>    <span class="n">group</span><span class="p">:</span> <span class="n">DrawingGroup</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>    <span class="nd">@property</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sized</span><span class="o">.</span><span class="n">size</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>    <span class="nd">@property</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sized</span><span class="o">.</span><span class="n">top_left</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">:</span> <span class="n">DrawingGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="k">if</span> <span class="n">coord</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coordinate</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>            <span class="k">return</span> <span class="n">coord</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Group </span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2"> not found.&quot;</span><span class="p">)</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>        <span class="n">res</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>        <span class="k">for</span> <span class="n">draw</span><span class="p">,</span> <span class="n">shift</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">drawing</span><span class="p">:</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>            <span class="n">coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="n">shift</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">draw</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">):</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DrawingOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">draw</span><span class="p">))</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>            <span class="k">else</span><span class="p">:</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>                <span class="n">res</span> <span class="o">+=</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">draw</span><span class="p">)</span><span class="o">.</span><span class="n">drawing_on_screens</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">:</span> <span class="n">DrawingGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>        <span class="k">if</span> <span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>        <span class="k">for</span> <span class="n">drawing</span><span class="p">,</span> <span class="n">shift</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">drawing</span><span class="p">:</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>            <span class="n">coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="n">shift</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drawing</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">):</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>                <span class="k">continue</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>            <span class="k">if</span> <span class="n">drawing</span> <span class="o">==</span> <span class="n">group</span><span class="p">:</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>                <span class="k">return</span> <span class="n">coord</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>            <span class="k">if</span> <span class="n">res</span> <span class="o">:=</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">drawing</span><span class="p">)</span><span class="o">.</span><span class="n">_coordinate</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>                <span class="k">return</span> <span class="n">res</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>        <span class="k">return</span> <span class="kc">None</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>    <span class="nd">@cached_property</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_sized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedDrawOnScreens</span><span class="p">:</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>        <span class="k">return</span> <span class="n">SizedDrawOnScreens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing_on_screens</span><span class="p">)</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">replace</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.coordinate</span><span class="w"> </span><span class="kn">import</span> <span class="n">ORIGIN</span><span class="p">,</span> <span class="n">Coordinate</span><span class="p">,</span> <span class="n">Moving</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.dimension</span><span class="w"> </span><span class="kn">import</span> <span class="n">Size</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.sizeable</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sizeable</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.core.time</span><span class="w"> </span><span class="kn">import</span> <span class="n">Millisecond</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.animation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Animation</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">nextrpg.draw.drawing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Drawing</span><span class="p">,</span> <span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="n">SizedDrawOnScreens</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a>
+</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RelativeDrawing</span><span class="p">:</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">Animation</span> <span class="o">|</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>    <span class="n">shift</span><span class="p">:</span> <span class="n">Size</span> <span class="o">|</span> <span class="n">Moving</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Animation</span> <span class="o">|</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">,</span> <span class="n">Size</span> <span class="o">|</span> <span class="n">Moving</span><span class="p">]:</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a>        <span class="k">return</span> <span class="nb">iter</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shift</span><span class="p">))</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drawing</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="p">,</span> <span class="n">Animation</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">):</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>            <span class="n">drawing</span> <span class="o">=</span> <span class="n">drawing</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shift</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shift</span><span class="p">,</span> <span class="n">Moving</span><span class="p">):</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>            <span class="n">shift</span> <span class="o">=</span> <span class="n">shift</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drawing</span><span class="o">=</span><span class="n">drawing</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="n">shift</span><span class="p">)</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DrawingGroup</span><span class="p">(</span><span class="n">Sizeable</span><span class="p">):</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>    <span class="n">relative_drawings</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">RelativeDrawing</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>        <span class="n">relative_drawings</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>            <span class="n">relative_drawing</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>            <span class="k">for</span> <span class="n">relative_drawing</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">relative_drawings</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>        <span class="p">)</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relative_drawings</span><span class="o">=</span><span class="n">relative_drawings</span><span class="p">)</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">drawing_on_screens</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_group_on_screen</span><span class="p">(</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawingGroupOnScreen</span><span class="p">:</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">ORIGIN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">ORIGIN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">top_left</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">Sizeable</span><span class="p">):</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>    <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>    <span class="n">drawing_group</span><span class="p">:</span> <span class="n">DrawingGroup</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>        <span class="n">drawing_group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing_group</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drawing_group</span><span class="o">=</span><span class="n">drawing_group</span><span class="p">)</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>    <span class="nd">@property</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sized</span><span class="o">.</span><span class="n">size</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>    <span class="nd">@property</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sized</span><span class="o">.</span><span class="n">top_left</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drawing_group</span><span class="p">:</span> <span class="n">DrawingGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>        <span class="k">if</span> <span class="n">coord</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coordinate</span><span class="p">(</span><span class="n">drawing_group</span><span class="p">):</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>            <span class="k">return</span> <span class="n">coord</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Group </span><span class="si">{</span><span class="n">drawing_group</span><span class="si">}</span><span class="s2"> not found.&quot;</span><span class="p">)</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>        <span class="n">res</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>        <span class="k">for</span> <span class="n">drawing</span><span class="p">,</span> <span class="n">shift</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing_group</span><span class="o">.</span><span class="n">relative_drawings</span><span class="p">:</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>            <span class="n">coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="n">shift</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drawing</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">):</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DrawingOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">drawing</span><span class="p">))</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>                <span class="n">res</span> <span class="o">+=</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">drawing</span><span class="p">)</span><span class="o">.</span><span class="n">drawing_on_screens</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drawing_group</span><span class="p">:</span> <span class="n">DrawingGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="k">if</span> <span class="n">drawing_group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing_group</span><span class="p">:</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>        <span class="k">for</span> <span class="n">drawing</span><span class="p">,</span> <span class="n">shift</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing_group</span><span class="o">.</span><span class="n">relative_drawings</span><span class="p">:</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>            <span class="n">coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="n">shift</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drawing</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">):</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>                <span class="k">continue</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>            <span class="k">if</span> <span class="n">drawing</span> <span class="o">==</span> <span class="n">drawing_group</span><span class="p">:</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>                <span class="k">return</span> <span class="n">coord</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>            <span class="k">if</span> <span class="n">res</span> <span class="o">:=</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">drawing</span><span class="p">)</span><span class="o">.</span><span class="n">_coordinate</span><span class="p">(</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>                <span class="n">drawing_group</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>            <span class="p">):</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>                <span class="k">return</span> <span class="n">res</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="k">return</span> <span class="kc">None</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>    <span class="nd">@cached_property</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_sized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedDrawOnScreens</span><span class="p">:</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="k">return</span> <span class="n">SizedDrawOnScreens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing_on_screens</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -210,62 +247,91 @@
                 <section id="RelativeDrawing">
                             <input id="RelativeDrawing-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
-            
+                    <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
+
     <span class="def">class</span>
-    <span class="name">RelativeDrawing</span><wbr>(<span class="base">typing.NamedTuple</span>):
+    <span class="name">RelativeDrawing</span>:
 
                 <label class="view-source-button" for="RelativeDrawing-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#RelativeDrawing"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="RelativeDrawing-14"><a href="#RelativeDrawing-14"><span class="linenos">14</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RelativeDrawing</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-</span><span id="RelativeDrawing-15"><a href="#RelativeDrawing-15"><span class="linenos">15</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span>
-</span><span id="RelativeDrawing-16"><a href="#RelativeDrawing-16"><span class="linenos">16</span></a>    <span class="n">shift</span><span class="p">:</span> <span class="n">Size</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="RelativeDrawing-16"><a href="#RelativeDrawing-16"><span class="linenos">16</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="RelativeDrawing-17"><a href="#RelativeDrawing-17"><span class="linenos">17</span></a><span class="k">class</span><span class="w"> </span><span class="nc">RelativeDrawing</span><span class="p">:</span>
+</span><span id="RelativeDrawing-18"><a href="#RelativeDrawing-18"><span class="linenos">18</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="n">Animation</span> <span class="o">|</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span>
+</span><span id="RelativeDrawing-19"><a href="#RelativeDrawing-19"><span class="linenos">19</span></a>    <span class="n">shift</span><span class="p">:</span> <span class="n">Size</span> <span class="o">|</span> <span class="n">Moving</span>
+</span><span id="RelativeDrawing-20"><a href="#RelativeDrawing-20"><span class="linenos">20</span></a>
+</span><span id="RelativeDrawing-21"><a href="#RelativeDrawing-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span>
+</span><span id="RelativeDrawing-22"><a href="#RelativeDrawing-22"><span class="linenos">22</span></a>        <span class="bp">self</span><span class="p">,</span>
+</span><span id="RelativeDrawing-23"><a href="#RelativeDrawing-23"><span class="linenos">23</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Animation</span> <span class="o">|</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">,</span> <span class="n">Size</span> <span class="o">|</span> <span class="n">Moving</span><span class="p">]:</span>
+</span><span id="RelativeDrawing-24"><a href="#RelativeDrawing-24"><span class="linenos">24</span></a>        <span class="k">return</span> <span class="nb">iter</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shift</span><span class="p">))</span>
+</span><span id="RelativeDrawing-25"><a href="#RelativeDrawing-25"><span class="linenos">25</span></a>
+</span><span id="RelativeDrawing-26"><a href="#RelativeDrawing-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="RelativeDrawing-27"><a href="#RelativeDrawing-27"><span class="linenos">27</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drawing</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="p">,</span> <span class="n">Animation</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">):</span>
+</span><span id="RelativeDrawing-28"><a href="#RelativeDrawing-28"><span class="linenos">28</span></a>            <span class="n">drawing</span> <span class="o">=</span> <span class="n">drawing</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="RelativeDrawing-29"><a href="#RelativeDrawing-29"><span class="linenos">29</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shift</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shift</span><span class="p">,</span> <span class="n">Moving</span><span class="p">):</span>
+</span><span id="RelativeDrawing-30"><a href="#RelativeDrawing-30"><span class="linenos">30</span></a>            <span class="n">shift</span> <span class="o">=</span> <span class="n">shift</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="RelativeDrawing-31"><a href="#RelativeDrawing-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drawing</span><span class="o">=</span><span class="n">drawing</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="n">shift</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>RelativeDrawing(drawing, shift)</p>
-</div>
-
+    
 
                             <div id="RelativeDrawing.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">RelativeDrawing</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">drawing</span><span class="p">:</span> <span class="n">Drawing</span> <span class="o">|</span> <span class="n">DrawingGroup</span>, </span><span class="param"><span class="n">shift</span><span class="p">:</span> <span class="n">Size</span></span>)</span>
+        <span class="name">RelativeDrawing</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">drawing</span><span class="p">:</span> <span class="s1">&#39;Animation | Drawing | DrawingGroup&#39;</span>,</span><span class="param">	<span class="n">shift</span><span class="p">:</span> <span class="s1">&#39;Size | Moving&#39;</span></span>)</span>
 
         
     </div>
     <a class="headerlink" href="#RelativeDrawing.__init__"></a>
     
-            <div class="docstring"><p>Create new instance of RelativeDrawing(drawing, shift)</p>
-</div>
-
+    
 
                             </div>
                             <div id="RelativeDrawing.drawing" class="classattr">
                                 <div class="attr variable">
-            <span class="name">drawing</span><span class="annotation">: Drawing | DrawingGroup</span>
+            <span class="name">drawing</span><span class="annotation">: &#39;Animation | Drawing | DrawingGroup&#39;</span>
 
         
     </div>
     <a class="headerlink" href="#RelativeDrawing.drawing"></a>
     
-            <div class="docstring"><p>Alias for field number 0</p>
-</div>
-
+    
 
                             </div>
                             <div id="RelativeDrawing.shift" class="classattr">
                                 <div class="attr variable">
-            <span class="name">shift</span><span class="annotation">: Size</span>
+            <span class="name">shift</span><span class="annotation">: &#39;Size | Moving&#39;</span>
 
         
     </div>
     <a class="headerlink" href="#RelativeDrawing.shift"></a>
     
-            <div class="docstring"><p>Alias for field number 1</p>
-</div>
+    
 
+                            </div>
+                            <div id="RelativeDrawing.tick" class="classattr">
+                                        <input id="RelativeDrawing.tick-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">tick</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="s1">&#39;Millisecond&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Self&#39;</span>:</span></span>
+
+                <label class="view-source-button" for="RelativeDrawing.tick-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#RelativeDrawing.tick"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="RelativeDrawing.tick-26"><a href="#RelativeDrawing.tick-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="RelativeDrawing.tick-27"><a href="#RelativeDrawing.tick-27"><span class="linenos">27</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drawing</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing</span><span class="p">,</span> <span class="n">Animation</span> <span class="o">|</span> <span class="n">DrawingGroup</span><span class="p">):</span>
+</span><span id="RelativeDrawing.tick-28"><a href="#RelativeDrawing.tick-28"><span class="linenos">28</span></a>            <span class="n">drawing</span> <span class="o">=</span> <span class="n">drawing</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="RelativeDrawing.tick-29"><a href="#RelativeDrawing.tick-29"><span class="linenos">29</span></a>        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shift</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shift</span><span class="p">,</span> <span class="n">Moving</span><span class="p">):</span>
+</span><span id="RelativeDrawing.tick-30"><a href="#RelativeDrawing.tick-30"><span class="linenos">30</span></a>            <span class="n">shift</span> <span class="o">=</span> <span class="n">shift</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="RelativeDrawing.tick-31"><a href="#RelativeDrawing.tick-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drawing</span><span class="o">=</span><span class="n">drawing</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="n">shift</span><span class="p">)</span>
+</span></pre></div>
+
+
+    
 
                             </div>
                 </section>
@@ -281,27 +347,34 @@
 
     </div>
     <a class="headerlink" href="#DrawingGroup"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroup-19"><a href="#DrawingGroup-19"><span class="linenos">19</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="DrawingGroup-20"><a href="#DrawingGroup-20"><span class="linenos">20</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DrawingGroup</span><span class="p">(</span><span class="n">Sizeable</span><span class="p">):</span>
-</span><span id="DrawingGroup-21"><a href="#DrawingGroup-21"><span class="linenos">21</span></a>    <span class="n">drawing</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">RelativeDrawing</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-</span><span id="DrawingGroup-22"><a href="#DrawingGroup-22"><span class="linenos">22</span></a>
-</span><span id="DrawingGroup-23"><a href="#DrawingGroup-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span>
-</span><span id="DrawingGroup-24"><a href="#DrawingGroup-24"><span class="linenos">24</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="DrawingGroup-25"><a href="#DrawingGroup-25"><span class="linenos">25</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="DrawingGroup-26"><a href="#DrawingGroup-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">drawing_on_screens</span>
-</span><span id="DrawingGroup-27"><a href="#DrawingGroup-27"><span class="linenos">27</span></a>
-</span><span id="DrawingGroup-28"><a href="#DrawingGroup-28"><span class="linenos">28</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_group_on_screen</span><span class="p">(</span>
-</span><span id="DrawingGroup-29"><a href="#DrawingGroup-29"><span class="linenos">29</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="DrawingGroup-30"><a href="#DrawingGroup-30"><span class="linenos">30</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawingGroupOnScreen</span><span class="p">:</span>
-</span><span id="DrawingGroup-31"><a href="#DrawingGroup-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-</span><span id="DrawingGroup-32"><a href="#DrawingGroup-32"><span class="linenos">32</span></a>
-</span><span id="DrawingGroup-33"><a href="#DrawingGroup-33"><span class="linenos">33</span></a>    <span class="nd">@cached_property</span>
-</span><span id="DrawingGroup-34"><a href="#DrawingGroup-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="DrawingGroup-35"><a href="#DrawingGroup-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">ORIGIN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">size</span>
-</span><span id="DrawingGroup-36"><a href="#DrawingGroup-36"><span class="linenos">36</span></a>
-</span><span id="DrawingGroup-37"><a href="#DrawingGroup-37"><span class="linenos">37</span></a>    <span class="nd">@property</span>
-</span><span id="DrawingGroup-38"><a href="#DrawingGroup-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="DrawingGroup-39"><a href="#DrawingGroup-39"><span class="linenos">39</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">ORIGIN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">top_left</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroup-34"><a href="#DrawingGroup-34"><span class="linenos">34</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="DrawingGroup-35"><a href="#DrawingGroup-35"><span class="linenos">35</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DrawingGroup</span><span class="p">(</span><span class="n">Sizeable</span><span class="p">):</span>
+</span><span id="DrawingGroup-36"><a href="#DrawingGroup-36"><span class="linenos">36</span></a>    <span class="n">relative_drawings</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">RelativeDrawing</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</span><span id="DrawingGroup-37"><a href="#DrawingGroup-37"><span class="linenos">37</span></a>
+</span><span id="DrawingGroup-38"><a href="#DrawingGroup-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="DrawingGroup-39"><a href="#DrawingGroup-39"><span class="linenos">39</span></a>        <span class="n">relative_drawings</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="DrawingGroup-40"><a href="#DrawingGroup-40"><span class="linenos">40</span></a>            <span class="n">relative_drawing</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="DrawingGroup-41"><a href="#DrawingGroup-41"><span class="linenos">41</span></a>            <span class="k">for</span> <span class="n">relative_drawing</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">relative_drawings</span>
+</span><span id="DrawingGroup-42"><a href="#DrawingGroup-42"><span class="linenos">42</span></a>        <span class="p">)</span>
+</span><span id="DrawingGroup-43"><a href="#DrawingGroup-43"><span class="linenos">43</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relative_drawings</span><span class="o">=</span><span class="n">relative_drawings</span><span class="p">)</span>
+</span><span id="DrawingGroup-44"><a href="#DrawingGroup-44"><span class="linenos">44</span></a>
+</span><span id="DrawingGroup-45"><a href="#DrawingGroup-45"><span class="linenos">45</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span>
+</span><span id="DrawingGroup-46"><a href="#DrawingGroup-46"><span class="linenos">46</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="DrawingGroup-47"><a href="#DrawingGroup-47"><span class="linenos">47</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="DrawingGroup-48"><a href="#DrawingGroup-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">drawing_on_screens</span>
+</span><span id="DrawingGroup-49"><a href="#DrawingGroup-49"><span class="linenos">49</span></a>
+</span><span id="DrawingGroup-50"><a href="#DrawingGroup-50"><span class="linenos">50</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_group_on_screen</span><span class="p">(</span>
+</span><span id="DrawingGroup-51"><a href="#DrawingGroup-51"><span class="linenos">51</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="DrawingGroup-52"><a href="#DrawingGroup-52"><span class="linenos">52</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawingGroupOnScreen</span><span class="p">:</span>
+</span><span id="DrawingGroup-53"><a href="#DrawingGroup-53"><span class="linenos">53</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+</span><span id="DrawingGroup-54"><a href="#DrawingGroup-54"><span class="linenos">54</span></a>
+</span><span id="DrawingGroup-55"><a href="#DrawingGroup-55"><span class="linenos">55</span></a>    <span class="nd">@cached_property</span>
+</span><span id="DrawingGroup-56"><a href="#DrawingGroup-56"><span class="linenos">56</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="DrawingGroup-57"><a href="#DrawingGroup-57"><span class="linenos">57</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">ORIGIN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">size</span>
+</span><span id="DrawingGroup-58"><a href="#DrawingGroup-58"><span class="linenos">58</span></a>
+</span><span id="DrawingGroup-59"><a href="#DrawingGroup-59"><span class="linenos">59</span></a>    <span class="nd">@cached_property</span>
+</span><span id="DrawingGroup-60"><a href="#DrawingGroup-60"><span class="linenos">60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="DrawingGroup-61"><a href="#DrawingGroup-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">ORIGIN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">top_left</span>
 </span></pre></div>
 
 
@@ -310,7 +383,7 @@
                             <div id="DrawingGroup.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">DrawingGroup</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">drawing</span><span class="p">:</span> <span class="s1">&#39;tuple[RelativeDrawing, ...]&#39;</span></span>)</span>
+        <span class="name">DrawingGroup</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">relative_drawings</span><span class="p">:</span> <span class="s1">&#39;tuple[RelativeDrawing, ...]&#39;</span></span>)</span>
 
         
     </div>
@@ -319,14 +392,37 @@
     
 
                             </div>
-                            <div id="DrawingGroup.drawing" class="classattr">
+                            <div id="DrawingGroup.relative_drawings" class="classattr">
                                 <div class="attr variable">
-            <span class="name">drawing</span><span class="annotation">: &#39;tuple[RelativeDrawing, ...]&#39;</span>
+            <span class="name">relative_drawings</span><span class="annotation">: &#39;tuple[RelativeDrawing, ...]&#39;</span>
 
         
     </div>
-    <a class="headerlink" href="#DrawingGroup.drawing"></a>
+    <a class="headerlink" href="#DrawingGroup.relative_drawings"></a>
     
+    
+
+                            </div>
+                            <div id="DrawingGroup.tick" class="classattr">
+                                        <input id="DrawingGroup.tick-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">tick</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="s1">&#39;Millisecond&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Self&#39;</span>:</span></span>
+
+                <label class="view-source-button" for="DrawingGroup.tick-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#DrawingGroup.tick"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroup.tick-38"><a href="#DrawingGroup.tick-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="DrawingGroup.tick-39"><a href="#DrawingGroup.tick-39"><span class="linenos">39</span></a>        <span class="n">relative_drawings</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="DrawingGroup.tick-40"><a href="#DrawingGroup.tick-40"><span class="linenos">40</span></a>            <span class="n">relative_drawing</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="DrawingGroup.tick-41"><a href="#DrawingGroup.tick-41"><span class="linenos">41</span></a>            <span class="k">for</span> <span class="n">relative_drawing</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">relative_drawings</span>
+</span><span id="DrawingGroup.tick-42"><a href="#DrawingGroup.tick-42"><span class="linenos">42</span></a>        <span class="p">)</span>
+</span><span id="DrawingGroup.tick-43"><a href="#DrawingGroup.tick-43"><span class="linenos">43</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">relative_drawings</span><span class="o">=</span><span class="n">relative_drawings</span><span class="p">)</span>
+</span></pre></div>
+
+
     
 
                             </div>
@@ -341,10 +437,10 @@
 
     </div>
     <a class="headerlink" href="#DrawingGroup.drawing_on_screens"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroup.drawing_on_screens-23"><a href="#DrawingGroup.drawing_on_screens-23"><span class="linenos">23</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span>
-</span><span id="DrawingGroup.drawing_on_screens-24"><a href="#DrawingGroup.drawing_on_screens-24"><span class="linenos">24</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="DrawingGroup.drawing_on_screens-25"><a href="#DrawingGroup.drawing_on_screens-25"><span class="linenos">25</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="DrawingGroup.drawing_on_screens-26"><a href="#DrawingGroup.drawing_on_screens-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">drawing_on_screens</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroup.drawing_on_screens-45"><a href="#DrawingGroup.drawing_on_screens-45"><span class="linenos">45</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span>
+</span><span id="DrawingGroup.drawing_on_screens-46"><a href="#DrawingGroup.drawing_on_screens-46"><span class="linenos">46</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="DrawingGroup.drawing_on_screens-47"><a href="#DrawingGroup.drawing_on_screens-47"><span class="linenos">47</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="DrawingGroup.drawing_on_screens-48"><a href="#DrawingGroup.drawing_on_screens-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">drawing_on_screens</span>
 </span></pre></div>
 
 
@@ -362,10 +458,10 @@
 
     </div>
     <a class="headerlink" href="#DrawingGroup.drawing_group_on_screen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroup.drawing_group_on_screen-28"><a href="#DrawingGroup.drawing_group_on_screen-28"><span class="linenos">28</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_group_on_screen</span><span class="p">(</span>
-</span><span id="DrawingGroup.drawing_group_on_screen-29"><a href="#DrawingGroup.drawing_group_on_screen-29"><span class="linenos">29</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="DrawingGroup.drawing_group_on_screen-30"><a href="#DrawingGroup.drawing_group_on_screen-30"><span class="linenos">30</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawingGroupOnScreen</span><span class="p">:</span>
-</span><span id="DrawingGroup.drawing_group_on_screen-31"><a href="#DrawingGroup.drawing_group_on_screen-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroup.drawing_group_on_screen-50"><a href="#DrawingGroup.drawing_group_on_screen-50"><span class="linenos">50</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_group_on_screen</span><span class="p">(</span>
+</span><span id="DrawingGroup.drawing_group_on_screen-51"><a href="#DrawingGroup.drawing_group_on_screen-51"><span class="linenos">51</span></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="DrawingGroup.drawing_group_on_screen-52"><a href="#DrawingGroup.drawing_group_on_screen-52"><span class="linenos">52</span></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DrawingGroupOnScreen</span><span class="p">:</span>
+</span><span id="DrawingGroup.drawing_group_on_screen-53"><a href="#DrawingGroup.drawing_group_on_screen-53"><span class="linenos">53</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -381,9 +477,9 @@
 
     </div>
     <a class="headerlink" href="#DrawingGroup.size"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroup.size-33"><a href="#DrawingGroup.size-33"><span class="linenos">33</span></a>    <span class="nd">@cached_property</span>
-</span><span id="DrawingGroup.size-34"><a href="#DrawingGroup.size-34"><span class="linenos">34</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="DrawingGroup.size-35"><a href="#DrawingGroup.size-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">ORIGIN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">size</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroup.size-55"><a href="#DrawingGroup.size-55"><span class="linenos">55</span></a>    <span class="nd">@cached_property</span>
+</span><span id="DrawingGroup.size-56"><a href="#DrawingGroup.size-56"><span class="linenos">56</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="DrawingGroup.size-57"><a href="#DrawingGroup.size-57"><span class="linenos">57</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">ORIGIN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">size</span>
 </span></pre></div>
 
 
@@ -399,9 +495,9 @@
 
     </div>
     <a class="headerlink" href="#DrawingGroup.top_left"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroup.top_left-37"><a href="#DrawingGroup.top_left-37"><span class="linenos">37</span></a>    <span class="nd">@property</span>
-</span><span id="DrawingGroup.top_left-38"><a href="#DrawingGroup.top_left-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="DrawingGroup.top_left-39"><a href="#DrawingGroup.top_left-39"><span class="linenos">39</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">ORIGIN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">top_left</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroup.top_left-59"><a href="#DrawingGroup.top_left-59"><span class="linenos">59</span></a>    <span class="nd">@cached_property</span>
+</span><span id="DrawingGroup.top_left-60"><a href="#DrawingGroup.top_left-60"><span class="linenos">60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="DrawingGroup.top_left-61"><a href="#DrawingGroup.top_left-61"><span class="linenos">61</span></a>        <span class="k">return</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">ORIGIN</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">top_left</span>
 </span></pre></div>
 
 
@@ -437,58 +533,64 @@
                     <div class="decorator decorator-dataclass">@dataclass(frozen=True)</div>
 
     <span class="def">class</span>
-    <span class="name">DrawingGroupOnScreen</span>:
+    <span class="name">DrawingGroupOnScreen</span><wbr>(<span class="base"><a href="../core/sizeable.html#Sizeable">nextrpg.core.sizeable.Sizeable</a></span>):
 
                 <label class="view-source-button" for="DrawingGroupOnScreen-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#DrawingGroupOnScreen"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroupOnScreen-42"><a href="#DrawingGroupOnScreen-42"><span class="linenos">42</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="DrawingGroupOnScreen-43"><a href="#DrawingGroupOnScreen-43"><span class="linenos">43</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DrawingGroupOnScreen</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen-44"><a href="#DrawingGroupOnScreen-44"><span class="linenos">44</span></a>    <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
-</span><span id="DrawingGroupOnScreen-45"><a href="#DrawingGroupOnScreen-45"><span class="linenos">45</span></a>    <span class="n">group</span><span class="p">:</span> <span class="n">DrawingGroup</span>
-</span><span id="DrawingGroupOnScreen-46"><a href="#DrawingGroupOnScreen-46"><span class="linenos">46</span></a>
-</span><span id="DrawingGroupOnScreen-47"><a href="#DrawingGroupOnScreen-47"><span class="linenos">47</span></a>    <span class="nd">@property</span>
-</span><span id="DrawingGroupOnScreen-48"><a href="#DrawingGroupOnScreen-48"><span class="linenos">48</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen-49"><a href="#DrawingGroupOnScreen-49"><span class="linenos">49</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sized</span><span class="o">.</span><span class="n">size</span>
-</span><span id="DrawingGroupOnScreen-50"><a href="#DrawingGroupOnScreen-50"><span class="linenos">50</span></a>
-</span><span id="DrawingGroupOnScreen-51"><a href="#DrawingGroupOnScreen-51"><span class="linenos">51</span></a>    <span class="nd">@property</span>
-</span><span id="DrawingGroupOnScreen-52"><a href="#DrawingGroupOnScreen-52"><span class="linenos">52</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen-53"><a href="#DrawingGroupOnScreen-53"><span class="linenos">53</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sized</span><span class="o">.</span><span class="n">top_left</span>
-</span><span id="DrawingGroupOnScreen-54"><a href="#DrawingGroupOnScreen-54"><span class="linenos">54</span></a>
-</span><span id="DrawingGroupOnScreen-55"><a href="#DrawingGroupOnScreen-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">:</span> <span class="n">DrawingGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen-56"><a href="#DrawingGroupOnScreen-56"><span class="linenos">56</span></a>        <span class="k">if</span> <span class="n">coord</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coordinate</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
-</span><span id="DrawingGroupOnScreen-57"><a href="#DrawingGroupOnScreen-57"><span class="linenos">57</span></a>            <span class="k">return</span> <span class="n">coord</span>
-</span><span id="DrawingGroupOnScreen-58"><a href="#DrawingGroupOnScreen-58"><span class="linenos">58</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Group </span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2"> not found.&quot;</span><span class="p">)</span>
-</span><span id="DrawingGroupOnScreen-59"><a href="#DrawingGroupOnScreen-59"><span class="linenos">59</span></a>
-</span><span id="DrawingGroupOnScreen-60"><a href="#DrawingGroupOnScreen-60"><span class="linenos">60</span></a>    <span class="nd">@cached_property</span>
-</span><span id="DrawingGroupOnScreen-61"><a href="#DrawingGroupOnScreen-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="DrawingGroupOnScreen-62"><a href="#DrawingGroupOnScreen-62"><span class="linenos">62</span></a>        <span class="n">res</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="DrawingGroupOnScreen-63"><a href="#DrawingGroupOnScreen-63"><span class="linenos">63</span></a>        <span class="k">for</span> <span class="n">draw</span><span class="p">,</span> <span class="n">shift</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">drawing</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen-64"><a href="#DrawingGroupOnScreen-64"><span class="linenos">64</span></a>            <span class="n">coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="n">shift</span>
-</span><span id="DrawingGroupOnScreen-65"><a href="#DrawingGroupOnScreen-65"><span class="linenos">65</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">draw</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">):</span>
-</span><span id="DrawingGroupOnScreen-66"><a href="#DrawingGroupOnScreen-66"><span class="linenos">66</span></a>                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DrawingOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">draw</span><span class="p">))</span>
-</span><span id="DrawingGroupOnScreen-67"><a href="#DrawingGroupOnScreen-67"><span class="linenos">67</span></a>            <span class="k">else</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen-68"><a href="#DrawingGroupOnScreen-68"><span class="linenos">68</span></a>                <span class="n">res</span> <span class="o">+=</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">draw</span><span class="p">)</span><span class="o">.</span><span class="n">drawing_on_screens</span>
-</span><span id="DrawingGroupOnScreen-69"><a href="#DrawingGroupOnScreen-69"><span class="linenos">69</span></a>
-</span><span id="DrawingGroupOnScreen-70"><a href="#DrawingGroupOnScreen-70"><span class="linenos">70</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-</span><span id="DrawingGroupOnScreen-71"><a href="#DrawingGroupOnScreen-71"><span class="linenos">71</span></a>
-</span><span id="DrawingGroupOnScreen-72"><a href="#DrawingGroupOnScreen-72"><span class="linenos">72</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">:</span> <span class="n">DrawingGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen-73"><a href="#DrawingGroupOnScreen-73"><span class="linenos">73</span></a>        <span class="k">if</span> <span class="n">group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen-74"><a href="#DrawingGroupOnScreen-74"><span class="linenos">74</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span>
-</span><span id="DrawingGroupOnScreen-75"><a href="#DrawingGroupOnScreen-75"><span class="linenos">75</span></a>        <span class="k">for</span> <span class="n">drawing</span><span class="p">,</span> <span class="n">shift</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">drawing</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen-76"><a href="#DrawingGroupOnScreen-76"><span class="linenos">76</span></a>            <span class="n">coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="n">shift</span>
-</span><span id="DrawingGroupOnScreen-77"><a href="#DrawingGroupOnScreen-77"><span class="linenos">77</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drawing</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">):</span>
-</span><span id="DrawingGroupOnScreen-78"><a href="#DrawingGroupOnScreen-78"><span class="linenos">78</span></a>                <span class="k">continue</span>
-</span><span id="DrawingGroupOnScreen-79"><a href="#DrawingGroupOnScreen-79"><span class="linenos">79</span></a>            <span class="k">if</span> <span class="n">drawing</span> <span class="o">==</span> <span class="n">group</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen-80"><a href="#DrawingGroupOnScreen-80"><span class="linenos">80</span></a>                <span class="k">return</span> <span class="n">coord</span>
-</span><span id="DrawingGroupOnScreen-81"><a href="#DrawingGroupOnScreen-81"><span class="linenos">81</span></a>            <span class="k">if</span> <span class="n">res</span> <span class="o">:=</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">drawing</span><span class="p">)</span><span class="o">.</span><span class="n">_coordinate</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
-</span><span id="DrawingGroupOnScreen-82"><a href="#DrawingGroupOnScreen-82"><span class="linenos">82</span></a>                <span class="k">return</span> <span class="n">res</span>
-</span><span id="DrawingGroupOnScreen-83"><a href="#DrawingGroupOnScreen-83"><span class="linenos">83</span></a>        <span class="k">return</span> <span class="kc">None</span>
-</span><span id="DrawingGroupOnScreen-84"><a href="#DrawingGroupOnScreen-84"><span class="linenos">84</span></a>
-</span><span id="DrawingGroupOnScreen-85"><a href="#DrawingGroupOnScreen-85"><span class="linenos">85</span></a>    <span class="nd">@cached_property</span>
-</span><span id="DrawingGroupOnScreen-86"><a href="#DrawingGroupOnScreen-86"><span class="linenos">86</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_sized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedDrawOnScreens</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen-87"><a href="#DrawingGroupOnScreen-87"><span class="linenos">87</span></a>        <span class="k">return</span> <span class="n">SizedDrawOnScreens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing_on_screens</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroupOnScreen-64"><a href="#DrawingGroupOnScreen-64"><span class="linenos"> 64</span></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="DrawingGroupOnScreen-65"><a href="#DrawingGroupOnScreen-65"><span class="linenos"> 65</span></a><span class="k">class</span><span class="w"> </span><span class="nc">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">Sizeable</span><span class="p">):</span>
+</span><span id="DrawingGroupOnScreen-66"><a href="#DrawingGroupOnScreen-66"><span class="linenos"> 66</span></a>    <span class="n">origin</span><span class="p">:</span> <span class="n">Coordinate</span>
+</span><span id="DrawingGroupOnScreen-67"><a href="#DrawingGroupOnScreen-67"><span class="linenos"> 67</span></a>    <span class="n">drawing_group</span><span class="p">:</span> <span class="n">DrawingGroup</span>
+</span><span id="DrawingGroupOnScreen-68"><a href="#DrawingGroupOnScreen-68"><span class="linenos"> 68</span></a>
+</span><span id="DrawingGroupOnScreen-69"><a href="#DrawingGroupOnScreen-69"><span class="linenos"> 69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen-70"><a href="#DrawingGroupOnScreen-70"><span class="linenos"> 70</span></a>        <span class="n">drawing_group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing_group</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="DrawingGroupOnScreen-71"><a href="#DrawingGroupOnScreen-71"><span class="linenos"> 71</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drawing_group</span><span class="o">=</span><span class="n">drawing_group</span><span class="p">)</span>
+</span><span id="DrawingGroupOnScreen-72"><a href="#DrawingGroupOnScreen-72"><span class="linenos"> 72</span></a>
+</span><span id="DrawingGroupOnScreen-73"><a href="#DrawingGroupOnScreen-73"><span class="linenos"> 73</span></a>    <span class="nd">@property</span>
+</span><span id="DrawingGroupOnScreen-74"><a href="#DrawingGroupOnScreen-74"><span class="linenos"> 74</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen-75"><a href="#DrawingGroupOnScreen-75"><span class="linenos"> 75</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sized</span><span class="o">.</span><span class="n">size</span>
+</span><span id="DrawingGroupOnScreen-76"><a href="#DrawingGroupOnScreen-76"><span class="linenos"> 76</span></a>
+</span><span id="DrawingGroupOnScreen-77"><a href="#DrawingGroupOnScreen-77"><span class="linenos"> 77</span></a>    <span class="nd">@property</span>
+</span><span id="DrawingGroupOnScreen-78"><a href="#DrawingGroupOnScreen-78"><span class="linenos"> 78</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen-79"><a href="#DrawingGroupOnScreen-79"><span class="linenos"> 79</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sized</span><span class="o">.</span><span class="n">top_left</span>
+</span><span id="DrawingGroupOnScreen-80"><a href="#DrawingGroupOnScreen-80"><span class="linenos"> 80</span></a>
+</span><span id="DrawingGroupOnScreen-81"><a href="#DrawingGroupOnScreen-81"><span class="linenos"> 81</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drawing_group</span><span class="p">:</span> <span class="n">DrawingGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen-82"><a href="#DrawingGroupOnScreen-82"><span class="linenos"> 82</span></a>        <span class="k">if</span> <span class="n">coord</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coordinate</span><span class="p">(</span><span class="n">drawing_group</span><span class="p">):</span>
+</span><span id="DrawingGroupOnScreen-83"><a href="#DrawingGroupOnScreen-83"><span class="linenos"> 83</span></a>            <span class="k">return</span> <span class="n">coord</span>
+</span><span id="DrawingGroupOnScreen-84"><a href="#DrawingGroupOnScreen-84"><span class="linenos"> 84</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Group </span><span class="si">{</span><span class="n">drawing_group</span><span class="si">}</span><span class="s2"> not found.&quot;</span><span class="p">)</span>
+</span><span id="DrawingGroupOnScreen-85"><a href="#DrawingGroupOnScreen-85"><span class="linenos"> 85</span></a>
+</span><span id="DrawingGroupOnScreen-86"><a href="#DrawingGroupOnScreen-86"><span class="linenos"> 86</span></a>    <span class="nd">@cached_property</span>
+</span><span id="DrawingGroupOnScreen-87"><a href="#DrawingGroupOnScreen-87"><span class="linenos"> 87</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="DrawingGroupOnScreen-88"><a href="#DrawingGroupOnScreen-88"><span class="linenos"> 88</span></a>        <span class="n">res</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="DrawingGroupOnScreen-89"><a href="#DrawingGroupOnScreen-89"><span class="linenos"> 89</span></a>        <span class="k">for</span> <span class="n">drawing</span><span class="p">,</span> <span class="n">shift</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing_group</span><span class="o">.</span><span class="n">relative_drawings</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen-90"><a href="#DrawingGroupOnScreen-90"><span class="linenos"> 90</span></a>            <span class="n">coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="n">shift</span>
+</span><span id="DrawingGroupOnScreen-91"><a href="#DrawingGroupOnScreen-91"><span class="linenos"> 91</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drawing</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">):</span>
+</span><span id="DrawingGroupOnScreen-92"><a href="#DrawingGroupOnScreen-92"><span class="linenos"> 92</span></a>                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DrawingOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">drawing</span><span class="p">))</span>
+</span><span id="DrawingGroupOnScreen-93"><a href="#DrawingGroupOnScreen-93"><span class="linenos"> 93</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen-94"><a href="#DrawingGroupOnScreen-94"><span class="linenos"> 94</span></a>                <span class="n">res</span> <span class="o">+=</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">drawing</span><span class="p">)</span><span class="o">.</span><span class="n">drawing_on_screens</span>
+</span><span id="DrawingGroupOnScreen-95"><a href="#DrawingGroupOnScreen-95"><span class="linenos"> 95</span></a>
+</span><span id="DrawingGroupOnScreen-96"><a href="#DrawingGroupOnScreen-96"><span class="linenos"> 96</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+</span><span id="DrawingGroupOnScreen-97"><a href="#DrawingGroupOnScreen-97"><span class="linenos"> 97</span></a>
+</span><span id="DrawingGroupOnScreen-98"><a href="#DrawingGroupOnScreen-98"><span class="linenos"> 98</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drawing_group</span><span class="p">:</span> <span class="n">DrawingGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen-99"><a href="#DrawingGroupOnScreen-99"><span class="linenos"> 99</span></a>        <span class="k">if</span> <span class="n">drawing_group</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing_group</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen-100"><a href="#DrawingGroupOnScreen-100"><span class="linenos">100</span></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span>
+</span><span id="DrawingGroupOnScreen-101"><a href="#DrawingGroupOnScreen-101"><span class="linenos">101</span></a>        <span class="k">for</span> <span class="n">drawing</span><span class="p">,</span> <span class="n">shift</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing_group</span><span class="o">.</span><span class="n">relative_drawings</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen-102"><a href="#DrawingGroupOnScreen-102"><span class="linenos">102</span></a>            <span class="n">coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="n">shift</span>
+</span><span id="DrawingGroupOnScreen-103"><a href="#DrawingGroupOnScreen-103"><span class="linenos">103</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drawing</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">):</span>
+</span><span id="DrawingGroupOnScreen-104"><a href="#DrawingGroupOnScreen-104"><span class="linenos">104</span></a>                <span class="k">continue</span>
+</span><span id="DrawingGroupOnScreen-105"><a href="#DrawingGroupOnScreen-105"><span class="linenos">105</span></a>            <span class="k">if</span> <span class="n">drawing</span> <span class="o">==</span> <span class="n">drawing_group</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen-106"><a href="#DrawingGroupOnScreen-106"><span class="linenos">106</span></a>                <span class="k">return</span> <span class="n">coord</span>
+</span><span id="DrawingGroupOnScreen-107"><a href="#DrawingGroupOnScreen-107"><span class="linenos">107</span></a>            <span class="k">if</span> <span class="n">res</span> <span class="o">:=</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">drawing</span><span class="p">)</span><span class="o">.</span><span class="n">_coordinate</span><span class="p">(</span>
+</span><span id="DrawingGroupOnScreen-108"><a href="#DrawingGroupOnScreen-108"><span class="linenos">108</span></a>                <span class="n">drawing_group</span>
+</span><span id="DrawingGroupOnScreen-109"><a href="#DrawingGroupOnScreen-109"><span class="linenos">109</span></a>            <span class="p">):</span>
+</span><span id="DrawingGroupOnScreen-110"><a href="#DrawingGroupOnScreen-110"><span class="linenos">110</span></a>                <span class="k">return</span> <span class="n">res</span>
+</span><span id="DrawingGroupOnScreen-111"><a href="#DrawingGroupOnScreen-111"><span class="linenos">111</span></a>        <span class="k">return</span> <span class="kc">None</span>
+</span><span id="DrawingGroupOnScreen-112"><a href="#DrawingGroupOnScreen-112"><span class="linenos">112</span></a>
+</span><span id="DrawingGroupOnScreen-113"><a href="#DrawingGroupOnScreen-113"><span class="linenos">113</span></a>    <span class="nd">@cached_property</span>
+</span><span id="DrawingGroupOnScreen-114"><a href="#DrawingGroupOnScreen-114"><span class="linenos">114</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_sized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SizedDrawOnScreens</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen-115"><a href="#DrawingGroupOnScreen-115"><span class="linenos">115</span></a>        <span class="k">return</span> <span class="n">SizedDrawOnScreens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">drawing_on_screens</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -497,7 +599,7 @@
                             <div id="DrawingGroupOnScreen.__init__" class="classattr">
                                 <div class="attr function">
             
-        <span class="name">DrawingGroupOnScreen</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">origin</span><span class="p">:</span> <span class="s1">&#39;Coordinate&#39;</span>, </span><span class="param"><span class="n">group</span><span class="p">:</span> <span class="s1">&#39;DrawingGroup&#39;</span></span>)</span>
+        <span class="name">DrawingGroupOnScreen</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">origin</span><span class="p">:</span> <span class="s1">&#39;Coordinate&#39;</span>, </span><span class="param"><span class="n">drawing_group</span><span class="p">:</span> <span class="s1">&#39;DrawingGroup&#39;</span></span>)</span>
 
         
     </div>
@@ -517,14 +619,34 @@
     
 
                             </div>
-                            <div id="DrawingGroupOnScreen.group" class="classattr">
+                            <div id="DrawingGroupOnScreen.drawing_group" class="classattr">
                                 <div class="attr variable">
-            <span class="name">group</span><span class="annotation">: &#39;DrawingGroup&#39;</span>
+            <span class="name">drawing_group</span><span class="annotation">: &#39;DrawingGroup&#39;</span>
 
         
     </div>
-    <a class="headerlink" href="#DrawingGroupOnScreen.group"></a>
+    <a class="headerlink" href="#DrawingGroupOnScreen.drawing_group"></a>
     
+    
+
+                            </div>
+                            <div id="DrawingGroupOnScreen.tick" class="classattr">
+                                        <input id="DrawingGroupOnScreen.tick-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">tick</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">time_delta</span><span class="p">:</span> <span class="s1">&#39;Millisecond&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Self&#39;</span>:</span></span>
+
+                <label class="view-source-button" for="DrawingGroupOnScreen.tick-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#DrawingGroupOnScreen.tick"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroupOnScreen.tick-69"><a href="#DrawingGroupOnScreen.tick-69"><span class="linenos">69</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_delta</span><span class="p">:</span> <span class="n">Millisecond</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen.tick-70"><a href="#DrawingGroupOnScreen.tick-70"><span class="linenos">70</span></a>        <span class="n">drawing_group</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing_group</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">time_delta</span><span class="p">)</span>
+</span><span id="DrawingGroupOnScreen.tick-71"><a href="#DrawingGroupOnScreen.tick-71"><span class="linenos">71</span></a>        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drawing_group</span><span class="o">=</span><span class="n">drawing_group</span><span class="p">)</span>
+</span></pre></div>
+
+
     
 
                             </div>
@@ -537,9 +659,9 @@
 
     </div>
     <a class="headerlink" href="#DrawingGroupOnScreen.size"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroupOnScreen.size-47"><a href="#DrawingGroupOnScreen.size-47"><span class="linenos">47</span></a>    <span class="nd">@property</span>
-</span><span id="DrawingGroupOnScreen.size-48"><a href="#DrawingGroupOnScreen.size-48"><span class="linenos">48</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen.size-49"><a href="#DrawingGroupOnScreen.size-49"><span class="linenos">49</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sized</span><span class="o">.</span><span class="n">size</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroupOnScreen.size-73"><a href="#DrawingGroupOnScreen.size-73"><span class="linenos">73</span></a>    <span class="nd">@property</span>
+</span><span id="DrawingGroupOnScreen.size-74"><a href="#DrawingGroupOnScreen.size-74"><span class="linenos">74</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen.size-75"><a href="#DrawingGroupOnScreen.size-75"><span class="linenos">75</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sized</span><span class="o">.</span><span class="n">size</span>
 </span></pre></div>
 
 
@@ -555,9 +677,9 @@
 
     </div>
     <a class="headerlink" href="#DrawingGroupOnScreen.top_left"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroupOnScreen.top_left-51"><a href="#DrawingGroupOnScreen.top_left-51"><span class="linenos">51</span></a>    <span class="nd">@property</span>
-</span><span id="DrawingGroupOnScreen.top_left-52"><a href="#DrawingGroupOnScreen.top_left-52"><span class="linenos">52</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen.top_left-53"><a href="#DrawingGroupOnScreen.top_left-53"><span class="linenos">53</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sized</span><span class="o">.</span><span class="n">top_left</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroupOnScreen.top_left-77"><a href="#DrawingGroupOnScreen.top_left-77"><span class="linenos">77</span></a>    <span class="nd">@property</span>
+</span><span id="DrawingGroupOnScreen.top_left-78"><a href="#DrawingGroupOnScreen.top_left-78"><span class="linenos">78</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">top_left</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen.top_left-79"><a href="#DrawingGroupOnScreen.top_left-79"><span class="linenos">79</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sized</span><span class="o">.</span><span class="n">top_left</span>
 </span></pre></div>
 
 
@@ -569,16 +691,16 @@
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">coordinate</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">group</span><span class="p">:</span> <span class="s1">&#39;DrawingGroup&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Coordinate&#39;</span>:</span></span>
+        <span class="name">coordinate</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">drawing_group</span><span class="p">:</span> <span class="s1">&#39;DrawingGroup&#39;</span></span><span class="return-annotation">) -> <span class="s1">&#39;Coordinate&#39;</span>:</span></span>
 
                 <label class="view-source-button" for="DrawingGroupOnScreen.coordinate-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#DrawingGroupOnScreen.coordinate"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroupOnScreen.coordinate-55"><a href="#DrawingGroupOnScreen.coordinate-55"><span class="linenos">55</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">:</span> <span class="n">DrawingGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen.coordinate-56"><a href="#DrawingGroupOnScreen.coordinate-56"><span class="linenos">56</span></a>        <span class="k">if</span> <span class="n">coord</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coordinate</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
-</span><span id="DrawingGroupOnScreen.coordinate-57"><a href="#DrawingGroupOnScreen.coordinate-57"><span class="linenos">57</span></a>            <span class="k">return</span> <span class="n">coord</span>
-</span><span id="DrawingGroupOnScreen.coordinate-58"><a href="#DrawingGroupOnScreen.coordinate-58"><span class="linenos">58</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Group </span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2"> not found.&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroupOnScreen.coordinate-81"><a href="#DrawingGroupOnScreen.coordinate-81"><span class="linenos">81</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drawing_group</span><span class="p">:</span> <span class="n">DrawingGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coordinate</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen.coordinate-82"><a href="#DrawingGroupOnScreen.coordinate-82"><span class="linenos">82</span></a>        <span class="k">if</span> <span class="n">coord</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coordinate</span><span class="p">(</span><span class="n">drawing_group</span><span class="p">):</span>
+</span><span id="DrawingGroupOnScreen.coordinate-83"><a href="#DrawingGroupOnScreen.coordinate-83"><span class="linenos">83</span></a>            <span class="k">return</span> <span class="n">coord</span>
+</span><span id="DrawingGroupOnScreen.coordinate-84"><a href="#DrawingGroupOnScreen.coordinate-84"><span class="linenos">84</span></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Group </span><span class="si">{</span><span class="n">drawing_group</span><span class="si">}</span><span class="s2"> not found.&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -594,22 +716,44 @@
 
     </div>
     <a class="headerlink" href="#DrawingGroupOnScreen.drawing_on_screens"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroupOnScreen.drawing_on_screens-60"><a href="#DrawingGroupOnScreen.drawing_on_screens-60"><span class="linenos">60</span></a>    <span class="nd">@cached_property</span>
-</span><span id="DrawingGroupOnScreen.drawing_on_screens-61"><a href="#DrawingGroupOnScreen.drawing_on_screens-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
-</span><span id="DrawingGroupOnScreen.drawing_on_screens-62"><a href="#DrawingGroupOnScreen.drawing_on_screens-62"><span class="linenos">62</span></a>        <span class="n">res</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="DrawingGroupOnScreen.drawing_on_screens-63"><a href="#DrawingGroupOnScreen.drawing_on_screens-63"><span class="linenos">63</span></a>        <span class="k">for</span> <span class="n">draw</span><span class="p">,</span> <span class="n">shift</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">drawing</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen.drawing_on_screens-64"><a href="#DrawingGroupOnScreen.drawing_on_screens-64"><span class="linenos">64</span></a>            <span class="n">coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="n">shift</span>
-</span><span id="DrawingGroupOnScreen.drawing_on_screens-65"><a href="#DrawingGroupOnScreen.drawing_on_screens-65"><span class="linenos">65</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">draw</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">):</span>
-</span><span id="DrawingGroupOnScreen.drawing_on_screens-66"><a href="#DrawingGroupOnScreen.drawing_on_screens-66"><span class="linenos">66</span></a>                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DrawingOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">draw</span><span class="p">))</span>
-</span><span id="DrawingGroupOnScreen.drawing_on_screens-67"><a href="#DrawingGroupOnScreen.drawing_on_screens-67"><span class="linenos">67</span></a>            <span class="k">else</span><span class="p">:</span>
-</span><span id="DrawingGroupOnScreen.drawing_on_screens-68"><a href="#DrawingGroupOnScreen.drawing_on_screens-68"><span class="linenos">68</span></a>                <span class="n">res</span> <span class="o">+=</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">draw</span><span class="p">)</span><span class="o">.</span><span class="n">drawing_on_screens</span>
-</span><span id="DrawingGroupOnScreen.drawing_on_screens-69"><a href="#DrawingGroupOnScreen.drawing_on_screens-69"><span class="linenos">69</span></a>
-</span><span id="DrawingGroupOnScreen.drawing_on_screens-70"><a href="#DrawingGroupOnScreen.drawing_on_screens-70"><span class="linenos">70</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="DrawingGroupOnScreen.drawing_on_screens-86"><a href="#DrawingGroupOnScreen.drawing_on_screens-86"><span class="linenos">86</span></a>    <span class="nd">@cached_property</span>
+</span><span id="DrawingGroupOnScreen.drawing_on_screens-87"><a href="#DrawingGroupOnScreen.drawing_on_screens-87"><span class="linenos">87</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">drawing_on_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="DrawingGroupOnScreen.drawing_on_screens-88"><a href="#DrawingGroupOnScreen.drawing_on_screens-88"><span class="linenos">88</span></a>        <span class="n">res</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DrawingOnScreen</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="DrawingGroupOnScreen.drawing_on_screens-89"><a href="#DrawingGroupOnScreen.drawing_on_screens-89"><span class="linenos">89</span></a>        <span class="k">for</span> <span class="n">drawing</span><span class="p">,</span> <span class="n">shift</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">drawing_group</span><span class="o">.</span><span class="n">relative_drawings</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen.drawing_on_screens-90"><a href="#DrawingGroupOnScreen.drawing_on_screens-90"><span class="linenos">90</span></a>            <span class="n">coord</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="n">shift</span>
+</span><span id="DrawingGroupOnScreen.drawing_on_screens-91"><a href="#DrawingGroupOnScreen.drawing_on_screens-91"><span class="linenos">91</span></a>            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drawing</span><span class="p">,</span> <span class="n">Drawing</span><span class="p">):</span>
+</span><span id="DrawingGroupOnScreen.drawing_on_screens-92"><a href="#DrawingGroupOnScreen.drawing_on_screens-92"><span class="linenos">92</span></a>                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DrawingOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">drawing</span><span class="p">))</span>
+</span><span id="DrawingGroupOnScreen.drawing_on_screens-93"><a href="#DrawingGroupOnScreen.drawing_on_screens-93"><span class="linenos">93</span></a>            <span class="k">else</span><span class="p">:</span>
+</span><span id="DrawingGroupOnScreen.drawing_on_screens-94"><a href="#DrawingGroupOnScreen.drawing_on_screens-94"><span class="linenos">94</span></a>                <span class="n">res</span> <span class="o">+=</span> <span class="n">DrawingGroupOnScreen</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">drawing</span><span class="p">)</span><span class="o">.</span><span class="n">drawing_on_screens</span>
+</span><span id="DrawingGroupOnScreen.drawing_on_screens-95"><a href="#DrawingGroupOnScreen.drawing_on_screens-95"><span class="linenos">95</span></a>
+</span><span id="DrawingGroupOnScreen.drawing_on_screens-96"><a href="#DrawingGroupOnScreen.drawing_on_screens-96"><span class="linenos">96</span></a>        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 </span></pre></div>
 
 
     
 
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt><a href="../core/sizeable.html#Sizeable">nextrpg.core.sizeable.Sizeable</a></dt>
+                                <dd id="DrawingGroupOnScreen.width" class="variable"><a href="../core/sizeable.html#Sizeable.width">width</a></dd>
+                <dd id="DrawingGroupOnScreen.height" class="variable"><a href="../core/sizeable.html#Sizeable.height">height</a></dd>
+                <dd id="DrawingGroupOnScreen.top" class="variable"><a href="../core/sizeable.html#Sizeable.top">top</a></dd>
+                <dd id="DrawingGroupOnScreen.left" class="variable"><a href="../core/sizeable.html#Sizeable.left">left</a></dd>
+                <dd id="DrawingGroupOnScreen.bottom" class="variable"><a href="../core/sizeable.html#Sizeable.bottom">bottom</a></dd>
+                <dd id="DrawingGroupOnScreen.right" class="variable"><a href="../core/sizeable.html#Sizeable.right">right</a></dd>
+                <dd id="DrawingGroupOnScreen.top_right" class="variable"><a href="../core/sizeable.html#Sizeable.top_right">top_right</a></dd>
+                <dd id="DrawingGroupOnScreen.bottom_left" class="variable"><a href="../core/sizeable.html#Sizeable.bottom_left">bottom_left</a></dd>
+                <dd id="DrawingGroupOnScreen.bottom_right" class="variable"><a href="../core/sizeable.html#Sizeable.bottom_right">bottom_right</a></dd>
+                <dd id="DrawingGroupOnScreen.top_center" class="variable"><a href="../core/sizeable.html#Sizeable.top_center">top_center</a></dd>
+                <dd id="DrawingGroupOnScreen.bottom_center" class="variable"><a href="../core/sizeable.html#Sizeable.bottom_center">bottom_center</a></dd>
+                <dd id="DrawingGroupOnScreen.center_left" class="variable"><a href="../core/sizeable.html#Sizeable.center_left">center_left</a></dd>
+                <dd id="DrawingGroupOnScreen.center_right" class="variable"><a href="../core/sizeable.html#Sizeable.center_right">center_right</a></dd>
+                <dd id="DrawingGroupOnScreen.center" class="variable"><a href="../core/sizeable.html#Sizeable.center">center</a></dd>
+
+            </div>
+                                </dl>
                             </div>
                 </section>
     </main>

@@ -46,10 +46,10 @@ class MovingAnimationOnScreen(AnimationOnScreen):
                 DrawingOnScreen(self.moving.coordinate, self.animated.drawing)
             )
         else:
-            group = DrawingGroupOnScreen(
+            drawing_group_on_screen = DrawingGroupOnScreen(
                 self.moving.coordinate, self.animated.drawing
             )
-            res += group.drawing_on_screens
+            res += drawing_group_on_screen.drawing_on_screens
         return tuple(res)
 
     def tick(self, time_delta: Millisecond) -> Self:
