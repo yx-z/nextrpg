@@ -20,7 +20,7 @@ class Quit(PygameEvent):
     pass
 
 
-class GuiResize(PygameEvent):
+class WindowResize(PygameEvent):
     @property
     def size(self) -> Size:
         return Size(self.event.w, self.event.h)
@@ -33,7 +33,7 @@ class KeyboardKey(Enum):
     UP = auto()
     DOWN = auto()
     CONFIRM = auto()
-    GUI_MODE_TOGGLE = auto()
+    WINDOW_MODE_TOGGLE = auto()
 
     @classmethod
     def from_pygame(cls, key: KeyCode) -> KeyboardKey | KeyCode:
@@ -43,7 +43,7 @@ class KeyboardKey(Enum):
             config().key_mapping.up: cls.UP,
             config().key_mapping.down: cls.DOWN,
             config().key_mapping.confirm: cls.CONFIRM,
-            config().key_mapping.gui_mode_toggle: cls.GUI_MODE_TOGGLE,
+            config().key_mapping.gui_mode_toggle: cls.WINDOW_MODE_TOGGLE,
         }.get(key, key)
 
 
@@ -64,7 +64,7 @@ class KeyPressUp(_KeyPressEvent):
 def to_typed_event(event: Event) -> PygameEvent:
     return {
         QUIT: Quit,
-        VIDEORESIZE: GuiResize,
+        VIDEORESIZE: WindowResize,
         KEYDOWN: KeyPressDown,
         KEYUP: KeyPressUp,
     }.get(event.type, PygameEvent)(event)

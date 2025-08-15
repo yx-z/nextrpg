@@ -7,7 +7,6 @@ from nextrpg.global_config.cutscene_config import CutsceneConfig
 from nextrpg.global_config.debug_config import DebugConfig
 from nextrpg.global_config.draw_config import DrawConfig
 from nextrpg.global_config.event_config import EventConfig
-from nextrpg.global_config.gui_config import GuiConfig
 from nextrpg.global_config.key_mapping_config import KeyMappingConfig
 from nextrpg.global_config.map_config import MapConfig
 from nextrpg.global_config.player_config import PlayerConfig
@@ -19,12 +18,13 @@ from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.global_config.text_config import TextConfig
 from nextrpg.global_config.text_group_config import TextGroupConfig
 from nextrpg.global_config.transition_config import TransitionConfig
+from nextrpg.global_config.window_config import WindowConfig
 
 
 @dataclass(frozen=True)
 class Config:
     debug: DebugConfig | None = None
-    gui: GuiConfig = GuiConfig()
+    window: WindowConfig = WindowConfig()
     map: MapConfig = MapConfig()
     character: CharacterConfig = CharacterConfig()
     player: PlayerConfig = PlayerConfig()
@@ -48,10 +48,10 @@ def set_config(cfg: Config) -> Config:
     if not _initial_config:
         _initial_config = cfg
 
-    if _cfg and cfg.gui != _cfg.gui:
-        from nextrpg.core.save import save_io
+    if _cfg and cfg.window != _cfg.window:
+        from nextrpg.core.save import SaveIo
 
-        save_io().save(cfg.gui)
+        SaveIo().save(cfg.window)
 
     _cfg = cfg
     return _cfg

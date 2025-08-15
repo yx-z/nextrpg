@@ -31,7 +31,6 @@ from nextrpg.global_config.debug_config import *
 from nextrpg.global_config.draw_config import *
 from nextrpg.global_config.event_config import *
 from nextrpg.global_config.global_config import *
-from nextrpg.global_config.gui_config import *
 from nextrpg.global_config.key_mapping_config import *
 from nextrpg.global_config.map_config import *
 from nextrpg.global_config.rpg_maker_character_draw_config import *
@@ -39,6 +38,7 @@ from nextrpg.global_config.save_config import *
 from nextrpg.global_config.say_event_config import *
 from nextrpg.global_config.text_config import *
 from nextrpg.global_config.transition_config import *
+from nextrpg.global_config.window_config import *
 from nextrpg.gui import *
 from nextrpg.gui.area import *
 from nextrpg.gui.window import *

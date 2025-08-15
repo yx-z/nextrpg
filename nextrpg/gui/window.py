@@ -1,67 +1,88 @@
 from __future__ import annotations
 
 import os
-from dataclasses import KW_ONLY, dataclass, field, replace
+from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import Self
 
-from pygame import DOUBLEBUF, font
+from pygame import font
 from pygame.display import flip, init, set_caption, set_icon, set_mode
 from pygame.locals import FULLSCREEN, RESIZABLE
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
 from nextrpg.core.coordinate import ORIGIN, Coordinate
-from nextrpg.core.dataclass_with_init import not_constructor_below
+from nextrpg.core.dataclass_with_init import (
+    dataclass_with_init,
+    default,
+    not_constructor_below,
+)
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.core.logger import ComponentAndMessage, Logger, pop_messages
-from nextrpg.core.save import save_io
+from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import Draw, DrawOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
-    GuiResize,
     KeyboardKey,
     KeyPressDown,
     PygameEvent,
+    WindowResize,
 )
 from nextrpg.global_config.global_config import config, set_config
-from nextrpg.global_config.gui_config import GuiConfig, GuiMode, ResizeMode
+from nextrpg.global_config.window_config import (
+    ResizeMode,
+    WindowConfig,
+    WindowMode,
+)
 
 logger = Logger()
 
 
-@dataclass(frozen=True)
+@dataclass_with_init(frozen=True)
 class Window:
     _: KW_ONLY = not_constructor_below()
-    initial_config: GuiConfig = field(default_factory=lambda: config().gui)
-    last_config: GuiConfig = field(default_factory=lambda: config().gui)
-    current_config: GuiConfig = field(
-        default_factory=lambda: (
-            set_config(replace(config(), gui=cfg)).gui
-            if (cfg := save_io().load(GuiConfig))
-            else config().gui
-        )
+    initial_config: WindowConfig = field(
+        default_factory=lambda: config().window
     )
-    _screen: Surface | None = None
-    _title: str | None = None
-    _icon: Draw | None = None
+    last_config: WindowConfig = default(lambda self: self.initial_config)
+    current_config: WindowConfig = default(
+        lambda self: self._saved_config or self.initial_config
+    )
+    __: None = field(
+        default_factory=lambda: os.environ.setdefault("SDL_VIDEO_CENTERED", "1")
+    )
+    _screen: Surface = default(
+        lambda self: self._set_screen(self.current_config)
+    )
 
     def update(self) -> Self:
-        if config().gui is self.current_config:
+        if (updated_config := config().window) is self.current_config:
             return self
+
+        if (
+            updated_config.size != self.current_config.size
+            or updated_config.mode != self.current_config.mode
+        ):
+            screen = self._set_screen(updated_config)
+        else:
+            screen = self._screen
+
         return replace(
-            self, current_config=config().gui, last_config=self.current_config
+            self,
+            current_config=updated_config,
+            last_config=self.current_config,
+            _screen=screen,
         )
 
     def event(self, e: PygameEvent) -> Self:
         match e:
-            case GuiResize():
+            case WindowResize():
                 return self._resize(e.size)
             case KeyPressDown():
-                if e.key is KeyboardKey.GUI_MODE_TOGGLE:
-                    return self._toggle_gui_mode
+                if e.key is KeyboardKey.WINDOW_MODE_TOGGLE:
+                    return self._toggle_mode
         return self
 
     def draw(
@@ -78,47 +99,22 @@ class Window:
                 d for text in _log_text(msgs) for d in text.draw_on_screens
             )
 
-        match self.current_config.resize_mode:
+        match self.current_config.resize:
             case ResizeMode.SCALE:
                 self._screen.blit(*self._scale(draw_on_screens).pygame)
             case ResizeMode.KEEP_NATIVE_SIZE:
                 self._screen.blits(d.pygame for d in draw_on_screens)
         flip()
 
-    def __post_init__(self) -> None:
-        os.environ.setdefault("SDL_VIDEO_CENTERED", "1")
-        if not self._screen:
+    def _set_screen(self, cfg: WindowConfig) -> Surface:
+        if cfg is self.initial_config or cfg is self._saved_config:
             init()
             font.init()
-
-        if self.current_config.icon and (
-            self._icon is None
-            or self.current_config.icon != self.last_config.icon
-        ):
-            icon = Draw(self.current_config.icon)
-            set_icon(icon.pygame)
-            object.__setattr__(self, "_icon", icon)
-
-        if (
-            self._title is None
-            or self.current_config.title != self.last_config.title
-        ):
-            object.__setattr__(self, "_title", self.current_config.title)
-            set_caption(self._title)
-
-        if (
-            self._screen is None
-            or self.last_config.size != self.current_config.size
-            or self.last_config.gui_mode != self.current_config.gui_mode
-            or self.last_config.allow_window_resize
-            != self.current_config.allow_window_resize
-            or self.last_config.double_buffer
-            != self.current_config.double_buffer
-        ):
-            screen = set_mode(
-                self.current_config.size.tuple, self._current_gui_flag
-            )
-            object.__setattr__(self, "_screen", screen)
+            set_caption(cfg.title)
+            if cfg.icon:
+                icon = Draw(cfg.icon)
+                set_icon(icon.pygame)
+        return set_mode(cfg.size.tuple, self._window_flag(cfg))
 
     def _scale(self, draws: tuple[DrawOnScreen, ...]) -> DrawOnScreen:
         screen = Surface(self.initial_config.size.tuple)
@@ -145,32 +141,41 @@ class Window:
         ) / 2
         return Coordinate(width_shift, height_shift)
 
-    @cached_property
-    def _current_gui_flag(self) -> _GuiFlag:
-        flag = DOUBLEBUF if self.current_config.double_buffer else 0
-        if self.current_config.gui_mode is GuiMode.FULL_SCREEN:
+    def _window_flag(self, cfg: WindowConfig) -> _WindowFlag:
+        flag = cfg.double_buffer
+        if cfg.mode is WindowMode.FULL_SCREEN:
             flag |= FULLSCREEN
-        if self.current_config.allow_window_resize:
+        if cfg.allow_resize:
             flag |= RESIZABLE
         return flag
 
     @cached_property
-    def _toggle_gui_mode(self) -> Self:
-        updated_gui_mode = self.current_config.gui_mode.opposite
-        updated_config = replace(self.current_config, gui_mode=updated_gui_mode)
-        set_config(replace(config(), gui=updated_config))
-        return replace(
-            self, current_config=updated_config, last_config=self.current_config
-        )
+    def _toggle_mode(self) -> Self:
+        mode = self.current_config.mode.opposite
+        updated_config = replace(self.current_config, mode=mode)
+        full_config = replace(config(), window=updated_config)
+        set_config(full_config)
+        return self.update()
 
     def _resize(self, size: Size) -> Self:
         if size == self.current_config.size:
             return self
         updated_config = replace(self.current_config, size=size)
-        set_config(replace(config(), gui=updated_config))
-        return replace(
-            self, current_config=updated_config, last_config=self.current_config
-        )
+        full_config = replace(config(), window=updated_config)
+        set_config(full_config)
+        return self.update()
+
+    @cached_property
+    def _saved_config(self) -> WindowConfig | None:
+        saved_config = SaveIo().update(self.initial_config)
+        if (
+            saved_config.size != self.initial_config.size
+            or saved_config.mode != self.initial_config.mode
+        ):
+            full_config = replace(config(), window=saved_config)
+            set_config(full_config)
+            return saved_config
+        return None
 
 
 def _log_text(
@@ -183,4 +188,4 @@ def _log_text(
     return components_on_screen, msgs_on_screen
 
 
-type _GuiFlag = int
+type _WindowFlag = int

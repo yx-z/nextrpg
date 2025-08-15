@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterator, Self, override
 
+from nextrpg.core.save import LoadFromSaveList
+
 type Pixel = int | float
 
 type PixelPerMillisecond = int | float
@@ -96,7 +98,7 @@ class WidthAndHeightScaling(_Dimension):
 
 
 @dataclass(frozen=True)
-class Size:
+class Size(LoadFromSaveList[int]):
     input_width: Pixel | Width
     input_height: Pixel | Height
 
@@ -162,3 +164,7 @@ class Size:
 
     def __repr__(self) -> str:
         return f"({self.width.value:.0f}, {self.height.value:.0f})"
+
+    @override
+    def save(self) -> list[int]:
+        return list(self.tuple)

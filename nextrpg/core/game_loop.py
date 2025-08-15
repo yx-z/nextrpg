@@ -33,7 +33,7 @@ class GameLoop:
     @property
     def tick(self) -> GameLoop:
         logger.debug(t"FPS: {self._clock.get_fps():.0f}", duration=None)
-        self._clock.tick(config().gui.frames_per_second)
+        self._clock.tick(config().window.frames_per_second)
         time_delta = self._clock.get_time()
 
         window = self._window.update()

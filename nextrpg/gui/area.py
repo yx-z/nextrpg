@@ -9,15 +9,15 @@ from nextrpg.core.dimension import (
 )
 from nextrpg.draw.draw import RectangleOnScreen
 from nextrpg.global_config.global_config import config, initial_config
-from nextrpg.global_config.gui_config import ResizeMode
+from nextrpg.global_config.window_config import ResizeMode
 
 
 def gui_size() -> Size:
-    match mode := config().gui.resize_mode:
+    match mode := config().window.resize:
         case ResizeMode.SCALE:
-            return initial_config().gui.size
+            return initial_config().window.size
         case ResizeMode.KEEP_NATIVE_SIZE:
-            return config().gui.size
+            return config().window.size
     raise ValueError(f"Invalid resize mode {mode}")
 
 

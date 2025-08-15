@@ -4,7 +4,7 @@ from abc import ABC
 from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass
 from functools import cached_property
-from os import PathLike
+from pathlib import Path
 from typing import override
 
 from pygame import SRCALPHA, Mask, Rect, Surface
@@ -49,7 +49,7 @@ class Trim:
 )
 @dataclass(frozen=True)
 class Draw(Sizeable):
-    resource: str | PathLike | Surface
+    resource: str | Path | Surface
     color_key: Color | Coordinate | None = None
 
     @property

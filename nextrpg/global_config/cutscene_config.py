@@ -16,7 +16,7 @@ class CutsceneConfig:
     def background(self) -> Color:
         from nextrpg.global_config.global_config import config
 
-        return self.background_override or config().gui.background
+        return self.background_override or config().window.background
 
     @property
     def duration(self) -> Millisecond:

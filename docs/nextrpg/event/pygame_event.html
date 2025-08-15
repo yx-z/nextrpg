@@ -49,10 +49,10 @@
 
             </li>
             <li>
-                    <a class="class" href="#GuiResize">GuiResize</a>
+                    <a class="class" href="#WindowResize">WindowResize</a>
                             <ul class="memberlist">
                         <li>
-                                <a class="variable" href="#GuiResize.size">size</a>
+                                <a class="variable" href="#WindowResize.size">size</a>
                         </li>
                 </ul>
 
@@ -79,7 +79,7 @@
                                 <a class="variable" href="#KeyboardKey.CONFIRM">CONFIRM</a>
                         </li>
                         <li>
-                                <a class="variable" href="#KeyboardKey.GUI_MODE_TOGGLE">GUI_MODE_TOGGLE</a>
+                                <a class="variable" href="#KeyboardKey.WINDOW_MODE_TOGGLE">WINDOW_MODE_TOGGLE</a>
                         </li>
                         <li>
                                 <a class="function" href="#KeyboardKey.from_pygame">from_pygame</a>
@@ -148,7 +148,7 @@
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="k">pass</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="k">class</span><span class="w"> </span><span class="nc">GuiResize</span><span class="p">(</span><span class="n">PygameEvent</span><span class="p">):</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WindowResize</span><span class="p">(</span><span class="n">PygameEvent</span><span class="p">):</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="nd">@property</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">h</span><span class="p">)</span>
@@ -161,7 +161,7 @@
 </span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>    <span class="n">UP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 </span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    <span class="n">DOWN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 </span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="n">CONFIRM</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="n">GUI_MODE_TOGGLE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="n">WINDOW_MODE_TOGGLE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 </span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>
 </span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="nd">@classmethod</span>
 </span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_pygame</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">KeyCode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeyboardKey</span> <span class="o">|</span> <span class="n">KeyCode</span><span class="p">:</span>
@@ -171,7 +171,7 @@
 </span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">up</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
 </span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">down</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">confirm</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">CONFIRM</span><span class="p">,</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">gui_mode_toggle</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">GUI_MODE_TOGGLE</span><span class="p">,</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">gui_mode_toggle</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">WINDOW_MODE_TOGGLE</span><span class="p">,</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
 </span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>
 </span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>
@@ -192,7 +192,7 @@
 </span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a><span class="k">def</span><span class="w"> </span><span class="nf">to_typed_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PygameEvent</span><span class="p">:</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="k">return</span> <span class="p">{</span>
 </span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>        <span class="n">QUIT</span><span class="p">:</span> <span class="n">Quit</span><span class="p">,</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>        <span class="n">VIDEORESIZE</span><span class="p">:</span> <span class="n">GuiResize</span><span class="p">,</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>        <span class="n">VIDEORESIZE</span><span class="p">:</span> <span class="n">WindowResize</span><span class="p">,</span>
 </span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>        <span class="n">KEYDOWN</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">,</span>
 </span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>        <span class="n">KEYUP</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">,</span>
 </span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">PygameEvent</span><span class="p">)(</span><span class="n">event</span><span class="p">)</span>
@@ -279,21 +279,21 @@
                                 </dl>
                             </div>
                 </section>
-                <section id="GuiResize">
-                            <input id="GuiResize-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                <section id="WindowResize">
+                            <input id="WindowResize-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr class">
             
     <span class="def">class</span>
-    <span class="name">GuiResize</span><wbr>(<span class="base"><a href="#PygameEvent">PygameEvent</a></span>):
+    <span class="name">WindowResize</span><wbr>(<span class="base"><a href="#PygameEvent">PygameEvent</a></span>):
 
-                <label class="view-source-button" for="GuiResize-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="WindowResize-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#GuiResize"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="GuiResize-24"><a href="#GuiResize-24"><span class="linenos">24</span></a><span class="k">class</span><span class="w"> </span><span class="nc">GuiResize</span><span class="p">(</span><span class="n">PygameEvent</span><span class="p">):</span>
-</span><span id="GuiResize-25"><a href="#GuiResize-25"><span class="linenos">25</span></a>    <span class="nd">@property</span>
-</span><span id="GuiResize-26"><a href="#GuiResize-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="GuiResize-27"><a href="#GuiResize-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">h</span><span class="p">)</span>
+    <a class="headerlink" href="#WindowResize"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WindowResize-24"><a href="#WindowResize-24"><span class="linenos">24</span></a><span class="k">class</span><span class="w"> </span><span class="nc">WindowResize</span><span class="p">(</span><span class="n">PygameEvent</span><span class="p">):</span>
+</span><span id="WindowResize-25"><a href="#WindowResize-25"><span class="linenos">25</span></a>    <span class="nd">@property</span>
+</span><span id="WindowResize-26"><a href="#WindowResize-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="WindowResize-27"><a href="#WindowResize-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">h</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -301,18 +301,18 @@
 </div>
 
 
-                            <div id="GuiResize.size" class="classattr">
-                                        <input id="GuiResize.size-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+                            <div id="WindowResize.size" class="classattr">
+                                        <input id="WindowResize.size-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr variable">
             <span class="name">size</span><span class="annotation">: &#39;Size&#39;</span>
 
-                <label class="view-source-button" for="GuiResize.size-view-source"><span>View Source</span></label>
+                <label class="view-source-button" for="WindowResize.size-view-source"><span>View Source</span></label>
 
     </div>
-    <a class="headerlink" href="#GuiResize.size"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="GuiResize.size-25"><a href="#GuiResize.size-25"><span class="linenos">25</span></a>    <span class="nd">@property</span>
-</span><span id="GuiResize.size-26"><a href="#GuiResize.size-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
-</span><span id="GuiResize.size-27"><a href="#GuiResize.size-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">h</span><span class="p">)</span>
+    <a class="headerlink" href="#WindowResize.size"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="WindowResize.size-25"><a href="#WindowResize.size-25"><span class="linenos">25</span></a>    <span class="nd">@property</span>
+</span><span id="WindowResize.size-26"><a href="#WindowResize.size-26"><span class="linenos">26</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Size</span><span class="p">:</span>
+</span><span id="WindowResize.size-27"><a href="#WindowResize.size-27"><span class="linenos">27</span></a>        <span class="k">return</span> <span class="n">Size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">h</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -323,8 +323,8 @@
                                 <h5>Inherited Members</h5>
                                 <dl>
                                     <div><dt><a href="#PygameEvent">PygameEvent</a></dt>
-                                <dd id="GuiResize.__init__" class="function"><a href="#PygameEvent.__init__">PygameEvent</a></dd>
-                <dd id="GuiResize.event" class="variable"><a href="#PygameEvent.event">event</a></dd>
+                                <dd id="WindowResize.__init__" class="function"><a href="#PygameEvent.__init__">PygameEvent</a></dd>
+                <dd id="WindowResize.event" class="variable"><a href="#PygameEvent.event">event</a></dd>
 
             </div>
                                 </dl>
@@ -348,7 +348,7 @@
 </span><span id="KeyboardKey-34"><a href="#KeyboardKey-34"><span class="linenos">34</span></a>    <span class="n">UP</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 </span><span id="KeyboardKey-35"><a href="#KeyboardKey-35"><span class="linenos">35</span></a>    <span class="n">DOWN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 </span><span id="KeyboardKey-36"><a href="#KeyboardKey-36"><span class="linenos">36</span></a>    <span class="n">CONFIRM</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
-</span><span id="KeyboardKey-37"><a href="#KeyboardKey-37"><span class="linenos">37</span></a>    <span class="n">GUI_MODE_TOGGLE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
+</span><span id="KeyboardKey-37"><a href="#KeyboardKey-37"><span class="linenos">37</span></a>    <span class="n">WINDOW_MODE_TOGGLE</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 </span><span id="KeyboardKey-38"><a href="#KeyboardKey-38"><span class="linenos">38</span></a>
 </span><span id="KeyboardKey-39"><a href="#KeyboardKey-39"><span class="linenos">39</span></a>    <span class="nd">@classmethod</span>
 </span><span id="KeyboardKey-40"><a href="#KeyboardKey-40"><span class="linenos">40</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">from_pygame</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">KeyCode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeyboardKey</span> <span class="o">|</span> <span class="n">KeyCode</span><span class="p">:</span>
@@ -358,7 +358,7 @@
 </span><span id="KeyboardKey-44"><a href="#KeyboardKey-44"><span class="linenos">44</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">up</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
 </span><span id="KeyboardKey-45"><a href="#KeyboardKey-45"><span class="linenos">45</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">down</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
 </span><span id="KeyboardKey-46"><a href="#KeyboardKey-46"><span class="linenos">46</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">confirm</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">CONFIRM</span><span class="p">,</span>
-</span><span id="KeyboardKey-47"><a href="#KeyboardKey-47"><span class="linenos">47</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">gui_mode_toggle</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">GUI_MODE_TOGGLE</span><span class="p">,</span>
+</span><span id="KeyboardKey-47"><a href="#KeyboardKey-47"><span class="linenos">47</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">gui_mode_toggle</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">WINDOW_MODE_TOGGLE</span><span class="p">,</span>
 </span><span id="KeyboardKey-48"><a href="#KeyboardKey-48"><span class="linenos">48</span></a>        <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
 </span></pre></div>
 
@@ -437,14 +437,14 @@
     
 
                             </div>
-                            <div id="KeyboardKey.GUI_MODE_TOGGLE" class="classattr">
+                            <div id="KeyboardKey.WINDOW_MODE_TOGGLE" class="classattr">
                                 <div class="attr variable">
-            <span class="name">GUI_MODE_TOGGLE</span>        =
-<span class="default_value">&lt;<a href="#KeyboardKey.GUI_MODE_TOGGLE">KeyboardKey.GUI_MODE_TOGGLE</a>: 7&gt;</span>
+            <span class="name">WINDOW_MODE_TOGGLE</span>        =
+<span class="default_value">&lt;<a href="#KeyboardKey.WINDOW_MODE_TOGGLE">KeyboardKey.WINDOW_MODE_TOGGLE</a>: 7&gt;</span>
 
         
     </div>
-    <a class="headerlink" href="#KeyboardKey.GUI_MODE_TOGGLE"></a>
+    <a class="headerlink" href="#KeyboardKey.WINDOW_MODE_TOGGLE"></a>
     
     
 
@@ -469,7 +469,7 @@
 </span><span id="KeyboardKey.from_pygame-44"><a href="#KeyboardKey.from_pygame-44"><span class="linenos">44</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">up</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">UP</span><span class="p">,</span>
 </span><span id="KeyboardKey.from_pygame-45"><a href="#KeyboardKey.from_pygame-45"><span class="linenos">45</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">down</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">DOWN</span><span class="p">,</span>
 </span><span id="KeyboardKey.from_pygame-46"><a href="#KeyboardKey.from_pygame-46"><span class="linenos">46</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">confirm</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">CONFIRM</span><span class="p">,</span>
-</span><span id="KeyboardKey.from_pygame-47"><a href="#KeyboardKey.from_pygame-47"><span class="linenos">47</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">gui_mode_toggle</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">GUI_MODE_TOGGLE</span><span class="p">,</span>
+</span><span id="KeyboardKey.from_pygame-47"><a href="#KeyboardKey.from_pygame-47"><span class="linenos">47</span></a>            <span class="n">config</span><span class="p">()</span><span class="o">.</span><span class="n">key_mapping</span><span class="o">.</span><span class="n">gui_mode_toggle</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">WINDOW_MODE_TOGGLE</span><span class="p">,</span>
 </span><span id="KeyboardKey.from_pygame-48"><a href="#KeyboardKey.from_pygame-48"><span class="linenos">48</span></a>        <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
 </span></pre></div>
 
@@ -562,7 +562,7 @@
             <div class="pdoc-code codehilite"><pre><span></span><span id="to_typed_event-65"><a href="#to_typed_event-65"><span class="linenos">65</span></a><span class="k">def</span><span class="w"> </span><span class="nf">to_typed_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PygameEvent</span><span class="p">:</span>
 </span><span id="to_typed_event-66"><a href="#to_typed_event-66"><span class="linenos">66</span></a>    <span class="k">return</span> <span class="p">{</span>
 </span><span id="to_typed_event-67"><a href="#to_typed_event-67"><span class="linenos">67</span></a>        <span class="n">QUIT</span><span class="p">:</span> <span class="n">Quit</span><span class="p">,</span>
-</span><span id="to_typed_event-68"><a href="#to_typed_event-68"><span class="linenos">68</span></a>        <span class="n">VIDEORESIZE</span><span class="p">:</span> <span class="n">GuiResize</span><span class="p">,</span>
+</span><span id="to_typed_event-68"><a href="#to_typed_event-68"><span class="linenos">68</span></a>        <span class="n">VIDEORESIZE</span><span class="p">:</span> <span class="n">WindowResize</span><span class="p">,</span>
 </span><span id="to_typed_event-69"><a href="#to_typed_event-69"><span class="linenos">69</span></a>        <span class="n">KEYDOWN</span><span class="p">:</span> <span class="n">KeyPressDown</span><span class="p">,</span>
 </span><span id="to_typed_event-70"><a href="#to_typed_event-70"><span class="linenos">70</span></a>        <span class="n">KEYUP</span><span class="p">:</span> <span class="n">KeyPressUp</span><span class="p">,</span>
 </span><span id="to_typed_event-71"><a href="#to_typed_event-71"><span class="linenos">71</span></a>    <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">PygameEvent</span><span class="p">)(</span><span class="n">event</span><span class="p">)</span>

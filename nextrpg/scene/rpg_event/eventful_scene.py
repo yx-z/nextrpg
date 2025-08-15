@@ -5,7 +5,6 @@ from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from typing import Any, Callable, Generator, Self, override
 
-from nextrpg import save_io
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcEventStartMode, NpcOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
@@ -15,10 +14,11 @@ from nextrpg.core.dataclass_with_init import (
     not_constructor_below,
 )
 from nextrpg.core.logger import Logger
+from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.draw import DrawOnScreen, TransparentDraw
 from nextrpg.event.event_as_attr import EventAsAttr
-from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
+from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.scene.scene import Scene
 
 logger = Logger()
@@ -28,6 +28,7 @@ logger = Logger()
 class EventfulScene(EventAsAttr, Scene):
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...]
+    save_io: SaveIo
     _: KW_ONLY = not_constructor_below()
     _started_npc: NpcOnScreen | None = None
     _ended_npc: NpcOnScreen | None = None
@@ -54,8 +55,8 @@ class EventfulScene(EventAsAttr, Scene):
 
         if isinstance(event, KeyPressDown) and event.key is KeyboardKey.CONFIRM:
             for character in self.npcs + (player,):
-                save_io().save(character)
-                
+                self.save_io.save(character)
+
         return replace(self, player=player)
 
     def tick(self, time_delta: Millisecond) -> Scene:

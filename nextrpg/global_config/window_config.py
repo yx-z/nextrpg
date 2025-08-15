@@ -1,0 +1,53 @@
+from __future__ import annotations
+
+from dataclasses import dataclass, replace
+from enum import auto
+from pathlib import Path
+from typing import Any, Self, override
+
+from nextrpg.core.color import BLACK, Color
+from nextrpg.core.dimension import Size
+from nextrpg.core.save import LoadFromSaveEnum, UpdateFromSave
+
+
+class ResizeMode(LoadFromSaveEnum):
+    SCALE = auto()
+    KEEP_NATIVE_SIZE = auto()
+
+
+class WindowMode(LoadFromSaveEnum):
+    WINDOWED = auto()
+    FULL_SCREEN = auto()
+
+    @property
+    def opposite(self) -> WindowMode:
+        return _OPPOSITE_GUI_MODE[self]
+
+
+@dataclass(frozen=True)
+class WindowConfig(UpdateFromSave[dict[str, Any]]):
+    title: str = "nextrpg"
+    size: Size = Size(1280, 720)
+    frames_per_second: int = 60
+    background: Color = BLACK
+    double_buffer: bool = True
+    mode: WindowMode = WindowMode.WINDOWED
+    resize: ResizeMode = ResizeMode.SCALE
+    allow_resize: bool = True
+    icon: str | Path | None = None
+
+    @override
+    def save(self) -> dict[str, Any]:
+        return {"size": self.size.save(), "mode": self.mode.save()}
+
+    @override
+    def update(self, data: dict[str, Any]) -> Self:
+        size = Size.load(data["size"])
+        mode = WindowMode.load(data["mode"])
+        return replace(self, size=size, mode=mode)
+
+
+_OPPOSITE_GUI_MODE = {
+    WindowMode.WINDOWED: WindowMode.FULL_SCREEN,
+    WindowMode.FULL_SCREEN: WindowMode.WINDOWED,
+}

@@ -2,11 +2,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from nextrpg.core.save import LoadFromSaveList
+
 type Alpha = int
 
 
 @dataclass(frozen=True)
-class Color:
+class Color(LoadFromSaveList):
     red: int
     green: int
     blue: int
@@ -15,6 +17,9 @@ class Color:
     @property
     def tuple(self) -> tuple[int, int, int, Alpha]:
         return self.red, self.green, self.blue, self.alpha
+
+    def save(self) -> list[int]:
+        return list(self.tuple)
 
 
 BLACK = Color(0, 0, 0)

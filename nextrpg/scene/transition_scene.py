@@ -21,7 +21,7 @@ class TransitionScene(Scene):
     from_scene: Scene
     to_scene: Scene
     intermediary: DrawOnScreen | tuple[DrawOnScreen, ...] | Color = field(
-        default_factory=lambda: config().gui.background
+        default_factory=lambda: config().window.background
     )
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration

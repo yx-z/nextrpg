@@ -1,4 +1,4 @@
-from nextrpg import CharacterSpec, MapScene, Move
+from nextrpg import CharacterSpec, MapScene, Move, SaveIo
 
 
 def exterior_scene(player_spec: CharacterSpec) -> MapScene:
@@ -6,7 +6,8 @@ def exterior_scene(player_spec: CharacterSpec) -> MapScene:
     from interior_scene import interior_scene
 
     return MapScene(
-        "example/asset/exterior.tmx",
-        player_spec,
-        Move("from_exterior", "to_interior", interior_scene),
+        tmx_file="example/asset/exterior.tmx",
+        player_spec=player_spec,
+        move=Move("from_exterior", "to_interior", interior_scene),
+        save_io=SaveIo(),
     )
