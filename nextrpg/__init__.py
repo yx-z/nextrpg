@@ -34,7 +34,7 @@ from nextrpg.core.color import (
     Color,
     alpha_from_percentage,
 )
-from nextrpg.core.coordinate import ORIGIN, Coordinate, Moving
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,

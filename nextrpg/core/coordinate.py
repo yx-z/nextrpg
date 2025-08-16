@@ -1,14 +1,12 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from math import atan2, degrees, hypot, sqrt
-from typing import Iterator, Self, override
+from typing import Iterator, override
 
 from nextrpg.core.dimension import Height, Pixel, Size, Width
 from nextrpg.core.direction import Direction, DirectionalOffset
 from nextrpg.core.save import LoadFromSaveList
-from nextrpg.core.time import Millisecond
 
 
 @dataclass(frozen=True)
@@ -116,13 +114,6 @@ class Coordinate(LoadFromSaveList[int]):
 
 
 ORIGIN = Coordinate(0, 0)
-
-
-class Moving(ABC):
-    coordinate: Coordinate
-
-    @abstractmethod
-    def tick(self, time_delta: Millisecond) -> Self: ...
 
 
 def _angle_difference(a1: float, a2: float) -> float:

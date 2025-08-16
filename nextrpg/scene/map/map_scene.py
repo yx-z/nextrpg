@@ -86,7 +86,8 @@ class MapScene(EventfulScene):
         player_coord = self.player.center
         shift = center_player(player_coord, self.map_helper.map_size)
         log.debug(
-            t"Player center coord {player_coord}. Shift {shift}", duration=100
+            t"Player center coordinate {player_coord}. Shift {shift}",
+            duration=100,
         )
         return shift
 
@@ -156,13 +157,13 @@ class MapScene(EventfulScene):
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
         obj = self.map_helper.get_object(spec.unique_name)
-        coord = Coordinate(obj.x, obj.y)
+        coordinate = Coordinate(obj.x, obj.y)
         if not (poly := get_polygon(obj)):
-            return NpcOnScreen(coordinate=coord, spec=to_strict(spec))
+            return NpcOnScreen(coordinate=coordinate, spec=to_strict(spec))
 
         if isinstance(spec.character, CharacterDrawing):
             npc = MovingNpcOnScreen(
-                coordinate=coord, path=poly, spec=to_strict(spec)
+                coordinate=coordinate, path=poly, spec=to_strict(spec)
             )
             if self.save_io:
                 return self.save_io.update(npc)
@@ -172,13 +173,13 @@ class MapScene(EventfulScene):
         if isinstance(poly, RectangleOnScreen):
             poly_draw = RectangleDrawing(poly.size, color)
         else:
-            points = tuple(p - coord for p in poly.points)
+            points = tuple(p - coordinate for p in poly.points)
             poly_draw = PolygonDrawing(points, color)
 
         poly_spec = to_strict(
             spec, PolygonCharacterDrawing(Direction.DOWN, poly_draw)
         )
-        npc = NpcOnScreen(coordinate=coord, spec=poly_spec)
+        npc = NpcOnScreen(coordinate=coordinate, spec=poly_spec)
         if self.save_io:
             return self.save_io.update(npc)
         return npc

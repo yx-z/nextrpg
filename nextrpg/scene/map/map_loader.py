@@ -89,7 +89,8 @@ class MapLoader:
     @cached_property
     def collisions(self) -> tuple[PolygonOnScreen, ...]:
         from_tiles = tuple(
-            self._polygon(coord, obj) for coord, obj in self._colliders
+            self._polygon(coordinate, obj)
+            for coordinate, obj in self._colliders
         )
         from_objects = tuple(
             poly
@@ -166,27 +167,29 @@ class MapLoader:
         )
 
     def _polygon(
-        self, coord: _TileCoordinate, obj: TiledObject
+        self, coordinate: _TileCoordinate, obj: TiledObject
     ) -> PolygonOnScreen:
-        return self._from_rect(coord, obj) or self._from_points(coord, obj)
+        return self._from_rect(coordinate, obj) or self._from_points(
+            coordinate, obj
+        )
 
     def _from_points(
-        self, coord: _TileCoordinate, obj: TiledObject
+        self, coordinate: _TileCoordinate, obj: TiledObject
     ) -> PolygonOnScreen:
         w, h = self._tile_size
-        cx, cy = coord
+        cx, cy = coordinate
         return PolygonOnScreen(
             tuple(Coordinate(cx * w + x, cy * h + y) for x, y in obj.as_points)
         )
 
     def _from_rect(
-        self, coord: _TileCoordinate, obj: TiledObject
+        self, coordinate: _TileCoordinate, obj: TiledObject
     ) -> RectangleOnScreen | None:
         if not _is_rect(obj):
             return None
 
         w, h = self._tile_size
-        cx, cy = coord
+        cx, cy = coordinate
         map_coord = Coordinate(cx * w + obj.x, cy * h + obj.y)
         size = Size(obj.width, obj.height)
         return RectangleOnScreen(map_coord, size)
@@ -214,14 +217,15 @@ class MapLoader:
     ) -> tuple[TileBottomAndDrawOnScreen, ...]:
         coord_and_draws = self._drawing(layer)
         coord_to_bottom = {
-            coord: drawing.visible_rectangle_on_screen.bottom
-            for coord, drawing in coord_and_draws.items()
+            coordinate: drawing.visible_rectangle_on_screen.bottom
+            for coordinate, drawing in coord_and_draws.items()
         }
         bottom_and_draw = tuple(
             TileBottomAndDrawOnScreen(
-                self._bottom(layer, coord, drawing, coord_to_bottom), drawing
+                self._bottom(layer, coordinate, drawing, coord_to_bottom),
+                drawing,
             )
-            for coord, drawing in coord_and_draws.items()
+            for coordinate, drawing in coord_and_draws.items()
         )
         return tuple(sorted(bottom_and_draw, key=lambda t: t.bottom))
 
@@ -245,9 +249,9 @@ class MapLoader:
         )
 
     def _class(
-        self, layer: TiledTileLayer, coord: _TileCoordinate
+        self, layer: TiledTileLayer, coordinate: _TileCoordinate
     ) -> str | None:
-        x, y = coord
+        x, y = coordinate
         if 0 <= x < len(layer.data) and 0 <= y < len(layer.data[x]):
             data_id = layer.data[x][y]
             return self._gid_to_cls.get(
@@ -258,34 +262,37 @@ class MapLoader:
     def _bottom(
         self,
         layer: TiledTileLayer,
-        coord: _TileCoordinate,
+        coordinate: _TileCoordinate,
         draw: DrawingOnScreen,
         coord_to_bottom: dict[_TileCoordinate, Height],
     ) -> Height:
         return (
-            max(coord_to_bottom[c] for c in self._component(layer, coord, cls))
-            if (cls := self._class(layer, coord))
+            max(
+                coord_to_bottom[c]
+                for c in self._component(layer, coordinate, cls)
+            )
+            if (cls := self._class(layer, coordinate))
             else draw.visible_rectangle_on_screen.bottom
         )
 
     def _component(
         self,
         layer: TiledTileLayer,
-        coord: _TileCoordinate,
+        coordinate: _TileCoordinate,
         cls: str,
         visited: set[_TileCoordinate] | None = None,
     ) -> set[_TileCoordinate]:
-        visited = (visited or set()) | {coord}
+        visited = (visited or set()) | {coordinate}
         return visited | {
             c
-            for neighbor in self._neighbors(layer, coord, cls) - visited
+            for neighbor in self._neighbors(layer, coordinate, cls) - visited
             for c in self._component(layer, neighbor, cls, visited)
         }
 
     def _neighbors(
-        self, layer: TiledTileLayer, coord: _TileCoordinate, cls: str
+        self, layer: TiledTileLayer, coordinate: _TileCoordinate, cls: str
     ) -> set[_TileCoordinate]:
-        x, y = coord
+        x, y = coordinate
         return {
             c
             for dx, dy in ((0, 1), (1, 0), (0, -1), (-1, 0))
@@ -343,5 +350,5 @@ class _TileCoordinate(NamedTuple):
 
 
 class _Collider(NamedTuple):
-    coord: _TileCoordinate
+    coordinate: _TileCoordinate
     obj: TiledObject

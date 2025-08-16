@@ -13,7 +13,7 @@ class Animation(Sizeable, ABC):
 
     @property
     @abstractmethod
-    def drawing(self) -> "Drawing | DrawingGroup": ...
+    def drawing(self) -> "Drawing | Group": ...
 
     @property
     def top_left(self) -> Coordinate:

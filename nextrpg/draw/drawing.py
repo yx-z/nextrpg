@@ -64,18 +64,18 @@ class Drawing(Sizeable):
         return Drawing(self.pygame.subsurface((top_left.tuple, size.tuple)))
 
     def trim(self, trim: Trim) -> Drawing:
-        coord = Coordinate(trim.left, trim.top)
+        coordinate = Coordinate(trim.left, trim.top)
         width = self.width - trim.left - trim.right
         height = self.height - trim.top - trim.bottom
         size = Size(width, height)
-        return self.crop(coord, size)
+        return self.crop(coordinate, size)
 
     def set_alpha(self, alpha: Alpha) -> Drawing:
         surf = self.surface.copy()
         surf.set_alpha(alpha)
         return Drawing(surf)
 
-    def draw_on_screen(self, coordinate: Coordinate) -> DrawingOnScreen:
+    def drawing_on_screen(self, coordinate: Coordinate) -> DrawingOnScreen:
         return DrawingOnScreen(coordinate, self)
 
     def __mul__(self, scaling: int | float | WidthAndHeightScaling) -> Drawing:
@@ -86,9 +86,9 @@ class Drawing(Sizeable):
     @cached_property
     def visible_rectangle(self) -> RectangleOnScreen:
         rectangle = self.surface.get_bounding_rect()
-        coord = Coordinate(rectangle.x, rectangle.y)
+        coordinate = Coordinate(rectangle.x, rectangle.y)
         size = Size(rectangle.width, rectangle.height)
-        return RectangleOnScreen(coord, size)
+        return RectangleOnScreen(coordinate, size)
 
     @property
     def rectangle(self) -> RectangleOnScreen:
@@ -356,9 +356,9 @@ def _bounding_rectangle(points: tuple[Coordinate, ...]) -> RectangleOnScreen:
     min_y = min(c.top for c in points)
     max_x = max(c.left for c in points)
     max_y = max(c.top for c in points)
-    coord = Coordinate(min_x, min_y)
+    coordinate = Coordinate(min_x, min_y)
     size = Size(max_x - min_x, max_y - min_y)
-    return RectangleOnScreen(coord, size)
+    return RectangleOnScreen(coordinate, size)
 
 
 def _draw_polygon(
