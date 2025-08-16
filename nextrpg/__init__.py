@@ -1,4 +1,4 @@
-__version__ = "0.1.15"
+__version__ = "0.1.16"
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import (
@@ -74,7 +74,7 @@ from nextrpg.draw.drawing import (
     TransparentDrawing,
     Trim,
 )
-from nextrpg.draw.fade import FadeIn, FadeOut, Resource
+from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.draw.text import Text, TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen

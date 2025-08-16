@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
-from typing import Self, TypeIs, override
+from typing import Self, override
 
 from nextrpg.core.color import alpha_from_percentage
 from nextrpg.core.dataclass_with_init import (
@@ -14,17 +14,10 @@ from nextrpg.draw.animation_on_screen import AnimationOnScreen
 from nextrpg.draw.drawing import DrawingOnScreen
 from nextrpg.global_config.global_config import config
 
-type Resource = (
-    DrawingOnScreen
-    | tuple[DrawingOnScreen, ...]
-    | AnimationOnScreen
-    | tuple[AnimationOnScreen, ...]
-)
-
 
 @dataclass_with_init(frozen=True)
 class _Fade(AnimationOnScreen, ABC):
-    resource: Resource
+    drawing_on_screen: DrawingOnScreen | tuple[DrawingOnScreen, ...]
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
     )
@@ -45,12 +38,6 @@ class _Fade(AnimationOnScreen, ABC):
     @override
     def tick(self, time_delta: Millisecond) -> Self:
         timer = self._timer.tick(time_delta)
-        if isinstance(self.resource, AnimationOnScreen):
-            animation = self.resource.tick(time_delta)
-            return replace(self, resource=animation, _timer=timer)
-        if _is_animated_tuple(self.resource):
-            animations = tuple(a.tick(time_delta) for a in self.resource)
-            return replace(self, resource=animations, _timer=timer)
         return replace(self, _timer=timer)
 
     @property
@@ -59,13 +46,9 @@ class _Fade(AnimationOnScreen, ABC):
 
     @cached_property
     def _drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        if isinstance(self.resource, DrawingOnScreen):
-            return (self.resource,)
-        if isinstance(self.resource, AnimationOnScreen):
-            return self.resource.drawing_on_screens
-        if _is_animated_tuple(self.resource):
-            return tuple(d for a in self.resource for d in a.drawing_on_screens)
-        return self.resource
+        if isinstance(self.drawing_on_screen, DrawingOnScreen):
+            return (self.drawing_on_screen,)
+        return self.drawing_on_screen
 
     @property
     @abstractmethod
@@ -112,15 +95,3 @@ class FadeOut(_Fade):
     @property
     def _complete(self) -> tuple[DrawingOnScreen, ...]:
         return ()
-
-
-def _is_animated_tuple(
-    resource: Resource,
-) -> TypeIs[tuple[AnimationOnScreen, ...]]:
-    if not resource:
-        return False
-    if not isinstance(resource, tuple):
-        return False
-    if not isinstance(resource[0], AnimationOnScreen):
-        return False
-    return True

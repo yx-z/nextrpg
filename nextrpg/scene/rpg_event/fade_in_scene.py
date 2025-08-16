@@ -8,7 +8,7 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import DrawingOnScreen
-from nextrpg.draw.fade import FadeIn, Resource
+from nextrpg.draw.fade import FadeIn
 from nextrpg.scene.rpg_event.eventful_scene import (
     BackgroundEvent,
     BackgroundEventSentinel,
@@ -20,15 +20,15 @@ from nextrpg.scene.scene import Scene
 
 @dataclass_with_init(frozen=True)
 class FadeInScene(RpgEventScene[BackgroundEventSentinel]):
-    resource: Resource
+    drawing_on_screen: DrawingOnScreen | tuple[DrawingOnScreen, ...]
     wait: bool = True
     duration: Millisecond | None = None
     _: KW_ONLY = not_constructor_below()
     _fade: FadeIn = default(
         lambda self: (
-            FadeIn(self.resource)
+            FadeIn(self.drawing_on_screen)
             if self.duration is None
-            else FadeIn(self.resource, self.duration)
+            else FadeIn(self.drawing_on_screen, self.duration)
         )
     )
 

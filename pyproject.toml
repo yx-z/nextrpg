@@ -1,6 +1,6 @@
 [project]
 name = "nextrpg"
-version = "0.1.15"
+version = "0.1.16"
 description = "Build your next RPG (Role Playing Game)."
 authors = [{ name = "yx-z", email = "yx-z@outlook.com" }]
 requires-python = ">=3.14"
