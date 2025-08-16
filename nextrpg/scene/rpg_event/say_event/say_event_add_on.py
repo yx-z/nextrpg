@@ -5,7 +5,7 @@ from functools import cached_property
 from typing import Literal, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.draw.drawing import (
     Drawing,
@@ -50,11 +50,12 @@ class SayEventAddOn:
         add_on_on_screen = DrawingGroupOnScreen(self.add_on_top_left, add_on)
 
         text_coord = add_on_on_screen.coordinate(self._text.drawing_group)
+        assert text_coord
         text_add_on = TextOnScreen(text_coord, self._text).drawing_on_screens
         return tuple(
-            d
-            for d in add_on_on_screen.drawing_on_screens
-            if d not in text_add_on
+            drawing_on_screen
+            for drawing_on_screen in add_on_on_screen.drawing_on_screens
+            if drawing_on_screen not in text_add_on
         )
 
     @cached_property
