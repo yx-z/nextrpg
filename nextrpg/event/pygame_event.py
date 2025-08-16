@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum, auto
 
-from pygame.event import Event, post
+from pygame.event import Event
 from pygame.locals import KEYDOWN, KEYUP, QUIT, VIDEORESIZE
 
 from nextrpg.core.dimension import Size
@@ -68,7 +68,3 @@ def to_typed_event(event: Event) -> PygameEvent:
         KEYDOWN: KeyPressDown,
         KEYUP: KeyPressUp,
     }.get(event.type, PygameEvent)(event)
-
-
-def trigger_quit() -> None:
-    post(Event(QUIT))

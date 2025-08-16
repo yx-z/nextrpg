@@ -6,11 +6,11 @@ from functools import cached_property
 from typing import Self
 
 from pygame import font
-from pygame.display import flip, init, set_caption, set_icon, set_mode
+from pygame.display import flip, init, set_caption, set_mode
 from pygame.surface import Surface
 from pygame.transform import smoothscale
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -23,16 +23,12 @@ from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing, DrawingOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.event.pygame_event import (
-    KeyboardKey,
-    KeyPressDown,
-    PygameEvent,
-    WindowResize,
-)
+from nextrpg.event.pygame_event import (KeyPressDown, KeyboardKey, PygameEvent,
+                                        WindowResize)
 from nextrpg.global_config.global_config import config, set_config
 from nextrpg.global_config.window_config import (
     ResizeMode,
-    WindowConfig,
+    WindowConfig
 )
 
 log = Log()
@@ -103,16 +99,13 @@ class Window:
             init()
             font.init()
             set_caption(cfg.title)
-            if cfg.icon:
-                icon = Drawing(cfg.icon)
-                set_icon(icon.pygame)
         return set_mode(cfg.size.tuple, cfg.flag)
 
     def _scale(self, draws: tuple[DrawingOnScreen, ...]) -> DrawingOnScreen:
         screen = Surface(self.initial_config.size.tuple)
         screen.blits(d.pygame for d in draws)
-        scaled = (self.initial_config.size * self._scaling).tuple
-        scaled_draw = Drawing(smoothscale(screen, scaled))
+        scaled = self.initial_config.size * self._scaling
+        scaled_draw = Drawing(smoothscale(screen, scaled.tuple))
         return DrawingOnScreen(self._center_shift, scaled_draw)
 
     @cached_property
@@ -152,14 +145,11 @@ class Window:
     @cached_property
     def _saved_config(self) -> WindowConfig | None:
         saved_config = SaveIo().update(self.initial_config)
-        if (
-            saved_config.size != self.initial_config.size
-            or saved_config.mode != self.initial_config.mode
-        ):
-            full_config = replace(config(), window=saved_config)
-            set_config(full_config)
-            return saved_config
-        return None
+        if saved_config == self.initial_config:
+            return None
+        full_config = replace(config(), window=saved_config)
+        set_config(full_config)
+        return saved_config
 
 
 def _log_text(

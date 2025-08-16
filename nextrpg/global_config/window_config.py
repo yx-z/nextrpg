@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 from enum import auto
-from pathlib import Path
 from typing import Any, Self, override
 
 from pygame.locals import FULLSCREEN, RESIZABLE
@@ -39,7 +38,6 @@ class WindowConfig(UpdateFromSave[dict[str, Any]]):
     mode: WindowMode = WindowMode.WINDOWED
     resize: ResizeMode = ResizeMode.SCALE
     allow_resize: bool = True
-    icon: str | Path | None = None
 
     @property
     @override
