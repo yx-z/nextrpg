@@ -8,9 +8,9 @@ from typing import Self
 from pygame import font
 from pygame.display import flip, init, set_caption, set_mode
 from pygame.surface import Surface
-from pygame.transform import smoothscale
+from pygame.transform import scale
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -24,8 +24,8 @@ from nextrpg.draw.drawing import Drawing, DrawingOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
-    KeyboardKey,
     KeyPressDown,
+    KeyboardKey,
     PygameEvent,
     WindowResize,
 )
@@ -108,7 +108,7 @@ class Window:
         screen = Surface(self.initial_config.size)
         screen.blits(d.pygame for d in drawing_on_screens)
         scaled = self.initial_config.size * self._scaling
-        scaled_draw = Drawing(smoothscale(screen, scaled))
+        scaled_draw = Drawing(scale(screen, scaled))
         return DrawingOnScreen(self._center_shift, scaled_draw)
 
     @cached_property

@@ -22,3 +22,12 @@ class DebugConfig:
     player_collide_with_others: bool = True
     log_level: LogLevel = LogLevel.DEBUG
     log_duration: Millisecond = 3000
+
+
+LOG_ONLY = DebugConfig(
+    drawing_background_color=None,
+    collision_rectangle_color=None,
+    start_event_rectangle_color=None,
+    move_object_color=None,
+    npc_path_color=None,
+)

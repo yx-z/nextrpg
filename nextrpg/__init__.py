@@ -99,7 +99,7 @@ from nextrpg.event.pygame_event import (
 )
 from nextrpg.game import Game
 from nextrpg.global_config.character_config import CharacterConfig
-from nextrpg.global_config.debug_config import DebugConfig
+from nextrpg.global_config.debug_config import LOG_ONLY, DebugConfig
 from nextrpg.global_config.drawing_config import DrawingConfig
 from nextrpg.global_config.event_config import EventConfig
 from nextrpg.global_config.global_config import (
