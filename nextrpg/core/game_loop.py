@@ -32,16 +32,19 @@ class GameLoop:
 
     @property
     def tick(self) -> GameLoop:
-        log.debug(t"FPS: {self._clock.get_fps():.0f}", duration=None)
-        self._clock.tick(config().window.frames_per_second)
-        time_delta = self._clock.get_time()
-
-        window = self._window.update()
-        window.blit(self._scene.drawing_on_screens, time_delta)
+        fps_info = f"FPS: {self._clock.get_fps():.0f}"
+        log.debug(fps_info, duration=None)
 
         # "<'package.my_class'>" -> "my_class"
         scene_type = str(type(self._scene))[2:-2].split(".")[-1]
         log.debug(t"Current scene {scene_type}", duration=None)
+
+        self._clock.tick(config().game_loop.max_frames_per_second)
+        time_delta = self._clock.get_time()
+
+        window = self._window.tick(fps_info)
+        window.blits(self._scene.drawing_on_screens, time_delta)
+
         loop = replace(
             self, _scene=self._scene.tick(time_delta), _window=window
         )

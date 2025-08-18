@@ -41,13 +41,14 @@ class SayEventAddOn:
         content = DrawingGroup(tuple(contents))
 
         background, shift = self._background_relative_to_text
-        add_on = DrawingGroup(
-            (
-                RelativeDrawing(background, ORIGIN),
-                RelativeDrawing(content, -shift),
-            )
+        add_ons = (
+            RelativeDrawing(background, ORIGIN),
+            RelativeDrawing(content, -shift),
         )
-        add_on_on_screen = DrawingGroupOnScreen(self.add_on_top_left, add_on)
+        add_on_group = DrawingGroup(add_ons)
+        add_on_on_screen = DrawingGroupOnScreen(
+            self._add_on_top_left, add_on_group
+        )
 
         text_coord = add_on_on_screen.coordinate(self._text.drawing_group)
         assert text_coord
@@ -61,23 +62,21 @@ class SayEventAddOn:
     @cached_property
     def text_on_screen(self) -> TextOnScreen:
         coordinate = (
-            self.add_on_top_left - self._background_relative_to_text.shift
+            self._add_on_top_left - self._background_relative_to_text.shift
         )
         return TextOnScreen(coordinate, self._text)
 
     @cached_property
-    def add_on_top_left(self) -> Coordinate:
+    def _add_on_top_left(self) -> Coordinate:
         return self._center_to_top_left(self.config.scene_coordinate)
 
     @property
-    def avatar(self) -> Drawing | DrawingGroup | None:
+    def _avatar(self) -> Drawing | DrawingGroup | None:
         return self.config.avatar
 
     @property
-    def name(self) -> str | None:
-        if name := self.config.name_override:
-            return name
-        return None
+    def _name(self) -> str | None:
+        return self.config.name_override
 
     def _center_to_top_left(self, center: Coordinate) -> Coordinate:
         return (
@@ -111,20 +110,20 @@ class SayEventAddOn:
 
     @cached_property
     def _avatar_relative_to_text(self) -> RelativeDrawing | None:
-        if not self.avatar:
+        if not self._avatar:
             return None
         shift = (
             self._text.bottom_left
             - self.config.padding.width
-            - self.avatar.size
+            - self._avatar.size
         )
-        return RelativeDrawing(self.avatar, shift.size)
+        return RelativeDrawing(self._avatar, shift.size)
 
     @cached_property
     def _name_relative_to_text(self) -> RelativeDrawing | None:
-        if not self.name:
+        if not self._name:
             return None
-        text = Text(self.name, self.config.name_text_config)
+        text = Text(self._name, self.config.name_text_config)
         shift = Size(0, -text.height.value - self.config.padding.height.value)
         return RelativeDrawing(text.drawing_group, shift)
 
@@ -143,10 +142,10 @@ class SayEventCharacterAddOn(SayEventAddOn):
     @cached_property
     @override
     def background(self) -> tuple[DrawingOnScreen, ...]:
-        return (self._background_tick,) + super().background
+        return (self._background_tip,) + super().background
 
     @cached_property
-    def _background_tick(self) -> DrawingOnScreen:
+    def _background_tip(self) -> DrawingOnScreen:
         if self._character_rectangle_on_screen.center in left_screen():
             width_sign = 1
         else:

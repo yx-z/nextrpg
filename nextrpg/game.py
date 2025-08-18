@@ -2,6 +2,8 @@ from asyncio import sleep
 from collections.abc import Callable
 from dataclasses import KW_ONLY
 
+from pygame import font, init
+
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -30,6 +32,8 @@ class Game:
             await sleep(0)
 
     def _init(self) -> None:
+        init()
+        font.init()
         set_config(self.config)
 
     def _tick(self) -> None:

@@ -3,6 +3,7 @@ from nextrpg import (
     Color,
     Direction,
     Drawing,
+    DrawingTrim,
     EventfulScene,
     EventSpec,
     MapScene,
@@ -15,7 +16,6 @@ from nextrpg import (
     RpgMakerSpriteSheet,
     SpriteSheetSelection,
     Text,
-    Trim,
     config,
     cutscene,
 )
@@ -23,7 +23,7 @@ from nextrpg import (
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
     sprite_sheet = RpgMakerSpriteSheet(
-        resource="example/asset/Characters_MV.png", trim=Trim(top=25)
+        resource="example/asset/Characters_MV.png", trim=DrawingTrim(top=25)
     )
     if player_spec:
         player = player_spec

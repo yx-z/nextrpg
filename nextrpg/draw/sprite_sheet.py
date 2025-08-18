@@ -5,7 +5,7 @@ from pathlib import Path
 from nextrpg.core.color import Color
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
-from nextrpg.draw.drawing import Drawing, Trim
+from nextrpg.draw.drawing import Drawing, DrawingTrim
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -20,7 +20,6 @@ class SpriteSheet:
     num_row: int
     num_column: int
     color_key: Color | None = None
-    trim: Trim | None = None
 
     @cached_property
     def grid(self) -> tuple[tuple[Drawing, ...], ...]:
@@ -37,10 +36,7 @@ class SpriteSheet:
         height = self.drawing.height.value / self.num_row
         top_left = Coordinate(width * selection.column, height * selection.row)
         size = Size(width, height)
-        drawing = self.drawing.crop(top_left, size)
-        if self.trim:
-            return drawing.trim(self.trim)
-        return drawing
+        return self.drawing.crop(top_left, size)
 
     @cached_property
     def drawing(self) -> Drawing:

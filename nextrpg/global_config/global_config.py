@@ -7,6 +7,7 @@ from nextrpg.global_config.cutscene_config import CutsceneConfig
 from nextrpg.global_config.debug_config import DebugConfig
 from nextrpg.global_config.drawing_config import DrawingConfig
 from nextrpg.global_config.event_config import EventConfig
+from nextrpg.global_config.game_loop_config import GameLoopConfig
 from nextrpg.global_config.key_mapping_config import KeyMappingConfig
 from nextrpg.global_config.map_config import MapConfig
 from nextrpg.global_config.player_config import PlayerConfig
@@ -40,6 +41,7 @@ class Config:
     say_event: SayEventConfig = SayEventConfig()
     cutscene: CutsceneConfig = CutsceneConfig()
     save: SaveConfig = SaveConfig()
+    game_loop: GameLoopConfig = GameLoopConfig()
 
 
 def set_config(cfg: Config) -> Config:

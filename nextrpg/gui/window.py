@@ -5,12 +5,11 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import Self
 
-from pygame import font
-from pygame.display import flip, init, set_caption, set_mode
+from pygame.display import flip, set_caption, set_mode
 from pygame.surface import Surface
 from pygame.transform import scale
 
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -24,8 +23,8 @@ from nextrpg.draw.drawing import Drawing, DrawingOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
-    KeyPressDown,
     KeyboardKey,
+    KeyPressDown,
     PygameEvent,
     WindowResize,
 )
@@ -48,13 +47,31 @@ class Window:
     __: None = field(
         default_factory=lambda: os.environ.setdefault("SDL_VIDEO_CENTERED", "1")
     )
+    ___: None = default(lambda self: set_caption(self.current_config.title))
     _screen: Surface = default(
         lambda self: self._set_screen(self.current_config)
     )
 
-    def update(self) -> Self:
-        if (updated_config := config().window) is self.current_config:
+    def tick(self, fps_info: str | None = None) -> Self:
+        updated_config = config().window
+        if updated_config.include_fps_in_window_title and fps_info:
+            set_caption(f"{config().window.title} {fps_info}")
+        if (
+            self.current_config.include_fps_in_window_title
+            and not updated_config.include_fps_in_window_title
+        ):
+            set_caption(config().window.title)
+
+        if updated_config is self.current_config:
             return self
+
+        if not updated_config.need_new_screen(self.current_config):
+            return replace(
+                self,
+                current_config=updated_config,
+                last_config=self.current_config,
+            )
+
         screen = self._set_screen(updated_config)
         return replace(
             self,
@@ -68,11 +85,13 @@ class Window:
             case WindowResize():
                 return self._resize(e.size)
             case KeyPressDown():
-                if e.key is KeyboardKey.WINDOW_MODE_TOGGLE:
-                    return self._toggle_mode
+                if e.key is KeyboardKey.FULL_SCREEN_TOGGLE:
+                    return self._toggle_full_screen()
+                if e.key is KeyboardKey.INCLUDE_FPS_IN_WINDOW_TITLE_TOGGLE:
+                    return self._toggle_include_fps_in_window_title()
         return self
 
-    def blit(
+    def blits(
         self,
         drawing_on_screens: tuple[DrawingOnScreen, ...],
         time_delta: Millisecond,
@@ -95,11 +114,16 @@ class Window:
                 self._screen.blits(d.pygame for d in drawing_on_screens)
         flip()
 
+    def _toggle_include_fps_in_window_title(self) -> Self:
+        window_config = replace(
+            self.current_config,
+            include_fps_in_window_title=not self.current_config.include_fps_in_window_title,
+        )
+        full_config = replace(config(), window=window_config)
+        set_config(full_config)
+        return self.tick()
+
     def _set_screen(self, cfg: WindowConfig) -> Surface:
-        if cfg is self.initial_config or cfg is self._saved_config:
-            init()
-            font.init()
-            set_caption(cfg.title)
         return set_mode(cfg.size, cfg.flag)
 
     def _scale(
@@ -129,13 +153,12 @@ class Window:
         ) / 2
         return Coordinate(width_shift, height_shift)
 
-    @cached_property
-    def _toggle_mode(self) -> Self:
-        mode = self.current_config.mode.opposite
-        updated_config = replace(self.current_config, mode=mode)
+    def _toggle_full_screen(self) -> Self:
+        full_screen = not self.current_config.full_screen
+        updated_config = replace(self.current_config, full_screen=full_screen)
         full_config = replace(config(), window=updated_config)
         set_config(full_config)
-        return self.update()
+        return self.tick()
 
     def _resize(self, size: Size) -> Self:
         if size == self.current_config.size:
@@ -143,7 +166,7 @@ class Window:
         updated_config = replace(self.current_config, size=size)
         full_config = replace(config(), window=updated_config)
         set_config(full_config)
-        return self.update()
+        return self.tick()
 
     @cached_property
     def _saved_config(self) -> WindowConfig | None:

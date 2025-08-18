@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, replace
 
 from nextrpg.core.color import BLACK, Color
@@ -8,7 +9,9 @@ from nextrpg.global_config.text_config import TextConfig
 
 
 @dataclass(frozen=True)
-class AddOnConfig:
+class ColorBackgroundConfig:
+    background: Color = Color(255, 255, 255, 200)
+    border_radius: Pixel = 16
     add_on_shift: Size = Size(0, 100)
     tail_base1_shift: Width = Width(10)
     tail_base2_shift: Width = Width(30)
@@ -16,13 +19,19 @@ class AddOnConfig:
 
 
 @dataclass(frozen=True)
+class NineSliceBackgroundConfig:
+    background: "NineSlice"
+    tip: "Drawing | DrawingGroup"
+
+
+@dataclass(frozen=True)
 class SayEventConfig:
-    background: Color = Color(255, 255, 255, 200)
-    border_radius: Pixel = 16
+    background: ColorBackgroundConfig | NineSliceBackgroundConfig = (
+        ColorBackgroundConfig()
+    )
     fade_duration: Millisecond = 200
     padding: Size = Size(12, 12)
     text_delay: Millisecond = 20
-    add_on: AddOnConfig = AddOnConfig()
     name_override: str | None = None
     scene_coordinate_override: Coordinate | None = None
     character_coordinate_override: Coordinate | None = None

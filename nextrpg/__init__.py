@@ -68,13 +68,13 @@ from nextrpg.draw.cyclic_animation import CyclicAnimation
 from nextrpg.draw.drawing import (
     Drawing,
     DrawingOnScreen,
+    DrawingTrim,
     PolygonDrawing,
     PolygonOnScreen,
     RectangleDrawing,
     RectangleOnScreen,
     SizedDrawOnScreens,
     TransparentDrawing,
-    Trim,
 )
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
@@ -102,6 +102,7 @@ from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.debug_config import LOG_ONLY, DebugConfig
 from nextrpg.global_config.drawing_config import DrawingConfig
 from nextrpg.global_config.event_config import EventConfig
+from nextrpg.global_config.game_loop_config import GameLoopConfig
 from nextrpg.global_config.global_config import (
     Config,
     config,
@@ -118,12 +119,7 @@ from nextrpg.global_config.save_config import SaveConfig
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.global_config.text_config import TextConfig
 from nextrpg.global_config.transition_config import TransitionConfig
-from nextrpg.global_config.window_config import (
-    ResizeMode,
-    WindowConfig,
-    WindowFlag,
-    WindowMode,
-)
+from nextrpg.global_config.window_config import ResizeMode, WindowConfig
 from nextrpg.gui.area import (
     bottom_left_screen,
     bottom_right_screen,

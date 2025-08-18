@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum, auto
+from functools import cache
 
 from pygame.event import Event
 from pygame.locals import KEYDOWN, KEYUP, QUIT, VIDEORESIZE
@@ -33,18 +34,25 @@ class KeyboardKey(Enum):
     UP = auto()
     DOWN = auto()
     CONFIRM = auto()
-    WINDOW_MODE_TOGGLE = auto()
+    FULL_SCREEN_TOGGLE = auto()
+    INCLUDE_FPS_IN_WINDOW_TITLE_TOGGLE = auto()
 
     @classmethod
     def from_pygame(cls, key: KeyCode) -> KeyboardKey | KeyCode:
-        return {
-            config().key_mapping.left: cls.LEFT,
-            config().key_mapping.right: cls.RIGHT,
-            config().key_mapping.up: cls.UP,
-            config().key_mapping.down: cls.DOWN,
-            config().key_mapping.confirm: cls.CONFIRM,
-            config().key_mapping.gui_mode_toggle: cls.WINDOW_MODE_TOGGLE,
-        }.get(key, key)
+        return _key_mapping().get(key, key)
+
+
+@cache
+def _key_mapping() -> dict[KeyCode, KeyboardKey]:
+    return {
+        config().key_mapping.left: KeyboardKey.LEFT,
+        config().key_mapping.right: KeyboardKey.RIGHT,
+        config().key_mapping.up: KeyboardKey.UP,
+        config().key_mapping.down: KeyboardKey.DOWN,
+        config().key_mapping.confirm: KeyboardKey.CONFIRM,
+        config().key_mapping.full_screen_toggle: KeyboardKey.FULL_SCREEN_TOGGLE,
+        config().key_mapping.include_fps_in_title_toggle: KeyboardKey.INCLUDE_FPS_IN_WINDOW_TITLE_TOGGLE,
+    }
 
 
 class _KeyPressEvent(PygameEvent):

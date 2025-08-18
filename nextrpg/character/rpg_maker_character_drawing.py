@@ -13,7 +13,7 @@ from nextrpg.core.dimension import Size
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.cyclic_animation import CyclicAnimation
-from nextrpg.draw.drawing import Drawing
+from nextrpg.draw.drawing import Drawing, DrawingTrim
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.global_config.global_config import config
 
@@ -53,6 +53,7 @@ type FrameType = type[
 class RpgMakerSpriteSheet(SpriteSheet):
     num_column: int = 4
     num_row: int = 2
+    trim: DrawingTrim | None = None
     style: FrameType = DefaultCharacterDrawingType
 
 

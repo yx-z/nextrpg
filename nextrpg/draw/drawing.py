@@ -38,7 +38,7 @@ log = Log()
 
 
 @dataclass(frozen=True, kw_only=True)
-class Trim:
+class DrawingTrim:
     top: Pixel = 0
     left: Pixel = 0
     bottom: Pixel = 0
@@ -53,6 +53,7 @@ class Trim:
 class Drawing(Sizeable):
     resource: str | Path | Surface
     color_key: Color | Coordinate | None = None
+    convert_alpha: bool | None = None
 
     @property
     def size(self) -> Size:
@@ -65,11 +66,11 @@ class Drawing(Sizeable):
     def crop(self, top_left: Coordinate, size: Size) -> Drawing:
         return Drawing(self.pygame.subsurface((top_left, size)))
 
-    def trim(self, trim: Trim) -> Drawing:
-        coordinate = Coordinate(trim.left, trim.top)
-        width = self.width - trim.left - trim.right
-        height = self.height - trim.top - trim.bottom
-        size = Size(width.value, height.value)
+    def trim(self, drawing_trim: DrawingTrim) -> Drawing:
+        coordinate = Coordinate(drawing_trim.left, drawing_trim.top)
+        width = self.width.value - drawing_trim.left - drawing_trim.right
+        height = self.height.value - drawing_trim.top - drawing_trim.bottom
+        size = Size(width, height)
         return self.crop(coordinate, size)
 
     def set_alpha(self, alpha: Alpha) -> Drawing:
@@ -110,18 +111,24 @@ class Drawing(Sizeable):
     @cached_property
     def surface(self) -> Surface:
         if isinstance(self.resource, Surface):
-            res = self.resource
-        else:
-            log.debug(t"Loading {self.resource}")
-            res = load(self.resource).convert_alpha()
+            return self.resource
 
-        if self.color_key:
-            if isinstance(self.color_key, Coordinate):
-                color = res.get_at(self.color_key)
-                res.set_colorkey(color)
-            else:
-                res.set_colorkey(self.color_key)
-        return res
+        log.debug(t"Loading {self.resource}")
+        res = load(self.resource)
+        if not self.color_key:
+            if self.convert_alpha is None or self.convert_alpha:
+                return res.convert_alpha()
+            return res.convert()
+
+        if isinstance(self.color_key, Coordinate):
+            color = res.get_at(self.color_key)
+            res.set_colorkey(color)
+        else:
+            res.set_colorkey(self.color_key)
+
+        if self.convert_alpha is None or not self.convert_alpha:
+            return res.convert()
+        return res.convert_alpha()
 
     @cached_property
     def _debug_surface(self) -> Surface | None:
@@ -130,7 +137,7 @@ class Drawing(Sizeable):
         ):
             return None
 
-        surface = Surface(self.size, SRCALPHA)
+        surface = Surface(self.size, SRCALPHA).convert_alpha()
         surface.fill(color)
         surface.blit(self.surface, (0, 0))
         return surface
@@ -184,7 +191,7 @@ class TransparentDrawing(Drawing, ABC):
     @cached_property
     def surface(self) -> Surface:
         if self.transparent:
-            return Surface((0, 0))
+            return Surface((0, 0)).convert()
         return super().surface
 
     @override
@@ -282,7 +289,7 @@ class RectangleDrawing(TransparentDrawing):
     def __init__(
         self, size: Size, color: Color, border_radius: Pixel | None = None
     ) -> None:
-        surface = Surface(size, SRCALPHA)
+        surface = Surface(size, SRCALPHA).convert_alpha()
         rectangle = Rect(ORIGIN, size)
         rect(surface, color, rectangle, border_radius=border_radius or -1)
         _set_resource_color_and_color_key(self, surface, color)
@@ -376,7 +383,7 @@ def _draw_polygon(
     bounding_rectangle: RectangleOnScreen | None = None,
 ) -> Surface:
     bounding_rectangle = bounding_rectangle or _bounding_rectangle(points)
-    surf = Surface(bounding_rectangle.size, SRCALPHA)
+    surf = Surface(bounding_rectangle.size, SRCALPHA).convert_alpha()
     negated = tuple(p - bounding_rectangle.top_left for p in points)
     method(surf, negated)
     return surf

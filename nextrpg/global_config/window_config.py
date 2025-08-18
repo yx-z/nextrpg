@@ -1,66 +1,54 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
-from enum import auto
+from enum import Enum, auto
 from typing import Any, Self, override
 
 from pygame.locals import FULLSCREEN, RESIZABLE
 
 from nextrpg.core.color import BLACK, Color
 from nextrpg.core.dimension import Size
-from nextrpg.core.save import LoadFromSaveEnum, UpdateFromSave
+from nextrpg.core.save import UpdateFromSave
 
 
-class ResizeMode(LoadFromSaveEnum):
+class ResizeMode(Enum):
     SCALE = auto()
     KEEP_NATIVE_SIZE = auto()
-
-
-class WindowMode(LoadFromSaveEnum):
-    WINDOWED = auto()
-    FULL_SCREEN = auto()
-
-    @property
-    def opposite(self) -> WindowMode:
-        return _OPPOSITE_GUI_MODE[self]
-
-
-type WindowFlag = int
 
 
 @dataclass(frozen=True)
 class WindowConfig(UpdateFromSave[dict[str, Any]]):
     title: str = "nextrpg"
     size: Size = Size(1280, 720)
-    frames_per_second: int = 60
     background: Color = BLACK
     double_buffer: bool = True
-    mode: WindowMode = WindowMode.WINDOWED
+    full_screen: bool = False
     resize: ResizeMode = ResizeMode.SCALE
     allow_resize: bool = True
+    include_fps_in_window_title: bool = False
+
+    def need_new_screen(self, other: WindowConfig) -> bool:
+        return self.size != other.size or self.flag != other.flag
 
     @property
     @override
     def save_data(self) -> dict[str, Any]:
-        return {"size": self.size.save_data, "mode": self.mode.save_data}
+        return {"size": self.size.save_data, "full_screen": self.full_screen}
 
     @override
     def update(self, data: dict[str, Any]) -> Self:
         size = Size.load(data["size"])
-        mode = WindowMode.load(data["mode"])
-        return replace(self, size=size, mode=mode)
+        full_screen = data["full_screen"]
+        return replace(self, size=size, full_screen=full_screen)
 
     @property
-    def flag(self) -> WindowFlag:
+    def flag(self) -> _WindowFlag:
         flag = self.double_buffer
-        if self.mode is WindowMode.FULL_SCREEN:
+        if self.full_screen:
             flag |= FULLSCREEN
         if self.allow_resize:
             flag |= RESIZABLE
         return flag
 
 
-_OPPOSITE_GUI_MODE = {
-    WindowMode.WINDOWED: WindowMode.FULL_SCREEN,
-    WindowMode.FULL_SCREEN: WindowMode.WINDOWED,
-}
+type _WindowFlag = int
