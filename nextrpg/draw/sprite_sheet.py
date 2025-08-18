@@ -22,8 +22,8 @@ class SpriteSheet:
     color_key: Color | None = None
 
     def select(self, selection: SpriteSheetSelection) -> Drawing:
-        width = self.drawing.width / self.num_column
-        height = self.drawing.height / self.num_row
+        width = self.drawing.width.value / self.num_column
+        height = self.drawing.height.value / self.num_row
         top_left = Coordinate(width * selection.column, height * selection.row)
         size = Size(width, height)
         return self.drawing.crop(top_left, size)

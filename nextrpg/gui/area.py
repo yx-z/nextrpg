@@ -13,7 +13,7 @@ from nextrpg.global_config.window_config import ResizeMode
 
 
 def gui_size() -> Size:
-    match mode := config().window.resize:
+    match config().window.resize:
         case ResizeMode.SCALE:
             return initial_config().window.size
         case ResizeMode.KEEP_NATIVE_SIZE:

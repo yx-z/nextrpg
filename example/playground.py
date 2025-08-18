@@ -465,8 +465,6 @@ def run_smoke_tests():
         s3.focus_index == 2
     ), "Focus should skip disabled buttons when moving."
 
-    print("All smoke tests passed.")
-
 
 # -------------- Entry point --------------
 if __name__ == "__main__":

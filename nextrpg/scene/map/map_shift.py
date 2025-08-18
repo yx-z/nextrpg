@@ -13,9 +13,9 @@ def center_player(player_coordinate: Coordinate, map_size: Size) -> Coordinate:
     return Coordinate(left_shift, top_shift)
 
 
-def _center_player[T](player_axis: T, gui_axis: T, map_axis: T) -> Pixel | T:
+def _center_player[T](player_axis: T, gui_axis: T, map_axis: T) -> Pixel:
     if player_axis < gui_axis / 2:
         return 0
     if player_axis > map_axis - gui_axis / 2:
-        return gui_axis - map_axis
-    return gui_axis / 2 - player_axis
+        return (gui_axis - map_axis).value
+    return (gui_axis / 2 - player_axis).value

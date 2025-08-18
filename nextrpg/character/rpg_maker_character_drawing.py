@@ -110,8 +110,8 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             return drawing.trim(self.sprite_sheet.trim)
         return drawing
 
-    def _load_row(self, draw: Drawing, row: int) -> CyclicAnimation:
-        frames = tuple(self._trim(d) for d in self._crop_at_row(draw, row))
+    def _load_row(self, drawing: Drawing, row: int) -> CyclicAnimation:
+        frames = tuple(self._trim(d) for d in self._crop_at_row(drawing, row))
         ordered_frames = tuple(
             frames[i] for i in self.sprite_sheet.style._frame_indices()
         )
@@ -119,13 +119,13 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             frames=ordered_frames, duration_per_frame=self.duration_per_frame
         )
 
-    def _crop_at_row(self, draw: Drawing, row: int) -> tuple[Drawing, ...]:
+    def _crop_at_row(self, drawing: Drawing, row: int) -> tuple[Drawing, ...]:
         num_frames = len(self.sprite_sheet.style)
-        width = draw.width / num_frames
-        height = draw.height / len(_DIR_TO_ROW)
+        width = drawing.width.value / num_frames
+        height = drawing.height.value / len(_DIR_TO_ROW)
         size = Size(width, height)
         return tuple(
-            draw.crop(Coordinate(width * i, height * row), size)
+            drawing.crop(Coordinate(width * i, height * row), size)
             for i in range(num_frames)
         )
 

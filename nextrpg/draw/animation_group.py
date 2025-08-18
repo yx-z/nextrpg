@@ -4,7 +4,7 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animation import Animation

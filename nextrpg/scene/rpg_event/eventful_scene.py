@@ -165,7 +165,7 @@ class EventfulScene(EventAsAttr, Scene):
     def _start_event(self, npc: NpcOnScreen, time_delta: Millisecond) -> Self:
         turn = not (
             isinstance(
-                drawing := npc.drawing_on_screen.draw, TransparentDrawing
+                drawing := npc.drawing_on_screen.drawing, TransparentDrawing
             )
             and drawing.transparent
         )

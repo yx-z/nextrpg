@@ -5,7 +5,7 @@ from functools import cached_property
 from typing import Literal, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.draw.drawing import (
     Drawing,
@@ -125,7 +125,7 @@ class SayEventAddOn:
         if not self.name:
             return None
         text = Text(self.name, self.config.name_text_config)
-        shift = Size(0, -text.height - self.config.padding.height)
+        shift = Size(0, -text.height.value - self.config.padding.height.value)
         return RelativeDrawing(text.drawing_group, shift)
 
     @cached_property
@@ -161,13 +161,17 @@ class SayEventCharacterAddOn(SayEventAddOn):
         base_coord1_left = tip_left + width_sign * cfg.tail_base1_shift
         base_coord2_left = tip_left + width_sign * cfg.tail_base2_shift
 
-        base_coord_top = self.add_on_top_left.top
+        base_coord_top = self.add_on_top_left
         if not self._character_edge.is_top:
             base_coord_top += self._background_relative_to_text.drawing.height
 
-        tip_coord = Coordinate(tip_left, tip_top)
-        base_coord1 = Coordinate(base_coord1_left, base_coord_top)
-        base_coord2 = Coordinate(base_coord2_left, base_coord_top)
+        tip_coord = Coordinate(tip_left.value, tip_top.value)
+        base_coord1 = Coordinate(
+            base_coord1_left.value, base_coord_top.top_value
+        )
+        base_coord2 = Coordinate(
+            base_coord2_left.value, base_coord_top.top_value
+        )
         tip = PolygonOnScreen((tip_coord, base_coord1, base_coord2))
         return tip.fill(self.config.background)
 
@@ -182,17 +186,17 @@ class SayEventCharacterAddOn(SayEventAddOn):
         center = character_left - shift_width
 
         # Clamp add-on within screen width.
-        background_width = self._background_relative_to_text.drawing.width
+        background_width = self._background_relative_to_text.drawing.width.value
         left = center - background_width / 2
-        pad_width = self.config.padding.width
+        pad_width = self.config.padding.width.value
         if left < pad_width:
             left = pad_width
         elif left + background_width > gui_width() - pad_width:
-            left = gui_width() - background_width - pad_width
+            left = gui_width().value - background_width - pad_width
 
         top = character_top + self._character_edge.height_sign * shift_height
         if self._character_edge.is_top:
-            top -= self._background_relative_to_text.drawing.height
+            top -= self._background_relative_to_text.drawing.height.value
 
         return Coordinate(left, top)
 

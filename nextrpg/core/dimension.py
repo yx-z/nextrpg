@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Iterator, Self, override
-
-from nextrpg.core.save import LoadFromSaveList
+from typing import NamedTuple, Self, override
 
 type Pixel = int | float
 
@@ -12,19 +10,17 @@ type PixelPerMillisecond = int | float
 
 @dataclass(frozen=True)
 class _Dimension:
-    input_value: Pixel | _Dimension
+    value: Pixel
 
-    def __lt__(self, other: Self) -> bool:
-        return self.value < other.value
+    def __lt__(self, other: Self | Pixel) -> bool:
+        if isinstance(other, _Dimension):
+            return self.value < other.value
+        return self.value < other
 
-    def __le__(self, other: Self) -> bool:
-        return self.value <= other.value
-
-    @property
-    def value(self) -> Pixel:
-        if isinstance(self.input_value, _Dimension):
-            return self.input_value.value
-        return self.input_value
+    def __le__(self, other: Self | Pixel) -> bool:
+        if isinstance(other, _Dimension):
+            return self.value <= other.value
+        return self.value <= other
 
     def __neg__(self) -> Self:
         return type(self)(-self.value)
@@ -97,41 +93,32 @@ class WidthAndHeightScaling(_Dimension):
     pass
 
 
-@dataclass(frozen=True)
-class Size(LoadFromSaveList[int]):
-    input_width: Pixel | Width
-    input_height: Pixel | Height
+class Size(NamedTuple):
+    width_value: Pixel
+    height_value: Pixel
 
     @property
     def width(self) -> Width:
-        if isinstance(self.input_width, Width):
-            return self.input_width
-        return Width(self.input_width)
+        return Width(self.width_value)
 
     @property
     def height(self) -> Height:
-        if isinstance(self.input_height, Height):
-            return self.input_height
-        return Height(self.input_height)
-
-    @property
-    def tuple(self) -> tuple[Pixel, Pixel]:
-        return self.width.value, self.height.value
-
-    def __iter__(self) -> Iterator[Width | Height]:
-        return iter((self.width, self.height))
+        return Height(self.height_value)
 
     def __neg__(self) -> Size:
-        return Size(-self.width, -self.height)
+        return Size(-self.width_value, -self.height_value)
 
     def __add__(self, other: Size | Width | Height) -> Size:
         if isinstance(other, Width):
-            return Size(self.width + other, self.height)
+            return Size(self.width_value + other.value, self.height_value)
 
         if isinstance(other, Height):
-            return Size(self.width, self.height + other)
+            return Size(self.width_value, self.height_value + other.value)
 
-        return Size(self.width + other.width, self.height + other.height)
+        return Size(
+            self.width_value + other.width_value,
+            self.height_value + other.height_value,
+        )
 
     def __radd__(self, other: Size | Width | Height) -> Size:
         return self + other
@@ -146,11 +133,14 @@ class Size(LoadFromSaveList[int]):
         self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
     ) -> Size:
         if isinstance(scaling, WidthScaling):
-            return Size(self.width * scaling, self.height)
+            return Size(self.width_value * scaling.value, self.height_value)
 
         if isinstance(scaling, HeightScaling):
-            return Size(self.width, self.height * scaling)
-        return Size(self.width * scaling.value, self.height * scaling.value)
+            return Size(self.width_value, self.height_value * scaling.value)
+
+        return Size(
+            self.width_value * scaling.value, self.height_value * scaling.value
+        )
 
     def __rmul__(
         self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
@@ -163,9 +153,12 @@ class Size(LoadFromSaveList[int]):
         return self * type(scaling)(1 / scaling.value)
 
     def __repr__(self) -> str:
-        return f"({self.width.value:.0f}, {self.height.value:.0f})"
+        return f"({self.width_value:.0f}, {self.height_value:.0f})"
 
-    @override
     @property
-    def save_data(self) -> list[int]:
-        return list(self.tuple)
+    def save_data(self) -> list[Pixel]:
+        return list(self)
+
+    @classmethod
+    def load(cls, data: list[Pixel]) -> Self:
+        return cls(*data)

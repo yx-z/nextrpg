@@ -1,10 +1,9 @@
 import json
 import sys
-from abc import ABC, ABCMeta, abstractmethod
 from collections.abc import Callable
 from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import KW_ONLY, field
-from enum import Enum, EnumMeta
+from enum import Enum
 from functools import cache
 from pathlib import Path
 from shutil import rmtree
@@ -23,9 +22,8 @@ type _Json = _Primitive | list["_Json"] | dict[str, "_Json"]
 type SaveData = _Primitive | bytes | list["SaveData"] | dict[str, "SaveData"]
 
 
-class Savable[_S](ABC):
+class Savable[_S]:
     @property
-    @abstractmethod
     def save_data(self) -> _S: ...
 
     @property
@@ -34,28 +32,15 @@ class Savable[_S](ABC):
 
 
 class UpdateFromSave[_S](Savable[_S]):
-    @abstractmethod
     def update(self, data: _S) -> Self | None: ...
 
 
 class LoadFromSave[_S](Savable[_S]):
     @classmethod
-    @abstractmethod
     def load(cls, data: _S) -> Self: ...
 
 
-class LoadFromSaveList[T](LoadFromSave[list[T]]):
-    @override
-    @classmethod
-    def load(cls, data: list[T]) -> Self:
-        return cls(*data)
-
-
-class _ABCEnumMeta(ABCMeta, EnumMeta):
-    pass
-
-
-class LoadFromSaveEnum(LoadFromSave[str], Enum, metaclass=_ABCEnumMeta):
+class LoadFromSaveEnum(LoadFromSave[str], Enum):
     @override
     @property
     def save_data(self) -> str:

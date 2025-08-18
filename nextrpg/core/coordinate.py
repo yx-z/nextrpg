@@ -1,88 +1,79 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from math import atan2, degrees, hypot, sqrt
-from typing import Iterator, override
+from typing import NamedTuple, Self
 
 from nextrpg.core.dimension import Height, Pixel, Size, Width
 from nextrpg.core.direction import Direction, DirectionalOffset
-from nextrpg.core.save import LoadFromSaveList
 
 
-@dataclass(frozen=True)
-class Coordinate(LoadFromSaveList[int]):
-    input_left: Pixel | Width
-    input_top: Pixel | Height
+class Coordinate(NamedTuple):
+    left_value: Pixel
+    top_value: Pixel
 
     @property
     def left(self) -> Width:
-        if isinstance(self.input_left, Width):
-            return self.input_left
-        return Width(self.input_left)
+        return Width(self.left_value)
 
     @property
     def top(self) -> Height:
-        if isinstance(self.input_top, Height):
-            return self.input_top
-        return Height(self.input_top)
+        return Height(self.top_value)
 
     @property
     def size(self) -> Size:
-        return Size(self.left, self.top)
-
-    @property
-    def tuple(self) -> tuple[Pixel, Pixel]:
-        return self.left.value, self.top.value
-
-    def __iter__(self) -> Iterator[Width | Height]:
-        return iter((self.left, self.top))
+        return Size(self.left_value, self.top_value)
 
     @property
     def negate_left(self) -> Coordinate:
-        return Coordinate(-self.left, self.top)
+        return Coordinate(-self.left_value, self.top_value)
 
     @property
     def negate_top(self) -> Coordinate:
-        return Coordinate(self.left, -self.top)
+        return Coordinate(self.left_value, -self.top_value)
 
     def __neg__(self) -> Coordinate:
-        return Coordinate(-self.left, -self.top)
+        return Coordinate(-self.left_value, -self.top_value)
 
     def __add__(
         self, arg: Coordinate | DirectionalOffset | Size | Width | Height
     ) -> Coordinate:
         if isinstance(arg, Width):
-            return Coordinate(self.left + arg, self.top)
+            return Coordinate(self.left_value + arg.value, self.top_value)
 
         if isinstance(arg, Height):
-            return Coordinate(self.left, self.top + arg)
+            return Coordinate(self.left_value, self.top_value + arg.value)
 
         if isinstance(arg, Size):
-            return Coordinate(self.left + arg.width, self.top + arg.height)
+            return Coordinate(
+                self.left_value + arg.width_value,
+                self.top_value + arg.height_value,
+            )
 
         if isinstance(arg, Coordinate):
-            return Coordinate(self.left + arg.left, self.top + arg.top)
+            return Coordinate(
+                self.left_value + arg.left_value, self.top_value + arg.top_value
+            )
 
         match arg.direction:
             case Direction.UP:
-                return Coordinate(self.left, self.top - arg.offset)
+                return Coordinate(self.left_value, self.top_value - arg.offset)
             case Direction.DOWN:
-                return Coordinate(self.left, self.top + arg.offset)
+                return Coordinate(self.left_value, self.top_value + arg.offset)
             case Direction.LEFT:
-                return Coordinate(self.left - arg.offset, self.top)
+                return Coordinate(self.left_value - arg.offset, self.top_value)
             case Direction.RIGHT:
-                return Coordinate(self.left + arg.offset, self.top)
+                return Coordinate(self.left_value + arg.offset, self.top_value)
 
         diag = arg.offset / sqrt(2)
         match arg.direction:
             case Direction.UP_LEFT:
-                return Coordinate(self.left - diag, self.top - diag)
+                return Coordinate(self.left_value - diag, self.top_value - diag)
             case Direction.UP_RIGHT:
-                return Coordinate(self.left + diag, self.top - diag)
+                return Coordinate(self.left_value + diag, self.top_value - diag)
             case Direction.DOWN_LEFT:
-                return Coordinate(self.left - diag, self.top + diag)
+                return Coordinate(self.left_value - diag, self.top_value + diag)
             case Direction.DOWN_RIGHT:
-                return Coordinate(self.left + diag, self.top + diag)
+                return Coordinate(self.left_value + diag, self.top_value + diag)
 
     def __sub__(
         self, arg: DirectionalOffset | Size | Width | Height | Coordinate
@@ -90,9 +81,9 @@ class Coordinate(LoadFromSaveList[int]):
         return self + -arg
 
     def relative_to(self, other: Coordinate) -> Direction:
-        dx = self.left - other.left
-        dy = self.top - other.top
-        angle = (degrees(atan2(-dy.value, dx.value)) + 360) % 360
+        dx = self.left_value - other.left_value
+        dy = self.top_value - other.top_value
+        angle = (degrees(atan2(-dy, dx)) + 360) % 360
         closest = min(
             _ANGLE_TO_DIRECTION.items(),
             key=lambda a: _angle_difference(angle, a[0]),
@@ -100,17 +91,20 @@ class Coordinate(LoadFromSaveList[int]):
         return closest[1]
 
     def __repr__(self) -> str:
-        return f"({self.left.value:.0f}, {self.top.value:.0f})"
+        return f"({self.left_value:.0f}, {self.top_value:.0f})"
 
     def distance(self, other: Coordinate) -> Pixel:
-        dx = self.left - other.left
-        dy = self.top - other.top
-        return hypot(dx.value, dy.value)
+        dx = self.left_value - other.left_value
+        dy = self.top_value - other.top_value
+        return hypot(dx, dy)
 
-    @override
     @property
-    def save_data(self) -> list[int]:
-        return list(self.tuple)
+    def save_data(self) -> list[Pixel]:
+        return list(self)
+
+    @classmethod
+    def load(cls, data: list[Pixel]) -> Self:
+        return cls(*data)
 
 
 ORIGIN = Coordinate(0, 0)

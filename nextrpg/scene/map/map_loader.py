@@ -32,13 +32,13 @@ log = Log()
 
 class TileBottomAndDrawOnScreen(NamedTuple):
     bottom: Height
-    draw: DrawingOnScreen
+    drawing_on_screen: DrawingOnScreen
 
 
 class LayerTileBottomAndDrawOnScreen(NamedTuple):
     layer: int
     bottom: Height
-    draw_on_screen: DrawingOnScreen
+    drawing_on_screen: DrawingOnScreen
 
 
 def get_polygon(obj: TiledObject) -> PolygonOnScreen | None:
@@ -263,7 +263,7 @@ class MapLoader:
         self,
         layer: TiledTileLayer,
         coordinate: _TileCoordinate,
-        draw: DrawingOnScreen,
+        drawing: DrawingOnScreen,
         coord_to_bottom: dict[_TileCoordinate, Height],
     ) -> Height:
         return (
@@ -272,7 +272,7 @@ class MapLoader:
                 for c in self._component(layer, coordinate, cls)
             )
             if (cls := self._class(layer, coordinate))
-            else draw.visible_rectangle_on_screen.bottom
+            else drawing.visible_rectangle_on_screen.bottom
         )
 
     def _component(

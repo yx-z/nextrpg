@@ -40,7 +40,7 @@ class Text(Sizeable):
 
     def drawing(self, line: str) -> Drawing:
         surface = self.config.font.pygame.render(
-            line, self.config.anti_alias, self.config.color.tuple
+            line, self.config.anti_alias, self.config.color
         )
         return Drawing(surface)
 
@@ -89,7 +89,7 @@ class Text(Sizeable):
     def _line_shift(self, index: int) -> Size:
         height = self.config.font.text_height + self.config.line_spacing
         shift = height * index
-        return Size(0, shift)
+        return Size(0, shift.value)
 
 
 @dataclass(frozen=True)
@@ -145,19 +145,19 @@ class TextGroup(Sizeable):
         curr_height = 0
         for line in lines:
             curr_width = 0
-            line_height = max(word.height for word in line)
+            line_height = max(word.height.value for word in line)
             for word in line:
                 word_width, word_height = word.size
                 height_diff = line_height - word_height
                 shift = Size(curr_width, curr_height + height_diff)
                 res.append(RelativeDrawing(word.drawing_group, shift))
-                curr_width += word_width + self.config.margin
-            curr_height += line_height + self.config.line_spacing
+                curr_width += word_width + self.config.margin.value
+            curr_height += line_height + self.config.line_spacing.value
         return DrawingGroup(tuple(res))
 
     def _width(self, line: list[Text]) -> Width:
-        widths = sum(t.size.width for t in line)
-        margins = (len(line) - 1) * self.config.margin
+        widths = sum(t.size.width.value for t in line)
+        margins = (len(line) - 1) * self.config.margin.value
         return Width(widths + margins)
 
     @cached_property
