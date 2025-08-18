@@ -7,15 +7,15 @@ from functools import cached_property
 from pathlib import Path
 from typing import override
 
-from pygame import Mask, Rect, SRCALPHA, Surface
+from pygame import SRCALPHA, Mask, Rect, Surface
 from pygame.draw import lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
 from pygame.transform import scale
 
 from nextrpg.core.cached_decorator import cached
-from nextrpg.core.color import Alpha, BLACK, Color, TRANSPARENT
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.color import BLACK, TRANSPARENT, Alpha, Color
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -23,10 +23,12 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.dimension import (
     Height,
+    HeightScaling,
     Pixel,
     Size,
     Width,
     WidthAndHeightScaling,
+    WidthScaling,
 )
 from nextrpg.core.log import Log
 from nextrpg.core.sizeable import Sizeable
@@ -78,8 +80,15 @@ class Drawing(Sizeable):
     def drawing_on_screen(self, coordinate: Coordinate) -> DrawingOnScreen:
         return DrawingOnScreen(coordinate, self)
 
-    def __mul__(self, scaling: int | float | WidthAndHeightScaling) -> Drawing:
-        size = self.size * WidthAndHeightScaling(scaling)
+    def __mul__(
+        self,
+        scaling: (
+            int | float | WidthScaling | HeightScaling | WidthAndHeightScaling
+        ),
+    ) -> Drawing:
+        if isinstance(scaling, int | float):
+            scaling = WidthAndHeightScaling(scaling)
+        size = self.size * scaling
         surf = scale(self.surface, size)
         return Drawing(surf)
 
