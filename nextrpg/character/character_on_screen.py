@@ -14,7 +14,7 @@ from nextrpg.core.dataclass_with_init import (
 from nextrpg.core.dimension import Size
 from nextrpg.core.direction import Direction
 from nextrpg.core.save import UpdateFromSave
-from nextrpg.core.sizeable import Sizeable
+from nextrpg.core.sizable import Sizable
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing, DrawingOnScreen, RectangleOnScreen
 from nextrpg.draw.drawing_group import DrawingGroup
@@ -38,7 +38,7 @@ class CharacterSpec(_BaseCharacterSpec):
 
 
 @dataclass_with_init(frozen=True)
-class CharacterOnScreen(EventAsAttr, Sizeable, UpdateFromSave):
+class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
     spec: CharacterSpec
     coordinate: Coordinate
     config: CharacterConfig = field(default_factory=lambda: config().character)

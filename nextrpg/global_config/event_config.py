@@ -9,7 +9,7 @@ from nextrpg.event.code_transformer import (
 )
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class EventConfig:
     transformers: tuple[NodeTransformer] = (
         ADD_PARENT,

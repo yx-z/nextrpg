@@ -3,13 +3,13 @@ from functools import cached_property
 
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
-from nextrpg.core.sizeable import Sizeable
+from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import DrawingOnScreen
 from nextrpg.draw.text import Text, TextGroup
 
 
 @dataclass(frozen=True)
-class TextOnScreen(Sizeable):
+class TextOnScreen(Sizable):
     top_left: Coordinate
     text: Text | TextGroup
 

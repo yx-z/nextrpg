@@ -8,20 +8,20 @@ from nextrpg.core.time import Millisecond
 from nextrpg.global_config.text_config import TextConfig
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class SayEventColorBubbleTipConfig:
     base_shift: Width = Width(30)
     tip_shift: Size = Size(40, 40)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class SayEventColorBackgroundConfig:
     background: Color = Color(255, 255, 255, 200)
     border_radius: Pixel = 16
     tip: SayEventColorBubbleTipConfig = SayEventColorBubbleTipConfig()
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class SayEventNineSliceBackgroundConfig:
     background_input: "NineSlice | Callable[[], NineSlice]"
     tip_input: "Drawing | Callable[[],Drawing] | None" = None
@@ -39,7 +39,7 @@ class SayEventNineSliceBackgroundConfig:
         return self.tip_input
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class SayEventConfig:
     background: (
         SayEventColorBackgroundConfig | SayEventNineSliceBackgroundConfig

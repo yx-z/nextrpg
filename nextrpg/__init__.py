@@ -27,14 +27,14 @@ from nextrpg.character.rpg_maker_character_drawing import (
 )
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.color import (
+    Alpha,
     BLACK,
+    Color,
     TRANSPARENT,
     WHITE,
-    Alpha,
-    Color,
     alpha_from_percentage,
 )
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -73,7 +73,7 @@ from nextrpg.draw.drawing import (
     PolygonOnScreen,
     RectangleDrawing,
     RectangleOnScreen,
-    SizedDrawOnScreens,
+    SizableDrawOnScreens,
     TransparentDrawing,
 )
 from nextrpg.draw.fade import FadeIn, FadeOut
@@ -89,9 +89,9 @@ from nextrpg.event.event_transformer import (
     transform,
 )
 from nextrpg.event.pygame_event import (
-    KeyboardKey,
     KeyPressDown,
     KeyPressUp,
+    KeyboardKey,
     PygameEvent,
     Quit,
     WindowResize,
@@ -99,7 +99,7 @@ from nextrpg.event.pygame_event import (
 )
 from nextrpg.game import Game
 from nextrpg.global_config.character_config import CharacterConfig
-from nextrpg.global_config.debug_config import LOG_ONLY, DebugConfig
+from nextrpg.global_config.debug_config import DebugConfig
 from nextrpg.global_config.drawing_config import DrawingConfig
 from nextrpg.global_config.event_config import EventConfig
 from nextrpg.global_config.game_loop_config import GameLoopConfig
@@ -148,8 +148,8 @@ from nextrpg.scene.rpg_event.eventful_scene import (
     BackgroundEvent,
     BackgroundEventSentinel,
     EventCallable,
-    EventfulScene,
     EventGenerator,
+    EventfulScene,
     RpgEventScene,
     register_rpg_event_scene,
     registered_rpg_event_scenes,

@@ -119,7 +119,7 @@ def _add(
 ) -> None:
     from nextrpg.global_config.global_config import config
 
-    if not (debug := config().debug):
+    if not (debug := config().debug) or debug.log_level > level:
         return
     message = Template(message) if isinstance(message, str) else message
     if duration is None:

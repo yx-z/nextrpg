@@ -6,7 +6,7 @@ from nextrpg.core.dimension import Height, Pixel, Width
 from nextrpg.draw.font import Font
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class TextConfig:
     font: Font = Font(28)
     color: Color = WHITE

@@ -4,6 +4,6 @@ from nextrpg.core.direction import Direction
 from nextrpg.global_config.character_config import CharacterConfig
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class PlayerConfig(CharacterConfig):
     directions: frozenset[Direction] = frozenset(Direction)

@@ -3,6 +3,6 @@ from dataclasses import dataclass
 from nextrpg.core.time import Millisecond
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class RpgMakerCharacterDrawingConfig:
     duration_per_frame: Millisecond = 200

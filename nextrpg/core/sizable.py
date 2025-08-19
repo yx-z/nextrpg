@@ -4,7 +4,7 @@ from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Height, Size, Width
 
 
-class Sizeable(ABC):
+class Sizable(ABC):
     # Subclass shall implement these.
     top_left: Coordinate
     size: Size

@@ -17,7 +17,7 @@ class ResizeMode(Enum):
     KEEP_NATIVE_SIZE = auto()
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class WindowConfig(UpdateFromSave[dict[str, Any]]):
     title: str = "nextrpg"
     size: Size = Size(1280, 720)

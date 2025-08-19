@@ -3,11 +3,11 @@ from typing import Self
 
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
-from nextrpg.core.sizeable import Sizeable
+from nextrpg.core.sizable import Sizable
 from nextrpg.core.time import Millisecond
 
 
-class Animation(Sizeable, ABC):
+class Animation(Sizable, ABC):
     @abstractmethod
     def tick(self, time_delta: Millisecond) -> Self: ...
 

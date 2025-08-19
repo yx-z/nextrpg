@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from nextrpg.core.dimension import Pixel
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class DrawingConfig:
-    stroke_thickness: Pixel = 2
+    stroke_thickness: Pixel = 1
     cache_size: int = 8

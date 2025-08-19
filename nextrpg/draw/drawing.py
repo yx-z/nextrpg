@@ -7,15 +7,15 @@ from functools import cached_property
 from pathlib import Path
 from typing import override
 
-from pygame import SRCALPHA, Mask, Rect, Surface
-from pygame.draw import lines, polygon, rect
+from pygame import Mask, Rect, SRCALPHA, Surface
+from pygame.draw import aalines, lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
 from pygame.transform import flip, scale, smoothscale
 
 from nextrpg.core.cached_decorator import cached
-from nextrpg.core.color import BLACK, TRANSPARENT, Alpha, Color
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.color import Alpha, BLACK, Color, TRANSPARENT
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -31,7 +31,7 @@ from nextrpg.core.dimension import (
     WidthScaling,
 )
 from nextrpg.core.log import Log
-from nextrpg.core.sizeable import Sizeable
+from nextrpg.core.sizable import Sizable
 from nextrpg.global_config.global_config import config
 
 log = Log()
@@ -50,7 +50,7 @@ class DrawingTrim:
     lambda resource, *_: None if isinstance(resource, Surface) else resource,
 )
 @dataclass(frozen=True)
-class Drawing(Sizeable):
+class Drawing(Sizable):
     resource: str | Path | Surface
     color_key: Color | Coordinate | None = None
     convert_alpha: bool | None = None
@@ -61,7 +61,9 @@ class Drawing(Sizeable):
 
     @property
     def pygame(self) -> Surface:
-        return self._debug_surface or self.surface
+        if self._debug_surface:
+            return self._debug_surface
+        return self.surface
 
     def cut(self, top_left: Coordinate, size: Size) -> Drawing:
         surface = self.surface.convert_alpha()
@@ -103,7 +105,10 @@ class Drawing(Sizeable):
         if isinstance(scaling, int | float):
             scaling = WidthAndHeightScaling(scaling)
         size = self.size * scaling
-        scale_fun = smoothscale if smooth else scale
+        if smooth:
+            scale_fun = smoothscale
+        else:
+            scale_fun = scale
         surface = scale_fun(self.surface, size)
         return Drawing(surface)
 
@@ -151,14 +156,14 @@ class Drawing(Sizeable):
         ):
             return None
 
-        surface = Surface(self.size, SRCALPHA).convert_alpha()
+        surface = Surface(self.size, SRCALPHA)
         surface.fill(color)
         surface.blit(self.surface, (0, 0))
         return surface
 
 
 @dataclass(frozen=True)
-class DrawingOnScreen(Sizeable):
+class DrawingOnScreen(Sizable):
     top_left: Coordinate
     drawing: Drawing
 
@@ -173,7 +178,7 @@ class DrawingOnScreen(Sizeable):
         return RectangleOnScreen(self.top_left + shift, size)
 
     @property
-    def pygame(self) -> tuple[Surface, tuple[Pixel, Pixel]]:
+    def pygame(self) -> tuple[Surface, Coordinate]:
         return self.drawing.pygame, self.top_left
 
     def set_alpha(self, alpha: Alpha) -> DrawingOnScreen:
@@ -187,6 +192,12 @@ class DrawingOnScreen(Sizeable):
         self, other: Coordinate | Size | Width | Height
     ) -> DrawingOnScreen:
         return DrawingOnScreen(self.top_left + other, self.drawing)
+
+    def add_fast(self, other: Coordinate) -> DrawingOnScreen:
+        left, top = self.top_left
+        shift_left, shift_top = other
+        coord = Coordinate(left + shift_left, top + shift_top)
+        return DrawingOnScreen(coord, self.drawing)
 
     def __sub__(
         self, other: Coordinate | Size | Width | Height
@@ -223,7 +234,7 @@ class PolygonDrawing(TransparentDrawing):
 
 
 @dataclass_with_init(frozen=True)
-class PolygonOnScreen(Sizeable):
+class PolygonOnScreen(Sizable):
     points: tuple[Coordinate, ...]
     closed: bool = True
     _: KW_ONLY = not_constructor_below()
@@ -249,16 +260,25 @@ class PolygonOnScreen(Sizeable):
         return self._drawing_on_screen(_fill_polygon(color))
 
     def line(
-        self, color: Color, stroke_width: Pixel | None = None
+        self,
+        color: Color,
+        *,
+        stroke_width: Pixel | None = None,
+        smooth: bool = True,
     ) -> DrawingOnScreen:
         if stroke_width is None:
             stroke = config().drawing.stroke_thickness
         else:
             stroke = stroke_width
 
+        if smooth:
+            lines_fun = aalines
+        else:
+            lines_fun = lines
+
         def _line(surface: Surface, points: tuple[Coordinate, ...]) -> None:
             point_tuples = tuple(p for p in points)
-            lines(surface, color, self.closed, point_tuples, stroke)
+            lines_fun(surface, color, self.closed, point_tuples, stroke)
 
         return self._drawing_on_screen(_line)
 
@@ -306,7 +326,7 @@ class RectangleDrawing(TransparentDrawing):
     def __init__(
         self, size: Size, color: Color, border_radius: Pixel | None = None
     ) -> None:
-        surface = Surface(size, SRCALPHA).convert_alpha()
+        surface = Surface(size, SRCALPHA)
         rectangle = Rect(ORIGIN, size)
         rect(surface, color, rectangle, border_radius=border_radius or -1)
         _set_resource_color_and_color_key(self, surface, color)
@@ -364,7 +384,7 @@ class RectangleOnScreen(PolygonOnScreen):
 
 
 @dataclass(frozen=True)
-class SizedDrawOnScreens(Sizeable):
+class SizableDrawOnScreens(Sizable):
     draw_on_screens: tuple[DrawingOnScreen, ...]
 
     @cached_property
@@ -400,7 +420,7 @@ def _draw_polygon(
     bounding_rectangle: RectangleOnScreen | None = None,
 ) -> Surface:
     bounding_rectangle = bounding_rectangle or _bounding_rectangle(points)
-    surface = Surface(bounding_rectangle.size, SRCALPHA).convert_alpha()
+    surface = Surface(bounding_rectangle.size, SRCALPHA)
     negated = tuple(p - bounding_rectangle.top_left for p in points)
     method(surface, negated)
     return surface

@@ -4,9 +4,9 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import Self
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dimension import Size, Width
-from nextrpg.core.sizeable import Sizeable
+from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup, RelativeDrawing
 from nextrpg.global_config.global_config import config
@@ -15,7 +15,7 @@ from nextrpg.global_config.text_group_config import TextGroupConfig
 
 
 @dataclass(frozen=True)
-class Text(Sizeable):
+class Text(Sizable):
     message: str
     config: TextConfig = field(default_factory=lambda: config().text)
 
@@ -93,7 +93,7 @@ class Text(Sizeable):
 
 
 @dataclass(frozen=True)
-class TextGroup(Sizeable):
+class TextGroup(Sizable):
     texts: tuple[Text, ...]
     config: TextGroupConfig = field(default_factory=lambda: config().text_group)
 

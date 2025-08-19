@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class SaveConfig:
     directory: Path = Path.home() / "nextrpg"
     shared_slot: str = "shared"

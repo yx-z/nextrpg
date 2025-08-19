@@ -45,9 +45,8 @@ class GameLoop:
         window = self._window.tick(fps_info)
         window.blits(self._scene.drawing_on_screens, time_delta)
 
-        loop = replace(
-            self, _scene=self._scene.tick(time_delta), _window=window
-        )
+        ticked_scene = self._scene.tick(time_delta)
+        loop = replace(self, _scene=ticked_scene, _window=window)
         for e in pygame.event.get():
             loop = loop._event(to_typed_event(e))
         return loop

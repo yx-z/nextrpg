@@ -4,10 +4,10 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import NamedTuple
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dimension import Size
-from nextrpg.core.sizeable import Sizeable
-from nextrpg.draw.drawing import Drawing, DrawingOnScreen, SizedDrawOnScreens
+from nextrpg.core.sizable import Sizable
+from nextrpg.draw.drawing import Drawing, DrawingOnScreen, SizableDrawOnScreens
 
 
 class RelativeDrawing(NamedTuple):
@@ -16,7 +16,7 @@ class RelativeDrawing(NamedTuple):
 
 
 @dataclass(frozen=True)
-class DrawingGroup(Sizeable):
+class DrawingGroup(Sizable):
     relative_drawings: tuple[RelativeDrawing, ...]
 
     def drawing_on_screens(
@@ -37,7 +37,7 @@ class DrawingGroup(Sizeable):
 
 
 @dataclass(frozen=True)
-class DrawingGroupOnScreen(Sizeable):
+class DrawingGroupOnScreen(Sizable):
     origin: Coordinate
     drawing_group: DrawingGroup
 
@@ -76,5 +76,5 @@ class DrawingGroupOnScreen(Sizeable):
         return None
 
     @cached_property
-    def _sized(self) -> SizedDrawOnScreens:
-        return SizedDrawOnScreens(self.drawing_on_screens)
+    def _sized(self) -> SizableDrawOnScreens:
+        return SizableDrawOnScreens(self.drawing_on_screens)

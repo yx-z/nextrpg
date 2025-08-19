@@ -5,6 +5,7 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import Self
 
+from pygame import SRCALPHA
 from pygame.display import flip, set_caption, set_mode
 from pygame.surface import Surface
 
@@ -128,7 +129,7 @@ class Window:
     def _scale(
         self, drawing_on_screens: tuple[DrawingOnScreen, ...]
     ) -> DrawingOnScreen:
-        screen = Surface(self.initial_config.size)
+        screen = Surface(self.initial_config.size, SRCALPHA)
         screen.blits(d.pygame for d in drawing_on_screens)
         scaled_draw = Drawing(screen) * self._scaling
         return DrawingOnScreen(self._center_shift, scaled_draw)

@@ -5,7 +5,7 @@ from nextrpg.core.dimension import HeightScaling
 from nextrpg.core.time import Millisecond
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class CutsceneConfig:
     background_override: Color | None = None
     screen_height_scaling: HeightScaling = HeightScaling(0.1)

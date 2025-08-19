@@ -22,7 +22,7 @@ from nextrpg.global_config.transition_config import TransitionConfig
 from nextrpg.global_config.window_config import WindowConfig
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class Config:
     debug: DebugConfig | None = None
     window: WindowConfig = WindowConfig()

@@ -5,7 +5,7 @@ from pygame.locals import K_DOWN, K_F1, K_F2, K_LEFT, K_RETURN, K_RIGHT, K_UP
 type KeyCode = int
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class KeyMappingConfig:
     left: KeyCode = K_LEFT
     right: KeyCode = K_RIGHT
