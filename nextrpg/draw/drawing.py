@@ -7,15 +7,15 @@ from functools import cached_property
 from pathlib import Path
 from typing import override
 
-from pygame import Mask, Rect, SRCALPHA, Surface
+from pygame import SRCALPHA, Mask, Rect, Surface
 from pygame.draw import aalines, lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
 from pygame.transform import flip, scale, smoothscale
 
 from nextrpg.core.cached_decorator import cached
-from nextrpg.core.color import Alpha, BLACK, Color, TRANSPARENT
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.color import BLACK, TRANSPARENT, Alpha, Color
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -77,12 +77,13 @@ class Drawing(Sizable):
         return Drawing(surface)
 
     def crop(self, top_left: Coordinate, size: Size) -> Drawing:
-        return Drawing(self.pygame.subsurface((top_left, size)))
+        surface = self.pygame.subsurface((top_left, size))
+        return Drawing(surface)
 
     def trim(self, drawing_trim: DrawingTrim) -> Drawing:
         coordinate = Coordinate(drawing_trim.left, drawing_trim.top)
-        width = self.width.value - drawing_trim.left - drawing_trim.right
-        height = self.height.value - drawing_trim.top - drawing_trim.bottom
+        width = self.surface.width - drawing_trim.left - drawing_trim.right
+        height = self.surface.height - drawing_trim.top - drawing_trim.bottom
         size = Size(width, height)
         return self.crop(coordinate, size)
 
@@ -100,15 +101,21 @@ class Drawing(Sizable):
             int | float | WidthScaling | HeightScaling | WidthAndHeightScaling
         ),
         *,
-        smooth: bool = True,
+        smooth: bool | None = None,
     ) -> Drawing:
         if isinstance(scaling, int | float):
             scaling = WidthAndHeightScaling(scaling)
         size = self.size * scaling
-        if smooth:
-            scale_fun = smoothscale
-        else:
-            scale_fun = scale
+        scale_fun = _get_scale_fun(smooth)
+        surface = scale_fun(self.surface, size)
+        return Drawing(surface)
+
+    def scale_fast(
+        self, scaling: int | float, *, smooth: bool | None = None
+    ) -> Drawing:
+        width, height = self.size
+        size = (width * scaling, height * scaling)
+        scale_fun = _get_scale_fun(smooth)
         surface = scale_fun(self.surface, size)
         return Drawing(surface)
 
@@ -156,9 +163,10 @@ class Drawing(Sizable):
         ):
             return None
 
-        surface = Surface(self.size, SRCALPHA)
+        size = (self.surface.width, self.surface.height)
+        surface = Surface(size, SRCALPHA)
         surface.fill(color)
-        surface.blit(self.surface, (0, 0))
+        surface.blit(self.surface, ORIGIN)
         return surface
 
 
@@ -213,10 +221,10 @@ class TransparentDrawing(Drawing, ABC):
         return self.color == TRANSPARENT
 
     @override
-    @cached_property
+    @property
     def surface(self) -> Surface:
         if self.transparent:
-            return Surface((0, 0)).convert()
+            return Surface(ORIGIN).convert()
         return super().surface
 
     @override
@@ -245,9 +253,10 @@ class PolygonOnScreen(Sizable):
 
     @cached_property
     def length(self) -> Pixel:
-        length = sum(
+        distances = tuple(
             p.distance(np) for p, np in zip(self.points, self.points[1:])
         )
+        length = sum(distances)
         if self.closed:
             return length + self.points[0].distance(self.points[-1])
         return length
@@ -264,13 +273,15 @@ class PolygonOnScreen(Sizable):
         color: Color,
         *,
         stroke_width: Pixel | None = None,
-        smooth: bool = True,
+        smooth: bool | None = None,
     ) -> DrawingOnScreen:
         if stroke_width is None:
             stroke = config().drawing.stroke_thickness
         else:
             stroke = stroke_width
 
+        if smooth is None:
+            smooth = config().drawing.smooth_line
         if smooth:
             lines_fun = aalines
         else:
@@ -441,3 +452,13 @@ def _fill_polygon(
         polygon(surface, color, points)
 
     return fill
+
+
+def _get_scale_fun(
+    smooth: bool | None,
+) -> Callable[[Surface, tuple[tuple[int, int], ...]], Surface]:
+    if smooth is None:
+        smooth = config().drawing.smooth_line
+    if smooth:
+        return smoothscale
+    return scale

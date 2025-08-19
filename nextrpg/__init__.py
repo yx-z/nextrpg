@@ -27,14 +27,14 @@ from nextrpg.character.rpg_maker_character_drawing import (
 )
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.color import (
-    Alpha,
     BLACK,
-    Color,
     TRANSPARENT,
     WHITE,
+    Alpha,
+    Color,
     alpha_from_percentage,
 )
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -89,9 +89,9 @@ from nextrpg.event.event_transformer import (
     transform,
 )
 from nextrpg.event.pygame_event import (
+    KeyboardKey,
     KeyPressDown,
     KeyPressUp,
-    KeyboardKey,
     PygameEvent,
     Quit,
     WindowResize,
@@ -148,8 +148,8 @@ from nextrpg.scene.rpg_event.eventful_scene import (
     BackgroundEvent,
     BackgroundEventSentinel,
     EventCallable,
-    EventGenerator,
     EventfulScene,
+    EventGenerator,
     RpgEventScene,
     register_rpg_event_scene,
     registered_rpg_event_scenes,

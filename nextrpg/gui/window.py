@@ -9,13 +9,13 @@ from pygame import SRCALPHA
 from pygame.display import flip, set_caption, set_mode
 from pygame.surface import Surface
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
     not_constructor_below,
 )
-from nextrpg.core.dimension import Size, WidthAndHeightScaling
+from nextrpg.core.dimension import Size
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
@@ -23,8 +23,8 @@ from nextrpg.draw.drawing import Drawing, DrawingOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
-    KeyboardKey,
     KeyPressDown,
+    KeyboardKey,
     PygameEvent,
     WindowResize,
 )
@@ -111,7 +111,8 @@ class Window:
             case ResizeMode.SCALE:
                 self._screen.blit(*self._scale(drawing_on_screens).pygame)
             case ResizeMode.KEEP_NATIVE_SIZE:
-                self._screen.blits(d.pygame for d in drawing_on_screens)
+                drawing_on_screens = tuple(d.pygame for d in drawing_on_screens)
+                self._screen.blits(drawing_on_screens)
         flip()
 
     def _toggle_include_fps_in_window_title(self) -> Self:
@@ -130,26 +131,25 @@ class Window:
         self, drawing_on_screens: tuple[DrawingOnScreen, ...]
     ) -> DrawingOnScreen:
         screen = Surface(self.initial_config.size, SRCALPHA)
-        screen.blits(d.pygame for d in drawing_on_screens)
-        scaled_draw = Drawing(screen) * self._scaling
+        surfaces = tuple(d.pygame for d in drawing_on_screens)
+        screen.blits(surfaces)
+        scaled_draw = Drawing(screen).scale_fast(self._scaling)
         return DrawingOnScreen(self._center_shift, scaled_draw)
 
     @cached_property
-    def _scaling(self) -> WidthAndHeightScaling:
+    def _scaling(self) -> float:
         current_width, current_height = self.current_config.size
         initial_width, initial_height = self.initial_config.size
         width_ratio = current_width / initial_width
         height_ratio = current_height / initial_height
-        return WidthAndHeightScaling(min(width_ratio, height_ratio))
+        return min(width_ratio, height_ratio)
 
     @cached_property
     def _center_shift(self) -> Coordinate:
         current_width, current_height = self.current_config.size
         initial_width, initial_height = self.initial_config.size
-        width_shift = (current_width - self._scaling.value * initial_width) / 2
-        height_shift = (
-            current_height - self._scaling.value * initial_height
-        ) / 2
+        width_shift = (current_width - self._scaling * initial_width) / 2
+        height_shift = (current_height - self._scaling * initial_height) / 2
         return Coordinate(width_shift, height_shift)
 
     def _toggle_full_screen(self) -> Self:
@@ -178,10 +178,12 @@ class Window:
 
 
 def _log_text(
-    msgs: tuple[ComponentAndMessage, ...],
+    component_and_messages: tuple[ComponentAndMessage, ...],
 ) -> tuple[TextOnScreen, ...]:
-    components = Text("\n".join(m.component for m in msgs))
-    components_on_screen = TextOnScreen(ORIGIN, components)
-    msgs = Text("\n".join(m.message for m in msgs))
-    msgs_on_screen = TextOnScreen(ORIGIN + components.width, msgs)
+    components = tuple(m.component for m in component_and_messages)
+    component_text = Text("\n".join(components))
+    components_on_screen = TextOnScreen(ORIGIN, component_text)
+    messages = tuple(m.message for m in component_and_messages)
+    msg_text = Text("\n".join(messages))
+    msgs_on_screen = TextOnScreen(ORIGIN + component_text.width, msg_text)
     return components_on_screen, msgs_on_screen

@@ -7,3 +7,5 @@ from nextrpg.core.dimension import Pixel
 class DrawingConfig:
     stroke_thickness: Pixel = 1
     cache_size: int = 8
+    smooth_scale: bool = True
+    smooth_line: bool = True

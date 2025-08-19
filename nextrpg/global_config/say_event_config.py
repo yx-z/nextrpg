@@ -21,7 +21,7 @@ class SayEventColorBackgroundConfig:
     tip: SayEventColorBubbleTipConfig = SayEventColorBubbleTipConfig()
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class SayEventNineSliceBackgroundConfig:
     background_input: "NineSlice | Callable[[], NineSlice]"
     tip_input: "Drawing | Callable[[],Drawing] | None" = None
@@ -39,7 +39,7 @@ class SayEventNineSliceBackgroundConfig:
         return self.tip_input
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class SayEventConfig:
     background: (
         SayEventColorBackgroundConfig | SayEventNineSliceBackgroundConfig

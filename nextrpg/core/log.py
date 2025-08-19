@@ -93,7 +93,8 @@ class _LogEntry:
 
     @property
     def formatted(self) -> str:
-        return "".join(_format(m) for m in self.message)
+        formatted = tuple(_format(m) for m in self.message)
+        return "".join(formatted)
 
 
 @dataclass(frozen=True)
