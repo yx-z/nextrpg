@@ -8,7 +8,7 @@ from typing import Self
 from pygame.display import flip, set_caption, set_mode
 from pygame.surface import Surface
 
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -22,8 +22,8 @@ from nextrpg.draw.drawing import Drawing, DrawingOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
-    KeyPressDown,
     KeyboardKey,
+    KeyPressDown,
     PygameEvent,
     WindowResize,
 )

@@ -137,7 +137,7 @@
   <object id="95" name="alisa" x="1043.67" y="371.5">
    <polygon points="0,0 -174,118.667 92.6667,146"/>
   </object>
-  <object id="99" name="david" x="497.333" y="628">
+  <object id="99" name="david" x="367.333" y="670">
    <point/>
   </object>
   <object id="100" name="auto" x="926" y="612.667" width="148.667" height="72.6667"/>

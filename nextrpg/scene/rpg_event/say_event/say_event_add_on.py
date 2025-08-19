@@ -176,8 +176,13 @@ class SayEventCharacterAddOn(SayEventAddOn):
             )
         if not (tip := self._bubble.tip(tip_height)):
             return None
+
+        if self._character_position.is_top:
+            horizontal = self._character_position.is_left
+        else:
+            horizontal = not self._character_position.is_left
         tip = tip.flip(
-            horizontal=not self._character_position.is_left,
+            horizontal=horizontal,
             vertical=self._character_position.is_top,
         )
 

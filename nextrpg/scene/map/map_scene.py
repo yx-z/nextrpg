@@ -66,10 +66,14 @@ class MapScene(EventfulScene):
 
     def init_player(self, player_spec: CharacterSpec) -> PlayerOnScreen:
         log.debug(t"Spawn player at {player_spec.unique_name}.")
-        player = self.map_helper.get_object(player_spec.unique_name)
+        player_object = self.map_helper.get_object(player_spec.unique_name)
+        bottom_center = Coordinate(player_object.x, player_object.y)
+        top_left = player_spec.character.bottom_center_to_top_left(
+            bottom_center
+        )
         player = PlayerOnScreen(
             player_spec,
-            Coordinate(player.x, player.y),
+            top_left,
             map_collisions=self.map_helper.collisions,
         )
         if self.save_io:
@@ -156,9 +160,14 @@ class MapScene(EventfulScene):
         )
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
-        obj = self.map_helper.get_object(spec.unique_name)
-        coordinate = Coordinate(obj.x, obj.y)
-        if not (poly := get_polygon(obj)):
+        npc_object = self.map_helper.get_object(spec.unique_name)
+        coordinate = Coordinate(npc_object.x, npc_object.y)
+        if isinstance(spec.character, CharacterDrawing):
+            coordinate = spec.character.bottom_center_to_top_left(coordinate)
+        else:
+            coordinate = coordinate
+
+        if not (poly := get_polygon(npc_object)):
             return NpcOnScreen(coordinate=coordinate, spec=to_strict(spec))
 
         if isinstance(spec.character, CharacterDrawing):
