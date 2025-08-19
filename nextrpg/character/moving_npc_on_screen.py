@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
-from nextrpg import CharacterDrawing
+from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen
 from nextrpg.core.coordinate import Coordinate
@@ -21,7 +21,8 @@ from nextrpg.draw.drawing import PolygonOnScreen
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     path: PolygonOnScreen
     _: KW_ONLY = not_constructor_below()
-    # coordinate has to be initialized before _walk as it's in the base class.
+    # `coordinate` is initialized in the base class.
+    # Hence, invoke `_walk` (given it's still an `_Init`) to initialize.
     coordinate: Coordinate = default(lambda self: self._walk(self).coordinate)
     _walk: Walk = default(
         lambda self: Walk(

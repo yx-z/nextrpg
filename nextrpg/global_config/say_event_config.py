@@ -11,7 +11,7 @@ from nextrpg.global_config.text_config import TextConfig
 @dataclass(frozen=True)
 class SayEventColorBubbleTipConfig:
     base_shift: Width = Width(30)
-    tip_shift: Widht = Width(40)
+    tip_shift: Size = Size(40, 40)
 
 
 @dataclass(frozen=True)

@@ -163,27 +163,11 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     def _background_tip(self) -> DrawingOnScreen | None:
-        if self._character_position.at_top:
-            tip_height = (
-                self._add_on_top_left.top
-                - self._character_position.coordinate.top
-            )
-        else:
-            tip_height = (
-                self._character_position.coordinate.top
-                - self._add_on_top_left.top
-                - self._background_relative_to_text.drawing.height
-            )
-        if not (tip := self._bubble.tip(tip_height)):
+        if not (tip := self._bubble.tip):
             return None
 
-        if self._character_position.at_top:
-            horizontal = self._character_position.at_left
-        else:
-            horizontal = not self._character_position.at_left
-        print(f"{self._character_position.at_left} {horizontal=}")
         tip = tip.flip(
-            horizontal=horizontal,
+            horizontal=self._character_position.at_left,
             vertical=self._character_position.at_top,
         )
 

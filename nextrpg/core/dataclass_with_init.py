@@ -18,7 +18,7 @@ def dataclass_with_init[T](
     if cls is None:
         return lambda c: dataclass_with_init(c, **kwargs)
 
-    def post_init(self, *args: Any, **kwargs: Any) -> None:
+    def post_init(self, *_: Any, **__: Any) -> None:
         if getattr(self, _NEXTRPG_INSTANCE_INIT, None):
             return
 

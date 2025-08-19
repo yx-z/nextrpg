@@ -1,7 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import KW_ONLY, dataclass
+from functools import cached_property
 
 from nextrpg.core.coordinate import ORIGIN
-from nextrpg.core.dimension import Height, Size
+from nextrpg.core.dimension import Size
 from nextrpg.draw.drawing import (
     Drawing,
     PolygonDrawing,
@@ -23,11 +24,12 @@ class SayEventColorBubble:
             size, self.config.background, self.config.border_radius
         )
 
-    def tip(self, tip_height: Height) -> PolygonDrawing | None:
+    @cached_property
+    def tip(self) -> PolygonDrawing | None:
         if not self.config.tip:
             return None
         base = ORIGIN + self.config.tip.base_shift
-        tip = ORIGIN + self.config.tip.tip_shift + tip_height
+        tip = ORIGIN + self.config.tip.tip_shift
         points = (ORIGIN, base, tip)
         return PolygonDrawing(points, self.config.background)
 
@@ -35,11 +37,12 @@ class SayEventColorBubble:
 @dataclass(frozen=True)
 class SayEventNineSliceBubble:
     config: SayEventNineSliceBackgroundConfig
+    _: KW_ONLY
     is_character: bool
 
     def background(self, size: Size) -> Drawing | DrawingGroup:
         return self.config.background.stretch(size)
 
-    def tip(self, tip_height: Height) -> Drawing | None:
-        if not self.config.tip:
-            return None
+    @cached_property
+    def tip(self) -> Drawing | None:
+        return self.config.tip
