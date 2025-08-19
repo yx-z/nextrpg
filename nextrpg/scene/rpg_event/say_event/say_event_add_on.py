@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Literal, override
+from typing import override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import ORIGIN, Coordinate
@@ -10,8 +10,6 @@ from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.draw.drawing import (
     Drawing,
     DrawingOnScreen,
-    PolygonOnScreen,
-    RectangleDrawing,
     RectangleOnScreen,
 )
 from nextrpg.draw.drawing_group import (
@@ -21,8 +19,15 @@ from nextrpg.draw.drawing_group import (
 )
 from nextrpg.draw.text import Text, TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.global_config.say_event_config import SayEventConfig
+from nextrpg.global_config.say_event_config import (
+    SayEventConfig,
+    SayEventNineSliceBackgroundConfig,
+)
 from nextrpg.gui.area import gui_width, left_screen, top_screen
+from nextrpg.scene.rpg_event.say_event.say_event_bubble import (
+    SayEventColorBubble,
+    SayEventNineSliceBubble,
+)
 from nextrpg.scene.scene import Scene
 
 
@@ -103,10 +108,20 @@ class SayEventAddOn:
             )
             shift -= extra_width
             size += extra_width
-        rect = RectangleDrawing(
-            size, self.config.background, self.config.border_radius
-        )
+        rect = self._bubble.background(size)
         return RelativeDrawing(rect, shift)
+
+    @cached_property
+    def _bubble(
+        self,
+    ) -> SayEventColorBubble | SayEventNineSliceBubble:
+        if isinstance(
+            self.config.background, SayEventNineSliceBackgroundConfig
+        ):
+            return SayEventNineSliceBubble(
+                self.config.background, is_character=False
+            )
+        return SayEventColorBubble(self.config.background)
 
     @cached_property
     def _avatar_relative_to_text(self) -> RelativeDrawing | None:
@@ -142,46 +157,49 @@ class SayEventCharacterAddOn(SayEventAddOn):
     @cached_property
     @override
     def background(self) -> tuple[DrawingOnScreen, ...]:
-        return (self._background_tip,) + super().background
+        if self._background_tip:
+            return (self._background_tip,) + super().background
+        return super().background
 
     @cached_property
-    def _background_tip(self) -> DrawingOnScreen:
-        if self._character_rectangle_on_screen.center in left_screen():
-            width_sign = 1
+    def _background_tip(self) -> DrawingOnScreen | None:
+        if self._character_position.is_top:
+            tip_height = (
+                self._add_on_top_left.top
+                - self._character_position.coordinate.top
+            )
         else:
-            width_sign = -1
-        height_sign = self._character_edge.height_sign
-        character_left, character_top = self._character_edge.coordinate
-
-        cfg = self.config.add_on
-        tip_left = character_left + width_sign * cfg.tail_tip_shift.width
-        tip_top = character_top + height_sign * cfg.tail_tip_shift.height
-
-        base_coord1_left = tip_left + width_sign * cfg.tail_base1_shift
-        base_coord2_left = tip_left + width_sign * cfg.tail_base2_shift
-
-        base_coord_top = self.add_on_top_left
-        if not self._character_edge.is_top:
-            base_coord_top += self._background_relative_to_text.drawing.height
-
-        tip_coord = Coordinate(tip_left.value, tip_top.value)
-        base_coord1 = Coordinate(
-            base_coord1_left.value, base_coord_top.top_value
+            tip_height = (
+                self._character_position.coordinate.top
+                - self._add_on_top_left.top
+                - self._background_relative_to_text.drawing.height
+            )
+        if not (tip := self._bubble.tip(tip_height)):
+            return None
+        tip = tip.flip(
+            horizontal=not self._character_position.is_left,
+            vertical=self._character_position.is_top,
         )
-        base_coord2 = Coordinate(
-            base_coord2_left.value, base_coord_top.top_value
-        )
-        tip = PolygonOnScreen((tip_coord, base_coord1, base_coord2))
-        return tip.fill(self.config.background)
+
+        top = self._character_position.coordinate.top_value
+        if not self._character_position.is_top:
+            top -= tip.size.height_value
+
+        left = self._character_position.coordinate.left_value
+        if self._character_position.is_left:
+            left -= tip.size.width_value
+
+        coordinate = Coordinate(left, top)
+        return DrawingOnScreen(coordinate, tip)
 
     @cached_property
     @override
-    def add_on_top_left(self) -> Coordinate:
+    def _add_on_top_left(self) -> Coordinate:
         if center := self.config.character_coordinate_override:
             return self._center_to_top_left(center)
 
-        shift_width, shift_height = self.config.add_on.add_on_shift
-        character_left, character_top = self._character_edge.coordinate
+        shift_width, shift_height = self.config.add_on_shift
+        character_left, character_top = self._character_position.coordinate
         center = character_left - shift_width
 
         # Clamp add-on within screen width.
@@ -193,36 +211,40 @@ class SayEventCharacterAddOn(SayEventAddOn):
         elif left + background_width > gui_width() - pad_width:
             left = gui_width().value - background_width - pad_width
 
-        top = character_top + self._character_edge.height_sign * shift_height
-        if self._character_edge.is_top:
+        if self._character_position.is_top:
+            height_sign = 1
+        else:
+            height_sign = -1
+        top = character_top + height_sign * shift_height
+        if self._character_position.is_top:
             top -= self._background_relative_to_text.drawing.height.value
 
         return Coordinate(left, top)
 
     @cached_property
     @override
-    def avatar(self) -> Drawing | DrawingGroup | None:
+    def _avatar(self) -> Drawing | DrawingGroup | None:
         if self.config.avatar:
             return self.config.avatar
         return self.character.spec.avatar
 
     @cached_property
     @override
-    def name(self) -> str:
+    def _name(self) -> str:
         if self.config.name_override:
             return self.config.name_override
         return self.character.display_name
 
     @cached_property
-    def _character_edge(self) -> _CharacterPosition:
-        if self._character_rectangle_on_screen.center in top_screen():
-            return _CharacterPosition(
-                coordinate=self._character_rectangle_on_screen.bottom_center,
-                is_top=True,
-            )
-        return _CharacterPosition(
-            coordinate=self._character_rectangle_on_screen.top_center,
-            is_top=False,
+    def _character_position(self) -> CharacterPosition:
+        is_left = self._character_rectangle_on_screen.center in left_screen()
+        if is_top := self._character_rectangle_on_screen.center in top_screen():
+            coordinate = self._character_rectangle_on_screen.bottom_center
+        else:
+            coordinate = self._character_rectangle_on_screen.top_center
+
+        return CharacterPosition(
+            coordinate=coordinate, is_top=is_top, is_left=is_left
         )
 
     @cached_property
@@ -232,14 +254,22 @@ class SayEventCharacterAddOn(SayEventAddOn):
             return rect + self.scene.drawing_on_screen_shift
         return rect
 
+    @override
+    @cached_property
+    def _bubble(
+        self,
+    ) -> SayEventColorBubble | SayEventNineSliceBubble:
+        if isinstance(
+            self.config.background, SayEventNineSliceBackgroundConfig
+        ):
+            return SayEventNineSliceBubble(
+                self.config.background, is_character=True
+            )
+        return SayEventColorBubble(self.config.background)
+
 
 @dataclass(frozen=True, kw_only=True)
-class _CharacterPosition:
+class CharacterPosition:
     coordinate: Coordinate
     is_top: bool
-
-    @property
-    def height_sign(self) -> Literal[-1, 1]:
-        if self.is_top:
-            return 1
-        return -1
+    is_left: bool

@@ -24,35 +24,50 @@ class NineSlice:
         stretched_bottom_center = self._bottom_center * width_scale
 
         height_scale = HeightScaling(
-            (size.height.value - self.top - self.bottom)
+            (size.height_value - self.top - self.bottom)
             / self._center_left.height.value
         )
         stretched_center_left = self._center_left * height_scale
         stretched_center_right = self._center_right * height_scale
         stretched_center = self._center * width_scale * height_scale
 
-        relative_drawings = (
-            RelativeDrawing(self._top_left, ORIGIN),
-            RelativeDrawing(stretched_top_center, Size(self.left, 0)),
-            RelativeDrawing(self._top_right, Size(size.width - self.right, 0)),
-            RelativeDrawing(stretched_center_left, Size(0, self.top)),
-            RelativeDrawing(stretched_center, Size(self.left, self.top)),
-            RelativeDrawing(
-                stretched_center_right, Size(size.height - self.right, self.top)
-            ),
-            RelativeDrawing(
-                self._bottom_left, Size(0, size.height - self.bottom)
-            ),
-            RelativeDrawing(
-                stretched_bottom_center,
-                Size(self.left, size.height - self.bottom),
-            ),
-            RelativeDrawing(
-                self._bottom_right,
-                Size(size.width - self.right, size.height - self.bottom),
+        top_left = RelativeDrawing(self._top_left, ORIGIN)
+        top_center = RelativeDrawing(stretched_top_center, Size(self.left, 0))
+        top_right = RelativeDrawing(
+            self._top_right, Size(size.width_value - self.right, 0)
+        )
+        center_left = RelativeDrawing(stretched_center_left, Size(0, self.top))
+        center = RelativeDrawing(stretched_center, Size(self.left, self.top))
+        center_right = RelativeDrawing(
+            stretched_center_right,
+            Size(size.height_value - self.right, self.top),
+        )
+        bottom_left = RelativeDrawing(
+            self._bottom_left, Size(0, size.height_value - self.bottom)
+        )
+        bottom_center = RelativeDrawing(
+            stretched_bottom_center,
+            Size(self.left, size.height_value - self.bottom),
+        )
+        bottom_right = RelativeDrawing(
+            self._bottom_right,
+            Size(
+                size.width_value - self.right,
+                size.height_value - self.bottom,
             ),
         )
 
+        relative_drawings = (
+            top_left,
+            top_center,
+            top_right,
+            center_left,
+            center,
+            center_right,
+            bottom_left,
+            bottom_center,
+            bottom_right,
+        )
         return DrawingGroup(relative_drawings)
 
     @cached_property
@@ -64,52 +79,61 @@ class NineSlice:
     @cached_property
     def _top_center(self) -> Drawing:
         top_left = Coordinate(self.left, 0)
-        size = Size(self.drawing.width - self.left - self.right, self.top)
+        size = Size(self.drawing.width.value - self.left - self.right, self.top)
         return self.drawing.crop(top_left, size)
 
     @cached_property
     def _top_right(self) -> Drawing:
-        top_left = Coordinate(self.drawing.width - self.right, 0)
+        top_left = Coordinate(self.drawing.width.value - self.right, 0)
         size = Size(self.right, self.top)
         return self.drawing.crop(top_left, size)
 
     @cached_property
     def _center_left(self) -> Drawing:
         top_left = Coordinate(0, self.top)
-        size = Size(self.left, self.drawing.height - self.top - self.bottom)
+        size = Size(
+            self.left, self.drawing.height.value - self.top - self.bottom
+        )
         return self.drawing.crop(top_left, size)
 
     @cached_property
     def _center(self) -> Drawing:
         top_left = Coordinate(self.left, self.top)
         size = Size(
-            self.drawing.width - self.left - self.right,
-            self.drawing.height - self.top - self.bottom,
+            self.drawing.width.value - self.left - self.right,
+            self.drawing.height.value - self.top - self.bottom,
         )
         return self.drawing.crop(top_left, size)
 
     @cached_property
     def _center_right(self) -> Drawing:
-        top_left = Coordinate(self.drawing.width - self.right, self.top)
-        size = Size(self.right, self.drawing.height - self.top - self.bottom)
+        top_left = Coordinate(self.drawing.width.value - self.right, self.top)
+        size = Size(
+            self.right, self.drawing.height.value - self.top - self.bottom
+        )
         return self.drawing.crop(top_left, size)
 
     @cached_property
     def _bottom_left(self) -> Drawing:
-        top_left = Coordinate(0, self.drawing.height - self.bottom)
+        top_left = Coordinate(0, self.drawing.height.value - self.bottom)
         size = Size(self.left, self.bottom)
         return self.drawing.crop(top_left, size)
 
     @cached_property
     def _bottom_center(self) -> Drawing:
-        top_left = Coordinate(self.left, self.drawing.height - self.bottom)
-        size = Size(self.drawing.width - self.left - self.right, self.bottom)
+        top_left = Coordinate(
+            self.left, self.drawing.height.value - self.bottom
+        )
+        size = Size(
+            self.drawing.width.value - self.left - self.right, self.bottom
+        )
         return self.drawing.crop(top_left, size)
 
     @cached_property
     def _bottom_right(self) -> Drawing:
         top_left = Coordinate(
-            self.drawing.width - self.right, self.drawing.height - self.bottom
+            self.drawing.width.value - self.right,
+            self.drawing.height.value - self.bottom,
         )
         size = Size(self.right, self.bottom)
         return self.drawing.crop(top_left, size)

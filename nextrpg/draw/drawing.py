@@ -11,7 +11,7 @@ from pygame import SRCALPHA, Mask, Rect, Surface
 from pygame.draw import lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
-from pygame.transform import scale
+from pygame.transform import flip, scale
 
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.color import BLACK, TRANSPARENT, Alpha, Color
@@ -63,6 +63,17 @@ class Drawing(Sizeable):
     def pygame(self) -> Surface:
         return self._debug_surface or self.surface
 
+    def cut(self, top_left: Coordinate, size: Size) -> Drawing:
+        surface = self.surface.convert_alpha()
+        surface.fill(TRANSPARENT, (top_left, size))
+        return Drawing(surface)
+
+    def flip(
+        self, *, horizontal: bool = False, vertical: bool = False
+    ) -> Drawing:
+        surface = flip(self.surface, horizontal, vertical)
+        return Drawing(surface)
+
     def crop(self, top_left: Coordinate, size: Size) -> Drawing:
         return Drawing(self.pygame.subsurface((top_left, size)))
 
@@ -74,9 +85,9 @@ class Drawing(Sizeable):
         return self.crop(coordinate, size)
 
     def set_alpha(self, alpha: Alpha) -> Drawing:
-        surf = self.surface.copy()
-        surf.set_alpha(alpha)
-        return Drawing(surf)
+        surface = self.surface.copy()
+        surface.set_alpha(alpha)
+        return Drawing(surface)
 
     def drawing_on_screen(self, coordinate: Coordinate) -> DrawingOnScreen:
         return DrawingOnScreen(coordinate, self)
@@ -90,8 +101,8 @@ class Drawing(Sizeable):
         if isinstance(scaling, int | float):
             scaling = WidthAndHeightScaling(scaling)
         size = self.size * scaling
-        surf = scale(self.surface, size)
-        return Drawing(surf)
+        surface = scale(self.surface, size)
+        return Drawing(surface)
 
     @cached_property
     def visible_rectangle(self) -> RectangleOnScreen:
@@ -204,8 +215,8 @@ class TransparentDrawing(Drawing, ABC):
 
 class PolygonDrawing(TransparentDrawing):
     def __init__(self, points: tuple[Coordinate, ...], color: Color) -> None:
-        surf = _draw_polygon(points, _fill_polygon(color))
-        _set_resource_color_and_color_key(self, surf, color)
+        surface = _draw_polygon(points, _fill_polygon(color))
+        _set_resource_color_and_color_key(self, surface, color)
 
 
 @dataclass_with_init(frozen=True)
@@ -276,13 +287,16 @@ class PolygonOnScreen(Sizeable):
 
     @cached_property
     def _mask(self) -> Mask:
-        return from_surface(self.fill(BLACK).drawing.pygame)
+        surface = self.fill(BLACK).drawing.pygame
+        return from_surface(surface)
 
     def _drawing_on_screen(
         self, method: Callable[[Surface, tuple[Coordinate, ...]], None]
     ) -> DrawingOnScreen:
-        surf = _draw_polygon(self.points, method, self.bounding_rectangle)
-        return DrawingOnScreen(self.bounding_rectangle.top_left, Drawing(surf))
+        surface = _draw_polygon(self.points, method, self.bounding_rectangle)
+        return DrawingOnScreen(
+            self.bounding_rectangle.top_left, Drawing(surface)
+        )
 
 
 class RectangleDrawing(TransparentDrawing):
@@ -383,10 +397,10 @@ def _draw_polygon(
     bounding_rectangle: RectangleOnScreen | None = None,
 ) -> Surface:
     bounding_rectangle = bounding_rectangle or _bounding_rectangle(points)
-    surf = Surface(bounding_rectangle.size, SRCALPHA).convert_alpha()
+    surface = Surface(bounding_rectangle.size, SRCALPHA).convert_alpha()
     negated = tuple(p - bounding_rectangle.top_left for p in points)
-    method(surf, negated)
-    return surf
+    method(surface, negated)
+    return surface
 
 
 def _set_resource_color_and_color_key[T](

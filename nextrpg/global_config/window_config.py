@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 from enum import Enum, auto
+from functools import cached_property
 from typing import Any, Self, override
 
 from pygame.locals import FULLSCREEN, RESIZABLE
@@ -26,6 +27,13 @@ class WindowConfig(UpdateFromSave[dict[str, Any]]):
     resize: ResizeMode = ResizeMode.SCALE
     allow_resize: bool = True
     include_fps_in_window_title: bool = False
+    icon_input: "Drawing | Callable[[],Drawing] | None" = None
+
+    @cached_property
+    def icon(self) -> "Drawing | None":
+        if callable(self.icon_input):
+            return self.icon_input()
+        return self.icon_input
 
     def need_new_screen(self, other: WindowConfig) -> bool:
         return self.size != other.size or self.flag != other.flag

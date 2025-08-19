@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, replace
+from functools import cached_property
 
 from nextrpg.core.color import BLACK, Color
 from nextrpg.core.coordinate import Coordinate
@@ -9,26 +9,42 @@ from nextrpg.global_config.text_config import TextConfig
 
 
 @dataclass(frozen=True)
-class ColorBackgroundConfig:
-    background: Color = Color(255, 255, 255, 200)
-    border_radius: Pixel = 16
-    add_on_shift: Size = Size(0, 100)
-    tail_base1_shift: Width = Width(10)
-    tail_base2_shift: Width = Width(30)
-    tail_tip_shift: Size = Size(0, 0)
+class SayEventColorBubbleTipConfig:
+    base_shift: Width = Width(30)
+    tip_shift: Widht = Width(40)
 
 
 @dataclass(frozen=True)
-class NineSliceBackgroundConfig:
-    background: "NineSlice"
-    tip: "Drawing | DrawingGroup"
+class SayEventColorBackgroundConfig:
+    background: Color = Color(255, 255, 255, 200)
+    border_radius: Pixel = 16
+    tip: SayEventColorBubbleTipConfig = SayEventColorBubbleTipConfig()
+
+
+@dataclass(frozen=True)
+class SayEventNineSliceBackgroundConfig:
+    background_input: "NineSlice | Callable[[], NineSlice]"
+    tip_input: "Drawing | Callable[[],Drawing] | None" = None
+
+    @cached_property
+    def background(self) -> "NineSlice":
+        if callable(self.background_input):
+            return self.background_input()
+        return self.background_input
+
+    @cached_property
+    def tip(self) -> "Drawing | None":
+        if callable(self.tip_input):
+            return self.tip_input()
+        return self.tip_input
 
 
 @dataclass(frozen=True)
 class SayEventConfig:
-    background: ColorBackgroundConfig | NineSliceBackgroundConfig = (
-        ColorBackgroundConfig()
-    )
+    background: (
+        SayEventColorBackgroundConfig | SayEventNineSliceBackgroundConfig
+    ) = SayEventColorBackgroundConfig()
+    add_on_shift: Size = Size(0, 100)
     fade_duration: Millisecond = 200
     padding: Size = Size(12, 12)
     text_delay: Millisecond = 20
@@ -37,7 +53,13 @@ class SayEventConfig:
     character_coordinate_override: Coordinate | None = None
     name_text_config_override: TextConfig | None = None
     text_config_override: TextConfig | None = None
-    avatar: "Drawing | DrawingGroup | None" = None
+    avatar_input: "Drawing | Callable[[],Drawing] | None" = None
+
+    @cached_property
+    def avatar(self) -> "Drawing":
+        if callable(self.avatar_input):
+            return self.avatar_input()
+        return self.avatar_input
 
     @property
     def scene_coordinate(self) -> Coordinate:
