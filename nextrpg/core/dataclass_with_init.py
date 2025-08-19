@@ -38,5 +38,8 @@ _NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"
 
 
 @dataclass(frozen=True)
-class _Init:
-    init: Callable[[Any], Any]
+class _Init[O, R]:
+    init: Callable[[O], R]
+
+    def __call__(self, obj: O) -> R:
+        return self.init(obj)

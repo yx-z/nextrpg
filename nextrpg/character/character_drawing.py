@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Self
 
-from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
@@ -11,11 +10,6 @@ from nextrpg.draw.drawing import Drawing
 @dataclass(frozen=True)
 class CharacterDrawing(ABC):
     direction: Direction
-
-    def bottom_center_to_top_left(
-        self, bottom_center: Coordinate
-    ) -> Coordinate:
-        return bottom_center - self.drawing.width / 2 - self.drawing.height
 
     @property
     @abstractmethod

@@ -163,7 +163,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     def _background_tip(self) -> DrawingOnScreen | None:
-        if self._character_position.is_top:
+        if self._character_position.at_top:
             tip_height = (
                 self._add_on_top_left.top
                 - self._character_position.coordinate.top
@@ -177,21 +177,22 @@ class SayEventCharacterAddOn(SayEventAddOn):
         if not (tip := self._bubble.tip(tip_height)):
             return None
 
-        if self._character_position.is_top:
-            horizontal = self._character_position.is_left
+        if self._character_position.at_top:
+            horizontal = self._character_position.at_left
         else:
-            horizontal = not self._character_position.is_left
+            horizontal = not self._character_position.at_left
+        print(f"{self._character_position.at_left} {horizontal=}")
         tip = tip.flip(
             horizontal=horizontal,
-            vertical=self._character_position.is_top,
+            vertical=self._character_position.at_top,
         )
 
         top = self._character_position.coordinate.top_value
-        if not self._character_position.is_top:
+        if not self._character_position.at_top:
             top -= tip.size.height_value
 
         left = self._character_position.coordinate.left_value
-        if self._character_position.is_left:
+        if self._character_position.at_left:
             left -= tip.size.width_value
 
         coordinate = Coordinate(left, top)
@@ -216,12 +217,12 @@ class SayEventCharacterAddOn(SayEventAddOn):
         elif left + background_width > gui_width() - pad_width:
             left = gui_width().value - background_width - pad_width
 
-        if self._character_position.is_top:
+        if self._character_position.at_top:
             height_sign = 1
         else:
             height_sign = -1
         top = character_top + height_sign * shift_height
-        if self._character_position.is_top:
+        if self._character_position.at_top:
             top -= self._background_relative_to_text.drawing.height.value
 
         return Coordinate(left, top)
@@ -242,14 +243,14 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     def _character_position(self) -> CharacterPosition:
-        is_left = self._character_rectangle_on_screen.center in left_screen()
-        if is_top := self._character_rectangle_on_screen.center in top_screen():
+        at_left = self._character_rectangle_on_screen.center in left_screen()
+        if at_top := self._character_rectangle_on_screen.center in top_screen():
             coordinate = self._character_rectangle_on_screen.bottom_center
         else:
             coordinate = self._character_rectangle_on_screen.top_center
 
         return CharacterPosition(
-            coordinate=coordinate, is_top=is_top, is_left=is_left
+            coordinate=coordinate, at_top=at_top, at_left=at_left
         )
 
     @cached_property
@@ -276,5 +277,5 @@ class SayEventCharacterAddOn(SayEventAddOn):
 @dataclass(frozen=True, kw_only=True)
 class CharacterPosition:
     coordinate: Coordinate
-    is_top: bool
-    is_left: bool
+    at_top: bool
+    at_left: bool

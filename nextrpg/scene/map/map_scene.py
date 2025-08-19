@@ -10,7 +10,10 @@ from cachetools import LRUCache
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterSpec
-from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
+from nextrpg.character.moving_npc_on_screen import (
+    MovingNpcOnScreen,
+    bottom_center_to_top_left,
+)
 from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec, to_strict
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
@@ -68,13 +71,11 @@ class MapScene(EventfulScene):
         log.debug(t"Spawn player at {player_spec.unique_name}.")
         player_object = self.map_helper.get_object(player_spec.unique_name)
         bottom_center = Coordinate(player_object.x, player_object.y)
-        top_left = player_spec.character.bottom_center_to_top_left(
-            bottom_center
+        top_left = bottom_center_to_top_left(
+            bottom_center, player_spec.character
         )
         player = PlayerOnScreen(
-            player_spec,
-            top_left,
-            map_collisions=self.map_helper.collisions,
+            player_spec, top_left, map_collisions=self.map_helper.collisions
         )
         if self.save_io:
             return self.save_io.update(player)
@@ -163,17 +164,13 @@ class MapScene(EventfulScene):
         npc_object = self.map_helper.get_object(spec.unique_name)
         coordinate = Coordinate(npc_object.x, npc_object.y)
         if isinstance(spec.character, CharacterDrawing):
-            coordinate = spec.character.bottom_center_to_top_left(coordinate)
-        else:
-            coordinate = coordinate
+            coordinate = bottom_center_to_top_left(coordinate, spec.character)
 
         if not (poly := get_polygon(npc_object)):
             return NpcOnScreen(coordinate=coordinate, spec=to_strict(spec))
 
         if isinstance(spec.character, CharacterDrawing):
-            npc = MovingNpcOnScreen(
-                coordinate=coordinate, path=poly, spec=to_strict(spec)
-            )
+            npc = MovingNpcOnScreen(path=poly, spec=to_strict(spec))
             if self.save_io:
                 return self.save_io.update(npc)
             return npc
