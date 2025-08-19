@@ -11,7 +11,7 @@ from pygame import SRCALPHA, Mask, Rect, Surface
 from pygame.draw import lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
-from pygame.transform import flip, scale
+from pygame.transform import flip, scale, smoothscale
 
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.color import BLACK, TRANSPARENT, Alpha, Color
@@ -97,11 +97,14 @@ class Drawing(Sizeable):
         scaling: (
             int | float | WidthScaling | HeightScaling | WidthAndHeightScaling
         ),
+        *,
+        smooth: bool = True,
     ) -> Drawing:
         if isinstance(scaling, int | float):
             scaling = WidthAndHeightScaling(scaling)
         size = self.size * scaling
-        surface = scale(self.surface, size)
+        scale_fun = smoothscale if smooth else scale
+        surface = scale_fun(self.surface, size)
         return Drawing(surface)
 
     @cached_property
