@@ -21,7 +21,7 @@ from nextrpg.draw.drawing import PolygonOnScreen
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     path: PolygonOnScreen
     _: KW_ONLY = not_constructor_below()
-    # coordinate has to be initialized before _walk as it's in base class.
+    # coordinate has to be initialized before _walk as it's in the base class.
     coordinate: Coordinate = default(lambda self: self._walk(self).coordinate)
     _walk: Walk = default(
         lambda self: Walk(

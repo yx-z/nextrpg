@@ -24,7 +24,7 @@ def dataclass_with_init[T](
 
         for f in cls_fields:
             if isinstance(attr := getattr(self, f.name, None), _Init):
-                object.__setattr__(self, f.name, attr.init(self))
+                object.__setattr__(self, f.name, attr(self))
         object.__setattr__(self, _NEXTRPG_INSTANCE_INIT, True)
 
     cls.__post_init__ = post_init
