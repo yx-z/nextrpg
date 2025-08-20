@@ -16,8 +16,10 @@ from nextrpg.core.direction import Direction
 from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.sizable import Sizable
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import Drawing, DrawingOnScreen, RectangleOnScreen
+from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.draw.polygon import RectangleOnScreen
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.global_config import config

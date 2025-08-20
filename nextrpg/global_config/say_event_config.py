@@ -10,8 +10,9 @@ from nextrpg.core.time import Millisecond
 from nextrpg.global_config.text_config import TextConfig
 
 if TYPE_CHECKING:
-    from nextrpg.draw.drawing import Drawing, PolygonDrawing
+    from nextrpg.draw.drawing import Drawing
     from nextrpg.draw.nine_slice import NineSlice
+    from nextrpg.draw.polygon import PolygonDrawing
 
 
 @dataclass(frozen=True, slots=True)
@@ -34,7 +35,7 @@ class SayEventColorBackgroundConfig:
             return None
 
         from nextrpg.core.coordinate import ORIGIN
-        from nextrpg.draw.drawing import PolygonDrawing
+        from nextrpg.draw.polygon import PolygonDrawing
 
         base = ORIGIN + self.tip_config.base_shift
         tip = ORIGIN + self.tip_config.tip_shift

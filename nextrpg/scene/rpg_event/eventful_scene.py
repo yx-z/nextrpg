@@ -16,7 +16,8 @@ from nextrpg.core.dataclass_with_init import (
 from nextrpg.core.log import Log
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import DrawingOnScreen, TransparentDrawing
+from nextrpg.draw.drawing import TransparentDrawing
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.scene.scene import Scene

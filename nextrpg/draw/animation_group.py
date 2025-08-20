@@ -9,8 +9,9 @@ from nextrpg.core.dimension import Size
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.animation import Animation
 from nextrpg.draw.animation_on_screen import AnimationOnScreen
-from nextrpg.draw.drawing import Drawing, DrawingOnScreen
+from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 
 
 @dataclass(frozen=True)

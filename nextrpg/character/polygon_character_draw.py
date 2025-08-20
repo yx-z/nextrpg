@@ -7,7 +7,8 @@ from nextrpg.core.color import TRANSPARENT
 from nextrpg.core.dimension import Size
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import Drawing, PolygonDrawing, RectangleDrawing
+from nextrpg.draw.drawing import Drawing
+from nextrpg.draw.polygon import PolygonDrawing, RectangleDrawing
 
 
 @dataclass(frozen=True)

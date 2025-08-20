@@ -8,7 +8,7 @@ def not_constructor_below() -> Any:
 
 
 def default(init: Callable[[Any], Any]) -> Any:
-    return field(repr=False, default_factory=lambda: _Init(init))
+    return field(default_factory=lambda: _Init(init))
 
 
 @dataclass_transform(field_descriptors=(not_constructor_below, default))

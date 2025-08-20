@@ -9,7 +9,7 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.animation_on_screen import AnimationOnScreen
-from nextrpg.draw.drawing import DrawingOnScreen
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.text_on_screen import TextOnScreen
 
 

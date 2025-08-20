@@ -4,7 +4,7 @@ from functools import cached_property
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.sizable import Sizable
-from nextrpg.draw.drawing import DrawingOnScreen
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.text import Text, TextGroup
 
 

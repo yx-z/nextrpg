@@ -6,7 +6,8 @@ from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import Drawing, DrawingOnScreen
+from nextrpg.draw.drawing import Drawing
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.text import Text, TextGroup
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.say_event_config import SayEventConfig

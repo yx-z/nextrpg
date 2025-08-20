@@ -6,7 +6,7 @@ from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.sizable import Sizable
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import DrawingOnScreen, SizableDrawOnScreens
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen, SizableDrawOnScreens
 
 
 class AnimationOnScreen(Sizable, ABC):

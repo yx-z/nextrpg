@@ -24,8 +24,8 @@ from nextrpg.core.dataclass_with_init import (
 from nextrpg.core.direction import Direction
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond, get_timepoint
-from nextrpg.draw.drawing import (
-    DrawingOnScreen,
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.draw.polygon import (
     PolygonDrawing,
     PolygonOnScreen,
     RectangleDrawing,

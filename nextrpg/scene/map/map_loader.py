@@ -21,10 +21,9 @@ from nextrpg.core.dimension import Height, Size
 from nextrpg.core.log import Log
 from nextrpg.draw.drawing import (
     Drawing,
-    DrawingOnScreen,
-    PolygonOnScreen,
-    RectangleOnScreen,
 )
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.draw.polygon import PolygonOnScreen, RectangleOnScreen
 from nextrpg.global_config.global_config import config
 
 log = Log()

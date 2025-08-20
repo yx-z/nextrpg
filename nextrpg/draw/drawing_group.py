@@ -10,10 +10,9 @@ from nextrpg.core.dimension import Size
 from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import (
     Drawing,
-    DrawingOnScreen,
-    PolygonOnScreen,
-    SizableDrawOnScreens,
 )
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen, SizableDrawOnScreens
+from nextrpg.draw.polygon import PolygonOnScreen
 from nextrpg.global_config.global_config import config
 
 

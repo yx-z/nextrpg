@@ -3,7 +3,7 @@ from typing import Self, override
 
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.draw.animation_on_screen import AnimationOnScreen
-from nextrpg.draw.drawing import DrawingOnScreen
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.pygame_event import PygameEvent
 
 
