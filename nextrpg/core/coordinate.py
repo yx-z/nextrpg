@@ -98,6 +98,51 @@ class Coordinate(NamedTuple):
         dy = self.top_value - other.top_value
         return hypot(dx, dy)
 
+    def as_top_left_of(self, sizable: "Sizable") -> "TopLeft":
+        from nextrpg.core.sizable import TopLeft
+
+        return TopLeft(sizable, self)
+
+    def as_top_center_of(self, sizable: "Sizable") -> "TopCenter":
+        from nextrpg.core.sizable import TopCenter
+
+        return TopCenter(sizable, self)
+
+    def as_top_right_of(self, sizable: "Sizable") -> "TopRight":
+        from nextrpg.core.sizable import TopRight
+
+        return TopRight(sizable, self)
+
+    def as_center_left_of(self, sizable: "Sizable") -> "CenterLeft":
+        from nextrpg.core.sizable import CenterLeft
+
+        return CenterLeft(sizable, self)
+
+    def as_center_of(self, sizable: "Sizable") -> "Center":
+        from nextrpg.core.sizable import Center
+
+        return Center(sizable, self)
+
+    def as_center_right_of(self, sizable: "Sizable") -> "CenterRight":
+        from nextrpg.core.sizable import CenterRight
+
+        return CenterRight(sizable, self)
+
+    def as_bottom_left_of(self, sizable: "Sizable") -> "BottomLeft":
+        from nextrpg.core.sizable import BottomLeft
+
+        return BottomLeft(sizable, self)
+
+    def as_bottom_center_of(self, sizable: "Sizable") -> "BottomCenter":
+        from nextrpg.core.sizable import BottomCenter
+
+        return BottomCenter(sizable, self)
+
+    def as_bottom_right_of(self, sizable: "Sizable") -> "BottomRight":
+        from nextrpg.core.sizable import BottomRight
+
+        return BottomRight(sizable, self)
+
     @property
     def save_data(self) -> list[Pixel]:
         return list(self)

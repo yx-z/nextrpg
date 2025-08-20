@@ -10,10 +10,7 @@ from cachetools import LRUCache
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterSpec
-from nextrpg.character.moving_npc_on_screen import (
-    MovingNpcOnScreen,
-    bottom_center_to_top_left,
-)
+from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec, to_strict
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
@@ -71,9 +68,9 @@ class MapScene(EventfulScene):
         log.debug(t"Spawn player at {player_spec.unique_name}.")
         player_object = self.map_helper.get_object(player_spec.unique_name)
         bottom_center = Coordinate(player_object.x, player_object.y)
-        top_left = bottom_center_to_top_left(
-            bottom_center, player_spec.character
-        )
+        top_left = bottom_center.as_bottom_center_of(
+            player_spec.character.drawing
+        ).top_left
         player = PlayerOnScreen(
             player_spec, top_left, map_collisions=self.map_helper.collisions
         )
@@ -164,7 +161,9 @@ class MapScene(EventfulScene):
         npc_object = self.map_helper.get_object(spec.unique_name)
         coordinate = Coordinate(npc_object.x, npc_object.y)
         if isinstance(spec.character, CharacterDrawing):
-            coordinate = bottom_center_to_top_left(coordinate, spec.character)
+            coordinate = coordinate.as_bottom_center_of(
+                spec.character.drawing
+            ).top_left
 
         if not (poly := get_polygon(npc_object)):
             return NpcOnScreen(coordinate=coordinate, spec=to_strict(spec))

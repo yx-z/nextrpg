@@ -48,7 +48,7 @@ class NpcSpec(_BaseCharacterSpec):
             not isinstance(
                 drawing := self.character.drawing, TransparentDrawing
             )
-            or not drawing.transparent
+            or not drawing.fully_transparent
         )
     )
 

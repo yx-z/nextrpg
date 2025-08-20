@@ -42,7 +42,7 @@ class Text(Sizable):
         surface = self.config.font.pygame.render(
             line, self.config.smooth, self.config.color
         )
-        return Drawing(surface)
+        return Drawing(surface, allow_background_in_debug=False)
 
     def __radd__(self, other: str) -> TextGroup:
         return self + other

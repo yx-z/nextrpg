@@ -7,15 +7,15 @@ from functools import cached_property
 from pathlib import Path
 from typing import override
 
-from pygame import Mask, Rect, SRCALPHA, Surface
+from pygame import SRCALPHA, Mask, Rect, Surface
 from pygame.draw import lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
 from pygame.transform import flip, scale, smoothscale
 
 from nextrpg.core.cached_decorator import cached
-from nextrpg.core.color import Alpha, BLACK, Color, TRANSPARENT
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.color import BLACK, TRANSPARENT, Alpha, Color
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -47,13 +47,16 @@ class DrawingTrim:
 
 @cached(
     lambda: config().drawing.cache_size,
-    lambda resource, *_: None if isinstance(resource, Surface) else resource,
+    lambda resource, *args, **kwargs: (
+        None if isinstance(resource, Surface) else resource
+    ),
 )
 @dataclass(frozen=True)
 class Drawing(Sizable):
     resource: str | Path | Surface
     color_key: Color | Coordinate | None = None
     convert_alpha: bool | None = None
+    allow_background_in_debug: bool = True
 
     @property
     def size(self) -> Size:
@@ -155,8 +158,10 @@ class Drawing(Sizable):
 
     @cached_property
     def _debug_surface(self) -> Surface | None:
-        if not (debug := config().debug) or not (
-            color := debug.drawing_background_color
+        if (
+            not (debug := config().debug)
+            or not (color := debug.drawing_background_color)
+            or not self.allow_background_in_debug
         ):
             return None
 
@@ -214,20 +219,20 @@ class TransparentDrawing(Drawing, ABC):
     color: Color
 
     @property
-    def transparent(self) -> bool:
+    def fully_transparent(self) -> bool:
         return self.color == TRANSPARENT
 
     @override
     @property
     def surface(self) -> Surface:
-        if self.transparent:
-            return Surface(ORIGIN).convert()
+        if self.fully_transparent:
+            return Surface(ORIGIN)
         return super().surface
 
     @override
     @cached_property
     def size(self) -> Size:
-        if self.transparent:
+        if self.fully_transparent:
             return Drawing(self.resource).size
         return super().size
 
@@ -263,22 +268,23 @@ class PolygonOnScreen(Sizable):
     def bounding_rectangle(self) -> RectangleOnScreen:
         return _bounding_rectangle(self.points)
 
-    def fill(self, color: Color) -> DrawingOnScreen:
+    def fill(
+        self, color: Color, allow_background_in_debug: bool = False
+    ) -> DrawingOnScreen:
         fill = _fill_polygon(color)
-        return self._drawing_on_screen(fill)
+        return self._drawing_on_screen(
+            fill, allow_background_in_debug=allow_background_in_debug
+        )
 
     def line(
-        self, color: Color, stroke_thickness: Pixel | None = None
+        self, color: Color, allow_background_in_debug: bool = False
     ) -> DrawingOnScreen:
-        if stroke_thickness is None:
-            stroke = config().drawing.stroke_thickness
-        else:
-            stroke = stroke_thickness
-
         def _line(surface: Surface, points: tuple[Coordinate, ...]) -> None:
-            lines(surface, color, self.closed, points, stroke)
+            lines(surface, color, self.closed, points)
 
-        return self._drawing_on_screen(_line)
+        return self._drawing_on_screen(
+            _line, allow_background_in_debug=allow_background_in_debug
+        )
 
     def collide(self, poly: PolygonOnScreen) -> bool:
         if not self.bounding_rectangle.collide(poly.bounding_rectangle):
@@ -312,10 +318,14 @@ class PolygonOnScreen(Sizable):
         return from_surface(surface)
 
     def _drawing_on_screen(
-        self, method: Callable[[Surface, tuple[Coordinate, ...]], None]
+        self,
+        method: Callable[[Surface, tuple[Coordinate, ...]], None],
+        allow_background_in_debug: bool,
     ) -> DrawingOnScreen:
         surface = _draw_polygon(self.points, method, self.bounding_rectangle)
-        drawing = Drawing(surface)
+        drawing = Drawing(
+            surface, allow_background_in_debug=allow_background_in_debug
+        )
         return DrawingOnScreen(self.bounding_rectangle.top_left, drawing)
 
 

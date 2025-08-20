@@ -167,7 +167,7 @@ class EventfulScene(EventAsAttr, Scene):
             isinstance(
                 drawing := npc.drawing_on_screen.drawing, TransparentDrawing
             )
-            and drawing.transparent
+            and drawing.fully_transparent
         )
         started_npc = npc.start_event(self.player, turn)
         npcs = tuple(started_npc if n.same_name(npc) else n for n in self.npcs)

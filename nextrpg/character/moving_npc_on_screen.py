@@ -3,7 +3,6 @@ from __future__ import annotations
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
-from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen
 from nextrpg.core.coordinate import Coordinate
@@ -29,7 +28,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
             replace(
                 self.path,
                 points=tuple(
-                    bottom_center_to_top_left(p, self.spec.character)
+                    p.as_bottom_center_of(self.spec.character.drawing).top_left
                     for p in self.path.points
                 ),
             ),
@@ -55,11 +54,3 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     @override
     def move(self, time_delta: Millisecond) -> Coordinate:
         return self._walk.tick(time_delta).coordinate
-
-
-def bottom_center_to_top_left(
-    bottom_center: Coordinate, character: CharacterDrawing
-) -> Coordinate:
-    return (
-        bottom_center - character.drawing.width / 2 - character.drawing.height
-    )
