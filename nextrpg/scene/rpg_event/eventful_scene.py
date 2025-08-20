@@ -1,16 +1,13 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
-from typing import Any, Callable, Generator, Self, override
+from typing import Any, Self, TYPE_CHECKING, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcEventStartMode, NpcOnScreen
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.dataclass_with_init import (
-    dataclass_with_init,
-    default,
     not_constructor_below,
 )
 from nextrpg.core.log import Log
@@ -18,9 +15,16 @@ from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import TransparentDrawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.event.background_event import (
+    BackgroundEvent,
+    BackgroundEventSentinel,
+)
 from nextrpg.event.event_as_attr import EventAsAttr
-from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
+from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.scene.scene import Scene
+
+if TYPE_CHECKING:
+    from nextrpg.scene.rpg_event.rpg_event_scene import EventGenerator
 
 log = Log()
 
@@ -219,74 +223,3 @@ class EventfulScene(EventAsAttr, Scene):
             _event=None,
             _event_result=None,
         )
-
-
-@dataclass(frozen=True)
-class BackgroundEventSentinel:
-    cls: type
-
-
-@dataclass_with_init(frozen=True)
-class BackgroundEvent(ABC):
-    _: KW_ONLY = not_constructor_below()
-    sentinel: BackgroundEventSentinel = default(
-        lambda self: BackgroundEventSentinel(type(self))
-    )
-
-    @property
-    def draw_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        return ()
-
-    def apply(self, scene: EventfulScene) -> EventfulScene:
-        return scene
-
-    @abstractmethod
-    def tick(self, time_delta: Millisecond) -> Self: ...
-
-    @property
-    @abstractmethod
-    def complete(self) -> bool: ...
-
-
-@dataclass(frozen=True)
-class RpgEventScene[R = None](Scene):
-    generator: EventGenerator
-    scene: EventfulScene
-
-    @cached_property
-    @override
-    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        return self.scene.drawing_on_screens + self.add_ons
-
-    @override
-    def tick(self, time_delta: Millisecond) -> Scene:
-        ticked = replace(self, scene=self.scene.tick_without_event(time_delta))
-        return self.tick_after_scene(time_delta, ticked)
-
-    def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
-        return ticked
-
-    @property
-    def add_ons(self) -> tuple[DrawingOnScreen, ...]:
-        return ()
-
-
-def register_rpg_event_scene[R, **P](
-    cls: RpgEventScene[R],
-) -> Callable[[Callable[P, R]], Callable[P, R]]:
-    def decorate(f: Callable[P, R]) -> Callable[P, R]:
-        def decorated(*args: P.args, **kwargs: P.kwargs) -> R:
-            return lambda generator, scene: cls(
-                generator, scene, *args, **kwargs
-            )
-
-        registered_rpg_event_scenes[f.__name__] = decorated
-        return decorated
-
-    return decorate
-
-
-registered_rpg_event_scenes: dict[str, Callable[..., None]] = {}
-
-type EventCallable = Callable[[EventGenerator, EventfulScene], RpgEventScene]
-type EventGenerator = Generator[EventCallable, Any, bool | None]

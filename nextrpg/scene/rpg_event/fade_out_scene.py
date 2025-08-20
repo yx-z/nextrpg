@@ -9,9 +9,11 @@ from nextrpg.core.dataclass_with_init import (
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.fade import FadeOut
-from nextrpg.scene.rpg_event.eventful_scene import (
+from nextrpg.event.background_event import (
     BackgroundEvent,
     BackgroundEventSentinel,
+)
+from nextrpg.scene.rpg_event.rpg_event_scene import (
     RpgEventScene,
     register_rpg_event_scene,
 )

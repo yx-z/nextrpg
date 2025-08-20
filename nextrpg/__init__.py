@@ -27,14 +27,14 @@ from nextrpg.character.rpg_maker_character_drawing import (
 )
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.color import (
-    Alpha,
     BLACK,
-    Color,
     TRANSPARENT,
     WHITE,
+    Alpha,
+    Color,
     alpha_from_percentage,
 )
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -72,24 +72,23 @@ from nextrpg.draw.drawing import (
 )
 from nextrpg.draw.drawing_on_screen import (
     DrawingOnScreen,
-    DrawingOnScreen,
     SizableDrawOnScreens,
 )
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.polygon import (
     PolygonDrawing,
-    PolygonDrawing,
-    PolygonOnScreen,
     PolygonOnScreen,
     RectangleDrawing,
-    RectangleDrawing,
-    RectangleOnScreen,
     RectangleOnScreen,
 )
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.draw.text import Text, TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.draw.typewriter import Typewriter
+from nextrpg.event.background_event import (
+    BackgroundEvent,
+    BackgroundEventSentinel,
+)
 from nextrpg.event.code_transformer import ADD_PARENT, ADD_YIELD, ANNOTATE_SAY
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.event.event_transformer import (
@@ -98,9 +97,9 @@ from nextrpg.event.event_transformer import (
     transform,
 )
 from nextrpg.event.pygame_event import (
+    KeyboardKey,
     KeyPressDown,
     KeyPressUp,
-    KeyboardKey,
     PygameEvent,
     Quit,
     WindowResize,
@@ -153,16 +152,7 @@ from nextrpg.scene.map.map_loader import (
 from nextrpg.scene.map.map_scene import MapScene, Move
 from nextrpg.scene.map.map_shift import center_player
 from nextrpg.scene.rpg_event.cutscene import cutscene
-from nextrpg.scene.rpg_event.eventful_scene import (
-    BackgroundEvent,
-    BackgroundEventSentinel,
-    EventCallable,
-    EventGenerator,
-    EventfulScene,
-    RpgEventScene,
-    register_rpg_event_scene,
-    registered_rpg_event_scenes,
-)
+from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
 from nextrpg.scene.rpg_event.fade_in_scene import (
     BackgroundFadeIn,
     FadeInScene,
@@ -172,6 +162,13 @@ from nextrpg.scene.rpg_event.fade_out_scene import (
     BackgroundFadeOut,
     FadeOutScene,
     fade_out,
+)
+from nextrpg.scene.rpg_event.rpg_event_scene import (
+    EventCallable,
+    EventGenerator,
+    RpgEventScene,
+    register_rpg_event_scene,
+    registered_rpg_event_scenes,
 )
 from nextrpg.scene.rpg_event.say_event.say_event_add_on import (
     SayEventAddOn,

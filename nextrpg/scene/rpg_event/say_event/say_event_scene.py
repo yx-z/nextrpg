@@ -11,7 +11,7 @@ from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.text import Text, TextGroup
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.say_event_config import SayEventConfig
-from nextrpg.scene.rpg_event.eventful_scene import (
+from nextrpg.scene.rpg_event.rpg_event_scene import (
     RpgEventScene,
     register_rpg_event_scene,
 )
