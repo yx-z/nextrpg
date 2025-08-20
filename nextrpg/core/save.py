@@ -7,7 +7,15 @@ from enum import Enum
 from functools import cache
 from pathlib import Path
 from shutil import rmtree
-from typing import Any, Iterable, Self, TypeAlias, TypeVar, override
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Iterable,
+    Self,
+    TypeAlias,
+    TypeVar,
+    override,
+)
 
 from nextrpg import __version__
 from nextrpg.core.dataclass_with_init import (
@@ -16,6 +24,9 @@ from nextrpg.core.dataclass_with_init import (
     not_constructor_below,
 )
 from nextrpg.global_config.save_config import SaveConfig
+
+if TYPE_CHECKING:
+    from nextrpg.core.log import Log
 
 _Primitive: TypeAlias = str | int | float | bool | None
 type _Json = _Primitive | list["_Json"] | dict[str, "_Json"]
@@ -63,7 +74,7 @@ def _config() -> SaveConfig:
     return config().save
 
 
-def _log() -> "Log":
+def _log() -> Log:
     from nextrpg.core.log import Log
 
     return Log()

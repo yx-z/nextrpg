@@ -1,15 +1,19 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, replace
 from enum import Enum, auto
 from functools import cached_property
-from typing import Any, Self, override
+from typing import TYPE_CHECKING, Any, Self, override
 
 from pygame.locals import FULLSCREEN, RESIZABLE
 
 from nextrpg.core.color import BLACK, Color
 from nextrpg.core.dimension import Size
 from nextrpg.core.save import UpdateFromSave
+
+if TYPE_CHECKING:
+    from nextrpg.draw.drawing import Drawing
 
 
 class ResizeMode(Enum):
@@ -27,7 +31,7 @@ class WindowConfig(UpdateFromSave[dict[str, Any]]):
     resize: ResizeMode = ResizeMode.SCALE
     allow_resize: bool = True
     include_fps_in_window_title: bool = False
-    icon_input: "Drawing | Callable[[],Drawing] | None" = None
+    icon_input: Drawing | Callable[[], Drawing] | None = None
 
     @cached_property
     def icon(self) -> "Drawing | None":

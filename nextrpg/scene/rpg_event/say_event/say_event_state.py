@@ -56,7 +56,7 @@ class SayEventFadeInState(SayEventState):
     config: SayEventConfig
     _: KW_ONLY = not_constructor_below()
     _fade_in: FadeIn = default(
-        lambda self: FadeIn(self.nine_slice, self.config.fade_duration)
+        lambda self: FadeIn(self.background, self.config.fade_duration)
     )
 
     @property

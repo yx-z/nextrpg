@@ -1,11 +1,17 @@
+from collections.abc import Callable
 from dataclasses import dataclass, replace
 from functools import cached_property
+from typing import TYPE_CHECKING
 
 from nextrpg.core.color import BLACK, BLUE, Color
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Pixel, Size, Width
 from nextrpg.core.time import Millisecond
 from nextrpg.global_config.text_config import TextConfig
+
+if TYPE_CHECKING:
+    from nextrpg.draw.drawing import Drawing, PolygonDrawing
+    from nextrpg.draw.nine_slice import NineSlice
 
 
 @dataclass(frozen=True, slots=True)
@@ -14,7 +20,7 @@ class SayEventColorBackgroundTipConfig:
     tip_shift: Size = Size(40, 40)
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class SayEventColorBackgroundConfig:
     background: Color = Color(255, 255, 255, 200)
     border_radius: Pixel = 16
@@ -23,7 +29,7 @@ class SayEventColorBackgroundConfig:
     )
 
     @cached_property
-    def tip(self) -> "PolygonDrawing | None":
+    def tip(self) -> PolygonDrawing | None:
         if not self.tip_config:
             return None
 
@@ -38,17 +44,17 @@ class SayEventColorBackgroundConfig:
 
 @dataclass(frozen=True)
 class SayEventNineSliceBackgroundConfig:
-    nine_slice_input: "NineSlice | Callable[[], NineSlice]"
-    tip_input: "Drawing | Callable[[],Drawing] | None" = None
+    nine_slice_input: NineSlice | Callable[[], NineSlice]
+    tip_input: Drawing | Callable[[], Drawing] | None = None
 
     @cached_property
-    def nine_slice(self) -> "NineSlice":
+    def nine_slice(self) -> NineSlice:
         if callable(self.nine_slice_input):
             return self.nine_slice_input()
         return self.nine_slice_input
 
     @cached_property
-    def tip(self) -> "Drawing | None":
+    def tip(self) -> Drawing | None:
         if callable(self.tip_input):
             return self.tip_input()
         return self.tip_input
@@ -69,7 +75,7 @@ class SayEventConfig:
     character_coordinate_override: Coordinate | None = None
     name_text_config_override: TextConfig | None = None
     text_config_override: TextConfig | None = None
-    avatar_input: "Drawing | Callable[[], Drawing] | None" = None
+    avatar_input: Drawing | Callable[[], Drawing] | None = None
 
     @cached_property
     def avatar(self) -> "Drawing":
