@@ -5,7 +5,7 @@ from functools import cached_property
 from typing import override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.draw.drawing import (
     Drawing,
@@ -108,6 +108,14 @@ class SayEventAddOn:
             )
             shift -= extra_width
             size += extra_width
+        if self.config.background_min_size:
+            width = max(
+                size.width_value, self.config.background_min_size.width_value
+            )
+            height = max(
+                size.height_value, self.config.background_min_size.height_value
+            )
+            size = Size(width, height)
         rect = self._bubble.background(size)
         return RelativeDrawing(rect, shift)
 
@@ -118,9 +126,7 @@ class SayEventAddOn:
         if isinstance(
             self.config.background, SayEventNineSliceBackgroundConfig
         ):
-            return SayEventNineSliceBubble(
-                self.config.background, is_character=False
-            )
+            return SayEventNineSliceBubble(self.config.background)
         return SayEventColorBubble(self.config.background)
 
     @cached_property
@@ -243,19 +249,6 @@ class SayEventCharacterAddOn(SayEventAddOn):
         if self.scene.drawing_on_screen_shift:
             return rect + self.scene.drawing_on_screen_shift
         return rect
-
-    @override
-    @cached_property
-    def _bubble(
-        self,
-    ) -> SayEventColorBubble | SayEventNineSliceBubble:
-        if isinstance(
-            self.config.background, SayEventNineSliceBackgroundConfig
-        ):
-            return SayEventNineSliceBubble(
-                self.config.background, is_character=True
-            )
-        return SayEventColorBubble(self.config.background)
 
 
 @dataclass(frozen=True, kw_only=True)

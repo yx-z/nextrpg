@@ -1,4 +1,4 @@
-from dataclasses import KW_ONLY, dataclass
+from dataclasses import dataclass
 from functools import cached_property
 
 from nextrpg.core.coordinate import ORIGIN
@@ -37,8 +37,6 @@ class SayEventColorBubble:
 @dataclass(frozen=True)
 class SayEventNineSliceBubble:
     config: SayEventNineSliceBackgroundConfig
-    _: KW_ONLY
-    is_character: bool
 
     def background(self, size: Size) -> Drawing | DrawingGroup:
         return self.config.background.stretch(size)

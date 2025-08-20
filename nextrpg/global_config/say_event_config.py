@@ -44,6 +44,7 @@ class SayEventConfig:
     background: (
         SayEventColorBackgroundConfig | SayEventNineSliceBackgroundConfig
     ) = SayEventColorBackgroundConfig()
+    background_min_size: Size | None = None
     add_on_shift: Size = Size(0, 100)
     fade_duration: Millisecond = 200
     padding: Size = Size(12, 12)
