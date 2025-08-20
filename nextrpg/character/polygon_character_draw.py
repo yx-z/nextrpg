@@ -8,7 +8,7 @@ from nextrpg.core.dimension import Size
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.polygon import PolygonDrawing
+from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
 
 

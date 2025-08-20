@@ -75,9 +75,9 @@ from nextrpg.draw.drawing_on_screen import (
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.polygon import (
-    PolygonDrawing,
     PolygonOnScreen,
 )
+from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
 from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection

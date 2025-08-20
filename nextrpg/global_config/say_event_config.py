@@ -12,7 +12,7 @@ from nextrpg.global_config.text_config import TextConfig
 if TYPE_CHECKING:
     from nextrpg.draw.drawing import Drawing
     from nextrpg.draw.nine_slice import NineSlice
-    from nextrpg.draw.polygon import PolygonDrawing
+    from nextrpg.draw.polygon_drawing import PolygonDrawing
 
 
 @dataclass(frozen=True, slots=True)
