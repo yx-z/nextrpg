@@ -7,15 +7,15 @@ from functools import cached_property
 from pathlib import Path
 from typing import override
 
-from pygame import SRCALPHA, Mask, Rect, Surface
+from pygame import Mask, Rect, SRCALPHA, Surface
 from pygame.draw import aalines, lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
 from pygame.transform import flip, scale, smoothscale
 
 from nextrpg.core.cached_decorator import cached
-from nextrpg.core.color import BLACK, TRANSPARENT, Alpha, Color
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.color import Alpha, BLACK, Color, TRANSPARENT
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -71,7 +71,7 @@ class Drawing(Sizable):
         return Drawing(surface)
 
     def flip(
-        self, *, horizontal: bool = False, vertical: bool = False
+        self, horizontal: bool = False, vertical: bool = False
     ) -> Drawing:
         surface = flip(self.surface, horizontal, vertical)
         return Drawing(surface)
@@ -100,7 +100,6 @@ class Drawing(Sizable):
         scaling: (
             int | float | WidthScaling | HeightScaling | WidthAndHeightScaling
         ),
-        *,
         smooth: bool | None = None,
     ) -> Drawing:
         if isinstance(scaling, int | float):
@@ -111,7 +110,7 @@ class Drawing(Sizable):
         return Drawing(surface)
 
     def scale_fast(
-        self, scaling: int | float, *, smooth: bool | None = None
+        self, scaling: int | float,  smooth: bool | None = None
     ) -> Drawing:
         width, height = self.size
         size = (width * scaling, height * scaling)
@@ -271,7 +270,6 @@ class PolygonOnScreen(Sizable):
     def line(
         self,
         color: Color,
-        *,
         stroke_width: Pixel | None = None,
         smooth: bool | None = None,
     ) -> DrawingOnScreen:

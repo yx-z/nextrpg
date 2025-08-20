@@ -4,10 +4,17 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import NamedTuple
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.color import Color
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dimension import Size
 from nextrpg.core.sizable import Sizable
-from nextrpg.draw.drawing import Drawing, DrawingOnScreen, SizableDrawOnScreens
+from nextrpg.draw.drawing import (
+    Drawing,
+    DrawingOnScreen,
+    PolygonOnScreen,
+    SizableDrawOnScreens,
+)
+from nextrpg.global_config.global_config import config
 
 
 class RelativeDrawing(NamedTuple):
@@ -56,9 +63,15 @@ class DrawingGroupOnScreen(Sizable):
             coordinate = self.origin + shift
             match relative:
                 case Drawing() as drawing:
-                    res.append(drawing.drawing_on_screen(coordinate))
+                    drawing_on_screen = drawing.drawing_on_screen(coordinate)
+                    res.append(drawing_on_screen)
                 case DrawingGroup() as drawing_group:
                     res += drawing_group.drawing_on_screens(coordinate)
+            if self._link_color:
+                points = (self.origin, coordinate)
+                link = PolygonOnScreen(points, closed=False)
+                link_drawing_on_screen = link.line(self._link_color)
+                res.append(link_drawing_on_screen)
         return tuple(res)
 
     def coordinate(self, arg: Drawing | DrawingGroup) -> Coordinate | None:
@@ -78,3 +91,9 @@ class DrawingGroupOnScreen(Sizable):
     @cached_property
     def _sized(self) -> SizableDrawOnScreens:
         return SizableDrawOnScreens(self.drawing_on_screens)
+
+    @cached_property
+    def _link_color(self) -> Color | None:
+        if (debug := config().debug) and debug.draw_group_link_color:
+            return debug.draw_group_link_color
+        return None
