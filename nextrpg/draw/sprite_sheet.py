@@ -5,7 +5,7 @@ from pathlib import Path
 from nextrpg.core.color import Color
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
-from nextrpg.draw.drawing import Drawing, DrawingTrim
+from nextrpg.draw.drawing import Drawing
 
 
 @dataclass(frozen=True, kw_only=True)

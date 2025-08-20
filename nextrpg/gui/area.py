@@ -7,7 +7,7 @@ from nextrpg.core.dimension import (
     WidthAndHeightScaling,
     WidthScaling,
 )
-from nextrpg.draw.polygon import RectangleOnScreen
+from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
 from nextrpg.global_config.global_config import config, initial_config
 from nextrpg.global_config.window_config import ResizeMode
 

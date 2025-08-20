@@ -13,7 +13,8 @@ from nextrpg.core.dimension import Size
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.cyclic_animation import CyclicAnimation
-from nextrpg.draw.drawing import Drawing, DrawingTrim
+from nextrpg.draw.drawing import Drawing
+from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.global_config.global_config import config
 

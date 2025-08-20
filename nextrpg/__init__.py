@@ -67,23 +67,23 @@ from nextrpg.draw.animation_on_screen import AnimationOnScreen
 from nextrpg.draw.cyclic_animation import CyclicAnimation
 from nextrpg.draw.drawing import (
     Drawing,
-    DrawingTrim,
-    TransparentDrawing,
 )
 from nextrpg.draw.drawing_on_screen import (
     DrawingOnScreen,
     SizableDrawOnScreens,
 )
+from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.polygon import (
     PolygonDrawing,
     PolygonOnScreen,
-    RectangleDrawing,
-    RectangleOnScreen,
 )
+from nextrpg.draw.rectangle_drawing import RectangleDrawing
+from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.draw.text import Text, TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
+from nextrpg.draw.transparent_drawing import TransparentDrawing
 from nextrpg.draw.typewriter import Typewriter
 from nextrpg.event.background_event import (
     BackgroundEvent,

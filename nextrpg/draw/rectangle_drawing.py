@@ -1,0 +1,25 @@
+from __future__ import annotations
+
+from pygame import Rect, SRCALPHA, Surface
+from pygame.draw import rect
+
+from nextrpg.core.color import Color
+from nextrpg.core.coordinate import ORIGIN
+from nextrpg.core.dimension import Pixel, Size
+from nextrpg.draw.transparent_drawing import TransparentDrawing
+
+
+class RectangleDrawing(TransparentDrawing):
+    def __init__(
+        self, size: Size, color: Color, border_radius: Pixel | None = None
+    ) -> None:
+        surface = Surface(size, SRCALPHA)
+        rectangle = Rect(ORIGIN, size)
+        rect(surface, color, rectangle, border_radius=border_radius or -1)
+        # Drawing
+        object.__setattr__(self, "resource", surface)
+        object.__setattr__(self, "color_key", None)
+        object.__setattr__(self, "convert_alpha", None)
+        object.__setattr__(self, "allow_background_in_debug", True)
+        # TransparentDrawing
+        object.__setattr__(self, "color", color)

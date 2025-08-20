@@ -25,12 +25,9 @@ from nextrpg.core.direction import Direction
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond, get_timepoint
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon import (
-    PolygonDrawing,
-    PolygonOnScreen,
-    RectangleDrawing,
-    RectangleOnScreen,
-)
+from nextrpg.draw.polygon import PolygonDrawing, PolygonOnScreen
+from nextrpg.draw.rectangle_drawing import RectangleDrawing
+from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
 from nextrpg.global_config.global_config import config
 from nextrpg.scene.map.map_loader import MapLoader, get_polygon
 from nextrpg.scene.map.map_shift import center_player

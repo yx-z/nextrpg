@@ -19,7 +19,7 @@ from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon import RectangleOnScreen
+from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.global_config import config

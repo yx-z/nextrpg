@@ -16,7 +16,7 @@ from nextrpg.core.dataclass_with_init import (
     default,
     not_constructor_below,
 )
-from nextrpg.draw.drawing import TransparentDrawing
+from nextrpg.draw.transparent_drawing import TransparentDrawing
 from nextrpg.event.event_transformer import transform
 
 type EventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]

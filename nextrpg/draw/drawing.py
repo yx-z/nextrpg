@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from abc import ABC
 from collections.abc import Callable
 from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
-from typing import TYPE_CHECKING, override
+from typing import TYPE_CHECKING
 
 from pygame import SRCALPHA, Surface
 from pygame.image import load
@@ -23,21 +22,14 @@ from nextrpg.core.dimension import (
 )
 from nextrpg.core.log import Log
 from nextrpg.core.sizable import Sizable
+from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.global_config.global_config import config
 
 if TYPE_CHECKING:
     from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-    from nextrpg.draw.polygon import RectangleOnScreen
+    from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
 
 log = Log()
-
-
-@dataclass(frozen=True, kw_only=True)
-class DrawingTrim:
-    top: Pixel = 0
-    left: Pixel = 0
-    bottom: Pixel = 0
-    right: Pixel = 0
 
 
 @cached(
@@ -118,7 +110,7 @@ class Drawing(Sizable):
 
     @cached_property
     def visible_rectangle(self) -> RectangleOnScreen:
-        from nextrpg.draw.polygon import RectangleOnScreen
+        from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
 
         rectangle = self.surface.get_bounding_rect()
         coordinate = Coordinate(rectangle.x, rectangle.y)
@@ -171,28 +163,6 @@ class Drawing(Sizable):
         surface.fill(color)
         surface.blit(self.surface, ORIGIN)
         return surface
-
-
-class TransparentDrawing(Drawing, ABC):
-    color: Color
-
-    @property
-    def fully_transparent(self) -> bool:
-        return self.color == TRANSPARENT
-
-    @override
-    @property
-    def surface(self) -> Surface:
-        if self.fully_transparent:
-            return Surface(ORIGIN)
-        return super().surface
-
-    @override
-    @cached_property
-    def size(self) -> Size:
-        if self.fully_transparent:
-            return Drawing(self.resource).size
-        return super().size
 
 
 def _get_scale_fun(

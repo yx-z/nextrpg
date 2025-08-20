@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from dataclasses import KW_ONLY
 from functools import cached_property
-from typing import Callable, override
+from typing import Callable, TYPE_CHECKING
 
-from pygame import SRCALPHA, Mask, Rect, Surface
-from pygame.draw import lines, polygon, rect
+from pygame import Mask, SRCALPHA, Surface
+from pygame.draw import lines, polygon
 from pygame.mask import from_surface
 
 from nextrpg.core.color import BLACK, Color
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -17,15 +17,25 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.dimension import Height, Pixel, Size, Width
 from nextrpg.core.sizable import Sizable
-from nextrpg.draw.drawing import Drawing, TransparentDrawing
+from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.draw.transparent_drawing import TransparentDrawing
+
+if TYPE_CHECKING:
+    from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
 
 
 class PolygonDrawing(TransparentDrawing):
     def __init__(self, points: tuple[Coordinate, ...], color: Color) -> None:
         fill = _fill_polygon(color)
         surface = _draw_polygon(points, fill)
-        _set_resource_color_and_color_key(self, surface, color)
+        # Drawing
+        object.__setattr__(self, "resource", surface)
+        object.__setattr__(self, "color_key", None)
+        object.__setattr__(self, "convert_alpha", None)
+        object.__setattr__(self, "allow_background_in_debug", True)
+        # TransparentDrawing
+        object.__setattr__(self, "color", color)
 
 
 @dataclass_with_init(frozen=True)
@@ -113,68 +123,9 @@ class PolygonOnScreen(Sizable):
         return DrawingOnScreen(self.bounding_rectangle.top_left, drawing)
 
 
-class RectangleDrawing(TransparentDrawing):
-    def __init__(
-        self, size: Size, color: Color, border_radius: Pixel | None = None
-    ) -> None:
-        surface = Surface(size, SRCALPHA)
-        rectangle = Rect(ORIGIN, size)
-        rect(surface, color, rectangle, border_radius=border_radius or -1)
-        _set_resource_color_and_color_key(self, surface, color)
-
-
-class RectangleOnScreen(PolygonOnScreen):
-    def __init__(self, top_left: Coordinate, size: Size) -> None:
-        object.__setattr__(self, "top_left", top_left)
-        object.__setattr__(self, "size", size)
-
-    @property
-    def points(self) -> tuple[Coordinate, ...]:
-        return (
-            self.top_left,
-            self.top_right,
-            self.bottom_right,
-            self.bottom_left,
-        )
-
-    @override
-    def collide(self, poly: PolygonOnScreen) -> bool:
-        if not isinstance(poly, RectangleOnScreen):
-            return super().collide(poly)
-
-        return (
-            self.top_left.left < poly.top_right.left
-            and self.top_right.left > poly.top_left.left
-            and self.top_left.top < poly.bottom_right.top
-            and self.bottom_right.top > poly.top_left.top
-        )
-
-    @override
-    def __contains__(self, coordinate: Coordinate) -> bool:
-        return (
-            self.left < coordinate.left < self.right
-            and self.top < coordinate.top < self.bottom
-        )
-
-    def __add__(
-        self, other: Coordinate | Size | Width | Height
-    ) -> RectangleOnScreen:
-        return RectangleOnScreen(self.top_left + other, self.size)
-
-    def __sub__(
-        self, other: Coordinate | Size | Width | Height
-    ) -> RectangleOnScreen:
-        return RectangleOnScreen(self.top_left - other, self.size)
-
-    def fill(
-        self, color: Color, border_radius: Pixel | None = None
-    ) -> DrawingOnScreen:
-        return DrawingOnScreen(
-            self.top_left, RectangleDrawing(self.size, color, border_radius)
-        )
-
-
 def _bounding_rectangle(points: tuple[Coordinate, ...]) -> RectangleOnScreen:
+    from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
+
     min_x = min(c.left_value for c in points)
     min_y = min(c.top_value for c in points)
     max_x = max(c.left_value for c in points)
@@ -199,14 +150,6 @@ def _draw_polygon(
     negated = tuple(p - bounding_rectangle.top_left for p in points)
     method(surface, negated)
     return surface
-
-
-def _set_resource_color_and_color_key[T](
-    self: T, surface: Surface, color: Color
-) -> None:
-    object.__setattr__(self, "resource", surface)
-    object.__setattr__(self, "color", color)
-    object.__setattr__(self, "color_key", None)
 
 
 def _fill_polygon(
