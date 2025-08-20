@@ -11,7 +11,7 @@ class TextConfig:
     font: Font = Font(28)
     color: Color = WHITE
     line_spacing: Height = Height(8)
-    anti_alias: bool = True
+    smooth: bool = True
     wrap: Width | None = None
 
     def line_spaced(self, line_spacing: Height) -> Self:

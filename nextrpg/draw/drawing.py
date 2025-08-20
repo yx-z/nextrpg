@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import override
 
 from pygame import Mask, Rect, SRCALPHA, Surface
-from pygame.draw import aalines, lines, polygon, rect
+from pygame.draw import lines, polygon, rect
 from pygame.image import load
 from pygame.mask import from_surface
 from pygame.transform import flip, scale, smoothscale
@@ -70,9 +70,7 @@ class Drawing(Sizable):
         surface.fill(TRANSPARENT, (top_left, size))
         return Drawing(surface)
 
-    def flip(
-        self, horizontal: bool = False, vertical: bool = False
-    ) -> Drawing:
+    def flip(self, horizontal: bool = False, vertical: bool = False) -> Drawing:
         surface = flip(self.surface, horizontal, vertical)
         return Drawing(surface)
 
@@ -110,7 +108,7 @@ class Drawing(Sizable):
         return Drawing(surface)
 
     def scale_fast(
-        self, scaling: int | float,  smooth: bool | None = None
+        self, scaling: int | float, smooth: bool | None = None
     ) -> Drawing:
         width, height = self.size
         size = (width * scaling, height * scaling)
@@ -236,7 +234,8 @@ class TransparentDrawing(Drawing, ABC):
 
 class PolygonDrawing(TransparentDrawing):
     def __init__(self, points: tuple[Coordinate, ...], color: Color) -> None:
-        surface = _draw_polygon(points, _fill_polygon(color))
+        fill = _fill_polygon(color)
+        surface = _draw_polygon(points, fill)
         _set_resource_color_and_color_key(self, surface, color)
 
 
@@ -265,29 +264,19 @@ class PolygonOnScreen(Sizable):
         return _bounding_rectangle(self.points)
 
     def fill(self, color: Color) -> DrawingOnScreen:
-        return self._drawing_on_screen(_fill_polygon(color))
+        fill = _fill_polygon(color)
+        return self._drawing_on_screen(fill)
 
     def line(
-        self,
-        color: Color,
-        stroke_width: Pixel | None = None,
-        smooth: bool | None = None,
+        self, color: Color, stroke_thickness: Pixel | None = None
     ) -> DrawingOnScreen:
-        if stroke_width is None:
+        if stroke_thickness is None:
             stroke = config().drawing.stroke_thickness
         else:
-            stroke = stroke_width
-
-        if smooth is None:
-            smooth = config().drawing.smooth_line
-        if smooth:
-            lines_fun = aalines
-        else:
-            lines_fun = lines
+            stroke = stroke_thickness
 
         def _line(surface: Surface, points: tuple[Coordinate, ...]) -> None:
-            point_tuples = tuple(p for p in points)
-            lines_fun(surface, color, self.closed, point_tuples, stroke)
+            lines(surface, color, self.closed, points, stroke)
 
         return self._drawing_on_screen(_line)
 
@@ -326,9 +315,8 @@ class PolygonOnScreen(Sizable):
         self, method: Callable[[Surface, tuple[Coordinate, ...]], None]
     ) -> DrawingOnScreen:
         surface = _draw_polygon(self.points, method, self.bounding_rectangle)
-        return DrawingOnScreen(
-            self.bounding_rectangle.top_left, Drawing(surface)
-        )
+        drawing = Drawing(surface)
+        return DrawingOnScreen(self.bounding_rectangle.top_left, drawing)
 
 
 class RectangleDrawing(TransparentDrawing):
@@ -419,7 +407,12 @@ def _bounding_rectangle(points: tuple[Coordinate, ...]) -> RectangleOnScreen:
     max_x = max(c.left_value for c in points)
     max_y = max(c.top_value for c in points)
     coordinate = Coordinate(min_x, min_y)
-    size = Size(max_x - min_x, max_y - min_y)
+    # The bounding rectangle must have a size of at least (1, 1).
+    # Otherwise, no surface to blit.
+    # This is useful for drawing vertical/horizontal lines.
+    width = max(max_x - min_x, 1)
+    height = max(max_y - min_y, 1)
+    size = Size(width, height)
     return RectangleOnScreen(coordinate, size)
 
 
@@ -454,7 +447,7 @@ def _fill_polygon(
 
 def _get_scale_fun(
     smooth: bool | None,
-) -> Callable[[Surface, tuple[tuple[int, int], ...]], Surface]:
+) -> Callable[[Surface, Size | tuple[Pixel, Pixel]], Surface]:
     if smooth is None:
         smooth = config().drawing.smooth_line
     if smooth:

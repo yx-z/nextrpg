@@ -33,14 +33,14 @@ class Text(Sizable):
     @cached_property
     def drawing_group(self) -> DrawingGroup:
         draws = tuple(
-            RelativeDrawing(self.drawing(line), self._line_shift(i))
+            RelativeDrawing(self._drawing(line), self._line_shift(i))
             for i, line in enumerate(self.lines)
         )
         return DrawingGroup(draws)
 
-    def drawing(self, line: str) -> Drawing:
+    def _drawing(self, line: str) -> Drawing:
         surface = self.config.font.pygame.render(
-            line, self.config.anti_alias, self.config.color
+            line, self.config.smooth, self.config.color
         )
         return Drawing(surface)
 

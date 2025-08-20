@@ -5,7 +5,7 @@ from functools import cached_property
 from typing import NamedTuple
 
 from nextrpg.core.color import Color
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import (
@@ -67,7 +67,7 @@ class DrawingGroupOnScreen(Sizable):
                     res.append(drawing_on_screen)
                 case DrawingGroup() as drawing_group:
                     res += drawing_group.drawing_on_screens(coordinate)
-            if self._link_color:
+            if self._link_color and coordinate != self.origin:
                 points = (self.origin, coordinate)
                 link = PolygonOnScreen(points, closed=False)
                 link_drawing_on_screen = link.line(self._link_color)
