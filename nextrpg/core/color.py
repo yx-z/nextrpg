@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import NamedTuple, Self, override
+from typing import NamedTuple, Self
 
 type Alpha = int
 
@@ -21,6 +20,9 @@ class Color(NamedTuple):
         return cls(*data)
 
 
+RED = Color(255, 0, 0)
+GREEN = Color(0, 255, 0)
+BLUE = Color(0, 0, 255)
 BLACK = Color(0, 0, 0)
 WHITE = Color(255, 255, 255)
 TRANSPARENT = Color(0, 0, 0, 0)

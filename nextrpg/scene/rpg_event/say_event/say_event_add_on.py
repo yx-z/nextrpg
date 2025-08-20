@@ -5,11 +5,12 @@ from functools import cached_property
 from typing import override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.draw.drawing import (
     Drawing,
     DrawingOnScreen,
+    RectangleDrawing,
     RectangleOnScreen,
 )
 from nextrpg.draw.drawing_group import (
@@ -24,10 +25,6 @@ from nextrpg.global_config.say_event_config import (
     SayEventNineSliceBackgroundConfig,
 )
 from nextrpg.gui.area import gui_width, left_screen, top_screen
-from nextrpg.scene.rpg_event.say_event.say_event_bubble import (
-    SayEventColorBubble,
-    SayEventNineSliceBubble,
-)
 from nextrpg.scene.scene import Scene
 
 
@@ -116,18 +113,13 @@ class SayEventAddOn:
                 size.height_value, self.config.background_min_size.height_value
             )
             size = Size(width, height)
-        rect = self._bubble.background(size)
-        return RelativeDrawing(rect, shift)
-
-    @cached_property
-    def _bubble(
-        self,
-    ) -> SayEventColorBubble | SayEventNineSliceBubble:
         if isinstance(
-            self.config.background, SayEventNineSliceBackgroundConfig
+            cfg := self.config.background, SayEventNineSliceBackgroundConfig
         ):
-            return SayEventNineSliceBubble(self.config.background)
-        return SayEventColorBubble(self.config.background)
+            rect = cfg.nine_slice.stretch(size)
+        else:
+            rect = RectangleDrawing(size, cfg.background, cfg.border_radius)
+        return RelativeDrawing(rect, shift)
 
     @cached_property
     def _avatar_relative_to_text(self) -> RelativeDrawing | None:
@@ -169,7 +161,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     def _background_tip(self) -> DrawingOnScreen | None:
-        if not (tip := self._bubble.tip):
+        if not (tip := self.config.background.tip):
             return None
 
         tip = tip.flip(
@@ -194,7 +186,9 @@ class SayEventCharacterAddOn(SayEventAddOn):
         if center := self.config.character_coordinate_override:
             return self._center_to_top_left(center)
 
-        shift_width, shift_height = self.config.add_on_shift
+        shift_width, shift_height = (
+            self.config.character_position_to_add_on_bottom
+        )
         character_left, character_top = self._character_position.coordinate
         center = character_left - shift_width
 

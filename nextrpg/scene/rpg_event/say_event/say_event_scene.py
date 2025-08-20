@@ -90,7 +90,7 @@ def _update_config(cfg: SayEventConfig, arg: SayEventArg) -> SayEventConfig:
     match arg:
         case SayEventConfig():
             return arg
-        case int() | float():
+        case int():
             return replace(cfg, text_delay=arg)
         case Coordinate():
             return replace(
