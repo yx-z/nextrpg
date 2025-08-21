@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from nextrpg.core.color import BLACK, BLUE, Color
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Pixel, Size, Width
+from nextrpg.core.dimension import Height, Pixel, Size, Width
 from nextrpg.core.time import Millisecond
 from nextrpg.global_config.text_config import TextConfig
 
@@ -17,8 +17,9 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True, slots=True)
 class SayEventColorBackgroundTipConfig:
-    base_shift: Width = Width(30)
-    tip_shift: Size = Size(40, 40)
+    height: Height = Height(20)
+    width1: Width = Width(10)
+    width2: Width = Width(30)
 
 
 @dataclass(frozen=True)
@@ -35,11 +36,11 @@ class SayEventColorBackgroundConfig:
             return None
 
         from nextrpg.core.coordinate import ORIGIN
-        from nextrpg.draw.polygon_on_screen import PolygonDrawing
+        from nextrpg.draw.polygon_drawing import PolygonDrawing
 
-        base = ORIGIN + self.tip_config.base_shift
-        tip = ORIGIN + self.tip_config.tip_shift
-        points = (ORIGIN, base, tip)
+        point1 = ORIGIN + self.tip_config.height + self.tip_config.width1
+        point2 = ORIGIN + self.tip_config.height + self.tip_config.width2
+        points = (ORIGIN, point1, point2)
         return PolygonDrawing(points, self.background)
 
 
@@ -67,7 +68,8 @@ class SayEventConfig:
         SayEventColorBackgroundConfig | SayEventNineSliceBackgroundConfig
     ) = SayEventColorBackgroundConfig()
     background_min_size: Size | None = None
-    character_position_to_add_on_bottom: Size = Size(0, 100)
+    character_position_to_add_on_edge_center: Size = Size(10, 10)
+    background_edge_center_to_tip: Width = Width(5)
     fade_duration: Millisecond = 200
     padding: Size = Size(12, 12)
     text_delay: Millisecond = 20

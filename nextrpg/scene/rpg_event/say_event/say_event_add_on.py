@@ -2,10 +2,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import cached_property
-from typing import override
+from typing import Literal, override
+
+from pygments.styles.dracula import background
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.draw.drawing import (
     Drawing,
@@ -44,35 +46,35 @@ class SayEventAddOn:
         content = DrawingGroup(tuple(contents))
 
         background, shift = self._background_relative_to_text
-        add_ons = (
+        background_and_content = (
             RelativeDrawing(background, ORIGIN),
             RelativeDrawing(content, -shift),
         )
-        add_on_group = DrawingGroup(add_ons)
+        add_on_group = DrawingGroup(background_and_content)
         add_on_on_screen = DrawingGroupOnScreen(
-            self._add_on_top_left, add_on_group
+            self._background_top_left, add_on_group
         )
 
         text_coord = add_on_on_screen.coordinate(self._text.drawing_group)
         assert text_coord
-        text_add_on = TextOnScreen(
+        text_on_screen = TextOnScreen(
             text_coord, self._text
         ).get_drawing_on_screens(include_link_lines=True)
         return tuple(
             drawing_on_screen
             for drawing_on_screen in add_on_on_screen.drawing_on_screens
-            if drawing_on_screen not in text_add_on
+            if drawing_on_screen not in text_on_screen
         )
 
     @cached_property
     def text_on_screen(self) -> TextOnScreen:
         coordinate = (
-            self._add_on_top_left - self._background_relative_to_text.shift
+            self._background_top_left - self._background_relative_to_text.shift
         )
         return TextOnScreen(coordinate, self._text)
 
     @cached_property
-    def _add_on_top_left(self) -> Coordinate:
+    def _background_top_left(self) -> Coordinate:
         return self._center_to_top_left(self.config.scene_coordinate)
 
     @property
@@ -157,62 +159,80 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     @override
-    def background(self) -> tuple[DrawingOnScreen, ...]:
-        if self._background_tip:
-            return (self._background_tip,) + super().background
-        return super().background
+    def _background_relative_to_text(self) -> RelativeDrawing:
+        relative = super()._background_relative_to_text
+        if not self._tip:
+            return relative
+        background, shift = relative
+        if self._character_position.at_top:
+            tip_top = -self._tip.height.value
+        else:
+            tip_top = background.height.value
+        tip_left = (
+            background.width.value / 2
+            + self._width_sign * self.config.background_edge_center_to_tip.value
+        )
+        if not self._character_position.at_left:
+            tip_left -= self._tip.width.value
+        tip_shift = Size(tip_left, tip_top)
+        background_and_tip = (
+            RelativeDrawing(background, ORIGIN),
+            RelativeDrawing(self._tip, tip_shift),
+        )
+        background_and_tip_group = DrawingGroup(background_and_tip)
+        return RelativeDrawing(background_and_tip_group, shift)
 
     @cached_property
-    def _background_tip(self) -> DrawingOnScreen | None:
-        if not (tip := self.config.background.tip):
-            return None
-
-        tip = tip.flip(
-            horizontal=self._character_position.at_left,
-            vertical=self._character_position.at_top,
-        )
-
-        top = self._character_position.coordinate.top_value
-        if not self._character_position.at_top:
-            top -= tip.size.height_value
-
-        left = self._character_position.coordinate.left_value
-        if self._character_position.at_left:
-            left -= tip.size.width_value
-
-        coordinate = Coordinate(left, top)
-        return DrawingOnScreen(coordinate, tip)
+    def _tip(self) -> Drawing | None:
+        if tip := self.config.background.tip:
+            return tip.flip(
+                horizontal=not self._character_position.at_left,
+                vertical=not self._character_position.at_top,
+            )
+        return None
 
     @cached_property
     @override
-    def _add_on_top_left(self) -> Coordinate:
+    def _background_top_left(self) -> Coordinate:
         if center := self.config.character_coordinate_override:
             return self._center_to_top_left(center)
 
         shift_width, shift_height = (
-            self.config.character_position_to_add_on_bottom
+            self.config.character_position_to_add_on_edge_center
         )
         character_left, character_top = self._character_position.coordinate
-        center = character_left - shift_width
-
-        # Clamp add-on within screen width.
         background_width = self._background_relative_to_text.drawing.width.value
-        left = center - background_width / 2
+        left = (
+            character_left
+            + self._width_sign * shift_width
+            - background_width / 2
+        )
+
+        # Clamp within screen width.
         pad_width = self.config.padding.width.value
         if left < pad_width:
             left = pad_width
         elif left + background_width > gui_width() - pad_width:
             left = gui_width().value - background_width - pad_width
 
+        top = character_top + self._height_sign * shift_height
         if self._character_position.at_top:
-            height_sign = 1
+            top += self._tip.height.value
         else:
-            height_sign = -1
-        top = character_top + height_sign * shift_height
-        if self._character_position.at_top:
             top -= self._background_relative_to_text.drawing.height.value
-
         return Coordinate(left, top)
+
+    @property
+    def _width_sign(self) -> Literal[-1, 1]:
+        if self._character_position.at_left:
+            return 1
+        return -1
+
+    @property
+    def _height_sign(self) -> Literal[-1, 1]:
+        if self._character_position.at_top:
+            return 1
+        return -1
 
     @cached_property
     @override
@@ -229,14 +249,14 @@ class SayEventCharacterAddOn(SayEventAddOn):
         return self.character.display_name
 
     @cached_property
-    def _character_position(self) -> CharacterPosition:
+    def _character_position(self) -> _CharacterPosition:
         at_left = self._character_rectangle_on_screen.center in left_screen()
         if at_top := self._character_rectangle_on_screen.center in top_screen():
             coordinate = self._character_rectangle_on_screen.bottom_center
         else:
             coordinate = self._character_rectangle_on_screen.top_center
 
-        return CharacterPosition(
+        return _CharacterPosition(
             coordinate=coordinate, at_top=at_top, at_left=at_left
         )
 
@@ -249,7 +269,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
 
 @dataclass(frozen=True, kw_only=True)
-class CharacterPosition:
+class _CharacterPosition:
     coordinate: Coordinate
     at_top: bool
     at_left: bool

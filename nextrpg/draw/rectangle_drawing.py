@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from pygame import Rect, SRCALPHA, Surface
+from pygame import SRCALPHA, Rect, Surface
 from pygame.draw import rect
 
 from nextrpg.core.color import Color
