@@ -43,7 +43,9 @@ class DrawingGroupOnScreen(Sizable):
                     drawing_on_screen = drawing.drawing_on_screen(coordinate)
                     res.append(drawing_on_screen)
                 case DrawingGroup() as drawing_group:
-                    res += drawing_group.drawing_on_screens(coordinate)
+                    res += drawing_group.drawing_on_screens(
+                        coordinate, include_link_lines
+                    )
             if (
                 self._link_color
                 and coordinate != self.origin

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable
+from typing import Any, TYPE_CHECKING, Callable
 
 from pygame import SRCALPHA, Surface
 from pygame.draw import lines, polygon
@@ -15,6 +15,18 @@ if TYPE_CHECKING:
 
 
 class PolygonDrawing(TransparentDrawing):
+    points: tuple[Coordinate, ...]
+    line_only: bool
+
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, PolygonDrawing):
+            return False
+        return (
+            self.points == other.points
+            and self.color == other.color
+            and self.line_only == other.line_only
+        )
+
     def __init__(
         self,
         points: tuple[Coordinate, ...],
@@ -38,6 +50,9 @@ class PolygonDrawing(TransparentDrawing):
         )
         # TransparentDrawing
         object.__setattr__(self, "color", color)
+        # PolygonDrawing
+        object.__setattr__(self, "points", points)
+        object.__setattr__(self, "line_only", line_only)
 
 
 def _draw_polygon(
