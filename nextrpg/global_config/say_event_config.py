@@ -35,7 +35,7 @@ class SayEventColorBackgroundConfig:
             return None
 
         from nextrpg.core.coordinate import ORIGIN
-        from nextrpg.draw.polygon import PolygonDrawing
+        from nextrpg.draw.polygon_on_screen import PolygonDrawing
 
         base = ORIGIN + self.tip_config.base_shift
         tip = ORIGIN + self.tip_config.tip_shift

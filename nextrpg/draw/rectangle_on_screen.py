@@ -6,7 +6,7 @@ from nextrpg.core.color import Color
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Height, Pixel, Size, Width
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon import PolygonOnScreen
+from nextrpg.draw.polygon_on_screen import PolygonOnScreen
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
 
 

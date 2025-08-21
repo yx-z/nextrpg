@@ -12,13 +12,14 @@ from nextrpg.draw.drawing import (
 )
 from nextrpg.draw.drawing_group import (
     DrawingGroup,
-    DrawingGroupOnScreen,
-    RelativeDrawing,
 )
+from nextrpg.draw.drawing_group_on_screen import DrawingGroupOnScreen
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
 from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
-from nextrpg.draw.text import Text, TextGroup
+from nextrpg.draw.relative_drawing import RelativeDrawing
+from nextrpg.draw.text import Text
+from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.global_config.say_event_config import (
     SayEventConfig,
@@ -54,7 +55,9 @@ class SayEventAddOn:
 
         text_coord = add_on_on_screen.coordinate(self._text.drawing_group)
         assert text_coord
-        text_add_on = TextOnScreen(text_coord, self._text).drawing_on_screens
+        text_add_on = TextOnScreen(
+            text_coord, self._text
+        ).get_drawing_on_screens(include_link_lines=True)
         return tuple(
             drawing_on_screen
             for drawing_on_screen in add_on_on_screen.drawing_on_screens

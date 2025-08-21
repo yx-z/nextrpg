@@ -61,24 +61,3 @@ class DrawingOnScreen(Sizable):
         self, other: Coordinate | Size | Width | Height
     ) -> DrawingOnScreen:
         return self + -other
-
-
-@dataclass(frozen=True)
-class SizableDrawOnScreens(Sizable):
-    draw_on_screens: tuple[DrawingOnScreen, ...]
-
-    @cached_property
-    def top_left(self) -> Coordinate:
-        min_left = min(d.top_left.left_value for d in self.draw_on_screens)
-        min_top = min(d.top_left.top_value for d in self.draw_on_screens)
-        return Coordinate(min_left, min_top)
-
-    @cached_property
-    def size(self) -> Size:
-        min_left = min(d.top_left.left_value for d in self.draw_on_screens)
-        min_top = min(d.top_left.top_value for d in self.draw_on_screens)
-        max_left = max(d.bottom_right.left_value for d in self.draw_on_screens)
-        max_top = max(d.bottom_right.top_value for d in self.draw_on_screens)
-        width = max_left - min_left
-        height = max_top - min_top
-        return Size(width, height)

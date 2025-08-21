@@ -4,7 +4,8 @@ from functools import cached_property
 from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import HeightScaling, Pixel, Size, WidthScaling
 from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup, RelativeDrawing
+from nextrpg.draw.drawing_group import DrawingGroup
+from nextrpg.draw.relative_drawing import RelativeDrawing
 
 
 @dataclass(frozen=True)

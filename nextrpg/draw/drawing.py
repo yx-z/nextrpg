@@ -119,7 +119,7 @@ class Drawing(Sizable):
 
     @property
     def rectangle(self) -> RectangleOnScreen:
-        from nextrpg.draw.polygon import RectangleOnScreen
+        from nextrpg.draw.polygon_on_screen import RectangleOnScreen
 
         return RectangleOnScreen(ORIGIN, self.size)
 

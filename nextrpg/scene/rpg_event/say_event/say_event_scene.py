@@ -8,7 +8,8 @@ from nextrpg.core.dimension import Size
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.text import Text, TextGroup
+from nextrpg.draw.text import Text
+from nextrpg.draw.text_group import TextGroup
 from nextrpg.global_config.global_config import config
 from nextrpg.global_config.say_event_config import SayEventConfig
 from nextrpg.scene.rpg_event.rpg_event_scene import (

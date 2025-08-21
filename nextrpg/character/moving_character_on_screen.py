@@ -6,7 +6,7 @@ from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.polygon import PolygonOnScreen
+from nextrpg.draw.polygon_on_screen import PolygonOnScreen
 from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
 
 log = Log()
