@@ -73,6 +73,7 @@ from nextrpg.draw.drawing_on_screen import (
 )
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.draw.fade import FadeIn, FadeOut
+from nextrpg.draw.nine_slice import NineSlice
 from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.polygon_on_screen import (
     PolygonOnScreen,
@@ -125,7 +126,12 @@ from nextrpg.global_config.rpg_maker_character_drawing_config import (
     RpgMakerCharacterDrawingConfig,
 )
 from nextrpg.global_config.save_config import SaveConfig
-from nextrpg.global_config.say_event_config import SayEventConfig
+from nextrpg.global_config.say_event_config import (
+    SayEventColorBackgroundConfig,
+    SayEventColorBackgroundTipConfig,
+    SayEventConfig,
+    SayEventNineSliceBackgroundConfig,
+)
 from nextrpg.global_config.text_config import TextConfig
 from nextrpg.global_config.transition_config import TransitionConfig
 from nextrpg.global_config.window_config import ResizeMode, WindowConfig
