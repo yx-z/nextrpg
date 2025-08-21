@@ -67,7 +67,6 @@ class SayEventConfig:
     background: (
         SayEventColorBackgroundConfig | SayEventNineSliceBackgroundConfig
     ) = SayEventColorBackgroundConfig()
-    background_min_size: Size | None = None
     character_position_to_add_on_edge_center: Size = Size(10, 10)
     background_edge_center_to_tip: Width = Width(5)
     fade_duration: Millisecond = 200

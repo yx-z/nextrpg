@@ -26,6 +26,6 @@ def tip() -> Drawing:
 
 
 say_event = SayEventConfig(
-    background=SayEventNineSliceBackgroundConfig(bubble, tip)
+    background=SayEventNineSliceBackgroundConfig(bubble, tip),
 )
 Game(interior_scene, Config(debug=DebugConfig(), say_event=say_event)).start()

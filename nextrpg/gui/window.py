@@ -6,7 +6,7 @@ from functools import cached_property
 from typing import Self
 
 from pygame import SRCALPHA
-from pygame.display import flip, set_caption, set_mode
+from pygame.display import flip, set_caption, set_icon, set_mode
 from pygame.surface import Surface
 
 from nextrpg.core.coordinate import ORIGIN, Coordinate
@@ -49,6 +49,13 @@ class Window:
         default_factory=lambda: os.environ.setdefault("SDL_VIDEO_CENTERED", "1")
     )
     ___: None = default(lambda self: set_caption(self.current_config.title))
+    ____: None = default(
+        lambda self: (
+            set_icon(icon.pygame)
+            if (icon := self.current_config.icon)
+            else None
+        )
+    )
     _screen: Surface = default(
         lambda self: self._set_screen(self.current_config)
     )

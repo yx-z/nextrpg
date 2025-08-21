@@ -5,7 +5,7 @@ from dataclasses import dataclass, replace
 from enum import Enum, auto
 from functools import cached_property
 from pathlib import Path
-from typing import Any, Self, TYPE_CHECKING, override
+from typing import TYPE_CHECKING, Any, Self, override
 
 from pygame.locals import FULLSCREEN, RESIZABLE
 
@@ -36,6 +36,9 @@ class WindowConfig(UpdateFromSave[dict[str, Any]]):
 
     @cached_property
     def icon(self) -> Drawing | None:
+        if not self.icon_input:
+            return None
+
         from nextrpg.draw.drawing import Drawing
 
         if callable(self.icon_input):

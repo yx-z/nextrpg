@@ -41,7 +41,7 @@ class NineSlice:
         center = RelativeDrawing(stretched_center, Size(self.left, self.top))
         center_right = RelativeDrawing(
             stretched_center_right,
-            Size(size.height_value - self.right, self.top),
+            Size(size.width_value - self.right, self.top),
         )
         bottom_left = RelativeDrawing(
             self._bottom_left, Size(0, size.height_value - self.bottom)

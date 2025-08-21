@@ -110,14 +110,6 @@ class SayEventAddOn:
             )
             shift -= extra_width
             size += extra_width
-        if self.config.background_min_size:
-            width = max(
-                size.width_value, self.config.background_min_size.width_value
-            )
-            height = max(
-                size.height_value, self.config.background_min_size.height_value
-            )
-            size = Size(width, height)
         if isinstance(
             cfg := self.config.background, SayEventNineSliceBackgroundConfig
         ):
