@@ -17,9 +17,10 @@ import json
 import os
 import sys
 import tempfile
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Optional
 
 # --- Center the window before initializing pygame ---
 os.environ.setdefault("SDL_VIDEO_CENTERED", "1")

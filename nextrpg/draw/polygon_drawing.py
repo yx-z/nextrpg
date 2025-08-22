@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from collections.abc import Hashable
+from collections.abc import Callable, Hashable
 from dataclasses import dataclass
 from functools import cached_property
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 from pygame import SRCALPHA, Surface
 from pygame.draw import lines, polygon

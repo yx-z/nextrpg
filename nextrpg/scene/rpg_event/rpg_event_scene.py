@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from collections.abc import Generator
+from collections.abc import Callable, Generator
 from dataclasses import dataclass, replace
 from functools import cached_property
-from typing import Any, Callable, Self, override
+from typing import Any, Self, override
 
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
