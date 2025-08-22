@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from functools import cached_property
 
+from nextrpg.core.anchor import Anchor
 from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import HeightScaling, Pixel, Size, WidthScaling
 from nextrpg.draw.drawing import Drawing
@@ -75,19 +76,22 @@ class NineSlice:
     def _top_left(self) -> Drawing:
         top_left = ORIGIN
         size = Size(self.left, self.top)
-        return self.drawing.crop(top_left, size)
+        cropped = self.drawing.crop(top_left, size)
+        return cropped.add_tag(Anchor.TOP_LEFT)
 
     @cached_property
     def _top_center(self) -> Drawing:
         top_left = Coordinate(self.left, 0)
         size = Size(self.drawing.width.value - self.left - self.right, self.top)
-        return self.drawing.crop(top_left, size)
+        cropped = self.drawing.crop(top_left, size)
+        return cropped.add_tag(Anchor.TOP_CENTER)
 
     @cached_property
     def _top_right(self) -> Drawing:
         top_left = Coordinate(self.drawing.width.value - self.right, 0)
         size = Size(self.right, self.top)
-        return self.drawing.crop(top_left, size)
+        cropped = self.drawing.crop(top_left, size)
+        return cropped.add_tag(Anchor.TOP_RIGHT)
 
     @cached_property
     def _center_left(self) -> Drawing:
@@ -95,7 +99,8 @@ class NineSlice:
         size = Size(
             self.left, self.drawing.height.value - self.top - self.bottom
         )
-        return self.drawing.crop(top_left, size)
+        cropped = self.drawing.crop(top_left, size)
+        return cropped.add_tag(Anchor.CENTER_LEFT)
 
     @cached_property
     def _center(self) -> Drawing:
@@ -104,7 +109,8 @@ class NineSlice:
             self.drawing.width.value - self.left - self.right,
             self.drawing.height.value - self.top - self.bottom,
         )
-        return self.drawing.crop(top_left, size)
+        cropped = self.drawing.crop(top_left, size)
+        return cropped.add_tag(Anchor.CENTER)
 
     @cached_property
     def _center_right(self) -> Drawing:
@@ -112,13 +118,15 @@ class NineSlice:
         size = Size(
             self.right, self.drawing.height.value - self.top - self.bottom
         )
-        return self.drawing.crop(top_left, size)
+        cropped = self.drawing.crop(top_left, size)
+        return cropped.add_tag(Anchor.CENTER_RIGHT)
 
     @cached_property
     def _bottom_left(self) -> Drawing:
         top_left = Coordinate(0, self.drawing.height.value - self.bottom)
         size = Size(self.left, self.bottom)
-        return self.drawing.crop(top_left, size)
+        cropped = self.drawing.crop(top_left, size)
+        return cropped.add_tag(Anchor.BOTTOM_LEFT)
 
     @cached_property
     def _bottom_center(self) -> Drawing:
@@ -128,7 +136,8 @@ class NineSlice:
         size = Size(
             self.drawing.width.value - self.left - self.right, self.bottom
         )
-        return self.drawing.crop(top_left, size)
+        cropped = self.drawing.crop(top_left, size)
+        return cropped.add_tag(Anchor.BOTTOM_CENTER)
 
     @cached_property
     def _bottom_right(self) -> Drawing:
@@ -137,4 +146,5 @@ class NineSlice:
             self.drawing.height.value - self.bottom,
         )
         size = Size(self.right, self.bottom)
-        return self.drawing.crop(top_left, size)
+        cropped = self.drawing.crop(top_left, size)
+        return cropped.add_tag(Anchor.BOTTOM_RIGHT)

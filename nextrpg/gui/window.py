@@ -187,11 +187,11 @@ class Window:
 
 def _log_text(
     component_and_messages: tuple[ComponentAndMessage, ...],
-) -> tuple[TextOnScreen, ...]:
+) -> list[TextOnScreen]:
     components = tuple(m.component for m in component_and_messages)
     component_text = Text("\n".join(components))
     components_on_screen = TextOnScreen(ORIGIN, component_text)
     messages = tuple(m.message for m in component_and_messages)
     msg_text = Text("\n".join(messages))
     msgs_on_screen = TextOnScreen(ORIGIN + component_text.width, msg_text)
-    return components_on_screen, msgs_on_screen
+    return [components_on_screen, msgs_on_screen]

@@ -13,19 +13,15 @@ from nextrpg import (
     NineSlice,
     SayEventConfig,
     SayEventNineSliceBackgroundConfig,
+    Size,
 )
 
-
-def bubble() -> NineSlice:
-    drawing = Drawing("example/asset/bubble_background.png")
-    return NineSlice(drawing, top=10, left=5, right=5, bottom=20)
-
-
-def tip() -> Drawing:
-    return Drawing("example/asset/tip.png")
-
-
+drawing = Drawing("example/asset/bubble_background.png")
+bubble = NineSlice(drawing, top=14, left=5, right=5, bottom=20)
+tip = Drawing("example/asset/tip.png")
 say_event = SayEventConfig(
     background=SayEventNineSliceBackgroundConfig(bubble, tip),
+    padding=Size(25, 15),
 )
-Game(interior_scene, Config(debug=DebugConfig(), say_event=say_event)).start()
+
+Game(interior_scene, Config(say_event=say_event, debug=DebugConfig())).start()

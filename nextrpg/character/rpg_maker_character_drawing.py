@@ -25,13 +25,13 @@ class DefaultCharacterDrawingType(IntEnum):
     _LEFT_FOOT = 2
 
     @classmethod
-    def _frame_indices(cls) -> tuple[int, ...]:
-        return (
+    def _frame_indices(cls) -> list[int]:
+        return [
             DefaultCharacterDrawingType._IDLE,
             DefaultCharacterDrawingType._RIGHT_FOOT,
             DefaultCharacterDrawingType._IDLE,
             DefaultCharacterDrawingType._LEFT_FOOT,
-        )
+        ]
 
 
 class RpgMakerXpCharacterDrawingType(IntEnum):
@@ -41,8 +41,8 @@ class RpgMakerXpCharacterDrawingType(IntEnum):
     _LEFT_FOOT = 3
 
     @classmethod
-    def _frame_indices(cls) -> tuple[int, ...]:
-        return tuple(cls)
+    def _frame_indices(cls) -> list[int]:
+        return list(cls)
 
 
 type FrameType = type[
@@ -120,15 +120,15 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             frames=ordered_frames, duration_per_frame=self.duration_per_frame
         )
 
-    def _crop_at_row(self, drawing: Drawing, row: int) -> tuple[Drawing, ...]:
+    def _crop_at_row(self, drawing: Drawing, row: int) -> list[Drawing]:
         num_frames = len(self.sprite_sheet.style)
         width = drawing.width.value / num_frames
         height = drawing.height.value / len(_DIR_TO_ROW)
         size = Size(width, height)
-        return tuple(
+        return [
             drawing.crop(Coordinate(width * i, height * row), size)
             for i in range(num_frames)
-        )
+        ]
 
     @property
     def _init_animation(self) -> dict[Direction, CyclicAnimation]:

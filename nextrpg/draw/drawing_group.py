@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Hashable
 from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
@@ -18,9 +19,22 @@ if TYPE_CHECKING:
 class DrawingGroup(Sizable):
     relative_drawings: tuple[RelativeDrawing, ...]
 
+    def add_tag(self, tag: Hashable) -> DrawingGroup:
+        relative_drawings = tuple(
+            relative.add_tag(tag) for relative in self.relative_drawings
+        )
+        return DrawingGroup(relative_drawings)
+
+    @cached_property
+    def tags(self) -> tuple[Hashable, ...]:
+        tags: list[Hashable] = []
+        for relative in self.relative_drawings:
+            tags += relative.drawing.tags
+        return tuple(tags)
+
     def drawing_on_screens(
         self, origin: Coordinate, include_link_lines: bool = True
-    ) -> tuple[DrawingOnScreen, ...]:
+    ) -> list[DrawingOnScreen]:
         from nextrpg.draw.drawing_group_on_screen import DrawingGroupOnScreen
 
         return DrawingGroupOnScreen(origin, self).get_drawing_on_screens(

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Hashable
 from typing import TYPE_CHECKING, Any, Callable
 
 from pygame import SRCALPHA, Surface
@@ -34,6 +35,7 @@ class PolygonDrawing(TransparentDrawing):
         allow_background_in_debug: bool = False,
         bounding_rectangle: RectangleOnScreen | None = None,
         line_only: bool = False,
+        tags: tuple[Hashable, ...] = (),
     ) -> None:
         if line_only:
             fill = _line(color)
@@ -48,23 +50,12 @@ class PolygonDrawing(TransparentDrawing):
         object.__setattr__(
             self, "allow_background_in_debug", allow_background_in_debug
         )
+        object.__setattr__(self, "tags", tags)
         # TransparentDrawing
         object.__setattr__(self, "color", color)
         # PolygonDrawing
         object.__setattr__(self, "points", points)
         object.__setattr__(self, "line_only", line_only)
-
-
-def _draw_polygon(
-    points: tuple[Coordinate, ...],
-    method: Callable[[Surface, tuple[Coordinate, ...]], None],
-    bounding_rect: RectangleOnScreen | None,
-) -> Surface:
-    bounding_rect = bounding_rect or get_bounding_rectangle(points)
-    surface = Surface(bounding_rect.size, SRCALPHA)
-    negated = tuple(p - bounding_rect.top_left for p in points)
-    method(surface, negated)
-    return surface
 
 
 def get_bounding_rectangle(points: tuple[Coordinate, ...]) -> RectangleOnScreen:
@@ -96,3 +87,15 @@ def _fill(color: Color) -> Callable[[Surface, tuple[Coordinate, ...]], None]:
         polygon(surface, color, points)
 
     return fill
+
+
+def _draw_polygon(
+    points: tuple[Coordinate, ...],
+    method: Callable[[Surface, tuple[Coordinate, ...]], None],
+    bounding_rect: RectangleOnScreen | None,
+) -> Surface:
+    bounding_rect = bounding_rect or get_bounding_rectangle(points)
+    surface = Surface(bounding_rect.size, SRCALPHA)
+    negated = tuple(p - bounding_rect.top_left for p in points)
+    method(surface, negated)
+    return surface

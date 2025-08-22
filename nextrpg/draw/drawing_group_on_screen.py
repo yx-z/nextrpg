@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from collections.abc import Hashable
+from dataclasses import dataclass, replace
 from functools import cached_property
 
 from nextrpg.core.color import Color
@@ -20,6 +21,14 @@ class DrawingGroupOnScreen(Sizable):
     origin: Coordinate
     drawing_group: DrawingGroup
 
+    def add_tag(self, tag: Hashable) -> DrawingGroupOnScreen:
+        drawing_group = self.drawing_group.add_tag(tag)
+        return replace(self, drawing_group=drawing_group)
+
+    @property
+    def tags(self) -> tuple[Hashable, ...]:
+        return self.drawing_group.tags
+
     @property
     def size(self) -> Size:
         return self._sized.size
@@ -29,47 +38,30 @@ class DrawingGroupOnScreen(Sizable):
         return self._sized.top_left
 
     @cached_property
-    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+    def drawing_on_screens(self) -> list[DrawingOnScreen]:
         return self.get_drawing_on_screens(include_link_lines=True)
 
     def get_drawing_on_screens(
         self, include_link_lines: bool
-    ) -> tuple[DrawingOnScreen, ...]:
+    ) -> list[DrawingOnScreen]:
         res: list[DrawingOnScreen] = []
-        for relative, shift in self.drawing_group.relative_drawings:
-            coordinate = self.origin + shift
-            match relative:
-                case Drawing() as drawing:
-                    drawing_on_screen = drawing.drawing_on_screen(coordinate)
-                    res.append(drawing_on_screen)
+        for relative in self.drawing_group.relative_drawings:
+            top_left = relative.top_left(self.origin)
+            match relative.drawing:
                 case DrawingGroup() as drawing_group:
                     res += drawing_group.drawing_on_screens(
-                        coordinate, include_link_lines
+                        top_left, include_link_lines
                     )
-            if (
-                self._link_color
-                and coordinate != self.origin
-                and include_link_lines
-            ):
-                points = (self.origin, coordinate)
+                case Drawing() as drawing:
+                    drawing_on_screen = drawing.drawing_on_screen(top_left)
+                    res.append(drawing_on_screen)
+            if self._link_color and include_link_lines:
+                declared_coord = self.origin + relative.shift
+                points = (self.origin, declared_coord)
                 link = PolygonOnScreen(points, closed=False)
                 link_drawing_on_screen = link.line(self._link_color)
                 res.append(link_drawing_on_screen)
-        return tuple(res)
-
-    def coordinate(self, arg: Drawing | DrawingGroup) -> Coordinate | None:
-        if arg == self.drawing_group:
-            return self.origin
-        for relative, shift in self.drawing_group.relative_drawings:
-            coordinate = self.origin + shift
-            match relative:
-                case Drawing() as drawing:
-                    if arg == drawing:
-                        return coordinate
-                case DrawingGroup() as group:
-                    if res := group.group_on_screen(coordinate).coordinate(arg):
-                        return res
-        return None
+        return res
 
     @cached_property
     def _sized(self) -> SizableDrawOnScreens:

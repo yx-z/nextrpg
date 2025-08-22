@@ -14,16 +14,16 @@ class Scene(AnimationOnScreen):
 
     @cached_property
     @override
-    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+    def drawing_on_screens(self) -> list[DrawingOnScreen]:
         if shift := self.drawing_on_screen_shift:
-            return tuple(
+            return [
                 d.add_fast(shift) for d in self.drawing_on_screens_before_shift
-            )
+            ]
         return self.drawing_on_screens_before_shift
 
     @property
-    def drawing_on_screens_before_shift(self) -> tuple[DrawingOnScreen, ...]:
-        return ()
+    def drawing_on_screens_before_shift(self) -> list[DrawingOnScreen]:
+        return []
 
     def event(self, event: PygameEvent) -> Self:
         return self

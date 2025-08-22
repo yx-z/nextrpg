@@ -22,14 +22,14 @@ class SpriteSheet:
     color_key: Color | None = None
 
     @cached_property
-    def grid(self) -> tuple[tuple[Drawing, ...], ...]:
-        return tuple(
-            tuple(
+    def grid(self) -> list[list[Drawing]]:
+        return [
+            [
                 self.select(SpriteSheetSelection(row, column))
                 for column in range(self.num_column)
-            )
+            ]
             for row in range(self.num_row)
-        )
+        ]
 
     def select(self, selection: SpriteSheetSelection) -> Drawing:
         width = self.drawing.width.value / self.num_column

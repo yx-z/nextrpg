@@ -18,7 +18,7 @@ class RpgEventScene[R = None](Scene):
 
     @cached_property
     @override
-    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+    def drawing_on_screens(self) -> list[DrawingOnScreen]:
         return self.scene.drawing_on_screens + self.add_ons
 
     @override
@@ -30,8 +30,8 @@ class RpgEventScene[R = None](Scene):
         return ticked
 
     @property
-    def add_ons(self) -> tuple[DrawingOnScreen, ...]:
-        return ()
+    def add_ons(self) -> list[DrawingOnScreen]:
+        return []
 
 
 def register_rpg_event_scene[R, **P](

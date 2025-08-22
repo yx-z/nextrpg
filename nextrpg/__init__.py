@@ -62,7 +62,6 @@ from nextrpg.core.save import (
 )
 from nextrpg.core.walk import Walk
 from nextrpg.draw.animation import Animation
-from nextrpg.draw.animation_group import AnimationGroup, AnimationGroupOnScreen
 from nextrpg.draw.animation_on_screen import AnimationOnScreen
 from nextrpg.draw.cyclic_animation import CyclicAnimation
 from nextrpg.draw.drawing import (

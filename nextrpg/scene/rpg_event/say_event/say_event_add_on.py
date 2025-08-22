@@ -9,12 +9,8 @@ from pygments.styles.dracula import background
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
-from nextrpg.draw.drawing import (
-    Drawing,
-)
-from nextrpg.draw.drawing_group import (
-    DrawingGroup,
-)
+from nextrpg.draw.drawing import Drawing
+from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_group_on_screen import DrawingGroupOnScreen
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
@@ -37,34 +33,27 @@ class SayEventAddOn:
     message: str | Text | TextGroup
 
     @cached_property
-    def background(self) -> tuple[DrawingOnScreen, ...]:
-        contents = [RelativeDrawing(self._text.drawing_group, ORIGIN)]
+    def background(self) -> list[DrawingOnScreen]:
+        TEXT = "text"
+        text_group = self._text.drawing_group.add_tag(TEXT)
+        contents = [RelativeDrawing(text_group, ORIGIN)]
         if self._name_relative_to_text:
             contents.append(self._name_relative_to_text)
         if self._avatar_relative_to_text:
             contents.append(self._avatar_relative_to_text)
         content = DrawingGroup(tuple(contents))
 
-        background, shift = self._background_relative_to_text
+        background = self._background_relative_to_text.drawing
+        shift = self._background_relative_to_text.shift
         background_and_content = (
             RelativeDrawing(background, ORIGIN),
             RelativeDrawing(content, -shift),
         )
         add_on_group = DrawingGroup(background_and_content)
-        add_on_on_screen = DrawingGroupOnScreen(
+        drawing_on_screens = DrawingGroupOnScreen(
             self._background_top_left, add_on_group
-        )
-
-        text_coord = add_on_on_screen.coordinate(self._text.drawing_group)
-        assert text_coord
-        text_on_screen = TextOnScreen(
-            text_coord, self._text
-        ).get_drawing_on_screens(include_link_lines=True)
-        return tuple(
-            drawing_on_screen
-            for drawing_on_screen in add_on_on_screen.drawing_on_screens
-            if drawing_on_screen not in text_on_screen
-        )
+        ).drawing_on_screens
+        return [d for d in drawing_on_screens if TEXT not in d.tags]
 
     @cached_property
     def text_on_screen(self) -> TextOnScreen:
@@ -75,7 +64,9 @@ class SayEventAddOn:
 
     @cached_property
     def _background_top_left(self) -> Coordinate:
-        return self._center_to_top_left(self.config.scene_coordinate)
+        return self.config.scene_coordinate.as_center_of(
+            self._background_relative_to_text.drawing
+        ).top_left
 
     @property
     def _avatar(self) -> Drawing | DrawingGroup | None:
@@ -84,13 +75,6 @@ class SayEventAddOn:
     @property
     def _name(self) -> str | None:
         return self.config.name_override
-
-    def _center_to_top_left(self, center: Coordinate) -> Coordinate:
-        return (
-            center
-            - self._background_relative_to_text.drawing.size
-            / WidthAndHeightScaling(2)
-        )
 
     @cached_property
     def _background_relative_to_text(self) -> RelativeDrawing:
@@ -155,24 +139,47 @@ class SayEventCharacterAddOn(SayEventAddOn):
         relative = super()._background_relative_to_text
         if not self._tip:
             return relative
-        background, shift = relative
+
+        background_drawing = relative.drawing
         if self._character_position.at_top:
             tip_top = -self._tip.height.value
         else:
-            tip_top = background.height.value
+            tip_top = background_drawing.height.value
         tip_left = (
-            background.width.value / 2
+            background_drawing.width.value / 2
             + self._width_sign * self.config.background_edge_center_to_tip.value
         )
         if not self._character_position.at_left:
             tip_left -= self._tip.width.value
+
+        if isinstance(
+            cfg := self.config.background, SayEventNineSliceBackgroundConfig
+        ):
+            if self._character_position.at_top:
+                tip_top += cfg.nine_slice.top
+                drawings = background_drawing.relative_drawings
+                drawing = drawings[1].drawing
+                shift = drawings[1].shift
+                drawings = (
+                    drawings[0],
+                    RelativeDrawing(
+                        drawing.cut(
+                            Coordinate(tip_left - cfg.nine_slice.left, 0),
+                            Size(self._tip.width.value, cfg.nine_slice.top),
+                        ),
+                        shift,
+                    ),
+                ) + drawings[2:]
+                background_drawing = DrawingGroup(drawings)
+
         tip_shift = Size(tip_left, tip_top)
+
         background_and_tip = (
-            RelativeDrawing(background, ORIGIN),
+            RelativeDrawing(background_drawing, ORIGIN),
             RelativeDrawing(self._tip, tip_shift),
         )
         background_and_tip_group = DrawingGroup(background_and_tip)
-        return RelativeDrawing(background_and_tip_group, shift)
+        return RelativeDrawing(background_and_tip_group, relative.shift)
 
     @cached_property
     def _tip(self) -> Drawing | None:
@@ -187,7 +194,9 @@ class SayEventCharacterAddOn(SayEventAddOn):
     @override
     def _background_top_left(self) -> Coordinate:
         if center := self.config.character_coordinate_override:
-            return self._center_to_top_left(center)
+            return center.as_center_of(
+                self._background_relative_to_text.drawing
+            ).top_left
 
         shift_width, shift_height = (
             self.config.character_position_to_add_on_edge_center

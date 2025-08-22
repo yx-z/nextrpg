@@ -78,6 +78,13 @@ def enter_room(
 def greet(
     player: PlayerOnScreen, npc: NpcOnScreen, scene: EventfulScene
 ) -> None:
+    cfg = config().say_event.text_config
+    # fmt: off
+    scene["Interior Scene"]: Text("Greetings!", cfg.sized(40)) + Text(
+        """This is...
+        a sample """, cfg) + Text("nextrpg event", cfg.colored(Color(128, 0, 255)))
+    # fmt: on
+
     npc: "Nice to meet you! What's your name?"
     player: f"Hello {npc.display_name}! I am {player.display_name}."
     npc: f"Hello {player.display_name}!"
@@ -85,10 +92,3 @@ def greet(
     other_name = "david" if npc.display_name == "alisa" else "alisa"
     other_npc = scene.get_character(other_name)
     other_npc: f"Hello! I am {other_npc.display_name}!"
-
-    cfg = config().say_event.text_config
-    # fmt: off
-    scene["Interior Scene"]: Text("Greetings!", cfg.sized(40)) + Text(
-"""This is...
-a sample """, cfg) + Text("nextrpg event", cfg.colored(Color(128, 0, 255)))
-    # fmt: on

@@ -37,16 +37,16 @@ class SayEventState(RpgEventScene, ABC):
 
     @override
     @cached_property
-    def add_ons(self) -> tuple[DrawingOnScreen, ...]:
+    def add_ons(self) -> list[DrawingOnScreen]:
         if self.unique_name:
             character = self.scene.get_character(self.unique_name)
             diff = character.coordinate - self.initial_coordinate
-            return tuple(a + diff for a in self._add_ons)
+            return [a + diff for a in self._add_ons]
         return self._add_ons
 
     @property
     @abstractmethod
-    def _add_ons(self) -> tuple[DrawingOnScreen, ...]: ...
+    def _add_ons(self) -> list[DrawingOnScreen]: ...
 
 
 @dataclass_with_init(frozen=True, kw_only=True)
@@ -61,7 +61,7 @@ class SayEventFadeInState(SayEventState):
 
     @property
     @override
-    def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
+    def _add_ons(self) -> list[DrawingOnScreen]:
         return self._fade_in.drawing_on_screens
 
     @override
@@ -95,7 +95,7 @@ class SayEventTypingState(SayEventState):
 
     @override
     @property
-    def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
+    def _add_ons(self) -> list[DrawingOnScreen]:
         if self._typewriter:
             text = self._typewriter.drawing_on_screens
         else:
@@ -140,7 +140,7 @@ class SayEventFadeOutState(SayEventState):
 
     @override
     @property
-    def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
+    def _add_ons(self) -> list[DrawingOnScreen]:
         return self._fade_out.drawing_on_screens
 
     @override

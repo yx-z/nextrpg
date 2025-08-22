@@ -36,7 +36,7 @@ class SayEventScene(RpgEventScene):
 
     @override
     @cached_property
-    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+    def drawing_on_screens(self) -> list[DrawingOnScreen]:
         return self._state.drawing_on_screens
 
     @override

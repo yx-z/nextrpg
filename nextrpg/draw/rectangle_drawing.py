@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Hashable
 
 from pygame import SRCALPHA, Rect, Surface
 from pygame.draw import rect
@@ -21,10 +21,16 @@ class RectangleDrawing(TransparentDrawing):
             self.size == other.size
             and self.color == other.color
             and self.border_radius == other.border_radius
+            and self.tags == other.tags
         )
 
     def __init__(
-        self, size: Size, color: Color, border_radius: Pixel | None = None
+        self,
+        size: Size,
+        color: Color,
+        border_radius: Pixel | None = None,
+        allow_background_in_debug: bool = True,
+        tags: tuple[Hashable, ...] = (),
     ) -> None:
         surface = Surface(size, SRCALPHA)
         rectangle = Rect(ORIGIN, size)
@@ -33,7 +39,10 @@ class RectangleDrawing(TransparentDrawing):
         object.__setattr__(self, "resource", surface)
         object.__setattr__(self, "color_key", None)
         object.__setattr__(self, "convert_alpha", None)
-        object.__setattr__(self, "allow_background_in_debug", True)
+        object.__setattr__(
+            self, "allow_background_in_debug", allow_background_in_debug
+        )
+        object.__setattr__(self, "tags", tags)
         # TransparentDrawing
         object.__setattr__(self, "color", color)
         # RectangleDrawing

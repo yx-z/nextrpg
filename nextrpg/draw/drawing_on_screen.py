@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Hashable
 from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
@@ -20,6 +21,10 @@ if TYPE_CHECKING:
 class DrawingOnScreen(Sizable):
     top_left: Coordinate
     drawing: Drawing
+
+    @property
+    def tags(self) -> tuple[Hashable, ...]:
+        return self.drawing.tags
 
     @property
     def rectangle_on_screen(self) -> RectangleOnScreen:

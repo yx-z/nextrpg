@@ -30,7 +30,7 @@ class FadeOutScene(RpgEventScene):
 
     @property
     @override
-    def add_ons(self) -> tuple[DrawingOnScreen, ...]:
+    def add_ons(self) -> list[DrawingOnScreen]:
         return self._fade.drawing_on_screens
 
     @override
@@ -62,7 +62,7 @@ class BackgroundFadeOut(BackgroundEvent):
     fade: FadeOut
 
     @override
-    def draw_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+    def draw_on_screens(self) -> list[DrawingOnScreen]:
         return self.fade.drawing_on_screens
 
     @override
