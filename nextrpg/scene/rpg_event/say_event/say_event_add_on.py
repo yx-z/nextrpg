@@ -4,8 +4,6 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import Literal, override
 
-from pygments.styles.dracula import background
-
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
