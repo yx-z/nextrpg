@@ -5,7 +5,7 @@ from functools import cached_property
 from typing import Literal, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
@@ -32,8 +32,8 @@ class SayEventAddOn:
 
     @cached_property
     def background(self) -> list[DrawingOnScreen]:
-        TEXT = "text"
-        text_group = self._text.drawing_group.add_tag(TEXT)
+        TEXT_TAG = "SayEventAddOnText"
+        text_group = self._text.drawing_group.add_tag(TEXT_TAG)
         contents = [RelativeDrawing(text_group, ORIGIN)]
         if self._name_relative_to_text:
             contents.append(self._name_relative_to_text)
@@ -51,7 +51,7 @@ class SayEventAddOn:
         drawing_on_screens = DrawingGroupOnScreen(
             self._background_top_left, add_on_group
         ).drawing_on_screens
-        return [d for d in drawing_on_screens if TEXT not in d.tags]
+        return [d for d in drawing_on_screens if TEXT_TAG not in d.tags]
 
     @cached_property
     def text_on_screen(self) -> TextOnScreen:
