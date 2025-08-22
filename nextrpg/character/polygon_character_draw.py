@@ -20,8 +20,8 @@ class PolygonCharacterDrawing(CharacterDrawing):
     @cached_property
     def drawing(self) -> Drawing:
         if isinstance(self.arg, Size):
-            return RectangleDrawing(self.arg, TRANSPARENT)
-        return self.arg
+            return RectangleDrawing(self.arg, TRANSPARENT).drawing
+        return self.arg.drawing
 
     @override
     def turn(self, direction: Direction) -> Self:

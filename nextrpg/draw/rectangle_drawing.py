@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from typing import Any, Hashable
+from dataclasses import dataclass
+from functools import cached_property
+from typing import Hashable
 
 from pygame import SRCALPHA, Rect, Surface
 from pygame.draw import rect
@@ -11,39 +13,27 @@ from nextrpg.core.dimension import Pixel, Size
 from nextrpg.draw.transparent_drawing import TransparentDrawing
 
 
-class RectangleDrawing(TransparentDrawing):
-    border_radius: Pixel
+@dataclass(frozen=True)
+class RectangleDrawing:
+    size: Size
+    color: Color
+    border_radius: Pixel | None = None
+    allow_background_in_debug: bool = True
+    tags: tuple[Hashable, ...] = ()
 
-    def __eq__(self, other: Any) -> bool:
-        if not isinstance(other, RectangleDrawing):
-            return False
-        return (
-            self.size == other.size
-            and self.color == other.color
-            and self.border_radius == other.border_radius
-            and self.tags == other.tags
+    @cached_property
+    def drawing(self) -> TransparentDrawing:
+        surface = Surface(self.size, SRCALPHA)
+        rectangle = Rect(ORIGIN, self.size)
+        rect(
+            surface,
+            self.color,
+            rectangle,
+            border_radius=self.border_radius or -1,
         )
-
-    def __init__(
-        self,
-        size: Size,
-        color: Color,
-        border_radius: Pixel | None = None,
-        allow_background_in_debug: bool = True,
-        tags: tuple[Hashable, ...] = (),
-    ) -> None:
-        surface = Surface(size, SRCALPHA)
-        rectangle = Rect(ORIGIN, size)
-        rect(surface, color, rectangle, border_radius=border_radius or -1)
-        # Drawing
-        object.__setattr__(self, "resource", surface)
-        object.__setattr__(self, "color_key", None)
-        object.__setattr__(self, "convert_alpha", None)
-        object.__setattr__(
-            self, "allow_background_in_debug", allow_background_in_debug
+        return TransparentDrawing(
+            resource=surface,
+            allow_background_in_debug=self.allow_background_in_debug,
+            tags=self.tags,
+            color=self.color,
         )
-        object.__setattr__(self, "tags", tags)
-        # TransparentDrawing
-        object.__setattr__(self, "color", color)
-        # RectangleDrawing
-        object.__setattr__(self, "border_radius", border_radius)

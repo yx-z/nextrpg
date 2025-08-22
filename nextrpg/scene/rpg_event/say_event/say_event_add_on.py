@@ -5,7 +5,7 @@ from functools import cached_property
 from typing import Literal, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
@@ -97,7 +97,9 @@ class SayEventAddOn:
         ):
             rect = cfg.nine_slice.stretch(size)
         else:
-            rect = RectangleDrawing(size, cfg.background, cfg.border_radius)
+            rect = RectangleDrawing(
+                size, cfg.background, cfg.border_radius
+            ).drawing
         return RelativeDrawing(rect, shift)
 
     @cached_property

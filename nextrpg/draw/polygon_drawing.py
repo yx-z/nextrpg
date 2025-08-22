@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from collections.abc import Hashable
-from typing import TYPE_CHECKING, Any, Callable
+from dataclasses import dataclass
+from functools import cached_property
+from typing import TYPE_CHECKING, Callable
 
 from pygame import SRCALPHA, Surface
 from pygame.draw import lines, polygon
@@ -15,47 +17,53 @@ if TYPE_CHECKING:
     from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
 
 
-class PolygonDrawing(TransparentDrawing):
+@dataclass(frozen=True)
+class PolygonDrawing:
     points: tuple[Coordinate, ...]
-    line_only: bool
+    color: Color
+    allow_background_in_debug: bool = False
+    bounding_rectangle: RectangleOnScreen | None = None
+    line_only: bool = False
+    tags: tuple[Hashable, ...] = ()
 
-    def __eq__(self, other: Any) -> bool:
-        if not isinstance(other, PolygonDrawing):
-            return False
-        return (
-            self.points == other.points
-            and self.color == other.color
-            and self.line_only == other.line_only
-        )
-
-    def __init__(
-        self,
-        points: tuple[Coordinate, ...],
-        color: Color,
-        allow_background_in_debug: bool = False,
-        bounding_rectangle: RectangleOnScreen | None = None,
-        line_only: bool = False,
-        tags: tuple[Hashable, ...] = (),
-    ) -> None:
-        if line_only:
-            fill = _line(color)
+    @cached_property
+    def drawing(self) -> TransparentDrawing:
+        if self.line_only:
+            fill = self._line
         else:
-            fill = _fill(color)
-
-        surface = _draw_polygon(points, fill, bounding_rectangle)
-        # Drawing
-        object.__setattr__(self, "resource", surface)
-        object.__setattr__(self, "color_key", None)
-        object.__setattr__(self, "convert_alpha", None)
-        object.__setattr__(
-            self, "allow_background_in_debug", allow_background_in_debug
+            fill = self._fill
+        surface = self._draw_polygon(fill)
+        return TransparentDrawing(
+            resource=surface,
+            allow_background_in_debug=self.allow_background_in_debug,
+            tags=self.tags,
+            color=self.color,
         )
-        object.__setattr__(self, "tags", tags)
-        # TransparentDrawing
-        object.__setattr__(self, "color", color)
-        # PolygonDrawing
-        object.__setattr__(self, "points", points)
-        object.__setattr__(self, "line_only", line_only)
+
+    @cached_property
+    def _line(self) -> Callable[[Surface, list[Coordinate]], None]:
+        def line(surface: Surface, points: list[Coordinate]) -> None:
+            lines(surface, self.color, closed=False, points=points)
+
+        return line
+
+    @cached_property
+    def _fill(self) -> Callable[[Surface, list[Coordinate]], None]:
+        def fill(surface: Surface, points: list[Coordinate]) -> None:
+            polygon(surface, self.color, points)
+
+        return fill
+
+    def _draw_polygon(
+        self, method: Callable[[Surface, list[Coordinate]], None]
+    ) -> Surface:
+        bounding_rect = self.bounding_rectangle or get_bounding_rectangle(
+            self.points
+        )
+        surface = Surface(bounding_rect.size, SRCALPHA)
+        negated = [p - bounding_rect.top_left for p in self.points]
+        method(surface, negated)
+        return surface
 
 
 def get_bounding_rectangle(points: tuple[Coordinate, ...]) -> RectangleOnScreen:
@@ -73,29 +81,3 @@ def get_bounding_rectangle(points: tuple[Coordinate, ...]) -> RectangleOnScreen:
     height = max(max_y - min_y, 1)
     size = Size(width, height)
     return RectangleOnScreen(coordinate, size)
-
-
-def _line(color: Color) -> Callable[[Surface, tuple[Coordinate, ...]], None]:
-    def line(surface: Surface, points: tuple[Coordinate, ...]) -> None:
-        lines(surface, color, closed=False, points=points)
-
-    return line
-
-
-def _fill(color: Color) -> Callable[[Surface, tuple[Coordinate, ...]], None]:
-    def fill(surface: Surface, points: tuple[Coordinate, ...]) -> None:
-        polygon(surface, color, points)
-
-    return fill
-
-
-def _draw_polygon(
-    points: tuple[Coordinate, ...],
-    method: Callable[[Surface, tuple[Coordinate, ...]], None],
-    bounding_rect: RectangleOnScreen | None,
-) -> Surface:
-    bounding_rect = bounding_rect or get_bounding_rectangle(points)
-    surface = Surface(bounding_rect.size, SRCALPHA)
-    negated = tuple(p - bounding_rect.top_left for p in points)
-    method(surface, negated)
-    return surface

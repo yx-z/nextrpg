@@ -1,18 +1,18 @@
 from __future__ import annotations
 
-from abc import ABC
+from dataclasses import dataclass
 from functools import cached_property
 from typing import override
 
 from pygame import Surface
 
 from nextrpg.core.color import TRANSPARENT, Color
-from nextrpg.core.coordinate import ORIGIN
 from nextrpg.core.dimension import Size
 from nextrpg.draw.drawing import Drawing
 
 
-class TransparentDrawing(Drawing, ABC):
+@dataclass(frozen=True, kw_only=True)
+class TransparentDrawing(Drawing):
     color: Color
 
     @property
@@ -23,7 +23,7 @@ class TransparentDrawing(Drawing, ABC):
     @property
     def surface(self) -> Surface:
         if self.fully_transparent:
-            return Surface(ORIGIN)
+            return Surface((0, 0))
         return super().surface
 
     @override

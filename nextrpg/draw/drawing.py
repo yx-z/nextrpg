@@ -63,15 +63,15 @@ class Drawing(Sizable):
     def cut(self, top_left: Coordinate, size: Size) -> Drawing:
         surface = self.surface.convert_alpha()
         surface.fill(TRANSPARENT, (top_left, size))
-        return Drawing(surface)
+        return replace(self, resource=surface)
 
     def flip(self, horizontal: bool = False, vertical: bool = False) -> Drawing:
         surface = flip(self.surface, horizontal, vertical)
-        return Drawing(surface)
+        return replace(self, resource=surface)
 
     def crop(self, top_left: Coordinate, size: Size) -> Drawing:
         surface = self.pygame.subsurface((top_left, size))
-        return Drawing(surface)
+        return replace(self, resource=surface)
 
     def trim(self, drawing_trim: DrawingTrim) -> Drawing:
         coordinate = Coordinate(drawing_trim.left, drawing_trim.top)
@@ -83,7 +83,7 @@ class Drawing(Sizable):
     def set_alpha(self, alpha: Alpha) -> Drawing:
         surface = self.surface.copy()
         surface.set_alpha(alpha)
-        return Drawing(surface)
+        return replace(self, resource=surface)
 
     def drawing_on_screen(self, coordinate: Coordinate) -> DrawingOnScreen:
         from nextrpg.draw.drawing_on_screen import DrawingOnScreen
@@ -102,7 +102,7 @@ class Drawing(Sizable):
         size = self.size * scaling
         scale_fun = _get_scale_fun(smooth)
         surface = scale_fun(self.surface, size)
-        return Drawing(surface)
+        return replace(self, resource=surface)
 
     def scale_fast(
         self, scaling: int | float, smooth: bool | None = None
@@ -111,7 +111,7 @@ class Drawing(Sizable):
         size = (width * scaling, height * scaling)
         scale_fun = _get_scale_fun(smooth)
         surface = scale_fun(self.surface, size)
-        return Drawing(surface)
+        return replace(self, resource=surface)
 
     @cached_property
     def visible_rectangle(self) -> RectangleOnScreen:

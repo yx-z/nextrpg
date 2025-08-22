@@ -56,6 +56,5 @@ class RectangleOnScreen(PolygonOnScreen):
     def fill(
         self, color: Color, border_radius: Pixel | None = None
     ) -> DrawingOnScreen:
-        return DrawingOnScreen(
-            self.top_left, RectangleDrawing(self.size, color, border_radius)
-        )
+        rect = RectangleDrawing(self.size, color, border_radius).drawing
+        return DrawingOnScreen(self.top_left, rect)

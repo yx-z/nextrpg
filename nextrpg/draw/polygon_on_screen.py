@@ -56,7 +56,7 @@ class PolygonOnScreen(Sizable):
             allow_background_in_debug,
             self.bounding_rectangle,
         )
-        return DrawingOnScreen(self.top_left, drawing)
+        return DrawingOnScreen(self.top_left, drawing.drawing)
 
     def line(
         self, color: Color, allow_background_in_debug: bool = False
@@ -68,7 +68,7 @@ class PolygonOnScreen(Sizable):
             self.bounding_rectangle,
             line_only=True,
         )
-        return DrawingOnScreen(self.top_left, drawing)
+        return DrawingOnScreen(self.top_left, drawing.drawing)
 
     def collide(self, poly: PolygonOnScreen) -> bool:
         if not self.bounding_rectangle.collide(poly.bounding_rectangle):
