@@ -4,7 +4,7 @@ from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cache, cached_property
 from os import PathLike
-from typing import NamedTuple, override
+from typing import override
 
 from cachetools import LRUCache
 
@@ -218,9 +218,11 @@ class Move:
             tmx = str(next_scene.tmx_file)
 
         if timed_scene := _scenes().get(tmx):
-            timepoint, scene = timed_scene
-            time_delta = now - timepoint
-            scene_with_player = replace(scene, player=scene.init_player(spec))
+            scene = timed_scene.scene
+            player = scene.init_player(spec)
+            scene_with_player = replace(scene, player=player)
+
+            time_delta = now - timed_scene.time
             to_scene = scene_with_player.tick(time_delta)
         else:
             to_scene = self.next_scene(spec)
@@ -231,7 +233,8 @@ class Move:
         return TransitionScene(from_scene=from_scene, to_scene=to_scene)
 
 
-class _TimedScene(NamedTuple):
+@dataclass(frozen=True)
+class _TimedScene:
     time: Millisecond
     scene: MapScene
 
@@ -242,5 +245,11 @@ def _scenes() -> LRUCache[str, _TimedScene]:
 
 
 @cache
-def _tmxs() -> LRUCache[Callable, str]:
+def _tmxs() -> LRUCache[
+    (
+        Callable[[CharacterSpec | None], MapScene]
+        | Callable[[CharacterSpec], MapScene]
+    ),
+    str,
+]:
     return LRUCache(config().map.cache_size)

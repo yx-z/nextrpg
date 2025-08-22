@@ -101,7 +101,7 @@ class Window:
 
     def blits(
         self,
-        drawing_on_screens: tuple[DrawingOnScreen, ...],
+        drawing_on_screens: list[DrawingOnScreen],
         time_delta: Millisecond,
     ) -> None:
         log.debug(
@@ -111,9 +111,9 @@ class Window:
         self._screen.fill(self.current_config.background)
 
         if msgs := pop_messages(time_delta):
-            drawing_on_screens += tuple(
+            drawing_on_screens += [
                 d for text in _log_text(msgs) for d in text.drawing_on_screens
-            )
+            ]
 
         match self.current_config.resize:
             case ResizeMode.SCALE:
@@ -136,7 +136,7 @@ class Window:
         return set_mode(cfg.size, cfg.flag)
 
     def _scale(
-        self, drawing_on_screens: tuple[DrawingOnScreen, ...]
+        self, drawing_on_screens: list[DrawingOnScreen]
     ) -> DrawingOnScreen:
         screen = Surface(self.initial_config.size, SRCALPHA)
         surfaces = tuple(d.pygame for d in drawing_on_screens)
@@ -186,12 +186,13 @@ class Window:
 
 
 def _log_text(
-    component_and_messages: tuple[ComponentAndMessage, ...],
+    component_and_messages: list[ComponentAndMessage],
 ) -> list[TextOnScreen]:
-    components = tuple(m.component for m in component_and_messages)
+    components = [m.component for m in component_and_messages]
     component_text = Text("\n".join(components))
     components_on_screen = TextOnScreen(ORIGIN, component_text)
-    messages = tuple(m.message for m in component_and_messages)
+
+    messages = [m.message for m in component_and_messages]
     msg_text = Text("\n".join(messages))
     msgs_on_screen = TextOnScreen(ORIGIN + component_text.width, msg_text)
     return [components_on_screen, msgs_on_screen]

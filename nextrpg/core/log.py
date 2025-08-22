@@ -2,7 +2,6 @@ from dataclasses import dataclass, field, replace
 from inspect import stack
 from pathlib import Path
 from string.templatelib import Interpolation, Template
-from typing import NamedTuple
 
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.global_config.debug_config import LogLevel
@@ -58,7 +57,8 @@ class Log:
         _add(self.component, LogLevel.ERROR, message, duration)
 
 
-class ComponentAndMessage(NamedTuple):
+@dataclass(frozen=True)
+class ComponentAndMessage:
     component: str
     message: str
 
