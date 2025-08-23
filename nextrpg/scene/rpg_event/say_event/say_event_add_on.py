@@ -152,28 +152,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
         if not self._character_position.at_left:
             tip_left -= self._tip.width.value
 
-        if isinstance(
-            cfg := self.config.background, SayEventNineSliceBackgroundConfig
-        ):
-            if self._character_position.at_top:
-                tip_top += cfg.nine_slice.top
-                drawings = background_drawing.relative_drawings
-                drawing = drawings[1].drawing
-                shift = drawings[1].shift
-                drawings = (
-                    drawings[0],
-                    RelativeDrawing(
-                        drawing.cut(
-                            Coordinate(tip_left - cfg.nine_slice.left, 0),
-                            Size(self._tip.width.value, cfg.nine_slice.top),
-                        ),
-                        shift,
-                    ),
-                ) + drawings[2:]
-                background_drawing = DrawingGroup(drawings)
-
         tip_shift = Size(tip_left, tip_top)
-
         background_and_tip = (
             RelativeDrawing(background_drawing, ORIGIN),
             RelativeDrawing(self._tip, tip_shift),
@@ -184,7 +163,11 @@ class SayEventCharacterAddOn(SayEventAddOn):
     @cached_property
     def _tip(self) -> Drawing | None:
         if tip := self.config.background.tip:
-            return tip.flip(
+            if isinstance(tip, Drawing):
+                tip_drawing = tip
+            else:
+                tip_drawing = tip.drawing
+            return tip_drawing.flip(
                 horizontal=not self._character_position.at_left,
                 vertical=not self._character_position.at_top,
             )

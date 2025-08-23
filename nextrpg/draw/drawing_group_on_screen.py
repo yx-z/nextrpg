@@ -39,24 +39,18 @@ class DrawingGroupOnScreen(Sizable):
 
     @cached_property
     def drawing_on_screens(self) -> list[DrawingOnScreen]:
-        return self.get_drawing_on_screens(include_link_lines=True)
-
-    def get_drawing_on_screens(
-        self, include_link_lines: bool
-    ) -> list[DrawingOnScreen]:
         res: list[DrawingOnScreen] = []
         for relative in self.drawing_group.relative_drawings:
             top_left = relative.top_left(self.origin)
             match relative.drawing:
                 case DrawingGroup() as drawing_group:
-                    res += drawing_group.drawing_on_screens(
-                        top_left, include_link_lines
-                    )
+                    res += drawing_group.drawing_on_screens(top_left)
                 case Drawing() as drawing:
                     drawing_on_screen = drawing.drawing_on_screen(top_left)
                     res.append(drawing_on_screen)
-            if self._link_color and include_link_lines:
-                declared_coord = self.origin + relative.shift
+
+            declared_coord = self.origin + relative.shift
+            if self._link_color and self.origin != declared_coord:
                 points = (self.origin, declared_coord)
                 link = PolygonOnScreen(points, closed=False)
                 link_drawing_on_screen = link.line(self._link_color)
@@ -65,7 +59,7 @@ class DrawingGroupOnScreen(Sizable):
 
     @cached_property
     def _sized(self) -> SizableDrawOnScreens:
-        return SizableDrawOnScreens(self.drawing_on_screens)
+        return SizableDrawOnScreens(tuple(self.drawing_on_screens))
 
     @cached_property
     def _link_color(self) -> Color | None:

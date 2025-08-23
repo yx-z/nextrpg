@@ -170,3 +170,6 @@ class Size(NamedTuple):
     @classmethod
     def load(cls, data: list[Pixel]) -> Self:
         return cls(*data)
+
+
+ZERO_SIZE = Size(0, 0)

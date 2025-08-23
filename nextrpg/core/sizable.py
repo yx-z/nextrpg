@@ -1,13 +1,20 @@
 from typing import Protocol
 
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Height, Size, Width
+from nextrpg.core.dimension import (
+    Height,
+    HeightScaling,
+    Size,
+    Width,
+    WidthAndHeightScaling,
+    WidthScaling,
+)
 
 
 class Sizable(Protocol):
     # Subclass shall implement these.
-    top_left: Coordinate
     size: Size
+    top_left: Coordinate
 
     @property
     def width(self) -> Width:
@@ -51,7 +58,7 @@ class Sizable(Protocol):
 
     @property
     def bottom_center(self) -> Coordinate:
-        return self.top_left + self.height / 2
+        return self.top_left + self.size / WidthScaling(2)
 
     @property
     def center_left(self) -> Coordinate:
@@ -59,8 +66,8 @@ class Sizable(Protocol):
 
     @property
     def center_right(self) -> Coordinate:
-        return self.top_right + self.height / 2
+        return self.top_left + self.size / HeightScaling(2)
 
     @property
     def center(self) -> Coordinate:
-        return self.top_center + self.height / 2
+        return self.top_left + self.size / WidthAndHeightScaling(2)

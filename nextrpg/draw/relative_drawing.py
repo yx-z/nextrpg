@@ -6,7 +6,13 @@ from typing import TYPE_CHECKING, Self
 
 from nextrpg.core.anchor import Anchor
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Size
+from nextrpg.core.dimension import (
+    ZERO_SIZE,
+    HeightScaling,
+    Size,
+    WidthAndHeightScaling,
+    WidthScaling,
+)
 from nextrpg.draw.drawing import Drawing
 
 if TYPE_CHECKING:
@@ -30,30 +36,21 @@ class RelativeDrawing:
     def top_left(self, origin: Coordinate) -> Coordinate:
         match self.anchor:
             case Anchor.TOP_LEFT:
-                extra = Size(0, 0)
+                extra = ZERO_SIZE
             case Anchor.TOP_CENTER:
-                extra = Size(-self.drawing.width.value / 2, 0)
+                extra = self.drawing.width / 2
             case Anchor.TOP_RIGHT:
-                extra = Size(-self.drawing.width.value, 0)
+                extra = self.drawing.width
             case Anchor.CENTER_LEFT:
-                extra = Size(0, -self.drawing.height.value / 2)
+                extra = self.drawing.height / 2
             case Anchor.CENTER:
-                extra = Size(
-                    -self.drawing.width.value / 2,
-                    -self.drawing.height.value / 2,
-                )
+                extra = self.drawing.size / WidthAndHeightScaling(2)
             case Anchor.CENTER_RIGHT:
-                extra = Size(
-                    -self.drawing.width.value, -self.drawing.height.value / 2
-                )
+                extra = self.drawing.size / HeightScaling(2)
             case Anchor.BOTTOM_LEFT:
-                extra = Size(0, -self.drawing.height.value)
+                extra = self.drawing.height
             case Anchor.BOTTOM_CENTER:
-                extra = Size(
-                    -self.drawing.width.value / 2, -self.drawing.height.value
-                )
+                extra = self.drawing.size / WidthScaling(2)
             case Anchor.BOTTOM_RIGHT:
-                extra = Size(
-                    -self.drawing.width.value, -self.drawing.height.value
-                )
-        return origin + extra + self.shift
+                extra = self.drawing.size
+        return origin + self.shift - extra

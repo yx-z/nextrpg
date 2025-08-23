@@ -113,7 +113,7 @@ class Coordinate(NamedTuple):
         return hypot(dx, dy)
 
     def as_top_left_of(self, sizable: Sizable) -> TopLeft:
-        from nextrpg.core.sizable import TopLeft
+        from nextrpg.core.sizable_proxy import TopLeft
 
         return TopLeft(sizable, self)
 

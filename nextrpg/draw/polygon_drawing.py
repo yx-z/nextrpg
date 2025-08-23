@@ -43,7 +43,7 @@ class PolygonDrawing:
     @cached_property
     def _line(self) -> Callable[[Surface, list[Coordinate]], None]:
         def line(surface: Surface, points: list[Coordinate]) -> None:
-            lines(surface, self.color, closed=False, points=points)
+            lines(surface, self.color, closed=True, points=points)
 
         return line
 

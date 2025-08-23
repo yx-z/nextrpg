@@ -20,11 +20,4 @@ class TextOnScreen(Sizable):
 
     @cached_property
     def drawing_on_screens(self) -> list[DrawingOnScreen]:
-        return self.get_drawing_on_screens(include_link_lines=False)
-
-    def get_drawing_on_screens(
-        self, include_link_lines: bool
-    ) -> list[DrawingOnScreen]:
-        return self.text.drawing_group.drawing_on_screens(
-            self.top_left, include_link_lines=include_link_lines
-        )
+        return self.text.drawing_group.drawing_on_screens(self.top_left)
