@@ -11,12 +11,12 @@ from nextrpg.core.dataclass_with_init import (
 from nextrpg.core.dimension import Pixel, PixelPerMillisecond
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.polygon_on_screen import PolygonOnScreen
+from nextrpg.draw.polygon_area import PolygonArea
 
 
 @dataclass_with_init(frozen=True)
 class Walk:
-    path: PolygonOnScreen
+    path: PolygonArea
     move_speed: PixelPerMillisecond
     cyclic: bool
     _: KW_ONLY = not_constructor_below()

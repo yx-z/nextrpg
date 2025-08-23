@@ -14,7 +14,7 @@ from nextrpg.core.dimension import Size
 from nextrpg.draw.transparent_drawing import TransparentDrawing
 
 if TYPE_CHECKING:
-    from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
+    from nextrpg.draw.rectangle_area import RectangleArea
 
 
 @dataclass(frozen=True)
@@ -22,7 +22,7 @@ class PolygonDrawing:
     points: tuple[Coordinate, ...]
     color: Color
     allow_background_in_debug: bool = False
-    bounding_rectangle: RectangleOnScreen | None = None
+    bounding_rectangle: RectangleArea | None = None
     line_only: bool = False
     tags: tuple[Hashable, ...] = ()
 
@@ -66,8 +66,8 @@ class PolygonDrawing:
         return surface
 
 
-def get_bounding_rectangle(points: tuple[Coordinate, ...]) -> RectangleOnScreen:
-    from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
+def get_bounding_rectangle(points: tuple[Coordinate, ...]) -> RectangleArea:
+    from nextrpg.draw.rectangle_area import RectangleArea
 
     min_x = min(c.left_value for c in points)
     min_y = min(c.top_value for c in points)
@@ -80,4 +80,4 @@ def get_bounding_rectangle(points: tuple[Coordinate, ...]) -> RectangleOnScreen:
     width = max(max_x - min_x, 1)
     height = max(max_y - min_y, 1)
     size = Size(width, height)
-    return RectangleOnScreen(coordinate, size)
+    return RectangleArea(coordinate, size)

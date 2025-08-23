@@ -20,11 +20,11 @@ from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.polygon_drawing import PolygonDrawing, get_bounding_rectangle
 
 if TYPE_CHECKING:
-    from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
+    from nextrpg.draw.rectangle_area import RectangleArea
 
 
 @dataclass_with_init(frozen=True)
-class PolygonOnScreen(Sizable):
+class PolygonArea(Sizable):
     points: tuple[Coordinate, ...]
     closed: bool = True
     _: KW_ONLY = not_constructor_below()
@@ -44,7 +44,7 @@ class PolygonOnScreen(Sizable):
         return length
 
     @cached_property
-    def bounding_rectangle(self) -> RectangleOnScreen:
+    def bounding_rectangle(self) -> RectangleArea:
         return get_bounding_rectangle(self.points)
 
     def fill(
@@ -70,7 +70,7 @@ class PolygonOnScreen(Sizable):
         )
         return DrawingOnScreen(self.top_left, drawing.drawing)
 
-    def collide(self, poly: PolygonOnScreen) -> bool:
+    def collide(self, poly: PolygonArea) -> bool:
         if not self.bounding_rectangle.collide(poly.bounding_rectangle):
             return False
         offset = (
@@ -85,15 +85,11 @@ class PolygonOnScreen(Sizable):
             return bool(self._mask.get_at((x, y)))
         return False
 
-    def __add__(
-        self, other: Coordinate | Size | Width | Height
-    ) -> PolygonOnScreen:
+    def __add__(self, other: Coordinate | Size | Width | Height) -> PolygonArea:
         points = tuple(p + other for p in self.points)
-        return PolygonOnScreen(points, self.closed)
+        return PolygonArea(points, self.closed)
 
-    def __sub__(
-        self, other: Coordinate | Size | Width | Height
-    ) -> PolygonOnScreen:
+    def __sub__(self, other: Coordinate | Size | Width | Height) -> PolygonArea:
         return self + -other
 
     @cached_property

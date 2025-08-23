@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from collections.abc import Hashable
 from dataclasses import dataclass, replace
+from enum import Enum, auto
 from typing import TYPE_CHECKING, Self
 
-from nextrpg.core.anchor import Anchor
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import (
     ZERO_SIZE,
@@ -17,6 +17,18 @@ from nextrpg.draw.drawing import Drawing
 
 if TYPE_CHECKING:
     from nextrpg.draw.drawing_group import DrawingGroup
+
+
+class Anchor(Enum):
+    TOP_LEFT = auto()
+    TOP_CENTER = auto()
+    TOP_RIGHT = auto()
+    CENTER_LEFT = auto()
+    CENTER = auto()
+    CENTER_RIGHT = auto()
+    BOTTOM_LEFT = auto()
+    BOTTOM_CENTER = auto()
+    BOTTOM_RIGHT = auto()
 
 
 @dataclass(frozen=True)

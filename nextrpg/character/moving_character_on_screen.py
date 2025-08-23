@@ -6,15 +6,15 @@ from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.polygon_on_screen import PolygonOnScreen
-from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
+from nextrpg.draw.polygon_area import PolygonArea
+from nextrpg.draw.rectangle_area import RectangleArea
 
 log = Log()
 
 
 @dataclass(frozen=True)
 class MovingCharacterOnScreen(CharacterOnScreen, ABC):
-    map_collisions: tuple[PolygonOnScreen, ...] = ()
+    map_collisions: tuple[PolygonArea, ...] = ()
 
     @property
     @abstractmethod
@@ -60,9 +60,9 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
     def _collide(
         self,
-        bounding_rect: RectangleOnScreen,
+        bounding_rect: RectangleArea,
         others: tuple[CharacterOnScreen, ...],
-    ) -> PolygonOnScreen | None:
+    ) -> PolygonArea | None:
         other_rects = tuple(
             c.collision_rectangle for c in others if c.spec.collide_with_others
         )

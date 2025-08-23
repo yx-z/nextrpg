@@ -93,5 +93,4 @@ class Text(Sizable):
 
     def _line_shift(self, index: int) -> Size:
         height = self.config.font.text_height + self.config.line_spacing
-        shift = height * index
-        return Size(0, shift.value)
+        return (height * index).with_width(0)

@@ -25,10 +25,10 @@ from nextrpg.core.direction import Direction
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond, get_timepoint
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.draw.polygon_area import PolygonArea
 from nextrpg.draw.polygon_drawing import PolygonDrawing
-from nextrpg.draw.polygon_on_screen import PolygonOnScreen
+from nextrpg.draw.rectangle_area import RectangleArea
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
-from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
 from nextrpg.global_config.global_config import config
 from nextrpg.scene.map.map_loader import MapLoader, get_polygon
 from nextrpg.scene.map.map_shift import center_player
@@ -134,7 +134,7 @@ class MapScene(EventfulScene):
         return []
 
     @cached_property
-    def _move_polys(self) -> list[PolygonOnScreen]:
+    def _move_polys(self) -> list[PolygonArea]:
         return [
             get_polygon(self.map_helper.get_object(m.trigger_object))
             for m in self._moves
@@ -175,7 +175,7 @@ class MapScene(EventfulScene):
             return npc
 
         color = spec.character or TRANSPARENT
-        if isinstance(poly, RectangleOnScreen):
+        if isinstance(poly, RectangleArea):
             poly_draw = RectangleDrawing(poly.size, color)
         else:
             points = tuple(p - coordinate for p in poly.points)

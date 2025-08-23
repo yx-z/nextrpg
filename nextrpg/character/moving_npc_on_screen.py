@@ -13,12 +13,12 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.core.walk import Walk
-from nextrpg.draw.polygon_on_screen import PolygonOnScreen
+from nextrpg.draw.polygon_area import PolygonArea
 
 
 @dataclass_with_init(frozen=True, kw_only=True)
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
-    path: PolygonOnScreen
+    path: PolygonArea
     _: KW_ONLY = not_constructor_below()
     # `coordinate` is initialized in the base class.
     # Hence, invoke `_walk` (given it's still an `_Init`) to initialize.

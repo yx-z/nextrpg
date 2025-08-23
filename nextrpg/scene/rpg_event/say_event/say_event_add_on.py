@@ -9,10 +9,9 @@ from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.drawing_group_on_screen import DrawingGroupOnScreen
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.draw.rectangle_area import RectangleArea
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
-from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
 from nextrpg.draw.relative_drawing import RelativeDrawing
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
@@ -48,9 +47,9 @@ class SayEventAddOn:
             RelativeDrawing(content, -shift),
         )
         add_on_group = DrawingGroup(background_and_content)
-        drawing_on_screens = DrawingGroupOnScreen(
-            self._background_top_left, add_on_group
-        ).drawing_on_screens
+        drawing_on_screens = add_on_group.drawing_on_screens(
+            self._background_top_left
+        )
         return [d for d in drawing_on_screens if TEXT_TAG not in d.tags]
 
     @cached_property
@@ -92,6 +91,7 @@ class SayEventAddOn:
             )
             shift -= extra_width
             size += extra_width
+
         if isinstance(
             cfg := self.config.background, SayEventNineSliceBackgroundConfig
         ):
@@ -118,7 +118,7 @@ class SayEventAddOn:
         if not self._name:
             return None
         text = Text(self._name, self.config.name_text_config)
-        shift = Size(0, -text.height.value - self.config.padding.height.value)
+        shift = -(text.height + self.config.padding.height).with_width(0)
         return RelativeDrawing(text.drawing_group, shift)
 
     @cached_property
@@ -162,16 +162,17 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     def _tip(self) -> Drawing | None:
-        if tip := self.config.background.tip:
-            if isinstance(tip, Drawing):
-                tip_drawing = tip
-            else:
-                tip_drawing = tip.drawing
-            return tip_drawing.flip(
-                horizontal=not self._character_position.at_left,
-                vertical=not self._character_position.at_top,
-            )
-        return None
+        if not (tip := self.config.background.tip):
+            return None
+
+        if isinstance(tip, Drawing):
+            tip_drawing = tip
+        else:
+            tip_drawing = tip.drawing
+        return tip_drawing.flip(
+            horizontal=not self._character_position.at_left,
+            vertical=not self._character_position.at_top,
+        )
 
     @cached_property
     @override
@@ -245,7 +246,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
         )
 
     @cached_property
-    def _character_rectangle_on_screen(self) -> RectangleOnScreen:
+    def _character_rectangle_on_screen(self) -> RectangleArea:
         rect = self.character.drawing_on_screen.visible_rectangle_on_screen
         if self.scene.drawing_on_screen_shift:
             return rect + self.scene.drawing_on_screen_shift

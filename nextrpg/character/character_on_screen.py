@@ -19,7 +19,7 @@ from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
+from nextrpg.draw.rectangle_area import RectangleArea
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.global_config import config
@@ -73,15 +73,15 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         return [self.drawing_on_screen] + debug_visuals
 
     @cached_property
-    def collision_rectangle(self) -> RectangleOnScreen:
+    def collision_rectangle(self) -> RectangleArea:
         return self._collision_rectangle(self.coordinate)
 
     @cached_property
-    def start_event_rectangle(self) -> RectangleOnScreen:
+    def start_event_rectangle(self) -> RectangleArea:
         scaling = self.config.start_event_scaling
         coordinate = self.coordinate - self.width * (scaling - 1) / 2
         size = self.size * scaling
-        return RectangleOnScreen(coordinate, size)
+        return RectangleArea(coordinate, size)
 
     @property
     def drawing_on_screen(self) -> DrawingOnScreen:
@@ -122,11 +122,11 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         character = self.character.turn(direction)
         return replace(self, coordinate=coordinate, character=character)
 
-    def _collision_rectangle(self, coordinate: Coordinate) -> RectangleOnScreen:
+    def _collision_rectangle(self, coordinate: Coordinate) -> RectangleArea:
         scaling = self.config.bounding_rectangle_scaling
         coordinate = coordinate + self.height * (1 - scaling) / 2
         size = self.size * scaling
-        return RectangleOnScreen(coordinate, size)
+        return RectangleArea(coordinate, size)
 
     @cached_property
     def _collision_visual(self) -> DrawingOnScreen | None:

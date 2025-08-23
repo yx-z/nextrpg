@@ -6,11 +6,11 @@ from nextrpg.core.color import Color
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Height, Pixel, Size, Width
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon_on_screen import PolygonOnScreen
+from nextrpg.draw.polygon_area import PolygonArea
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
 
 
-class RectangleOnScreen(PolygonOnScreen):
+class RectangleArea(PolygonArea):
     def __init__(self, top_left: Coordinate, size: Size) -> None:
         object.__setattr__(self, "top_left", top_left)
         object.__setattr__(self, "size", size)
@@ -25,8 +25,8 @@ class RectangleOnScreen(PolygonOnScreen):
         )
 
     @override
-    def collide(self, poly: PolygonOnScreen) -> bool:
-        if not isinstance(poly, RectangleOnScreen):
+    def collide(self, poly: PolygonArea) -> bool:
+        if not isinstance(poly, RectangleArea):
             return super().collide(poly)
 
         return (
@@ -45,13 +45,13 @@ class RectangleOnScreen(PolygonOnScreen):
 
     def __add__(
         self, other: Coordinate | Size | Width | Height
-    ) -> RectangleOnScreen:
-        return RectangleOnScreen(self.top_left + other, self.size)
+    ) -> RectangleArea:
+        return RectangleArea(self.top_left + other, self.size)
 
     def __sub__(
         self, other: Coordinate | Size | Width | Height
-    ) -> RectangleOnScreen:
-        return RectangleOnScreen(self.top_left - other, self.size)
+    ) -> RectangleArea:
+        return RectangleArea(self.top_left - other, self.size)
 
     def fill(
         self, color: Color, border_radius: Pixel | None = None

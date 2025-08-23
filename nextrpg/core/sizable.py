@@ -1,6 +1,7 @@
+from dataclasses import dataclass
 from typing import Protocol
 
-from nextrpg.core.coordinate import Coordinate
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import (
     Height,
     HeightScaling,
@@ -71,3 +72,9 @@ class Sizable(Protocol):
     @property
     def center(self) -> Coordinate:
         return self.top_left + self.size / WidthAndHeightScaling(2)
+
+
+@dataclass(frozen=True)
+class SizableArea(Sizable):
+    size: Size
+    top_left: Coordinate = ORIGIN

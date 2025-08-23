@@ -23,8 +23,8 @@ from nextrpg.draw.drawing import (
     Drawing,
 )
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon_on_screen import PolygonOnScreen
-from nextrpg.draw.rectangle_on_screen import RectangleOnScreen
+from nextrpg.draw.polygon_area import PolygonArea
+from nextrpg.draw.rectangle_area import RectangleArea
 from nextrpg.global_config.global_config import config
 
 log = Log()
@@ -41,13 +41,13 @@ class LayerTileBottomAndDrawOnScreen(NamedTuple):
     drawing_on_screen: DrawingOnScreen
 
 
-def get_polygon(obj: TiledObject) -> PolygonOnScreen | None:
+def get_polygon(obj: TiledObject) -> PolygonArea | None:
     if hasattr(obj, "points"):
-        return PolygonOnScreen(
+        return PolygonArea(
             tuple(Coordinate(x, y) for x, y in obj.points), obj.closed
         )
     if _is_rect(obj):
-        return RectangleOnScreen(
+        return RectangleArea(
             Coordinate(obj.x, obj.y), Size(obj.width, obj.height)
         )
     return None
@@ -87,7 +87,7 @@ class MapLoader:
         return self._draw_layers(config().map.above_character)
 
     @cached_property
-    def collisions(self) -> list[PolygonOnScreen]:
+    def collisions(self) -> list[PolygonArea]:
         from_tiles = [
             self._polygon(coordinate, obj)
             for coordinate, obj in self._colliders
@@ -164,23 +164,23 @@ class MapLoader:
 
     def _polygon(
         self, coordinate: _TileCoordinate, obj: TiledObject
-    ) -> PolygonOnScreen:
+    ) -> PolygonArea:
         return self._from_rect(coordinate, obj) or self._from_points(
             coordinate, obj
         )
 
     def _from_points(
         self, coordinate: _TileCoordinate, obj: TiledObject
-    ) -> PolygonOnScreen:
+    ) -> PolygonArea:
         w, h = self._tile_size
         cx, cy = coordinate
-        return PolygonOnScreen(
+        return PolygonArea(
             tuple(Coordinate(cx * w + x, cy * h + y) for x, y in obj.as_points)
         )
 
     def _from_rect(
         self, coordinate: _TileCoordinate, obj: TiledObject
-    ) -> RectangleOnScreen | None:
+    ) -> RectangleArea | None:
         if not _is_rect(obj):
             return None
 
@@ -188,7 +188,7 @@ class MapLoader:
         cx, cy = coordinate
         map_coord = Coordinate(cx * w + obj.x, cy * h + obj.y)
         size = Size(obj.width, obj.height)
-        return RectangleOnScreen(map_coord, size)
+        return RectangleArea(map_coord, size)
 
     def _tile_layers(self, class_name: str) -> list[TiledTileLayer]:
         return [

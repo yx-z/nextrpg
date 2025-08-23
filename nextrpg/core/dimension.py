@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import NamedTuple, Self, override
+from typing import TYPE_CHECKING, NamedTuple, Self, override
+
+if TYPE_CHECKING:
+    from nextrpg.core.coordinate import Coordinate
 
 type Pixel = int | float
 
@@ -62,6 +65,11 @@ class Width(_Dimension):
             return self * (1 / scaling.value)
         return self * (1 / scaling)
 
+    def with_height(self, height: Pixel | Height) -> Size:
+        if isinstance(height, Height):
+            return Size(self.value, height.value)
+        return Size(self.value, height)
+
 
 class Height(_Dimension):
     @override
@@ -79,6 +87,11 @@ class Height(_Dimension):
         if isinstance(scaling, HeightScaling):
             return self * (1 / scaling.value)
         return self * (1 / scaling)
+
+    def with_width(self, width: Pixel | Width) -> Size:
+        if isinstance(width, Width):
+            return Size(width.value, self.value)
+        return Size(width, self.value)
 
 
 class WidthScaling(_Dimension):
@@ -162,6 +175,12 @@ class Size(NamedTuple):
 
     def __repr__(self) -> str:
         return f"({self.width_value:.0f}, {self.height_value:.0f})"
+
+    @property
+    def coordinate(self) -> Coordinate:
+        from nextrpg.core.coordinate import Coordinate
+
+        return Coordinate(self.width_value, self.height_value)
 
     @property
     def save_data(self) -> list[Pixel]:
