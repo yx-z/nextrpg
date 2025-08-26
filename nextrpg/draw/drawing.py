@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Hashable
+from collections.abc import Callable
 from dataclasses import dataclass, replace
 from functools import cached_property
 from pathlib import Path
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING
 
 from pygame import SRCALPHA, Surface
 from pygame.image import load
@@ -44,11 +44,6 @@ class Drawing(Sizable):
     color_key: Color | Coordinate | None = None
     convert_alpha: bool | None = None
     allow_background_in_debug: bool = True
-    tags: tuple[Hashable, ...] = ()
-
-    def add_tag(self, tag: Hashable) -> Self:
-        tags = self.tags + (tag,)
-        return replace(self, tags=tags)
 
     @property
     def size(self) -> Size:

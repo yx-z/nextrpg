@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Hashable
+from collections.abc import Callable
 from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
@@ -24,7 +24,6 @@ class PolygonDrawing:
     allow_background_in_debug: bool = False
     bounding_rectangle: RectangleArea | None = None
     line_only: bool = False
-    tags: tuple[Hashable, ...] = ()
 
     @cached_property
     def drawing(self) -> TransparentDrawing:
@@ -36,7 +35,6 @@ class PolygonDrawing:
         return TransparentDrawing(
             resource=surface,
             allow_background_in_debug=self.allow_background_in_debug,
-            tags=self.tags,
             color=self.color,
         )
 

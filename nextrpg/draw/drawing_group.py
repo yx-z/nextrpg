@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from collections.abc import Hashable
 from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
@@ -8,6 +7,7 @@ from typing import TYPE_CHECKING
 from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.sizable import Sizable
+from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.relative_drawing import RelativeDrawing
 
@@ -19,18 +19,16 @@ if TYPE_CHECKING:
 class DrawingGroup(Sizable):
     relative_drawings: tuple[RelativeDrawing, ...]
 
-    def add_tag(self, tag: Hashable) -> DrawingGroup:
-        relative_drawings = tuple(
-            relative.add_tag(tag) for relative in self.relative_drawings
-        )
-        return DrawingGroup(relative_drawings)
-
     @cached_property
-    def tags(self) -> tuple[Hashable, ...]:
-        tags: list[Hashable] = []
+    def drawings(self) -> tuple[Drawing, ...]:
+        res: list[Drawing] = []
         for relative in self.relative_drawings:
-            tags += relative.drawing.tags
-        return tuple(tags)
+            match relative.drawing:
+                case DrawingGroup() as drawing_group:
+                    res += drawing_group.drawings
+                case Drawing() as drawing:
+                    res.append(drawing)
+        return tuple(res)
 
     def drawing_on_screens(
         self, origin: Coordinate

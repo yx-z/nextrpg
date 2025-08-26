@@ -93,64 +93,55 @@ class NineSlice:
     def _top_left(self) -> Drawing:
         top_left = ORIGIN
         size = Size(self._left.value, self._top.value)
-        cropped = self.drawing.crop(top_left, size)
-        return cropped.add_tag(NineSlicePosition.TOP_LEFT)
+        return self.drawing.crop(top_left, size)
 
     @cached_property
     def _top_center(self) -> Drawing:
         top_left = ORIGIN + self._left
         size = Size(self._center_width.value, self._top.value)
-        cropped = self.drawing.crop(top_left, size)
-        return cropped.add_tag(NineSlicePosition.TOP_CENTER)
+        return self.drawing.crop(top_left, size)
 
     @cached_property
     def _top_right(self) -> Drawing:
         top_left = ORIGIN + self.drawing.width - self._right
         size = Size(self._right.value, self._top.value)
-        cropped = self.drawing.crop(top_left, size)
-        return cropped.add_tag(NineSlicePosition.TOP_RIGHT)
+        return self.drawing.crop(top_left, size)
 
     @cached_property
     def _center_left(self) -> Drawing:
         top_left = ORIGIN + self._top
         size = Size(self._left.value, self._center_height.value)
-        cropped = self.drawing.crop(top_left, size)
-        return cropped.add_tag(NineSlicePosition.CENTER_LEFT)
+        return self.drawing.crop(top_left, size)
 
     @cached_property
     def _center(self) -> Drawing:
         top_left = ORIGIN + self._top + self._left
         size = Size(self._center_width.value, self._center_height.value)
-        cropped = self.drawing.crop(top_left, size)
-        return cropped.add_tag(NineSlicePosition.CENTER)
+        return self.drawing.crop(top_left, size)
 
     @cached_property
     def _center_right(self) -> Drawing:
         top_left = ORIGIN + self.drawing.width - self._right + self._top
         size = Size(self._right.value, self._center_height.value)
-        cropped = self.drawing.crop(top_left, size)
-        return cropped.add_tag(NineSlicePosition.CENTER_RIGHT)
+        return self.drawing.crop(top_left, size)
 
     @cached_property
     def _bottom_left(self) -> Drawing:
         top_left = ORIGIN + self.drawing.height - self._bottom
         size = Size(self._left.value, self._bottom.value)
-        cropped = self.drawing.crop(top_left, size)
-        return cropped.add_tag(NineSlicePosition.BOTTOM_LEFT)
+        return self.drawing.crop(top_left, size)
 
     @cached_property
     def _bottom_center(self) -> Drawing:
         top_left = ORIGIN + self._left + self.drawing.height - self._bottom
         size = Size(self._center_width.value, self._bottom.value)
-        cropped = self.drawing.crop(top_left, size)
-        return cropped.add_tag(NineSlicePosition.BOTTOM_CENTER)
+        return self.drawing.crop(top_left, size)
 
     @cached_property
     def _bottom_right(self) -> Drawing:
         top_left = self.drawing.size - self._right - self._bottom
         size = Size(self._right.value, self._bottom.value)
-        cropped = self.drawing.crop(top_left.coordinate, size)
-        return cropped.add_tag(NineSlicePosition.BOTTOM_RIGHT)
+        return self.drawing.crop(top_left.coordinate, size)
 
     @property
     def _top(self) -> Height:

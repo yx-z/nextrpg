@@ -41,6 +41,10 @@ class Text(Sizable):
         )
         return DrawingGroup(draws)
 
+    @property
+    def drawings(self) -> tuple[Drawing, ...]:
+        return self.drawing_group.drawings
+
     def _drawing(self, line: str) -> Drawing:
         surface = self.config.font.pygame.render(
             line, self.config.smooth, self.config.color

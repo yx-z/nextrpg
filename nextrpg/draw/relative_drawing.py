@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from collections.abc import Hashable
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 from enum import Enum, auto
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING
 
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import (
@@ -36,14 +35,6 @@ class RelativeDrawing:
     drawing: Drawing | DrawingGroup
     shift: Size
     anchor: Anchor = Anchor.TOP_LEFT
-
-    def add_tag(self, tag: Hashable) -> Self:
-        drawing = self.drawing.add_tag(tag)
-        return replace(self, drawing=drawing)
-
-    @property
-    def tags(self) -> tuple[Hashable, ...]:
-        return self.drawing.tags
 
     def top_left(self, origin: Coordinate) -> Coordinate:
         match self.anchor:

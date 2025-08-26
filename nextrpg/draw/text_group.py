@@ -4,9 +4,10 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import Self
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dimension import Size, Width
 from nextrpg.core.sizable import Sizable
+from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.relative_drawing import RelativeDrawing
 from nextrpg.draw.text import Text
@@ -18,6 +19,10 @@ from nextrpg.global_config.text_group_config import TextGroupConfig
 class TextGroup(Sizable):
     texts: tuple[Text, ...]
     config: TextGroupConfig = field(default_factory=lambda: config().text_group)
+
+    @property
+    def drawings(self) -> tuple[Drawing, ...]:
+        return self.drawing_group.drawings
 
     def __getitem__(self, item: slice) -> Self:
         if item.step not in (None, 1):

@@ -31,9 +31,7 @@ class SayEventAddOn:
 
     @cached_property
     def background(self) -> tuple[DrawingOnScreen, ...]:
-        TEXT_TAG = "SayEventAddOnText"
-        text_group = self._text.drawing_group.add_tag(TEXT_TAG)
-        contents = [RelativeDrawing(text_group, ORIGIN)]
+        contents = [RelativeDrawing(self._text.drawing_group, ORIGIN)]
         if self._name_relative_to_text:
             contents.append(self._name_relative_to_text)
         if self._avatar_relative_to_text:
@@ -50,7 +48,11 @@ class SayEventAddOn:
         drawing_on_screens = add_on_group.drawing_on_screens(
             self._background_top_left
         )
-        return tuple(d for d in drawing_on_screens if TEXT_TAG not in d.tags)
+        return tuple(
+            drawing_on_screen
+            for drawing_on_screen in drawing_on_screens
+            if drawing_on_screen.drawing not in self._text.drawings
+        )
 
     @cached_property
     def text_on_screen(self) -> TextOnScreen:

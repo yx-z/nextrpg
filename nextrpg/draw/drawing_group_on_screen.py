@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Hashable
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 from functools import cached_property
 
 from nextrpg.core.color import Color
@@ -20,14 +19,6 @@ from nextrpg.global_config.global_config import config
 class DrawingGroupOnScreen(Sizable):
     origin: Coordinate
     drawing_group: DrawingGroup
-
-    def add_tag(self, tag: Hashable) -> DrawingGroupOnScreen:
-        drawing_group = self.drawing_group.add_tag(tag)
-        return replace(self, drawing_group=drawing_group)
-
-    @property
-    def tags(self) -> tuple[Hashable, ...]:
-        return self.drawing_group.tags
 
     @property
     def size(self) -> Size:
