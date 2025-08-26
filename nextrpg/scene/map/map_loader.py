@@ -88,15 +88,15 @@ class MapLoader:
 
     @cached_property
     def collisions(self) -> tuple[PolygonArea, ...]:
-        from_tiles = [
+        from_tiles = tuple(
             self._polygon(coordinate, obj)
             for coordinate, obj in self._colliders
-        ]
-        from_objects = [
+        )
+        from_objects = tuple(
             poly
             for obj in self.get_objects_by_class_name(config().map.collision)
             if (poly := get_polygon(obj))
-        ]
+        )
         return from_tiles + from_objects
 
     @cached_property
