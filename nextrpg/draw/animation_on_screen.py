@@ -13,7 +13,7 @@ from nextrpg.draw.sizable_draw_on_screens import SizableDrawOnScreens
 class AnimationOnScreen(Sizable, ABC):
     @property
     @abstractmethod
-    def drawing_on_screens(self) -> list[DrawingOnScreen]: ...
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]: ...
 
     @abstractmethod
     def tick(self, time_delta: Millisecond) -> Self: ...
@@ -28,4 +28,4 @@ class AnimationOnScreen(Sizable, ABC):
 
     @cached_property
     def _sized(self) -> SizableDrawOnScreens:
-        return SizableDrawOnScreens(tuple(self.drawing_on_screens))
+        return SizableDrawOnScreens(self.drawing_on_screens)

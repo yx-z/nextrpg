@@ -67,27 +67,27 @@ class MapLoader:
         return Size(width, height)
 
     @cached_property
-    def background(self) -> list[DrawingOnScreen]:
+    def background(self) -> tuple[DrawingOnScreen, ...]:
         return self._draw_layers(config().map.background)
 
     @cached_property
     def foreground(
         self,
-    ) -> list[list[LayerTileBottomAndDrawOnScreen]]:
-        return [
+    ) -> tuple[tuple[LayerTileBottomAndDrawOnScreen, ...], ...]:
+        return tuple(
             _foreground_layer(i, tiles)
             for i, layer in enumerate(
                 self._tile_layers(config().map.foreground)
             )
             if (tiles := self._bottom_and_drawing(layer))
-        ]
+        )
 
     @cached_property
-    def above_character(self) -> list[DrawingOnScreen]:
+    def above_character(self) -> tuple[DrawingOnScreen, ...]:
         return self._draw_layers(config().map.above_character)
 
     @cached_property
-    def collisions(self) -> list[PolygonArea]:
+    def collisions(self) -> tuple[PolygonArea, ...]:
         from_tiles = [
             self._polygon(coordinate, obj)
             for coordinate, obj in self._colliders
@@ -100,12 +100,12 @@ class MapLoader:
         return from_tiles + from_objects
 
     @cached_property
-    def collision_visuals(self) -> list[DrawingOnScreen]:
+    def collision_visuals(self) -> tuple[DrawingOnScreen, ...]:
         if config().debug and (
             color := config().debug.collision_rectangle_color
         ):
-            return [c.fill(color) for c in self.collisions]
-        return []
+            return tuple(c.fill(color) for c in self.collisions)
+        return ()
 
     def get_object(self, name: str) -> TiledObject:
         for obj in self._all_objects:
@@ -113,22 +113,24 @@ class MapLoader:
                 return obj
         raise RuntimeError(f"Object {name} not found.")
 
-    def get_objects_by_class_name(self, class_name: str) -> list[TiledObject]:
-        return [obj for obj in self._all_objects if obj.type == class_name]
+    def get_objects_by_class_name(
+        self, class_name: str
+    ) -> tuple[TiledObject, ...]:
+        return tuple(obj for obj in self._all_objects if obj.type == class_name)
 
     def layer_bottom_and_drawing(
         self, character: CharacterOnScreen
-    ) -> list[LayerTileBottomAndDrawOnScreen]:
+    ) -> tuple[LayerTileBottomAndDrawOnScreen, ...]:
         character_layer = self._character_layer(character)
         character_bottom = (
             character.drawing_on_screen.visible_rectangle_on_screen.bottom
         )
-        return [
+        return tuple(
             LayerTileBottomAndDrawOnScreen(
                 character_layer, character_bottom, draw_on_screen
             )
             for draw_on_screen in character.draw_on_screens
-        ]
+        )
 
     def _character_layer(self, character: CharacterOnScreen) -> int:
         for index, layer in enumerate(self._reversed_foregrounds):
@@ -139,28 +141,30 @@ class MapLoader:
     @cached_property
     def _reversed_foregrounds(
         self,
-    ) -> list[list[LayerTileBottomAndDrawOnScreen]]:
-        return reversed(self.foreground)
+    ) -> tuple[tuple[LayerTileBottomAndDrawOnScreen, ...], ...]:
+        return tuple(reversed(self.foreground))
 
     @cached_property
-    def _all_objects(self) -> list[TiledObject]:
-        return [
+    def _all_objects(self) -> tuple[TiledObject, ...]:
+        return tuple(
             obj
             for i in self._tmx.visible_object_groups
             for obj in self._layer(i)
-        ]
+        )
 
     @cached_property
-    def _colliders(self) -> list[_Collider]:
-        return [
+    def _colliders(self) -> tuple[_Collider, ...]:
+        return tuple(
             _Collider(_TileCoordinate(x, y), collider)
             for layer in self._all_tile_layers
             for x, y, gid in layer
             for collider in self._collider(gid)
-        ]
+        )
 
-    def _collider(self, gid: _Gid) -> list[TiledObject]:
-        return self._tmx.tile_properties.get(gid, {}).get("colliders", [])
+    def _collider(self, gid: _Gid) -> tuple[TiledObject, ...]:
+        return tuple(
+            self._tmx.tile_properties.get(gid, {}).get("colliders", ())
+        )
 
     def _polygon(
         self, coordinate: _TileCoordinate, obj: TiledObject
@@ -190,27 +194,27 @@ class MapLoader:
         size = Size(obj.width, obj.height)
         return RectangleArea(map_coord, size)
 
-    def _tile_layers(self, class_name: str) -> list[TiledTileLayer]:
-        return [
+    def _tile_layers(self, class_name: str) -> tuple[TiledTileLayer, ...]:
+        return tuple(
             layer
             for layer in self._all_tile_layers
             if getattr(layer, "class", None) == class_name
-        ]
+        )
 
     @cached_property
-    def _all_tile_layers(self) -> list[TiledTileLayer]:
-        return [self._layer(i) for i in self._tmx.visible_tile_layers]
+    def _all_tile_layers(self) -> tuple[TiledTileLayer, ...]:
+        return tuple(self._layer(i) for i in self._tmx.visible_tile_layers)
 
-    def _draw_layers(self, class_name: str) -> list[DrawingOnScreen]:
-        return [
+    def _draw_layers(self, class_name: str) -> tuple[DrawingOnScreen, ...]:
+        return tuple(
             drawing
             for layer in self._tile_layers(class_name)
             for drawing in self._drawing(layer).values()
-        ]
+        )
 
     def _bottom_and_drawing(
         self, layer: TiledTileLayer
-    ) -> list[TileBottomAndDrawOnScreen]:
+    ) -> tuple[TileBottomAndDrawOnScreen, ...]:
         coord_and_draws = self._drawing(layer)
         coord_to_bottom = {
             coordinate: drawing.visible_rectangle_on_screen.bottom
@@ -223,7 +227,7 @@ class MapLoader:
             )
             for coordinate, drawing in coord_and_draws.items()
         )
-        return sorted(bottom_and_draw, key=lambda t: t.bottom)
+        return tuple(sorted(bottom_and_draw, key=lambda t: t.bottom))
 
     @property
     def _tile_size(self) -> Size:
@@ -329,12 +333,12 @@ def _is_rect(obj: TiledObject) -> bool:
 
 
 def _foreground_layer(
-    idx: int, tiles: list[TileBottomAndDrawOnScreen]
-) -> list[LayerTileBottomAndDrawOnScreen]:
-    return [
+    idx: int, tiles: tuple[TileBottomAndDrawOnScreen, ...]
+) -> tuple[LayerTileBottomAndDrawOnScreen, ...]:
+    return tuple(
         LayerTileBottomAndDrawOnScreen(idx, bottom, drawing)
         for bottom, drawing in tiles
-    ]
+    )
 
 
 type _Gid = int

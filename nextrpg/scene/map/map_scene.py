@@ -70,9 +70,7 @@ class MapScene(EventfulScene):
             player_spec.character.drawing
         ).top_left
         player = PlayerOnScreen(
-            player_spec,
-            top_left,
-            map_collisions=tuple(self.map_helper.collisions),
+            player_spec, top_left, map_collisions=self.map_helper.collisions
         )
         if self.save_io:
             return self.save_io.update(player)
@@ -95,7 +93,7 @@ class MapScene(EventfulScene):
 
     @cached_property
     @override
-    def drawing_on_screens_before_shift(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens_before_shift(self) -> tuple[DrawingOnScreen, ...]:
         return (
             self.map_helper.background
             + self._foreground_and_characters
@@ -104,16 +102,18 @@ class MapScene(EventfulScene):
         )
 
     @cached_property
-    def _foreground_and_characters(self) -> list[DrawingOnScreen]:
+    def _foreground_and_characters(self) -> tuple[DrawingOnScreen, ...]:
         characters = (self.player,) + self.npcs
-        layer_bottom_draws = list(
+        layer_bottom_draws = tuple(
             drawing
             for character in characters
             for drawing in self.map_helper.layer_bottom_and_drawing(character)
         )
-        foregrounds = [t for layer in self.map_helper.foreground for t in layer]
+        foregrounds = tuple(
+            t for layer in self.map_helper.foreground for t in layer
+        )
         layers = sorted(foregrounds + layer_bottom_draws, key=lambda x: x[:2])
-        return [drawing_on_screen for _, _, drawing_on_screen in layers]
+        return tuple(drawing_on_screen for _, _, drawing_on_screen in layers)
 
     def _move_to_scene(self, time_delta: Millisecond) -> Scene | None:
         for move in self._moves:
@@ -128,17 +128,17 @@ class MapScene(EventfulScene):
         return (self.move,)
 
     @cached_property
-    def _move_visuals(self) -> list[DrawingOnScreen]:
+    def _move_visuals(self) -> tuple[DrawingOnScreen, ...]:
         if config().debug and (color := config().debug.move_object_color):
-            return [m.fill(color) for m in self._move_polys]
-        return []
+            return tuple(m.fill(color) for m in self._move_polys)
+        return ()
 
     @cached_property
-    def _move_polys(self) -> list[PolygonArea]:
-        return [
+    def _move_polys(self) -> tuple[PolygonArea, ...]:
+        return tuple(
             get_polygon(self.map_helper.get_object(m.trigger_object))
             for m in self._moves
-        ]
+        )
 
     def _move(self, move: Move, time_delta: Millisecond) -> Scene | None:
         move_poly = get_polygon(self.map_helper.get_object(move.trigger_object))
@@ -148,14 +148,14 @@ class MapScene(EventfulScene):
         return None
 
     @cached_property
-    def _npc_paths(self) -> list[DrawingOnScreen]:
+    def _npc_paths(self) -> tuple[DrawingOnScreen, ...]:
         if not (debug := config().debug) or not (color := debug.npc_path_color):
-            return []
-        return [
+            return ()
+        return tuple(
             npc.path.line(color)
             for npc in self.npcs
             if isinstance(npc, MovingNpcOnScreen)
-        ]
+        )
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
         npc_object = self.map_helper.get_object(spec.unique_name)

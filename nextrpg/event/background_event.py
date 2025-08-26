@@ -29,8 +29,8 @@ class BackgroundEvent(ABC):
     )
 
     @property
-    def draw_on_screens(self) -> list[DrawingOnScreen]:
-        return []
+    def draw_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return ()
 
     def apply(self, scene: EventfulScene) -> EventfulScene:
         return scene

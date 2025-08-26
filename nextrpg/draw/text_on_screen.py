@@ -19,5 +19,5 @@ class TextOnScreen(Sizable):
         return self.text.size
 
     @cached_property
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return self.text.drawing_group.drawing_on_screens(self.top_left)

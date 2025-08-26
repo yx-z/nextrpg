@@ -63,18 +63,18 @@ class ComponentAndMessage:
     message: str
 
 
-def pop_messages(time_delta: Millisecond) -> list[ComponentAndMessage]:
+def pop_messages(time_delta: Millisecond) -> tuple[ComponentAndMessage, ...]:
     from nextrpg.global_config.global_config import config
 
     if not (debug := config().debug):
         _pop(time_delta)
-        return []
+        return ()
 
-    msgs = [
+    msgs = tuple(
         ComponentAndMessage(e.component, e.formatted)
         for e in _entries + list(_timed_entries.values())
         if e.level >= debug.log_level
-    ]
+    )
     _pop(time_delta)
     return msgs
 

@@ -63,14 +63,14 @@ class Text(Sizable):
         return TextGroup((self, txt))
 
     @cached_property
-    def line_texts(self) -> list[Self]:
-        return [self.text(l) for l in self.lines]
+    def line_texts(self) -> tuple[Self, ...]:
+        return tuple(self.text(l) for l in self.lines)
 
     def text(self, message: str) -> Self:
         return replace(self, message=message)
 
     @cached_property
-    def lines(self) -> list[str]:
+    def lines(self) -> tuple[str, ...]:
         if not (wrap := self.config.wrap):
             return self.message.splitlines(keepends=True)
 
@@ -89,7 +89,7 @@ class Text(Sizable):
             if line_buffer:
                 lines.append(" ".join(line_buffer))
                 line_buffer = []
-        return lines
+        return tuple(lines)
 
     def _line_shift(self, index: int) -> Size:
         height = self.config.font.text_height + self.config.line_spacing

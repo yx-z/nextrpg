@@ -38,7 +38,7 @@ class Savable[_S]:
     def save_data(self) -> _S: ...
 
     @property
-    def key(self) -> list[str]:
+    def key(self) -> tuple[str, ...]:
         return _module_and_class(self)
 
 
@@ -201,7 +201,7 @@ def _concat(args: Iterable[Any]) -> str:
     return "|".join(map(str, args))
 
 
-def _module_and_class(x: type | Any) -> list[str]:
+def _module_and_class(x: type | Any) -> tuple[str, ...]:
     if isinstance(x, type):
-        return [x.__module__, x.__qualname__]
-    return [x.__module__, x.__class__.__qualname__]
+        return x.__module__, x.__qualname__
+    return x.__module__, x.__class__.__qualname__

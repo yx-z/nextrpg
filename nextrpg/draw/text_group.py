@@ -83,8 +83,8 @@ class TextGroup(Sizable):
         return Width(widths + margins)
 
     @cached_property
-    def _no_wrap(self) -> list[Text]:
-        return [_no_wrap(t) for t in self.texts]
+    def _no_wrap(self) -> tuple[Text, ...]:
+        return tuple(_no_wrap(t) for t in self.texts)
 
 
 def _no_wrap(text: Text) -> Text:

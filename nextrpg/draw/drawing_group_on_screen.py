@@ -38,7 +38,7 @@ class DrawingGroupOnScreen(Sizable):
         return self._sized.top_left
 
     @cached_property
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         res: list[DrawingOnScreen] = []
         for relative in self.drawing_group.relative_drawings:
             top_left = relative.top_left(self.origin)
@@ -55,11 +55,11 @@ class DrawingGroupOnScreen(Sizable):
                 link = PolygonArea(points, closed=False)
                 link_drawing_on_screen = link.line(self._link_color)
                 res.append(link_drawing_on_screen)
-        return res
+        return tuple(res)
 
     @cached_property
     def _sized(self) -> SizableDrawOnScreens:
-        return SizableDrawOnScreens(tuple(self.drawing_on_screens))
+        return SizableDrawOnScreens(self.drawing_on_screens)
 
     @cached_property
     def _link_color(self) -> Color | None:

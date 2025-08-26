@@ -26,14 +26,14 @@ class _Fade(AnimationOnScreen, ABC):
 
     @cached_property
     @override
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if self._timer.complete:
             return self._complete
         if self._timer.elapsed == 0:
             return self._start
 
         alpha = alpha_from_percentage(self._percentage)
-        return [d.set_alpha(alpha) for d in self._drawing_on_screens]
+        return tuple(d.set_alpha(alpha) for d in self._drawing_on_screens)
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
@@ -45,18 +45,18 @@ class _Fade(AnimationOnScreen, ABC):
         return self._timer.complete
 
     @cached_property
-    def _drawing_on_screens(self) -> list[DrawingOnScreen]:
+    def _drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if isinstance(self.drawing_on_screen, DrawingOnScreen):
-            return [self.drawing_on_screen]
-        return list(self.drawing_on_screen)
+            return (self.drawing_on_screen,)
+        return self.drawing_on_screen
 
     @property
     @abstractmethod
-    def _start(self) -> list[DrawingOnScreen]: ...
+    def _start(self) -> tuple[DrawingOnScreen, ...]: ...
 
     @property
     @abstractmethod
-    def _complete(self) -> list[DrawingOnScreen]: ...
+    def _complete(self) -> tuple[DrawingOnScreen, ...]: ...
 
     @property
     @abstractmethod
@@ -66,12 +66,12 @@ class _Fade(AnimationOnScreen, ABC):
 class FadeIn(_Fade):
     @override
     @property
-    def _start(self) -> list[DrawingOnScreen]:
-        return []
+    def _start(self) -> tuple[DrawingOnScreen, ...]:
+        return ()
 
     @override
     @property
-    def _complete(self) -> list[DrawingOnScreen]:
+    def _complete(self) -> tuple[DrawingOnScreen, ...]:
         return self._drawing_on_screens
 
     @override
@@ -88,10 +88,10 @@ class FadeOut(_Fade):
 
     @override
     @property
-    def _start(self) -> list[DrawingOnScreen]:
+    def _start(self) -> tuple[DrawingOnScreen, ...]:
         return self._drawing_on_screens
 
     @override
     @property
-    def _complete(self) -> list[DrawingOnScreen]:
-        return []
+    def _complete(self) -> tuple[DrawingOnScreen, ...]:
+        return ()

@@ -129,10 +129,10 @@ class EventfulScene(EventAsAttr, Scene):
 
     @cached_property
     @override
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
-        context_draws = [
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        context_draws = tuple(
             d for c in self._background_events for d in c.draw_on_screens
-        ]
+        )
         return super().drawing_on_screens + context_draws
 
     def get_background_event(
@@ -151,8 +151,8 @@ class EventfulScene(EventAsAttr, Scene):
         )
         return replace(self, _background_events=background_events)
 
-    def _others(self, npc: NpcOnScreen) -> list[NpcOnScreen]:
-        return [self.player] + [n for n in self.npcs if n is not npc]
+    def _others(self, npc: NpcOnScreen) -> tuple[NpcOnScreen, ...]:
+        return (self.player,) + tuple(n for n in self.npcs if n is not npc)
 
     @cached_property
     def _npc_dict(self) -> dict[str, NpcOnScreen]:

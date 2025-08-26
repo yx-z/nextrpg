@@ -30,7 +30,7 @@ class SayEventAddOn:
     message: str | Text | TextGroup
 
     @cached_property
-    def background(self) -> list[DrawingOnScreen]:
+    def background(self) -> tuple[DrawingOnScreen, ...]:
         TEXT_TAG = "SayEventAddOnText"
         text_group = self._text.drawing_group.add_tag(TEXT_TAG)
         contents = [RelativeDrawing(text_group, ORIGIN)]
@@ -50,7 +50,7 @@ class SayEventAddOn:
         drawing_on_screens = add_on_group.drawing_on_screens(
             self._background_top_left
         )
-        return [d for d in drawing_on_screens if TEXT_TAG not in d.tags]
+        return tuple(d for d in drawing_on_screens if TEXT_TAG not in d.tags)
 
     @cached_property
     def text_on_screen(self) -> TextOnScreen:

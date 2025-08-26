@@ -32,7 +32,9 @@ class DrawingGroup(Sizable):
             tags += relative.drawing.tags
         return tuple(tags)
 
-    def drawing_on_screens(self, origin: Coordinate) -> list[DrawingOnScreen]:
+    def drawing_on_screens(
+        self, origin: Coordinate
+    ) -> tuple[DrawingOnScreen, ...]:
         from nextrpg.draw.drawing_group_on_screen import DrawingGroupOnScreen
 
         return DrawingGroupOnScreen(origin, self).drawing_on_screens

@@ -66,11 +66,11 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         return replace(self, character=self.character.tick_idle(time_delta))
 
     @property
-    def draw_on_screens(self) -> list[DrawingOnScreen]:
-        debug_visuals = [
+    def draw_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        debug_visuals = tuple(
             d for d in (self._collision_visual, self._start_event_visual) if d
-        ]
-        return [self.drawing_on_screen] + debug_visuals
+        )
+        return (self.drawing_on_screen,) + debug_visuals
 
     @cached_property
     def collision_rectangle(self) -> RectangleArea:
@@ -104,8 +104,8 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
 
     @override
     @property
-    def key(self) -> list[str]:
-        return super().key + [self.spec.unique_name]
+    def key(self) -> tuple[str, ...]:
+        return super().key + (self.spec.unique_name,)
 
     @override
     @property

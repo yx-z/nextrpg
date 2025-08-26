@@ -111,9 +111,9 @@ class Window:
         self._screen.fill(self.current_config.background)
 
         if msgs := pop_messages(time_delta):
-            drawing_on_screens += [
+            drawing_on_screens += tuple(
                 d for text in _log_text(msgs) for d in text.drawing_on_screens
-            ]
+            )
 
         match self.current_config.resize:
             case ResizeMode.SCALE:
@@ -186,13 +186,13 @@ class Window:
 
 
 def _log_text(
-    component_and_messages: list[ComponentAndMessage],
-) -> list[TextOnScreen]:
-    components = [m.component for m in component_and_messages]
+    component_and_messages: tuple[ComponentAndMessage, ...],
+) -> tuple[TextOnScreen, ...]:
+    components = tuple(m.component for m in component_and_messages)
     component_text = Text("\n".join(components))
     components_on_screen = TextOnScreen(ORIGIN, component_text)
 
-    messages = [m.message for m in component_and_messages]
+    messages = tuple(m.message for m in component_and_messages)
     msg_text = Text("\n".join(messages))
     msgs_on_screen = TextOnScreen(ORIGIN + component_text.width, msg_text)
-    return [components_on_screen, msgs_on_screen]
+    return components_on_screen, msgs_on_screen
