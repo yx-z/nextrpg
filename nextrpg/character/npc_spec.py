@@ -9,7 +9,7 @@ from nextrpg.character.character_on_screen import (
     _BaseCharacterSpec,
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
+from nextrpg.character.polygon_character_drawing import PolygonCharacterDrawing
 from nextrpg.core.color import Color
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,

@@ -1,14 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Self
+from typing import Self
 
 from nextrpg.core.time import Millisecond
+from nextrpg.draw.drawing import Drawing
+from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.sizable import Sizable
-
-if TYPE_CHECKING:
-    from nextrpg.draw.drawing import Drawing
-    from nextrpg.draw.drawing_group import DrawingGroup
 
 
 class Animation(Sizable, ABC):

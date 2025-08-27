@@ -70,6 +70,7 @@ from nextrpg.core.dataclass_with_default_init import (
     default_init,
     not_constructor_below,
 )
+from nextrpg.core.font import Font
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
 from nextrpg.core.save import (
     LoadFromSave,
@@ -114,6 +115,7 @@ from nextrpg.event.pygame_event import (
     to_typed_event,
 )
 from nextrpg.game import Game
+from nextrpg.game_loop import GameLoop
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
     Height,

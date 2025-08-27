@@ -14,7 +14,7 @@ from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen
 from nextrpg.character.npc_spec import NpcSpec, to_strict
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
+from nextrpg.character.polygon_character_drawing import PolygonCharacterDrawing
 from nextrpg.config.config import config
 from nextrpg.core.color import TRANSPARENT
 from nextrpg.core.dataclass_with_default_init import (

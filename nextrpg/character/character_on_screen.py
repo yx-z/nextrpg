@@ -5,7 +5,7 @@ from functools import cached_property
 from typing import Any, Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
+from nextrpg.character.polygon_character_drawing import PolygonCharacterDrawing
 from nextrpg.config.character_config import CharacterConfig
 from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default_init import (
