@@ -49,14 +49,14 @@ class NineSlice:
             stretched_center,
             stretched_center_right,
         )
-        center_row = RelativeDrawing(center_row_group, self.top.with_width(0))
+        center_row = RelativeDrawing(center_row_group, self.top * Width(0))
 
         stretched_bottom_center = self._bottom_center * width_scale
         bottom_row_group = self._stretch_row(
             size, self._bottom_left, stretched_bottom_center, self._bottom_right
         )
         bottom_row = RelativeDrawing(
-            bottom_row_group, size.height.with_width(0), Anchor.BOTTOM_LEFT
+            bottom_row_group, size.height * Width(0), Anchor.BOTTOM_LEFT
         )
 
         rows = (top_row, center_row, bottom_row)
@@ -66,9 +66,9 @@ class NineSlice:
         self, size: Size, left: Drawing, center: Drawing, right: Drawing
     ) -> DrawingGroup:
         relative_left = RelativeDrawing(left, ZERO_SIZE)
-        relative_center = RelativeDrawing(center, self.left.with_height(0))
+        relative_center = RelativeDrawing(center, self.left * Height(0))
         relative_right = RelativeDrawing(
-            right, size.width.with_height(0), Anchor.TOP_RIGHT
+            right, size.width * Height(0), Anchor.TOP_RIGHT
         )
         relatives = (relative_left, relative_center, relative_right)
         return DrawingGroup(relatives)

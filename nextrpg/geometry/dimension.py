@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, NamedTuple, Self, override
+from functools import singledispatchmethod
+from typing import NamedTuple, Self, TYPE_CHECKING, override
 
 if TYPE_CHECKING:
     from nextrpg.geometry.coordinate import Coordinate
@@ -52,48 +53,6 @@ class _Dimension:
         return self * (1 / scaling)
 
 
-class Width(_Dimension):
-    @override
-    def __mul__(self, scaling: int | float | WidthScaling) -> Width:
-        if isinstance(scaling, WidthScaling):
-            return Width(self.value * scaling.value)
-        return Width(self.value * scaling)
-
-    @override
-    def __truediv__(self, scaling: int | float | WidthScaling) -> Width:
-        if isinstance(scaling, WidthScaling):
-            return self * (1 / scaling.value)
-        return self * (1 / scaling)
-
-    def with_height(self, height: Pixel | Height) -> Size:
-        if isinstance(height, Height):
-            return Size(self.value, height.value)
-        return Size(self.value, height)
-
-
-class Height(_Dimension):
-    @override
-    def __mul__(self, scaling: int | float | HeightScaling) -> Height:
-        if isinstance(scaling, HeightScaling):
-            return Height(self.value * scaling.value)
-        return Height(self.value * scaling)
-
-    @override
-    def __rmul__(self, scaling: int | float | HeightScaling) -> Height:
-        return self * scaling
-
-    @override
-    def __truediv__(self, scaling: int | float | HeightScaling) -> Height:
-        if isinstance(scaling, HeightScaling):
-            return self * (1 / scaling.value)
-        return self * (1 / scaling)
-
-    def with_width(self, width: Pixel | Width) -> Size:
-        if isinstance(width, Width):
-            return Size(width.value, self.value)
-        return Size(width, self.value)
-
-
 class WidthScaling(_Dimension):
     pass
 
@@ -104,6 +63,62 @@ class HeightScaling(_Dimension):
 
 class WidthAndHeightScaling(_Dimension):
     pass
+
+
+class Width(_Dimension):
+    @override
+    @singledispatchmethod
+    def __mul__(
+        self, arg: int | float | WidthScaling | Height
+    ) -> Width | Size: ...
+
+    @override
+    def __rmul__(self, arg: int | float | WidthScaling) -> Width:
+        return self * arg
+
+    @override
+    def __truediv__(self, arg: int | float | WidthScaling) -> Width:
+        if isinstance(arg, WidthScaling):
+            return self * (1 / arg.value)
+        return self * (1 / arg)
+
+
+class Height(_Dimension):
+    @override
+    @singledispatchmethod
+    def __mul__(self, arg: int | float | HeightScaling) -> Height | Size: ...
+
+    @__mul__.register
+    def height_scale(self, arg: int | float | HeightScaling) -> Height:
+        if isinstance(arg, HeightScaling):
+            return Height(self.value * arg.value)
+        return Height(self.value * arg)
+
+    @__mul__.register
+    def height_with_width(self, arg: Width) -> Size:
+        return Size(arg.value, self.value)
+
+    @override
+    def __rmul__(self, arg: int | float | HeightScaling) -> Height | Size:
+        return self * arg
+
+    @override
+    def __truediv__(self, scaling: int | float | HeightScaling) -> Height:
+        if isinstance(scaling, HeightScaling):
+            return self * (1 / scaling.value)
+        return self * (1 / scaling)
+
+
+@Width.__mul__.register
+def width_scale(self, arg: int | float | WidthScaling) -> Width:
+    if isinstance(arg, WidthScaling):
+        return Width(self.value * arg.value)
+    return Width(self.value * arg)
+
+
+@Width.__mul__.register
+def width_with_height(self, arg: Height) -> Size:
+    return Size(self.value, arg.value)
 
 
 class Size(NamedTuple):

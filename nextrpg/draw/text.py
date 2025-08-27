@@ -10,7 +10,7 @@ from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.relative_drawing import RelativeDrawing
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.dimension import Size, Width
 from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
@@ -97,4 +97,4 @@ class Text(Sizable):
 
     def _line_shift(self, index: int) -> Size:
         height = self.config.font.text_height + self.config.line_spacing
-        return (height * index).with_width(0)
+        return (height * index) * Width(0)

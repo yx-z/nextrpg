@@ -18,7 +18,7 @@ from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
-from nextrpg.geometry.dimension import Size, WidthAndHeightScaling
+from nextrpg.geometry.dimension import Size, Width, WidthAndHeightScaling
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.gui.area import gui_width, left_screen, top_screen
 from nextrpg.scene.scene import Scene
@@ -120,7 +120,7 @@ class SayEventAddOn:
         if not self._name:
             return None
         text = Text(self._name, self.config.name_text_config)
-        shift = -(text.height + self.config.padding.height).with_width(0)
+        shift = -(text.height + self.config.padding.height) * Width(0)
         return RelativeDrawing(text.drawing_group, shift)
 
     @cached_property

@@ -124,11 +124,11 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         num_frames = len(self.sprite_sheet.style)
         width = drawing.width / num_frames
         height = drawing.height / len(_DIR_TO_ROW)
-        size = width.with_height(height)
+        size = width * height
         return tuple(
             drawing.crop(
                 RectangleAreaOnScreen(
-                    (width * i).with_height(height * row).coordinate, size
+                    ((width * i) * (height * row)).coordinate, size
                 )
             )
             for i in range(num_frames)
