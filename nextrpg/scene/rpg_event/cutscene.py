@@ -27,7 +27,7 @@ def _cutscene[R, **P](
     cfg: CutsceneConfig, fun: Callable[P, R]
 ) -> Callable[P, EventGenerator]:
     def decorated(*args: P.args, **kwargs: P.kwargs) -> EventGenerator:
-        size = gui_size() * cfg.screen_height_scaling
+        size = gui_size() * cfg.cover_from_screen_scaling
         top_border = RectangleAreaOnScreen(ORIGIN, size)
         bottom_border = top_border + gui_height() - size.height
         borders = tuple(
