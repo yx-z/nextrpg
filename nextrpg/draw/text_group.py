@@ -4,7 +4,7 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import Self
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size, Width
 from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import Drawing
@@ -48,14 +48,14 @@ class TextGroup(Sizable):
 
     def __add__(self, other: str | Text) -> TextGroup:
         if isinstance(other, str):
-            txt = Text(other)
+            text = Text(other)
         else:
-            txt = other
-        return replace(self, texts=self.texts + (txt,))
+            text = other
+        return replace(self, texts=self.texts + (text,))
 
     @property
     def top_left(self) -> Coordinate:
-        return ORIGIN
+        return self.drawing_group.top_left
 
     @property
     def size(self) -> Size:

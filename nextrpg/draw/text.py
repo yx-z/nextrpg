@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
 from functools import cached_property
-from typing import TYPE_CHECKING, Self
+from typing import Self, TYPE_CHECKING
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
 from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import Drawing
@@ -31,7 +31,7 @@ class Text(Sizable):
 
     @property
     def top_left(self) -> Coordinate:
-        return ORIGIN
+        return self.drawing_group.top_left
 
     @cached_property
     def drawing_group(self) -> DrawingGroup:
