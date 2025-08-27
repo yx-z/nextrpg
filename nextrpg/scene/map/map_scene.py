@@ -111,7 +111,7 @@ class MapScene(EventfulScene):
             for drawing in self.map_helper.layer_bottom_and_drawing(character)
         )
         foregrounds = tuple(
-            t for layer in self.map_helper.foreground for t in layer
+            tile for layer in self.map_helper.foreground for tile in layer
         )
         layers = sorted(foregrounds + layer_bottom_draws, key=lambda x: x[:2])
         return tuple(drawing_on_screen for _, _, drawing_on_screen in layers)
@@ -165,8 +165,8 @@ class MapScene(EventfulScene):
             if not isinstance(npc, MovingNpcOnScreen):
                 continue
             points = tuple(
-                p.as_top_left_of(npc.character.drawing).bottom_center
-                for p in npc.path.points
+                point.as_top_left_of(npc).bottom_center
+                for point in npc.path.points
             )
             path = PolylineOnScreen(points).fill(color)
             res.append(path)
@@ -180,7 +180,7 @@ class MapScene(EventfulScene):
             ), "Require CharacterDrawing for point-like NPC."
             coordinate = (
                 Coordinate(npc_object.x, npc_object.y)
-                .as_bottom_center_of(spec.character.drawing)
+                .as_bottom_center_of(spec.character)
                 .top_left
             )
             strict_spec = to_strict(spec)
@@ -189,7 +189,7 @@ class MapScene(EventfulScene):
 
         if isinstance(spec.character, CharacterDrawing):
             points = [
-                p.as_bottom_center_of(spec.character.drawing).top_left
+                p.as_bottom_center_of(spec.character).top_left
                 for p in poly.points
             ]
             if isinstance(poly, AreaOnScreen):
@@ -198,7 +198,7 @@ class MapScene(EventfulScene):
             npc = MovingNpcOnScreen(path=path, spec=to_strict(spec))
             return self._update_with_save(npc)
 
-        # AreaOnScreen without CharacterDrawing -> "static area trigger events".
+        # AreaOnScreen without CharacterDrawing -> static area triggering events
         coordinate = poly.top_left
         color = spec.character or TRANSPARENT
         if isinstance(poly, RectangleAreaOnScreen):
