@@ -5,6 +5,7 @@ from functools import cached_property
 from typing import Any, Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
+from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
@@ -16,10 +17,14 @@ from nextrpg.core.direction import Direction
 from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.sizable import Sizable
 from nextrpg.core.time import Millisecond
+from nextrpg.draw.area_on_screen import AreaOnScreen
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.draw.polygon_area_on_screen import PolygonAreaOnScreen
+from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.draw.rectangle_drawing import RectangleDrawing
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.global_config import config
@@ -73,11 +78,16 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         return (self.drawing_on_screen,) + debug_visuals
 
     @cached_property
-    def collision_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
+    def collision_rectangle_area_on_screen(self) -> AreaOnScreen:
+        if self._poly_area:
+            return self._poly_area
         return self._collision_rectangle_area_on_screen(self.coordinate)
 
     @cached_property
-    def start_event_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
+    def start_event_rectangle_area_on_screen(self) -> AreaOnScreen:
+        if self._poly_area:
+            return self._poly_area
+
         scaling = self.config.start_event_scaling
         coordinate = self.coordinate - self.width * (scaling - 1) / 2
         size = self.size * scaling
@@ -118,6 +128,18 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         direction = Direction.load(save["direction"])
         character = self.character.turn(direction)
         return replace(self, coordinate=coordinate, character=character)
+
+    @cached_property
+    def _poly_area(self) -> AreaOnScreen | None:
+        if not isinstance(self.character, PolygonCharacterDrawing):
+            return None
+
+        match self.character.rect_or_poly:
+            case RectangleDrawing() as rect:
+                return RectangleAreaOnScreen(self.coordinate, rect.size)
+            case PolygonDrawing() as poly:
+                points = tuple(p + self.coordinate for p in poly.points)
+                return PolygonAreaOnScreen(points)
 
     def _collision_rectangle_area_on_screen(
         self, coordinate: Coordinate

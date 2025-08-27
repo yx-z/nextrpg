@@ -1,10 +1,7 @@
-from dataclasses import dataclass
-from functools import cached_property
+from dataclasses import KW_ONLY, dataclass
 from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.core.color import TRANSPARENT
-from nextrpg.core.dimension import Size
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
@@ -14,14 +11,14 @@ from nextrpg.draw.rectangle_drawing import RectangleDrawing
 
 @dataclass(frozen=True)
 class PolygonCharacterDrawing(CharacterDrawing):
-    arg: Size | RectangleDrawing | PolygonDrawing
+    _: KW_ONLY
+    rect_or_poly: RectangleDrawing | PolygonDrawing
+    direction: Direction = Direction.DOWN
 
     @override
-    @cached_property
+    @property
     def drawing(self) -> Drawing:
-        if isinstance(self.arg, Size):
-            return RectangleDrawing(self.arg, TRANSPARENT).drawing
-        return self.arg.drawing
+        return self.rect_or_poly.drawing
 
     @override
     def turn(self, direction: Direction) -> Self:

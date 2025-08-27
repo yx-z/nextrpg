@@ -21,7 +21,6 @@ from nextrpg.core.dataclass_with_init import (
     default,
     not_constructor_below,
 )
-from nextrpg.core.direction import Direction
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond, get_timepoint
 from nextrpg.draw.area_on_screen import AreaOnScreen
@@ -175,13 +174,14 @@ class MapScene(EventfulScene):
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
         npc_object = self.map_helper.get_object(spec.unique_name)
-        coordinate = Coordinate(npc_object.x, npc_object.y)
-        if isinstance(spec.character, CharacterDrawing):
-            coordinate = coordinate.as_bottom_center_of(
-                spec.character.drawing
-            ).top_left
 
         if not (poly := get_geometry(npc_object)):
+            assert isinstance(spec.character, CharacterDrawing)
+            coordinate = (
+                Coordinate(npc_object.x, npc_object.y)
+                .as_bottom_center_of(spec.character.drawing)
+                .top_left
+            )
             return NpcOnScreen(coordinate=coordinate, spec=to_strict(spec))
 
         if isinstance(spec.character, CharacterDrawing):
@@ -197,6 +197,7 @@ class MapScene(EventfulScene):
                 return self.save_io.update(npc)
             return npc
 
+        coordinate = poly.top_left
         color = spec.character or TRANSPARENT
         if isinstance(poly, RectangleAreaOnScreen):
             drawing = RectangleDrawing(poly.size, color)
@@ -205,7 +206,7 @@ class MapScene(EventfulScene):
             drawing = PolygonDrawing(points, color)
 
         poly_spec = to_strict(
-            spec, PolygonCharacterDrawing(Direction.DOWN, drawing)
+            spec, PolygonCharacterDrawing(rect_or_poly=drawing)
         )
         npc = NpcOnScreen(coordinate=coordinate, spec=poly_spec)
         if self.save_io:
