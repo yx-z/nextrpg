@@ -161,8 +161,8 @@ class EventfulScene(EventAsAttr, Scene):
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:
         for npc in self.npcs:
-            collided = npc.start_event_rectangle_area_on_screen.collide(
-                self.player.start_event_rectangle_area_on_screen
+            collided = self.player.start_event_area_on_screen.collide(
+                npc.start_event_area_on_screen
             )
             if npc.spec.event and collided:
                 return npc

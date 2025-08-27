@@ -17,7 +17,7 @@ class Scene(AnimationOnScreen):
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if shift := self.drawing_on_screen_shift:
             return tuple(
-                d.add_fast(shift) for d in self.drawing_on_screens_before_shift
+                d + shift for d in self.drawing_on_screens_before_shift
             )
         return self.drawing_on_screens_before_shift
 

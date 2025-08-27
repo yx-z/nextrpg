@@ -4,10 +4,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING, override
 
-from pygame import Mask
-from pygame.mask import from_surface
-
-from nextrpg.core.color import BLACK, Color
+from nextrpg.core.color import Color
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size, Width
@@ -51,24 +48,30 @@ class PolygonAreaOnScreen(AreaOnScreen):
         else:
             poly = PolygonAreaOnScreen(area.points)
 
-        if not self._bounding_rectangle_area_on_screen.collide(
-            poly._bounding_rectangle_area_on_screen
-        ):
-            return False
-
-        offset = (
-            self._bounding_rectangle_area_on_screen.top_left
-            - poly._bounding_rectangle_area_on_screen.top_left
-        )
-        return bool(self._mask.overlap(poly._mask, offset))
+        for poly in (self, poly):
+            for i in range(len(poly.points)):
+                x1, y1 = poly.points[i]
+                x2, y2 = poly.points[(i + 1) % len(poly.points)]
+                axis = Coordinate(y1 - y2, x2 - x1)
+                proj1 = _project_polygon(axis, self)
+                proj2 = _project_polygon(axis, poly)
+                if not _overlap(proj1, proj2):
+                    return False
+        return True
 
     @override
     def __contains__(self, coordinate: Coordinate) -> bool:
-        x, y = coordinate - self._bounding_rectangle_area_on_screen.top_left
-        width, height = self._mask.get_size()
-        if 0 <= x < width and 0 <= y < height:
-            return bool(self._mask.get_at((x, y)))
-        return False
+        inside = False
+        for i in range(len(self.points)):
+            x1, y1 = self.points[i]
+            x2, y2 = self.points[(i + 1) % len(self.points)]
+            if (y1 > coordinate.top_value) != (y2 > coordinate.top_value):
+                x_intersect = (x2 - x1) * (coordinate.top_value - y1) / (
+                    y2 - y1 + 1e-12
+                ) + x1
+                if coordinate.left_value < x_intersect:
+                    inside = not inside
+        return inside
 
     @override
     def __add__(
@@ -76,11 +79,6 @@ class PolygonAreaOnScreen(AreaOnScreen):
     ) -> PolygonAreaOnScreen:
         points = tuple(p + other for p in self.points)
         return PolygonAreaOnScreen(points)
-
-    @cached_property
-    def _mask(self) -> Mask:
-        surface = self.fill(BLACK).drawing.pygame
-        return from_surface(surface)
 
     @cached_property
     def _bounding_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
@@ -104,3 +102,15 @@ def get_bounding_rectangle_area_on_screen(
     height = max(max_y - min_y, 1)
     size = Size(width, height)
     return RectangleAreaOnScreen(coordinate, size)
+
+
+def _project_polygon(axis: Coordinate, poly: PolygonAreaOnScreen) -> Coordinate:
+    dots = tuple(x * axis[0] + y * axis[1] for x, y in poly.points)
+    return Coordinate(min(dots), max(dots))
+
+
+def _overlap(coordinate1: Coordinate, coordinate2: Coordinate) -> bool:
+    return not (
+        coordinate1.top_value < coordinate2.left_value
+        or coordinate2.top_value < coordinate1.left_value
+    )

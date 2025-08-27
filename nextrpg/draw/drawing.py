@@ -99,15 +99,6 @@ class Drawing(Sizable):
         surface = scale_fun(self.surface, size)
         return replace(self, resource=surface)
 
-    def scale_fast(
-        self, scaling: int | float, smooth: bool | None = None
-    ) -> Drawing:
-        width, height = self.size
-        size = (width * scaling, height * scaling)
-        scale_fun = _get_scale_fun(smooth)
-        surface = scale_fun(self.surface, size)
-        return replace(self, resource=surface)
-
     @cached_property
     def visible_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
         from nextrpg.geometry.rectangle_area_on_screen import (

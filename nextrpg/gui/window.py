@@ -143,7 +143,7 @@ class Window:
         screen = Surface(self.initial_config.size, SRCALPHA)
         surfaces = tuple(d.pygame for d in drawing_on_screens)
         screen.blits(surfaces)
-        scaled_draw = Drawing(screen).scale_fast(self._scaling)
+        scaled_draw = Drawing(screen) * self._scaling
         return DrawingOnScreen(self._center_shift, scaled_draw)
 
     @cached_property

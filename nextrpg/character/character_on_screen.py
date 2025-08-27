@@ -84,7 +84,7 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         return self._collision_rectangle_area_on_screen(self.coordinate)
 
     @cached_property
-    def start_event_rectangle_area_on_screen(self) -> AreaOnScreen:
+    def start_event_area_on_screen(self) -> AreaOnScreen:
         if self._area_on_screen:
             return self._area_on_screen
 
@@ -162,5 +162,5 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         if (debug := config().debug) and (
             color := debug.start_event_rectangle_color
         ):
-            return self.start_event_rectangle_area_on_screen.fill(color)
+            return self.start_event_area_on_screen.fill(color)
         return None

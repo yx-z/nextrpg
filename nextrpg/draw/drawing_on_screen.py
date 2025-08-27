@@ -44,12 +44,6 @@ class DrawingOnScreen(Sizable):
     ) -> DrawingOnScreen:
         return DrawingOnScreen(self.top_left + other, self.drawing)
 
-    def add_fast(self, other: Coordinate) -> DrawingOnScreen:
-        left, top = self.top_left
-        shift_left, shift_top = other
-        coord = Coordinate(left + shift_left, top + shift_top)
-        return DrawingOnScreen(coord, self.drawing)
-
     def __sub__(
         self, other: Coordinate | Size | Width | Height
     ) -> DrawingOnScreen:
