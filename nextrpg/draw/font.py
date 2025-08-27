@@ -10,7 +10,7 @@ from nextrpg.core.dimension import Height, Pixel, Size
 
 @dataclass(frozen=True)
 class Font:
-    size: Height | Pixel
+    size: Height
     name: str | None = None
     bold: bool = False
     italic: bool = False
@@ -37,7 +37,7 @@ class Font:
     def scripted(self, script: str) -> Self:
         return replace(self, script=script)
 
-    def sized(self, size: Pixel | Height) -> Self:
+    def sized(self, size: Height) -> Self:
         return replace(self, size=size)
 
     @cached_property

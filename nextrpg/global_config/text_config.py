@@ -2,7 +2,7 @@ from dataclasses import dataclass, replace
 from typing import Self
 
 from nextrpg.core.color import Color, WHITE
-from nextrpg.core.dimension import Height, Pixel, Width
+from nextrpg.core.dimension import Height, Width
 from nextrpg.draw.font import Font
 
 
@@ -20,7 +20,7 @@ class TextConfig:
     def wrapped(self, wrap: Width) -> Self:
         return replace(self, wrap=wrap)
 
-    def sized(self, size: Pixel) -> Self:
+    def sized(self, size: Height) -> Self:
         return replace(self, font=self.font.sized(size))
 
     def colored(self, color: Color) -> Self:
