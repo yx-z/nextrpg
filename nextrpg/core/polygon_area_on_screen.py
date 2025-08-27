@@ -33,8 +33,8 @@ class PolygonAreaOnScreen(AreaOnScreen):
     def fill(
         self, color: Color, allow_background_in_debug: bool = True
     ) -> DrawingOnScreen:
-        from nextrpg.draw.polygon_drawing import PolygonDrawing
         from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+        from nextrpg.draw.polygon_drawing import PolygonDrawing
 
         drawing = PolygonDrawing(
             self.points,

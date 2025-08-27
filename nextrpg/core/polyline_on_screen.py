@@ -26,8 +26,8 @@ class PolylineOnScreen:
     def fill(
         self, color: Color, allow_background_in_debug: bool = True
     ) -> DrawingOnScreen:
-        from nextrpg.draw.polyline_drawing import PolylineDrawing
         from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+        from nextrpg.draw.polyline_drawing import PolylineDrawing
 
         drawing = PolylineDrawing(
             self.points,

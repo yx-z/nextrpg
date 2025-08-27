@@ -7,14 +7,13 @@ from nextrpg.character.character_on_screen import (
 )
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
-from nextrpg.character.npc_on_screen import (
+from nextrpg.character.npc_on_screen import NpcOnScreen, StrictNpcSpec
+from nextrpg.character.npc_spec import (
     EventSpec,
     EventSpecParams,
     NpcEventStartMode,
-    NpcOnScreen,
     NpcSpec,
     RpgEvent,
-    StrictNpcSpec,
     to_strict,
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
@@ -27,14 +26,14 @@ from nextrpg.character.rpg_maker_character_drawing import (
 )
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.color import (
+    Alpha,
     BLACK,
+    Color,
     TRANSPARENT,
     WHITE,
-    Alpha,
-    Color,
     alpha_from_percentage,
 )
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
@@ -100,9 +99,9 @@ from nextrpg.event.event_transformer import (
     transform,
 )
 from nextrpg.event.pygame_event import (
-    KeyboardKey,
     KeyPressDown,
     KeyPressUp,
+    KeyboardKey,
     PygameEvent,
     Quit,
     WindowResize,

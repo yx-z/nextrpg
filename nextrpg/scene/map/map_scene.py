@@ -11,7 +11,8 @@ from cachetools import LRUCache
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterSpec
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
-from nextrpg.character.npc_on_screen import NpcOnScreen, NpcSpec, to_strict
+from nextrpg.character.npc_on_screen import NpcOnScreen
+from nextrpg.character.npc_spec import NpcSpec, to_strict
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
 from nextrpg.core.area_on_screen import AreaOnScreen
