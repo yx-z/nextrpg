@@ -10,7 +10,7 @@ from pygame.draw import polygon
 from nextrpg.core.color import Color
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
-from nextrpg.draw.transparent_drawing import TransparentDrawing
+from nextrpg.draw.drawing import Drawing
 
 if TYPE_CHECKING:
     from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
@@ -24,11 +24,10 @@ class PolygonDrawing:
     bounding_rectangle_area_on_screen: RectangleAreaOnScreen | None = None
 
     @cached_property
-    def drawing(self) -> TransparentDrawing:
-        return TransparentDrawing(
+    def drawing(self) -> Drawing:
+        return Drawing(
             self._surface,
             allow_background_in_debug=self.allow_background_in_debug,
-            color=self.color,
         )
 
     def _draw(self, surface: Surface, points: tuple[Coordinate, ...]) -> None:

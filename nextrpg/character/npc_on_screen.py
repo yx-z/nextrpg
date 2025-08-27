@@ -10,13 +10,13 @@ from nextrpg.character.character_on_screen import (
     _BaseCharacterSpec,
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
+from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
 from nextrpg.core.color import Color
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
     default,
     not_constructor_below,
 )
-from nextrpg.draw.transparent_drawing import TransparentDrawing
 from nextrpg.event.event_transformer import transform
 
 type EventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
@@ -44,12 +44,7 @@ class NpcSpec(_BaseCharacterSpec):
     cyclic_walk: bool = True
     collide_with_others: bool = default(
         lambda self: isinstance(self.character, CharacterDrawing)
-        and (
-            not isinstance(
-                drawing := self.character.drawing, TransparentDrawing
-            )
-            or not drawing.fully_transparent
-        )
+        and not isinstance(self.character, PolygonCharacterDrawing)
     )
 
     @property

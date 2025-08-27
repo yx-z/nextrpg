@@ -84,7 +84,6 @@ from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.draw.transparent_drawing import TransparentDrawing
 from nextrpg.draw.typewriter import Typewriter
 from nextrpg.event.background_event import (
     BackgroundEvent,

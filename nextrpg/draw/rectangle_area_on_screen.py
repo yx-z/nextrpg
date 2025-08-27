@@ -22,7 +22,6 @@ class RectangleAreaOnScreen(AreaOnScreen):
     def collide(self, area: AreaOnScreen) -> bool:
         if not isinstance(area, RectangleAreaOnScreen):
             return self._polygon.collide(area)
-
         return (
             self.top_left.left < area.top_right.left
             and self.top_right.left > area.top_left.left
@@ -65,4 +64,4 @@ class RectangleAreaOnScreen(AreaOnScreen):
 
     @cached_property
     def _polygon(self) -> PolygonAreaOnScreen:
-        return PolygonAreaOnScreen(self.points, self)
+        return PolygonAreaOnScreen(self.points)

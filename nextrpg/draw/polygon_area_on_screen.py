@@ -24,13 +24,12 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class PolygonAreaOnScreen(AreaOnScreen):
     points: tuple[Coordinate, ...]
-    bounding_rectangle_area_on_screen_input: RectangleAreaOnScreen | None = None
 
-    @cached_property
+    @property
     def top_left(self) -> Coordinate:
         return self._bounding_rectangle_area_on_screen.top_left
 
-    @cached_property
+    @property
     def size(self) -> Size:
         return self._bounding_rectangle_area_on_screen.size
 
@@ -48,7 +47,11 @@ class PolygonAreaOnScreen(AreaOnScreen):
 
     @override
     def collide(self, area: AreaOnScreen) -> bool:
-        poly = PolygonAreaOnScreen(area.points)
+        if isinstance(area, PolygonAreaOnScreen):
+            poly = area
+        else:
+            poly = PolygonAreaOnScreen(area.points)
+
         if not self._bounding_rectangle_area_on_screen.collide(
             poly._bounding_rectangle_area_on_screen
         ):
@@ -82,6 +85,4 @@ class PolygonAreaOnScreen(AreaOnScreen):
 
     @cached_property
     def _bounding_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
-        if self.bounding_rectangle_area_on_screen_input:
-            return self.bounding_rectangle_area_on_screen_input
         return get_bounding_rectangle_area_on_screen(self.points)

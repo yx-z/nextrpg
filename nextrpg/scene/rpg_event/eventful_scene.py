@@ -14,7 +14,6 @@ from nextrpg.core.log import Log
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.transparent_drawing import TransparentDrawing
 from nextrpg.event.background_event import (
     BackgroundEvent,
     BackgroundEventSentinel,
@@ -171,15 +170,9 @@ class EventfulScene(EventAsAttr, Scene):
         return None
 
     def _start_event(self, npc: NpcOnScreen, time_delta: Millisecond) -> Self:
-        turn = not (
-            isinstance(
-                drawing := npc.drawing_on_screen.drawing, TransparentDrawing
-            )
-            and drawing.fully_transparent
-        )
-        started_npc = npc.start_event(self.player, turn)
+        started_npc = npc.start_event(self.player)
         npcs = tuple(started_npc if n.same_name(npc) else n for n in self.npcs)
-        player = self.player.start_event(started_npc, turn)
+        player = self.player.start_event(started_npc)
         ticked = replace(
             self, player=player, npcs=npcs, _started_npc=started_npc
         ).tick_without_event(time_delta)

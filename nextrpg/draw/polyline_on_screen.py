@@ -13,7 +13,6 @@ from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 @dataclass(frozen=True)
 class PolylineOnScreen:
     points: tuple[Coordinate, ...]
-    bounding_rectangle_area_on_screen_input: RectangleAreaOnScreen | None = None
 
     @cached_property
     def length(self) -> Pixel:
@@ -35,6 +34,4 @@ class PolylineOnScreen:
 
     @cached_property
     def _bounding_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
-        if self.bounding_rectangle_area_on_screen_input:
-            return self.bounding_rectangle_area_on_screen_input
         return get_bounding_rectangle_area_on_screen(self.points)

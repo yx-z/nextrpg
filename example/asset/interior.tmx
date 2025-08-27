@@ -128,7 +128,7 @@
     <property name="file" type="file" value="exterior.tmx"/>
    </properties>
   </object>
-  <object id="75" name="from_exterior" x="749.333" y="625.333">
+  <object id="75" name="from_exterior" x="753.333" y="656.333">
    <point/>
   </object>
   <object id="82" name="player" x="1000.67" y="467.333">

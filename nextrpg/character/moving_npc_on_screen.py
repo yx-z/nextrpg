@@ -25,20 +25,6 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     coordinate: Coordinate = default(lambda self: self._walk(self).coordinate)
     _walk: Walk = default(lambda self: self._init_walk)
 
-    @property
-    def _init_walk(self) -> Walk:
-        if (
-            self.path.points[0] == self.path.points[-1]
-            or not self.spec.cyclic_walk
-        ):
-            return Walk(
-                self.path, self.spec.config.move_speed, self.spec.cyclic_walk
-            )
-
-        points = self.path.points + tuple(reversed(self.path.points))
-        path = PolylineOnScreen(points)
-        return Walk(path, self.spec.config.move_speed, self.spec.cyclic_walk)
-
     @override
     def tick_after_character_and_coordinate(
         self, time_delta: Millisecond, ticked: Self
@@ -56,3 +42,17 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     @override
     def move(self, time_delta: Millisecond) -> Coordinate:
         return self._walk.tick(time_delta).coordinate
+
+    @property
+    def _init_walk(self) -> Walk:
+        if (
+            self.path.points[0] == self.path.points[-1]
+            or not self.spec.cyclic_walk
+        ):
+            return Walk(
+                self.path, self.spec.config.move_speed, self.spec.cyclic_walk
+            )
+
+        points = self.path.points + tuple(reversed(self.path.points))
+        path = PolylineOnScreen(points)
+        return Walk(path, self.spec.config.move_speed, self.spec.cyclic_walk)

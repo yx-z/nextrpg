@@ -90,12 +90,9 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
     def same_name(self, other: CharacterOnScreen) -> bool:
         return self.spec.unique_name == other.spec.unique_name
 
-    def start_event(self, other: CharacterOnScreen, turn: bool) -> Self:
-        if turn:
-            direction = other.coordinate.relative_to(self.coordinate)
-            character = self.character.turn(direction)
-        else:
-            character = self.character
+    def start_event(self, other: CharacterOnScreen) -> Self:
+        direction = other.coordinate.relative_to(self.coordinate)
+        character = self.character.turn(direction)
         return replace(self, character=character, _event_started=True)
 
     @property

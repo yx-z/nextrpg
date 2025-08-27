@@ -160,11 +160,18 @@ class MapScene(EventfulScene):
     def _npc_paths(self) -> tuple[DrawingOnScreen, ...]:
         if not (debug := config().debug) or not (color := debug.npc_path_color):
             return ()
-        return tuple(
-            npc.path.fill(color)
-            for npc in self.npcs
-            if isinstance(npc, MovingNpcOnScreen)
-        )
+        res: list[DrawingOnScreen] = []
+        for npc in self.npcs:
+            if not isinstance(npc, MovingNpcOnScreen):
+                continue
+
+            points = tuple(
+                p.as_top_left_of(npc.character.drawing).bottom_center
+                for p in npc.path.points
+            )
+            path = PolylineOnScreen(points).fill(color)
+            res.append(path)
+        return tuple(res)
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
         npc_object = self.map_helper.get_object(spec.unique_name)
