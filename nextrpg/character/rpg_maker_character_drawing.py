@@ -14,8 +14,6 @@ from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
-from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.direction import Direction
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
@@ -72,6 +70,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         lambda self: self._init_animation
     )
 
+    @override
     @property
     def drawing(self) -> Drawing:
         return self._animations[_adjust(self.direction)].drawing
@@ -123,12 +122,14 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
 
     def _crop_at_row(self, drawing: Drawing, row: int) -> tuple[Drawing, ...]:
         num_frames = len(self.sprite_sheet.style)
-        width = drawing.width.value / num_frames
-        height = drawing.height.value / len(_DIR_TO_ROW)
-        size = Size(width, height)
+        width = drawing.width / num_frames
+        height = drawing.height / len(_DIR_TO_ROW)
+        size = width.with_height(height)
         return tuple(
             drawing.crop(
-                RectangleAreaOnScreen(Coordinate(width * i, height * row), size)
+                RectangleAreaOnScreen(
+                    (width * i).with_height(height * row).coordinate, size
+                )
             )
             for i in range(num_frames)
         )

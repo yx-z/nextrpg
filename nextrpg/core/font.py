@@ -42,11 +42,7 @@ class Font:
 
     @cached_property
     def pygame(self) -> pygame.Font:
-        if isinstance(self.size, Height):
-            size = self.size.value
-        else:
-            size = self.size
-        font = SysFont(self.name, size, self.bold, self.italic)
+        font = SysFont(self.name, self.size.value, self.bold, self.italic)
         if self.underline:
             font.set_underline(True)
         if self.strikethrough:

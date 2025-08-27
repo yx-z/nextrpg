@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from nextrpg.geometry.dimension import Pixel
+from nextrpg.geometry.dimension import Height, Width
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class DrawingTrim:
-    top: Pixel = 0
-    left: Pixel = 0
-    bottom: Pixel = 0
-    right: Pixel = 0
+    top: Height = Height(0)
+    left: Width = Width(0)
+    bottom: Height = Height(0)
+    right: Width = Width(0)

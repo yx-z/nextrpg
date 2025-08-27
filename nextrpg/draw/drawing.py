@@ -69,10 +69,10 @@ class Drawing(Sizable):
         return replace(self, resource=surface)
 
     def trim(self, drawing_trim: DrawingTrim) -> Drawing:
-        coordinate = Coordinate(drawing_trim.left, drawing_trim.top)
-        width = self.width.value - drawing_trim.left - drawing_trim.right
-        height = self.height.value - drawing_trim.top - drawing_trim.bottom
-        size = Size(width, height)
+        coordinate = drawing_trim.left.with_height(drawing_trim.top).coordinate
+        width = self.width - drawing_trim.left - drawing_trim.right
+        height = self.height - drawing_trim.top - drawing_trim.bottom
+        size = width.with_height(height)
         area = RectangleAreaOnScreen(coordinate, size)
         return self.crop(area)
 

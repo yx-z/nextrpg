@@ -4,8 +4,9 @@ from nextrpg import (
     Direction,
     Drawing,
     DrawingTrim,
-    EventfulScene,
     EventSpec,
+    EventfulScene,
+    Height,
     MapScene,
     Move,
     NpcEventStartMode,
@@ -23,7 +24,8 @@ from nextrpg import (
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
     sprite_sheet = RpgMakerSpriteSheet(
-        resource="example/asset/Characters_MV.png", trim=DrawingTrim(top=25)
+        resource="example/asset/Characters_MV.png",
+        trim=DrawingTrim(top=Height(25)),
     )
     if player_spec:
         player = player_spec
@@ -80,7 +82,7 @@ def greet(
 ) -> None:
     cfg = config().say_event.text_config
     # fmt: off
-    scene["Interior Scene"]: Text("Greetings!", cfg.sized(40)) + Text(
+    scene["Interior Scene"]: Text("Greetings!", cfg.sized(Height(40))) + Text(
         """This is...
         a sample """, cfg) + Text("nextrpg event", cfg.colored(Color(128, 0, 255)))
     # fmt: on

@@ -10,14 +10,18 @@ from nextrpg import (
     DebugConfig,
     Drawing,
     Game,
+    Height,
     NineSlice,
     SayEventConfig,
     SayEventNineSliceBackgroundConfig,
     Size,
+    Width,
 )
 
 drawing = Drawing("example/asset/bubble_background.png")
-bubble = NineSlice(drawing, top=14, left=5, right=5, bottom=20)
+bubble = NineSlice(
+    drawing, top=Height(14), left=Width(5), right=Width(5), bottom=Height(20)
+)
 tip = Drawing("example/asset/tip.png")
 say_event = SayEventConfig(
     background=SayEventNineSliceBackgroundConfig(bubble, tip),

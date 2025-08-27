@@ -11,6 +11,7 @@ from nextrpg.geometry.dimension import Height, Pixel, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.draw.drawing import Drawing
+    from nextrpg.draw.drawing_group import DrawingGroup
     from nextrpg.draw.nine_slice import NineSlice
     from nextrpg.draw.polygon_drawing import PolygonDrawing
 
@@ -81,10 +82,16 @@ class SayEventConfig:
     character_coordinate_override: Coordinate | None = None
     name_text_config_override: TextConfig | None = None
     text_config_override: TextConfig | None = None
-    avatar_input: Drawing | Callable[[], Drawing] | None = None
+    avatar_input: (
+        Drawing
+        | DrawingGroup
+        | Callable[[], Drawing]
+        | Callable[[], DrawingGroup]
+        | None
+    ) = None
 
     @cached_property
-    def avatar(self) -> "Drawing":
+    def avatar(self) -> Drawing | DrawingGroup:
         if callable(self.avatar_input):
             return self.avatar_input()
         return self.avatar_input

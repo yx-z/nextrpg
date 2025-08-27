@@ -4,6 +4,7 @@ from typing import Self
 
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
+from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.direction import Direction
@@ -16,7 +17,7 @@ class CharacterDrawing(ABC, Sizable):
 
     @property
     @abstractmethod
-    def drawing(self) -> Drawing: ...
+    def drawing(self) -> Drawing | DrawingGroup: ...
 
     @abstractmethod
     def turn(self, direction: Direction) -> Self: ...
