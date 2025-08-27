@@ -18,7 +18,7 @@ class DebugConfig:
     collision_rectangle_color: Color | None = Color(255, 0, 0, 64)
     start_event_rectangle_color: Color | None = Color(0, 255, 255, 64)
     move_object_color: Color | None = Color(255, 255, 0, 180)
-    npc_path_color: Color | None = Color(0, 255, 0, 255)
+    npc_path_color: Color | None = Color(0, 255, 0, 64)
     draw_group_link_color: Color | None = Color(255, 0, 255, 200)
     player_collide_with_others: bool = True
     log_level: LogLevel = LogLevel.DEBUG

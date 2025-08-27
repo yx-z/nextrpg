@@ -163,7 +163,6 @@ class MapScene(EventfulScene):
         for npc in self.npcs:
             if not isinstance(npc, MovingNpcOnScreen):
                 continue
-
             points = tuple(
                 p.as_top_left_of(npc.character.drawing).bottom_center
                 for p in npc.path.points
@@ -174,15 +173,18 @@ class MapScene(EventfulScene):
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
         npc_object = self.map_helper.get_object(spec.unique_name)
-
         if not (poly := get_geometry(npc_object)):
-            assert isinstance(spec.character, CharacterDrawing)
+            assert isinstance(
+                spec.character, CharacterDrawing
+            ), "Require CharacterDrawing for point-like NPC."
             coordinate = (
                 Coordinate(npc_object.x, npc_object.y)
                 .as_bottom_center_of(spec.character.drawing)
                 .top_left
             )
-            return NpcOnScreen(coordinate=coordinate, spec=to_strict(spec))
+            strict_spec = to_strict(spec)
+            npc = NpcOnScreen(coordinate=coordinate, spec=strict_spec)
+            return self._update_with_save(npc)
 
         if isinstance(spec.character, CharacterDrawing):
             points = [
@@ -193,10 +195,9 @@ class MapScene(EventfulScene):
                 points.append(points[0])
             path = PolylineOnScreen(tuple(points))
             npc = MovingNpcOnScreen(path=path, spec=to_strict(spec))
-            if self.save_io:
-                return self.save_io.update(npc)
-            return npc
+            return self._update_with_save(npc)
 
+        # AreaOnScreen without CharacterDrawing -> "static area trigger events".
         coordinate = poly.top_left
         color = spec.character or TRANSPARENT
         if isinstance(poly, RectangleAreaOnScreen):
@@ -205,10 +206,12 @@ class MapScene(EventfulScene):
             points = tuple(p - coordinate for p in poly.points)
             drawing = PolygonDrawing(points, color)
 
-        poly_spec = to_strict(
-            spec, PolygonCharacterDrawing(rect_or_poly=drawing)
-        )
-        npc = NpcOnScreen(coordinate=coordinate, spec=poly_spec)
+        character_draw = PolygonCharacterDrawing(rect_or_poly=drawing)
+        strict_spec = to_strict(spec, character_draw)
+        npc = NpcOnScreen(coordinate=coordinate, spec=strict_spec)
+        return self._update_with_save(npc)
+
+    def _update_with_save(self, npc: NpcOnScreen) -> NpcOnScreen:
         if self.save_io:
             return self.save_io.update(npc)
         return npc
