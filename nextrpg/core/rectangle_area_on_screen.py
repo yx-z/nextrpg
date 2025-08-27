@@ -19,6 +19,10 @@ class RectangleAreaOnScreen(AreaOnScreen):
     top_left: Coordinate
     size: Size
 
+    @property
+    def pygame(self) -> tuple[Coordinate, Size]:
+        return self.top_left, self.size
+
     @override
     def collide(self, area: AreaOnScreen) -> bool:
         if not isinstance(area, RectangleAreaOnScreen):

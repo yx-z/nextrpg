@@ -11,6 +11,7 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.dimension import Size
 from nextrpg.core.direction import Direction
+from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.cyclic_animation import CyclicAnimation
 from nextrpg.draw.drawing import Drawing
@@ -126,7 +127,9 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         height = drawing.height.value / len(_DIR_TO_ROW)
         size = Size(width, height)
         return tuple(
-            drawing.crop(Coordinate(width * i, height * row), size)
+            drawing.crop(
+                RectangleAreaOnScreen(Coordinate(width * i, height * row), size)
+            )
             for i in range(num_frames)
         )
 

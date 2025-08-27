@@ -5,6 +5,7 @@ from pathlib import Path
 from nextrpg.core.color import Color
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Size
+from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.draw.drawing import Drawing
 
 
@@ -36,7 +37,8 @@ class SpriteSheet:
         height = self.drawing.height.value / self.num_row
         top_left = Coordinate(width * selection.column, height * selection.row)
         size = Size(width, height)
-        return self.drawing.crop(top_left, size)
+        area = RectangleAreaOnScreen(top_left, size)
+        return self.drawing.crop(area)
 
     @cached_property
     def drawing(self) -> Drawing:

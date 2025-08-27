@@ -2,18 +2,15 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import cached_property
-from typing import TYPE_CHECKING
 
 from pygame import Surface
 
 from nextrpg.core.color import Alpha
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Height, Size, Width
+from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import Drawing
-
-if TYPE_CHECKING:
-    from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 @dataclass(frozen=True)
@@ -23,14 +20,10 @@ class DrawingOnScreen(Sizable):
 
     @property
     def rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
-        from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
-
         return RectangleAreaOnScreen(self.top_left, self.drawing.size)
 
     @cached_property
     def visible_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
-        from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
-
         shift = self.drawing.visible_rectangle_area_on_screen.top_left
         size = self.drawing.visible_rectangle_area_on_screen.size
         return RectangleAreaOnScreen(self.top_left + shift, size)

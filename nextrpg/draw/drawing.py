@@ -21,12 +21,12 @@ from nextrpg.core.dimension import (
     WidthScaling,
 )
 from nextrpg.core.log import Log
+from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.global_config.global_config import config
 
 if TYPE_CHECKING:
-    from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
     from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 
 log = Log()
@@ -56,7 +56,7 @@ class Drawing(Sizable):
         return self.surface
 
     def cut(self, top_left: Coordinate, size: Size) -> Drawing:
-        surface = self.surface.convert_alpha()
+        surface = self.surface.copy()
         surface.fill(TRANSPARENT, (top_left, size))
         return replace(self, resource=surface)
 
@@ -64,8 +64,8 @@ class Drawing(Sizable):
         surface = flip(self.surface, horizontal, vertical)
         return replace(self, resource=surface)
 
-    def crop(self, top_left: Coordinate, size: Size) -> Drawing:
-        surface = self.pygame.subsurface((top_left, size))
+    def crop(self, area: RectangleAreaOnScreen) -> Drawing:
+        surface = self.pygame.subsurface(area.pygame)
         return replace(self, resource=surface)
 
     def trim(self, drawing_trim: DrawingTrim) -> Drawing:
@@ -73,7 +73,8 @@ class Drawing(Sizable):
         width = self.surface.width - drawing_trim.left - drawing_trim.right
         height = self.surface.height - drawing_trim.top - drawing_trim.bottom
         size = Size(width, height)
-        return self.crop(coordinate, size)
+        area = RectangleAreaOnScreen(coordinate, size)
+        return self.crop(area)
 
     def set_alpha(self, alpha: Alpha) -> Drawing:
         surface = self.surface.copy()
