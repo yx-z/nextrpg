@@ -1,14 +1,14 @@
 from dataclasses import dataclass, replace
 from typing import Self
 
-from nextrpg.core.color import WHITE, Color
+from nextrpg.core.color import Color, WHITE
 from nextrpg.core.dimension import Height, Pixel, Width
 from nextrpg.draw.font import Font
 
 
 @dataclass(frozen=True, slots=True)
 class TextConfig:
-    font: Font = Font(28)
+    font: Font = Font(Height(28))
     color: Color = WHITE
     line_spacing: Height = Height(8)
     smooth: bool = True

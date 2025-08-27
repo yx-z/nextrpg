@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from enum import Enum, auto
 from functools import cached_property
 
 from nextrpg.core.coordinate import ORIGIN
@@ -15,18 +14,6 @@ from nextrpg.core.dimension import (
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.relative_drawing import Anchor, RelativeDrawing
-
-
-class NineSlicePosition(Enum):
-    TOP_LEFT = auto()
-    TOP_CENTER = auto()
-    TOP_RIGHT = auto()
-    CENTER_LEFT = auto()
-    CENTER = auto()
-    CENTER_RIGHT = auto()
-    BOTTOM_LEFT = auto()
-    BOTTOM_CENTER = auto()
-    BOTTOM_RIGHT = auto()
 
 
 @dataclass(frozen=True)
