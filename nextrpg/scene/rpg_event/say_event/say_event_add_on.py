@@ -7,10 +7,10 @@ from typing import Literal, override
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size, WidthAndHeightScaling
+from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
 from nextrpg.draw.relative_drawing import RelativeDrawing
 from nextrpg.draw.text import Text

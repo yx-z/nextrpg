@@ -10,8 +10,8 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.dimension import Pixel, PixelPerMillisecond
 from nextrpg.core.direction import Direction
+from nextrpg.core.polyline_on_screen import PolylineOnScreen
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.polyline_on_screen import PolylineOnScreen
 
 
 @dataclass_with_init(frozen=True)

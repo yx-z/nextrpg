@@ -7,18 +7,14 @@ from typing import TYPE_CHECKING, override
 from pygame import Mask
 from pygame.mask import from_surface
 
+from nextrpg.core.area_on_screen import AreaOnScreen
 from nextrpg.core.color import BLACK, Color
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Height, Size, Width
-from nextrpg.draw.area_on_screen import AreaOnScreen
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon_drawing import (
-    PolygonDrawing,
-    get_bounding_rectangle_area_on_screen,
-)
 
 if TYPE_CHECKING:
-    from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
+    from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
+    from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 
 
 @dataclass(frozen=True)
@@ -37,6 +33,9 @@ class PolygonAreaOnScreen(AreaOnScreen):
     def fill(
         self, color: Color, allow_background_in_debug: bool = True
     ) -> DrawingOnScreen:
+        from nextrpg.draw.polygon_drawing import PolygonDrawing
+        from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+
         drawing = PolygonDrawing(
             self.points,
             color,
@@ -86,3 +85,22 @@ class PolygonAreaOnScreen(AreaOnScreen):
     @cached_property
     def _bounding_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
         return get_bounding_rectangle_area_on_screen(self.points)
+
+
+def get_bounding_rectangle_area_on_screen(
+    points: tuple[Coordinate, ...],
+) -> RectangleAreaOnScreen:
+    from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
+
+    min_x = min(c.left_value for c in points)
+    min_y = min(c.top_value for c in points)
+    max_x = max(c.left_value for c in points)
+    max_y = max(c.top_value for c in points)
+    coordinate = Coordinate(min_x, min_y)
+    # The bounding rectangle must have a size of at least (1, 1).
+    # Otherwise, no surface to blit.
+    # This is useful for drawing vertical/horizontal lines.
+    width = max(max_x - min_x, 1)
+    height = max(max_y - min_y, 1)
+    size = Size(width, height)
+    return RectangleAreaOnScreen(coordinate, size)

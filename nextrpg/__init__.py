@@ -52,6 +52,12 @@ from nextrpg.core.dimension import (
 )
 from nextrpg.core.direction import Direction, DirectionalOffset
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
+from nextrpg.core.polygon_area_on_screen import (
+    PolygonAreaOnScreen,
+    get_bounding_rectangle_area_on_screen,
+)
+from nextrpg.core.polyline_on_screen import PolylineOnScreen
+from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.core.save import (
     LoadFromSave,
     LoadFromSaveEnum,
@@ -73,11 +79,8 @@ from nextrpg.draw.drawing_on_screen import (
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.nine_slice import NineSlice
-from nextrpg.draw.polygon_area_on_screen import (
-    PolygonAreaOnScreen,
-)
 from nextrpg.draw.polygon_drawing import PolygonDrawing
-from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.draw.polyline_drawing import PolylineDrawing
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
 from nextrpg.draw.sizable_draw_on_screens import SizableDrawOnScreens
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection

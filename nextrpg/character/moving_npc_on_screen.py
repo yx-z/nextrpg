@@ -11,9 +11,9 @@ from nextrpg.core.dataclass_with_init import (
     default,
     not_constructor_below,
 )
+from nextrpg.core.polyline_on_screen import PolylineOnScreen
 from nextrpg.core.time import Millisecond
 from nextrpg.core.walk import Walk
-from nextrpg.draw.polyline_on_screen import PolylineOnScreen
 
 
 @dataclass_with_init(frozen=True, kw_only=True)

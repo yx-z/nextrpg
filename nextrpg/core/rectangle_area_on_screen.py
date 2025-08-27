@@ -2,15 +2,16 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 from functools import cached_property
-from typing import Self, override
+from typing import Self, TYPE_CHECKING, override
 
+from nextrpg.core.area_on_screen import AreaOnScreen
 from nextrpg.core.color import Color
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Height, Pixel, Size, Width
-from nextrpg.draw.area_on_screen import AreaOnScreen
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon_area_on_screen import PolygonAreaOnScreen
-from nextrpg.draw.rectangle_drawing import RectangleDrawing
+from nextrpg.core.polygon_area_on_screen import PolygonAreaOnScreen
+
+if TYPE_CHECKING:
+    from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 
 
 @dataclass(frozen=True)
@@ -48,6 +49,9 @@ class RectangleAreaOnScreen(AreaOnScreen):
         allow_background_in_debug: bool = True,
         border_radius: Pixel | None = None,
     ) -> DrawingOnScreen:
+        from nextrpg.draw.rectangle_drawing import RectangleDrawing
+        from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+
         rect = RectangleDrawing(
             self.size, color, border_radius, allow_background_in_debug
         )

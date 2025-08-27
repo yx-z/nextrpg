@@ -19,13 +19,13 @@ from nextrpg.core.cached_decorator import cached
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dimension import Height, Size
 from nextrpg.core.log import Log
+from nextrpg.core.polygon_area_on_screen import PolygonAreaOnScreen
+from nextrpg.core.polyline_on_screen import PolylineOnScreen
+from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.draw.drawing import (
     Drawing,
 )
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon_area_on_screen import PolygonAreaOnScreen
-from nextrpg.draw.polyline_on_screen import PolylineOnScreen
-from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.global_config.global_config import config
 
 log = Log()

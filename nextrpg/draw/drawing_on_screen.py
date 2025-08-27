@@ -13,7 +13,7 @@ from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import Drawing
 
 if TYPE_CHECKING:
-    from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
+    from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 @dataclass(frozen=True)
@@ -23,13 +23,13 @@ class DrawingOnScreen(Sizable):
 
     @property
     def rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
-        from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
+        from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 
         return RectangleAreaOnScreen(self.top_left, self.drawing.size)
 
     @cached_property
     def visible_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
-        from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
+        from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 
         shift = self.drawing.visible_rectangle_area_on_screen.top_left
         size = self.drawing.visible_rectangle_area_on_screen.size

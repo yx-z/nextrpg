@@ -5,9 +5,9 @@ from typing import Self, override
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.log import Log
+from nextrpg.core.polygon_area_on_screen import PolygonAreaOnScreen
+from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.polygon_area_on_screen import PolygonAreaOnScreen
-from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 
 log = Log()
 

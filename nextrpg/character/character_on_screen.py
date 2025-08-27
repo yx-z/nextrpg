@@ -6,6 +6,7 @@ from typing import Any, Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
+from nextrpg.core.area_on_screen import AreaOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_init import (
     dataclass_with_init,
@@ -14,16 +15,15 @@ from nextrpg.core.dataclass_with_init import (
 )
 from nextrpg.core.dimension import Size
 from nextrpg.core.direction import Direction
+from nextrpg.core.polygon_area_on_screen import PolygonAreaOnScreen
+from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.sizable import Sizable
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.area_on_screen import AreaOnScreen
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.draw.polygon_drawing import PolygonDrawing
-from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.global_config.character_config import CharacterConfig
