@@ -79,14 +79,14 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
 
     @cached_property
     def collision_rectangle_area_on_screen(self) -> AreaOnScreen:
-        if self._poly_area:
-            return self._poly_area
+        if self._area_on_screen:
+            return self._area_on_screen
         return self._collision_rectangle_area_on_screen(self.coordinate)
 
     @cached_property
     def start_event_rectangle_area_on_screen(self) -> AreaOnScreen:
-        if self._poly_area:
-            return self._poly_area
+        if self._area_on_screen:
+            return self._area_on_screen
 
         scaling = self.config.start_event_scaling
         coordinate = self.coordinate - self.width * (scaling - 1) / 2
@@ -130,7 +130,7 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         return replace(self, coordinate=coordinate, character=character)
 
     @cached_property
-    def _poly_area(self) -> AreaOnScreen | None:
+    def _area_on_screen(self) -> AreaOnScreen | None:
         if not isinstance(self.character, PolygonCharacterDrawing):
             return None
 
