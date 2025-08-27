@@ -11,8 +11,8 @@ from pygame.image import load
 from pygame.transform import flip, scale, smoothscale
 
 from nextrpg.core.cached_decorator import cached
-from nextrpg.core.color import Alpha, Color, TRANSPARENT
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.color import TRANSPARENT, Alpha, Color
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import (
     HeightScaling,
     Pixel,
@@ -47,7 +47,7 @@ class Drawing(Sizable):
 
     @property
     def size(self) -> Size:
-        return Size(self.width.value, self.height.value)
+        return Size(self.surface.width, self.surface.height)
 
     @property
     def pygame(self) -> Surface:

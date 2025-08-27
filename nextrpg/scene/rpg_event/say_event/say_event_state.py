@@ -6,9 +6,9 @@ from functools import cached_property
 from typing import Self, override
 
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dataclass_with_init import (
-    dataclass_with_init,
-    default,
+from nextrpg.core.dataclass_with_default_init import (
+    dataclass_with_default_init,
+    default_init,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
@@ -22,12 +22,12 @@ from nextrpg.scene.rpg_event.rpg_event_scene import RpgEventScene
 from nextrpg.scene.scene import Scene
 
 
-@dataclass_with_init(frozen=True, kw_only=True)
+@dataclass_with_default_init(frozen=True, kw_only=True)
 class SayEventState(RpgEventScene, ABC):
     unique_name: str | None
     config: SayEventConfig
     _: KW_ONLY = not_constructor_below()
-    initial_coordinate: Coordinate | None = default(
+    initial_coordinate: Coordinate | None = default_init(
         lambda self: (
             self.scene.get_character(n).coordinate
             if (n := self.unique_name)
@@ -49,13 +49,13 @@ class SayEventState(RpgEventScene, ABC):
     def _add_ons(self) -> tuple[DrawingOnScreen, ...]: ...
 
 
-@dataclass_with_init(frozen=True, kw_only=True)
+@dataclass_with_default_init(frozen=True, kw_only=True)
 class SayEventFadeInState(SayEventState):
     background: tuple[DrawingOnScreen, ...]
     text_on_screen: TextOnScreen
     config: SayEventConfig
     _: KW_ONLY = not_constructor_below()
-    _fade_in: FadeIn = default(
+    _fade_in: FadeIn = default_init(
         lambda self: FadeIn(self.background, self.config.fade_duration)
     )
 
@@ -80,12 +80,12 @@ class SayEventFadeInState(SayEventState):
         )
 
 
-@dataclass_with_init(frozen=True, kw_only=True)
+@dataclass_with_default_init(frozen=True, kw_only=True)
 class SayEventTypingState(SayEventState):
     background: tuple[DrawingOnScreen, ...]
     text_on_screen: TextOnScreen
     _: KW_ONLY = not_constructor_below()
-    _typewriter: Typewriter | None = default(
+    _typewriter: Typewriter | None = default_init(
         lambda self: (
             Typewriter(self.text_on_screen, delay)
             if (delay := self.config.text_delay)
@@ -131,12 +131,12 @@ class SayEventTypingState(SayEventState):
         )
 
 
-@dataclass_with_init(frozen=True, kw_only=True)
+@dataclass_with_default_init(frozen=True, kw_only=True)
 class SayEventFadeOutState(SayEventState):
     drawing_on_screens_input: tuple[DrawingOnScreen, ...]
     config: SayEventConfig
     _: KW_ONLY = not_constructor_below()
-    _fade_out: FadeOut = default(
+    _fade_out: FadeOut = default_init(
         lambda self: FadeOut(
             self.drawing_on_screens_input, self.config.fade_duration
         )

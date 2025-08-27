@@ -3,7 +3,7 @@ from typing import Self
 
 from pygame.time import get_ticks
 
-from nextrpg.core.dataclass_with_init import not_constructor_below
+from nextrpg.core.dataclass_with_default_init import not_constructor_below
 
 type Millisecond = int
 

@@ -3,9 +3,9 @@ from functools import cached_property
 from typing import override
 
 from nextrpg.core.color import Color
-from nextrpg.core.dataclass_with_init import (
-    dataclass_with_init,
-    default,
+from nextrpg.core.dataclass_with_default_init import (
+    dataclass_with_default_init,
+    default_init,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
@@ -16,7 +16,7 @@ from nextrpg.gui.area import screen
 from nextrpg.scene.scene import Scene
 
 
-@dataclass_with_init(frozen=True)
+@dataclass_with_default_init(frozen=True)
 class TransitionScene(Scene):
     from_scene: Scene
     to_scene: Scene
@@ -27,10 +27,10 @@ class TransitionScene(Scene):
         default_factory=lambda: config().transition.duration
     )
     _: KW_ONLY = not_constructor_below()
-    _fade_in: FadeIn = default(
+    _fade_in: FadeIn = default_init(
         lambda self: FadeIn(self._intermediary, self.duration // 2)
     )
-    _fade_out: FadeOut = default(
+    _fade_out: FadeOut = default_init(
         lambda self: FadeOut(self._intermediary, self.duration // 2)
     )
 

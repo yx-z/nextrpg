@@ -8,9 +8,9 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
 from nextrpg.core.area_on_screen import AreaOnScreen
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dataclass_with_init import (
-    dataclass_with_init,
-    default,
+from nextrpg.core.dataclass_with_default_init import (
+    dataclass_with_default_init,
+    default_init,
     not_constructor_below,
 )
 from nextrpg.core.dimension import Size
@@ -30,12 +30,12 @@ from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.global_config import config
 
 
-@dataclass_with_init(frozen=True)
+@dataclass_with_default_init(frozen=True)
 class _BaseCharacterSpec:
     unique_name: str
     collide_with_others: bool = True
     avatar: Drawing | DrawingGroup | None = None
-    display_name: str = default(lambda self: self.unique_name)
+    display_name: str = default_init(lambda self: self.unique_name)
     config: CharacterConfig = field(default_factory=lambda: config().character)
 
 
@@ -44,13 +44,13 @@ class CharacterSpec(_BaseCharacterSpec):
     character: CharacterDrawing
 
 
-@dataclass_with_init(frozen=True)
+@dataclass_with_default_init(frozen=True)
 class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
     spec: CharacterSpec
     coordinate: Coordinate
     config: CharacterConfig = field(default_factory=lambda: config().character)
     _: KW_ONLY = not_constructor_below()
-    character: CharacterDrawing = default(lambda self: self.spec.character)
+    character: CharacterDrawing = default_init(lambda self: self.spec.character)
     _event_started: bool = False
 
     @property

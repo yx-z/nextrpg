@@ -1,11 +1,13 @@
+from __future__ import annotations
+
 from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Self
 
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dataclass_with_init import (
-    dataclass_with_init,
-    default,
+from nextrpg.core.dataclass_with_default_init import (
+    dataclass_with_default_init,
+    default_init,
     not_constructor_below,
 )
 from nextrpg.core.dimension import Pixel, PixelPerMillisecond
@@ -14,13 +16,13 @@ from nextrpg.core.polyline_on_screen import PolylineOnScreen
 from nextrpg.core.time import Millisecond
 
 
-@dataclass_with_init(frozen=True)
+@dataclass_with_default_init(frozen=True)
 class Walk:
     path: PolylineOnScreen
     move_speed: PixelPerMillisecond
     cyclic: bool
     _: KW_ONLY = not_constructor_below()
-    coordinate: Coordinate = default(lambda self: self._initial_point)
+    coordinate: Coordinate = default_init(lambda self: self._initial_point)
     _target_index: int | None = 1
 
     @cached_property

@@ -18,9 +18,9 @@ from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
 from nextrpg.core.area_on_screen import AreaOnScreen
 from nextrpg.core.color import TRANSPARENT
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dataclass_with_init import (
-    dataclass_with_init,
-    default,
+from nextrpg.core.dataclass_with_default_init import (
+    dataclass_with_default_init,
+    default_init,
     not_constructor_below,
 )
 from nextrpg.core.log import Log
@@ -40,20 +40,20 @@ from nextrpg.scene.transition_scene import TransitionScene
 log = Log()
 
 
-@dataclass_with_init(frozen=True, kw_only=True)
+@dataclass_with_default_init(frozen=True, kw_only=True)
 class MapScene(EventfulScene):
     tmx_file: PathLike | str
     player_spec: CharacterSpec
     move: Move | tuple[Move, ...] = ()
     npc_specs: NpcSpec | tuple[NpcSpec, ...] = ()
     _: KW_ONLY = not_constructor_below()
-    npcs: tuple[NpcOnScreen, ...] = default(
+    npcs: tuple[NpcOnScreen, ...] = default_init(
         lambda self: tuple(self._init_npc(n) for n in self._npc_specs)
     )
-    player: PlayerOnScreen = default(
+    player: PlayerOnScreen = default_init(
         lambda self: self.init_player(self.player_spec)
     )
-    _debug_visuals: tuple[DrawingOnScreen, ...] = default(
+    _debug_visuals: tuple[DrawingOnScreen, ...] = default_init(
         lambda self: self.map_helper.collision_visuals
         + self._npc_paths
         + self._move_visuals

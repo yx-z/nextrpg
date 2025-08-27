@@ -10,9 +10,9 @@ from pygame.display import flip, set_caption, set_icon, set_mode
 from pygame.surface import Surface
 
 from nextrpg.core.coordinate import ORIGIN, Coordinate
-from nextrpg.core.dataclass_with_init import (
-    dataclass_with_init,
-    default,
+from nextrpg.core.dataclass_with_default_init import (
+    dataclass_with_default_init,
+    default_init,
     not_constructor_below,
 )
 from nextrpg.core.dimension import Size
@@ -35,28 +35,30 @@ from nextrpg.global_config.window_config import ResizeMode, WindowConfig
 log = Log()
 
 
-@dataclass_with_init(frozen=True)
+@dataclass_with_default_init(frozen=True)
 class Window:
     _: KW_ONLY = not_constructor_below()
     initial_config: WindowConfig = field(
         default_factory=lambda: config().window
     )
-    last_config: WindowConfig = default(lambda self: self.initial_config)
-    current_config: WindowConfig = default(
+    last_config: WindowConfig = default_init(lambda self: self.initial_config)
+    current_config: WindowConfig = default_init(
         lambda self: self._saved_config or self.initial_config
     )
     __: None = field(
         default_factory=lambda: os.environ.setdefault("SDL_VIDEO_CENTERED", "1")
     )
-    ___: None = default(lambda self: set_caption(self.current_config.title))
-    ____: None = default(
+    ___: None = default_init(
+        lambda self: set_caption(self.current_config.title)
+    )
+    ____: None = default_init(
         lambda self: (
             set_icon(icon.pygame)
             if (icon := self.current_config.icon)
             else None
         )
     )
-    _screen: Surface = default(
+    _screen: Surface = default_init(
         lambda self: self._set_screen(self.current_config)
     )
 

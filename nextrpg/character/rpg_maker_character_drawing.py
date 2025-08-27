@@ -4,9 +4,9 @@ from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dataclass_with_init import (
-    dataclass_with_init,
-    default,
+from nextrpg.core.dataclass_with_default_init import (
+    dataclass_with_default_init,
+    default_init,
     not_constructor_below,
 )
 from nextrpg.core.dimension import Size
@@ -59,7 +59,7 @@ class RpgMakerSpriteSheet(SpriteSheet):
     style: FrameType = DefaultCharacterDrawingType
 
 
-@dataclass_with_init(frozen=True)
+@dataclass_with_default_init(frozen=True)
 class RpgMakerCharacterDrawing(CharacterDrawing):
     sprite_sheet: RpgMakerSpriteSheet
     selection: SpriteSheetSelection | None = None
@@ -68,7 +68,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         default_factory=lambda: config().rpg_maker_character.duration_per_frame
     )
     _: KW_ONLY = not_constructor_below()
-    _animations: dict[Direction, CyclicAnimation] = default(
+    _animations: dict[Direction, CyclicAnimation] = default_init(
         lambda self: self._init_animation
     )
 

@@ -7,9 +7,9 @@ from typing import Self
 import pygame
 from pygame import Clock
 
-from nextrpg.core.dataclass_with_init import (
-    dataclass_with_init,
-    default,
+from nextrpg.core.dataclass_with_default_init import (
+    dataclass_with_default_init,
+    default_init,
     not_constructor_below,
 )
 from nextrpg.core.log import Log
@@ -21,14 +21,14 @@ from nextrpg.scene.scene import Scene
 log = Log()
 
 
-@dataclass_with_init(frozen=True)
+@dataclass_with_default_init(frozen=True)
 class GameLoop:
     entry_scene: Callable[[], Scene]
     _: KW_ONLY = not_constructor_below()
     running: bool = True
     _clock: Clock = field(default_factory=Clock)
     _window: Window = field(default_factory=Window)
-    _scene: Scene = default(lambda self: self.entry_scene())
+    _scene: Scene = default_init(lambda self: self.entry_scene())
 
     @property
     def tick(self) -> GameLoop:

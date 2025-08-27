@@ -11,9 +11,9 @@ from nextrpg.character.character_on_screen import (
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
 from nextrpg.core.color import Color
-from nextrpg.core.dataclass_with_init import (
-    dataclass_with_init,
-    default,
+from nextrpg.core.dataclass_with_default_init import (
+    dataclass_with_default_init,
+    default_init,
     not_constructor_below,
 )
 from nextrpg.event.event_transformer import transform
@@ -33,20 +33,20 @@ class NpcEventStartMode(Enum):
     COLLIDE = auto()
 
 
-@dataclass_with_init(frozen=True)
+@dataclass_with_default_init(frozen=True)
 class EventSpec:
     event: RpgEvent
     start_mode: NpcEventStartMode = NpcEventStartMode.CONFIRM
     _: KW_ONLY = not_constructor_below()
-    generator: EventGenerator = default(lambda self: transform(self.event))
+    generator: EventGenerator = default_init(lambda self: transform(self.event))
 
 
-@dataclass_with_init(frozen=True, kw_only=True)
+@dataclass_with_default_init(frozen=True, kw_only=True)
 class NpcSpec(_BaseCharacterSpec):
     character: CharacterDrawing | Color | None = None
     event: EventSpec | RpgEvent | None = None
     cyclic_walk: bool = True
-    collide_with_others: bool = default(
+    collide_with_others: bool = default_init(
         lambda self: isinstance(self.character, CharacterDrawing)
         and not isinstance(self.character, PolygonCharacterDrawing)
     )
