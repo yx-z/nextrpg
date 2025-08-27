@@ -23,14 +23,14 @@ class RectangleDrawing:
     def drawing(self) -> TransparentDrawing:
         surface = Surface(self.size, SRCALPHA)
         rectangle = Rect(ORIGIN, self.size)
-        rect(
-            surface,
-            self.color,
-            rectangle,
-            border_radius=self.border_radius or -1,
-        )
+        if self.border_radius is None:
+            rect(surface, self.color, rectangle)
+        else:
+            rect(
+                surface, self.color, rectangle, border_radius=self.border_radius
+            )
         return TransparentDrawing(
-            resource=surface,
+            surface,
             allow_background_in_debug=self.allow_background_in_debug,
             color=self.color,
         )

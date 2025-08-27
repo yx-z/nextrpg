@@ -118,24 +118,28 @@ class SayEventTypingState(SayEventState):
             or event.key is not KeyboardKey.CONFIRM
         ):
             return self
+        drawing_on_screens = (
+            self.background + self.text_on_screen.drawing_on_screens
+        )
         return SayEventFadeOutState(
             generator=self.generator,
             scene=self.scene,
             unique_name=self.unique_name,
             initial_coordinate=self.initial_coordinate,
-            draw_on_screens=self.background
-            + self.text_on_screen.drawing_on_screens,
+            drawing_on_screens_input=drawing_on_screens,
             config=self.config,
         )
 
 
 @dataclass_with_init(frozen=True, kw_only=True)
 class SayEventFadeOutState(SayEventState):
-    draw_on_screens: tuple[DrawingOnScreen, ...]
+    drawing_on_screens_input: tuple[DrawingOnScreen, ...]
     config: SayEventConfig
     _: KW_ONLY = not_constructor_below()
     _fade_out: FadeOut = default(
-        lambda self: FadeOut(self.draw_on_screens, self.config.fade_duration)
+        lambda self: FadeOut(
+            self.drawing_on_screens_input, self.config.fade_duration
+        )
     )
 
     @override

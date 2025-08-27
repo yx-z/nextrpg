@@ -6,15 +6,15 @@ from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.polygon_area import PolygonArea
-from nextrpg.draw.rectangle_area import RectangleArea
+from nextrpg.draw.polygon_area_on_screen import PolygonAreaOnScreen
+from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 
 log = Log()
 
 
 @dataclass(frozen=True)
 class MovingCharacterOnScreen(CharacterOnScreen, ABC):
-    map_collisions: tuple[PolygonArea, ...] = ()
+    map_collisions: tuple[PolygonAreaOnScreen, ...] = ()
 
     @property
     @abstractmethod
@@ -52,7 +52,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
             return True
 
         if collision := self._collide(
-            self._collision_rectangle(coordinate), others
+            self._collision_rectangle_area_on_screen(coordinate), others
         ):
             log.debug(t"Collided {collision.points}")
             return False
@@ -60,13 +60,15 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
     def _collide(
         self,
-        bounding_rect: RectangleArea,
+        bounding_rect: RectangleAreaOnScreen,
         others: tuple[CharacterOnScreen, ...],
-    ) -> PolygonArea | None:
-        other_rects = tuple(
-            c.collision_rectangle for c in others if c.spec.collide_with_others
+    ) -> PolygonAreaOnScreen | None:
+        other_rectangle_area_on_screens = tuple(
+            c.collision_rectangle_area_on_screen
+            for c in others
+            if c.spec.collide_with_others
         )
-        for collision in self.map_collisions + other_rects:
+        for collision in self.map_collisions + other_rectangle_area_on_screens:
             if collision.collide(bounding_rect):
                 return collision
         return None

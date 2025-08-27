@@ -19,7 +19,7 @@ from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.rectangle_area import RectangleArea
+from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.global_config.character_config import CharacterConfig
 from nextrpg.global_config.global_config import config
@@ -66,22 +66,22 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         return replace(self, character=self.character.tick_idle(time_delta))
 
     @property
-    def draw_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         debug_visuals = tuple(
             d for d in (self._collision_visual, self._start_event_visual) if d
         )
         return (self.drawing_on_screen,) + debug_visuals
 
     @cached_property
-    def collision_rectangle(self) -> RectangleArea:
-        return self._collision_rectangle(self.coordinate)
+    def collision_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
+        return self._collision_rectangle_area_on_screen(self.coordinate)
 
     @cached_property
-    def start_event_rectangle(self) -> RectangleArea:
+    def start_event_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
         scaling = self.config.start_event_scaling
         coordinate = self.coordinate - self.width * (scaling - 1) / 2
         size = self.size * scaling
-        return RectangleArea(coordinate, size)
+        return RectangleAreaOnScreen(coordinate, size)
 
     @property
     def drawing_on_screen(self) -> DrawingOnScreen:
@@ -122,18 +122,20 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         character = self.character.turn(direction)
         return replace(self, coordinate=coordinate, character=character)
 
-    def _collision_rectangle(self, coordinate: Coordinate) -> RectangleArea:
+    def _collision_rectangle_area_on_screen(
+        self, coordinate: Coordinate
+    ) -> RectangleAreaOnScreen:
         scaling = self.config.bounding_rectangle_scaling
         coordinate = coordinate + self.height * (1 - scaling) / 2
         size = self.size * scaling
-        return RectangleArea(coordinate, size)
+        return RectangleAreaOnScreen(coordinate, size)
 
     @cached_property
     def _collision_visual(self) -> DrawingOnScreen | None:
         if (debug := config().debug) and (
             color := debug.collision_rectangle_color
         ):
-            return self.collision_rectangle.fill(color)
+            return self.collision_rectangle_area_on_screen.fill(color)
         return None
 
     @cached_property
@@ -141,5 +143,5 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         if (debug := config().debug) and (
             color := debug.start_event_rectangle_color
         ):
-            return self.start_event_rectangle.fill(color)
+            return self.start_event_rectangle_area_on_screen.fill(color)
         return None

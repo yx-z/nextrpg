@@ -73,11 +73,11 @@ from nextrpg.draw.drawing_on_screen import (
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.nine_slice import NineSlice
-from nextrpg.draw.polygon_area import (
-    PolygonArea,
+from nextrpg.draw.polygon_area_on_screen import (
+    PolygonAreaOnScreen,
 )
 from nextrpg.draw.polygon_drawing import PolygonDrawing
-from nextrpg.draw.rectangle_area import RectangleArea
+from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
 from nextrpg.draw.sizable_draw_on_screens import SizableDrawOnScreens
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
@@ -153,7 +153,7 @@ from nextrpg.scene.map.map_loader import (
     LayerTileBottomAndDrawOnScreen,
     MapLoader,
     TileBottomAndDrawOnScreen,
-    get_polygon,
+    get_geometry,
 )
 from nextrpg.scene.map.map_scene import MapScene, Move
 from nextrpg.scene.map.map_shift import center_player

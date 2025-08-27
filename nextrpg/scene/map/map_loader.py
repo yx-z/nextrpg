@@ -23,8 +23,9 @@ from nextrpg.draw.drawing import (
     Drawing,
 )
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon_area import PolygonArea
-from nextrpg.draw.rectangle_area import RectangleArea
+from nextrpg.draw.polygon_area_on_screen import PolygonAreaOnScreen
+from nextrpg.draw.polyline_on_screen import PolylineOnScreen
+from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.global_config.global_config import config
 
 log = Log()
@@ -41,13 +42,16 @@ class LayerTileBottomAndDrawOnScreen(NamedTuple):
     drawing_on_screen: DrawingOnScreen
 
 
-def get_polygon(obj: TiledObject) -> PolygonArea | None:
+def get_geometry(
+    obj: TiledObject,
+) -> PolygonAreaOnScreen | PolylineOnScreen | RectangleAreaOnScreen | None:
     if hasattr(obj, "points"):
-        return PolygonArea(
-            tuple(Coordinate(x, y) for x, y in obj.points), obj.closed
-        )
+        points = tuple(Coordinate(x, y) for x, y in obj.points)
+        if obj.closed:
+            return PolygonAreaOnScreen(points)
+        return PolylineOnScreen(points)
     if _is_rect(obj):
-        return RectangleArea(
+        return RectangleAreaOnScreen(
             Coordinate(obj.x, obj.y), Size(obj.width, obj.height)
         )
     return None
@@ -87,7 +91,7 @@ class MapLoader:
         return self._draw_layers(config().map.above_character)
 
     @cached_property
-    def collisions(self) -> tuple[PolygonArea, ...]:
+    def collisions(self) -> tuple[PolygonAreaOnScreen, ...]:
         from_tiles = tuple(
             self._polygon(coordinate, obj)
             for coordinate, obj in self._colliders
@@ -95,7 +99,7 @@ class MapLoader:
         from_objects = tuple(
             poly
             for obj in self.get_objects_by_class_name(config().map.collision)
-            if (poly := get_polygon(obj))
+            if (poly := get_geometry(obj))
         )
         return from_tiles + from_objects
 
@@ -123,13 +127,13 @@ class MapLoader:
     ) -> tuple[LayerTileBottomAndDrawOnScreen, ...]:
         character_layer = self._character_layer(character)
         character_bottom = (
-            character.drawing_on_screen.visible_rectangle_on_screen.bottom
+            character.drawing_on_screen.visible_rectangle_area_on_screen.bottom
         )
         return tuple(
             LayerTileBottomAndDrawOnScreen(
                 character_layer, character_bottom, draw_on_screen
             )
-            for draw_on_screen in character.draw_on_screens
+            for draw_on_screen in character.drawing_on_screens
         )
 
     def _character_layer(self, character: CharacterOnScreen) -> int:
@@ -168,23 +172,23 @@ class MapLoader:
 
     def _polygon(
         self, coordinate: _TileCoordinate, obj: TiledObject
-    ) -> PolygonArea:
+    ) -> PolygonAreaOnScreen:
         return self._from_rect(coordinate, obj) or self._from_points(
             coordinate, obj
         )
 
     def _from_points(
         self, coordinate: _TileCoordinate, obj: TiledObject
-    ) -> PolygonArea:
+    ) -> PolygonAreaOnScreen:
         w, h = self._tile_size
         cx, cy = coordinate
-        return PolygonArea(
+        return PolygonAreaOnScreen(
             tuple(Coordinate(cx * w + x, cy * h + y) for x, y in obj.as_points)
         )
 
     def _from_rect(
         self, coordinate: _TileCoordinate, obj: TiledObject
-    ) -> RectangleArea | None:
+    ) -> RectangleAreaOnScreen | None:
         if not _is_rect(obj):
             return None
 
@@ -192,7 +196,7 @@ class MapLoader:
         cx, cy = coordinate
         map_coord = Coordinate(cx * w + obj.x, cy * h + obj.y)
         size = Size(obj.width, obj.height)
-        return RectangleArea(map_coord, size)
+        return RectangleAreaOnScreen(map_coord, size)
 
     def _tile_layers(self, class_name: str) -> tuple[TiledTileLayer, ...]:
         return tuple(
@@ -217,7 +221,7 @@ class MapLoader:
     ) -> tuple[TileBottomAndDrawOnScreen, ...]:
         coord_and_draws = self._drawing(layer)
         coord_to_bottom = {
-            coordinate: drawing.visible_rectangle_on_screen.bottom
+            coordinate: drawing.visible_rectangle_area_on_screen.bottom
             for coordinate, drawing in coord_and_draws.items()
         }
         bottom_and_draw = tuple(
@@ -272,7 +276,7 @@ class MapLoader:
                 for c in self._component(layer, coordinate, cls)
             )
             if (cls := self._class(layer, coordinate))
-            else drawing.visible_rectangle_on_screen.bottom
+            else drawing.visible_rectangle_area_on_screen.bottom
         )
 
     def _component(
@@ -320,10 +324,10 @@ def _below_character_layer(
     layer: tuple[LayerTileBottomAndDrawOnScreen, ...],
     character: CharacterOnScreen,
 ) -> bool:
-    rect = character.drawing_on_screen.visible_rectangle_on_screen
+    rect = character.drawing_on_screen.visible_rectangle_area_on_screen
     return layer[-1].bottom < rect.bottom and any(
         bottom < rect.bottom
-        and rect.collide(drawing.visible_rectangle_on_screen)
+        and rect.collide(drawing.visible_rectangle_area_on_screen)
         for _, bottom, drawing in layer
     )
 

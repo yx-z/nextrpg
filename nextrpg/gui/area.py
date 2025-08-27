@@ -7,7 +7,7 @@ from nextrpg.core.dimension import (
     WidthAndHeightScaling,
     WidthScaling,
 )
-from nextrpg.draw.rectangle_area import RectangleArea
+from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.global_config.global_config import config, initial_config
 from nextrpg.global_config.window_config import ResizeMode
 
@@ -28,37 +28,37 @@ def gui_height() -> Height:
     return gui_size().height
 
 
-def screen() -> RectangleArea:
-    return RectangleArea(ORIGIN, gui_size())
+def screen() -> RectangleAreaOnScreen:
+    return RectangleAreaOnScreen(ORIGIN, gui_size())
 
 
-def left_screen() -> RectangleArea:
-    return RectangleArea(ORIGIN, gui_size() / WidthScaling(2))
+def left_screen() -> RectangleAreaOnScreen:
+    return RectangleAreaOnScreen(ORIGIN, gui_size() / WidthScaling(2))
 
 
-def right_screen() -> RectangleArea:
+def right_screen() -> RectangleAreaOnScreen:
     return left_screen() + gui_size().width / 2
 
 
-def top_screen() -> RectangleArea:
-    return RectangleArea(ORIGIN, gui_size() / HeightScaling(2))
+def top_screen() -> RectangleAreaOnScreen:
+    return RectangleAreaOnScreen(ORIGIN, gui_size() / HeightScaling(2))
 
 
-def bottom_screen() -> RectangleArea:
+def bottom_screen() -> RectangleAreaOnScreen:
     return top_screen() + gui_size().height / 2
 
 
-def top_left_screen() -> RectangleArea:
-    return RectangleArea(ORIGIN, gui_size() / WidthAndHeightScaling(2))
+def top_left_screen() -> RectangleAreaOnScreen:
+    return RectangleAreaOnScreen(ORIGIN, gui_size() / WidthAndHeightScaling(2))
 
 
-def top_right_screen() -> RectangleArea:
+def top_right_screen() -> RectangleAreaOnScreen:
     return top_left_screen() + gui_size().width / 2
 
 
-def bottom_left_screen() -> RectangleArea:
+def bottom_left_screen() -> RectangleAreaOnScreen:
     return top_left_screen() + gui_size().height / 2
 
 
-def bottom_right_screen() -> RectangleArea:
+def bottom_right_screen() -> RectangleAreaOnScreen:
     return top_right_screen() + gui_size().height / 2

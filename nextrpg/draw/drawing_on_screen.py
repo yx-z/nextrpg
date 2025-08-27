@@ -13,7 +13,7 @@ from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import Drawing
 
 if TYPE_CHECKING:
-    from nextrpg.draw.rectangle_area import RectangleArea
+    from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 @dataclass(frozen=True)
@@ -22,18 +22,18 @@ class DrawingOnScreen(Sizable):
     drawing: Drawing
 
     @property
-    def rectangle_on_screen(self) -> RectangleArea:
-        from nextrpg.draw.rectangle_area import RectangleArea
+    def rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
+        from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 
-        return RectangleArea(self.top_left, self.drawing.size)
+        return RectangleAreaOnScreen(self.top_left, self.drawing.size)
 
     @cached_property
-    def visible_rectangle_on_screen(self) -> RectangleArea:
-        from nextrpg.draw.rectangle_area import RectangleArea
+    def visible_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
+        from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 
-        shift = self.drawing.visible_rectangle.top_left
-        size = self.drawing.visible_rectangle.size
-        return RectangleArea(self.top_left + shift, size)
+        shift = self.drawing.visible_rectangle_area_on_screen.top_left
+        size = self.drawing.visible_rectangle_area_on_screen.size
+        return RectangleAreaOnScreen(self.top_left + shift, size)
 
     @property
     def pygame(self) -> tuple[Surface, Coordinate]:

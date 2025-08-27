@@ -10,7 +10,7 @@ from nextrpg.core.dimension import Size, WidthAndHeightScaling
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.rectangle_area import RectangleArea
+from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
 from nextrpg.draw.relative_drawing import RelativeDrawing
 from nextrpg.draw.text import Text
@@ -248,8 +248,8 @@ class SayEventCharacterAddOn(SayEventAddOn):
         )
 
     @cached_property
-    def _character_rectangle_on_screen(self) -> RectangleArea:
-        rect = self.character.drawing_on_screen.visible_rectangle_on_screen
+    def _character_rectangle_on_screen(self) -> RectangleAreaOnScreen:
+        rect = self.character.drawing_on_screen.visible_rectangle_area_on_screen
         if self.scene.drawing_on_screen_shift:
             return rect + self.scene.drawing_on_screen_shift
         return rect

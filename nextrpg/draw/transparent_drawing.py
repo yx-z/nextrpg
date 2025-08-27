@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import KW_ONLY, dataclass
 from functools import cached_property
 from typing import override
 
@@ -11,8 +11,9 @@ from nextrpg.core.dimension import Size
 from nextrpg.draw.drawing import Drawing
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class TransparentDrawing(Drawing):
+    _: KW_ONLY
     color: Color
 
     @property

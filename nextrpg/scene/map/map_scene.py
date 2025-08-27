@@ -24,13 +24,14 @@ from nextrpg.core.dataclass_with_init import (
 from nextrpg.core.direction import Direction
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond, get_timepoint
+from nextrpg.draw.area_on_screen import AreaOnScreen
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon_area import PolygonArea
 from nextrpg.draw.polygon_drawing import PolygonDrawing
-from nextrpg.draw.rectangle_area import RectangleArea
+from nextrpg.draw.polyline_on_screen import PolylineOnScreen
+from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
 from nextrpg.global_config.global_config import config
-from nextrpg.scene.map.map_loader import MapLoader, get_polygon
+from nextrpg.scene.map.map_loader import MapLoader, get_geometry
 from nextrpg.scene.map.map_shift import center_player
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
 from nextrpg.scene.scene import Scene
@@ -58,7 +59,7 @@ class MapScene(EventfulScene):
         + self._move_visuals
     )
 
-    @property
+    @cached_property
     def map_helper(self) -> MapLoader:
         return MapLoader(self.tmx_file)
 
@@ -130,19 +131,27 @@ class MapScene(EventfulScene):
     @cached_property
     def _move_visuals(self) -> tuple[DrawingOnScreen, ...]:
         if config().debug and (color := config().debug.move_object_color):
-            return tuple(m.fill(color) for m in self._move_polys)
+            return tuple(m.fill(color) for m in self._move_areas)
         return ()
 
     @cached_property
-    def _move_polys(self) -> tuple[PolygonArea, ...]:
+    def _move_areas(self) -> tuple[AreaOnScreen, ...]:
         return tuple(
-            get_polygon(self.map_helper.get_object(m.trigger_object))
+            get_geometry(self.map_helper.get_object(m.trigger_object))
             for m in self._moves
         )
 
     def _move(self, move: Move, time_delta: Millisecond) -> Scene | None:
-        move_poly = get_polygon(self.map_helper.get_object(move.trigger_object))
-        if self.player.drawing_on_screen.rectangle_on_screen.collide(move_poly):
+        move_area = get_geometry(
+            self.map_helper.get_object(move.trigger_object)
+        )
+        assert isinstance(
+            move_area, AreaOnScreen
+        ), f"'{move.trigger_object}' needs to be an area."
+
+        if self.player.drawing_on_screen.rectangle_area_on_screen.collide(
+            move_area
+        ):
             to_scene = move.to_scene(self, self.player)
             return to_scene.tick(time_delta)
         return None
@@ -152,7 +161,7 @@ class MapScene(EventfulScene):
         if not (debug := config().debug) or not (color := debug.npc_path_color):
             return ()
         return tuple(
-            npc.path.line(color)
+            npc.path.fill(color)
             for npc in self.npcs
             if isinstance(npc, MovingNpcOnScreen)
         )
@@ -165,24 +174,31 @@ class MapScene(EventfulScene):
                 spec.character.drawing
             ).top_left
 
-        if not (poly := get_polygon(npc_object)):
+        if not (poly := get_geometry(npc_object)):
             return NpcOnScreen(coordinate=coordinate, spec=to_strict(spec))
 
         if isinstance(spec.character, CharacterDrawing):
-            npc = MovingNpcOnScreen(path=poly, spec=to_strict(spec))
+            points = [
+                p.as_bottom_center_of(spec.character.drawing).top_left
+                for p in poly.points
+            ]
+            if isinstance(poly, AreaOnScreen):
+                points.append(points[0])
+            path = PolylineOnScreen(tuple(points))
+            npc = MovingNpcOnScreen(path=path, spec=to_strict(spec))
             if self.save_io:
                 return self.save_io.update(npc)
             return npc
 
         color = spec.character or TRANSPARENT
-        if isinstance(poly, RectangleArea):
-            poly_draw = RectangleDrawing(poly.size, color)
+        if isinstance(poly, RectangleAreaOnScreen):
+            drawing = RectangleDrawing(poly.size, color)
         else:
             points = tuple(p - coordinate for p in poly.points)
-            poly_draw = PolygonDrawing(points, color)
+            drawing = PolygonDrawing(points, color)
 
         poly_spec = to_strict(
-            spec, PolygonCharacterDrawing(Direction.DOWN, poly_draw)
+            spec, PolygonCharacterDrawing(Direction.DOWN, drawing)
         )
         npc = NpcOnScreen(coordinate=coordinate, spec=poly_spec)
         if self.save_io:

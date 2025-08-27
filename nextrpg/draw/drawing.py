@@ -27,7 +27,7 @@ from nextrpg.global_config.global_config import config
 
 if TYPE_CHECKING:
     from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-    from nextrpg.draw.rectangle_area import RectangleArea
+    from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 
 log = Log()
 
@@ -109,19 +109,19 @@ class Drawing(Sizable):
         return replace(self, resource=surface)
 
     @cached_property
-    def visible_rectangle(self) -> RectangleArea:
-        from nextrpg.draw.rectangle_area import RectangleArea
+    def visible_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
+        from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 
         rectangle = self.surface.get_bounding_rect()
         coordinate = Coordinate(rectangle.x, rectangle.y)
         size = Size(rectangle.width, rectangle.height)
-        return RectangleArea(coordinate, size)
+        return RectangleAreaOnScreen(coordinate, size)
 
     @property
-    def rectangle(self) -> RectangleArea:
-        from nextrpg.draw.polygon_area import RectangleArea
+    def rectangle(self) -> RectangleAreaOnScreen:
+        from nextrpg.draw.polygon_area_on_screen import RectangleAreaOnScreen
 
-        return RectangleArea(ORIGIN, self.size)
+        return RectangleAreaOnScreen(ORIGIN, self.size)
 
     @property
     def top_left(self) -> Coordinate:

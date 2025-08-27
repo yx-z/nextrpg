@@ -3,7 +3,7 @@ from functools import wraps
 from types import FunctionType
 
 from nextrpg.core.coordinate import ORIGIN
-from nextrpg.draw.rectangle_area import RectangleArea
+from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.global_config.cutscene_config import CutsceneConfig
 from nextrpg.global_config.global_config import config
 from nextrpg.gui.area import gui_height, gui_size
@@ -28,7 +28,7 @@ def _cutscene[R, **P](
 ) -> Callable[P, EventGenerator]:
     def decorated(*args: P.args, **kwargs: P.kwargs) -> EventGenerator:
         size = gui_size() * cfg.screen_height_scaling
-        top_border = RectangleArea(ORIGIN, size)
+        top_border = RectangleAreaOnScreen(ORIGIN, size)
         bottom_border = top_border + gui_height() - size.height
         borders = tuple(
             r.fill(cfg.background) for r in (top_border, bottom_border)

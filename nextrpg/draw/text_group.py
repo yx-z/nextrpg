@@ -4,7 +4,7 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import Self
 
-from nextrpg.core.coordinate import Coordinate, ORIGIN
+from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dimension import Size, Width
 from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import Drawing

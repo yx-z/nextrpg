@@ -10,7 +10,7 @@ from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon_area import PolygonArea
+from nextrpg.draw.polyline_on_screen import PolylineOnScreen
 from nextrpg.draw.sizable_draw_on_screens import SizableDrawOnScreens
 from nextrpg.global_config.global_config import config
 
@@ -43,8 +43,8 @@ class DrawingGroupOnScreen(Sizable):
             declared_coord = self.origin + relative.shift
             if self._link_color and self.origin != declared_coord:
                 points = (self.origin, declared_coord)
-                link = PolygonArea(points, closed=False)
-                link_drawing_on_screen = link.line(self._link_color)
+                link = PolylineOnScreen(points)
+                link_drawing_on_screen = link.fill(self._link_color)
                 res.append(link_drawing_on_screen)
         return tuple(res)
 

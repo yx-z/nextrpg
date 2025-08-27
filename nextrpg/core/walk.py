@@ -11,12 +11,12 @@ from nextrpg.core.dataclass_with_init import (
 from nextrpg.core.dimension import Pixel, PixelPerMillisecond
 from nextrpg.core.direction import Direction
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.polygon_area import PolygonArea
+from nextrpg.draw.polyline_on_screen import PolylineOnScreen
 
 
 @dataclass_with_init(frozen=True)
 class Walk:
-    path: PolygonArea
+    path: PolylineOnScreen
     move_speed: PixelPerMillisecond
     cyclic: bool
     _: KW_ONLY = not_constructor_below()
@@ -26,10 +26,7 @@ class Walk:
     @cached_property
     def direction(self) -> Direction:
         if self._target_index is None:
-            if self.path.closed:
-                penultimate = self.path.points[-1]
-            else:
-                penultimate = self.path.points[-2]
+            penultimate = self.path.points[-2]
             return self._final_target.relative_to(penultimate)
 
         target = self.path.points[self._target_index]
@@ -95,6 +92,4 @@ class Walk:
 
     @property
     def _final_target(self) -> Coordinate:
-        if self.path.closed:
-            return self._initial_point
         return self.path.points[-1]

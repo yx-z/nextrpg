@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from collections.abc import Callable
 from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
 
 from pygame import SRCALPHA, Surface
-from pygame.draw import lines, polygon
+from pygame.draw import polygon
 
 from nextrpg.core.color import Color
 from nextrpg.core.coordinate import Coordinate
@@ -14,58 +13,43 @@ from nextrpg.core.dimension import Size
 from nextrpg.draw.transparent_drawing import TransparentDrawing
 
 if TYPE_CHECKING:
-    from nextrpg.draw.rectangle_area import RectangleArea
+    from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 @dataclass(frozen=True)
 class PolygonDrawing:
     points: tuple[Coordinate, ...]
     color: Color
-    allow_background_in_debug: bool = False
-    bounding_rectangle: RectangleArea | None = None
-    line_only: bool = False
+    allow_background_in_debug: bool = True
+    bounding_rectangle_area_on_screen: RectangleAreaOnScreen | None = None
 
     @cached_property
     def drawing(self) -> TransparentDrawing:
-        if self.line_only:
-            fill = self._line
-        else:
-            fill = self._fill
-        surface = self._draw_polygon(fill)
         return TransparentDrawing(
-            resource=surface,
+            self._surface,
             allow_background_in_debug=self.allow_background_in_debug,
             color=self.color,
         )
 
-    @cached_property
-    def _line(self) -> Callable[[Surface, list[Coordinate]], None]:
-        def line(surface: Surface, points: list[Coordinate]) -> None:
-            lines(surface, self.color, closed=True, points=points)
-
-        return line
+    def _draw(self, surface: Surface, points: tuple[Coordinate, ...]) -> None:
+        polygon(surface, self.color, points)
 
     @cached_property
-    def _fill(self) -> Callable[[Surface, list[Coordinate]], None]:
-        def fill(surface: Surface, points: list[Coordinate]) -> None:
-            polygon(surface, self.color, points)
-
-        return fill
-
-    def _draw_polygon(
-        self, method: Callable[[Surface, list[Coordinate]], None]
-    ) -> Surface:
-        bounding_rect = self.bounding_rectangle or get_bounding_rectangle(
-            self.points
+    def _surface(self) -> Surface:
+        bounding_rect = (
+            self.bounding_rectangle_area_on_screen
+            or get_bounding_rectangle_area_on_screen(self.points)
         )
         surface = Surface(bounding_rect.size, SRCALPHA)
-        negated = [p - bounding_rect.top_left for p in self.points]
-        method(surface, negated)
+        negated = tuple(p - bounding_rect.top_left for p in self.points)
+        self._draw(surface, negated)
         return surface
 
 
-def get_bounding_rectangle(points: tuple[Coordinate, ...]) -> RectangleArea:
-    from nextrpg.draw.rectangle_area import RectangleArea
+def get_bounding_rectangle_area_on_screen(
+    points: tuple[Coordinate, ...],
+) -> RectangleAreaOnScreen:
+    from nextrpg.draw.rectangle_area_on_screen import RectangleAreaOnScreen
 
     min_x = min(c.left_value for c in points)
     min_y = min(c.top_value for c in points)
@@ -78,4 +62,4 @@ def get_bounding_rectangle(points: tuple[Coordinate, ...]) -> RectangleArea:
     width = max(max_x - min_x, 1)
     height = max(max_y - min_y, 1)
     size = Size(width, height)
-    return RectangleArea(coordinate, size)
+    return RectangleAreaOnScreen(coordinate, size)

@@ -38,8 +38,12 @@ class SayEventColorBackgroundConfig:
         from nextrpg.core.coordinate import ORIGIN
         from nextrpg.draw.polygon_drawing import PolygonDrawing
 
-        point1 = ORIGIN + self.tip_config.height + self.tip_config.width1
-        point2 = ORIGIN + self.tip_config.height + self.tip_config.width2
+        point1: Coordinate = (
+            ORIGIN + self.tip_config.height + self.tip_config.width1
+        )
+        point2: Coordinate = (
+            ORIGIN + self.tip_config.height + self.tip_config.width2
+        )
         points = (ORIGIN, point1, point2)
         return PolygonDrawing(points, self.background)
 
