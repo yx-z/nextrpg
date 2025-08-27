@@ -1,9 +1,11 @@
 from dataclasses import dataclass
 from functools import cached_property
 
-from nextrpg import RectangleAreaOnScreen
-from nextrpg.core.coordinate import ORIGIN
-from nextrpg.core.dimension import (
+from nextrpg.draw.drawing import Drawing
+from nextrpg.draw.drawing_group import DrawingGroup
+from nextrpg.draw.relative_drawing import Anchor, RelativeDrawing
+from nextrpg.geometry.coordinate import ORIGIN
+from nextrpg.geometry.dimension import (
     ZERO_SIZE,
     Height,
     HeightScaling,
@@ -12,9 +14,7 @@ from nextrpg.core.dimension import (
     Width,
     WidthScaling,
 )
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.relative_drawing import Anchor, RelativeDrawing
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 @dataclass(frozen=True)

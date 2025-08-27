@@ -2,22 +2,22 @@ from dataclasses import KW_ONLY, dataclass, field, replace
 from enum import IntEnum
 from typing import Self, override
 
+from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.core.coordinate import Coordinate
+from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
     not_constructor_below,
 )
-from nextrpg.core.dimension import Size
-from nextrpg.core.direction import Direction
-from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.cyclic_animation import CyclicAnimation
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
-from nextrpg.global_config.global_config import config
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.direction import Direction
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 class DefaultCharacterDrawingType(IntEnum):

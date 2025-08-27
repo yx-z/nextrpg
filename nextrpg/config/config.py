@@ -2,24 +2,24 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Generator
 
-from nextrpg.global_config.character_config import CharacterConfig
-from nextrpg.global_config.cutscene_config import CutsceneConfig
-from nextrpg.global_config.debug_config import DebugConfig
-from nextrpg.global_config.drawing_config import DrawingConfig
-from nextrpg.global_config.event_config import EventConfig
-from nextrpg.global_config.game_loop_config import GameLoopConfig
-from nextrpg.global_config.key_mapping_config import KeyMappingConfig
-from nextrpg.global_config.map_config import MapConfig
-from nextrpg.global_config.player_config import PlayerConfig
-from nextrpg.global_config.rpg_maker_character_drawing_config import (
+from nextrpg.config.character_config import CharacterConfig
+from nextrpg.config.cutscene_config import CutsceneConfig
+from nextrpg.config.debug_config import DebugConfig
+from nextrpg.config.drawing_config import DrawingConfig
+from nextrpg.config.event_config import EventConfig
+from nextrpg.config.game_loop_config import GameLoopConfig
+from nextrpg.config.key_mapping_config import KeyMappingConfig
+from nextrpg.config.map_config import MapConfig
+from nextrpg.config.player_config import PlayerConfig
+from nextrpg.config.rpg_maker_character_drawing_config import (
     RpgMakerCharacterDrawingConfig,
 )
-from nextrpg.global_config.save_config import SaveConfig
-from nextrpg.global_config.say_event_config import SayEventConfig
-from nextrpg.global_config.text_config import TextConfig
-from nextrpg.global_config.text_group_config import TextGroupConfig
-from nextrpg.global_config.transition_config import TransitionConfig
-from nextrpg.global_config.window_config import WindowConfig
+from nextrpg.config.save_config import SaveConfig
+from nextrpg.config.say_event_config import SayEventConfig
+from nextrpg.config.text_config import TextConfig
+from nextrpg.config.text_group_config import TextGroupConfig
+from nextrpg.config.transition_config import TransitionConfig
+from nextrpg.config.window_config import WindowConfig
 
 
 @dataclass(frozen=True, slots=True)

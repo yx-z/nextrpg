@@ -10,21 +10,21 @@ from pygame import SRCALPHA, Surface
 from pygame.image import load
 from pygame.transform import flip, scale, smoothscale
 
+from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.color import TRANSPARENT, Alpha, Color
-from nextrpg.core.coordinate import ORIGIN, Coordinate
-from nextrpg.core.dimension import (
+from nextrpg.core.log import Log
+from nextrpg.draw.drawing_trim import DrawingTrim
+from nextrpg.geometry.coordinate import ORIGIN, Coordinate
+from nextrpg.geometry.dimension import (
     HeightScaling,
     Pixel,
     Size,
     WidthAndHeightScaling,
     WidthScaling,
 )
-from nextrpg.core.log import Log
-from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.core.sizable import Sizable
-from nextrpg.draw.drawing_trim import DrawingTrim
-from nextrpg.global_config.global_config import config
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
     from nextrpg.draw.drawing_on_screen import DrawingOnScreen
@@ -111,7 +111,9 @@ class Drawing(Sizable):
 
     @cached_property
     def visible_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
-        from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
+        from nextrpg.geometry.rectangle_area_on_screen import (
+            RectangleAreaOnScreen,
+        )
 
         rectangle = self.surface.get_bounding_rect()
         coordinate = Coordinate(rectangle.x, rectangle.y)
@@ -120,7 +122,9 @@ class Drawing(Sizable):
 
     @property
     def rectangle(self) -> RectangleAreaOnScreen:
-        from nextrpg.core.polygon_area_on_screen import RectangleAreaOnScreen
+        from nextrpg.geometry.polygon_area_on_screen import (
+            RectangleAreaOnScreen,
+        )
 
         return RectangleAreaOnScreen(ORIGIN, self.size)
 

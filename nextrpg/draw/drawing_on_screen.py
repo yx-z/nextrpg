@@ -6,11 +6,11 @@ from functools import cached_property
 from pygame import Surface
 
 from nextrpg.core.color import Alpha
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Height, Size, Width
-from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import Drawing
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Height, Size, Width
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.sizable import Sizable
 
 
 @dataclass(frozen=True)

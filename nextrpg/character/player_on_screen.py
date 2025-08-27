@@ -3,9 +3,8 @@ from typing import Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
-from nextrpg.core.coordinate import Coordinate
+from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default_init import not_constructor_below
-from nextrpg.core.direction import Direction, DirectionalOffset
 from nextrpg.core.time import Millisecond
 from nextrpg.event.pygame_event import (
     KeyboardKey,
@@ -13,7 +12,8 @@ from nextrpg.event.pygame_event import (
     KeyPressUp,
     PygameEvent,
 )
-from nextrpg.global_config.global_config import config
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.direction import Direction, DirectionalOffset
 
 
 @dataclass(frozen=True)

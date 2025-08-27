@@ -3,16 +3,16 @@ from __future__ import annotations
 from dataclasses import dataclass
 from functools import cached_property
 
+from nextrpg.config.config import config
 from nextrpg.core.color import Color
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Size
-from nextrpg.core.polyline_on_screen import PolylineOnScreen
-from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.sizable_draw_on_screens import SizableDrawOnScreens
-from nextrpg.global_config.global_config import config
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
+from nextrpg.geometry.sizable import Sizable
 
 
 @dataclass(frozen=True)

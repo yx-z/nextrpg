@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
 from nextrpg.core.color import Color
-from nextrpg.core.dimension import HeightScaling
 from nextrpg.core.time import Millisecond
+from nextrpg.geometry.dimension import HeightScaling
 
 
 @dataclass(frozen=True, slots=True)
@@ -14,12 +14,12 @@ class CutsceneConfig:
 
     @property
     def background(self) -> Color:
-        from nextrpg.global_config.global_config import config
+        from nextrpg.config.config import config
 
         return self.background_override or config().window.background
 
     @property
     def duration(self) -> Millisecond:
-        from nextrpg.global_config.global_config import config
+        from nextrpg.config.config import config
 
         return self.duration_override or config().transition.duration

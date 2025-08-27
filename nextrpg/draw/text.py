@@ -4,14 +4,14 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import TYPE_CHECKING, Self
 
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Size
-from nextrpg.core.sizable import Sizable
+from nextrpg.config.config import config
+from nextrpg.config.text_config import TextConfig
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.relative_drawing import RelativeDrawing
-from nextrpg.global_config.global_config import config
-from nextrpg.global_config.text_config import TextConfig
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
     from nextrpg.draw.text_group import TextGroup

@@ -4,16 +4,16 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Self
 
-from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
     not_constructor_below,
 )
-from nextrpg.core.dimension import Pixel, PixelPerMillisecond
-from nextrpg.core.direction import Direction
-from nextrpg.core.polyline_on_screen import PolylineOnScreen
 from nextrpg.core.time import Millisecond
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Pixel, PixelPerMillisecond
+from nextrpg.geometry.direction import Direction
+from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 
 
 @dataclass_with_default_init(frozen=True)

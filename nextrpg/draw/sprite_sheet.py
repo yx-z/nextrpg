@@ -3,10 +3,10 @@ from functools import cached_property
 from pathlib import Path
 
 from nextrpg.core.color import Color
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Size
-from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.draw.drawing import Drawing
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 @dataclass(frozen=True, kw_only=True)

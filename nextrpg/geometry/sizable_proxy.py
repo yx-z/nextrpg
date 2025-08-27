@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Size, WidthAndHeightScaling
-from nextrpg.core.sizable import Sizable
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size, WidthAndHeightScaling
+from nextrpg.geometry.sizable import Sizable
 
 
 @dataclass(frozen=True)

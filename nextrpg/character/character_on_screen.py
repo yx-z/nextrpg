@@ -6,19 +6,14 @@ from typing import Any, Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
-from nextrpg.core.area_on_screen import AreaOnScreen
-from nextrpg.core.coordinate import Coordinate
+from nextrpg.config.character_config import CharacterConfig
+from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
     not_constructor_below,
 )
-from nextrpg.core.dimension import Size
-from nextrpg.core.direction import Direction
-from nextrpg.core.polygon_area_on_screen import PolygonAreaOnScreen
-from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.core.save import UpdateFromSave
-from nextrpg.core.sizable import Sizable
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
@@ -26,8 +21,13 @@ from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
 from nextrpg.event.event_as_attr import EventAsAttr
-from nextrpg.global_config.character_config import CharacterConfig
-from nextrpg.global_config.global_config import config
+from nextrpg.geometry.area_on_screen import AreaOnScreen
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.direction import Direction
+from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.sizable import Sizable
 
 
 @dataclass_with_default_init(frozen=True)

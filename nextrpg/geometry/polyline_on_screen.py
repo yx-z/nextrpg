@@ -3,12 +3,12 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from nextrpg.core.color import Color
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Pixel
-from nextrpg.core.polygon_area_on_screen import (
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Pixel
+from nextrpg.geometry.polygon_area_on_screen import (
     get_bounding_rectangle_area_on_screen,
 )
-from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 if TYPE_CHECKING:
     from nextrpg.draw.drawing_on_screen import DrawingOnScreen

@@ -1,6 +1,7 @@
 from dataclasses import KW_ONLY, dataclass, replace
 from typing import Self, override
 
+from nextrpg.animation.fade import FadeIn
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
@@ -8,7 +9,6 @@ from nextrpg.core.dataclass_with_default_init import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.fade import FadeIn
 from nextrpg.event.background_event import (
     BackgroundEvent,
     BackgroundEventSentinel,

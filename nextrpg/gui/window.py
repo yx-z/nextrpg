@@ -9,13 +9,13 @@ from pygame import SRCALPHA
 from pygame.display import flip, set_caption, set_icon, set_mode
 from pygame.surface import Surface
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.config.config import config, set_config
+from nextrpg.config.window_config import ResizeMode, WindowConfig
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
     not_constructor_below,
 )
-from nextrpg.core.dimension import Size
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
@@ -29,8 +29,8 @@ from nextrpg.event.pygame_event import (
     PygameEvent,
     WindowResize,
 )
-from nextrpg.global_config.global_config import config, set_config
-from nextrpg.global_config.window_config import ResizeMode, WindowConfig
+from nextrpg.geometry.coordinate import ORIGIN, Coordinate
+from nextrpg.geometry.dimension import Size
 
 log = Log()
 

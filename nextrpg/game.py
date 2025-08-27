@@ -4,13 +4,13 @@ from dataclasses import KW_ONLY
 
 from pygame import font, init
 
+from nextrpg.config.config import Config, set_config
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
     not_constructor_below,
 )
 from nextrpg.core.game_loop import GameLoop
-from nextrpg.global_config.global_config import Config, set_config
 from nextrpg.scene.scene import Scene
 
 

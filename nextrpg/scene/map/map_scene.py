@@ -15,22 +15,22 @@ from nextrpg.character.npc_on_screen import NpcOnScreen
 from nextrpg.character.npc_spec import NpcSpec, to_strict
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.polygon_character_draw import PolygonCharacterDrawing
-from nextrpg.core.area_on_screen import AreaOnScreen
+from nextrpg.config.config import config
 from nextrpg.core.color import TRANSPARENT
-from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
     not_constructor_below,
 )
 from nextrpg.core.log import Log
-from nextrpg.core.polyline_on_screen import PolylineOnScreen
-from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.core.time import Millisecond, get_timepoint
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
-from nextrpg.global_config.global_config import config
+from nextrpg.geometry.area_on_screen import AreaOnScreen
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.scene.map.map_loader import MapLoader, get_geometry
 from nextrpg.scene.map.map_shift import center_player
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene

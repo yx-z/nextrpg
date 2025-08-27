@@ -7,9 +7,9 @@ from pygame import SRCALPHA, Rect, Surface
 from pygame.draw import rect
 
 from nextrpg.core.color import Color
-from nextrpg.core.coordinate import ORIGIN
-from nextrpg.core.dimension import Pixel, Size
 from nextrpg.draw.drawing import Drawing
+from nextrpg.geometry.coordinate import ORIGIN
+from nextrpg.geometry.dimension import Pixel, Size
 
 
 @dataclass(frozen=True)

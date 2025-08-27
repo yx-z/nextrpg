@@ -1,13 +1,13 @@
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
+from nextrpg.animation.animation import Animation
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond, Timer
-from nextrpg.draw.animation import Animation
 from nextrpg.draw.drawing import Drawing
 
 

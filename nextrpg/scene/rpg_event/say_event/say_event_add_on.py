@@ -5,9 +5,10 @@ from functools import cached_property
 from typing import Literal, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.core.coordinate import ORIGIN, Coordinate
-from nextrpg.core.dimension import Size, WidthAndHeightScaling
-from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.config.say_event_config import (
+    SayEventConfig,
+    SayEventNineSliceBackgroundConfig,
+)
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
@@ -16,10 +17,9 @@ from nextrpg.draw.relative_drawing import RelativeDrawing
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.global_config.say_event_config import (
-    SayEventConfig,
-    SayEventNineSliceBackgroundConfig,
-)
+from nextrpg.geometry.coordinate import ORIGIN, Coordinate
+from nextrpg.geometry.dimension import Size, WidthAndHeightScaling
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.gui.area import gui_width, left_screen, top_screen
 from nextrpg.scene.scene import Scene
 

@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Self
 
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Size
-from nextrpg.core.sizable import Sizable
 from nextrpg.core.time import Millisecond
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
     from nextrpg.draw.drawing import Drawing

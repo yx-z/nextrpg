@@ -4,7 +4,7 @@ from inspect import getsource, isfunction
 from textwrap import dedent
 from typing import Any, Generator
 
-from nextrpg.global_config.global_config import config
+from nextrpg.config.config import config
 
 
 def transform[**P](

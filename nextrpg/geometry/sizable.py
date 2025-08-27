@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Protocol
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
-from nextrpg.core.dimension import (
+from nextrpg.geometry.coordinate import ORIGIN, Coordinate
+from nextrpg.geometry.dimension import (
     Height,
     HeightScaling,
     Size,

@@ -4,12 +4,12 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from nextrpg.core.coordinate import ORIGIN, Coordinate
-from nextrpg.core.dimension import Size
-from nextrpg.core.sizable import Sizable
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.relative_drawing import RelativeDrawing
+from nextrpg.geometry.coordinate import ORIGIN, Coordinate
+from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
     from nextrpg.draw.drawing_group_on_screen import DrawingGroupOnScreen

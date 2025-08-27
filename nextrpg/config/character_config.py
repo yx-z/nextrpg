@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from nextrpg.core.dimension import (
+from nextrpg.geometry.dimension import (
     HeightScaling,
     PixelPerMillisecond,
     WidthScaling,

@@ -2,12 +2,12 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Self
 
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Size
-from nextrpg.core.direction import Direction
-from nextrpg.core.sizable import Sizable
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.direction import Direction
+from nextrpg.geometry.sizable import Sizable
 
 
 @dataclass(frozen=True)

@@ -4,8 +4,8 @@ from dataclasses import dataclass, replace
 from enum import auto
 from typing import Self
 
-from nextrpg.core.dimension import Pixel
 from nextrpg.core.save import LoadFromSaveEnum
+from nextrpg.geometry.dimension import Pixel
 
 
 class Direction(LoadFromSaveEnum):

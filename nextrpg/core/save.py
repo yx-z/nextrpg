@@ -18,12 +18,12 @@ from typing import (
 )
 
 from nextrpg import __version__
+from nextrpg.config.save_config import SaveConfig
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
     not_constructor_below,
 )
-from nextrpg.global_config.save_config import SaveConfig
 
 if TYPE_CHECKING:
     from nextrpg.core.log import Log
@@ -69,7 +69,7 @@ _U = TypeVar("_U", bound=UpdateFromSave)
 
 
 def _config() -> SaveConfig:
-    from nextrpg.global_config.global_config import config
+    from nextrpg.config.config import config
 
     return config().save
 

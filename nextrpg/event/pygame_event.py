@@ -7,9 +7,9 @@ from functools import cache
 from pygame.event import Event
 from pygame.locals import KEYDOWN, KEYUP, QUIT, VIDEORESIZE
 
-from nextrpg.core.dimension import Size
-from nextrpg.global_config.global_config import config
-from nextrpg.global_config.key_mapping_config import KeyCode
+from nextrpg.config.config import config
+from nextrpg.config.key_mapping_config import KeyCode
+from nextrpg.geometry.dimension import Size
 
 
 @dataclass(frozen=True)

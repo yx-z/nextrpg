@@ -1,5 +1,10 @@
 __version__ = "0.1.16"
 
+from nextrpg.animation.animation import Animation
+from nextrpg.animation.animation_on_screen import AnimationOnScreen
+from nextrpg.animation.cyclic_animation import CyclicAnimation
+from nextrpg.animation.fade import FadeIn, FadeOut
+from nextrpg.animation.typewriter import Typewriter
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import (
     CharacterOnScreen,
@@ -24,6 +29,33 @@ from nextrpg.character.rpg_maker_character_drawing import (
     RpgMakerSpriteSheet,
     RpgMakerXpCharacterDrawingType,
 )
+from nextrpg.config.character_config import CharacterConfig
+from nextrpg.config.config import (
+    Config,
+    config,
+    initial_config,
+    override_config,
+    set_config,
+)
+from nextrpg.config.debug_config import DebugConfig
+from nextrpg.config.drawing_config import DrawingConfig
+from nextrpg.config.event_config import EventConfig
+from nextrpg.config.game_loop_config import GameLoopConfig
+from nextrpg.config.key_mapping_config import KeyMappingConfig
+from nextrpg.config.map_config import MapConfig
+from nextrpg.config.rpg_maker_character_drawing_config import (
+    RpgMakerCharacterDrawingConfig,
+)
+from nextrpg.config.save_config import SaveConfig
+from nextrpg.config.say_event_config import (
+    SayEventColorBackgroundConfig,
+    SayEventColorBackgroundTipConfig,
+    SayEventConfig,
+    SayEventNineSliceBackgroundConfig,
+)
+from nextrpg.config.text_config import TextConfig
+from nextrpg.config.transition_config import TransitionConfig
+from nextrpg.config.window_config import ResizeMode, WindowConfig
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.color import (
     BLACK,
@@ -33,30 +65,12 @@ from nextrpg.core.color import (
     Color,
     alpha_from_percentage,
 )
-from nextrpg.core.coordinate import ORIGIN, Coordinate
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
     not_constructor_below,
 )
-from nextrpg.core.dimension import (
-    Height,
-    HeightScaling,
-    Pixel,
-    PixelPerMillisecond,
-    Size,
-    Width,
-    WidthAndHeightScaling,
-    WidthScaling,
-)
-from nextrpg.core.direction import Direction, DirectionalOffset
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
-from nextrpg.core.polygon_area_on_screen import (
-    PolygonAreaOnScreen,
-    get_bounding_rectangle_area_on_screen,
-)
-from nextrpg.core.polyline_on_screen import PolylineOnScreen
-from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.core.save import (
     LoadFromSave,
     LoadFromSaveEnum,
@@ -65,18 +79,11 @@ from nextrpg.core.save import (
     SaveIo,
     UpdateFromSave,
 )
-from nextrpg.core.walk import Walk
-from nextrpg.draw.animation import Animation
-from nextrpg.draw.animation_on_screen import AnimationOnScreen
-from nextrpg.draw.cyclic_animation import CyclicAnimation
-from nextrpg.draw.drawing import (
-    Drawing,
-)
+from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import (
     DrawingOnScreen,
 )
 from nextrpg.draw.drawing_trim import DrawingTrim
-from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.nine_slice import NineSlice
 from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.polyline_drawing import PolylineDrawing
@@ -86,7 +93,6 @@ from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.draw.typewriter import Typewriter
 from nextrpg.event.background_event import (
     BackgroundEvent,
     BackgroundEventSentinel,
@@ -108,33 +114,25 @@ from nextrpg.event.pygame_event import (
     to_typed_event,
 )
 from nextrpg.game import Game
-from nextrpg.global_config.character_config import CharacterConfig
-from nextrpg.global_config.debug_config import DebugConfig
-from nextrpg.global_config.drawing_config import DrawingConfig
-from nextrpg.global_config.event_config import EventConfig
-from nextrpg.global_config.game_loop_config import GameLoopConfig
-from nextrpg.global_config.global_config import (
-    Config,
-    config,
-    initial_config,
-    override_config,
-    set_config,
+from nextrpg.geometry.coordinate import ORIGIN, Coordinate
+from nextrpg.geometry.dimension import (
+    Height,
+    HeightScaling,
+    Pixel,
+    PixelPerMillisecond,
+    Size,
+    Width,
+    WidthAndHeightScaling,
+    WidthScaling,
 )
-from nextrpg.global_config.key_mapping_config import KeyMappingConfig
-from nextrpg.global_config.map_config import MapConfig
-from nextrpg.global_config.rpg_maker_character_drawing_config import (
-    RpgMakerCharacterDrawingConfig,
+from nextrpg.geometry.direction import Direction, DirectionalOffset
+from nextrpg.geometry.polygon_area_on_screen import (
+    PolygonAreaOnScreen,
+    get_bounding_rectangle_area_on_screen,
 )
-from nextrpg.global_config.save_config import SaveConfig
-from nextrpg.global_config.say_event_config import (
-    SayEventColorBackgroundConfig,
-    SayEventColorBackgroundTipConfig,
-    SayEventConfig,
-    SayEventNineSliceBackgroundConfig,
-)
-from nextrpg.global_config.text_config import TextConfig
-from nextrpg.global_config.transition_config import TransitionConfig
-from nextrpg.global_config.window_config import ResizeMode, WindowConfig
+from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.walk import Walk
 from nextrpg.gui.area import (
     bottom_left_screen,
     bottom_right_screen,

@@ -8,14 +8,14 @@ from pygame import SRCALPHA, Surface
 from pygame.draw import polygon
 
 from nextrpg.core.color import Color
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.polygon_area_on_screen import (
+from nextrpg.draw.drawing import Drawing
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.polygon_area_on_screen import (
     get_bounding_rectangle_area_on_screen,
 )
-from nextrpg.draw.drawing import Drawing
 
 if TYPE_CHECKING:
-    from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
+    from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 @dataclass(frozen=True)

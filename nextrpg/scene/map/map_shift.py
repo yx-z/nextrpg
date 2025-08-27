@@ -1,5 +1,5 @@
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Pixel, Size
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Pixel, Size
 from nextrpg.gui.area import gui_height, gui_width
 
 

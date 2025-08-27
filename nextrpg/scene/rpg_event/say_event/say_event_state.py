@@ -5,7 +5,9 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.core.coordinate import Coordinate
+from nextrpg.animation.fade import FadeIn, FadeOut
+from nextrpg.animation.typewriter import Typewriter
+from nextrpg.config.say_event_config import SayEventConfig
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
@@ -13,11 +15,9 @@ from nextrpg.core.dataclass_with_default_init import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.fade import FadeIn, FadeOut
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.draw.typewriter import Typewriter
 from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
-from nextrpg.global_config.say_event_config import SayEventConfig
+from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.rpg_event.rpg_event_scene import RpgEventScene
 from nextrpg.scene.scene import Scene
 

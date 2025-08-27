@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from nextrpg.core.dimension import Pixel
+from nextrpg.geometry.dimension import Pixel
 
 
 @dataclass(frozen=True, kw_only=True)

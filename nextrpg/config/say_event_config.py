@@ -3,11 +3,11 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import TYPE_CHECKING
 
+from nextrpg.config.text_config import TextConfig
 from nextrpg.core.color import BLACK, BLUE, Color
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Height, Pixel, Size, Width
 from nextrpg.core.time import Millisecond
-from nextrpg.global_config.text_config import TextConfig
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Height, Pixel, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.draw.drawing import Drawing
@@ -35,8 +35,8 @@ class SayEventColorBackgroundConfig:
         if not self.tip_config:
             return None
 
-        from nextrpg.core.coordinate import ORIGIN
         from nextrpg.draw.polygon_drawing import PolygonDrawing
+        from nextrpg.geometry.coordinate import ORIGIN
 
         point1: Coordinate = (
             ORIGIN + self.tip_config.height + self.tip_config.width1
@@ -103,7 +103,7 @@ class SayEventConfig:
         if self.text_config_override:
             return self.text_config_override
 
-        from nextrpg.global_config.global_config import config
+        from nextrpg.config.config import config
 
         return replace(config().text, color=BLACK)
 

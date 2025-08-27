@@ -2,13 +2,13 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Self, override
 
+from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond, Timer
-from nextrpg.draw.animation_on_screen import AnimationOnScreen
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.text_on_screen import TextOnScreen
 

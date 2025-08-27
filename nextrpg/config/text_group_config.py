@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from nextrpg.core.dimension import Height, Width
+from nextrpg.geometry.dimension import Height, Width
 
 
 @dataclass(frozen=True, slots=True)

@@ -4,15 +4,15 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import TYPE_CHECKING
 
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import (
+from nextrpg.draw.drawing import Drawing
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import (
     ZERO_SIZE,
     HeightScaling,
     Size,
     WidthAndHeightScaling,
     WidthScaling,
 )
-from nextrpg.draw.drawing import Drawing
 
 if TYPE_CHECKING:
     from nextrpg.draw.drawing_group import DrawingGroup

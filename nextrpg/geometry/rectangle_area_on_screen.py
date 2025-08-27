@@ -4,11 +4,11 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import TYPE_CHECKING, Self, override
 
-from nextrpg.core.area_on_screen import AreaOnScreen
 from nextrpg.core.color import Color
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Height, Pixel, Size, Width
-from nextrpg.core.polygon_area_on_screen import PolygonAreaOnScreen
+from nextrpg.geometry.area_on_screen import AreaOnScreen
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Height, Pixel, Size, Width
+from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 
 if TYPE_CHECKING:
     from nextrpg.draw.drawing_on_screen import DrawingOnScreen

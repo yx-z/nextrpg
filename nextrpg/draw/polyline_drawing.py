@@ -3,8 +3,8 @@ from typing import override
 from pygame import Surface
 from pygame.draw import lines
 
-from nextrpg.core.coordinate import Coordinate
 from nextrpg.draw.polygon_drawing import PolygonDrawing
+from nextrpg.geometry.coordinate import Coordinate
 
 
 class PolylineDrawing(PolygonDrawing):

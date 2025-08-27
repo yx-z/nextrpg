@@ -4,15 +4,15 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import Self
 
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Size, Width
-from nextrpg.core.sizable import Sizable
+from nextrpg.config.config import config
+from nextrpg.config.text_group_config import TextGroupConfig
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.relative_drawing import RelativeDrawing
 from nextrpg.draw.text import Text
-from nextrpg.global_config.global_config import config
-from nextrpg.global_config.text_group_config import TextGroupConfig
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size, Width
+from nextrpg.geometry.sizable import Sizable
 
 
 @dataclass(frozen=True)

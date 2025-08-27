@@ -2,6 +2,8 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import override
 
+from nextrpg.animation.fade import FadeIn, FadeOut
+from nextrpg.config.config import config
 from nextrpg.core.color import Color
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
@@ -10,8 +12,6 @@ from nextrpg.core.dataclass_with_default_init import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.fade import FadeIn, FadeOut
-from nextrpg.global_config.global_config import config
 from nextrpg.gui.area import screen
 from nextrpg.scene.scene import Scene
 

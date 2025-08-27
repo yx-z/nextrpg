@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from nextrpg.core.direction import Direction
-from nextrpg.global_config.character_config import CharacterConfig
+from nextrpg.config.character_config import CharacterConfig
+from nextrpg.geometry.direction import Direction
 
 
 @dataclass(frozen=True, slots=True)

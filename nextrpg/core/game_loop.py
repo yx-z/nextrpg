@@ -7,6 +7,7 @@ from typing import Self
 import pygame
 from pygame import Clock
 
+from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
@@ -14,7 +15,6 @@ from nextrpg.core.dataclass_with_default_init import (
 )
 from nextrpg.core.log import Log
 from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
-from nextrpg.global_config.global_config import config
 from nextrpg.gui.window import Window
 from nextrpg.scene.scene import Scene
 

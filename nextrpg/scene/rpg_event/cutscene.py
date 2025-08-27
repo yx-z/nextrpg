@@ -2,10 +2,10 @@ from collections.abc import Callable
 from functools import wraps
 from types import FunctionType
 
-from nextrpg.core.coordinate import ORIGIN
-from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.global_config.cutscene_config import CutsceneConfig
-from nextrpg.global_config.global_config import config
+from nextrpg.config.config import config
+from nextrpg.config.cutscene_config import CutsceneConfig
+from nextrpg.geometry.coordinate import ORIGIN
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.gui.area import gui_height, gui_size
 from nextrpg.scene.rpg_event.fade_in_scene import fade_in
 from nextrpg.scene.rpg_event.fade_out_scene import fade_out

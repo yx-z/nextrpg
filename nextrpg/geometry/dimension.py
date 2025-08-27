@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, NamedTuple, Self, override
 
 if TYPE_CHECKING:
-    from nextrpg.core.coordinate import Coordinate
+    from nextrpg.geometry.coordinate import Coordinate
 
 type Pixel = int | float
 
@@ -178,7 +178,7 @@ class Size(NamedTuple):
 
     @property
     def coordinate(self) -> Coordinate:
-        from nextrpg.core.coordinate import Coordinate
+        from nextrpg.geometry.coordinate import Coordinate
 
         return Coordinate(self.width_value, self.height_value)
 

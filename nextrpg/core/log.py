@@ -3,8 +3,8 @@ from inspect import stack
 from pathlib import Path
 from string.templatelib import Interpolation, Template
 
+from nextrpg.config.debug_config import LogLevel
 from nextrpg.core.time import Millisecond, Timer
-from nextrpg.global_config.debug_config import LogLevel
 
 
 class _DurationFromConfig:
@@ -64,7 +64,7 @@ class ComponentAndMessage:
 
 
 def pop_messages(time_delta: Millisecond) -> tuple[ComponentAndMessage, ...]:
-    from nextrpg.global_config.global_config import config
+    from nextrpg.config.config import config
 
     if not (debug := config().debug):
         _pop(time_delta)
@@ -118,7 +118,7 @@ def _add(
     message: Template | str,
     duration: Millisecond | _DurationFromConfig | None,
 ) -> None:
-    from nextrpg.global_config.global_config import config
+    from nextrpg.config.config import config
 
     if not (debug := config().debug) or debug.log_level > level:
         return

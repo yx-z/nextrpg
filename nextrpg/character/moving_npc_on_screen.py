@@ -5,15 +5,15 @@ from typing import Self, override
 
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen
-from nextrpg.core.coordinate import Coordinate
 from nextrpg.core.dataclass_with_default_init import (
     dataclass_with_default_init,
     default_init,
     not_constructor_below,
 )
-from nextrpg.core.polyline_on_screen import PolylineOnScreen
 from nextrpg.core.time import Millisecond
-from nextrpg.core.walk import Walk
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
+from nextrpg.geometry.walk import Walk
 
 
 @dataclass_with_default_init(frozen=True, kw_only=True)

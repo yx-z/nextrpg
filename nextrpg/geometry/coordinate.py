@@ -3,11 +3,11 @@ from __future__ import annotations
 from math import atan2, degrees, hypot, sqrt
 from typing import TYPE_CHECKING, NamedTuple, Self
 
-from nextrpg.core.dimension import Height, Pixel, Size, Width
-from nextrpg.core.direction import Direction, DirectionalOffset
+from nextrpg.geometry.dimension import Height, Pixel, Size, Width
+from nextrpg.geometry.direction import Direction, DirectionalOffset
 
 if TYPE_CHECKING:
-    from nextrpg.core.sizable_proxy import (
+    from nextrpg.geometry.sizable_proxy import (
         BottomCenter,
         BottomLeft,
         BottomRight,
@@ -113,47 +113,47 @@ class Coordinate(NamedTuple):
         return hypot(dx, dy)
 
     def as_top_left_of(self, sizable: Sizable) -> TopLeft:
-        from nextrpg.core.sizable_proxy import TopLeft
+        from nextrpg.geometry.sizable_proxy import TopLeft
 
         return TopLeft(sizable, self)
 
     def as_top_center_of(self, sizable: Sizable) -> TopCenter:
-        from nextrpg.core.sizable_proxy import TopCenter
+        from nextrpg.geometry.sizable_proxy import TopCenter
 
         return TopCenter(sizable, self)
 
     def as_top_right_of(self, sizable: Sizable) -> TopRight:
-        from nextrpg.core.sizable_proxy import TopRight
+        from nextrpg.geometry.sizable_proxy import TopRight
 
         return TopRight(sizable, self)
 
     def as_center_left_of(self, sizable: Sizable) -> CenterLeft:
-        from nextrpg.core.sizable_proxy import CenterLeft
+        from nextrpg.geometry.sizable_proxy import CenterLeft
 
         return CenterLeft(sizable, self)
 
     def as_center_of(self, sizable: Sizable) -> Center:
-        from nextrpg.core.sizable_proxy import Center
+        from nextrpg.geometry.sizable_proxy import Center
 
         return Center(sizable, self)
 
     def as_center_right_of(self, sizable: Sizable) -> CenterRight:
-        from nextrpg.core.sizable_proxy import CenterRight
+        from nextrpg.geometry.sizable_proxy import CenterRight
 
         return CenterRight(sizable, self)
 
     def as_bottom_left_of(self, sizable: Sizable) -> BottomLeft:
-        from nextrpg.core.sizable_proxy import BottomLeft
+        from nextrpg.geometry.sizable_proxy import BottomLeft
 
         return BottomLeft(sizable, self)
 
     def as_bottom_center_of(self, sizable: Sizable) -> BottomCenter:
-        from nextrpg.core.sizable_proxy import BottomCenter
+        from nextrpg.geometry.sizable_proxy import BottomCenter
 
         return BottomCenter(sizable, self)
 
     def as_bottom_right_of(self, sizable: Sizable) -> BottomRight:
-        from nextrpg.core.sizable_proxy import BottomRight
+        from nextrpg.geometry.sizable_proxy import BottomRight
 
         return BottomRight(sizable, self)
 

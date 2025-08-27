@@ -2,12 +2,12 @@ from abc import ABC, abstractmethod
 from functools import cached_property
 from typing import Self
 
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Size
-from nextrpg.core.sizable import Sizable
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.sizable_draw_on_screens import SizableDrawOnScreens
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.sizable import Sizable
 
 
 class AnimationOnScreen(Sizable, ABC):

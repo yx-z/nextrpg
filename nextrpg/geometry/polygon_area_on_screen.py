@@ -7,14 +7,14 @@ from typing import TYPE_CHECKING, override
 from pygame import Mask
 from pygame.mask import from_surface
 
-from nextrpg.core.area_on_screen import AreaOnScreen
 from nextrpg.core.color import BLACK, Color
-from nextrpg.core.coordinate import Coordinate
-from nextrpg.core.dimension import Height, Size, Width
+from nextrpg.geometry.area_on_screen import AreaOnScreen
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Height, Size, Width
 
 if TYPE_CHECKING:
-    from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
     from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+    from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 @dataclass(frozen=True)
@@ -90,7 +90,7 @@ class PolygonAreaOnScreen(AreaOnScreen):
 def get_bounding_rectangle_area_on_screen(
     points: tuple[Coordinate, ...],
 ) -> RectangleAreaOnScreen:
-    from nextrpg.core.rectangle_area_on_screen import RectangleAreaOnScreen
+    from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
     min_x = min(c.left_value for c in points)
     min_y = min(c.top_value for c in points)
