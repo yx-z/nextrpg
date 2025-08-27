@@ -11,8 +11,8 @@ from pygame.image import load
 from pygame.transform import flip, scale, smoothscale
 
 from nextrpg.core.cached_decorator import cached
-from nextrpg.core.color import TRANSPARENT, Alpha, Color
-from nextrpg.core.coordinate import ORIGIN, Coordinate
+from nextrpg.core.color import Alpha, Color, TRANSPARENT
+from nextrpg.core.coordinate import Coordinate, ORIGIN
 from nextrpg.core.dimension import (
     HeightScaling,
     Pixel,
@@ -47,7 +47,7 @@ class Drawing(Sizable):
 
     @property
     def size(self) -> Size:
-        return Size(self.surface.width, self.surface.height)
+        return Size(self.width.value, self.height.value)
 
     @property
     def pygame(self) -> Surface:
@@ -70,8 +70,8 @@ class Drawing(Sizable):
 
     def trim(self, drawing_trim: DrawingTrim) -> Drawing:
         coordinate = Coordinate(drawing_trim.left, drawing_trim.top)
-        width = self.surface.width - drawing_trim.left - drawing_trim.right
-        height = self.surface.height - drawing_trim.top - drawing_trim.bottom
+        width = self.width.value - drawing_trim.left - drawing_trim.right
+        height = self.height.value - drawing_trim.top - drawing_trim.bottom
         size = Size(width, height)
         area = RectangleAreaOnScreen(coordinate, size)
         return self.crop(area)
@@ -159,7 +159,7 @@ class Drawing(Sizable):
         ):
             return None
 
-        size = (self.surface.width, self.surface.height)
+        size = (self.width.value, self.height.value)
         surface = Surface(size, SRCALPHA)
         surface.fill(color)
         surface.blit(self.surface, ORIGIN)
