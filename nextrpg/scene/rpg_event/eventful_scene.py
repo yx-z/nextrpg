@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, Self, override
+from typing import Any, Self, TYPE_CHECKING, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen
@@ -20,7 +20,7 @@ from nextrpg.event.background_event import (
     BackgroundEventSentinel,
 )
 from nextrpg.event.event_as_attr import EventAsAttr
-from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
+from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
 from nextrpg.scene.scene import Scene
 
 if TYPE_CHECKING:
@@ -161,12 +161,10 @@ class EventfulScene(EventAsAttr, Scene):
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:
         for npc in self.npcs:
-            if (
-                npc.spec.event
-                and npc.start_event_rectangle_area_on_screen.collide(
-                    self.player.start_event_rectangle_area_on_screen
-                )
-            ):
+            collided = npc.start_event_rectangle_area_on_screen.collide(
+                self.player.start_event_rectangle_area_on_screen
+            )
+            if npc.spec.event and collided:
                 return npc
         return None
 
