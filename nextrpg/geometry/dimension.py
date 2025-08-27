@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from functools import singledispatchmethod
-from typing import NamedTuple, Self, TYPE_CHECKING, override
+from typing import TYPE_CHECKING, NamedTuple, Self, overload, override
 
 if TYPE_CHECKING:
     from nextrpg.geometry.coordinate import Coordinate
@@ -66,11 +65,19 @@ class WidthAndHeightScaling(_Dimension):
 
 
 class Width(_Dimension):
+    @overload
+    def __mul__(self, arg: int | float | WidthScaling) -> Width: ...
+
+    @overload
+    def __mul__(self, arg: Height) -> Size: ...
+
     @override
-    @singledispatchmethod
-    def __mul__(
-        self, arg: int | float | WidthScaling | Height
-    ) -> Width | Size: ...
+    def __mul__(self, arg: int | float | WidthScaling | Height) -> Width | Size:
+        if isinstance(arg, Height):
+            return Size(self.value, arg.value)
+        if isinstance(arg, WidthScaling):
+            return Width(self.value * arg.value)
+        return Width(self.value * arg)
 
     @override
     def __rmul__(self, arg: int | float | WidthScaling) -> Width:
@@ -84,19 +91,21 @@ class Width(_Dimension):
 
 
 class Height(_Dimension):
-    @override
-    @singledispatchmethod
-    def __mul__(self, arg: int | float | HeightScaling) -> Height | Size: ...
+    @overload
+    def __mul__(self, arg: int | float | HeightScaling) -> Height: ...
 
-    @__mul__.register
-    def height_scale(self, arg: int | float | HeightScaling) -> Height:
+    @overload
+    def __mul__(self, arg: Width) -> Size: ...
+
+    @override
+    def __mul__(
+        self, arg: int | float | HeightScaling | Width
+    ) -> Height | Size:
+        if isinstance(arg, Width):
+            return Size(arg.value, self.value)
         if isinstance(arg, HeightScaling):
             return Height(self.value * arg.value)
         return Height(self.value * arg)
-
-    @__mul__.register
-    def height_with_width(self, arg: Width) -> Size:
-        return Size(arg.value, self.value)
 
     @override
     def __rmul__(self, arg: int | float | HeightScaling) -> Height | Size:
@@ -107,18 +116,6 @@ class Height(_Dimension):
         if isinstance(scaling, HeightScaling):
             return self * (1 / scaling.value)
         return self * (1 / scaling)
-
-
-@Width.__mul__.register
-def width_scale(self, arg: int | float | WidthScaling) -> Width:
-    if isinstance(arg, WidthScaling):
-        return Width(self.value * arg.value)
-    return Width(self.value * arg)
-
-
-@Width.__mul__.register
-def width_with_height(self, arg: Height) -> Size:
-    return Size(self.value, arg.value)
 
 
 class Size(NamedTuple):
