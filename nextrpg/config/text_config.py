@@ -1,7 +1,7 @@
 from dataclasses import dataclass, replace
 from typing import Self
 
-from nextrpg.core.color import WHITE, Color
+from nextrpg.core.color import Color, WHITE
 from nextrpg.core.font import Font
 from nextrpg.geometry.dimension import Height, Width
 
@@ -21,13 +21,15 @@ class TextConfig:
         return replace(self, wrap=wrap)
 
     def sized(self, size: Height) -> Self:
-        return replace(self, font=self.font.sized(size))
+        font = self.font.sized(size)
+        return replace(self, font=font)
 
     def colored(self, color: Color) -> Self:
         return replace(self, color=color)
 
     def scripted(self, script: str) -> Self:
-        return replace(self, font=self.font.scripted(script))
+        font = self.font.scripted(script)
+        return replace(self, font=font)
 
     @property
     def italicized(self) -> Self:
