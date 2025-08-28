@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import override
 
+from nextrpg import RectangleAreaOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.say_event_config import (
     SayEventConfig,
@@ -17,7 +18,7 @@ from nextrpg.draw.relative_drawing import Anchor, RelativeDrawing
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.geometry.coordinate import Coordinate, ORIGIN
+from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import Width, WidthAndHeightScaling
 from nextrpg.gui.area import gui_width, left_screen, top_screen
 from nextrpg.scene.scene import Scene
@@ -134,18 +135,6 @@ class SayEventCharacterAddOn(SayEventAddOn):
     @override
     def _background_relative_to_text(self) -> RelativeDrawing:
         background_drawing = super()._background_relative_to_text.drawing
-        if self._character_position.at_top:
-            tip_top = -self._tip.height
-        else:
-            tip_top = background_drawing.height
-        if isinstance(
-            self.config.background, SayEventNineSliceBackgroundConfig
-        ):
-            if self._character_position.at_top:
-                tip_top += self.config.background.nine_slice.top
-            else:
-                tip_top -= self.config.background.nine_slice.bottom
-
         if self._character_position.at_left:
             tip_left = (
                 background_drawing.width / 2
@@ -158,7 +147,35 @@ class SayEventCharacterAddOn(SayEventAddOn):
                 - self._tip.width
             )
 
+        if self._character_position.at_top:
+            tip_top = -self._tip.height
+        else:
+            tip_top = background_drawing.height
+        if isinstance(
+            self.config.background, SayEventNineSliceBackgroundConfig
+        ):
+            if self._character_position.at_top:
+                tip_top += self.config.background.nine_slice.top
+            else:
+                tip_top -= self.config.background.nine_slice.bottom
         tip_shift = tip_left * tip_top
+
+        if isinstance(
+            self.config.background, SayEventNineSliceBackgroundConfig
+        ):
+            if self._character_position.at_top:
+                crop_size = (
+                    self._tip.width * self.config.background.nine_slice.top
+                )
+            else:
+                crop_size = (
+                    self._tip.width * self.config.background.nine_slice.bottom
+                )
+            background_crop = RectangleAreaOnScreen(
+                tip_shift.coordinate, crop_size
+            )
+            background_drawing = background_drawing.cut(background_crop)
+
         background_and_tip = (
             RelativeDrawing(background_drawing, ORIGIN),
             RelativeDrawing(self._tip, tip_shift),

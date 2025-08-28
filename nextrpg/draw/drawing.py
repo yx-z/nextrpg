@@ -53,9 +53,9 @@ class Drawing(Sizable):
             return self._debug_surface
         return self.surface
 
-    def cut(self, top_left: Coordinate, size: Size) -> Drawing:
+    def cut(self, area: RectangleAreaOnScreen) -> Drawing:
         surface = self.surface.copy()
-        surface.fill(TRANSPARENT, (top_left, size))
+        surface.fill(TRANSPARENT, (area.top_left, area.size))
         return replace(self, resource=surface)
 
     def flip(self, horizontal: bool = False, vertical: bool = False) -> Drawing:
