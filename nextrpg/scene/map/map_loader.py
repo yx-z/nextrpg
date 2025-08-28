@@ -53,7 +53,7 @@ def get_geometry(
     if _is_rect(obj):
         coordinate = Coordinate(obj.x, obj.y)
         size = Size(obj.width, obj.height)
-        return coordinate.as_top_left_of(size).rectangle_area_on_screen
+        return coordinate.anchor(size).rectangle_area_on_screen
     return None
 
 

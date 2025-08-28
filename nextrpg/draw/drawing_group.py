@@ -61,9 +61,7 @@ class DrawingGroup(Sizable):
         res: list[RelativeDrawing] = []
         for relative in self.relative_drawings:
             top_left = area.top_left - relative.top_left(ORIGIN)
-            relative_area = top_left.as_top_left_of(
-                area.size
-            ).rectangle_area_on_screen
+            relative_area = top_left.anchor(area.size).rectangle_area_on_screen
             drawing = relative.drawing.cut(relative_area)
             relative_drawing = replace(relative, drawing=drawing)
             res.append(relative_drawing)

@@ -17,12 +17,12 @@ class _SizableProxy:
 
 
 @dataclass(frozen=True)
-class TopLeft(_SizableProxy, Sizable):
+class TopLeftSizable(_SizableProxy, Sizable):
     top_left: Coordinate
 
 
 @dataclass(frozen=True)
-class TopCenter(_SizableProxy, Sizable):
+class TopCenterSizable(_SizableProxy, Sizable):
     top_center_input: Coordinate
 
     @property
@@ -31,7 +31,7 @@ class TopCenter(_SizableProxy, Sizable):
 
 
 @dataclass(frozen=True)
-class TopRight(_SizableProxy, Sizable):
+class TopRightSizable(_SizableProxy, Sizable):
     top_right_input: Coordinate
 
     @property
@@ -40,7 +40,7 @@ class TopRight(_SizableProxy, Sizable):
 
 
 @dataclass(frozen=True)
-class CenterLeft(_SizableProxy, Sizable):
+class CenterLeftSizable(_SizableProxy, Sizable):
     center_left_input: Coordinate
 
     @property
@@ -49,7 +49,7 @@ class CenterLeft(_SizableProxy, Sizable):
 
 
 @dataclass(frozen=True)
-class Center(_SizableProxy, Sizable):
+class CenterSizable(_SizableProxy, Sizable):
     center_input: Coordinate
 
     @property
@@ -58,7 +58,7 @@ class Center(_SizableProxy, Sizable):
 
 
 @dataclass(frozen=True)
-class CenterRight(_SizableProxy, Sizable):
+class CenterRightSizable(_SizableProxy, Sizable):
     center_right_input: Coordinate
 
     @property
@@ -67,7 +67,7 @@ class CenterRight(_SizableProxy, Sizable):
 
 
 @dataclass(frozen=True)
-class BottomLeft(_SizableProxy, Sizable):
+class BottomLeftSizable(_SizableProxy, Sizable):
     bottom_left_input: Coordinate
 
     @property
@@ -76,7 +76,7 @@ class BottomLeft(_SizableProxy, Sizable):
 
 
 @dataclass(frozen=True)
-class BottomCenter(_SizableProxy, Sizable):
+class BottomCenterSizable(_SizableProxy, Sizable):
     bottom_center_input: Coordinate
 
     @property
@@ -85,7 +85,7 @@ class BottomCenter(_SizableProxy, Sizable):
 
 
 @dataclass(frozen=True)
-class BottomRight(_SizableProxy, Sizable):
+class BottomRightSizable(_SizableProxy, Sizable):
     bottom_right_input: Coordinate
 
     @property

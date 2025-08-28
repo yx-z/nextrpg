@@ -130,9 +130,9 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         height_shift = row * height
         return tuple(
             drawing.crop(
-                size.with_top_left(
-                    ((width * i) * height_shift).coordinate
-                ).rectangle_area_on_screen
+                ((width * i) * height_shift)
+                .coordinate.anchor(size)
+                .rectangle_area_on_screen
             )
             for i in range(num_frames)
         )

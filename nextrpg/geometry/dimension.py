@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, NamedTuple, Self, overload
 
 if TYPE_CHECKING:
     from nextrpg.geometry.coordinate import Coordinate
-    from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 type Pixel = int | float
 
@@ -184,109 +183,6 @@ class Size(NamedTuple):
         self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
     ) -> Size:
         return self * type(scaling)(1.0 / scaling.value)
-
-    def with_top_left(self, top_left: Coordinate) -> RectangleAreaOnScreen:
-        from nextrpg.geometry.rectangle_area_on_screen import (
-            RectangleAreaOnScreen,
-        )
-
-        return RectangleAreaOnScreen(top_left, self)
-
-    def with_top_center(self, top_center: Coordinate) -> RectangleAreaOnScreen:
-        from nextrpg.geometry.rectangle_area_on_screen import (
-            RectangleAreaOnScreen,
-        )
-
-        top_left = top_center.as_top_center_of(self).top_left
-        return RectangleAreaOnScreen(top_left, self)
-
-    def with_top_right(self, top_right: Coordinate) -> RectangleAreaOnScreen:
-        from nextrpg.geometry.rectangle_area_on_screen import (
-            RectangleAreaOnScreen,
-        )
-
-        top_left = top_right.as_top_right_of(self).top_left
-        return RectangleAreaOnScreen(top_left, self)
-
-    def with_center_left(
-        self, center_left: Coordinate
-    ) -> RectangleAreaOnScreen:
-        from nextrpg.geometry.rectangle_area_on_screen import (
-            RectangleAreaOnScreen,
-        )
-
-        top_left = center_left.as_center_left_of(self).top_left
-
-        def with_center_left(
-            self, center_left: Coordinate
-        ) -> RectangleAreaOnScreen:
-            from nextrpg.geometry.rectangle_area_on_screen import (
-                RectangleAreaOnScreen,
-            )
-
-            top_left = center_left.as_center_left_of(self).top_left
-            return RectangleAreaOnScreen(top_left, self)
-
-        return RectangleAreaOnScreen(top_left, self)
-
-    def with_center(self, center: Coordinate) -> RectangleAreaOnScreen:
-        from nextrpg.geometry.rectangle_area_on_screen import (
-            RectangleAreaOnScreen,
-        )
-
-        top_left = center.as_center_of(self).top_left
-        return RectangleAreaOnScreen(top_left, self)
-
-    def with_center_right(
-        self, center_right: Coordinate
-    ) -> RectangleAreaOnScreen:
-        from nextrpg.geometry.rectangle_area_on_screen import (
-            RectangleAreaOnScreen,
-        )
-
-        top_left = center_right.as_center_right_of(self).top_left
-        return RectangleAreaOnScreen(top_left, self)
-
-    def with_bottom_left(
-        self, bottom_left: Coordinate
-    ) -> RectangleAreaOnScreen:
-        from nextrpg.geometry.rectangle_area_on_screen import (
-            RectangleAreaOnScreen,
-        )
-
-        top_left = bottom_left.as_bottom_left_of(self).top_left
-        return RectangleAreaOnScreen(top_left, self)
-
-    def with_bottom_center(
-        self, bottom_center: Coordinate
-    ) -> RectangleAreaOnScreen:
-        from nextrpg.geometry.rectangle_area_on_screen import (
-            RectangleAreaOnScreen,
-        )
-
-        top_left = bottom_center.as_bottom_center_of(self).top_left
-
-        return RectangleAreaOnScreen(top_left, self)
-
-    def with_bottom_center(
-        self, bottom_center: Coordinate
-    ) -> RectangleAreaOnScreen:
-        from nextrpg.geometry.rectangle_area_on_screen import (
-            RectangleAreaOnScreen,
-        )
-
-        top_left = bottom_center.as_bottom_center_of(self).top_left
-        return RectangleAreaOnScreen(top_left, self)
-
-    def with_bottom_right(
-        self, bottom_right: Coordinate
-    ) -> RectangleAreaOnScreen:
-        from nextrpg.geometry.rectangle_area_on_screen import (
-            RectangleAreaOnScreen,
-        )
-
-        top_left = bottom_right.as_bottom_right_of(self).top_left
-        return RectangleAreaOnScreen(top_left, self)
 
     def __repr__(self) -> str:
         return f"({self.width_value:.0f}, {self.height_value:.0f})"

@@ -1,13 +1,20 @@
 from typing import TYPE_CHECKING, Protocol
 
+from nextrpg.geometry.anchored_coodinate import (
+    BottomCenterCoordinate,
+    BottomLeftCoordinate,
+    BottomRightCoordinate,
+    CenterCoordinate,
+    CenterLeftCoodinate,
+    CenterRightCoordinate,
+    TopCenterCoordinate,
+    TopRightCoordinate,
+)
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import (
     Height,
-    HeightScaling,
     Size,
     Width,
-    WidthAndHeightScaling,
-    WidthScaling,
 )
 
 if TYPE_CHECKING:
@@ -52,33 +59,49 @@ class Sizable(Protocol):
         return self.top_left.left + self.size.width
 
     @property
-    def top_right(self) -> Coordinate:
-        return self.top_left + self.width
+    def top_right(self) -> TopRightCoordinate:
+        left, top = self.top_left
+        return TopRightCoordinate(left + self.width.value, top)
 
     @property
-    def bottom_left(self) -> Coordinate:
-        return self.top_left + self.height
+    def bottom_left(self) -> BottomLeftCoordinate:
+        left, top = self.top_left
+        return BottomLeftCoordinate(left, top + self.height.value)
 
     @property
-    def bottom_right(self) -> Coordinate:
-        return self.top_left + self.size
+    def bottom_right(self) -> BottomRightCoordinate:
+        left, top = self.top_left
+        return BottomRightCoordinate(
+            left + self.width.value, top + self.height.value
+        )
 
     @property
-    def top_center(self) -> Coordinate:
-        return self.top_left + self.width / 2
+    def top_center(self) -> TopCenterCoordinate:
+        left, top = self.top_left
+        return TopCenterCoordinate(left + self.width.value / 2, top)
 
     @property
-    def bottom_center(self) -> Coordinate:
-        return self.top_left + self.size / WidthScaling(2)
+    def bottom_center(self) -> BottomCenterCoordinate:
+        left, top = self.top_left
+        return BottomCenterCoordinate(
+            left + self.width.value / 2, top + self.height.value
+        )
 
     @property
-    def center_left(self) -> Coordinate:
-        return self.top_left + self.height / 2
+    def center_left(self) -> CenterLeftCoodinate:
+        left, top = self.top_left
+        return CenterLeftCoodinate(left, top + self.height.value / 2)
 
     @property
-    def center_right(self) -> Coordinate:
-        return self.top_left + self.size / HeightScaling(2)
+    def center_right(self) -> CenterRightCoordinate:
+        left, top = self.top_left
+        return CenterRightCoordinate(
+            left + self.width.value, top + self.height.value / 2
+        )
 
     @property
-    def center(self) -> Coordinate:
-        return self.top_left + self.size / WidthAndHeightScaling(2)
+    def center(self) -> CenterCoordinate:
+        left, top = self.top_left
+        return CenterCoordinate(
+            left + self.width.value / 2, top + self.height.value / 2
+        )

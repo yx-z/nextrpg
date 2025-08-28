@@ -171,7 +171,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
                 crop_size = (
                     self._tip.width * self.config.background.nine_slice.bottom
                 )
-            background_crop = tip_shift.coordinate.as_top_left_of(
+            background_crop = tip_shift.coordinate.anchor(
                 crop_size
             ).rectangle_area_on_screen
             background_drawing = background_drawing.cut(background_crop)

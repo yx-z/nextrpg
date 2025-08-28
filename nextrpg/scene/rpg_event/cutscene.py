@@ -27,11 +27,9 @@ def _cutscene[R, **P](
 ) -> Callable[P, EventGenerator]:
     def decorated(*args: P.args, **kwargs: P.kwargs) -> EventGenerator:
         size = gui_size() * cfg.cover_from_screen_scaling
-        top_border = ORIGIN.as_top_left_of(size).rectangle_area_on_screen
+        top_border = ORIGIN.anchor(size).rectangle_area_on_screen
         bottom_border = (
-            screen()
-            .bottom_left.as_bottom_left_of(size)
-            .rectangle_area_on_screen
+            screen().bottom_left.anchor(size).rectangle_area_on_screen
         )
         borders = (top_border, bottom_border)
         borders = tuple(r.fill(cfg.background) for r in borders)

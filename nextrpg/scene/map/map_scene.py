@@ -27,6 +27,7 @@ from nextrpg.core.time import Millisecond, get_timepoint
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
+from nextrpg.geometry.anchored_coodinate import BottomCenterCoordinate
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
@@ -66,10 +67,8 @@ class MapScene(EventfulScene):
     def init_player(self, player_spec: CharacterSpec) -> PlayerOnScreen:
         log.debug(t"Spawn player at {player_spec.unique_name}.")
         player_object = self.map_helper.get_object(player_spec.unique_name)
-        bottom_center = Coordinate(player_object.x, player_object.y)
-        top_left = bottom_center.as_bottom_center_of(
-            player_spec.character.drawing
-        ).top_left
+        bottom_center = BottomCenterCoordinate(player_object.x, player_object.y)
+        top_left = bottom_center.anchor(player_spec.character.drawing).top_left
         player = PlayerOnScreen(
             player_spec, top_left, map_collisions=self.map_helper.collisions
         )
@@ -165,8 +164,7 @@ class MapScene(EventfulScene):
             if not isinstance(npc, MovingNpcOnScreen):
                 continue
             points = tuple(
-                point.as_top_left_of(npc).bottom_center
-                for point in npc.path.points
+                point.anchor(npc).bottom_center for point in npc.path.points
             )
             path = PolylineOnScreen(points).fill(color)
             res.append(path)
@@ -178,11 +176,8 @@ class MapScene(EventfulScene):
             assert isinstance(
                 spec.character, CharacterDrawing
             ), "Require CharacterDrawing for point-like NPC."
-            coordinate = (
-                Coordinate(npc_object.x, npc_object.y)
-                .as_bottom_center_of(spec.character)
-                .top_left
-            )
+            bottom_center = BottomCenterCoordinate(npc_object.x, npc_object.y)
+            coordinate = bottom_center.anchor(spec.character).top_left
             strict_spec = to_strict(spec)
             npc = NpcOnScreen(coordinate=coordinate, spec=strict_spec)
             return self._update_with_save(npc)

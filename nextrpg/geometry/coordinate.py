@@ -8,16 +8,16 @@ from nextrpg.geometry.direction import Direction, DirectionalOffset
 
 if TYPE_CHECKING:
     from nextrpg.geometry.sizable_proxy import (
-        BottomCenter,
-        BottomLeft,
-        BottomRight,
-        Center,
-        CenterLeft,
-        CenterRight,
+        BottomCenterSizable,
+        BottomLeftSizable,
+        BottomRightSizable,
+        CenterLeftSizable,
+        CenterRightSizable,
+        CenterSizable,
         Sizable,
-        TopCenter,
-        TopLeft,
-        TopRight,
+        TopCenterSizable,
+        TopLeftSizable,
+        TopRightSizable,
     )
 
 
@@ -104,50 +104,52 @@ class Coordinate(NamedTuple):
         dy = self.top_value - other.top_value
         return hypot(dx, dy)
 
-    def as_top_left_of(self, sizable: Sizable | Size) -> TopLeft:
-        from nextrpg.geometry.sizable_proxy import TopLeft
+    def as_top_left_of(self, sizable: Sizable | Size) -> TopLeftSizable:
+        from nextrpg.geometry.sizable_proxy import TopLeftSizable
 
-        return TopLeft(sizable, self)
+        return TopLeftSizable(sizable, self)
 
-    def as_top_center_of(self, sizable: Sizable | Size) -> TopCenter:
-        from nextrpg.geometry.sizable_proxy import TopCenter
+    def as_top_center_of(self, sizable: Sizable | Size) -> TopCenterSizable:
+        from nextrpg.geometry.sizable_proxy import TopCenterSizable
 
-        return TopCenter(sizable, self)
+        return TopCenterSizable(sizable, self)
 
-    def as_top_right_of(self, sizable: Sizable | Size) -> TopRight:
-        from nextrpg.geometry.sizable_proxy import TopRight
+    def as_top_right_of(self, sizable: Sizable | Size) -> TopRightSizable:
+        from nextrpg.geometry.sizable_proxy import TopRightSizable
 
-        return TopRight(sizable, self)
+        return TopRightSizable(sizable, self)
 
-    def as_center_left_of(self, sizable: Sizable | Size) -> CenterLeft:
-        from nextrpg.geometry.sizable_proxy import CenterLeft
+    def as_center_left_of(self, sizable: Sizable | Size) -> CenterLeftSizable:
+        from nextrpg.geometry.sizable_proxy import CenterLeftSizable
 
-        return CenterLeft(sizable, self)
+        return CenterLeftSizable(sizable, self)
 
-    def as_center_of(self, sizable: Sizable | Size) -> Center:
-        from nextrpg.geometry.sizable_proxy import Center
+    def as_center_of(self, sizable: Sizable | Size) -> CenterSizable:
+        from nextrpg.geometry.sizable_proxy import CenterSizable
 
-        return Center(sizable, self)
+        return CenterSizable(sizable, self)
 
-    def as_center_right_of(self, sizable: Sizable | Size) -> CenterRight:
-        from nextrpg.geometry.sizable_proxy import CenterRight
+    def as_center_right_of(self, sizable: Sizable | Size) -> CenterRightSizable:
+        from nextrpg.geometry.sizable_proxy import CenterRightSizable
 
-        return CenterRight(sizable, self)
+        return CenterRightSizable(sizable, self)
 
-    def as_bottom_left_of(self, sizable: Sizable | Size) -> BottomLeft:
-        from nextrpg.geometry.sizable_proxy import BottomLeft
+    def as_bottom_left_of(self, sizable: Sizable | Size) -> BottomLeftSizable:
+        from nextrpg.geometry.sizable_proxy import BottomLeftSizable
 
-        return BottomLeft(sizable, self)
+        return BottomLeftSizable(sizable, self)
 
-    def as_bottom_center_of(self, sizable: Sizable | Size) -> BottomCenter:
-        from nextrpg.geometry.sizable_proxy import BottomCenter
+    def as_bottom_center_of(
+        self, sizable: Sizable | Size
+    ) -> BottomCenterSizable:
+        from nextrpg.geometry.sizable_proxy import BottomCenterSizable
 
-        return BottomCenter(sizable, self)
+        return BottomCenterSizable(sizable, self)
 
-    def as_bottom_right_of(self, sizable: Sizable | Size) -> BottomRight:
-        from nextrpg.geometry.sizable_proxy import BottomRight
+    def as_bottom_right_of(self, sizable: Sizable | Size) -> BottomRightSizable:
+        from nextrpg.geometry.sizable_proxy import BottomRightSizable
 
-        return BottomRight(sizable, self)
+        return BottomRightSizable(sizable, self)
 
     @property
     def save_data(self) -> list[Pixel]:
@@ -156,6 +158,9 @@ class Coordinate(NamedTuple):
     @classmethod
     def load(cls, data: list[Pixel]) -> Self:
         return cls(*data)
+
+    def anchor(self, size: Size | Sizable) -> TopLeftSizable:
+        return self.as_top_left_of(size)
 
 
 ORIGIN = Coordinate(0, 0)
