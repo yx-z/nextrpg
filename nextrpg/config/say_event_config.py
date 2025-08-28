@@ -14,35 +14,23 @@ if TYPE_CHECKING:
     from nextrpg.draw.drawing import Drawing
     from nextrpg.draw.drawing_group import DrawingGroup
     from nextrpg.draw.nine_slice import NineSlice
-    from nextrpg.draw.polygon_drawing import PolygonDrawing
-
-
-@dataclass(frozen=True, slots=True)
-class SayEventColorBackgroundTipConfig:
-    height: Height = Height(20)
-    width1: Width = Width(10)
-    width2: Width = Width(30)
 
 
 @dataclass(frozen=True)
 class SayEventColorBackgroundConfig:
     background: Color = Color(255, 255, 255, 200)
     border_radius: Pixel = 10
-    tip_config: SayEventColorBackgroundTipConfig = (
-        SayEventColorBackgroundTipConfig()
-    )
+    tip_height: Height = Height(20)
+    tip_width1: Width = Width(10)
+    tip_width2: Width = Width(30)
 
     @cached_property
     def tip_at_top(self) -> Drawing:
         from nextrpg.draw.polygon_drawing import PolygonDrawing
         from nextrpg.geometry.coordinate import ORIGIN
 
-        point1: Coordinate = (
-            ORIGIN + self.tip_config.height + self.tip_config.width1
-        )
-        point2: Coordinate = (
-            ORIGIN + self.tip_config.height + self.tip_config.width2
-        )
+        point1 = ORIGIN + self.tip_height + self.tip_width1
+        point2 = ORIGIN + self.tip_height + self.tip_width2
         points = (ORIGIN, point1, point2)
         poly = PolygonDrawing(points, self.background)
         return poly.drawing

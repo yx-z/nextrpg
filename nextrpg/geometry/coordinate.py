@@ -37,14 +37,6 @@ class Coordinate(NamedTuple):
     def size(self) -> Size:
         return Size(self.left_value, self.top_value)
 
-    @property
-    def negate_left(self) -> Coordinate:
-        return Coordinate(-self.left_value, self.top_value)
-
-    @property
-    def negate_top(self) -> Coordinate:
-        return Coordinate(self.left_value, -self.top_value)
-
     def __neg__(self) -> Coordinate:
         return Coordinate(-self.left_value, -self.top_value)
 

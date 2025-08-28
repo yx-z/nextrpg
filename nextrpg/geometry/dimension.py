@@ -27,14 +27,8 @@ class _Dimension:
     def __add__(self, other: Self) -> Self:
         return type(self)(self.value + other.value)
 
-    def __radd__(self, other: Self) -> Self:
-        return self + other
-
     def __sub__(self, other: Self) -> Self:
         return self + -other
-
-    def __rsub__(self, other: Self) -> Self:
-        return other + -self
 
 
 class _Scaling(_Dimension):
@@ -70,7 +64,7 @@ class Width(_Dimension):
         return Width(self.value * arg.value)
 
     def __rmul__(self, arg: int | float | WidthScaling) -> Width:
-        return self * arg
+        return Width(self.value * arg)
 
     def __truediv__(self, arg: int | float | WidthScaling) -> Width:
         if isinstance(arg, int | float):
@@ -95,7 +89,7 @@ class Height(_Dimension):
         return Height(self.value * arg.value)
 
     def __rmul__(self, arg: int | float | HeightScaling) -> Height | Size:
-        return self * arg
+        return Height(self.value * arg)
 
     def __truediv__(self, scaling: int | float | HeightScaling) -> Height:
         if isinstance(scaling, int | float):
@@ -114,14 +108,6 @@ class Size(NamedTuple):
     @property
     def height(self) -> Height:
         return Height(self.height_value)
-
-    @property
-    def negate_width(self) -> Size:
-        return Size(-self.width_value, self.height_value)
-
-    @property
-    def negate_height(self) -> Size:
-        return Size(self.width_value, -self.height_value)
 
     def __neg__(self) -> Size:
         return Size(-self.width_value, -self.height_value)

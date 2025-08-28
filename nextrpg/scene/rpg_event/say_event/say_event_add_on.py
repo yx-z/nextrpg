@@ -45,7 +45,7 @@ class SayEventAddOn:
         )
         add_on_group = DrawingGroup(background_and_content)
         drawing_on_screens = add_on_group.drawing_on_screens(
-            self._background_top_left
+            self._add_on_top_left
         )
         return tuple(
             drawing_on_screen
@@ -56,12 +56,12 @@ class SayEventAddOn:
     @cached_property
     def text_on_screen(self) -> TextOnScreen:
         coordinate = (
-            self._background_top_left - self._background_relative_to_text.shift
+            self._add_on_top_left - self._background_relative_to_text.shift
         )
         return TextOnScreen(coordinate, self._text)
 
     @cached_property
-    def _background_top_left(self) -> Coordinate:
+    def _add_on_top_left(self) -> Coordinate:
         return self.config.scene_coordinate.as_center_of(
             self._background_relative_to_text.drawing
         ).top_left
@@ -142,6 +142,14 @@ class SayEventCharacterAddOn(SayEventAddOn):
             tip_top = -self._tip.height
         else:
             tip_top = background_drawing.height
+        if isinstance(
+            self.config.background, SayEventNineSliceBackgroundConfig
+        ):
+            if self._character_position.at_top:
+                tip_top += self.config.background.nine_slice.top
+            else:
+                tip_top -= self.config.background.nine_slice.bottom
+
         tip_left = (
             background_drawing.width / 2
             + self._width_sign * self.config.background_edge_center_to_tip
@@ -169,7 +177,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     @override
-    def _background_top_left(self) -> Coordinate:
+    def _add_on_top_left(self) -> Coordinate:
         if center := self.config.character_coordinate_override:
             return center.as_center_of(
                 self._background_relative_to_text.drawing
