@@ -2,11 +2,10 @@ from collections.abc import Callable
 from functools import wraps
 from types import FunctionType
 
-from nextrpg import screen
 from nextrpg.config.config import config
 from nextrpg.config.cutscene_config import CutsceneConfig
 from nextrpg.geometry.coordinate import ORIGIN
-from nextrpg.gui.area import gui_size
+from nextrpg.gui.area import gui_size, screen
 from nextrpg.scene.rpg_event.fade_in_scene import fade_in
 from nextrpg.scene.rpg_event.fade_out_scene import fade_out
 from nextrpg.scene.rpg_event.rpg_event_scene import EventGenerator

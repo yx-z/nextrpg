@@ -8,8 +8,8 @@ from typing import Self
 import pygame
 from pygame import Clock
 
-from nextrpg import GameLoopConfig
 from nextrpg.config.config import config
+from nextrpg.config.game_loop_config import GameLoopConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
