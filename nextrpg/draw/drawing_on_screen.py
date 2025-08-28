@@ -21,13 +21,14 @@ class DrawingOnScreen(Sizable):
 
     @property
     def rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
-        return RectangleAreaOnScreen(self.top_left, self.drawing.size)
+        return self.top_left.as_top_left_of(self.size).rectangle_area_on_screen
 
     @cached_property
     def visible_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
         shift = self.drawing.visible_rectangle_area_on_screen.top_left
         size = self.drawing.visible_rectangle_area_on_screen.size
-        return RectangleAreaOnScreen(self.top_left + shift, size)
+        coordinate = self.top_left + shift
+        return coordinate.as_top_left_of(self.size).rectangle_area_on_screen
 
     @property
     def pygame(self) -> tuple[Surface, Coordinate]:

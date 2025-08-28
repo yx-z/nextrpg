@@ -51,9 +51,9 @@ def get_geometry(
             return PolygonAreaOnScreen(points)
         return PolylineOnScreen(points)
     if _is_rect(obj):
-        return RectangleAreaOnScreen(
-            Coordinate(obj.x, obj.y), Size(obj.width, obj.height)
-        )
+        coordinate = Coordinate(obj.x, obj.y)
+        size = Size(obj.width, obj.height)
+        return coordinate.as_top_left_of(size).rectangle_area_on_screen
     return None
 
 

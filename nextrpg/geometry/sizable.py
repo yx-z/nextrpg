@@ -1,7 +1,6 @@
-from dataclasses import dataclass
-from typing import Protocol
+from typing import Protocol, TYPE_CHECKING
 
-from nextrpg.geometry.coordinate import ORIGIN, Coordinate
+from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import (
     Height,
     HeightScaling,
@@ -11,11 +10,22 @@ from nextrpg.geometry.dimension import (
     WidthScaling,
 )
 
+if TYPE_CHECKING:
+    from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+
 
 class Sizable(Protocol):
     # Subclass shall implement these.
     size: Size
     top_left: Coordinate
+
+    @property
+    def rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
+        from nextrpg.geometry.rectangle_area_on_screen import (
+            RectangleAreaOnScreen,
+        )
+
+        return RectangleAreaOnScreen(self.top_left, self.size)
 
     @property
     def width(self) -> Width:
@@ -72,9 +82,3 @@ class Sizable(Protocol):
     @property
     def center(self) -> Coordinate:
         return self.top_left + self.size / WidthAndHeightScaling(2)
-
-
-@dataclass(frozen=True)
-class SizableArea(Sizable):
-    size: Size
-    top_left: Coordinate = ORIGIN

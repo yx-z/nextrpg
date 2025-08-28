@@ -93,7 +93,7 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
             self.coordinate - self.width * (scaling - WidthScaling(1)) / 2
         )
         size = self.size * scaling
-        return RectangleAreaOnScreen(coordinate, size)
+        return coordinate.as_top_left_of(size).rectangle_area_on_screen
 
     @property
     def drawing_on_screen(self) -> DrawingOnScreen:
@@ -138,7 +138,9 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
 
         match self.character.rect_or_poly:
             case RectangleDrawing() as rect:
-                return RectangleAreaOnScreen(self.coordinate, rect.size)
+                return self.coordinate.as_top_left_of(
+                    rect.size
+                ).rectangle_area_on_screen
             case PolygonDrawing() as poly:
                 points = tuple(p + self.coordinate for p in poly.points)
                 return PolygonAreaOnScreen(points)
@@ -149,7 +151,7 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         scaling = self.config.bounding_rectangle_scaling
         coordinate = coordinate + self.height * scaling.complement / 2
         size = self.size * scaling
-        return RectangleAreaOnScreen(coordinate, size)
+        return coordinate.as_top_left_of(size).rectangle_area_on_screen
 
     @cached_property
     def _collision_visual(self) -> DrawingOnScreen | None:

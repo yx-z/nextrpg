@@ -88,8 +88,6 @@ class PolygonAreaOnScreen(AreaOnScreen):
 def get_bounding_rectangle_area_on_screen(
     points: tuple[Coordinate, ...],
 ) -> RectangleAreaOnScreen:
-    from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-
     min_x = min(c.left_value for c in points)
     min_y = min(c.top_value for c in points)
     max_x = max(c.left_value for c in points)
@@ -101,7 +99,7 @@ def get_bounding_rectangle_area_on_screen(
     width = max(max_x - min_x, 1)
     height = max(max_y - min_y, 1)
     size = Size(width, height)
-    return RectangleAreaOnScreen(coordinate, size)
+    return coordinate.as_top_left_of(size).rectangle_area_on_screen
 
 
 def _project_polygon(axis: Coordinate, poly: PolygonAreaOnScreen) -> Coordinate:

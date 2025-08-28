@@ -6,21 +6,23 @@ from nextrpg.geometry.sizable import Sizable
 
 
 @dataclass(frozen=True)
-class SizableProxy(Sizable):
-    sizable: Sizable
+class _SizableProxy:
+    size_input: Sizable | Size
 
     @property
     def size(self) -> Size:
-        return self.sizable.size
+        if isinstance(self.size_input, Size):
+            return self.size_input
+        return self.size_input.size
 
 
 @dataclass(frozen=True)
-class TopLeft(SizableProxy):
+class TopLeft(_SizableProxy, Sizable):
     top_left: Coordinate
 
 
 @dataclass(frozen=True)
-class TopCenter(SizableProxy):
+class TopCenter(_SizableProxy, Sizable):
     top_center_input: Coordinate
 
     @property
@@ -29,7 +31,7 @@ class TopCenter(SizableProxy):
 
 
 @dataclass(frozen=True)
-class TopRight(SizableProxy):
+class TopRight(_SizableProxy, Sizable):
     top_right_input: Coordinate
 
     @property
@@ -38,7 +40,7 @@ class TopRight(SizableProxy):
 
 
 @dataclass(frozen=True)
-class CenterLeft(SizableProxy):
+class CenterLeft(_SizableProxy, Sizable):
     center_left_input: Coordinate
 
     @property
@@ -47,7 +49,7 @@ class CenterLeft(SizableProxy):
 
 
 @dataclass(frozen=True)
-class Center(SizableProxy):
+class Center(_SizableProxy, Sizable):
     center_input: Coordinate
 
     @property
@@ -56,7 +58,7 @@ class Center(SizableProxy):
 
 
 @dataclass(frozen=True)
-class CenterRight(SizableProxy):
+class CenterRight(_SizableProxy, Sizable):
     center_right_input: Coordinate
 
     @property
@@ -65,7 +67,7 @@ class CenterRight(SizableProxy):
 
 
 @dataclass(frozen=True)
-class BottomLeft(SizableProxy):
+class BottomLeft(_SizableProxy, Sizable):
     bottom_left_input: Coordinate
 
     @property
@@ -74,7 +76,7 @@ class BottomLeft(SizableProxy):
 
 
 @dataclass(frozen=True)
-class BottomCenter(SizableProxy):
+class BottomCenter(_SizableProxy, Sizable):
     bottom_center_input: Coordinate
 
     @property
@@ -83,8 +85,9 @@ class BottomCenter(SizableProxy):
 
 
 @dataclass(frozen=True)
-class BottomRight(SizableProxy):
+class BottomRight(_SizableProxy, Sizable):
     bottom_right_input: Coordinate
 
+    @property
     def top_left(self) -> Coordinate:
         return self.bottom_right_input - self.size

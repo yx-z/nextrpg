@@ -70,7 +70,9 @@ class Drawing(Sizable):
         coordinate = (drawing_trim.left * drawing_trim.top).coordinate
         width = self.width - drawing_trim.left - drawing_trim.right
         height = self.height - drawing_trim.top - drawing_trim.bottom
-        area = RectangleAreaOnScreen(coordinate, width * height)
+        area = coordinate.as_top_left_of(
+            width * height
+        ).rectangle_area_on_screen
         return self.crop(area)
 
     def set_alpha(self, alpha: Alpha) -> Drawing:
@@ -100,22 +102,15 @@ class Drawing(Sizable):
 
     @cached_property
     def visible_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
-        from nextrpg.geometry.rectangle_area_on_screen import (
-            RectangleAreaOnScreen,
-        )
 
         rectangle = self.surface.get_bounding_rect()
         coordinate = Coordinate(rectangle.x, rectangle.y)
         size = Size(rectangle.width, rectangle.height)
-        return RectangleAreaOnScreen(coordinate, size)
+        return coordinate.as_top_right_of(size).rectangle_area_on_screen
 
     @property
     def rectangle(self) -> RectangleAreaOnScreen:
-        from nextrpg.geometry.polygon_area_on_screen import (
-            RectangleAreaOnScreen,
-        )
-
-        return RectangleAreaOnScreen(ORIGIN, self.size)
+        return ORIGIN.as_top_left_of(self.size).rectangle_area_on_screen
 
     @property
     def top_left(self) -> Coordinate:

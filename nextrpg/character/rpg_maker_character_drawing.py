@@ -15,7 +15,6 @@ from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.geometry.direction import Direction
-from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 class DefaultCharacterDrawingType(IntEnum):
@@ -127,9 +126,9 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         size = width * height
         return tuple(
             drawing.crop(
-                RectangleAreaOnScreen(
-                    ((width * i) * (height * row)).coordinate, size
-                )
+                size.with_top_left(
+                    ((width * i) * (height * row)).coordinate
+                ).rectangle_area_on_screen
             )
             for i in range(num_frames)
         )

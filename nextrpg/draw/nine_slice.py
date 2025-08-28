@@ -13,7 +13,6 @@ from nextrpg.geometry.dimension import (
     Width,
     WidthScaling,
 )
-from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 @dataclass(frozen=True)
@@ -75,65 +74,64 @@ class NineSlice:
 
     @cached_property
     def _top_left(self) -> Drawing:
-        top_left = ORIGIN
-        size = Size(self.left.value, self.top.value)
-        area = RectangleAreaOnScreen(top_left, size)
+        size = self.left * self.top
+        area = ORIGIN.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _top_center(self) -> Drawing:
         top_left = ORIGIN + self.left
-        size = Size(self._center_width.value, self.top.value)
-        area = RectangleAreaOnScreen(top_left, size)
+        size = self._center_width * self.top
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _top_right(self) -> Drawing:
         top_left = ORIGIN + self.drawing.width - self.right
-        size = Size(self.right.value, self.top.value)
-        area = RectangleAreaOnScreen(top_left, size)
+        size = self.right * self.top
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _center_left(self) -> Drawing:
         top_left = ORIGIN + self.top
-        size = Size(self.left.value, self._center_height.value)
-        area = RectangleAreaOnScreen(top_left, size)
+        size = self.left * self._center_height
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _center(self) -> Drawing:
         top_left = ORIGIN + self.top + self.left
-        size = Size(self._center_width.value, self._center_height.value)
-        area = RectangleAreaOnScreen(top_left, size)
+        size = self._center_width * self._center_height
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _center_right(self) -> Drawing:
         top_left = ORIGIN + self.drawing.width - self.right + self.top
-        size = Size(self.right.value, self._center_height.value)
-        area = RectangleAreaOnScreen(top_left, size)
+        size = self.right * self._center_height
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _bottom_left(self) -> Drawing:
         top_left = ORIGIN + self.drawing.height - self.bottom
-        size = Size(self.left.value, self.bottom.value)
-        area = RectangleAreaOnScreen(top_left, size)
+        size = self.left * self.bottom
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _bottom_center(self) -> Drawing:
         top_left = ORIGIN + self.left + self.drawing.height - self.bottom
-        size = Size(self._center_width.value, self.bottom.value)
-        area = RectangleAreaOnScreen(top_left, size)
+        size = self._center_width * self.bottom
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _bottom_right(self) -> Drawing:
         top_left = ORIGIN + self.drawing.size - self.right - self.bottom
-        size = Size(self.right.value, self.bottom.value)
-        area = RectangleAreaOnScreen(top_left, size)
+        size = self.right * self.bottom
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @property

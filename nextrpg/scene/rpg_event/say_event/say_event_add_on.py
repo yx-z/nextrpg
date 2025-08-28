@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import override
 
-from nextrpg import RectangleAreaOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.say_event_config import (
     SayEventConfig,
@@ -18,7 +17,7 @@ from nextrpg.draw.relative_drawing import Anchor, RelativeDrawing
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.geometry.coordinate import Coordinate, ORIGIN
+from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import Width, WidthAndHeightScaling
 from nextrpg.gui.area import gui_width, left_screen, top_screen
 from nextrpg.scene.scene import Scene
@@ -171,9 +170,9 @@ class SayEventCharacterAddOn(SayEventAddOn):
                 crop_size = (
                     self._tip.width * self.config.background.nine_slice.bottom
                 )
-            background_crop = RectangleAreaOnScreen(
-                tip_shift.coordinate, crop_size
-            )
+            background_crop = tip_shift.coordinate.as_top_left_of(
+                crop_size
+            ).rectangle_area_on_screen
             background_drawing = background_drawing.cut(background_crop)
 
         background_and_tip = (

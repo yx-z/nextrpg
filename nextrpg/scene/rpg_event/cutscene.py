@@ -2,11 +2,11 @@ from collections.abc import Callable
 from functools import wraps
 from types import FunctionType
 
+from nextrpg import screen
 from nextrpg.config.config import config
 from nextrpg.config.cutscene_config import CutsceneConfig
 from nextrpg.geometry.coordinate import ORIGIN
-from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.gui.area import gui_height, gui_size
+from nextrpg.gui.area import gui_size
 from nextrpg.scene.rpg_event.fade_in_scene import fade_in
 from nextrpg.scene.rpg_event.fade_out_scene import fade_out
 from nextrpg.scene.rpg_event.rpg_event_scene import EventGenerator
@@ -28,11 +28,14 @@ def _cutscene[R, **P](
 ) -> Callable[P, EventGenerator]:
     def decorated(*args: P.args, **kwargs: P.kwargs) -> EventGenerator:
         size = gui_size() * cfg.cover_from_screen_scaling
-        top_border = RectangleAreaOnScreen(ORIGIN, size)
-        bottom_border = top_border + gui_height() - size.height
-        borders = tuple(
-            r.fill(cfg.background) for r in (top_border, bottom_border)
+        top_border = ORIGIN.as_top_left_of(size).rectangle_area_on_screen
+        bottom_border = (
+            screen()
+            .bottom_left.as_bottom_left_of(size)
+            .rectangle_area_on_screen
         )
+        borders = (top_border, bottom_border)
+        borders = tuple(r.fill(cfg.background) for r in borders)
 
         sentinel = yield fade_in(borders, cfg.wait, cfg.duration)
         res = yield from fun(*args, **kwargs)

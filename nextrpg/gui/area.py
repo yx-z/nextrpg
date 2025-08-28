@@ -29,11 +29,13 @@ def gui_height() -> Height:
 
 
 def screen() -> RectangleAreaOnScreen:
-    return RectangleAreaOnScreen(ORIGIN, gui_size())
+    size = gui_size()
+    return ORIGIN.as_top_left_of(size).rectangle_area_on_screen
 
 
 def left_screen() -> RectangleAreaOnScreen:
-    return RectangleAreaOnScreen(ORIGIN, gui_size() / WidthScaling(2))
+    size = gui_size() / WidthScaling(2)
+    return ORIGIN.as_top_left_of(size).rectangle_area_on_screen
 
 
 def right_screen() -> RectangleAreaOnScreen:
@@ -41,7 +43,8 @@ def right_screen() -> RectangleAreaOnScreen:
 
 
 def top_screen() -> RectangleAreaOnScreen:
-    return RectangleAreaOnScreen(ORIGIN, gui_size() / HeightScaling(2))
+    size = gui_size() / HeightScaling(2)
+    return ORIGIN.as_top_left_of(size).rectangle_area_on_screen
 
 
 def bottom_screen() -> RectangleAreaOnScreen:
@@ -49,7 +52,8 @@ def bottom_screen() -> RectangleAreaOnScreen:
 
 
 def top_left_screen() -> RectangleAreaOnScreen:
-    return RectangleAreaOnScreen(ORIGIN, gui_size() / WidthAndHeightScaling(2))
+    size = gui_size() / WidthAndHeightScaling(2)
+    return ORIGIN.as_top_left_of(size).rectangle_area_on_screen
 
 
 def top_right_screen() -> RectangleAreaOnScreen:
