@@ -9,16 +9,17 @@ from nextrpg.config.say_event_config import (
     SayEventConfig,
     SayEventNineSliceBackgroundConfig,
 )
+from nextrpg.draw.anchor import Anchor
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
-from nextrpg.draw.relative_drawing import Anchor, RelativeDrawing
+from nextrpg.draw.relative_drawing import RelativeDrawing
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.geometry.coordinate import ORIGIN, Coordinate
-from nextrpg.geometry.dimension import Width, WidthAndHeightScaling
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import ZERO_SIZE, Width, WidthAndHeightScaling
 from nextrpg.gui.area import gui_width, left_screen, top_screen
 from nextrpg.scene.scene import Scene
 
@@ -30,7 +31,7 @@ class SayEventAddOn:
 
     @cached_property
     def background(self) -> tuple[DrawingOnScreen, ...]:
-        contents = [RelativeDrawing(self._text.drawing_group, ORIGIN)]
+        contents = [self._text.drawing_group.shift(ZERO_SIZE)]
         if self._name_relative_to_text:
             contents.append(self._name_relative_to_text)
         if self._avatar_relative_to_text:
@@ -40,8 +41,8 @@ class SayEventAddOn:
         background = self._background_relative_to_text.drawing
         shift = self._background_relative_to_text.shift
         background_and_content = (
-            RelativeDrawing(background, ORIGIN),
-            RelativeDrawing(content, -shift),
+            background.shift(ZERO_SIZE),
+            content.shift(-shift),
         )
         add_on_group = DrawingGroup(background_and_content)
         drawing_on_screens = add_on_group.drawing_on_screens(
@@ -101,14 +102,14 @@ class SayEventAddOn:
             rect = RectangleDrawing(
                 size, cfg.background, cfg.border_radius
             ).drawing
-        return RelativeDrawing(rect, shift)
+        return rect.shift(shift)
 
     @cached_property
     def _avatar_relative_to_text(self) -> RelativeDrawing | None:
         if not self._avatar:
             return None
         shift = self._text.bottom_left - self.config.padding.width
-        return RelativeDrawing(self._avatar, shift.size, Anchor.BOTTOM_RIGHT)
+        return self._avatar.shift(shift.size, Anchor.BOTTOM_RIGHT)
 
     @cached_property
     def _name_relative_to_text(self) -> RelativeDrawing | None:
@@ -116,7 +117,7 @@ class SayEventAddOn:
             return None
         text = Text(self._name, self.config.name_text_config)
         shift = Width(0) * -self.config.padding.height
-        return RelativeDrawing(text.drawing_group, shift, Anchor.BOTTOM_LEFT)
+        return text.drawing_group.shift(shift, Anchor.BOTTOM_LEFT)
 
     @cached_property
     def _text(self) -> Text | TextGroup:
@@ -176,13 +177,13 @@ class SayEventCharacterAddOn(SayEventAddOn):
             background_drawing = background_drawing.cut(background_crop)
 
         background_and_tip = (
-            RelativeDrawing(background_drawing, ORIGIN),
-            RelativeDrawing(self._tip, tip_shift),
+            background_drawing.shift(ZERO_SIZE),
+            self._tip.shift(tip_shift),
         )
         background_and_tip_group = DrawingGroup(background_and_tip)
 
         shift = super()._background_relative_to_text.shift
-        return RelativeDrawing(background_and_tip_group, shift)
+        return background_and_tip_group.shift(shift)
 
     @cached_property
     def _tip(self) -> Drawing:

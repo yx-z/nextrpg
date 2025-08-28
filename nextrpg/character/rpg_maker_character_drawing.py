@@ -17,7 +17,7 @@ from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.geometry.direction import Direction
 
 
-class DefaultCharacterDrawingType(IntEnum):
+class RpgMakerCharacterDrawingDefaultFrameType(IntEnum):
     _RIGHT_FOOT = 0
     _IDLE = 1
     _LEFT_FOOT = 2
@@ -25,14 +25,14 @@ class DefaultCharacterDrawingType(IntEnum):
     @classmethod
     def frame_indices(cls) -> tuple[int, ...]:
         return (
-            DefaultCharacterDrawingType._IDLE,
-            DefaultCharacterDrawingType._RIGHT_FOOT,
-            DefaultCharacterDrawingType._IDLE,
-            DefaultCharacterDrawingType._LEFT_FOOT,
+            RpgMakerCharacterDrawingDefaultFrameType._IDLE,
+            RpgMakerCharacterDrawingDefaultFrameType._RIGHT_FOOT,
+            RpgMakerCharacterDrawingDefaultFrameType._IDLE,
+            RpgMakerCharacterDrawingDefaultFrameType._LEFT_FOOT,
         )
 
 
-class RpgMakerXpCharacterDrawingType(IntEnum):
+class RpgMakerCharacterDrawingXpFrameType(IntEnum):
     _IDLE = 0
     _RIGHT_FOOT = 1
     _IDLE_AGAIN = 2
@@ -43,8 +43,9 @@ class RpgMakerXpCharacterDrawingType(IntEnum):
         return tuple(cls)
 
 
-type FrameType = type[
-    DefaultCharacterDrawingType | RpgMakerXpCharacterDrawingType
+type RpgMakerCharacterDrawingFrameType = type[
+    RpgMakerCharacterDrawingDefaultFrameType
+    | RpgMakerCharacterDrawingXpFrameType
 ]
 
 
@@ -53,7 +54,9 @@ class RpgMakerSpriteSheet(SpriteSheet):
     num_column: int = 4
     num_row: int = 2
     trim: DrawingTrim | None = None
-    style: FrameType = DefaultCharacterDrawingType
+    style: RpgMakerCharacterDrawingFrameType = (
+        RpgMakerCharacterDrawingDefaultFrameType
+    )
 
 
 @dataclass_with_default(frozen=True)

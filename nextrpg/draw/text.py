@@ -8,7 +8,6 @@ from nextrpg.config.config import config
 from nextrpg.config.text_config import TextConfig
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.relative_drawing import RelativeDrawing
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size, Width
 from nextrpg.geometry.sizable import Sizable
@@ -36,7 +35,7 @@ class Text(Sizable):
     @cached_property
     def drawing_group(self) -> DrawingGroup:
         draws = tuple(
-            RelativeDrawing(self._drawing(line), self._line_shift(i))
+            self._drawing(line).shift(self._line_shift(i))
             for i, line in enumerate(self.lines)
         )
         return DrawingGroup(draws)

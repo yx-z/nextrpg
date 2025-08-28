@@ -4,6 +4,7 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import TYPE_CHECKING, Self
 
+from nextrpg.draw.anchor import Anchor
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.relative_drawing import RelativeDrawing
@@ -19,6 +20,11 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class DrawingGroup(Sizable):
     relative_drawings: tuple[RelativeDrawing, ...]
+
+    def shift(
+        self, shift: Size, anchor: Anchor = Anchor.TOP_LEFT
+    ) -> RelativeDrawing:
+        return RelativeDrawing(self, shift, anchor)
 
     @cached_property
     def drawings(self) -> tuple[Drawing, ...]:

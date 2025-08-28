@@ -13,6 +13,7 @@ from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.color import TRANSPARENT, Alpha, Color
 from nextrpg.core.log import Log
+from nextrpg.draw.anchor import Anchor
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
@@ -26,6 +27,7 @@ from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
     from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+    from nextrpg.draw.relative_drawing import RelativeDrawing
 
 log = Log()
 
@@ -42,6 +44,13 @@ class Drawing(Sizable):
     color_key: Color | Coordinate | None = None
     convert_alpha: bool | None = None
     allow_background_in_debug: bool = True
+
+    def shift(
+        self, shift: Size, anchor: Anchor = Anchor.TOP_LEFT
+    ) -> RelativeDrawing:
+        from nextrpg.draw.relative_drawing import RelativeDrawing
+
+        return RelativeDrawing(self, shift, anchor)
 
     @property
     def size(self) -> Size:

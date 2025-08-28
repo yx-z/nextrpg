@@ -76,7 +76,7 @@ class TextGroup(Sizable):
             for word in line:
                 height_diff = line_height - word.height
                 shift = curr_width * (curr_height + height_diff)
-                res.append(RelativeDrawing(word.drawing_group, shift))
+                res.append(word.drawing_group.shift(shift))
                 curr_width += word.width + self.config.margin
             curr_height += line_height + self.config.line_spacing
         return DrawingGroup(tuple(res))

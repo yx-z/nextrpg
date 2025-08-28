@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from functools import cached_property
 
+from nextrpg.draw.anchor import Anchor
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.relative_drawing import Anchor, RelativeDrawing
 from nextrpg.geometry.coordinate import ORIGIN
 from nextrpg.geometry.dimension import ZERO_SIZE, Height, Size, Width
 
@@ -28,7 +28,7 @@ class NineSlice:
         top_row_group = self._stretch_row(
             size, self._top_left, stretched_top_center, self._top_right
         )
-        top_row = RelativeDrawing(top_row_group, ZERO_SIZE)
+        top_row = top_row_group.shift(ZERO_SIZE)
 
         stretched_center_left = self._center_left * height_scale
         stretched_center = self._center * width_scale * height_scale
@@ -39,14 +39,14 @@ class NineSlice:
             stretched_center,
             stretched_center_right,
         )
-        center_row = RelativeDrawing(center_row_group, self.top * Width(0))
+        center_row = center_row_group.shift(self.top * Width(0))
 
         stretched_bottom_center = self._bottom_center * width_scale
         bottom_row_group = self._stretch_row(
             size, self._bottom_left, stretched_bottom_center, self._bottom_right
         )
-        bottom_row = RelativeDrawing(
-            bottom_row_group, size.height * Width(0), Anchor.BOTTOM_LEFT
+        bottom_row = bottom_row_group.shift(
+            size.height * Width(0), Anchor.BOTTOM_LEFT
         )
 
         rows = (top_row, center_row, bottom_row)
@@ -55,11 +55,9 @@ class NineSlice:
     def _stretch_row(
         self, size: Size, left: Drawing, center: Drawing, right: Drawing
     ) -> DrawingGroup:
-        relative_left = RelativeDrawing(left, ZERO_SIZE)
-        relative_center = RelativeDrawing(center, self.left * Height(0))
-        relative_right = RelativeDrawing(
-            right, size.width * Height(0), Anchor.TOP_RIGHT
-        )
+        relative_left = left.shift(ZERO_SIZE)
+        relative_center = center.shift(self.left * Height(0))
+        relative_right = right.shift(size.width * Height(0), Anchor.TOP_RIGHT)
         relatives = (relative_left, relative_center, relative_right)
         return DrawingGroup(relatives)
 
