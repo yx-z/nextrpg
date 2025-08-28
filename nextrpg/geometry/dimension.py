@@ -67,10 +67,24 @@ class Width(_Dimension):
     def __rmul__(self, arg: int | float | WidthScaling) -> Width:
         return Width(self.value * arg)
 
-    def __truediv__(self, arg: int | float | WidthScaling) -> Width:
+    @overload
+    def __truediv__(self, arg: int | float | WidthScaling) -> Width: ...
+
+    @overload
+    def __truediv__(self, arg: Width) -> WidthScaling: ...
+
+    def __truediv__(
+        self, arg: int | float | WidthScaling | Width
+    ) -> Width | WidthScaling:
+        if isinstance(arg, Width):
+            return WidthScaling(self.value / arg.value)
+
         if isinstance(arg, int | float):
             return Width(self.value / arg)
         return Width(self.value / arg.value)
+
+    def with_height(self, height: Height) -> Size:
+        return self * height
 
 
 class Height(_Dimension):
@@ -92,10 +106,24 @@ class Height(_Dimension):
     def __rmul__(self, arg: int | float | HeightScaling) -> Height | Size:
         return Height(self.value * arg)
 
-    def __truediv__(self, scaling: int | float | HeightScaling) -> Height:
-        if isinstance(scaling, int | float):
-            return Height(self.value / scaling)
-        return Height(self.value / scaling.value)
+    @overload
+    def __truediv__(self, arg: int | float | HeightScaling) -> Height: ...
+
+    @overload
+    def __truediv__(self, arg: Height) -> HeightScaling: ...
+
+    def __truediv__(
+        self, arg: int | float | HeightScaling | Height
+    ) -> Height | HeightScaling:
+        if isinstance(arg, Height):
+            return HeightScaling(self.value / arg.value)
+
+        if isinstance(arg, int | float):
+            return Height(self.value / arg)
+        return Height(self.value / arg.value)
+
+    def with_width(self, width: Width) -> Size:
+        return width * self
 
 
 class Size(NamedTuple):

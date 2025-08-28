@@ -5,14 +5,7 @@ from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.relative_drawing import Anchor, RelativeDrawing
 from nextrpg.geometry.coordinate import ORIGIN
-from nextrpg.geometry.dimension import (
-    ZERO_SIZE,
-    Height,
-    HeightScaling,
-    Size,
-    Width,
-    WidthScaling,
-)
+from nextrpg.geometry.dimension import ZERO_SIZE, Height, Size, Width
 
 
 @dataclass(frozen=True)
@@ -24,14 +17,12 @@ class NineSlice:
     right: Width
 
     def stretch(self, size: Size) -> DrawingGroup:
-        width_scale = WidthScaling(
-            (size.width - self.left - self.right).value
-            / self._top_center.width.value
-        )
-        height_scale = HeightScaling(
-            (size.height_value - self.top.value - self.bottom.value)
-            / self._center_left.height.value
-        )
+        width_scale = (
+            size.width - self.left - self.right
+        ) / self._top_center.width
+        height_scale = (
+            size.height - self.top - self.bottom
+        ) / self._center_left.height
 
         stretched_top_center = self._top_center * width_scale
         top_row_group = self._stretch_row(

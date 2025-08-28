@@ -23,7 +23,7 @@ class DefaultCharacterDrawingType(IntEnum):
     _LEFT_FOOT = 2
 
     @classmethod
-    def _frame_indices(cls) -> tuple[int, ...]:
+    def frame_indices(cls) -> tuple[int, ...]:
         return (
             DefaultCharacterDrawingType._IDLE,
             DefaultCharacterDrawingType._RIGHT_FOOT,
@@ -39,7 +39,7 @@ class RpgMakerXpCharacterDrawingType(IntEnum):
     _LEFT_FOOT = 3
 
     @classmethod
-    def _frame_indices(cls) -> tuple[int, ...]:
+    def frame_indices(cls) -> tuple[int, ...]:
         return tuple(cls)
 
 
@@ -113,7 +113,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     def _load_row(self, drawing: Drawing, row: int) -> CyclicAnimation:
         frames = tuple(self._trim(d) for d in self._crop_at_row(drawing, row))
         ordered_frames = tuple(
-            frames[i] for i in self.sprite_sheet.style._frame_indices()
+            frames[i] for i in self.sprite_sheet.style.frame_indices()
         )
         return CyclicAnimation(
             frames=ordered_frames, duration_per_frame=self.duration_per_frame
@@ -124,10 +124,11 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         width = drawing.width / num_frames
         height = drawing.height / len(_DIR_TO_ROW)
         size = width * height
+        height_shift = row * height
         return tuple(
             drawing.crop(
                 size.with_top_left(
-                    ((width * i) * (height * row)).coordinate
+                    ((width * i) * height_shift).coordinate
                 ).rectangle_area_on_screen
             )
             for i in range(num_frames)

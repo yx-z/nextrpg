@@ -58,9 +58,11 @@ class Walk:
             dist_to_target = coordinate.distance(target)
             if remaining_dist < dist_to_target:
                 factor = remaining_dist / dist_to_target
-                x = coordinate.left + (target.left - coordinate.left) * factor
-                y = coordinate.top + (target.top - coordinate.top) * factor
-                coordinate = Coordinate(x.value, y.value)
+                left = (
+                    coordinate.left + (target.left - coordinate.left) * factor
+                )
+                top = coordinate.top + (target.top - coordinate.top) * factor
+                coordinate = (left * top).coordinate
                 break
 
             remaining_dist -= dist_to_target
