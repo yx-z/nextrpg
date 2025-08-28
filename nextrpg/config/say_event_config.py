@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from nextrpg.config.text_config import TextConfig
 from nextrpg.core.color import BLACK, BLUE, Color
+from nextrpg.core.dataclass_with_default import dataclass_with_default, default
 from nextrpg.core.time import Millisecond
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Pixel, Size, Width
@@ -26,16 +27,13 @@ class SayEventColorBackgroundTipConfig:
 @dataclass(frozen=True)
 class SayEventColorBackgroundConfig:
     background: Color = Color(255, 255, 255, 200)
-    border_radius: Pixel = 16
-    tip_config: SayEventColorBackgroundTipConfig | None = (
+    border_radius: Pixel = 10
+    tip_config: SayEventColorBackgroundTipConfig = (
         SayEventColorBackgroundTipConfig()
     )
 
     @cached_property
-    def tip(self) -> PolygonDrawing | None:
-        if not self.tip_config:
-            return None
-
+    def tip_at_top(self) -> Drawing:
         from nextrpg.draw.polygon_drawing import PolygonDrawing
         from nextrpg.geometry.coordinate import ORIGIN
 
@@ -46,13 +44,21 @@ class SayEventColorBackgroundConfig:
             ORIGIN + self.tip_config.height + self.tip_config.width2
         )
         points = (ORIGIN, point1, point2)
-        return PolygonDrawing(points, self.background)
+        poly = PolygonDrawing(points, self.background)
+        return poly.drawing
+
+    @cached_property
+    def tip_at_bottom(self) -> Drawing:
+        return self.tip_at_top.flip(vertical=True)
 
 
-@dataclass(frozen=True)
+@dataclass_with_default(frozen=True)
 class SayEventNineSliceBackgroundConfig:
     nine_slice_input: NineSlice | Callable[[], NineSlice]
-    tip_input: Drawing | Callable[[], Drawing] | None = None
+    tip_at_top_input: Drawing | Callable[[], Drawing]
+    tip_at_bottom_input: Drawing | Callable[[], Drawing] = default(
+        lambda self: lambda: self.tip_at_top.flip(vertical=True)
+    )
 
     @cached_property
     def nine_slice(self) -> NineSlice:
@@ -61,10 +67,16 @@ class SayEventNineSliceBackgroundConfig:
         return self.nine_slice_input
 
     @cached_property
-    def tip(self) -> Drawing | None:
-        if callable(self.tip_input):
-            return self.tip_input()
-        return self.tip_input
+    def tip_at_top(self) -> Drawing:
+        if callable(self.tip_at_top_input):
+            return self.tip_at_top_input()
+        return self.tip_at_top_input
+
+    @cached_property
+    def tip_at_bottom(self) -> Drawing:
+        if callable(self.tip_at_bottom_input):
+            return self.tip_at_bottom_input()
+        return self.tip_at_bottom_input
 
 
 @dataclass(frozen=True)
@@ -91,7 +103,7 @@ class SayEventConfig:
     ) = None
 
     @cached_property
-    def avatar(self) -> Drawing | DrawingGroup:
+    def avatar(self) -> Drawing | DrawingGroup | None:
         if callable(self.avatar_input):
             return self.avatar_input()
         return self.avatar_input

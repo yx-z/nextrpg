@@ -101,7 +101,7 @@ def _update_config(cfg: SayEventConfig, arg: SayEventArg) -> SayEventConfig:
                 character_coordinate_override=arg,
             )
         case Drawing():
-            return replace(cfg, avatar=arg)
+            return replace(cfg, avatar_input=arg)
         case str():
             return replace(cfg, name_override=arg)
     raise ValueError(

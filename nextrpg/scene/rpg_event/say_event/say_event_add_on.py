@@ -139,9 +139,6 @@ class SayEventCharacterAddOn(SayEventAddOn):
     @override
     def _background_relative_to_text(self) -> RelativeDrawing:
         relative = super()._background_relative_to_text
-        if not self._tip:
-            return relative
-
         background_drawing = relative.drawing
         if self._character_position.at_top:
             tip_top = -self._tip.height.value
@@ -163,18 +160,13 @@ class SayEventCharacterAddOn(SayEventAddOn):
         return RelativeDrawing(background_and_tip_group, relative.shift)
 
     @cached_property
-    def _tip(self) -> Drawing | None:
-        if not (tip := self.config.background.tip):
-            return None
-
-        if isinstance(tip, Drawing):
-            tip_drawing = tip
+    def _tip(self) -> Drawing:
+        if self._character_position.at_top:
+            tip_drawing = self.config.background.tip_at_top
         else:
-            tip_drawing = tip.drawing
-        return tip_drawing.flip(
-            horizontal=not self._character_position.at_left,
-            vertical=not self._character_position.at_top,
-        )
+            tip_drawing = self.config.background.tip_at_bottom
+
+        return tip_drawing.flip(horizontal=not self._character_position.at_left)
 
     @cached_property
     @override
