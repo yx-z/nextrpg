@@ -1,4 +1,4 @@
-from typing import Protocol, TYPE_CHECKING
+from typing import TYPE_CHECKING, Protocol
 
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import (

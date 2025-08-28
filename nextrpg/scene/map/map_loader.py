@@ -65,10 +65,9 @@ class MapLoader:
 
     @cached_property
     def map_size(self) -> Size:
-        tile_width, tile_height = self._tile_size
-        width = self._tmx.width * tile_width
-        height = self._tmx.height * tile_height
-        return Size(width, height)
+        width = self._tmx.width * self._tile_size.width
+        height = self._tmx.height * self._tile_size.height
+        return width * height
 
     @cached_property
     def background(self) -> tuple[DrawingOnScreen, ...]:

@@ -4,8 +4,6 @@ from pathlib import Path
 
 from nextrpg.core.color import Color
 from nextrpg.draw.drawing import Drawing
-from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -32,10 +30,12 @@ class SpriteSheet:
         )
 
     def select(self, selection: SpriteSheetSelection) -> Drawing:
-        width = self.drawing.width.value / self.num_column
-        height = self.drawing.height.value / self.num_row
-        top_left = Coordinate(width * selection.column, height * selection.row)
-        size = Size(width, height)
+        width = self.drawing.width / self.num_column
+        height = self.drawing.height / self.num_row
+        top_left = (
+            (width * selection.column) * (height * selection.row)
+        ).coordinate
+        size = width * height
         area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 

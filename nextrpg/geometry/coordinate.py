@@ -35,7 +35,7 @@ class Coordinate(NamedTuple):
 
     @property
     def size(self) -> Size:
-        return Size(self.left_value, self.top_value)
+        return self.left * self.top
 
     def __neg__(self) -> Coordinate:
         return Coordinate(-self.left_value, -self.top_value)

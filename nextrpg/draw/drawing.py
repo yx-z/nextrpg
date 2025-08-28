@@ -102,7 +102,6 @@ class Drawing(Sizable):
 
     @cached_property
     def visible_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
-
         rectangle = self.surface.get_bounding_rect()
         coordinate = Coordinate(rectangle.x, rectangle.y)
         size = Size(rectangle.width, rectangle.height)

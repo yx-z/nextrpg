@@ -88,17 +88,17 @@ class PolygonAreaOnScreen(AreaOnScreen):
 def get_bounding_rectangle_area_on_screen(
     points: tuple[Coordinate, ...],
 ) -> RectangleAreaOnScreen:
-    min_x = min(c.left_value for c in points)
-    min_y = min(c.top_value for c in points)
-    max_x = max(c.left_value for c in points)
-    max_y = max(c.top_value for c in points)
-    coordinate = Coordinate(min_x, min_y)
+    min_x = min(c.left for c in points)
+    min_y = min(c.top for c in points)
+    max_x = max(c.left for c in points)
+    max_y = max(c.top for c in points)
+    coordinate = (min_x * min_y).coordinate
     # The bounding rectangle must have a size of at least (1, 1).
     # Otherwise, no surface to blit.
     # This is useful for drawing vertical/horizontal lines.
-    width = max(max_x - min_x, 1)
-    height = max(max_y - min_y, 1)
-    size = Size(width, height)
+    width = max(max_x - min_x, Width(1))
+    height = max(max_y - min_y, Height(1))
+    size = width * height
     return coordinate.as_top_left_of(size).rectangle_area_on_screen
 
 
