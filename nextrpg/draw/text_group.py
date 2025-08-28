@@ -11,7 +11,7 @@ from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.relative_drawing import RelativeDrawing
 from nextrpg.draw.text import Text
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size, Width
+from nextrpg.geometry.dimension import Height, Size, Width
 from nextrpg.geometry.sizable import Sizable
 
 
@@ -69,17 +69,16 @@ class TextGroup(Sizable):
             lines += [[t] for t in text.line_texts[1:]]
 
         res: list[RelativeDrawing] = []
-        curr_height = 0
+        curr_height = Height(0)
         for line in lines:
-            curr_width = 0
-            line_height = max(word.height.value for word in line)
+            curr_width = Width(0)
+            line_height = max(word.height for word in line)
             for word in line:
-                word_width, word_height = word.size
-                height_diff = line_height - word_height
-                shift = Size(curr_width, curr_height + height_diff)
+                height_diff = line_height - word.height
+                shift = curr_width * (curr_height + height_diff)
                 res.append(RelativeDrawing(word.drawing_group, shift))
-                curr_width += word_width + self.config.margin.value
-            curr_height += line_height + self.config.line_spacing.value
+                curr_width += word.width + self.config.margin
+            curr_height += line_height + self.config.line_spacing
         return DrawingGroup(tuple(res))
 
     def _width(self, line: list[Text]) -> Width:
