@@ -18,8 +18,7 @@ from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.geometry.coordinate import Coordinate, ORIGIN
-from nextrpg.geometry.dimension import Size, Width, WidthAndHeightScaling
-from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.dimension import Width, WidthAndHeightScaling
 from nextrpg.gui.area import gui_width, left_screen, top_screen
 from nextrpg.scene.scene import Scene
 
@@ -120,7 +119,7 @@ class SayEventAddOn:
         if not self._name:
             return None
         text = Text(self._name, self.config.name_text_config)
-        shift = -(text.height + self.config.padding.height) * Width(0)
+        shift = Width(0) * (-text.height - self.config.padding.height)
         return RelativeDrawing(text.drawing_group, shift)
 
     @cached_property
@@ -138,35 +137,35 @@ class SayEventCharacterAddOn(SayEventAddOn):
     @cached_property
     @override
     def _background_relative_to_text(self) -> RelativeDrawing:
-        relative = super()._background_relative_to_text
-        background_drawing = relative.drawing
+        background_drawing = super()._background_relative_to_text.drawing
         if self._character_position.at_top:
-            tip_top = -self._tip.height.value
+            tip_top = -self._tip.height
         else:
-            tip_top = background_drawing.height.value
+            tip_top = background_drawing.height
         tip_left = (
-            background_drawing.width.value / 2
-            + self._width_sign * self.config.background_edge_center_to_tip.value
+            background_drawing.width / 2
+            + self._width_sign * self.config.background_edge_center_to_tip
         )
         if not self._character_position.at_left:
-            tip_left -= self._tip.width.value
+            tip_left -= self._tip.width
 
-        tip_shift = Size(tip_left, tip_top)
+        tip_shift = tip_left * tip_top
         background_and_tip = (
             RelativeDrawing(background_drawing, ORIGIN),
             RelativeDrawing(self._tip, tip_shift),
         )
         background_and_tip_group = DrawingGroup(background_and_tip)
-        return RelativeDrawing(background_and_tip_group, relative.shift)
+
+        shift = super()._background_relative_to_text.shift
+        return RelativeDrawing(background_and_tip_group, shift)
 
     @cached_property
     def _tip(self) -> Drawing:
         if self._character_position.at_top:
-            tip_drawing = self.config.background.tip_at_top
+            tip = self.config.background.tip_at_top
         else:
-            tip_drawing = self.config.background.tip_at_bottom
-
-        return tip_drawing.flip(horizontal=not self._character_position.at_left)
+            tip = self.config.background.tip_at_bottom
+        return tip.flip(horizontal=not self._character_position.at_left)
 
     @cached_property
     @override
@@ -229,22 +228,19 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     def _character_position(self) -> _CharacterPosition:
-        at_left = self._character_rectangle_on_screen.center in left_screen()
-        if at_top := self._character_rectangle_on_screen.center in top_screen():
-            coordinate = self._character_rectangle_on_screen.bottom_center
+        rect = self.character.drawing_on_screen.visible_rectangle_area_on_screen
+        if self.scene.drawing_on_screen_shift:
+            rect += self.scene.drawing_on_screen_shift
+
+        at_left = rect.center in left_screen()
+        if at_top := rect.center in top_screen():
+            coordinate = rect.bottom_center
         else:
-            coordinate = self._character_rectangle_on_screen.top_center
+            coordinate = rect.top_center
 
         return _CharacterPosition(
             coordinate=coordinate, at_top=at_top, at_left=at_left
         )
-
-    @cached_property
-    def _character_rectangle_on_screen(self) -> RectangleAreaOnScreen:
-        rect = self.character.drawing_on_screen.visible_rectangle_area_on_screen
-        if self.scene.drawing_on_screen_shift:
-            return rect + self.scene.drawing_on_screen_shift
-        return rect
 
 
 @dataclass(frozen=True, kw_only=True)
