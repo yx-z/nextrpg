@@ -11,9 +11,9 @@ from pygame.surface import Surface
 
 from nextrpg.config.config import config, set_config
 from nextrpg.config.window_config import ResizeMode, WindowConfig
-from nextrpg.core.dataclass_with_default_init import (
-    dataclass_with_default_init,
-    default_init,
+from nextrpg.core.dataclass_with_default import (
+    dataclass_with_default,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
@@ -35,30 +35,28 @@ from nextrpg.geometry.dimension import Size
 log = Log()
 
 
-@dataclass_with_default_init(frozen=True)
+@dataclass_with_default(frozen=True)
 class Window:
     _: KW_ONLY = not_constructor_below()
     initial_config: WindowConfig = field(
         default_factory=lambda: config().window
     )
-    last_config: WindowConfig = default_init(lambda self: self.initial_config)
-    current_config: WindowConfig = default_init(
+    last_config: WindowConfig = default(lambda self: self.initial_config)
+    current_config: WindowConfig = default(
         lambda self: self._saved_config or self.initial_config
     )
     __: None = field(
         default_factory=lambda: os.environ.setdefault("SDL_VIDEO_CENTERED", "1")
     )
-    ___: None = default_init(
-        lambda self: set_caption(self.current_config.title)
-    )
-    ____: None = default_init(
+    ___: None = default(lambda self: set_caption(self.current_config.title))
+    ____: None = default(
         lambda self: (
             set_icon(icon.pygame)
             if (icon := self.current_config.icon)
             else None
         )
     )
-    _screen: Surface = default_init(
+    _screen: Surface = default(
         lambda self: self._set_screen(self.current_config)
     )
 
@@ -103,7 +101,7 @@ class Window:
 
     def blits(
         self,
-        drawing_on_screens: list[DrawingOnScreen],
+        drawing_on_screens: tuple[DrawingOnScreen, ...],
         time_delta: Millisecond,
     ) -> None:
         log.debug(
@@ -143,7 +141,7 @@ class Window:
         screen = Surface(self.initial_config.size, SRCALPHA)
         surfaces = tuple(d.pygame for d in drawing_on_screens)
         screen.blits(surfaces)
-        scaled_draw = Drawing(screen) * self._scaling
+        scaled_draw = Drawing(screen).scale_fast(self._scaling)
         return DrawingOnScreen(self._center_shift, scaled_draw)
 
     @cached_property

@@ -65,9 +65,9 @@ from nextrpg.core.color import (
     Color,
     alpha_from_percentage,
 )
-from nextrpg.core.dataclass_with_default_init import (
-    dataclass_with_default_init,
-    default_init,
+from nextrpg.core.dataclass_with_default import (
+    dataclass_with_default,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.font import Font

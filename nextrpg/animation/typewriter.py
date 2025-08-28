@@ -3,9 +3,9 @@ from functools import cached_property
 from typing import Self, override
 
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
-from nextrpg.core.dataclass_with_default_init import (
-    dataclass_with_default_init,
-    default_init,
+from nextrpg.core.dataclass_with_default import (
+    dataclass_with_default,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond, Timer
@@ -13,13 +13,13 @@ from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.text_on_screen import TextOnScreen
 
 
-@dataclass_with_default_init(frozen=True)
+@dataclass_with_default(frozen=True)
 class Typewriter(AnimationOnScreen):
     text_on_screen: TextOnScreen
     delay: Millisecond
     _: KW_ONLY = not_constructor_below()
     _index: int = 0
-    _timer: Timer = default_init(lambda self: Timer(self.delay))
+    _timer: Timer = default(lambda self: Timer(self.delay))
 
     @cached_property
     @override

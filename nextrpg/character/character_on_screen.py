@@ -8,9 +8,9 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.polygon_character_drawing import PolygonCharacterDrawing
 from nextrpg.config.character_config import CharacterConfig
 from nextrpg.config.config import config
-from nextrpg.core.dataclass_with_default_init import (
-    dataclass_with_default_init,
-    default_init,
+from nextrpg.core.dataclass_with_default import (
+    dataclass_with_default,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.save import UpdateFromSave
@@ -23,19 +23,19 @@ from nextrpg.draw.rectangle_drawing import RectangleDrawing
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.dimension import Size, WidthScaling
 from nextrpg.geometry.direction import Direction
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
 
 
-@dataclass_with_default_init(frozen=True)
+@dataclass_with_default(frozen=True)
 class _BaseCharacterSpec:
     unique_name: str
     collide_with_others: bool = True
     avatar: Drawing | DrawingGroup | None = None
-    display_name: str = default_init(lambda self: self.unique_name)
+    display_name: str = default(lambda self: self.unique_name)
     config: CharacterConfig = field(default_factory=lambda: config().character)
 
 
@@ -44,13 +44,13 @@ class CharacterSpec(_BaseCharacterSpec):
     character: CharacterDrawing
 
 
-@dataclass_with_default_init(frozen=True)
+@dataclass_with_default(frozen=True)
 class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
     spec: CharacterSpec
     coordinate: Coordinate
     config: CharacterConfig = field(default_factory=lambda: config().character)
     _: KW_ONLY = not_constructor_below()
-    character: CharacterDrawing = default_init(lambda self: self.spec.character)
+    character: CharacterDrawing = default(lambda self: self.spec.character)
     _event_started: bool = False
 
     @property
@@ -89,7 +89,9 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
             return self._area_on_screen
 
         scaling = self.config.start_event_scaling
-        coordinate = self.coordinate - self.width * (scaling - 1) / 2
+        coordinate = (
+            self.coordinate - self.width * (scaling - WidthScaling(1)) / 2
+        )
         size = self.size * scaling
         return RectangleAreaOnScreen(coordinate, size)
 
@@ -145,7 +147,7 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         self, coordinate: Coordinate
     ) -> RectangleAreaOnScreen:
         scaling = self.config.bounding_rectangle_scaling
-        coordinate = coordinate + self.height * (1 - scaling) / 2
+        coordinate = coordinate + self.height * scaling.complement / 2
         size = self.size * scaling
         return RectangleAreaOnScreen(coordinate, size)
 

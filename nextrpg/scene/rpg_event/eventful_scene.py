@@ -8,7 +8,7 @@ from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen
 from nextrpg.character.npc_spec import NpcEventStartMode
 from nextrpg.character.player_on_screen import PlayerOnScreen
-from nextrpg.core.dataclass_with_default_init import (
+from nextrpg.core.dataclass_with_default import (
     not_constructor_below,
 )
 from nextrpg.core.log import Log

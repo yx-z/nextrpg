@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from collections.abc import Callable
 from dataclasses import dataclass, replace
 from functools import cached_property
 from pathlib import Path
@@ -8,7 +7,7 @@ from typing import TYPE_CHECKING
 
 from pygame import SRCALPHA, Surface
 from pygame.image import load
-from pygame.transform import flip, scale, smoothscale
+from pygame.transform import flip, smoothscale
 
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
@@ -18,7 +17,6 @@ from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
     HeightScaling,
-    Pixel,
     Size,
     WidthAndHeightScaling,
     WidthScaling,
@@ -49,7 +47,7 @@ class Drawing(Sizable):
     def size(self) -> Size:
         return Size(self.surface.width, self.surface.height)
 
-    @property
+    @cached_property
     def pygame(self) -> Surface:
         if self._debug_surface:
             return self._debug_surface
@@ -86,18 +84,19 @@ class Drawing(Sizable):
         return DrawingOnScreen(coordinate, self)
 
     def __mul__(
-        self,
-        scaling: (
-            int | float | WidthScaling | HeightScaling | WidthAndHeightScaling
-        ),
-        smooth: bool | None = None,
+        self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
     ) -> Drawing:
-        if isinstance(scaling, int | float):
-            scaling = WidthAndHeightScaling(scaling)
         size = self.size * scaling
-        scale_fun = _get_scale_fun(smooth)
-        surface = scale_fun(self.surface, size)
+        surface = smoothscale(self.surface, size)
         return replace(self, resource=surface)
+
+    def scale_fast(self, scaling: float) -> Drawing:
+        return Drawing(
+            smoothscale(
+                self.surface,
+                (self.surface.width * scaling, self.surface.height * scaling),
+            )
+        )
 
     @cached_property
     def visible_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
@@ -153,18 +152,8 @@ class Drawing(Sizable):
         ):
             return None
 
-        size = (self.width.value, self.height.value)
+        size = (self.surface.width, self.surface.height)
         surface = Surface(size, SRCALPHA)
         surface.fill(color)
         surface.blit(self.surface, ORIGIN)
         return surface
-
-
-def _get_scale_fun(
-    smooth: bool | None,
-) -> Callable[[Surface, Size | tuple[Pixel, Pixel]], Surface]:
-    if smooth is None:
-        smooth = config().drawing.smooth_line
-    if smooth:
-        return smoothscale
-    return scale

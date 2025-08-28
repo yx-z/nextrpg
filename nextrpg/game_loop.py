@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import gc
 from collections.abc import Callable
 from dataclasses import KW_ONLY, field, replace
 from typing import Self
@@ -7,10 +8,11 @@ from typing import Self
 import pygame
 from pygame import Clock
 
+from nextrpg import GameLoopConfig
 from nextrpg.config.config import config
-from nextrpg.core.dataclass_with_default_init import (
-    dataclass_with_default_init,
-    default_init,
+from nextrpg.core.dataclass_with_default import (
+    dataclass_with_default,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.log import Log
@@ -21,17 +23,32 @@ from nextrpg.scene.scene import Scene
 log = Log()
 
 
-@dataclass_with_default_init(frozen=True)
+@dataclass_with_default(frozen=True)
 class GameLoop:
     entry_scene: Callable[[], Scene]
     _: KW_ONLY = not_constructor_below()
     running: bool = True
     _clock: Clock = field(default_factory=Clock)
     _window: Window = field(default_factory=Window)
-    _scene: Scene = default_init(lambda self: self.entry_scene())
+    _scene: Scene = default(lambda self: self.entry_scene())
+    _config: GameLoopConfig = field(default_factory=lambda: config().game_loop)
+    _: None = default(
+        lambda self: (
+            gc.disable()
+            if self._config.garbage_collect_time_threshold
+            else None
+        )
+    )
 
     @property
     def tick(self) -> GameLoop:
+        if (
+            self._config.garbage_collect_time_threshold
+            and self._clock.get_time()
+            < self._config.garbage_collect_time_threshold
+        ):
+            gc.collect()
+
         fps_info = f"FPS: {self._clock.get_fps():.0f}"
         log.debug(fps_info, duration=None)
 

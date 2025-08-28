@@ -5,9 +5,9 @@ from typing import Self, override
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config.config import config
-from nextrpg.core.dataclass_with_default_init import (
-    dataclass_with_default_init,
-    default_init,
+from nextrpg.core.dataclass_with_default import (
+    dataclass_with_default,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
@@ -57,7 +57,7 @@ class RpgMakerSpriteSheet(SpriteSheet):
     style: FrameType = DefaultCharacterDrawingType
 
 
-@dataclass_with_default_init(frozen=True)
+@dataclass_with_default(frozen=True)
 class RpgMakerCharacterDrawing(CharacterDrawing):
     sprite_sheet: RpgMakerSpriteSheet
     selection: SpriteSheetSelection | None = None
@@ -66,7 +66,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         default_factory=lambda: config().rpg_maker_character.duration_per_frame
     )
     _: KW_ONLY = not_constructor_below()
-    _animations: dict[Direction, CyclicAnimation] = default_init(
+    _animations: dict[Direction, CyclicAnimation] = default(
         lambda self: self._init_animation
     )
 

@@ -19,9 +19,9 @@ from typing import (
 
 from nextrpg import __version__
 from nextrpg.config.save_config import SaveConfig
-from nextrpg.core.dataclass_with_default_init import (
-    dataclass_with_default_init,
-    default_init,
+from nextrpg.core.dataclass_with_default import (
+    dataclass_with_default,
+    default,
     not_constructor_below,
 )
 
@@ -80,10 +80,10 @@ def _log() -> Log:
     return Log()
 
 
-@dataclass_with_default_init(frozen=True)
+@dataclass_with_default(frozen=True)
 class SaveIo:
     config: SaveConfig = field(default_factory=_config)
-    slot: str = default_init(lambda self: self.config.shared_slot)
+    slot: str = default(lambda self: self.config.shared_slot)
     _: KW_ONLY = not_constructor_below()
     _log: "Log" = field(default_factory=_log)
     _thread = ThreadPoolExecutor(max_workers=1)

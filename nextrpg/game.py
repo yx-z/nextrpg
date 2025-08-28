@@ -5,22 +5,22 @@ from dataclasses import KW_ONLY
 from pygame import font, init
 
 from nextrpg.config.config import Config, set_config
-from nextrpg.core.dataclass_with_default_init import (
-    dataclass_with_default_init,
-    default_init,
+from nextrpg.core.dataclass_with_default import (
+    dataclass_with_default,
+    default,
     not_constructor_below,
 )
 from nextrpg.game_loop import GameLoop
 from nextrpg.scene.scene import Scene
 
 
-@dataclass_with_default_init(frozen=True)
+@dataclass_with_default(frozen=True)
 class Game:
     entry_scene: Callable[[], Scene]
     config: Config = Config()
     _: KW_ONLY = not_constructor_below()
-    __: None = default_init(lambda self: self._init())
-    _loop: GameLoop = default_init(lambda self: GameLoop(self.entry_scene))
+    __: None = default(lambda self: self._init())
+    _loop: GameLoop = default(lambda self: GameLoop(self.entry_scene))
 
     def start(self) -> None:
         while self._loop.running:

@@ -6,23 +6,23 @@ from typing import Self, override
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.config.config import config
 from nextrpg.core.color import alpha_from_percentage
-from nextrpg.core.dataclass_with_default_init import (
-    dataclass_with_default_init,
-    default_init,
+from nextrpg.core.dataclass_with_default import (
+    dataclass_with_default,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 
 
-@dataclass_with_default_init(frozen=True)
+@dataclass_with_default(frozen=True)
 class _Fade(AnimationOnScreen, ABC):
     drawing_on_screen: DrawingOnScreen | tuple[DrawingOnScreen, ...]
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
     )
     _: KW_ONLY = not_constructor_below()
-    _timer: Timer = default_init(lambda self: Timer(self.duration))
+    _timer: Timer = default(lambda self: Timer(self.duration))
 
     @cached_property
     @override

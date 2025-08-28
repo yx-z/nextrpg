@@ -17,7 +17,7 @@ from nextrpg.draw.relative_drawing import RelativeDrawing
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.geometry.coordinate import ORIGIN, Coordinate
+from nextrpg.geometry.coordinate import Coordinate, ORIGIN
 from nextrpg.geometry.dimension import Size, Width, WidthAndHeightScaling
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.gui.area import gui_width, left_screen, top_screen
@@ -199,7 +199,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
         pad_width = self.config.padding.width.value
         if left < pad_width:
             left = pad_width
-        elif left + background_width > gui_width() - pad_width:
+        elif left + background_width > gui_width().value - pad_width:
             left = gui_width().value - background_width - pad_width
 
         top = character_top + self._height_sign * shift_height

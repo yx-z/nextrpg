@@ -4,7 +4,7 @@ from typing import Self, override
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.config.config import config
-from nextrpg.core.dataclass_with_default_init import not_constructor_below
+from nextrpg.core.dataclass_with_default import not_constructor_below
 from nextrpg.core.time import Millisecond
 from nextrpg.event.pygame_event import (
     KeyboardKey,

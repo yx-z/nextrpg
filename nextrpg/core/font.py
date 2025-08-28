@@ -5,7 +5,7 @@ from typing import Self
 import pygame
 from pygame.font import SysFont
 
-from nextrpg.geometry.dimension import Height, Pixel, Size
+from nextrpg.geometry.dimension import Height, Size
 
 
 @dataclass(frozen=True)
@@ -56,5 +56,5 @@ class Font:
         return Size(width, height)
 
     @property
-    def text_height(self) -> Pixel:
-        return self.pygame.get_linesize()
+    def text_height(self) -> Height:
+        return Height(self.pygame.get_linesize())

@@ -2,22 +2,22 @@ from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
 from nextrpg.animation.animation import Animation
-from nextrpg.core.dataclass_with_default_init import (
-    dataclass_with_default_init,
-    default_init,
+from nextrpg.core.dataclass_with_default import (
+    dataclass_with_default,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.drawing import Drawing
 
 
-@dataclass_with_default_init(frozen=True)
+@dataclass_with_default(frozen=True)
 class CyclicAnimation(Animation):
     frames: tuple[Drawing, ...]
     duration_per_frame: Millisecond
     _: KW_ONLY = not_constructor_below()
     _index: int = 0
-    _timer: Timer = default_init(lambda self: Timer(self.duration_per_frame))
+    _timer: Timer = default(lambda self: Timer(self.duration_per_frame))
 
     @property
     @override

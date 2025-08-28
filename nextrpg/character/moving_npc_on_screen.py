@@ -5,9 +5,9 @@ from typing import Self, override
 
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen
-from nextrpg.core.dataclass_with_default_init import (
-    dataclass_with_default_init,
-    default_init,
+from nextrpg.core.dataclass_with_default import (
+    dataclass_with_default,
+    default,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
@@ -16,16 +16,14 @@ from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.walk import Walk
 
 
-@dataclass_with_default_init(frozen=True, kw_only=True)
+@dataclass_with_default(frozen=True, kw_only=True)
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     path: PolylineOnScreen
     _: KW_ONLY = not_constructor_below()
     # `coordinate` is initialized in the base class.
     # Hence, invoke `_walk` (given it's still an `_Init`) to initialize.
-    coordinate: Coordinate = default_init(
-        lambda self: self._walk(self).coordinate
-    )
-    _walk: Walk = default_init(lambda self: self._init_walk)
+    coordinate: Coordinate = default(lambda self: self._walk(self).coordinate)
+    _walk: Walk = default(lambda self: self._init_walk)
 
     @override
     def tick_after_character_and_coordinate(
