@@ -57,11 +57,11 @@ from nextrpg.config.transition_config import TransitionConfig
 from nextrpg.config.window_config import ResizeMode, WindowConfig
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.color import (
-    Alpha,
     BLACK,
-    Color,
     TRANSPARENT,
     WHITE,
+    Alpha,
+    Color,
     alpha_from_percentage,
 )
 from nextrpg.core.dataclass_with_default import (
@@ -105,9 +105,9 @@ from nextrpg.event.event_transformer import (
     transform,
 )
 from nextrpg.event.pygame_event import (
+    KeyboardKey,
     KeyPressDown,
     KeyPressUp,
-    KeyboardKey,
     PygameEvent,
     Quit,
     WindowResize,
@@ -115,7 +115,7 @@ from nextrpg.event.pygame_event import (
 )
 from nextrpg.game import Game
 from nextrpg.game_loop import GameLoop
-from nextrpg.geometry.coordinate import Coordinate, ORIGIN
+from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
     Height,
     HeightScaling,

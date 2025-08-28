@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Literal, override
+from typing import override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.say_event_config import (
@@ -13,7 +13,7 @@ from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
-from nextrpg.draw.relative_drawing import RelativeDrawing
+from nextrpg.draw.relative_drawing import Anchor, RelativeDrawing
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
@@ -107,20 +107,16 @@ class SayEventAddOn:
     def _avatar_relative_to_text(self) -> RelativeDrawing | None:
         if not self._avatar:
             return None
-        shift = (
-            self._text.bottom_left
-            - self.config.padding.width
-            - self._avatar.size
-        )
-        return RelativeDrawing(self._avatar, shift.size)
+        shift = self._text.bottom_left - self.config.padding.width
+        return RelativeDrawing(self._avatar, shift.size, Anchor.BOTTOM_RIGHT)
 
     @cached_property
     def _name_relative_to_text(self) -> RelativeDrawing | None:
         if not self._name:
             return None
         text = Text(self._name, self.config.name_text_config)
-        shift = Width(0) * (-text.height - self.config.padding.height)
-        return RelativeDrawing(text.drawing_group, shift)
+        shift = Width(0) * -self.config.padding.height
+        return RelativeDrawing(text.drawing_group, shift, Anchor.BOTTOM_LEFT)
 
     @cached_property
     def _text(self) -> Text | TextGroup:
@@ -150,12 +146,17 @@ class SayEventCharacterAddOn(SayEventAddOn):
             else:
                 tip_top -= self.config.background.nine_slice.bottom
 
-        tip_left = (
-            background_drawing.width / 2
-            + self._width_sign * self.config.background_edge_center_to_tip
-        )
-        if not self._character_position.at_left:
-            tip_left -= self._tip.width
+        if self._character_position.at_left:
+            tip_left = (
+                background_drawing.width / 2
+                + self.config.background_edge_center_to_tip
+            )
+        else:
+            tip_left = (
+                background_drawing.width / 2
+                - self.config.background_edge_center_to_tip
+                - self._tip.width
+            )
 
         tip_shift = tip_left * tip_top
         background_and_tip = (
@@ -183,42 +184,38 @@ class SayEventCharacterAddOn(SayEventAddOn):
                 self._background_relative_to_text.drawing
             ).top_left
 
-        shift_width, shift_height = (
-            self.config.character_position_to_add_on_edge_center
-        )
-        character_left, character_top = self._character_position.coordinate
-        background_width = self._background_relative_to_text.drawing.width.value
-        left = (
-            character_left
-            + self._width_sign * shift_width
-            - background_width / 2
-        )
-
+        background_width = self._background_relative_to_text.drawing.width
+        if self._character_position.at_left:
+            left = (
+                self._character_position.coordinate.left
+                + self.config.character_position_to_add_on_edge_center.width
+                - background_width / 2
+            )
+        else:
+            left = (
+                self._character_position.coordinate.left
+                - self.config.character_position_to_add_on_edge_center.width
+                - background_width / 2
+            )
         # Clamp within screen width.
-        pad_width = self.config.padding.width.value
+        pad_width = self.config.padding.width
         if left < pad_width:
             left = pad_width
-        elif left + background_width > gui_width().value - pad_width:
-            left = gui_width().value - background_width - pad_width
+        elif left + background_width > gui_width() - pad_width:
+            left = gui_width() - background_width - pad_width
 
-        top = character_top + self._height_sign * shift_height
         if self._character_position.at_top:
-            top += self._tip.height.value
+            top = (
+                self._character_position.coordinate.top
+                + self.config.character_position_to_add_on_edge_center.height
+            )
         else:
-            top -= self._background_relative_to_text.drawing.height.value
-        return Coordinate(left, top)
-
-    @property
-    def _width_sign(self) -> Literal[-1, 1]:
-        if self._character_position.at_left:
-            return 1
-        return -1
-
-    @property
-    def _height_sign(self) -> Literal[-1, 1]:
-        if self._character_position.at_top:
-            return 1
-        return -1
+            top = (
+                self._character_position.coordinate.top
+                - self.config.character_position_to_add_on_edge_center.height
+                - self._background_relative_to_text.drawing.height
+            )
+        return (left * top).coordinate
 
     @cached_property
     @override
