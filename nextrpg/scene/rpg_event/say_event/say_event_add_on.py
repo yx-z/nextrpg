@@ -18,7 +18,7 @@ from nextrpg.draw.relative_drawing import Anchor, RelativeDrawing
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.geometry.coordinate import ORIGIN, Coordinate
+from nextrpg.geometry.coordinate import Coordinate, ORIGIN
 from nextrpg.geometry.dimension import Width, WidthAndHeightScaling
 from nextrpg.gui.area import gui_width, left_screen, top_screen
 from nextrpg.scene.scene import Scene

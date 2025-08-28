@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 from functools import cached_property
-from typing import Self, TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.relative_drawing import RelativeDrawing
-from nextrpg.geometry.coordinate import Coordinate, ORIGIN
+from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
@@ -52,17 +52,16 @@ class DrawingGroup(Sizable):
         return self._drawing_group_on_screen.top_left
 
     def cut(self, area: RectangleAreaOnScreen) -> Self:
-        cut_relative_drawings: list[RelativeDrawing] = []
+        res: list[RelativeDrawing] = []
         for relative in self.relative_drawings:
-            drawing_top_left = relative.top_left(ORIGIN)
-            cut_top_left = area.top_left - drawing_top_left
-            relative_cut_area = RectangleAreaOnScreen(cut_top_left, area.size)
-            cut_drawing = relative.drawing.cut(relative_cut_area)
-            cut_relative = RelativeDrawing(
-                cut_drawing, relative.shift, relative.anchor
+            top_left = relative.top_left(ORIGIN)
+            relative_area = RectangleAreaOnScreen(
+                area.top_left - top_left, area.size
             )
-            cut_relative_drawings.append(cut_relative)
-        return replace(self, relative_drawings=tuple(cut_relative_drawings))
+            drawing = relative.drawing.cut(relative_area)
+            relative_drawing = replace(relative, drawing=drawing)
+            res.append(relative_drawing)
+        return replace(self, relative_drawings=tuple(res))
 
     @cached_property
     def _drawing_group_on_screen(self) -> DrawingGroupOnScreen:
