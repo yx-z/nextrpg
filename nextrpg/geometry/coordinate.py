@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from math import atan2, degrees, hypot, sqrt
-from typing import TYPE_CHECKING, NamedTuple, Self, overload
+from typing import NamedTuple, Self, TYPE_CHECKING, overload
 
 from nextrpg.geometry.dimension import Dimension, Height, Pixel, Size, Width
 from nextrpg.geometry.direction import Direction, DirectionalOffset
@@ -49,7 +49,7 @@ class XAxis(Dimension):
 
     @property
     def with_zero_y_axis(self) -> Coordinate:
-        return Coordinate(self.value, 0)
+        return self.pair(YAxis(0))
 
 
 class YAxis(Dimension):
@@ -80,7 +80,7 @@ class YAxis(Dimension):
 
     @property
     def with_zero_x_axis(self) -> Coordinate:
-        return Coordinate(0, self.value)
+        return self.pair(XAxis(0))
 
 
 class Coordinate(NamedTuple):
