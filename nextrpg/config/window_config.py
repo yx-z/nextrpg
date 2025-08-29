@@ -9,8 +9,8 @@ from typing import TYPE_CHECKING, Any, Self, override
 
 from pygame.locals import FULLSCREEN, RESIZABLE
 
-from nextrpg.core.color import BLACK, Color
 from nextrpg.core.save import UpdateFromSave
+from nextrpg.draw.color import BLACK, Color
 from nextrpg.geometry.dimension import Size
 
 if TYPE_CHECKING:

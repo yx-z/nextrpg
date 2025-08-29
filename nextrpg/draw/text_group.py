@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
 from functools import cached_property
-from typing import Self, TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 
 from nextrpg.config.config import config
 from nextrpg.config.text_group_config import TextGroupConfig

@@ -11,9 +11,9 @@ from pygame.transform import flip, smoothscale
 
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
-from nextrpg.core.color import TRANSPARENT, Alpha, Color
 from nextrpg.core.log import Log
 from nextrpg.draw.anchor import Anchor
+from nextrpg.draw.color import TRANSPARENT, Alpha, Color
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (

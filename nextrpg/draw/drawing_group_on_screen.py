@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from functools import cached_property
 
 from nextrpg.config.config import config
-from nextrpg.core.color import Color
+from nextrpg.draw.color import Color
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen

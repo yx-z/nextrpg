@@ -4,13 +4,13 @@ from typing import override
 
 from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.config.config import config
-from nextrpg.core.color import Color
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond
+from nextrpg.draw.color import Color
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.gui.area import screen
 from nextrpg.scene.scene import Scene

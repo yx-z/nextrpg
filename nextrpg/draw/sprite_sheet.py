@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
 
-from nextrpg.core.color import Color
+from nextrpg.draw.color import Color
 from nextrpg.draw.drawing import Drawing
 
 

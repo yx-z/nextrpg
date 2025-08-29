@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from pygame import SRCALPHA, Surface
 from pygame.draw import polygon
 
-from nextrpg.core.color import Color
+from nextrpg.draw.color import Color
 from nextrpg.draw.drawing import Drawing
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.polygon_area_on_screen import (

@@ -1,4 +1,4 @@
-__version__ = "0.1.16"
+__version__ = "0.1.17"
 
 from nextrpg.animation.animation import Animation
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
@@ -56,20 +56,11 @@ from nextrpg.config.text_config import TextConfig
 from nextrpg.config.transition_config import TransitionConfig
 from nextrpg.config.window_config import ResizeMode, WindowConfig
 from nextrpg.core.cached_decorator import cached
-from nextrpg.core.color import (
-    BLACK,
-    TRANSPARENT,
-    WHITE,
-    Alpha,
-    Color,
-    alpha_from_percentage,
-)
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
     not_constructor_below,
 )
-from nextrpg.core.font import Font
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
 from nextrpg.core.save import (
     LoadFromSave,
@@ -80,11 +71,20 @@ from nextrpg.core.save import (
     UpdateFromSave,
 )
 from nextrpg.draw.anchor import Anchor
+from nextrpg.draw.color import (
+    BLACK,
+    TRANSPARENT,
+    WHITE,
+    Alpha,
+    Color,
+    alpha_from_percentage,
+)
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import (
     DrawingOnScreen,
 )
 from nextrpg.draw.drawing_trim import DrawingTrim
+from nextrpg.draw.font import Font
 from nextrpg.draw.nine_slice import NineSlice
 from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.polyline_drawing import PolylineDrawing

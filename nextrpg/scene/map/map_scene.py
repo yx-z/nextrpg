@@ -16,7 +16,6 @@ from nextrpg.character.npc_spec import NpcSpec, to_strict
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.polygon_character_drawing import PolygonCharacterDrawing
 from nextrpg.config.config import config
-from nextrpg.core.color import TRANSPARENT
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -24,6 +23,7 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond, get_timepoint
+from nextrpg.draw.color import TRANSPARENT
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.rectangle_drawing import RectangleDrawing

@@ -5,13 +5,13 @@ from typing import Self, override
 
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.config.config import config
-from nextrpg.core.color import alpha_from_percentage
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
     not_constructor_below,
 )
 from nextrpg.core.time import Millisecond, Timer
+from nextrpg.draw.color import alpha_from_percentage
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 
 

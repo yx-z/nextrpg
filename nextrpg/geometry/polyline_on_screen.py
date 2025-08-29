@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from nextrpg.core.color import Color
+from nextrpg.draw.color import Color
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Pixel
 from nextrpg.geometry.polygon_area_on_screen import (

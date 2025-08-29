@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING, override
 
-from nextrpg.core.color import Color
+from nextrpg.draw.color import Color
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size, Width

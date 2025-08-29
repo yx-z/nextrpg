@@ -1,8 +1,8 @@
 from dataclasses import dataclass, replace
 from typing import Self
 
-from nextrpg.core.color import WHITE, Color
-from nextrpg.core.font import Font
+from nextrpg.draw.color import WHITE, Color
+from nextrpg.draw.font import Font
 from nextrpg.geometry.dimension import Height, Width
 
 

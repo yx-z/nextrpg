@@ -6,7 +6,7 @@ from typing import Self
 
 from pygame import Surface
 
-from nextrpg.core.color import Alpha
+from nextrpg.draw.color import Alpha
 from nextrpg.draw.drawing import Drawing
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size, Width

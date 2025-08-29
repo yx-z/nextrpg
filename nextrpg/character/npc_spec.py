@@ -10,12 +10,12 @@ from nextrpg.character.character_on_screen import (
 )
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.polygon_character_drawing import PolygonCharacterDrawing
-from nextrpg.core.color import Color
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
     not_constructor_below,
 )
+from nextrpg.draw.color import Color
 from nextrpg.event.event_transformer import transform
 
 if TYPE_CHECKING:
