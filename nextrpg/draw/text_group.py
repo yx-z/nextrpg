@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
 from functools import cached_property
-from typing import TYPE_CHECKING, Self
+from typing import Self, TYPE_CHECKING
 
 from nextrpg.config.config import config
 from nextrpg.config.text_group_config import TextGroupConfig
@@ -39,16 +39,16 @@ class TextGroup(Sizable):
         texts: list[Text] = []
         start = item.start or 0
         stop = item.stop
-        i = 0
+        idx = 0
         for text in self.texts:
             msg_len = len(text.message)
-            if stop is not None and i >= stop:
+            if stop is not None and idx >= stop:
                 break
-            text_start = max(start - i, 0)
+            text_start = max(start - idx, 0)
             if text_start < msg_len:
-                text_stop = stop - i if stop is not None else msg_len
+                text_stop = stop - idx if stop is not None else msg_len
                 texts.append(text[text_start:text_stop])
-            i += msg_len
+            idx += msg_len
         return replace(self, texts=tuple(texts))
 
     def __radd__(self, other: str) -> TextGroup:

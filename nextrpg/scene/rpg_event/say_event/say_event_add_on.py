@@ -19,7 +19,7 @@ from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Width, WidthAndHeightScaling
+from nextrpg.geometry.dimension import WidthAndHeightScaling
 from nextrpg.gui.area import gui_width, left_screen, top_screen
 from nextrpg.scene.scene import Scene
 
@@ -95,12 +95,14 @@ class SayEventAddOn:
             size += extra_width
 
         if isinstance(
-            cfg := self.config.background, SayEventNineSliceBackgroundConfig
+            self.config.background, SayEventNineSliceBackgroundConfig
         ):
-            rect = cfg.nine_slice.stretch(size)
+            rect = self.config.background.nine_slice.stretch(size)
         else:
             rect = RectangleDrawing(
-                size, cfg.background, cfg.border_radius
+                size,
+                self.config.background.color,
+                self.config.background.border_radius,
             ).drawing
         return rect.shift(shift)
 
@@ -116,8 +118,9 @@ class SayEventAddOn:
         if not self._name:
             return None
         text = Text(self._name, self.config.name_text_config)
-        shift = Width(0) * -self.config.padding.height
-        return text.drawing_group.shift(shift, Anchor.BOTTOM_LEFT)
+        return text.drawing_group.shift(
+            -self.config.padding.height.with_zero_width, Anchor.BOTTOM_LEFT
+        )
 
     @cached_property
     def _text(self) -> Text | TextGroup:
@@ -151,6 +154,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
             tip_top = -self._tip.height
         else:
             tip_top = background_drawing.height
+
         if isinstance(
             self.config.background, SayEventNineSliceBackgroundConfig
         ):
@@ -250,9 +254,14 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     def _character_position(self) -> _CharacterPosition:
-        rect = self.character.drawing_on_screen.visible_rectangle_area_on_screen
         if self.scene.drawing_on_screen_shift:
-            rect += self.scene.drawing_on_screen_shift
+            rect = (
+                self.character.drawing_on_screen.visible_rectangle_area_on_screen
+            ) + self.scene.drawing_on_screen_shift
+        else:
+            rect = (
+                self.character.drawing_on_screen.visible_rectangle_area_on_screen
+            )
 
         at_left = rect.center in left_screen()
         if at_top := rect.center in top_screen():

@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class SayEventColorBackgroundConfig:
-    background: Color = Color(255, 255, 255, 200)
+    color: Color = Color(255, 255, 255, 200)
     border_radius: Pixel = 10
     tip_height: Height = Height(20)
     tip_width1: Width = Width(10)
