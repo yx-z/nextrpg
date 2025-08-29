@@ -191,6 +191,7 @@ class EventfulScene(EventAsAttr, Scene):
             return None
 
         ticked = self.tick_without_event(time_delta)
+        assert ticked._event
         try:
             create_next_scene = ticked._event.send(self._event_result)
             return create_next_scene(ticked._event, ticked)

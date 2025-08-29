@@ -20,7 +20,7 @@ from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import WidthAndHeightScaling
-from nextrpg.gui.area import gui_width, left_screen, top_screen
+from nextrpg.gui.area import left_screen, screen, top_screen
 from nextrpg.scene.scene import Scene
 
 
@@ -220,10 +220,10 @@ class SayEventCharacterAddOn(SayEventAddOn):
             )
         # Clamp within screen width.
         pad_width = self.config.padding.width
-        if left < pad_width:
-            left = pad_width
-        elif left + background_width > gui_width() - pad_width:
-            left = gui_width() - background_width - pad_width
+        if left.width < pad_width:
+            left = pad_width.x_axis
+        elif left + background_width > screen().right - pad_width:
+            left = screen().right - background_width - pad_width
 
         if self._character_position.at_top:
             top = (

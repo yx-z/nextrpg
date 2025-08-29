@@ -5,7 +5,7 @@ from nextrpg.draw.color import Color
 from nextrpg.geometry.dimension import HeightScaling
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class CutsceneConfig:
     background_override: Color | None = None
     cover_from_screen_scaling: HeightScaling = HeightScaling(0.1)

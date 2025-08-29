@@ -10,7 +10,7 @@ from nextrpg.geometry.anchored_coodinate import (
     TopCenterCoordinate,
     TopRightCoordinate,
 )
-from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.coordinate import Coordinate, XAxis, YAxis
 from nextrpg.geometry.dimension import (
     Height,
     Size,
@@ -43,19 +43,19 @@ class Sizable(Protocol):
         return self.size.height
 
     @property
-    def top(self) -> Height:
+    def top(self) -> YAxis:
         return self.top_left.top
 
     @property
-    def left(self) -> Width:
+    def left(self) -> XAxis:
         return self.top_left.left
 
     @property
-    def bottom(self) -> Height:
+    def bottom(self) -> YAxis:
         return self.top_left.top + self.size.height
 
     @property
-    def right(self) -> Width:
+    def right(self) -> XAxis:
         return self.top_left.left + self.size.width
 
     @property

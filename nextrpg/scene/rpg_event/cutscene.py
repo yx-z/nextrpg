@@ -31,8 +31,10 @@ def _cutscene[R, **P](
         bottom_border = (
             screen().bottom_left.anchor(size).rectangle_area_on_screen
         )
-        borders = (top_border, bottom_border)
-        borders = tuple(r.fill(cfg.background) for r in borders)
+        rectangle_area_on_screens = (top_border, bottom_border)
+        borders = tuple(
+            r.fill(cfg.background) for r in rectangle_area_on_screens
+        )
 
         sentinel = yield fade_in(borders, cfg.wait, cfg.duration)
         res = yield from fun(*args, **kwargs)

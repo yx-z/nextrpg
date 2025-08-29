@@ -7,7 +7,7 @@ from nextrpg.geometry.dimension import (
 )
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class CharacterConfig:
     move_speed: PixelPerMillisecond = 0.2
     bounding_rectangle_scaling: HeightScaling = HeightScaling(0.4)

@@ -126,11 +126,13 @@ def _add(
     if duration is None:
         _entries.append(_LogEntry(component, level, message))
         return
-    duration = debug.log_duration if duration is _FROM_CONFIG else duration
+    if duration is _FROM_CONFIG:
+        timer_duration = debug.log_duration
+    else:
+        timer_duration = duration
+    timer = Timer(timer_duration)
     if (k := _Key(component, message.strings)) not in _timed_entries:
-        _timed_entries[k] = _TimedLogEntry(
-            component, level, message, Timer(duration)
-        )
+        _timed_entries[k] = _TimedLogEntry(component, level, message, timer)
 
 
 def _format(s: Interpolation | str) -> str:

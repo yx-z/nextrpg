@@ -62,6 +62,7 @@ class BackgroundFadeOut(BackgroundEvent):
     fade: FadeOut
 
     @override
+    @property
     def draw_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return self.fade.drawing_on_screens
 

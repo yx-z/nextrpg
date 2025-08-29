@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class MapConfig:
     background: str = "background"
     foreground: str = "foreground"

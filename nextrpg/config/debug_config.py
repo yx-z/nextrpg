@@ -12,7 +12,7 @@ class LogLevel(IntEnum):
     ERROR = auto()
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class DebugConfig:
     drawing_background_color: Color | None = Color(0, 0, 255, 16)
     collision_rectangle_color: Color | None = Color(255, 0, 0, 64)

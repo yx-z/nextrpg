@@ -32,7 +32,7 @@ class GameLoop:
     _window: Window = field(default_factory=Window)
     _scene: Scene = default(lambda self: self.entry_scene())
     _config: GameLoopConfig = field(default_factory=lambda: config().game_loop)
-    _: None = default(
+    __: None = default(
         lambda self: (
             gc.disable()
             if self._config.garbage_collect_time_threshold

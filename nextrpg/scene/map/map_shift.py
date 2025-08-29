@@ -1,16 +1,16 @@
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
-from nextrpg.gui.area import gui_height, gui_width
+from nextrpg.gui.area import screen
 
 
 def center_player(player_coordinate: Coordinate, map_size: Size) -> Coordinate:
     left_shift = _center_player(
-        player_coordinate.left, gui_width(), map_size.width
+        player_coordinate.left, screen().right, map_size.width.x_axis
     )
     top_shift = _center_player(
-        player_coordinate.top, gui_height(), map_size.height
+        player_coordinate.top, screen().bottom, map_size.height.y_axis
     )
-    return (left_shift * top_shift).coordinate
+    return left_shift.pair(top_shift)
 
 
 def _center_player[T](player_axis: T, gui_axis: T, map_axis: T) -> T:

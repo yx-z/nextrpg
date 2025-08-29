@@ -30,6 +30,18 @@ class Dimension:
     def __sub__(self, other: Self) -> Self:
         return self + -other
 
+    def __mul__(self, other: int | float) -> Self:
+        return type(self)(self.value * other)
+
+    def __rmul__(self, other: int | float) -> Self:
+        return self * other
+
+    def __truediv__(self, other: int | float) -> Self:
+        return self * (1.0 / other)
+
+    def __rtruediv__(self, other: int | float) -> Self:
+        return other * (1.0 / self)
+
 
 class _Scaling(Dimension):
     @property
@@ -41,12 +53,30 @@ class WidthScaling(_Scaling):
     pass
 
 
-class HeightScaling(_Scaling):
-    pass
-
-
 class WidthAndHeightScaling(_Scaling):
-    pass
+    @overload
+    def __mul__(self, arg: int | float) -> WidthScaling: ...
+
+    @overload
+    def __mul__(self, arg: Width) -> Width: ...
+
+    def __mul__(self, arg: int | float | Width) -> WidthScaling | Width:
+        if isinstance(arg, Width):
+            return Width(self.value * arg.value)
+        return WidthScaling(self.value * arg)
+
+
+class HeightScaling(_Scaling):
+    @overload
+    def __mul__(self, arg: int | float) -> HeightScaling: ...
+
+    @overload
+    def __mul__(self, arg: Height) -> Height: ...
+
+    def __mul__(self, arg: int | float | Height) -> HeightScaling | Height:
+        if isinstance(arg, Height):
+            return Height(self.value * arg.value)
+        return HeightScaling(self.value * arg)
 
 
 class Width(Dimension):
@@ -69,7 +99,7 @@ class Width(Dimension):
             return Width(self.value * arg)
         return Width(self.value * arg.value)
 
-    def __rmul__(self, arg: int | float | WidthScaling) -> Width:
+    def __rmul__(self, arg: int | float) -> Width:
         return Width(self.value * arg)
 
     @overload
@@ -115,7 +145,7 @@ class Height(Dimension):
             return Height(self.value * arg)
         return Height(self.value * arg.value)
 
-    def __rmul__(self, arg: int | float | HeightScaling) -> Height | Size:
+    def __rmul__(self, arg: int | float) -> Height:
         return Height(self.value * arg)
 
     @overload
