@@ -142,18 +142,18 @@ class SayEventCharacterAddOn(SayEventAddOn):
             tip_left = (
                 background_drawing.width / 2
                 + self.config.background_edge_center_to_tip
-            )
+            ).x_axis
         else:
             tip_left = (
                 background_drawing.width / 2
                 - self.config.background_edge_center_to_tip
                 - self._tip.width
-            )
+            ).x_axis
 
         if self._character_position.at_top:
-            tip_top = -self._tip.height
+            tip_top = -self._tip.height.y_axis
         else:
-            tip_top = background_drawing.height
+            tip_top = background_drawing.height.y_axis
 
         if isinstance(
             self.config.background, SayEventNineSliceBackgroundConfig
@@ -162,7 +162,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
                 tip_top += self.config.background.nine_slice.top
             else:
                 tip_top -= self.config.background.nine_slice.bottom
-        tip_shift = tip_left * tip_top
+        tip_shift = tip_left.pair(tip_top)
 
         if isinstance(
             self.config.background, SayEventNineSliceBackgroundConfig
@@ -175,7 +175,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
                 crop_size = (
                     self._tip.width * self.config.background.nine_slice.bottom
                 )
-            background_crop = tip_shift.coordinate.anchor(
+            background_crop = tip_shift.anchor(
                 crop_size
             ).rectangle_area_on_screen
             background_drawing = background_drawing.cut(background_crop)
@@ -186,8 +186,9 @@ class SayEventCharacterAddOn(SayEventAddOn):
         )
         background_and_tip_group = DrawingGroup(background_and_tip)
 
-        shift = super()._background_relative_to_text.shift
-        return background_and_tip_group.shift(shift)
+        return background_and_tip_group.shift(
+            super()._background_relative_to_text.shift
+        )
 
     @cached_property
     def _tip(self) -> Drawing:

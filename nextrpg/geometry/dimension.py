@@ -99,9 +99,6 @@ class Width(Dimension):
             return Width(self.value * arg)
         return Width(self.value * arg.value)
 
-    def __rmul__(self, arg: int | float) -> Width:
-        return Width(self.value * arg)
-
     @overload
     def __truediv__(self, arg: int | float | WidthScaling) -> Width: ...
 
@@ -144,9 +141,6 @@ class Height(Dimension):
         if isinstance(arg, int | float):
             return Height(self.value * arg)
         return Height(self.value * arg.value)
-
-    def __rmul__(self, arg: int | float) -> Height:
-        return Height(self.value * arg)
 
     @overload
     def __truediv__(self, arg: int | float | HeightScaling) -> Height: ...
