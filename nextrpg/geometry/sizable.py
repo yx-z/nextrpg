@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Protocol
 
-from nextrpg.geometry.anchored_coodinate import (
+from nextrpg.geometry.anchored_coordinate import (
     BottomCenterCoordinate,
     BottomLeftCoordinate,
     BottomRightCoordinate,

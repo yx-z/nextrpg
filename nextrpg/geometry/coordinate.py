@@ -47,6 +47,10 @@ class XAxis(Dimension):
     def pair(self, y_axis: YAxis) -> Coordinate:
         return Coordinate(self.value, y_axis.value)
 
+    @property
+    def with_zero_y_axis(self) -> Coordinate:
+        return Coordinate(self.value, 0)
+
 
 class YAxis(Dimension):
     @property
@@ -73,6 +77,10 @@ class YAxis(Dimension):
 
     def pair(self, x_axis: XAxis) -> Coordinate:
         return Coordinate(x_axis.value, self.value)
+
+    @property
+    def with_zero_x_axis(self) -> Coordinate:
+        return Coordinate(0, self.value)
 
 
 class Coordinate(NamedTuple):

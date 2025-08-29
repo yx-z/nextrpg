@@ -27,7 +27,7 @@ from nextrpg.draw.color import TRANSPARENT
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
-from nextrpg.geometry.anchored_coodinate import BottomCenterCoordinate
+from nextrpg.geometry.anchored_coordinate import BottomCenterCoordinate
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
