@@ -24,12 +24,12 @@ from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
-    KeyboardKey,
     KeyPressDown,
+    KeyboardKey,
     PygameEvent,
     WindowResize,
 )
-from nextrpg.geometry.coordinate import ORIGIN, Coordinate
+from nextrpg.geometry.coordinate import Coordinate, ORIGIN
 from nextrpg.geometry.dimension import Size
 
 log = Log()
@@ -189,10 +189,10 @@ def _log_text(
     component_and_messages: tuple[ComponentAndMessage, ...],
 ) -> tuple[TextOnScreen, ...]:
     components = tuple(m.component for m in component_and_messages)
-    component_text = Text("\n".join(components))
-    components_on_screen = TextOnScreen(ORIGIN, component_text)
+    component_text = Text("\n".join(components)).text_on_screen(ORIGIN)
 
     messages = tuple(m.message for m in component_and_messages)
-    msg_text = Text("\n".join(messages))
-    msgs_on_screen = TextOnScreen(ORIGIN + component_text.width, msg_text)
-    return components_on_screen, msgs_on_screen
+    msg_text = Text("\n".join(messages)).text_on_screen(
+        ORIGIN + component_text.width
+    )
+    return component_text, msg_text

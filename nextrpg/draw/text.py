@@ -14,6 +14,7 @@ from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
     from nextrpg.draw.text_group import TextGroup
+    from nextrpg.draw.text_on_screen import TextOnScreen
 
 
 @dataclass(frozen=True)
@@ -39,6 +40,11 @@ class Text(Sizable):
             for i, line in enumerate(self.lines)
         )
         return DrawingGroup(draws)
+
+    def text_on_screen(self, coordinate: Coordinate) -> TextOnScreen:
+        from nextrpg.draw.text_on_screen import TextOnScreen
+
+        return TextOnScreen(coordinate, self)
 
     @property
     def drawings(self) -> tuple[Drawing, ...]:

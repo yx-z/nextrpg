@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
 from functools import cached_property
-from typing import Self
+from typing import TYPE_CHECKING, Self
 
 from nextrpg.config.config import config
 from nextrpg.config.text_group_config import TextGroupConfig
@@ -14,11 +14,19 @@ from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size, Width
 from nextrpg.geometry.sizable import Sizable
 
+if TYPE_CHECKING:
+    from nextrpg.draw.text_on_screen import TextOnScreen
+
 
 @dataclass(frozen=True)
 class TextGroup(Sizable):
     texts: tuple[Text, ...]
     config: TextGroupConfig = field(default_factory=lambda: config().text_group)
+
+    def text_on_screen(self, coordinate: Coordinate) -> TextOnScreen:
+        from nextrpg.draw.text_on_screen import TextOnScreen
+
+        return TextOnScreen(coordinate, self)
 
     @property
     def drawings(self) -> tuple[Drawing, ...]:

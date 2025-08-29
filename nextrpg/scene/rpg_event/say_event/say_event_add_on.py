@@ -19,7 +19,7 @@ from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import ZERO_SIZE, Width, WidthAndHeightScaling
+from nextrpg.geometry.dimension import Width, WidthAndHeightScaling, ZERO_SIZE
 from nextrpg.gui.area import gui_width, left_screen, top_screen
 from nextrpg.scene.scene import Scene
 
@@ -59,7 +59,7 @@ class SayEventAddOn:
         coordinate = (
             self._add_on_top_left - self._background_relative_to_text.shift
         )
-        return TextOnScreen(coordinate, self._text)
+        return self._text.text_on_screen(coordinate)
 
     @cached_property
     def _add_on_top_left(self) -> Coordinate:
