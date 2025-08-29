@@ -236,7 +236,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
                 - self.config.character_position_to_add_on_edge_center.height
                 - self._background_relative_to_text.drawing.height
             )
-        return (left * top).coordinate
+        return left.pair(top)
 
     @cached_property
     @override

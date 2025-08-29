@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, NamedTuple, Self, overload
 
 if TYPE_CHECKING:
-    from nextrpg.geometry.coordinate import Coordinate
+    from nextrpg.geometry.coordinate import Coordinate, XAxis, YAxis
 
 type Pixel = int | float
 
@@ -12,7 +12,7 @@ type PixelPerMillisecond = int | float
 
 
 @dataclass(frozen=True)
-class _Dimension:
+class Dimension:
     value: Pixel
 
     def __lt__(self, other: Self) -> bool:
@@ -31,7 +31,7 @@ class _Dimension:
         return self + -other
 
 
-class _Scaling(_Dimension):
+class _Scaling(Dimension):
     @property
     def complement(self) -> Self:
         return type(self)(1.0 - self.value)
@@ -49,7 +49,13 @@ class WidthAndHeightScaling(_Scaling):
     pass
 
 
-class Width(_Dimension):
+class Width(Dimension):
+    @property
+    def x_axis(self) -> XAxis:
+        from nextrpg.geometry.coordinate import XAxis
+
+        return XAxis(self.value)
+
     @overload
     def __mul__(self, arg: int | float | WidthScaling) -> Width: ...
 
@@ -82,15 +88,18 @@ class Width(_Dimension):
             return Width(self.value / arg)
         return Width(self.value / arg.value)
 
-    def with_height(self, height: Height) -> Size:
-        return self * height
-
     @property
     def with_zero_height(self) -> Size:
         return self * Height(0)
 
 
-class Height(_Dimension):
+class Height(Dimension):
+    @property
+    def y_axis(self) -> YAxis:
+        from nextrpg.geometry.coordinate import YAxis
+
+        return YAxis(self.value)
+
     @overload
     def __mul__(self, arg: int | float | HeightScaling) -> Height: ...
 
@@ -124,9 +133,6 @@ class Height(_Dimension):
         if isinstance(arg, int | float):
             return Height(self.value / arg)
         return Height(self.value / arg.value)
-
-    def with_width(self, width: Width) -> Size:
-        return width * self
 
     @property
     def with_zero_width(self) -> Size:

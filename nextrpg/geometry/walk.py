@@ -62,7 +62,7 @@ class Walk:
                     coordinate.left + (target.left - coordinate.left) * factor
                 )
                 top = coordinate.top + (target.top - coordinate.top) * factor
-                coordinate = (left * top).coordinate
+                coordinate = left.pair(top)
                 break
 
             remaining_dist -= dist_to_target

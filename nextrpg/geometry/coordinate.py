@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from math import atan2, degrees, hypot, sqrt
-from typing import TYPE_CHECKING, NamedTuple, Self
+from typing import TYPE_CHECKING, NamedTuple, Self, overload
 
-from nextrpg.geometry.dimension import Height, Pixel, Size, Width
+from nextrpg.geometry.dimension import Dimension, Height, Pixel, Size, Width
 from nextrpg.geometry.direction import Direction, DirectionalOffset
 
 if TYPE_CHECKING:
@@ -21,21 +21,75 @@ if TYPE_CHECKING:
     )
 
 
+class XAxis(Dimension):
+    @property
+    def width(self) -> Width:
+        return Width(self.value)
+
+    def __add__(self, other: Pixel | Width) -> XAxis:
+        if isinstance(other, Width):
+            return XAxis(self.value + other.value)
+        return XAxis(self.value + other)
+
+    @overload
+    def __sub__(self, other: Pixel | Width) -> XAxis: ...
+
+    @overload
+    def __sub__(self, other: XAxis) -> Width: ...
+
+    def __sub__(self, other: Pixel | Width | XAxis) -> XAxis | Width:
+        if isinstance(other, XAxis):
+            return Width(self.value - other.value)
+        if isinstance(other, Width):
+            return XAxis(self.value - other.value)
+        return XAxis(self.value - other)
+
+    def pair(self, y_axis: YAxis) -> Coordinate:
+        return Coordinate(self.value, y_axis.value)
+
+
+class YAxis(Dimension):
+    @property
+    def height(self) -> Height:
+        return Height(self.value)
+
+    def __add__(self, other: Pixel | Height) -> YAxis:
+        if isinstance(other, Height):
+            return YAxis(self.value + other.value)
+        return YAxis(self.value + other)
+
+    @overload
+    def __sub__(self, other: Pixel | Height) -> YAxis: ...
+
+    @overload
+    def __sub__(self, other: YAxis) -> Height: ...
+
+    def __sub__(self, other: Pixel | Height | YAxis) -> YAxis | Height:
+        if isinstance(other, YAxis):
+            return Height(self.value - other.value)
+        if isinstance(other, Height):
+            return YAxis(self.value - other.value)
+        return YAxis(self.value - other)
+
+    def pair(self, x_axis: XAxis) -> Coordinate:
+        return Coordinate(x_axis.value, self.value)
+
+
 class Coordinate(NamedTuple):
     left_value: Pixel
     top_value: Pixel
 
     @property
-    def left(self) -> Width:
-        return Width(self.left_value)
+    def left(self) -> XAxis:
+        return XAxis(self.left_value)
 
     @property
-    def top(self) -> Height:
-        return Height(self.top_value)
+    def top(self) -> YAxis:
+        return YAxis(self.top_value)
 
     @property
     def size(self) -> Size:
-        return self.left * self.top
+        return self.left.width * self.top.height
 
     def __neg__(self) -> Coordinate:
         return Coordinate(-self.left_value, -self.top_value)

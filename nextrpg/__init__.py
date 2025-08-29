@@ -118,6 +118,7 @@ from nextrpg.game import Game
 from nextrpg.game_loop import GameLoop
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
+    Dimension,
     Height,
     HeightScaling,
     Pixel,
