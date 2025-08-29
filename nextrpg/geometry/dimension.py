@@ -85,6 +85,10 @@ class Width(_Dimension):
     def with_height(self, height: Height) -> Size:
         return self * height
 
+    @property
+    def with_zero_height(self) -> Size:
+        return self * Height(0)
+
 
 class Height(_Dimension):
     @overload
@@ -123,6 +127,10 @@ class Height(_Dimension):
 
     def with_width(self, width: Width) -> Size:
         return width * self
+
+    @property
+    def with_zero_width(self) -> Size:
+        return Width(0) * self
 
 
 class Size(NamedTuple):

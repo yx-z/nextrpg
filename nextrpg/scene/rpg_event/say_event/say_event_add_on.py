@@ -19,7 +19,7 @@ from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Width, WidthAndHeightScaling, ZERO_SIZE
+from nextrpg.geometry.dimension import Width, WidthAndHeightScaling
 from nextrpg.gui.area import gui_width, left_screen, top_screen
 from nextrpg.scene.scene import Scene
 
@@ -31,7 +31,7 @@ class SayEventAddOn:
 
     @cached_property
     def background(self) -> tuple[DrawingOnScreen, ...]:
-        contents = [self._text.drawing_group.shift(ZERO_SIZE)]
+        contents = [self._text.drawing_group.no_shift]
         if self._name_relative_to_text:
             contents.append(self._name_relative_to_text)
         if self._avatar_relative_to_text:
@@ -41,7 +41,7 @@ class SayEventAddOn:
         background = self._background_relative_to_text.drawing
         shift = self._background_relative_to_text.shift
         background_and_content = (
-            background.shift(ZERO_SIZE),
+            background.no_shift,
             content.shift(-shift),
         )
         add_on_group = DrawingGroup(background_and_content)
@@ -177,7 +177,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
             background_drawing = background_drawing.cut(background_crop)
 
         background_and_tip = (
-            background_drawing.shift(ZERO_SIZE),
+            background_drawing.no_shift,
             self._tip.shift(tip_shift),
         )
         background_and_tip_group = DrawingGroup(background_and_tip)

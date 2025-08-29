@@ -9,7 +9,7 @@ from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.relative_drawing import RelativeDrawing
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.dimension import ZERO_SIZE, Size
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
 
@@ -20,6 +20,10 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class DrawingGroup(Sizable):
     relative_drawings: tuple[RelativeDrawing, ...]
+
+    @property
+    def no_shift(self) -> RelativeDrawing:
+        return self.shift(ZERO_SIZE)
 
     def shift(
         self, shift: Size, anchor: Anchor = Anchor.TOP_LEFT

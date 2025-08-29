@@ -24,12 +24,12 @@ from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.event.pygame_event import (
-    KeyPressDown,
     KeyboardKey,
+    KeyPressDown,
     PygameEvent,
     WindowResize,
 )
-from nextrpg.geometry.coordinate import Coordinate, ORIGIN
+from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import Size
 
 log = Log()

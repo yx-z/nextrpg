@@ -17,6 +17,7 @@ from nextrpg.draw.anchor import Anchor
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
+    ZERO_SIZE,
     HeightScaling,
     Size,
     WidthAndHeightScaling,
@@ -44,6 +45,10 @@ class Drawing(Sizable):
     color_key: Color | Coordinate | None = None
     convert_alpha: bool | None = None
     allow_background_in_debug: bool = True
+
+    @property
+    def no_shift(self) -> RelativeDrawing:
+        return self.shift(ZERO_SIZE)
 
     def shift(
         self, shift: Size, anchor: Anchor = Anchor.TOP_LEFT

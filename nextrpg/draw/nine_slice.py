@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 from functools import cached_property
 
+from nextrpg.config.config import config
 from nextrpg.draw.anchor import Anchor
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
+from nextrpg.draw.polyline_drawing import PolylineDrawing
 from nextrpg.geometry.coordinate import ORIGIN
-from nextrpg.geometry.dimension import ZERO_SIZE, Height, Size, Width
+from nextrpg.geometry.dimension import Height, Size, Width
 
 
 @dataclass(frozen=True)
@@ -25,10 +27,9 @@ class NineSlice:
         ) / self._center_left.height
 
         stretched_top_center = self._top_center * width_scale
-        top_row_group = self._stretch_row(
+        top_row = self._stretch_row(
             size, self._top_left, stretched_top_center, self._top_right
-        )
-        top_row = top_row_group.shift(ZERO_SIZE)
+        ).no_shift
 
         stretched_center_left = self._center_left * height_scale
         stretched_center = self._center * width_scale * height_scale
@@ -39,25 +40,34 @@ class NineSlice:
             stretched_center,
             stretched_center_right,
         )
-        center_row = center_row_group.shift(self.top * Width(0))
+        center_row = center_row_group.shift(self.top.with_zero_width)
 
         stretched_bottom_center = self._bottom_center * width_scale
         bottom_row_group = self._stretch_row(
             size, self._bottom_left, stretched_bottom_center, self._bottom_right
         )
         bottom_row = bottom_row_group.shift(
-            size.height * Width(0), Anchor.BOTTOM_LEFT
+            size.height.with_zero_width, Anchor.BOTTOM_LEFT
         )
 
-        rows = (top_row, center_row, bottom_row)
-        return DrawingGroup(rows)
+        parts = [top_row, center_row, bottom_row]
+        if (debug := config().debug) and (color := debug.draw_group_link_color):
+            points = (ORIGIN, size.height.with_zero_width.coordinate)
+            vertical_line = PolylineDrawing(points, color).drawing
+            parts += [
+                vertical_line.shift(self.left.with_zero_height),
+                vertical_line.shift((size.width - self.right).with_zero_height),
+            ]
+        return DrawingGroup(tuple(parts))
 
     def _stretch_row(
         self, size: Size, left: Drawing, center: Drawing, right: Drawing
     ) -> DrawingGroup:
-        relative_left = left.shift(ZERO_SIZE)
-        relative_center = center.shift(self.left * Height(0))
-        relative_right = right.shift(size.width * Height(0), Anchor.TOP_RIGHT)
+        relative_left = left.no_shift
+        relative_center = center.shift(self.left.with_zero_height)
+        relative_right = right.shift(
+            size.width.with_zero_height, Anchor.TOP_RIGHT
+        )
         relatives = (relative_left, relative_center, relative_right)
         return DrawingGroup(relatives)
 
