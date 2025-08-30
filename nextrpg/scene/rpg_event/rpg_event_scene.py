@@ -14,7 +14,7 @@ from nextrpg.scene.scene import Scene
 @dataclass(frozen=True)
 class RpgEventScene[R = None](Scene):
     generator: EventGenerator
-    scene: EventfulScene
+    scene: EventfulScene[R]
 
     @cached_property
     @override

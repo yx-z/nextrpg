@@ -42,7 +42,7 @@ log = Log()
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
-class MapScene(EventfulScene):
+class MapScene[R](EventfulScene[R]):
     tmx_file: PathLike | str
     player_spec: CharacterSpec
     move: Move | tuple[Move, ...] = ()

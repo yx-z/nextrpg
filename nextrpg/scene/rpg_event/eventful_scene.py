@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
-from typing import Any, Self, TYPE_CHECKING, override
+from typing import TYPE_CHECKING, Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen
@@ -20,7 +20,7 @@ from nextrpg.event.background_event import (
     BackgroundEventSentinel,
 )
 from nextrpg.event.event_as_attr import EventAsAttr
-from nextrpg.event.pygame_event import KeyPressDown, KeyboardKey, PygameEvent
+from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
 from nextrpg.scene.scene import Scene
 
 if TYPE_CHECKING:
@@ -30,7 +30,7 @@ log = Log()
 
 
 @dataclass(frozen=True)
-class EventfulScene(EventAsAttr, Scene):
+class EventfulScene[R](EventAsAttr, Scene):
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...]
     save_io: SaveIo | None = None
@@ -38,7 +38,7 @@ class EventfulScene(EventAsAttr, Scene):
     _started_npc: NpcOnScreen | None = None
     _ended_npc: NpcOnScreen | None = None
     _event: EventGenerator | None = None
-    _event_result: Any = None
+    _event_result: R | None = None
     _background_events: tuple[BackgroundEvent, ...] = ()
 
     def get_character(self, unique_name: str) -> CharacterOnScreen:
@@ -110,10 +110,10 @@ class EventfulScene(EventAsAttr, Scene):
             ticked, _background_events=not_completed_background_events
         )
 
-    def complete[R = None](
+    def complete(
         self,
         event: EventGenerator,
-        event_result: R = None,
+        event_result: R | None = None,
         background_event: BackgroundEvent | None = None,
     ) -> Self:
         if background_event:
