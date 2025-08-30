@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from math import atan2, degrees, hypot, sqrt
-from typing import NamedTuple, Self, TYPE_CHECKING, overload
+from typing import TYPE_CHECKING, NamedTuple, Self, overload
 
 from nextrpg.geometry.dimension import Dimension, Height, Pixel, Size, Width
 from nextrpg.geometry.direction import Direction, DirectionalOffset
