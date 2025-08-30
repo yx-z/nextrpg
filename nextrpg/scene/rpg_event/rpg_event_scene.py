@@ -35,7 +35,7 @@ class RpgEventScene[R = None](Scene):
 
 
 def register_rpg_event_scene[R, **P](
-    cls: RpgEventScene[R],
+    cls: type[RpgEventScene[Any]],
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     def decorate(f: Callable[P, R]) -> Callable[P, R]:
         def decorated(*args: P.args, **kwargs: P.kwargs) -> R:

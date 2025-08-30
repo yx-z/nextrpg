@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from functools import wraps
 from types import FunctionType
+from typing import Any, overload
 
 from nextrpg.config.config import config
 from nextrpg.config.cutscene_config import CutsceneConfig
@@ -11,10 +12,20 @@ from nextrpg.scene.rpg_event.fade_out_scene import fade_out
 from nextrpg.scene.rpg_event.rpg_event_scene import EventGenerator
 
 
-def cutscene[R, **P](
-    arg: CutsceneConfig | Callable[P, R],
+@overload
+def cutscene[**P](
+    arg: CutsceneConfig,
+) -> Callable[[Callable[P, Any]], Callable[P, EventGenerator]]: ...
+
+
+@overload
+def cutscene[**P](arg: Callable[P, Any]) -> Callable[P, EventGenerator]: ...
+
+
+def cutscene[**P](
+    arg: CutsceneConfig | Callable[P, Any],
 ) -> (
-    Callable[[Callable[P, R]], Callable[P, EventGenerator]]
+    Callable[[Callable[P, Any]], Callable[P, EventGenerator]]
     | Callable[P, EventGenerator]
 ):
     if isinstance(arg, CutsceneConfig):
@@ -22,8 +33,8 @@ def cutscene[R, **P](
     return _cutscene(config().cutscene, arg)
 
 
-def _cutscene[R, **P](
-    cfg: CutsceneConfig, fun: Callable[P, R]
+def _cutscene[**P](
+    cfg: CutsceneConfig, fun: Callable[P, Any]
 ) -> Callable[P, EventGenerator]:
     def decorated(*args: P.args, **kwargs: P.kwargs) -> EventGenerator:
         size = gui_size() * cfg.cover_from_screen_scaling

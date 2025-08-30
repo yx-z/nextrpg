@@ -20,12 +20,16 @@ from nextrpg.event.event_transformer import transform
 
 if TYPE_CHECKING:
     from nextrpg.character.npc_on_screen import NpcOnScreen
-    from nextrpg.scene.rpg_event.rpg_event_scene import EventGenerator
+    from nextrpg.scene.rpg_event.rpg_event_scene import (
+        EventfulScene,
+        EventGenerator,
+    )
 
 
-type EventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, "EventfulScene"]
-
-type RpgEvent = Callable[[*EventSpecParams], "EventGenerator | bool | None"]
+type EventSpecParams = tuple[PlayerOnScreen, NpcOnScreen, EventfulScene]
+type RpgEvent = Callable[[*EventSpecParams], EventGenerator] | Callable[
+    [*EventSpecParams], bool
+] | Callable[[*EventSpecParams], None]
 
 
 class NpcEventStartMode(Enum):

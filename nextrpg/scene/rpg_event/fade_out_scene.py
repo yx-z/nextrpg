@@ -20,8 +20,27 @@ from nextrpg.scene.rpg_event.rpg_event_scene import (
 from nextrpg.scene.scene import Scene
 
 
+@dataclass(frozen=True, kw_only=True)
+class BackgroundFadeOut(BackgroundEvent):
+    fade: FadeOut
+
+    @override
+    @property
+    def draw_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return self.fade.drawing_on_screens
+
+    @override
+    def tick(self, time_delta: Millisecond) -> Self:
+        return replace(self, fade=self.fade.tick(time_delta))
+
+    @property
+    @override
+    def complete(self) -> bool:
+        return self.fade.complete
+
+
 @dataclass_with_default(frozen=True)
-class FadeOutScene(RpgEventScene):
+class FadeOutScene(RpgEventScene[BackgroundFadeOut]):
     sentinel: BackgroundEventSentinel
     wait: bool = True
     duration: Millisecond | None = None
@@ -55,25 +74,6 @@ class FadeOutScene(RpgEventScene):
         if self.duration is None:
             return FadeOut(res)
         return FadeOut(res, self.duration)
-
-
-@dataclass(frozen=True, kw_only=True)
-class BackgroundFadeOut(BackgroundEvent):
-    fade: FadeOut
-
-    @override
-    @property
-    def draw_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        return self.fade.drawing_on_screens
-
-    @override
-    def tick(self, time_delta: Millisecond) -> Self:
-        return replace(self, fade=self.fade.tick(time_delta))
-
-    @property
-    @override
-    def complete(self) -> bool:
-        return self.fade.complete
 
 
 @register_rpg_event_scene(FadeOutScene)
