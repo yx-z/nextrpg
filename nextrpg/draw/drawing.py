@@ -41,7 +41,7 @@ log = Log()
 )
 @dataclass(frozen=True)
 class Drawing(Sizable):
-    resource: str | Path | Surface
+    resource: Path | Surface
     color_key: Color | Coordinate | None = None
     convert_alpha: bool | None = None
     allow_background_in_debug: bool = True

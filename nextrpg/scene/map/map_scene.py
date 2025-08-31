@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cache, cached_property
-from os import PathLike
+from pathlib import Path
 from typing import override
 
 from cachetools import LRUCache
@@ -43,7 +43,7 @@ log = Log()
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class MapScene[R](EventfulScene[R]):
-    tmx_file: PathLike | str
+    tmx_file: Path
     player_spec: CharacterSpec
     move: Move | tuple[Move, ...] = ()
     npc_specs: NpcSpec | tuple[NpcSpec, ...] = ()

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import cached_property
-from os import PathLike
+from pathlib import Path
 from typing import NamedTuple
 
 from pygame import Surface
@@ -60,8 +60,7 @@ def get_geometry(
 @cached(lambda: config().map.cache_size)
 @dataclass(frozen=True)
 class MapLoader:
-
-    tmx_file: PathLike | str
+    tmx_file: Path
 
     @cached_property
     def map_size(self) -> Size:

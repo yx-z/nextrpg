@@ -1,11 +1,13 @@
+from pathlib import Path
+
 from nextrpg import (
     CharacterSpec,
     Color,
     Direction,
     Drawing,
     DrawingTrim,
-    EventSpec,
     EventfulScene,
+    EventSpec,
     Height,
     MapScene,
     Move,
@@ -24,7 +26,7 @@ from nextrpg import (
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
     sprite_sheet = RpgMakerSpriteSheet(
-        drawing="example/asset/Characters_MV.png",
+        drawing=Drawing("example/asset/Characters_MV.png"),
         trim=DrawingTrim(top=Height(25)),
     )
     if player_spec:
@@ -63,7 +65,7 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
     # Local import to avoid circular dependency.
     from exterior_scene import exterior_scene
 
-    tmx = "example/asset/interior.tmx"
+    tmx = Path("example/asset/interior.tmx")
     move = Move("from_interior", "to_exterior", exterior_scene)
     npcs = (david, alisa, auto_trigger)
     return MapScene(tmx_file=tmx, player_spec=player, move=move, npc_specs=npcs)

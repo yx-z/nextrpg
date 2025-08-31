@@ -4,7 +4,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, replace
 from enum import Enum, auto
 from functools import cached_property
-from typing import Any, Self, TYPE_CHECKING, override
+from typing import TYPE_CHECKING, Any, Self, override
 
 from pygame.locals import FULLSCREEN, RESIZABLE
 
