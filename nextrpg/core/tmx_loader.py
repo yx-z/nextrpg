@@ -56,7 +56,10 @@ class TmxLoader:
         return tuple(obj for obj in self._all_objects if obj.type == class_name)
 
     def image_layer(self, name: str) -> DrawingOnScreen:
-        layer: TiledImageLayer = self._tmx.get_layer_by_name(name)
+        layer = self._tmx.get_layer_by_name(name)
+        assert isinstance(
+            layer, TiledImageLayer
+        ), f"Require {name} to be a TiledImageLayer"
         coordinate = Coordinate(layer.offsetx, layer.offsety)
         drawing = Drawing(layer.image)
         return DrawingOnScreen(coordinate, drawing)
