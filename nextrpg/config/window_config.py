@@ -4,8 +4,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, replace
 from enum import Enum, auto
 from functools import cached_property
-from pathlib import Path
-from typing import TYPE_CHECKING, Any, Self, override
+from typing import Any, Self, TYPE_CHECKING, override
 
 from pygame.locals import FULLSCREEN, RESIZABLE
 
@@ -32,20 +31,15 @@ class WindowConfig(UpdateFromSave[dict[str, Any]]):
     resize: ResizeMode = ResizeMode.SCALE
     allow_resize: bool = True
     include_fps_in_window_title: bool = False
-    icon_input: str | Path | Drawing | Callable[[], Drawing] | None = None
+    icon_input: Drawing | Callable[[], Drawing] | None = None
 
     @cached_property
     def icon(self) -> Drawing | None:
-        if not self.icon_input:
+        if self.icon_input is None:
             return None
-
-        from nextrpg.draw.drawing import Drawing
-
         if callable(self.icon_input):
             return self.icon_input()
-        if isinstance(self.icon_input, Drawing):
-            return self.icon_input
-        return Drawing(self.icon_input)
+        return self.icon_input
 
     def need_new_screen(self, other: WindowConfig) -> bool:
         return self.size != other.size or self.flag != other.flag

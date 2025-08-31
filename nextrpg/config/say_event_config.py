@@ -4,7 +4,6 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from nextrpg.config.text_config import TextConfig
-from nextrpg.core.dataclass_with_default import dataclass_with_default, default
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.color import BLACK, BLUE, Color
 from nextrpg.geometry.coordinate import Coordinate
@@ -40,13 +39,11 @@ class SayEventColorBackgroundConfig:
         return self.tip_at_top.flip(vertical=True)
 
 
-@dataclass_with_default(frozen=True)
+@dataclass(frozen=True)
 class SayEventNineSliceBackgroundConfig:
     nine_slice_input: NineSlice | Callable[[], NineSlice]
     tip_at_top_input: Drawing | Callable[[], Drawing]
-    tip_at_bottom_input: Drawing | Callable[[], Drawing] = default(
-        lambda self: lambda: self.tip_at_top.flip(vertical=True)
-    )
+    tip_at_bottom_input: Drawing | Callable[[], Drawing] | None = None
 
     @cached_property
     def nine_slice(self) -> NineSlice:
@@ -62,6 +59,8 @@ class SayEventNineSliceBackgroundConfig:
 
     @cached_property
     def tip_at_bottom(self) -> Drawing:
+        if self.tip_at_bottom_input is None:
+            return self.tip_at_top.flip(vertical=True)
         if callable(self.tip_at_bottom_input):
             return self.tip_at_bottom_input()
         return self.tip_at_bottom_input

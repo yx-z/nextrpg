@@ -4,8 +4,8 @@ from nextrpg import (
     Direction,
     Drawing,
     DrawingTrim,
-    EventfulScene,
     EventSpec,
+    EventfulScene,
     Height,
     MapScene,
     Move,
@@ -24,7 +24,7 @@ from nextrpg import (
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
     sprite_sheet = RpgMakerSpriteSheet(
-        resource="example/asset/Characters_MV.png",
+        drawing="example/asset/Characters_MV.png",
         trim=DrawingTrim(top=Height(25)),
     )
     if player_spec:

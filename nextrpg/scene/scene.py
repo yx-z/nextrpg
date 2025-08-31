@@ -2,6 +2,7 @@ from functools import cached_property
 from typing import Self, override
 
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
+from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.pygame_event import PygameEvent
 from nextrpg.geometry.coordinate import Coordinate
@@ -26,4 +27,8 @@ class Scene(AnimationOnScreen):
         return ()
 
     def event(self, event: PygameEvent) -> Self:
+        return self
+
+    @override
+    def tick(self, time_delta: Millisecond) -> Self:
         return self

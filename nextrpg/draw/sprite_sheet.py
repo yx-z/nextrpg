@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from functools import cached_property
-from pathlib import Path
 
 from nextrpg.draw.color import Color
 from nextrpg.draw.drawing import Drawing
@@ -14,7 +13,7 @@ class SpriteSheetSelection:
 
 @dataclass(frozen=True, kw_only=True)
 class SpriteSheet:
-    resource: Drawing | str | Path
+    drawing: Drawing
     num_row: int
     num_column: int
     color_key: Color | None = None
@@ -38,7 +37,3 @@ class SpriteSheet:
         size = width * height
         area = top_left.anchor(size).rectangle_area_on_screen
         return self.drawing.crop(area)
-
-    @cached_property
-    def drawing(self) -> Drawing:
-        return Drawing(self.resource, self.color_key)
