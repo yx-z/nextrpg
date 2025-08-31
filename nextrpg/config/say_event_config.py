@@ -31,7 +31,7 @@ class SayEventColorBackgroundConfig:
         point1 = ORIGIN + self.tip_height + self.tip_width1
         point2 = ORIGIN + self.tip_height + self.tip_width2
         points = (ORIGIN, point1, point2)
-        poly = PolygonDrawing(points, self.background)
+        poly = PolygonDrawing(points, self.color)
         return poly.drawing
 
     @cached_property

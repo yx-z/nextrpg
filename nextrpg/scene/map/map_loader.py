@@ -1,23 +1,18 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from functools import cached_property
-from pathlib import Path
 from typing import NamedTuple
 
 from pygame import Surface
 from pytmx import (
-    TiledMap,
     TiledObject,
-    TiledObjectGroup,
     TiledTileLayer,
-    load_pygame,
 )
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
-from nextrpg.core.log import Log
+from nextrpg.core.tmx_loader import TmxLoader, _is_rect, get_geometry
 from nextrpg.draw.drawing import (
     Drawing,
 )
@@ -25,10 +20,7 @@ from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
-from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-
-log = Log()
 
 
 class TileBottomAndDrawOnScreen(NamedTuple):
@@ -42,26 +34,8 @@ class LayerTileBottomAndDrawOnScreen(NamedTuple):
     drawing_on_screen: DrawingOnScreen
 
 
-def get_geometry(
-    obj: TiledObject,
-) -> PolygonAreaOnScreen | PolylineOnScreen | RectangleAreaOnScreen | None:
-    if hasattr(obj, "points"):
-        points = tuple(Coordinate(x, y) for x, y in obj.points)
-        if obj.closed:
-            return PolygonAreaOnScreen(points)
-        return PolylineOnScreen(points)
-    if _is_rect(obj):
-        coordinate = Coordinate(obj.x, obj.y)
-        size = Size(obj.width, obj.height)
-        return coordinate.anchor(size).rectangle_area_on_screen
-    return None
-
-
 @cached(lambda: config().map.cache_size)
-@dataclass(frozen=True)
-class MapLoader:
-    tmx_file: Path
-
+class MapLoader(TmxLoader):
     @cached_property
     def map_size(self) -> Size:
         width = self._tmx.width * self._tile_size.width
@@ -70,7 +44,7 @@ class MapLoader:
 
     @cached_property
     def background(self) -> tuple[DrawingOnScreen, ...]:
-        return self._draw_layers(config().map.background)
+        return self._draw_tile_layers(config().map.background)
 
     @cached_property
     def foreground(
@@ -86,7 +60,7 @@ class MapLoader:
 
     @cached_property
     def above_character(self) -> tuple[DrawingOnScreen, ...]:
-        return self._draw_layers(config().map.above_character)
+        return self._draw_tile_layers(config().map.above_character)
 
     @cached_property
     def collisions(self) -> tuple[PolygonAreaOnScreen, ...]:
@@ -108,17 +82,6 @@ class MapLoader:
         ):
             return tuple(c.fill(color) for c in self.collisions)
         return ()
-
-    def get_object(self, name: str) -> TiledObject:
-        for obj in self._all_objects:
-            if obj.name == name:
-                return obj
-        raise RuntimeError(f"Object {name} not found.")
-
-    def get_objects_by_class_name(
-        self, class_name: str
-    ) -> tuple[TiledObject, ...]:
-        return tuple(obj for obj in self._all_objects if obj.type == class_name)
 
     def layer_bottom_and_drawing(
         self, character: CharacterOnScreen
@@ -145,14 +108,6 @@ class MapLoader:
         self,
     ) -> tuple[tuple[LayerTileBottomAndDrawOnScreen, ...], ...]:
         return tuple(reversed(self.foreground))
-
-    @cached_property
-    def _all_objects(self) -> tuple[TiledObject, ...]:
-        return tuple(
-            obj
-            for i in self._tmx.visible_object_groups
-            for obj in self._layer(i)
-        )
 
     @cached_property
     def _colliders(self) -> tuple[_Collider, ...]:
@@ -207,13 +162,6 @@ class MapLoader:
     def _all_tile_layers(self) -> tuple[TiledTileLayer, ...]:
         return tuple(self._layer(i) for i in self._tmx.visible_tile_layers)
 
-    def _draw_layers(self, class_name: str) -> tuple[DrawingOnScreen, ...]:
-        return tuple(
-            drawing
-            for layer in self._tile_layers(class_name)
-            for drawing in self._drawing(layer).values()
-        )
-
     def _bottom_and_drawing(
         self, layer: TiledTileLayer
     ) -> tuple[TileBottomAndDrawOnScreen, ...]:
@@ -234,6 +182,13 @@ class MapLoader:
     @property
     def _tile_size(self) -> Size:
         return Size(self._tmx.tilewidth, self._tmx.tileheight)
+
+    def _draw_tile_layers(self, class_name: str) -> tuple[DrawingOnScreen, ...]:
+        return tuple(
+            drawing
+            for layer in self._tile_layers(class_name)
+            for drawing in self._drawing(layer).values()
+        )
 
     def _drawing(
         self, layer: TiledTileLayer
@@ -309,14 +264,6 @@ class MapLoader:
             if (cls := tile.get("type"))
         }
 
-    def _layer(self, index: int) -> TiledTileLayer | TiledObjectGroup:
-        return self._tmx.layers[index]
-
-    @cached_property
-    def _tmx(self) -> TiledMap:
-        log.debug(t"Loading {self.tmx_file}")
-        return load_pygame(str(self.tmx_file))
-
 
 def _below_character_layer(
     layer: tuple[LayerTileBottomAndDrawOnScreen, ...],
@@ -328,10 +275,6 @@ def _below_character_layer(
         and rect.collide(drawing.visible_rectangle_area_on_screen)
         for _, bottom, drawing in layer
     )
-
-
-def _is_rect(obj: TiledObject) -> bool:
-    return obj.x is not None and obj.y is not None and obj.width and obj.height
 
 
 def _foreground_layer(

@@ -23,6 +23,7 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond, get_timepoint
+from nextrpg.core.tmx_loader import get_geometry
 from nextrpg.draw.color import TRANSPARENT
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.polygon_drawing import PolygonDrawing
@@ -32,7 +33,7 @@ from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.scene.map.map_loader import MapLoader, get_geometry
+from nextrpg.scene.map.map_loader import MapLoader
 from nextrpg.scene.map.map_shift import center_player
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
 from nextrpg.scene.scene import Scene
