@@ -4,7 +4,7 @@ from typing import TypeVar
 
 from cachetools import LRUCache
 
-Type = TypeVar("Type", bound=type)
+_Type = TypeVar("_Type", bound=type)
 
 
 @dataclass(frozen=True)
@@ -15,7 +15,7 @@ class cached[T, K, **P]:
         frozenset(kwargs.items()),
     )
 
-    def __call__(self, cls: Type) -> Type:
+    def __call__(self, cls: _Type) -> _Type:
         cls._nextrpg_instances: LRUCache[K, T] = LRUCache(self.size_fun())
 
         def new(klass: type[T], *args: P.args, **kwargs: P.kwargs) -> T:
