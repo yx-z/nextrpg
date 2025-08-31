@@ -56,22 +56,18 @@ class MapScene[R](EventfulScene[R]):
         lambda self: self.init_player(self.player_spec)
     )
     _debug_visuals: tuple[DrawingOnScreen, ...] = default(
-        lambda self: self.map_helper.collision_visuals
+        lambda self: self._map_loader.collision_visuals
         + self._npc_paths
         + self._move_visuals
     )
 
-    @cached_property
-    def map_helper(self) -> MapLoader:
-        return MapLoader(self.tmx_file)
-
     def init_player(self, player_spec: CharacterSpec) -> PlayerOnScreen:
         log.debug(t"Spawn player at {player_spec.unique_name}.")
-        player_object = self.map_helper.get_object(player_spec.unique_name)
+        player_object = self._map_loader.get_object(player_spec.unique_name)
         bottom_center = BottomCenterCoordinate(player_object.x, player_object.y)
         top_left = bottom_center.anchor(player_spec.character.drawing).top_left
         player = PlayerOnScreen(
-            player_spec, top_left, map_collisions=self.map_helper.collisions
+            player_spec, top_left, map_collisions=self._map_loader.collisions
         )
         if self.save_io:
             return self.save_io.update(player)
@@ -85,7 +81,7 @@ class MapScene[R](EventfulScene[R]):
     @override
     def drawing_on_screen_shift(self) -> Coordinate:
         player_coord = self.player.center
-        shift = center_player(player_coord, self.map_helper.map_size)
+        shift = center_player(player_coord, self._map_loader.map_size)
         log.debug(
             t"Player center coordinate {player_coord}. Shift {shift}",
             duration=100,
@@ -96,11 +92,15 @@ class MapScene[R](EventfulScene[R]):
     @override
     def drawing_on_screens_before_shift(self) -> tuple[DrawingOnScreen, ...]:
         return (
-            self.map_helper.background
+            self._map_loader.background
             + self._foreground_and_characters
-            + self.map_helper.above_character
+            + self._map_loader.above_character
             + self._debug_visuals
         )
+
+    @cached_property
+    def _map_loader(self) -> MapLoader:
+        return MapLoader(self.tmx_file)
 
     @cached_property
     def _foreground_and_characters(self) -> tuple[DrawingOnScreen, ...]:
@@ -108,10 +108,10 @@ class MapScene[R](EventfulScene[R]):
         layer_bottom_draws = tuple(
             drawing
             for character in characters
-            for drawing in self.map_helper.layer_bottom_and_drawing(character)
+            for drawing in self._map_loader.layer_bottom_and_drawing(character)
         )
         foregrounds = tuple(
-            tile for layer in self.map_helper.foreground for tile in layer
+            tile for layer in self._map_loader.foreground for tile in layer
         )
         layers = sorted(foregrounds + layer_bottom_draws, key=lambda x: x[:2])
         return tuple(drawing_on_screen for _, _, drawing_on_screen in layers)
@@ -137,13 +137,13 @@ class MapScene[R](EventfulScene[R]):
     @cached_property
     def _move_areas(self) -> tuple[AreaOnScreen, ...]:
         return tuple(
-            get_geometry(self.map_helper.get_object(m.trigger_object))
+            get_geometry(self._map_loader.get_object(m.trigger_object))
             for m in self._moves
         )
 
     def _move(self, move: Move, time_delta: Millisecond) -> Scene | None:
         move_area = get_geometry(
-            self.map_helper.get_object(move.trigger_object)
+            self._map_loader.get_object(move.trigger_object)
         )
         assert isinstance(
             move_area, AreaOnScreen
@@ -172,7 +172,7 @@ class MapScene[R](EventfulScene[R]):
         return tuple(res)
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
-        npc_object = self.map_helper.get_object(spec.unique_name)
+        npc_object = self._map_loader.get_object(spec.unique_name)
         if not (poly := get_geometry(npc_object)):
             assert isinstance(
                 spec.character, CharacterDrawing

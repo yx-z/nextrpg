@@ -1,7 +1,7 @@
-from nextrpg import Drawing, TitleScene
+from pathlib import Path
+
+from nextrpg import TitleScene
 
 
 def title() -> TitleScene:
-    background = Drawing("")
-
-    return TitleScene()
+    return TitleScene(Path("example/asset/title.tmx"))

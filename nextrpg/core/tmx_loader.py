@@ -4,10 +4,18 @@ from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
 
-from pytmx import TiledMap, TiledObject, TiledObjectGroup, TiledTileLayer, \
-    load_pygame
+from pytmx import (
+    TiledImageLayer,
+    TiledMap,
+    TiledObject,
+    TiledObjectGroup,
+    TiledTileLayer,
+    load_pygame,
+)
 
 from nextrpg.core.log import Log
+from nextrpg.draw.drawing import Drawing
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
@@ -15,6 +23,22 @@ from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 log = Log()
+
+
+def get_geometry(
+    obj: TiledObject,
+) -> PolygonAreaOnScreen | PolylineOnScreen | RectangleAreaOnScreen | None:
+    if hasattr(obj, "points"):
+        points = tuple(Coordinate(x, y) for x, y in obj.points)
+        if obj.closed:
+            return PolygonAreaOnScreen(points)
+        return PolylineOnScreen(points)
+    if _is_rect(obj):
+        coordinate = Coordinate(obj.x, obj.y)
+        size = Size(obj.width, obj.height)
+        return coordinate.anchor(size).rectangle_area_on_screen
+    return None
+
 
 @dataclass(frozen=True)
 class TmxLoader:
@@ -31,6 +55,12 @@ class TmxLoader:
     ) -> tuple[TiledObject, ...]:
         return tuple(obj for obj in self._all_objects if obj.type == class_name)
 
+    def image_layer(self, name: str) -> DrawingOnScreen:
+        layer: TiledImageLayer = self._tmx.get_layer_by_name(name)
+        coordinate = Coordinate(layer.offsetx, layer.offsety)
+        drawing = Drawing(layer.image)
+        return DrawingOnScreen(coordinate, drawing)
+
     @cached_property
     def _tmx(self) -> TiledMap:
         log.debug(t"Loading {self.file}")
@@ -44,25 +74,11 @@ class TmxLoader:
             for obj in self._layer(i)
         )
 
-
-    def _layer(self, index: int) -> TiledTileLayer | TiledObjectGroup:
+    def _layer(
+        self, index: int
+    ) -> TiledTileLayer | TiledImageLayer | TiledObjectGroup:
         return self._tmx.layers[index]
 
 
 def _is_rect(obj: TiledObject) -> bool:
     return obj.x is not None and obj.y is not None and obj.width and obj.height
-
-
-def get_geometry(
-    obj: TiledObject,
-) -> PolygonAreaOnScreen | PolylineOnScreen | RectangleAreaOnScreen | None:
-    if hasattr(obj, "points"):
-        points = tuple(Coordinate(x, y) for x, y in obj.points)
-        if obj.closed:
-            return PolygonAreaOnScreen(points)
-        return PolylineOnScreen(points)
-    if _is_rect(obj):
-        coordinate = Coordinate(obj.x, obj.y)
-        size = Size(obj.width, obj.height)
-        return coordinate.anchor(size).rectangle_area_on_screen
-    return None

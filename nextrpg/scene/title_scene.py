@@ -1,19 +1,20 @@
 from dataclasses import dataclass
-from typing import Self
+from functools import cached_property
+from pathlib import Path
 
-from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import Drawing
-from nextrpg.geometry.coordinate import ORIGIN
-from nextrpg.gui.button import Button
+from nextrpg import DrawingOnScreen
+from nextrpg.core.tmx_loader import TmxLoader
 from nextrpg.scene.scene import Scene
 
 
 @dataclass(frozen=True)
 class TitleScene(Scene):
-    background: Drawing
-    new_game: Button
-    load: Button
-    quit: Button
+    tmx_file: Path
 
-    def tick(self, time_delta: Millisecond) -> Self:
-        return self.background.drawing_on_screen(ORIGIN)
+    @cached_property
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return (self._tmx.image_layer("background"),)
+
+    @cached_property
+    def _tmx(self) -> TmxLoader:
+        return TmxLoader(self.tmx_file)
