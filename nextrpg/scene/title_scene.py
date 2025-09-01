@@ -10,9 +10,11 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.core.tmx_loader import TmxLoader, get_coordinate
+from nextrpg.core.tmx_loader import TmxLoader, get_coordinate, get_geometry
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent
+from nextrpg.geometry.area_on_screen import AreaOnScreen
+from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.scene import Scene
 from nextrpg.ui.selectable_widget_group import SelectableWidgetGroup
 from nextrpg.ui.selectable_widget_group_on_screen import (
@@ -64,10 +66,14 @@ class TitleScene(Scene):
     def _init_selectable_widget_group_on_screen(
         self,
     ) -> SelectableWidgetGroupOnScreen:
-        on_screen = {
-            widget.unique_name: get_coordinate(
-                self._tmx.get_object(widget.unique_name)
-            )
-            for widget in self.widget.widgets
-        }
+        on_screen: dict[str, Coordinate | AreaOnScreen] = {}
+        for widget in self.widget.widgets:
+            name = widget.unique_name
+            obj = self._tmx.get_object(name)
+            if isinstance(area := get_geometry(obj), AreaOnScreen):
+                res = area
+            else:
+                res = get_coordinate(obj)
+            on_screen[name] = res
+
         return SelectableWidgetGroupOnScreen(self.widget, on_screen)
