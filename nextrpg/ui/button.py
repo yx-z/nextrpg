@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True, kw_only=True)
 class Button(SelectableWidget):
+    unique_name: str
     idle: Drawing | DrawingGroup | Animation
     selected: Drawing | DrawingGroup | Animation
     confirm: Scene | Callable[[], None]

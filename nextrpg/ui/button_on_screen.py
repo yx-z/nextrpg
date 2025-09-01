@@ -24,7 +24,8 @@ class ButtonOnScreen(SelectableWidgetOnScreen):
             drawings = self.widget.idle
 
         assert isinstance(
-            coordinate := self.on_screen[self.widget.unique_name], Coordinate
+            coordinate := self.name_to_on_screens[self.widget.unique_name],
+            Coordinate,
         ), f"Button {self.widget.unique_name} requires on_screen as a coordinate"
 
         if isinstance(drawings, Drawing):

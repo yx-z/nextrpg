@@ -67,13 +67,11 @@ class TitleScene(Scene):
         self,
     ) -> SelectableWidgetGroupOnScreen:
         on_screen: dict[str, Coordinate | AreaOnScreen] = {}
-        for widget in self.widget.widgets:
-            name = widget.unique_name
-            obj = self._tmx.get_object(name)
+        for obj in self._tmx.all_objects:
             if isinstance(area := get_geometry(obj), AreaOnScreen):
                 res = area
             else:
                 res = get_coordinate(obj)
-            on_screen[name] = res
+            on_screen[obj.name] = res
 
         return SelectableWidgetGroupOnScreen(self.widget.select, on_screen)

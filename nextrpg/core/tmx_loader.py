@@ -49,7 +49,7 @@ class TmxLoader:
     file: Path
 
     def get_object(self, name: str) -> TiledObject:
-        for obj in self._all_objects:
+        for obj in self.all_objects:
             if obj.name == name:
                 return obj
         raise RuntimeError(f"Object {name} not found.")
@@ -57,7 +57,7 @@ class TmxLoader:
     def get_objects_by_class_name(
         self, class_name: str
     ) -> tuple[TiledObject, ...]:
-        return tuple(obj for obj in self._all_objects if obj.type == class_name)
+        return tuple(obj for obj in self.all_objects if obj.type == class_name)
 
     def image_layer(self, name: str) -> DrawingOnScreen:
         layer = self._tmx.get_layer_by_name(name)
@@ -69,17 +69,17 @@ class TmxLoader:
         return DrawingOnScreen(coordinate, drawing)
 
     @cached_property
-    def _tmx(self) -> TiledMap:
-        log.debug(t"Loading {self.file}")
-        return load_pygame(str(self.file))
-
-    @cached_property
-    def _all_objects(self) -> tuple[TiledObject, ...]:
+    def all_objects(self) -> tuple[TiledObject, ...]:
         return tuple(
             obj
             for i in self._tmx.visible_object_groups
             for obj in self._layer(i)
         )
+
+    @cached_property
+    def _tmx(self) -> TiledMap:
+        log.debug(t"Loading {self.file}")
+        return load_pygame(str(self.file))
 
     def _layer(
         self, index: int

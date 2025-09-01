@@ -59,6 +59,6 @@ class SelectableWidgetGroupOnScreen(SelectableWidgetOnScreen):
         self,
     ) -> tuple[SelectableWidgetOnScreen, ...]:
         return tuple(
-            widget.widget_on_screen(self.on_screen)
+            widget.widget_on_screen(self.name_to_on_screens)
             for widget in self.widget.widgets
         )

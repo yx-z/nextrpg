@@ -54,7 +54,7 @@ def title() -> TitleScene:
     )
 
     widgets = (start, load, settings, exit_button)
-    group = SelectableWidgetGroup(unique_name="buttons", widgets=widgets)
+    group = SelectableWidgetGroup(widgets=widgets)
 
     tmx = Path("example/asset/title.tmx")
     return TitleScene(tmx, "background", group)

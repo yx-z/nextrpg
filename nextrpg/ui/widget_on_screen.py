@@ -12,7 +12,7 @@ from nextrpg.ui.widget import Widget
 @dataclass(frozen=True)
 class WidgetOnScreen(ABC):
     widget: Widget
-    on_screen: dict[str, Coordinate | AreaOnScreen]
+    name_to_on_screens: dict[str, Coordinate | AreaOnScreen]
 
     def tick(self, time_delta: Millisecond) -> Self:
         widget = self.widget.tick(time_delta)

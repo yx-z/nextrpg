@@ -12,8 +12,6 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class Widget(ABC):
-    unique_name: str
-
     @abstractmethod
     def tick(self, time_delta: Millisecond) -> Self: ...
 
