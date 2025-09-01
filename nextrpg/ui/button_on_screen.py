@@ -32,12 +32,8 @@ class ButtonOnScreen(SelectableWidgetOnScreen):
         return drawings.drawing_on_screens(coordinate)
 
     @override
-    def event(self, event: IoEvent) -> Scene | Self | None:
-        if (
-            self.widget.is_selected
-            and isinstance(event, KeyPressDown)
-            and event.key is KeyboardKey.CONFIRM
-        ):
+    def selected_event(self, event: IoEvent) -> Scene | Self | None:
+        if isinstance(event, KeyPressDown) and event.key is KeyboardKey.CONFIRM:
             if callable(self.widget.confirm):
                 self.widget.confirm()
                 return self

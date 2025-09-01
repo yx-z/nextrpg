@@ -18,7 +18,7 @@ class SelectableWidgetGroupOnScreen(SelectableWidgetOnScreen):
     widget: SelectableWidgetGroup
 
     @override
-    def event(self, event: IoEvent) -> Self | Scene | None:
+    def selected_event(self, event: IoEvent) -> Self | Scene | None:
         widgets: list[SelectableWidget] = []
         for widget in self._selectable_widget_on_screens:
             if res := widget.event(event):

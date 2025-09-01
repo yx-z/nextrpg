@@ -10,5 +10,10 @@ from nextrpg.ui.widget_on_screen import WidgetOnScreen
 class SelectableWidgetOnScreen(WidgetOnScreen):
     widget: SelectableWidget
 
+    def event(self, event: IoEvent) -> Self | Scene | None:
+        if not self.widget.is_selected:
+            return self
+        return self.selected_event(event)
+
     @abstractmethod
-    def event(self, event: IoEvent) -> Self | Scene | None: ...
+    def selected_event(self, event: IoEvent) -> Self | Scene | None: ...
