@@ -84,9 +84,7 @@ from nextrpg.draw.color import (
     alpha_from_percentage,
 )
 from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_on_screen import (
-    DrawingOnScreen,
-)
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.draw.font import Font
 from nextrpg.draw.nine_slice import NineSlice
