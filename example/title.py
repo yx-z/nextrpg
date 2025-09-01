@@ -15,6 +15,7 @@ from nextrpg import (
 
 def title() -> TitleScene:
     highlight = config().text.colored(BLUE)
+
     start_text_idle = Text("Start")
     start_text_selected = start_text_idle.configured(highlight)
     scene = TransitionScene(title, interior_scene())
