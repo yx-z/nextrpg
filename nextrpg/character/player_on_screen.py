@@ -4,13 +4,13 @@ from typing import Self, override
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.config.config import config
-from nextrpg.core.dataclass_with_default import not_constructor_below
+from nextrpg.core.dataclass_with_default import private_init_below
 from nextrpg.core.time import Millisecond
-from nextrpg.event.pygame_event import (
+from nextrpg.event.io_event import (
+    IoEvent,
     KeyboardKey,
     KeyPressDown,
     KeyPressUp,
-    PygameEvent,
 )
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.direction import Direction, DirectionalOffset
@@ -18,7 +18,7 @@ from nextrpg.geometry.direction import Direction, DirectionalOffset
 
 @dataclass(frozen=True)
 class PlayerOnScreen(MovingCharacterOnScreen):
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
     @override
@@ -26,7 +26,7 @@ class PlayerOnScreen(MovingCharacterOnScreen):
         start_event = super().start_event(character)
         return replace(start_event, _movement_keys=frozenset())
 
-    def event(self, event: PygameEvent) -> Self:
+    def event(self, event: IoEvent) -> Self:
         if self._event_started or not isinstance(
             event, (KeyPressDown, KeyPressUp)
         ):

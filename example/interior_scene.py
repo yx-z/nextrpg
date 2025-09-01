@@ -25,42 +25,40 @@ from nextrpg import (
 
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
+    sprite_sheet_drawing = Drawing(Path("example/asset/Characters_MV.png"))
+    sprite_sheet_trim = DrawingTrim(top=Height(25))
     sprite_sheet = RpgMakerSpriteSheet(
-        drawing=Drawing("example/asset/Characters_MV.png"),
-        trim=DrawingTrim(top=Height(25)),
+        drawing=sprite_sheet_drawing, trim=sprite_sheet_trim
     )
+
     if player_spec:
         player = player_spec
     else:
+        player_drawing = RpgMakerCharacterDrawing(
+            Direction.DOWN,
+            sprite_sheet,
+            SpriteSheetSelection(row=0, column=0),
+        )
+        avatar = Drawing(Path("example/asset/avatar.png"))
         player = CharacterSpec(
             unique_name="player",
             display_name="Will",
-            character=RpgMakerCharacterDrawing(
-                Direction.DOWN,
-                sprite_sheet,
-                SpriteSheetSelection(row=0, column=0),
-            ),
-            avatar=Drawing("example/asset/avatar.png"),
+            character=player_drawing,
+            avatar=avatar,
         )
 
-    alisa = NpcSpec(
-        unique_name="alisa",
-        character=RpgMakerCharacterDrawing(
-            Direction.RIGHT, sprite_sheet, SpriteSheetSelection(row=0, column=1)
-        ),
-        event=greet,
+    alisa_drawing = RpgMakerCharacterDrawing(
+        Direction.RIGHT, sprite_sheet, SpriteSheetSelection(row=0, column=1)
     )
-    david = NpcSpec(
-        unique_name="david",
-        character=RpgMakerCharacterDrawing(
-            Direction.DOWN, sprite_sheet, SpriteSheetSelection(row=0, column=2)
-        ),
-        event=greet,
+    alisa = NpcSpec(unique_name="alisa", character=alisa_drawing, event=greet)
+
+    david_drawing = RpgMakerCharacterDrawing(
+        Direction.DOWN, sprite_sheet, SpriteSheetSelection(row=0, column=2)
     )
-    auto_trigger = NpcSpec(
-        unique_name="auto",
-        event=EventSpec(enter_room, NpcEventStartMode.COLLIDE),
-    )
+    david = NpcSpec(unique_name="david", character=david_drawing, event=greet)
+
+    enter_room_spec = EventSpec(enter_room, NpcEventStartMode.COLLIDE)
+    auto_trigger = NpcSpec(unique_name="auto", event=enter_room_spec)
 
     # Local import to avoid circular dependency.
     from exterior_scene import exterior_scene

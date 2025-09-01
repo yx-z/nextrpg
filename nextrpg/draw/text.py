@@ -22,6 +22,9 @@ class Text(Sizable):
     message: str
     config: TextConfig = field(default_factory=lambda: config().text)
 
+    def configured(self, text_config: TextConfig) -> Self:
+        return replace(self, config=text_config)
+
     def __getitem__(self, s: slice) -> Self:
         return replace(self, message=self.message[s])
 
@@ -52,7 +55,7 @@ class Text(Sizable):
 
     def _drawing(self, line: str) -> Drawing:
         surface = self.config.font.pygame.render(
-            line, self.config.smooth, self.config.color
+            line, antialias=True, color=self.config.color
         )
         return Drawing(surface, allow_background_in_debug=False)
 

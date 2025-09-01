@@ -3,7 +3,7 @@ from typing import Self
 
 from pygame.time import get_ticks
 
-from nextrpg.core.dataclass_with_default import not_constructor_below
+from nextrpg.core.dataclass_with_default import private_init_below
 
 type Millisecond = int
 
@@ -11,7 +11,7 @@ type Millisecond = int
 @dataclass(frozen=True)
 class Timer:
     duration: Millisecond
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     elapsed: Millisecond = 0
 
     @property

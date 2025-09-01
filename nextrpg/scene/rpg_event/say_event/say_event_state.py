@@ -11,12 +11,12 @@ from nextrpg.config.say_event_config import SayEventConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
+from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.rpg_event.rpg_event_scene import RpgEventScene
 from nextrpg.scene.scene import Scene
@@ -26,7 +26,7 @@ from nextrpg.scene.scene import Scene
 class SayEventState(RpgEventScene, ABC):
     unique_name: str | None
     config: SayEventConfig
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     initial_coordinate: Coordinate | None = default(
         lambda self: (
             self.scene.get_character(n).coordinate
@@ -54,7 +54,7 @@ class SayEventFadeInState(SayEventState):
     background: tuple[DrawingOnScreen, ...]
     text_on_screen: TextOnScreen
     config: SayEventConfig
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     _fade_in: FadeIn = default(
         lambda self: FadeIn(self.background, self.config.fade_duration)
     )
@@ -84,7 +84,7 @@ class SayEventFadeInState(SayEventState):
 class SayEventTypingState(SayEventState):
     background: tuple[DrawingOnScreen, ...]
     text_on_screen: TextOnScreen
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     _typewriter: Typewriter | None = default(
         lambda self: (
             Typewriter(self.text_on_screen, delay)
@@ -112,7 +112,7 @@ class SayEventTypingState(SayEventState):
         return replace(ticked, _typewriter=typewriter)
 
     @override
-    def event(self, event: PygameEvent) -> Scene:
+    def event(self, event: IoEvent) -> Scene:
         if (
             not isinstance(event, KeyPressDown)
             or event.key is not KeyboardKey.CONFIRM
@@ -135,7 +135,7 @@ class SayEventTypingState(SayEventState):
 class SayEventFadeOutState(SayEventState):
     drawing_on_screens_input: tuple[DrawingOnScreen, ...]
     config: SayEventConfig
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     _fade_out: FadeOut = default(
         lambda self: FadeOut(
             self.drawing_on_screens_input, self.config.fade_duration

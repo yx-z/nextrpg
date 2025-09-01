@@ -4,7 +4,7 @@ from typing import Self, override
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.event.pygame_event import PygameEvent
+from nextrpg.event.io_event import IoEvent
 from nextrpg.geometry.coordinate import Coordinate
 
 
@@ -26,7 +26,7 @@ class Scene(AnimationOnScreen):
     def drawing_on_screens_before_shift(self) -> tuple[DrawingOnScreen, ...]:
         return ()
 
-    def event(self, event: PygameEvent) -> Self:
+    def event(self, event: IoEvent) -> Self:
         return self
 
     @override

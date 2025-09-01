@@ -9,7 +9,7 @@ from nextrpg.character.npc_on_screen import NpcOnScreen
 from nextrpg.character.npc_spec import NpcEventStartMode
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.dataclass_with_default import (
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.log import Log
 from nextrpg.core.save import SaveIo
@@ -20,7 +20,7 @@ from nextrpg.event.background_event import (
     BackgroundEventSentinel,
 )
 from nextrpg.event.event_as_attr import EventAsAttr
-from nextrpg.event.pygame_event import KeyboardKey, KeyPressDown, PygameEvent
+from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.scene.scene import Scene
 
 if TYPE_CHECKING:
@@ -34,7 +34,7 @@ class EventfulScene[R](EventAsAttr, Scene):
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...]
     save_io: SaveIo | None = None
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     _started_npc: NpcOnScreen | None = None
     _ended_npc: NpcOnScreen | None = None
     _event: EventGenerator | None = None
@@ -46,7 +46,7 @@ class EventfulScene[R](EventAsAttr, Scene):
             return self.player
         return self._npc_dict[unique_name]
 
-    def event(self, event: PygameEvent) -> Scene:
+    def event(self, event: IoEvent) -> Scene:
         player = self.player.event(event)
         if (
             not self._started_npc

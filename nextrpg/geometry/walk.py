@@ -7,7 +7,7 @@ from typing import Self
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.geometry.coordinate import Coordinate
@@ -21,7 +21,7 @@ class Walk:
     path: PolylineOnScreen
     move_speed: PixelPerMillisecond
     cyclic: bool
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     coordinate: Coordinate = default(lambda self: self._initial_point)
     _target_index: int | None = 1
 

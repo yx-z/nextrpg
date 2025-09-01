@@ -5,7 +5,7 @@ from nextrpg.animation.fade import FadeOut
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
@@ -44,7 +44,7 @@ class FadeOutScene(RpgEventScene[BackgroundFadeOut]):
     sentinel: BackgroundEventSentinel
     wait: bool = True
     duration: Millisecond | None = None
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     _fade: FadeOut = default(lambda self: self._init_fade)
 
     @property
@@ -65,8 +65,7 @@ class FadeOutScene(RpgEventScene[BackgroundFadeOut]):
         if fade.complete:
             return background_removed.complete(self.generator)
 
-        ticking = replace(ticked, scene=background_removed)
-        return replace(ticking, _fade=fade)
+        return replace(ticked, scene=background_removed, _fade=fade)
 
     @property
     def _init_fade(self) -> FadeOut:

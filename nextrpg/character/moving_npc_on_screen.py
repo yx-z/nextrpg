@@ -8,7 +8,7 @@ from nextrpg.character.npc_on_screen import NpcOnScreen
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.geometry.coordinate import Coordinate
@@ -19,7 +19,7 @@ from nextrpg.geometry.walk import Walk
 @dataclass_with_default(frozen=True, kw_only=True)
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     path: PolylineOnScreen
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     # `coordinate` is initialized in the base class.
     # Hence, invoke `_walk` (given it's still an `_Init`) to initialize.
     coordinate: Coordinate = default(lambda self: self._walk(self).coordinate)

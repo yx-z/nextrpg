@@ -5,7 +5,7 @@ from nextrpg.animation.fade import FadeIn
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
@@ -25,7 +25,7 @@ class FadeInScene(RpgEventScene[BackgroundEventSentinel]):
     drawing_on_screen: DrawingOnScreen | tuple[DrawingOnScreen, ...]
     wait: bool = True
     duration: Millisecond | None = None
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     _fade: FadeIn = default(
         lambda self: (
             FadeIn(self.drawing_on_screen)

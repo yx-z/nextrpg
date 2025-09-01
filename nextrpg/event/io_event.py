@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from functools import cache
 
-from pygame.event import Event
+from pygame.event import Event, post
 from pygame.locals import KEYDOWN, KEYUP, QUIT, VIDEORESIZE
 
 from nextrpg.config.config import config
@@ -13,15 +13,15 @@ from nextrpg.geometry.dimension import Size
 
 
 @dataclass(frozen=True)
-class PygameEvent:
+class IoEvent:
     event: Event
 
 
-class Quit(PygameEvent):
+class Quit(IoEvent):
     pass
 
 
-class WindowResize(PygameEvent):
+class WindowResize(IoEvent):
     @property
     def size(self) -> Size:
         return Size(self.event.w, self.event.h)
@@ -55,7 +55,7 @@ def _key_mapping() -> dict[KeyCode, KeyboardKey]:
     }
 
 
-class _KeyPressEvent(PygameEvent):
+class _KeyPressEvent(IoEvent):
     @property
     def key(self) -> KeyboardKey | KeyCode:
         return KeyboardKey.from_pygame(self.event.key)
@@ -69,10 +69,14 @@ class KeyPressUp(_KeyPressEvent):
     pass
 
 
-def to_typed_event(event: Event) -> PygameEvent:
+def to_io_event(event: Event) -> IoEvent:
     return {
         QUIT: Quit,
         VIDEORESIZE: WindowResize,
         KEYDOWN: KeyPressDown,
         KEYUP: KeyPressUp,
-    }.get(event.type, PygameEvent)(event)
+    }.get(event.type, IoEvent)(event)
+
+
+def quit() -> None:
+    post(Event(QUIT))

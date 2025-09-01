@@ -22,7 +22,7 @@ from nextrpg.config.save_config import SaveConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 
 if TYPE_CHECKING:
@@ -84,7 +84,7 @@ def _log() -> Log:
 class SaveIo:
     config: SaveConfig = field(default_factory=_config)
     slot: str = default(lambda self: self.config.shared_slot)
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     _log: "Log" = field(default_factory=_log)
     _thread = ThreadPoolExecutor(max_workers=1)
 

@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Self
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
@@ -23,7 +23,7 @@ class BackgroundEventSentinel:
 
 @dataclass_with_default(frozen=True)
 class BackgroundEvent(ABC):
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     sentinel: BackgroundEventSentinel = default(
         lambda self: BackgroundEventSentinel(type(self))
     )

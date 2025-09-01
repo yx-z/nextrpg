@@ -13,12 +13,12 @@ from nextrpg.config.game_loop_config import GameLoopConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.log import Log
-from nextrpg.event.pygame_event import PygameEvent, Quit, to_typed_event
-from nextrpg.gui.window import Window
+from nextrpg.event.io_event import IoEvent, Quit, to_io_event
 from nextrpg.scene.scene import Scene
+from nextrpg.ui.window import Window
 
 log = Log()
 
@@ -26,7 +26,7 @@ log = Log()
 @dataclass_with_default(frozen=True)
 class GameLoop:
     entry_scene: Callable[[], Scene]
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     running: bool = True
     _clock: Clock = field(default_factory=Clock)
     _window: Window = field(default_factory=Window)
@@ -65,10 +65,10 @@ class GameLoop:
         ticked_scene = self._scene.tick(time_delta)
         loop = replace(self, _scene=ticked_scene, _window=window)
         for e in pygame.event.get():
-            loop = loop._event(to_typed_event(e))
+            loop = loop._event(to_io_event(e))
         return loop
 
-    def _event(self, e: PygameEvent) -> Self:
+    def _event(self, e: IoEvent) -> Self:
         scene = self._scene.event(e)
         window = self._window.event(e)
         running = not isinstance(e, Quit)

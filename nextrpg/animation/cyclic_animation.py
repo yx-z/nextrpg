@@ -5,7 +5,7 @@ from nextrpg.animation.animation import Animation
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.drawing import Drawing
@@ -15,7 +15,7 @@ from nextrpg.draw.drawing import Drawing
 class CyclicAnimation(Animation):
     frames: tuple[Drawing, ...]
     duration_per_frame: Millisecond
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     _index: int = 0
     _timer: Timer = default(lambda self: Timer(self.duration_per_frame))
 

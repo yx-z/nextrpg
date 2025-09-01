@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import override
@@ -7,18 +8,18 @@ from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.color import Color
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.gui.area import screen
 from nextrpg.scene.scene import Scene
+from nextrpg.ui.area import screen
 
 
 @dataclass_with_default(frozen=True)
 class TransitionScene(Scene):
-    from_scene: Scene
+    from_scene_input: Scene | Callable[[], Scene]
     to_scene: Scene
     intermediary: DrawingOnScreen | tuple[DrawingOnScreen, ...] | Color = field(
         default_factory=lambda: config().window.background
@@ -26,7 +27,7 @@ class TransitionScene(Scene):
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
     )
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     _fade_in: FadeIn = default(
         lambda self: FadeIn(self._intermediary, self.duration // 2)
     )
@@ -54,7 +55,7 @@ class TransitionScene(Scene):
                 + self._fade_out.drawing_on_screens
             )
         return (
-            self.from_scene.drawing_on_screens
+            self._from_scene.drawing_on_screens
             + self._fade_in.drawing_on_screens
         )
 
@@ -63,3 +64,9 @@ class TransitionScene(Scene):
         if isinstance(self.intermediary, Color):
             return screen().fill(self.intermediary)
         return self.intermediary
+
+    @cached_property
+    def _from_scene(self) -> Scene:
+        if callable(self.from_scene_input):
+            return self.from_scene_input()
+        return self.from_scene_input

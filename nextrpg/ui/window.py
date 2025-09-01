@@ -14,7 +14,7 @@ from nextrpg.config.window_config import ResizeMode, WindowConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
 from nextrpg.core.save import SaveIo
@@ -23,13 +23,13 @@ from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_on_screen import TextOnScreen
-from nextrpg.event.pygame_event import (
-    KeyboardKey,
+from nextrpg.event.io_event import (
+    IoEvent,
     KeyPressDown,
-    PygameEvent,
+    KeyboardKey,
     WindowResize,
 )
-from nextrpg.geometry.coordinate import ORIGIN, Coordinate
+from nextrpg.geometry.coordinate import Coordinate, ORIGIN
 from nextrpg.geometry.dimension import Size
 
 log = Log()
@@ -37,7 +37,7 @@ log = Log()
 
 @dataclass_with_default(frozen=True)
 class Window:
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     initial_config: WindowConfig = field(
         default_factory=lambda: config().window
     )
@@ -88,7 +88,7 @@ class Window:
             _screen=screen,
         )
 
-    def event(self, e: PygameEvent) -> Self:
+    def event(self, e: IoEvent) -> Self:
         match e:
             case WindowResize():
                 return self._resize(e.size)

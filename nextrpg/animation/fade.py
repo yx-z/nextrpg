@@ -8,7 +8,7 @@ from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.color import alpha_from_percentage
@@ -21,7 +21,7 @@ class _Fade(AnimationOnScreen, ABC):
     duration: Millisecond = field(
         default_factory=lambda: config().transition.duration
     )
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     _timer: Timer = default(lambda self: Timer(self.duration))
 
     @cached_property

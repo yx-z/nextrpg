@@ -8,7 +8,7 @@ from nextrpg.config.config import Config, set_config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.game_loop import GameLoop
 from nextrpg.scene.scene import Scene
@@ -18,7 +18,7 @@ from nextrpg.scene.scene import Scene
 class Game:
     entry_scene: Callable[[], Scene]
     config: Config = Config()
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     __: None = default(lambda self: self._init())
     _loop: GameLoop = default(lambda self: GameLoop(self.entry_scene))
 

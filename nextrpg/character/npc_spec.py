@@ -13,7 +13,7 @@ from nextrpg.character.polygon_character_drawing import PolygonCharacterDrawing
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.draw.color import Color
 from nextrpg.event.event_transformer import transform
@@ -41,7 +41,7 @@ class NpcEventStartMode(Enum):
 class EventSpec:
     event: RpgEvent
     start_mode: NpcEventStartMode = NpcEventStartMode.CONFIRM
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     generator: EventGenerator = default(lambda self: transform(self.event))
 
 

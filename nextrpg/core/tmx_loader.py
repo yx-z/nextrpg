@@ -40,6 +40,10 @@ def get_geometry(
     return None
 
 
+def get_coordinate(obj: TiledObject) -> Coordinate:
+    return Coordinate(obj.x, obj.y)
+
+
 @dataclass(frozen=True)
 class TmxLoader:
     file: Path

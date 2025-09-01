@@ -8,7 +8,7 @@ from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
@@ -67,7 +67,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     duration_per_frame: Millisecond = field(
         default_factory=lambda: config().rpg_maker_character.duration_per_frame
     )
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     _animations: dict[Direction, CyclicAnimation] = default(
         lambda self: self._init_animation
     )

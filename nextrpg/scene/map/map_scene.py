@@ -19,7 +19,7 @@ from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond, get_timepoint
@@ -48,7 +48,7 @@ class MapScene[R](EventfulScene[R]):
     player_spec: CharacterSpec
     move: Move | tuple[Move, ...] = ()
     npc_specs: NpcSpec | tuple[NpcSpec, ...] = ()
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     npcs: tuple[NpcOnScreen, ...] = default(
         lambda self: tuple(self._init_npc(n) for n in self._npc_specs)
     )

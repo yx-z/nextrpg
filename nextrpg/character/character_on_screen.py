@@ -11,7 +11,7 @@ from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.time import Millisecond
@@ -49,7 +49,7 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
     spec: CharacterSpec
     coordinate: Coordinate
     config: CharacterConfig = field(default_factory=lambda: config().character)
-    _: KW_ONLY = not_constructor_below()
+    _: KW_ONLY = private_init_below()
     character: CharacterDrawing = default(lambda self: self.spec.character)
     _event_started: bool = False
 

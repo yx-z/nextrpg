@@ -59,7 +59,7 @@ from nextrpg.core.cached_decorator import cached
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
-    not_constructor_below,
+    private_init_below,
 )
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
 from nextrpg.core.save import (
@@ -74,6 +74,9 @@ from nextrpg.core.tmx_loader import TmxLoader, get_geometry
 from nextrpg.draw.anchor import Anchor
 from nextrpg.draw.color import (
     BLACK,
+    BLUE,
+    GREEN,
+    RED,
     TRANSPARENT,
     WHITE,
     Alpha,
@@ -106,14 +109,15 @@ from nextrpg.event.event_transformer import (
     registered_rpg_events,
     transform,
 )
-from nextrpg.event.pygame_event import (
+from nextrpg.event.io_event import (
+    IoEvent,
     KeyboardKey,
     KeyPressDown,
     KeyPressUp,
-    PygameEvent,
     Quit,
     WindowResize,
-    to_typed_event,
+    quit,
+    to_io_event,
 )
 from nextrpg.game import Game
 from nextrpg.game_loop import GameLoop
@@ -137,21 +141,6 @@ from nextrpg.geometry.polygon_area_on_screen import (
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.walk import Walk
-from nextrpg.gui.area import (
-    bottom_left_screen,
-    bottom_right_screen,
-    bottom_screen,
-    gui_height,
-    gui_size,
-    gui_width,
-    left_screen,
-    right_screen,
-    screen,
-    top_left_screen,
-    top_right_screen,
-    top_screen,
-)
-from nextrpg.gui.window import Window
 from nextrpg.scene.map.map_loader import (
     LayerTileBottomAndDrawOnScreen,
     MapLoader,
@@ -191,3 +180,27 @@ from nextrpg.scene.rpg_event.say_event.say_event_state import (
 )
 from nextrpg.scene.title_scene import TitleScene
 from nextrpg.scene.transition_scene import TransitionScene
+from nextrpg.ui.area import (
+    bottom_left_screen,
+    bottom_right_screen,
+    bottom_screen,
+    gui_height,
+    gui_size,
+    gui_width,
+    left_screen,
+    right_screen,
+    screen,
+    top_left_screen,
+    top_right_screen,
+    top_screen,
+)
+from nextrpg.ui.button import Button
+from nextrpg.ui.button_on_screen import ButtonOnScreen
+from nextrpg.ui.selectable_widget import SelectableWidget
+from nextrpg.ui.selectable_widget_group import SelectableWidgetGroup
+from nextrpg.ui.selectable_widget_group_on_screen import (
+    SelectableWidgetGroupOnScreen,
+)
+from nextrpg.ui.widget import Widget
+from nextrpg.ui.widget_on_screen import WidgetOnScreen
+from nextrpg.ui.window import Window
