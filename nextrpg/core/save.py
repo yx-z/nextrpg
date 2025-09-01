@@ -164,7 +164,9 @@ class SaveIo:
     def _read_text(self) -> dict[str, SaveData]:
         if (file := self._text_path).exists():
             text = file.read_text()
+            # Load save data, including a previously stored nextrpg version.
             return json.loads(text)
+        # Create the first-time save data: store the current nextrpg version.
         return {"_nextrpg_version": __version__}
 
     def _serialize(self, key: str, data: SaveData) -> _Json:
