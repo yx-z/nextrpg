@@ -28,10 +28,10 @@ class TitleScene(Scene):
     background: str | DrawingOnScreen | AnimationOnScreen
     widget: SelectableWidgetGroup
     _: KW_ONLY = private_init_below()
+    _tmx: TmxLoader = default(lambda self: TmxLoader(self.tmx_file))
     _widget_on_screen: SelectableWidgetGroupOnScreen = default(
         lambda self: self._init_selectable_widget_group_on_screen
     )
-    _tmx: TmxLoader = default(lambda self: TmxLoader(self.tmx_file))
 
     @override
     def event(self, event: IoEvent) -> Self:
@@ -76,4 +76,4 @@ class TitleScene(Scene):
                 res = get_coordinate(obj)
             on_screen[name] = res
 
-        return SelectableWidgetGroupOnScreen(self.widget, on_screen)
+        return SelectableWidgetGroupOnScreen(self.widget.select, on_screen)

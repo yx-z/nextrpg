@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Self, override
+from typing import override
 
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
@@ -32,7 +32,9 @@ class ButtonOnScreen(SelectableWidgetOnScreen):
         return drawings.drawing_on_screens(coordinate)
 
     @override
-    def selected_event(self, event: IoEvent) -> Scene | Self | None:
+    def selected_event(
+        self, event: IoEvent
+    ) -> Scene | SelectableWidgetOnScreen | None:
         if isinstance(event, KeyPressDown) and event.key is KeyboardKey.CONFIRM:
             if callable(self.widget.confirm):
                 self.widget.confirm()

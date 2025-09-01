@@ -25,8 +25,14 @@ class SelectableWidgetGroup(SelectableWidget):
     scroll_direction: ScrollDirection = ScrollDirection.VERTICAL
     loop: bool = True
 
+    @override
+    @cached_property
+    def select(self) -> Self:
+        return self._deselect_and_select(0)
+
     @cached_property
     def select_next(self) -> Self:
+        assert self._selected_index is not None
         if (next_index := self._selected_index + 1) == len(self.widgets):
             if self.loop:
                 next_index = 0
@@ -36,6 +42,7 @@ class SelectableWidgetGroup(SelectableWidget):
 
     @cached_property
     def select_previous(self) -> Self:
+        assert self._selected_index is not None
         if (previous_index := self._selected_index - 1) == -1:
             if self.loop:
                 previous_index = len(self.widgets) - 1
@@ -58,19 +65,12 @@ class SelectableWidgetGroup(SelectableWidget):
         widgets = tuple(w.tick(time_delta) for w in self.widgets)
         return replace(self, widgets=widgets)
 
-    def __post_init__(self) -> None:
-        assert self.widgets
-        if all(not widget.is_selected for widget in self.widgets):
-            widget = self.widgets[0].select
-            widgets = (widget,) + self.widgets[1:]
-            object.__setattr__(self, "widgets", widgets)
-        assert sum(widget.is_selected for widget in self.widgets) == 1
-
     @cached_property
-    def _selected_index(self) -> int:
-        return next(
-            i for i, widget in enumerate(self.widgets) if widget.is_selected
-        )
+    def _selected_index(self) -> int | None:
+        for i, widget in enumerate(self.widgets):
+            if widget.is_selected:
+                return i
+        return None
 
     def _deselect_and_select(self, selected_index: int) -> Self:
         widgets: list[SelectableWidget] = []
@@ -82,4 +82,4 @@ class SelectableWidgetGroup(SelectableWidget):
             else:
                 res = widget
             widgets.append(res)
-        return replace(self, widgets=tuple(widgets))
+        return replace(self, is_selected=True, widgets=tuple(widgets))
