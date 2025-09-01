@@ -20,15 +20,15 @@ class Button(SelectableWidget):
     unique_name: str
     idle: Drawing | DrawingGroup | Animation
     selected: Drawing | DrawingGroup | Animation
-    confirm: Scene | Callable[[], None]
+    on_click: Scene | Callable[[], None]
 
     @override
     def widget_on_screen(
-        self, on_screen: dict[str, Coordinate | AreaOnScreen]
+        self, name_to_on_screens: dict[str, Coordinate | AreaOnScreen]
     ) -> ButtonOnScreen:
         from nextrpg.ui.button_on_screen import ButtonOnScreen
 
-        return ButtonOnScreen(self, on_screen)
+        return ButtonOnScreen(self, name_to_on_screens)
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:

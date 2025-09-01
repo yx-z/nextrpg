@@ -52,13 +52,13 @@ class SelectableWidgetGroup(SelectableWidget):
 
     @override
     def widget_on_screen(
-        self, on_screen: dict[str, Coordinate | AreaOnScreen]
+        self, name_to_on_screens: dict[str, Coordinate | AreaOnScreen]
     ) -> SelectableWidgetGroupOnScreen:
         from nextrpg.ui.selectable_widget_group_on_screen import (
             SelectableWidgetGroupOnScreen,
         )
 
-        return SelectableWidgetGroupOnScreen(self, on_screen)
+        return SelectableWidgetGroupOnScreen(self, name_to_on_screens)
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:

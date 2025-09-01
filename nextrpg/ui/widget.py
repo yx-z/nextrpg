@@ -17,5 +17,5 @@ class Widget(ABC):
 
     @abstractmethod
     def widget_on_screen(
-        self, on_screen: dict[str, Coordinate | AreaOnScreen]
+        self, name_to_on_screens: dict[str, Coordinate | AreaOnScreen]
     ) -> WidgetOnScreen: ...

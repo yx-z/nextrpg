@@ -23,7 +23,7 @@ def title() -> TitleScene:
         unique_name="start",
         idle=start_text_idle.drawing_group,
         selected=start_text_selected.drawing_group,
-        confirm=scene,
+        on_click=scene,
     )
 
     load_text_idle = Text("Load")
@@ -32,7 +32,7 @@ def title() -> TitleScene:
         unique_name="load",
         idle=load_text_idle.drawing_group,
         selected=load_text_selected.drawing_group,
-        confirm=quit,
+        on_click=quit,
     )
 
     settings_text_idle = Text("Settings")
@@ -41,7 +41,7 @@ def title() -> TitleScene:
         unique_name="settings",
         idle=settings_text_idle.drawing_group,
         selected=settings_text_selected.drawing_group,
-        confirm=quit,
+        on_click=quit,
     )
 
     exit_text_idle = Text("Exit")
@@ -50,7 +50,7 @@ def title() -> TitleScene:
         unique_name="exit",
         idle=exit_text_idle.drawing_group,
         selected=exit_text_selected.drawing_group,
-        confirm=quit,
+        on_click=quit,
     )
 
     widgets = (start, load, settings, exit_button)

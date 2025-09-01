@@ -26,6 +26,9 @@ def dataclass_with_default[T](
 
 
 @overload
+@dataclass_transform(
+    field_descriptors=(field, Field, private_init_below, default)
+)
 def dataclass_with_default[T](cls: type[T]) -> type[T]: ...
 
 

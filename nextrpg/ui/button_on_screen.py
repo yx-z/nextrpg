@@ -37,8 +37,8 @@ class ButtonOnScreen(SelectableWidgetOnScreen):
         self, event: IoEvent
     ) -> Scene | SelectableWidgetOnScreen | None:
         if isinstance(event, KeyPressDown) and event.key is KeyboardKey.CONFIRM:
-            if callable(self.widget.confirm):
-                self.widget.confirm()
+            if callable(self.widget.on_click):
+                self.widget.on_click()
                 return self
-            return self.widget.confirm
+            return self.widget.on_click
         return self
