@@ -18,7 +18,7 @@ def title() -> TitleScene:
 
     start_text_idle = Text("Start")
     start_text_selected = start_text_idle.configured(highlight)
-    scene = TransitionScene(title, interior_scene())
+    scene = TransitionScene(title, interior_scene)
     start = Button(
         unique_name="start",
         idle=start_text_idle.drawing_group,
