@@ -26,28 +26,31 @@ class TitleScene(Scene):
     background: str | DrawingOnScreen | AnimationOnScreen
     widget: SelectableWidgetGroup
     _: KW_ONLY = private_init_below()
-    _widget: SelectableWidgetGroupOnScreen = default(
+    _widget_on_screen: SelectableWidgetGroupOnScreen = default(
         lambda self: self._init_selectable_widget_group_on_screen
     )
+    _tmx: TmxLoader = default(lambda self: TmxLoader(self.tmx_file))
 
     @override
     def event(self, event: IoEvent) -> Self:
-        widget = self._widget.event(event)
-        return replace(self, _widget=widget)
+        widget_on_screen = self._widget_on_screen.event(event)
+        return replace(self, _widget_on_screen=widget_on_screen)
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        widget = self._widget.tick(time_delta)
+        widget_on_screen = self._widget_on_screen.tick(time_delta)
         if isinstance(self.background, AnimationOnScreen):
             background = self.background.tick(time_delta)
         else:
             background = self.background
-        return replace(self, background=background, _widget=widget)
+        return replace(
+            self, background=background, _widget_on_screen=widget_on_screen
+        )
 
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        return self._background + self._widget.drawing_on_screens
+        return self._background + self._widget_on_screen.drawing_on_screens
 
     @cached_property
     def _background(self) -> tuple[DrawingOnScreen, ...]:
@@ -56,10 +59,6 @@ class TitleScene(Scene):
         if isinstance(self.background, AnimationOnScreen):
             return self.background.drawing_on_screens
         return (self.background,)
-
-    @cached_property
-    def _tmx(self) -> TmxLoader:
-        return TmxLoader(self.tmx_file)
 
     @cached_property
     def _init_selectable_widget_group_on_screen(
