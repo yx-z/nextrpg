@@ -4,7 +4,7 @@ from typing import Self, override
 
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.event.io_event import IoEvent, KeyPressDown, KeyboardKey
+from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.scene import Scene
 from nextrpg.ui.button import Button

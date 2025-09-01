@@ -19,7 +19,7 @@ from nextrpg.ui.area import screen
 
 @dataclass_with_default(frozen=True)
 class TransitionScene(Scene):
-    from_scene_input: Scene | Callable[[], Scene]
+    from_scene: Scene | Callable[[], Scene]
     to_scene: Scene
     intermediary: DrawingOnScreen | tuple[DrawingOnScreen, ...] | Color = field(
         default_factory=lambda: config().window.background
@@ -67,6 +67,6 @@ class TransitionScene(Scene):
 
     @cached_property
     def _from_scene(self) -> Scene:
-        if callable(self.from_scene_input):
-            return self.from_scene_input()
-        return self.from_scene_input
+        if callable(self.from_scene):
+            return self.from_scene()
+        return self.from_scene
