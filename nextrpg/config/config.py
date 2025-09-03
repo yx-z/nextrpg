@@ -19,6 +19,7 @@ from nextrpg.config.say_event_config import SayEventConfig
 from nextrpg.config.text_config import TextConfig
 from nextrpg.config.text_group_config import TextGroupConfig
 from nextrpg.config.transition_config import TransitionConfig
+from nextrpg.config.ui_config import UiConfig
 from nextrpg.config.window_config import WindowConfig
 
 
@@ -42,6 +43,7 @@ class Config:
     cutscene: CutsceneConfig = CutsceneConfig()
     save: SaveConfig = SaveConfig()
     game_loop: GameLoopConfig = GameLoopConfig()
+    ui: UiConfig = UiConfig()
 
 
 def set_config(cfg: Config) -> Config:

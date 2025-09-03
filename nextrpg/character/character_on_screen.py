@@ -48,7 +48,6 @@ class CharacterSpec(_BaseCharacterSpec):
 class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
     spec: CharacterSpec
     coordinate: Coordinate
-    config: CharacterConfig = field(default_factory=lambda: config().character)
     _: KW_ONLY = private_init_below()
     character: CharacterDrawing = default(lambda self: self.spec.character)
     _event_started: bool = False
@@ -88,7 +87,7 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         if self._area_on_screen:
             return self._area_on_screen
 
-        scaling = self.config.start_event_scaling
+        scaling = self.spec.config.start_event_scaling
         coordinate = (
             self.coordinate - self.width * (scaling - WidthScaling(1)) / 2
         )
@@ -148,7 +147,7 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
     def _collision_rectangle_area_on_screen(
         self, coordinate: Coordinate
     ) -> RectangleAreaOnScreen:
-        scaling = self.config.bounding_rectangle_scaling
+        scaling = self.spec.config.bounding_rectangle_scaling
         coordinate = coordinate + self.height * scaling.complement / 2
         size = self.size * scaling
         return coordinate.anchor(size).rectangle_area_on_screen

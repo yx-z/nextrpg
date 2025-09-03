@@ -58,7 +58,7 @@ class PlayerOnScreen(MovingCharacterOnScreen):
     @override
     def move(self, time_delta: Millisecond) -> Coordinate | None:
         directional_offset = DirectionalOffset(
-            self.character.direction, self.config.move_speed * time_delta
+            self.character.direction, self.spec.config.move_speed * time_delta
         )
         return self.coordinate + directional_offset
 

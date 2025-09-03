@@ -54,6 +54,7 @@ from nextrpg.config.say_event_config import (
 )
 from nextrpg.config.text_config import TextConfig
 from nextrpg.config.transition_config import TransitionConfig
+from nextrpg.config.ui_config import UiConfig
 from nextrpg.config.window_config import ResizeMode, WindowConfig
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.dataclass_with_default import (
@@ -192,13 +193,13 @@ from nextrpg.ui.area import (
     top_right_screen,
     top_screen,
 )
-from nextrpg.ui.button import Button
-from nextrpg.ui.button_on_screen import ButtonOnScreen
+from nextrpg.ui.button import Button, ButtonOnScreen
+from nextrpg.ui.panel import Panel
+from nextrpg.ui.scroll_direction import ScrollDirection
 from nextrpg.ui.selectable_widget import SelectableWidget
-from nextrpg.ui.selectable_widget_group import SelectableWidgetGroup
-from nextrpg.ui.selectable_widget_group_on_screen import (
-    SelectableWidgetGroupOnScreen,
+from nextrpg.ui.widget import Widget, WidgetOnScreen
+from nextrpg.ui.widget_group import (
+    WidgetGroup,
+    WidgetGroupOnScreen,
 )
-from nextrpg.ui.widget import Widget
-from nextrpg.ui.widget_on_screen import WidgetOnScreen
 from nextrpg.ui.window import Window

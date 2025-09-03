@@ -16,6 +16,6 @@
   <object id="4" name="exit" x="444.522" y="622">
    <point/>
   </object>
-  <object id="5" name="save" x="302.667" y="51.3333" width="574.667" height="372.667"/>
+  <object id="5" name="load_panel" x="302.667" y="51.3333" width="574.667" height="372.667"/>
  </objectgroup>
 </map>

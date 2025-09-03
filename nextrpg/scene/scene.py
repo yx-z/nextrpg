@@ -1,8 +1,9 @@
+from __future__ import annotations
+
 from functools import cached_property
-from typing import Self, override
+from typing import override
 
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
-from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent
 from nextrpg.geometry.coordinate import Coordinate
@@ -26,9 +27,5 @@ class Scene(AnimationOnScreen):
     def drawing_on_screens_before_shift(self) -> tuple[DrawingOnScreen, ...]:
         return ()
 
-    def event(self, event: IoEvent) -> Self:
-        return self
-
-    @override
-    def tick(self, time_delta: Millisecond) -> Self:
+    def event(self, event: IoEvent) -> Scene:
         return self

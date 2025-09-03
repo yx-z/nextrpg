@@ -4,10 +4,11 @@ from example.interior_scene import interior_scene
 from nextrpg import (
     BLUE,
     Button,
-    SelectableWidgetGroup,
+    Panel,
     Text,
     TitleScene,
     TransitionScene,
+    WidgetGroup,
     config,
     quit,
 )
@@ -20,41 +21,45 @@ def title() -> TitleScene:
     start_text_selected = start_text_idle.configured(highlight)
     scene = TransitionScene(title, interior_scene)
     start = Button(
-        unique_name="start",
-        idle=start_text_idle.drawing_group,
-        selected=start_text_selected.drawing_group,
-        on_click=scene,
+        "start",
+        start_text_idle.drawing_group,
+        start_text_selected.drawing_group,
+        scene,
     )
 
     load_text_idle = Text("Load")
     load_text_selected = load_text_idle.configured(highlight)
     load = Button(
-        unique_name="load",
-        idle=load_text_idle.drawing_group,
-        selected=load_text_selected.drawing_group,
-        on_click=quit,
+        "load",
+        load_text_idle.drawing_group,
+        load_text_selected.drawing_group,
+        load_panel(),
     )
 
     settings_text_idle = Text("Settings")
     settings_text_selected = settings_text_idle.configured(highlight)
     settings = Button(
-        unique_name="settings",
-        idle=settings_text_idle.drawing_group,
-        selected=settings_text_selected.drawing_group,
-        on_click=quit,
+        "settings",
+        settings_text_idle.drawing_group,
+        settings_text_selected.drawing_group,
+        quit,
     )
 
     exit_text_idle = Text("Exit")
     exit_text_selected = exit_text_idle.configured(highlight)
     exit_button = Button(
-        unique_name="exit",
-        idle=exit_text_idle.drawing_group,
-        selected=exit_text_selected.drawing_group,
-        on_click=quit,
+        "exit",
+        exit_text_idle.drawing_group,
+        exit_text_selected.drawing_group,
+        quit,
     )
 
-    widgets = (start, load, settings, exit_button)
-    group = SelectableWidgetGroup(widgets=widgets)
+    group = WidgetGroup((start, load, settings, exit_button))
 
     tmx = Path("example/asset/title.tmx")
     return TitleScene(tmx, "background", group)
+
+
+def load_panel() -> Panel:
+    group = WidgetGroup(children=())
+    return Panel("load_panel", group)

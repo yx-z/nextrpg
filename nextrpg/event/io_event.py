@@ -34,6 +34,7 @@ class KeyboardKey(Enum):
     UP = auto()
     DOWN = auto()
     CONFIRM = auto()
+    CANCEL = auto()
     FULL_SCREEN_TOGGLE = auto()
     INCLUDE_FPS_IN_WINDOW_TITLE_TOGGLE = auto()
 
@@ -50,6 +51,7 @@ def _key_mapping() -> dict[KeyCode, KeyboardKey]:
         config().key_mapping.up: KeyboardKey.UP,
         config().key_mapping.down: KeyboardKey.DOWN,
         config().key_mapping.confirm: KeyboardKey.CONFIRM,
+        config().key_mapping.cancel: KeyboardKey.CANCEL,
         config().key_mapping.full_screen_toggle: KeyboardKey.FULL_SCREEN_TOGGLE,
         config().key_mapping.include_fps_in_title_toggle: KeyboardKey.INCLUDE_FPS_IN_WINDOW_TITLE_TOGGLE,
     }
