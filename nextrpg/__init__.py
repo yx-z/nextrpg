@@ -194,9 +194,11 @@ from nextrpg.ui.area import (
     top_screen,
 )
 from nextrpg.ui.button import Button, ButtonOnScreen
+from nextrpg.ui.label import Label, LabelOnScreen
 from nextrpg.ui.panel import Panel
 from nextrpg.ui.scroll_direction import ScrollDirection
 from nextrpg.ui.selectable_widget import SelectableWidget
+from nextrpg.ui.sizable_widget import SizableWidget
 from nextrpg.ui.widget import Widget, WidgetOnScreen
 from nextrpg.ui.widget_group import (
     WidgetGroup,
