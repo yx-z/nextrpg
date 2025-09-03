@@ -4,8 +4,8 @@ from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import ClassVar, Self, override
 
-from nextrpg import UiConfig
 from nextrpg.config.config import config
+from nextrpg.config.ui_config import UiConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -21,7 +21,8 @@ from nextrpg.ui.selectable_widget import (
     SelectableWidget,
     SelectableWidgetOnScreen,
 )
-from nextrpg.ui.widget_group import WidgetGroup, WidgetGroupOnScreen
+from nextrpg.ui.sizable_widget import SizableWidget
+from nextrpg.ui.widget_group import WidgetGroupOnScreen
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
@@ -29,7 +30,7 @@ class PanelOnScreen(SelectableWidgetOnScreen):
     widget_input: Panel
     _: KW_ONLY = private_init_below()
     _group: WidgetGroupOnScreen = default(
-        lambda self: self.widget_input.group.widget_on_screen(
+        lambda self: self.widget_input.children.widget_on_screen(
             self.name_to_on_screens
         )
     )
@@ -59,7 +60,7 @@ class PanelOnScreen(SelectableWidgetOnScreen):
 @dataclass(frozen=True, kw_only=True)
 class Panel(SelectableWidget[PanelOnScreen]):
     name: str
-    group: WidgetGroup
+    children: tuple[SizableWidget, ...]
     config: UiConfig = field(default_factory=lambda: config().ui)
     background: NineSlice | None = None
     widget_on_screen_type: ClassVar[type[PanelOnScreen]] = PanelOnScreen

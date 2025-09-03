@@ -61,5 +61,4 @@ def title() -> TitleScene:
 
 
 def load_panel() -> Panel:
-    group = WidgetGroup(children=())
-    return Panel(name="load_panel", group=group)
+    return Panel(name="load_panel", children=())

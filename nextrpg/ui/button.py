@@ -17,11 +17,13 @@ from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size
 from nextrpg.scene.scene import Scene
 from nextrpg.ui.selectable_widget import (
     SelectableWidget,
     SelectableWidgetOnScreen,
 )
+from nextrpg.ui.sizable_widget import SizableWidget
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
@@ -38,11 +40,7 @@ class ButtonOnScreen(SelectableWidgetOnScreen):
         else:
             drawings = self._button.idle
 
-        if self._button.coordinate:
-            coordinate = self._button.coordinate
-        else:
-            coordinate = self._get_on_screen(Coordinate)
-
+        coordinate = self._get_on_screen(Coordinate)
         if isinstance(drawings, Drawing):
             return (drawings.drawing_on_screen(coordinate),)
         return drawings.drawing_on_screens(coordinate)
@@ -79,9 +77,14 @@ class ButtonOnScreen(SelectableWidgetOnScreen):
 
 
 @dataclass(frozen=True, kw_only=True)
-class Button(SelectableWidget[ButtonOnScreen]):
+class Button(SizableWidget[ButtonOnScreen], SelectableWidget[ButtonOnScreen]):
     name: str
     idle: Drawing | DrawingGroup | Animation
     selected: Drawing | DrawingGroup | Animation
     on_click: Scene | SelectableWidget | Callable[[], None]
     widget_on_screen_type: ClassVar[type[ButtonOnScreen]] = ButtonOnScreen
+
+    @override
+    @property
+    def size(self) -> Size:
+        return self.idle.size
