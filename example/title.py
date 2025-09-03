@@ -4,7 +4,10 @@ from example.interior_scene import interior_scene
 from nextrpg import (
     BLUE,
     Button,
+    Color,
+    Label,
     Panel,
+    PanelConfig,
     Text,
     TitleScene,
     TransitionScene,
@@ -61,4 +64,8 @@ def title() -> TitleScene:
 
 
 def load_panel() -> Panel:
-    return Panel(name="load_panel", children=())
+    return Panel(
+        name="load_panel",
+        children=(Label(message="No save data found."),),
+        config=PanelConfig(background=Color(0, 0, 0, 128)),
+    )

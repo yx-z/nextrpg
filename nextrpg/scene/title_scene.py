@@ -61,7 +61,7 @@ class TitleScene(Scene):
             return self.background.drawing_on_screens
         return (self.background,)
 
-    @cached_property
+    @property
     def _init_widget_on_screen(
         self,
     ) -> WidgetGroupOnScreen:

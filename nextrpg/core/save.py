@@ -74,10 +74,11 @@ def _config() -> SaveConfig:
     return config().save
 
 
+@cache
 def _log() -> Log:
     from nextrpg.core.log import Log
 
-    return Log()
+    return Log("save")
 
 
 @dataclass_with_default(frozen=True)
@@ -85,7 +86,7 @@ class SaveIo:
     config: SaveConfig = field(default_factory=_config)
     slot: str = default(lambda self: self.config.shared_slot)
     _: KW_ONLY = private_init_below()
-    _log: "Log" = field(default_factory=_log)
+    _log: Log = field(default_factory=_log)
     _thread = ThreadPoolExecutor(max_workers=1)
 
     def save(self, savable: Savable) -> Future:
@@ -116,6 +117,7 @@ class SaveIo:
 
     @property
     def web(self) -> bool:
+        # TODO: Implement web save/load using IndexedDB.
         return sys.platform == "emscripten"
 
     def _load(

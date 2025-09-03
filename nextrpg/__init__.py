@@ -54,7 +54,7 @@ from nextrpg.config.say_event_config import (
 )
 from nextrpg.config.text_config import TextConfig
 from nextrpg.config.transition_config import TransitionConfig
-from nextrpg.config.ui_config import UiConfig
+from nextrpg.config.ui_config import PanelConfig
 from nextrpg.config.window_config import ResizeMode, WindowConfig
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.dataclass_with_default import (
@@ -92,7 +92,7 @@ from nextrpg.draw.nine_slice import NineSlice
 from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.polyline_drawing import PolylineDrawing
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
-from nextrpg.draw.sizable_draw_on_screens import SizableDrawOnScreens
+from nextrpg.draw.sizable_drawing_on_screens import SizableDrawingOnScreens
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup

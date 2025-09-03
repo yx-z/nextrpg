@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass, replace
-from functools import cached_property
 from typing import ClassVar, Self, override
 
 from nextrpg.animation.animation import Animation
@@ -14,36 +13,31 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
-from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.scene.scene import Scene
 from nextrpg.ui.selectable_widget import (
     SelectableWidget,
     SelectableWidgetOnScreen,
 )
-from nextrpg.ui.sizable_widget import SizableWidget
+from nextrpg.ui.sizable_widget import (
+    SizableSelectableWidget,
+    SizableWidgetOnScreen,
+)
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
-class ButtonOnScreen(SelectableWidgetOnScreen):
+class ButtonOnScreen(SelectableWidgetOnScreen, SizableWidgetOnScreen):
     widget_input: Button
     _: KW_ONLY = private_init_below()
     _button: Button = default(lambda self: self.widget_input)
 
     @override
-    @cached_property
-    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+    @property
+    def drawing(self) -> Drawing | DrawingGroup:
         if self.is_selected:
-            drawings = self._button.selected
-        else:
-            drawings = self._button.idle
-
-        coordinate = self._get_on_screen(Coordinate)
-        if isinstance(drawings, Drawing):
-            return (drawings.drawing_on_screen(coordinate),)
-        return drawings.drawing_on_screens(coordinate)
+            return self._button.selected
+        return self._button.idle
 
     @override
     def selected_event(
@@ -77,7 +71,7 @@ class ButtonOnScreen(SelectableWidgetOnScreen):
 
 
 @dataclass(frozen=True, kw_only=True)
-class Button(SizableWidget[ButtonOnScreen], SelectableWidget[ButtonOnScreen]):
+class Button(SizableSelectableWidget[ButtonOnScreen]):
     name: str
     idle: Drawing | DrawingGroup | Animation
     selected: Drawing | DrawingGroup | Animation

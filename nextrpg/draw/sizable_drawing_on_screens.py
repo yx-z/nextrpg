@@ -10,7 +10,7 @@ from nextrpg.geometry.sizable import Sizable
 
 
 @dataclass(frozen=True)
-class SizableDrawOnScreens(Sizable):
+class SizableDrawingOnScreens(Sizable):
     draw_on_screens: tuple[DrawingOnScreen, ...]
 
     @cached_property

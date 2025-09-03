@@ -8,7 +8,7 @@ from nextrpg.draw.color import Color
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.sizable_draw_on_screens import SizableDrawOnScreens
+from nextrpg.draw.sizable_drawing_on_screens import SizableDrawingOnScreens
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
@@ -49,8 +49,8 @@ class DrawingGroupOnScreen(Sizable):
         return tuple(res)
 
     @cached_property
-    def _sized(self) -> SizableDrawOnScreens:
-        return SizableDrawOnScreens(self.drawing_on_screens)
+    def _sized(self) -> SizableDrawingOnScreens:
+        return SizableDrawingOnScreens(self.drawing_on_screens)
 
     @cached_property
     def _link_color(self) -> Color | None:

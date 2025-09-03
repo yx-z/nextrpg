@@ -5,7 +5,7 @@ from functools import cached_property
 from typing import ClassVar, Self, override
 
 from nextrpg.config.config import config
-from nextrpg.config.ui_config import UiConfig
+from nextrpg.config.ui_config import PanelConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -13,7 +13,6 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.nine_slice import NineSlice
 from nextrpg.event.io_event import IoEvent
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.scene.scene import Scene
@@ -21,46 +20,58 @@ from nextrpg.ui.selectable_widget import (
     SelectableWidget,
     SelectableWidgetOnScreen,
 )
-from nextrpg.ui.sizable_widget import SizableWidget
-from nextrpg.ui.widget_group import WidgetGroupOnScreen
+from nextrpg.ui.sizable_widget import SizableWidget, SizableWidgetOnScreen
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class PanelOnScreen(SelectableWidgetOnScreen):
     widget_input: Panel
     _: KW_ONLY = private_init_below()
-    _group: WidgetGroupOnScreen = default(
-        lambda self: self.widget_input.children.widget_on_screen(
-            self.name_to_on_screens
-        )
+    _children: tuple[SizableWidgetOnScreen, ...] = default(
+        lambda self: self._init_children
     )
 
     @override
     def selected_event(
         self, event: IoEvent
     ) -> SelectableWidgetOnScreen | Scene:
-        return self._group.selected_event(event)
+        # TODO
+        return self
 
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        drawing_on_screens = self._group.drawing_on_screens
-        if self.widget_input.background:
-            rect = self._get_on_screen(RectangleAreaOnScreen)
-            background = self.widget_input.background.stretch(rect.size)
-            return (background,) + drawing_on_screens
-        return drawing_on_screens
+        drawing_on_screens = tuple(
+            drawing_on_screen
+            for child in self._children
+            for drawing_on_screen in child.drawing_on_screens
+        )
+        return (
+            self.widget_input.config.drawing_on_screens(self.area)
+            + drawing_on_screens
+        )
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        group = self._group.tick(time_delta)
-        return replace(self, _group=group)
+        children = tuple(child.tick(time_delta) for child in self._children)
+        return replace(self, _children=children)
+
+    @cached_property
+    def area(self) -> RectangleAreaOnScreen:
+        return self._get_on_screen(RectangleAreaOnScreen)
+
+    @property
+    def _init_children(self) -> tuple[SizableWidgetOnScreen, ...]:
+        return (
+            self.widget_input.children[0]
+            .anchor(self.area.top_left)
+            .widget_on_screen(self.name_to_on_screens),
+        )
 
 
 @dataclass(frozen=True, kw_only=True)
 class Panel(SelectableWidget[PanelOnScreen]):
     name: str
     children: tuple[SizableWidget, ...]
-    config: UiConfig = field(default_factory=lambda: config().ui)
-    background: NineSlice | None = None
+    config: PanelConfig = field(default_factory=lambda: config().ui.panel)
     widget_on_screen_type: ClassVar[type[PanelOnScreen]] = PanelOnScreen
