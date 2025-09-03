@@ -53,6 +53,6 @@ _SelectableWidgetOnScreen = TypeVar(
 )
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class SelectableWidget(Widget[_SelectableWidgetOnScreen]):
     widget_on_screen_type: ClassVar[type[SelectableWidgetOnScreen]]

@@ -63,15 +63,15 @@ class WidgetGroupOnScreen(SelectableWidgetOnScreen):
                 case ScrollDirection.HORIZONTAL:
                     match event.key:
                         case KeyboardKey.LEFT:
-                            children = self._step(children, forward=False)
+                            return self._step(forward=False)
                         case KeyboardKey.RIGHT:
-                            children = self._step(children, forward=True)
+                            return self._step(forward=True)
                 case ScrollDirection.VERTICAL:
                     match event.key:
                         case KeyboardKey.UP:
-                            children = self._step(children, forward=False)
+                            return self._step(forward=False)
                         case KeyboardKey.DOWN:
-                            children = self._step(children, forward=True)
+                            return self._step(forward=True)
         return replace(self, _children=tuple(children))
 
     @override
@@ -101,66 +101,55 @@ class WidgetGroupOnScreen(SelectableWidgetOnScreen):
             selected = True
         return replace(super().select, _children=tuple(res))
 
-    def _step(
-        self, children: list[WidgetOnScreen], forward: bool
-    ) -> list[WidgetOnScreen]:
-        if len(selectable_widgets := self._selectable_widgets(children)) < 2:
-            return children
-
-        selected = self._selected(children)
-        first = selectable_widgets[0]
-        last = selectable_widgets[-1]
-        if not self.widget_input.loop and (
-            (not forward and selected is first)
-            or (forward and selected is last)
-        ):
-            return children
-
-        prev = None
-        nxt = None
-        for w1, w2 in pairwise(cycle(selectable_widgets)):
-            if w1 is selected:
-                prev, nxt = w1, w2
-                break
-
-        if forward:
-            target = nxt
-        else:
-            target = prev
-        assert target
-
-        res: list[WidgetOnScreen] = []
-        for child in children:
-            if child is selected:
-                assert isinstance(child, SelectableWidgetOnScreen)
-                child = child.deselect
-            if child is target:
-                child = child.select
-            res.append(child)
-        return res
-
-    def _selectable_widgets(
-        self, children: list[WidgetOnScreen]
-    ) -> tuple[SelectableWidgetOnScreen, ...]:
-        return tuple(
-            widget
-            for widget in children
-            if isinstance(widget, SelectableWidgetOnScreen)
-        )
-
-    def _selected(
-        self, children: list[WidgetOnScreen]
-    ) -> SelectableWidgetOnScreen:
-        for child in children:
+    @cached_property
+    def selected(self) -> SelectableWidgetOnScreen | None:
+        for child in self._children:
             if (
                 isinstance(child, SelectableWidgetOnScreen)
                 and child.is_selected
             ):
                 return child
-        raise RuntimeError(f"No selected widget in {self}")
+        return None
+
+    def _step(self, forward: bool) -> Self:
+        if len(self._selectable_widgets) < 2 or (
+            not self.widget_input.loop
+            and (
+                (not forward and self.selected is self._selectable_widgets[0])
+                or (forward and self.selected is self._selectable_widgets[-1])
+            )
+        ):
+            return self
+
+        target: SelectableWidgetOnScreen | None = None
+        for w1, w2 in pairwise(cycle(self._selectable_widgets)):
+            if not forward and w2 is self.selected:
+                target = w1
+                break
+            if forward and w1 is self.selected:
+                target = w2
+                break
+
+        res: list[WidgetOnScreen] = []
+        for child in self._children:
+            if child is self.selected:
+                assert isinstance(child, SelectableWidgetOnScreen)
+                child = child.deselect
+            if child is target:
+                child = child.select
+            res.append(child)
+        return replace(self, _children=tuple(res))
+
+    @cached_property
+    def _selectable_widgets(self) -> tuple[SelectableWidgetOnScreen, ...]:
+        return tuple(
+            widget
+            for widget in self._children
+            if isinstance(widget, SelectableWidgetOnScreen)
+        )
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class WidgetGroup(SelectableWidget[WidgetGroupOnScreen]):
     children: tuple[Widget, ...]
     scroll_direction: ScrollDirection = ScrollDirection.VERTICAL

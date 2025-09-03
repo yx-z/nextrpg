@@ -21,40 +21,40 @@ def title() -> TitleScene:
     start_text_selected = start_text_idle.configured(highlight)
     scene = TransitionScene(title, interior_scene)
     start = Button(
-        "start",
-        start_text_idle.drawing_group,
-        start_text_selected.drawing_group,
-        scene,
+        name="start",
+        idle=start_text_idle.drawing_group,
+        selected=start_text_selected.drawing_group,
+        on_click=scene,
     )
 
     load_text_idle = Text("Load")
     load_text_selected = load_text_idle.configured(highlight)
     load = Button(
-        "load",
-        load_text_idle.drawing_group,
-        load_text_selected.drawing_group,
-        load_panel(),
+        name="load",
+        idle=load_text_idle.drawing_group,
+        selected=load_text_selected.drawing_group,
+        on_click=load_panel(),
     )
 
     settings_text_idle = Text("Settings")
     settings_text_selected = settings_text_idle.configured(highlight)
     settings = Button(
-        "settings",
-        settings_text_idle.drawing_group,
-        settings_text_selected.drawing_group,
-        quit,
+        name="settings",
+        idle=settings_text_idle.drawing_group,
+        selected=settings_text_selected.drawing_group,
+        on_click=quit,
     )
 
     exit_text_idle = Text("Exit")
     exit_text_selected = exit_text_idle.configured(highlight)
     exit_button = Button(
-        "exit",
-        exit_text_idle.drawing_group,
-        exit_text_selected.drawing_group,
-        quit,
+        name="exit",
+        idle=exit_text_idle.drawing_group,
+        selected=exit_text_selected.drawing_group,
+        on_click=quit,
     )
 
-    group = WidgetGroup((start, load, settings, exit_button))
+    group = WidgetGroup(children=(start, load, settings, exit_button))
 
     tmx = Path("example/asset/title.tmx")
     return TitleScene(tmx, "background", group)
@@ -62,4 +62,4 @@ def title() -> TitleScene:
 
 def load_panel() -> Panel:
     group = WidgetGroup(children=())
-    return Panel("load_panel", group)
+    return Panel(name="load_panel", group=group)

@@ -38,6 +38,7 @@ _WidgetOnScreen = TypeVar("_WidgetOnScreen", bound=WidgetOnScreen)
 @dataclass(frozen=True)
 class Widget[_WidgetOnScreen](ABC):
     widget_on_screen_type: ClassVar[type]
+    coordinate: Coordinate | None = None
 
     def widget_on_screen(
         self, name_to_on_screens: dict[str, Coordinate | AreaOnScreen]

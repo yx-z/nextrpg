@@ -78,11 +78,10 @@ class ButtonOnScreen(SelectableWidgetOnScreen):
         return replace(self, _button=button)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class Button(SelectableWidget[ButtonOnScreen]):
     name: str
     idle: Drawing | DrawingGroup | Animation
     selected: Drawing | DrawingGroup | Animation
     on_click: Scene | SelectableWidget | Callable[[], None]
-    coordinate: Coordinate | None = None
     widget_on_screen_type: ClassVar[type[ButtonOnScreen]] = ButtonOnScreen

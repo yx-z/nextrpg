@@ -4,6 +4,7 @@ from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import ClassVar, Self, override
 
+from nextrpg import UiConfig
 from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -14,7 +15,6 @@ from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.nine_slice import NineSlice
 from nextrpg.event.io_event import IoEvent
-from nextrpg.geometry.dimension import Pixel
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.scene.scene import Scene
 from nextrpg.ui.selectable_widget import (
@@ -28,7 +28,7 @@ from nextrpg.ui.widget_group import WidgetGroup, WidgetGroupOnScreen
 class PanelOnScreen(SelectableWidgetOnScreen):
     widget_input: Panel
     _: KW_ONLY = private_init_below()
-    _group_on_screen: WidgetGroupOnScreen = default(
+    _group: WidgetGroupOnScreen = default(
         lambda self: self.widget_input.group.widget_on_screen(
             self.name_to_on_screens
         )
@@ -38,13 +38,12 @@ class PanelOnScreen(SelectableWidgetOnScreen):
     def selected_event(
         self, event: IoEvent
     ) -> SelectableWidgetOnScreen | Scene:
-        # TODO
-        return self
+        return self._group.selected_event(event)
 
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        drawing_on_screens = self._group_on_screen.drawing_on_screens
+        drawing_on_screens = self._group.drawing_on_screens
         if self.widget_input.background:
             rect = self._get_on_screen(RectangleAreaOnScreen)
             background = self.widget_input.background.stretch(rect.size)
@@ -53,14 +52,14 @@ class PanelOnScreen(SelectableWidgetOnScreen):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        group_on_screen = self._group_on_screen.tick(time_delta)
-        return replace(self, _group_on_screen=group_on_screen)
+        group = self._group.tick(time_delta)
+        return replace(self, _group=group)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class Panel(SelectableWidget[PanelOnScreen]):
     name: str
     group: WidgetGroup
-    padding: Pixel = field(default_factory=lambda: config().ui.padding)
+    config: UiConfig = field(default_factory=lambda: config().ui)
     background: NineSlice | None = None
     widget_on_screen_type: ClassVar[type[PanelOnScreen]] = PanelOnScreen
