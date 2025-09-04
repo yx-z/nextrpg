@@ -15,7 +15,6 @@ from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.dimension import Size
-from nextrpg.scene.fade_in_scene import FadeInScene
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.ui.sizable_widget import SizableWidget, SizableWidgetOnScreen
 from nextrpg.scene.ui.widget import Widget
@@ -47,10 +46,9 @@ class ButtonOnScreen(SizableWidgetOnScreen):
             return self
 
         if isinstance(self._button.on_click, Widget):
-            widget_on_screen = self._button.on_click.widget_on_screen(
+            return self._button.on_click.widget_on_screen(
                 self.name_to_on_screens, self.parent
             ).select
-            return FadeInScene(self, widget_on_screen)
 
         return self._button.on_click
 

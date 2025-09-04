@@ -11,7 +11,6 @@ from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.scene.fade_out_scene import FadeOutScene
 from nextrpg.scene.scene import Scene
 
 
@@ -58,7 +57,7 @@ class WidgetOnScreen(Scene):
             and event.key is KeyboardKey.CANCEL
             and self.parent
         ):
-            return FadeOutScene(self, self.parent)
+            return self.parent
         return self.event_after_selected(event)
 
     def tick_after_parent(self, time_delta: Millisecond) -> Self:
