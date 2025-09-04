@@ -156,7 +156,8 @@ from nextrpg.gui.area import (
     top_screen,
 )
 from nextrpg.gui.window import Window
-from nextrpg.scene.fade_scene import FadeInScene, FadeOutScene, FadeScene
+from nextrpg.scene.fade_in_scene import FadeInScene
+from nextrpg.scene.fade_out_scene import FadeOutScene
 from nextrpg.scene.map.map_loader import (
     LayerTileBottomAndDrawOnScreen,
     MapLoader,

@@ -11,7 +11,7 @@ from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.scene.fade_scene import FadeOutScene
+from nextrpg.scene.fade_out_scene import FadeOutScene
 from nextrpg.scene.scene import Scene
 
 

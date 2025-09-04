@@ -15,7 +15,7 @@ from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.dimension import Size
-from nextrpg.scene.fade_scene import FadeInScene
+from nextrpg.scene.fade_in_scene import FadeInScene
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.ui.sizable_widget import SizableWidget, SizableWidgetOnScreen
 from nextrpg.scene.ui.widget import Widget
