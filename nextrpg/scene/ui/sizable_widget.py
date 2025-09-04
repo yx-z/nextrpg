@@ -23,7 +23,7 @@ class SizableWidgetOnScreen(WidgetOnScreen):
         if self.widget_input.coordinate:
             coordinate = self.widget_input.coordinate
         else:
-            coordinate = self._get_on_screen(Coordinate)
+            coordinate = self.from_on_screen(Coordinate)
 
         if isinstance(self.drawing, Drawing):
             return (self.drawing.drawing_on_screen(coordinate),)

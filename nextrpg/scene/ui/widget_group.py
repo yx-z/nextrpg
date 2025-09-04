@@ -75,7 +75,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         )
 
     def _init_child(self, child: Widget) -> WidgetOnScreen:
-        return child.widget_on_screen(self.name_to_on_screens)
+        return child.widget_on_screen(self.name_to_on_screens).with_parent(self)
 
     def _step(self, forward: bool) -> Self:
         if len(self._children) < 2 or (

@@ -75,7 +75,7 @@ class WidgetOnScreen(Scene):
     def event_after_selected(self, event: IoEvent) -> Scene:
         return self
 
-    def _get_on_screen[T](self, cls: type[T]) -> T:
+    def from_on_screen[T](self, cls: type[T]) -> T:
         name = getattr(self.widget_input, "name", None)
         assert name, f"Require 'name' attribute for widget {self.widget_input}."
         obj = self.name_to_on_screens.get(name)

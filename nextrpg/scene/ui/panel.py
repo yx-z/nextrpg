@@ -48,14 +48,17 @@ class PanelOnScreen(WidgetOnScreen):
 
     @cached_property
     def area(self) -> RectangleAreaOnScreen:
-        return self._get_on_screen(RectangleAreaOnScreen)
+        return self.from_on_screen(RectangleAreaOnScreen)
 
     @property
     def _init_children(self) -> tuple[SizableWidgetOnScreen, ...]:
+        # TODO: Init all children.
         return (
             self.widget_input.children[0]
             .anchor(self.area.top_left)
-            .widget_on_screen(self.name_to_on_screens),
+            .widget_on_screen(self.name_to_on_screens)
+            .with_parent(self)
+            .select,
         )
 
 

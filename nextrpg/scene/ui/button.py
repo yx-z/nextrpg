@@ -17,7 +17,7 @@ from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.dimension import Size
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.ui.sizable_widget import SizableWidget, SizableWidgetOnScreen
-from nextrpg.scene.ui.widget import WidgetOnScreen
+from nextrpg.scene.ui.widget import Widget
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
@@ -45,8 +45,13 @@ class ButtonOnScreen(SizableWidgetOnScreen):
             self._button.on_click()
             return self
 
-        if isinstance(self._button.on_click, WidgetOnScreen):
-            return self._button.on_click.with_parent(self)
+        if isinstance(self._button.on_click, Widget):
+            return (
+                self._button.on_click.widget_on_screen(self.name_to_on_screens)
+                .with_parent(self._parent)
+                .select
+            )
+
         return self._button.on_click
 
     @override
@@ -70,7 +75,7 @@ class Button(SizableWidget[ButtonOnScreen]):
     name: str
     idle: Drawing | DrawingGroup | Animation
     active: Drawing | DrawingGroup | Animation
-    on_click: Scene | Callable[[], None]
+    on_click: Scene | Widget | Callable[[], None]
     widget_on_screen_type: ClassVar[type[ButtonOnScreen]] = ButtonOnScreen
 
     @override
