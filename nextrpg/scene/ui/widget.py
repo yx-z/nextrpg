@@ -36,7 +36,7 @@ class WidgetOnScreen(Scene):
             parent = self._parent.tick(time_delta)
         else:
             parent = None
-        ticked = self._tick(time_delta)
+        ticked = self.tick_after_parent(time_delta)
         return replace(ticked, _parent=parent)
 
     @override
@@ -46,7 +46,7 @@ class WidgetOnScreen(Scene):
             parent = self._parent.drawing_on_screens
         else:
             parent = ()
-        return parent + self._drawing_on_screens
+        return parent + self.drawing_on_screens_after_parent
 
     @override
     def event(self, event: IoEvent) -> Scene:
@@ -58,19 +58,21 @@ class WidgetOnScreen(Scene):
             and self._parent
         ):
             return self._parent
-        return self._event(event)
+        return self.event_after_selected(event)
 
     def with_parent(self, parent: Scene) -> Self:
         return replace(self, _parent=parent)
 
-    def _tick(self, time_delta: Millisecond) -> Self:
+    def tick_after_parent(self, time_delta: Millisecond) -> Self:
         return self
 
     @property
     @abstractmethod
-    def _drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]: ...
+    def drawing_on_screens_after_parent(
+        self,
+    ) -> tuple[DrawingOnScreen, ...]: ...
 
-    def _event(self, event: IoEvent) -> Scene:
+    def event_after_selected(self, event: IoEvent) -> Scene:
         return self
 
     def _get_on_screen[T](self, cls: type[T]) -> T:

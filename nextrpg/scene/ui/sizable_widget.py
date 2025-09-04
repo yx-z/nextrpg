@@ -19,7 +19,7 @@ class SizableWidgetOnScreen(WidgetOnScreen):
 
     @override
     @cached_property
-    def _drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+    def drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
         if self.widget_input.coordinate:
             coordinate = self.widget_input.coordinate
         else:

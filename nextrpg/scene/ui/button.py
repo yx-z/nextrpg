@@ -34,7 +34,7 @@ class ButtonOnScreen(SizableWidgetOnScreen):
         return self._button.idle
 
     @override
-    def _event(self, event: IoEvent) -> Scene:
+    def event_after_selected(self, event: IoEvent) -> Scene:
         if (
             not isinstance(event, KeyPressDown)
             or event.key is not KeyboardKey.CONFIRM
@@ -50,7 +50,7 @@ class ButtonOnScreen(SizableWidgetOnScreen):
         return self._button.on_click
 
     @override
-    def _tick(self, time_delta: Millisecond) -> Self:
+    def tick_after_parent(self, time_delta: Millisecond) -> Self:
         if isinstance(self._button.idle, Animation):
             idle = self._button.idle.tick(time_delta)
         else:
