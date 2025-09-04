@@ -8,25 +8,26 @@ from nextrpg import (
     Label,
     Panel,
     PanelConfig,
+    Scene,
     Text,
-    TitleScene,
     TransitionScene,
     WidgetGroup,
     config,
     quit,
+    title,
 )
 
 
-def title() -> TitleScene:
+def create_title() -> Scene:
     highlight = config().text.colored(BLUE)
 
     start_text_idle = Text("Start")
     start_text_selected = start_text_idle.configured(highlight)
-    scene = TransitionScene(title, interior_scene)
+    scene = TransitionScene(create_title, interior_scene)
     start = Button(
         name="start",
         idle=start_text_idle.drawing_group,
-        selected=start_text_selected.drawing_group,
+        active=start_text_selected.drawing_group,
         on_click=scene,
     )
 
@@ -35,7 +36,7 @@ def title() -> TitleScene:
     load = Button(
         name="load",
         idle=load_text_idle.drawing_group,
-        selected=load_text_selected.drawing_group,
+        active=load_text_selected.drawing_group,
         on_click=load_panel(),
     )
 
@@ -44,7 +45,7 @@ def title() -> TitleScene:
     settings = Button(
         name="settings",
         idle=settings_text_idle.drawing_group,
-        selected=settings_text_selected.drawing_group,
+        active=settings_text_selected.drawing_group,
         on_click=quit,
     )
 
@@ -53,14 +54,14 @@ def title() -> TitleScene:
     exit_button = Button(
         name="exit",
         idle=exit_text_idle.drawing_group,
-        selected=exit_text_selected.drawing_group,
+        active=exit_text_selected.drawing_group,
         on_click=quit,
     )
 
     group = WidgetGroup(children=(start, load, settings, exit_button))
 
     tmx = Path("example/asset/title.tmx")
-    return TitleScene(tmx, "background", group)
+    return title(tmx, "background", group)
 
 
 def load_panel() -> Panel:

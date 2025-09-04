@@ -140,6 +140,21 @@ from nextrpg.geometry.polygon_area_on_screen import (
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.walk import Walk
+from nextrpg.gui.area import (
+    bottom_left_screen,
+    bottom_right_screen,
+    bottom_screen,
+    gui_height,
+    gui_size,
+    gui_width,
+    left_screen,
+    right_screen,
+    screen,
+    top_left_screen,
+    top_right_screen,
+    top_screen,
+)
+from nextrpg.gui.window import Window
 from nextrpg.scene.map.map_loader import (
     LayerTileBottomAndDrawOnScreen,
     MapLoader,
@@ -177,31 +192,16 @@ from nextrpg.scene.rpg_event.say_event.say_event_state import (
     SayEventState,
     SayEventTypingState,
 )
-from nextrpg.scene.title_scene import TitleScene
+from nextrpg.scene.scene import Scene
+from nextrpg.scene.title_scene import TitleScene, title
 from nextrpg.scene.transition_scene import TransitionScene
-from nextrpg.ui.area import (
-    bottom_left_screen,
-    bottom_right_screen,
-    bottom_screen,
-    gui_height,
-    gui_size,
-    gui_width,
-    left_screen,
-    right_screen,
-    screen,
-    top_left_screen,
-    top_right_screen,
-    top_screen,
-)
-from nextrpg.ui.button import Button, ButtonOnScreen
-from nextrpg.ui.label import Label, LabelOnScreen
-from nextrpg.ui.panel import Panel
-from nextrpg.ui.scroll_direction import ScrollDirection
-from nextrpg.ui.selectable_widget import SelectableWidget
-from nextrpg.ui.sizable_widget import SizableWidget
-from nextrpg.ui.widget import Widget, WidgetOnScreen
-from nextrpg.ui.widget_group import (
+from nextrpg.scene.ui.button import Button, ButtonOnScreen
+from nextrpg.scene.ui.label import Label, LabelOnScreen
+from nextrpg.scene.ui.panel import Panel
+from nextrpg.scene.ui.scroll_direction import ScrollDirection
+from nextrpg.scene.ui.sizable_widget import SizableWidget
+from nextrpg.scene.ui.widget import Widget, WidgetOnScreen
+from nextrpg.scene.ui.widget_group import (
     WidgetGroup,
     WidgetGroupOnScreen,
 )
-from nextrpg.ui.window import Window

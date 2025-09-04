@@ -21,7 +21,7 @@ class Scene(AnimationOnScreen):
             return tuple(
                 d.add_fast(shift) for d in self.drawing_on_screens_before_shift
             )
-        return self.drawing_on_screens_before_shift
+        return ()
 
     @property
     def drawing_on_screens_before_shift(self) -> tuple[DrawingOnScreen, ...]:

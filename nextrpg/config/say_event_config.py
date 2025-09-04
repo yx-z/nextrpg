@@ -100,7 +100,7 @@ class SayEventConfig:
         if self.scene_coordinate_override:
             return self.scene_coordinate_override
 
-        from nextrpg.ui.area import screen
+        from nextrpg.gui.area import screen
 
         return screen().center
 

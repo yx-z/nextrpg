@@ -13,8 +13,8 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.color import Color
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.gui.area import screen
 from nextrpg.scene.scene import Scene
-from nextrpg.ui.area import screen
 
 
 @dataclass_with_default(frozen=True)

@@ -5,24 +5,21 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Self, TypeVar, override
 
-from nextrpg import Drawing, DrawingOnScreen
+from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_group import DrawingGroup
+from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
-from nextrpg.ui.selectable_widget import (
-    SelectableWidget,
-    SelectableWidgetOnScreen,
-)
-from nextrpg.ui.widget import Widget, WidgetOnScreen
+from nextrpg.scene.ui.widget import Widget, WidgetOnScreen
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class SizableWidgetOnScreen(WidgetOnScreen):
     widget_input: SizableWidget
 
     @override
     @cached_property
-    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+    def _drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if self.widget_input.coordinate:
             coordinate = self.widget_input.coordinate
         else:
@@ -52,15 +49,3 @@ class SizableWidget(Widget[_SizableWidgetOnScreen]):
     @property
     @abstractmethod
     def size(self) -> Size: ...
-
-
-_SelectableWidgetOnScreen = TypeVar(
-    "_SelectableWidgetOnScreen", bound=SelectableWidgetOnScreen
-)
-
-
-class SizableSelectableWidget(
-    SizableWidget[_SelectableWidgetOnScreen],
-    SelectableWidget[_SelectableWidgetOnScreen],
-):
-    pass

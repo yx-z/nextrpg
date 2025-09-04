@@ -1,6 +1,6 @@
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Pixel, Size
-from nextrpg.ui.area import gui_height, gui_width
+from nextrpg.gui.area import gui_height, gui_width
 
 
 def center_player(player_coordinate: Coordinate, map_size: Size) -> Coordinate:

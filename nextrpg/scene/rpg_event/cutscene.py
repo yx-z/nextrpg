@@ -6,10 +6,10 @@ from typing import Any, overload
 from nextrpg.config.config import config
 from nextrpg.config.cutscene_config import CutsceneConfig
 from nextrpg.geometry.coordinate import ORIGIN
+from nextrpg.gui.area import gui_size, screen
 from nextrpg.scene.rpg_event.fade_in_scene import fade_in
 from nextrpg.scene.rpg_event.fade_out_scene import fade_out
 from nextrpg.scene.rpg_event.rpg_event_scene import EventGenerator
-from nextrpg.ui.area import gui_size, screen
 
 
 @overload

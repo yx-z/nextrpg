@@ -12,59 +12,38 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_coordinate, get_geometry
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.event.io_event import IoEvent
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.scene import Scene
-from nextrpg.ui.selectable_widget import SelectableWidgetOnScreen
-from nextrpg.ui.widget_group import WidgetGroup, WidgetGroupOnScreen
+from nextrpg.scene.ui.widget import Widget
 
 
-@dataclass_with_default(frozen=True)
+@dataclass_with_default(frozen=True, kw_only=True)
 class TitleScene(Scene):
     tmx_file: Path
     background: str | DrawingOnScreen | AnimationOnScreen
-    widget: WidgetGroup
     _: KW_ONLY = private_init_below()
     _tmx: TmxLoader = default(lambda self: TmxLoader(self.tmx_file))
-    _widget_on_screen: SelectableWidgetOnScreen = default(
-        lambda self: self._init_widget_on_screen
-    )
-
-    @override
-    def event(self, event: IoEvent) -> Scene:
-        if isinstance(res := self._widget_on_screen.event(event), Scene):
-            return res
-        return replace(self, _widget_on_screen=res)
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        widget_on_screen = self._widget_on_screen.tick(time_delta)
         if isinstance(self.background, AnimationOnScreen):
             background = self.background.tick(time_delta)
         else:
             background = self.background
-        return replace(
-            self, background=background, _widget_on_screen=widget_on_screen
-        )
+        return replace(self, background=background)
 
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        return self._background + self._widget_on_screen.drawing_on_screens
-
-    @cached_property
-    def _background(self) -> tuple[DrawingOnScreen, ...]:
         if isinstance(self.background, str):
             return (self._tmx.image_layer(self.background),)
         if isinstance(self.background, AnimationOnScreen):
             return self.background.drawing_on_screens
         return (self.background,)
 
-    @property
-    def _init_widget_on_screen(
-        self,
-    ) -> WidgetGroupOnScreen:
+    @cached_property
+    def name_to_on_screens(self) -> dict[str, Coordinate | AreaOnScreen]:
         name_to_on_screens: dict[str, Coordinate | AreaOnScreen] = {}
         for obj in self._tmx.all_objects:
             if isinstance(area := get_geometry(obj), AreaOnScreen):
@@ -72,5 +51,17 @@ class TitleScene(Scene):
             else:
                 res = get_coordinate(obj)
             name_to_on_screens[obj.name] = res
+        return name_to_on_screens
 
-        return self.widget.widget_on_screen(name_to_on_screens).select
+
+def title(
+    tmx_file: Path,
+    background: str | DrawingOnScreen | AnimationOnScreen,
+    widget: Widget,
+) -> Scene:
+    title_scene = TitleScene(tmx_file=tmx_file, background=background)
+    return (
+        widget.widget_on_screen(title_scene.name_to_on_screens)
+        .with_parent(title_scene)
+        .select
+    )

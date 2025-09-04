@@ -20,8 +20,8 @@ from nextrpg.draw.text_group import TextGroup
 from nextrpg.draw.text_on_screen import TextOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import WidthAndHeightScaling
+from nextrpg.gui.area import left_screen, screen, top_screen
 from nextrpg.scene.scene import Scene
-from nextrpg.ui.area import left_screen, screen, top_screen
 
 
 @dataclass(frozen=True)

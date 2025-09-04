@@ -13,18 +13,13 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.event.io_event import IoEvent
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.scene.scene import Scene
-from nextrpg.ui.selectable_widget import (
-    SelectableWidget,
-    SelectableWidgetOnScreen,
-)
-from nextrpg.ui.sizable_widget import SizableWidget, SizableWidgetOnScreen
+from nextrpg.scene.ui.sizable_widget import SizableWidget, SizableWidgetOnScreen
+from nextrpg.scene.ui.widget import Widget, WidgetOnScreen
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
-class PanelOnScreen(SelectableWidgetOnScreen):
+class PanelOnScreen(WidgetOnScreen):
     widget_input: Panel
     _: KW_ONLY = private_init_below()
     _children: tuple[SizableWidgetOnScreen, ...] = default(
@@ -32,19 +27,12 @@ class PanelOnScreen(SelectableWidgetOnScreen):
     )
 
     @override
-    def selected_event(
-        self, event: IoEvent
-    ) -> SelectableWidgetOnScreen | Scene:
-        # TODO
-        return self
-
-    @override
     @cached_property
-    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+    def _drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         drawing_on_screens = tuple(
             drawing_on_screen
             for child in self._children
-            for drawing_on_screen in child.drawing_on_screens
+            for drawing_on_screen in child._drawing_on_screens
         )
         return (
             self.widget_input.config.drawing_on_screens(self.area)
@@ -52,8 +40,8 @@ class PanelOnScreen(SelectableWidgetOnScreen):
         )
 
     @override
-    def tick(self, time_delta: Millisecond) -> Self:
-        children = tuple(child.tick(time_delta) for child in self._children)
+    def _tick(self, time_delta: Millisecond) -> Self:
+        children = tuple(child._tick(time_delta) for child in self._children)
         return replace(self, _children=children)
 
     @cached_property
@@ -70,7 +58,7 @@ class PanelOnScreen(SelectableWidgetOnScreen):
 
 
 @dataclass(frozen=True, kw_only=True)
-class Panel(SelectableWidget[PanelOnScreen]):
+class Panel(Widget[PanelOnScreen]):
     name: str
     children: tuple[SizableWidget, ...]
     config: PanelConfig = field(default_factory=lambda: config().ui.panel)

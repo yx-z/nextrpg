@@ -1,23 +1,18 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import ClassVar, Self, override
+from typing import ClassVar, override
 
-from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.geometry.dimension import Size
-from nextrpg.ui.sizable_widget import SizableWidget, SizableWidgetOnScreen
+from nextrpg.scene.ui.sizable_widget import SizableWidget, SizableWidgetOnScreen
 
 
 @dataclass(frozen=True)
 class LabelOnScreen(SizableWidgetOnScreen):
     widget_input: Label
-
-    @override
-    def tick(self, time_delta: Millisecond) -> Self:
-        return self
 
     @override
     @property
