@@ -56,8 +56,7 @@ class PanelOnScreen(WidgetOnScreen):
         return (
             self.widget_input.children[0]
             .anchor(self.area.top_left)
-            .widget_on_screen(self.name_to_on_screens)
-            .with_parent(self)
+            .widget_on_screen(self.name_to_on_screens, self)
             .select,
         )
 

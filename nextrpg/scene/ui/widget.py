@@ -18,9 +18,9 @@ from nextrpg.scene.scene import Scene
 class WidgetOnScreen(Scene):
     widget_input: Widget
     name_to_on_screens: dict[str, Coordinate | AreaOnScreen]
+    parent: Scene | None = None
     _: KW_ONLY = private_init_below()
     _is_selected: bool = False
-    _parent: Scene | None = None
 
     @property
     def select(self) -> Self:
@@ -32,18 +32,18 @@ class WidgetOnScreen(Scene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        if self._parent:
-            parent = self._parent.tick(time_delta)
+        if self.parent:
+            parent = self.parent.tick(time_delta)
         else:
             parent = None
         ticked = self.tick_after_parent(time_delta)
-        return replace(ticked, _parent=parent)
+        return replace(ticked, parent=parent)
 
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        if self._parent:
-            parent = self._parent.drawing_on_screens
+        if self.parent:
+            parent = self.parent.drawing_on_screens
         else:
             parent = ()
         return parent + self.drawing_on_screens_after_parent
@@ -55,13 +55,10 @@ class WidgetOnScreen(Scene):
         if (
             isinstance(event, KeyPressDown)
             and event.key is KeyboardKey.CANCEL
-            and self._parent
+            and self.parent
         ):
-            return self._parent
+            return self.parent
         return self.event_after_selected(event)
-
-    def with_parent(self, parent: Scene) -> Self:
-        return replace(self, _parent=parent)
 
     def tick_after_parent(self, time_delta: Millisecond) -> Self:
         return self
@@ -84,6 +81,9 @@ class WidgetOnScreen(Scene):
         ), f"Require {cls.__name__} for {name}. Got {obj}."
         return obj
 
+    def with_parent(self, parent: Scene | None) -> Self:
+        return replace(self, parent=parent)
+
 
 _WidgetOnScreen = TypeVar("_WidgetOnScreen", bound=WidgetOnScreen)
 
@@ -93,8 +93,12 @@ class Widget(ABC, Generic[_WidgetOnScreen]):
     widget_on_screen_type: ClassVar[type]
 
     def widget_on_screen(
-        self, name_to_on_screens: dict[str, Coordinate | AreaOnScreen]
+        self,
+        name_to_on_screens: dict[str, Coordinate | AreaOnScreen],
+        parent: Scene | None,
     ) -> _WidgetOnScreen:
         return self.widget_on_screen_type(
-            widget_input=self, name_to_on_screens=name_to_on_screens
+            widget_input=self,
+            name_to_on_screens=name_to_on_screens,
+            parent=parent,
         )

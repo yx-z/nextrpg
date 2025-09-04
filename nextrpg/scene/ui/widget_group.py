@@ -75,7 +75,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         )
 
     def _init_child(self, child: Widget) -> WidgetOnScreen:
-        return child.widget_on_screen(self.name_to_on_screens).with_parent(self)
+        return child.widget_on_screen(self.name_to_on_screens, self)
 
     def _step(self, forward: bool) -> Self:
         if len(self._children) < 2 or (
@@ -107,7 +107,10 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         return self._with_children(children)
 
     def _with_children(self, children: Iterable[WidgetOnScreen]) -> Self:
-        return replace(self, _children=tuple(children))
+        children_with_parent = tuple(
+            child.with_parent(self) for child in children
+        )
+        return replace(self, _children=children_with_parent)
 
 
 @dataclass(frozen=True, kw_only=True)
