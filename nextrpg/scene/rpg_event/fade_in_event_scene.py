@@ -1,7 +1,8 @@
-from dataclasses import KW_ONLY, dataclass, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from typing import Self, override
 
-from nextrpg.animation.fade import FadeOut
+from nextrpg.animation.fade import FadeIn
+from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -21,11 +22,11 @@ from nextrpg.scene.scene import Scene
 
 
 @dataclass(frozen=True, kw_only=True)
-class BackgroundFadeOut(BackgroundEvent):
-    fade: FadeOut
+class BackgroundFadeInEvent(BackgroundEvent):
+    fade: FadeIn
 
-    @override
     @property
+    @override
     def draw_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return self.fade.drawing_on_screens
 
@@ -36,16 +37,20 @@ class BackgroundFadeOut(BackgroundEvent):
     @property
     @override
     def complete(self) -> bool:
-        return self.fade.complete
+        return False
 
 
 @dataclass_with_default(frozen=True)
-class FadeOutScene(RpgEventScene[BackgroundFadeOut]):
-    sentinel: BackgroundEventSentinel
+class FadeInEventScene(RpgEventScene[BackgroundEventSentinel]):
+    drawing_on_screen: DrawingOnScreen | tuple[DrawingOnScreen, ...]
     wait: bool = True
-    duration: Millisecond | None = None
+    duration: Millisecond = field(
+        default_factory=lambda: config().timing.fade_duration
+    )
     _: KW_ONLY = private_init_below()
-    _fade: FadeOut = default(lambda self: self._init_fade)
+    _fade: FadeIn = default(
+        lambda self: FadeIn(self.drawing_on_screen, self.duration)
+    )
 
     @property
     @override
@@ -55,29 +60,18 @@ class FadeOutScene(RpgEventScene[BackgroundFadeOut]):
     @override
     def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
         fade = self._fade.tick(time_delta)
-        background_removed = ticked.scene.remove_background_event(self.sentinel)
-        if not self.wait:
-            background_event = BackgroundFadeOut(fade=fade)
-            return background_removed.complete(
-                self.generator, background_event=background_event
-            )
+        if self.wait and not fade.complete:
+            return replace(ticked, _fade=fade)
 
-        if fade.complete:
-            return background_removed.complete(self.generator)
-
-        return replace(ticked, scene=background_removed, _fade=fade)
-
-    @property
-    def _init_fade(self) -> FadeOut:
-        res = self.scene.get_background_event(self.sentinel).draw_on_screens
-        if self.duration is None:
-            return FadeOut(res)
-        return FadeOut(res, self.duration)
+        background_fade_in = BackgroundFadeInEvent(fade=fade)
+        return ticked.scene.complete(
+            self.generator, background_fade_in.sentinel, background_fade_in
+        )
 
 
-@register_rpg_event_scene(FadeOutScene)
-def fade_out(
-    sentinel: BackgroundEventSentinel,
+@register_rpg_event_scene(FadeInEventScene)
+def fade_in(
+    resource: DrawingOnScreen | tuple[DrawingOnScreen, ...],
     wait: bool = True,
     duration: Millisecond | None = None,
-) -> None: ...
+) -> BackgroundEventSentinel: ...

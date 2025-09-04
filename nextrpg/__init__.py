@@ -3,7 +3,7 @@ __version__ = "0.1.17"
 from nextrpg.animation.animation import Animation
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.animation.cyclic_animation import CyclicAnimation
-from nextrpg.animation.fade import FadeIn, FadeOut
+from nextrpg.animation.fade import Fade, FadeIn, FadeOut
 from nextrpg.animation.typewriter import Typewriter
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import (
@@ -53,7 +53,7 @@ from nextrpg.config.say_event_config import (
     SayEventNineSliceBackgroundConfig,
 )
 from nextrpg.config.text_config import TextConfig
-from nextrpg.config.transition_config import TransitionConfig
+from nextrpg.config.timing_config import TimingConfig
 from nextrpg.config.ui_config import PanelConfig
 from nextrpg.config.window_config import ResizeMode, WindowConfig
 from nextrpg.core.cached_decorator import cached
@@ -71,6 +71,7 @@ from nextrpg.core.save import (
     SaveIo,
     UpdateFromSave,
 )
+from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry
 from nextrpg.draw.anchor import Anchor
 from nextrpg.draw.color import (
@@ -155,6 +156,7 @@ from nextrpg.gui.area import (
     top_screen,
 )
 from nextrpg.gui.window import Window
+from nextrpg.scene.fade_scene import FadeInScene, FadeOutScene, FadeScene
 from nextrpg.scene.map.map_loader import (
     LayerTileBottomAndDrawOnScreen,
     MapLoader,
@@ -164,14 +166,14 @@ from nextrpg.scene.map.map_scene import MapScene, Move
 from nextrpg.scene.map.map_shift import center_player
 from nextrpg.scene.rpg_event.cutscene import cutscene
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
-from nextrpg.scene.rpg_event.fade_in_scene import (
-    BackgroundFadeIn,
-    FadeInScene,
+from nextrpg.scene.rpg_event.fade_in_event_scene import (
+    BackgroundFadeInEvent,
+    FadeInEventScene,
     fade_in,
 )
-from nextrpg.scene.rpg_event.fade_out_scene import (
-    BackgroundFadeOut,
-    FadeOutScene,
+from nextrpg.scene.rpg_event.fade_out_event_scene import (
+    BackgroundFadeOutEvent,
+    FadeOutEventScene,
     fade_out,
 )
 from nextrpg.scene.rpg_event.rpg_event_scene import (

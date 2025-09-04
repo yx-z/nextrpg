@@ -22,4 +22,6 @@ class CutsceneConfig:
     def duration(self) -> Millisecond:
         from nextrpg.config.config import config
 
-        return self.duration_override or config().transition.duration
+        return (
+            self.duration_override or config().timing.transition_total_duration
+        )

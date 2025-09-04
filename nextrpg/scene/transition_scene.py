@@ -25,7 +25,7 @@ class TransitionScene(Scene):
         default_factory=lambda: config().window.background
     )
     duration: Millisecond = field(
-        default_factory=lambda: config().transition.duration
+        default_factory=lambda: config().timing.transition_total_duration
     )
     _: KW_ONLY = private_init_below()
     _fade_in: FadeIn = default(

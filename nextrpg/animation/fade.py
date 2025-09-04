@@ -16,10 +16,14 @@ from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 
 
 @dataclass_with_default(frozen=True)
-class _Fade(AnimationOnScreen, ABC):
-    drawing_on_screen: DrawingOnScreen | tuple[DrawingOnScreen, ...]
+class Fade(AnimationOnScreen, ABC):
+    resource: (
+        AnimationOnScreen
+        | DrawingOnScreen
+        | tuple[DrawingOnScreen | AnimationOnScreen, ...]
+    )
     duration: Millisecond = field(
-        default_factory=lambda: config().transition.duration
+        default_factory=lambda: config().timing.fade_duration
     )
     _: KW_ONLY = private_init_below()
     _timer: Timer = default(lambda self: Timer(self.duration))
@@ -37,8 +41,22 @@ class _Fade(AnimationOnScreen, ABC):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
+        match self.resource:
+            case AnimationOnScreen():
+                resource = self.resource.tick(time_delta)
+            case tuple():
+                resource = tuple(
+                    (
+                        resource.tick(time_delta)
+                        if isinstance(resource, AnimationOnScreen)
+                        else resource
+                    )
+                    for resource in self.resource
+                )
+            case _:
+                resource = self.resource
         timer = self._timer.tick(time_delta)
-        return replace(self, _timer=timer)
+        return replace(self, resource=resource, _timer=timer)
 
     @property
     def complete(self) -> bool:
@@ -46,9 +64,17 @@ class _Fade(AnimationOnScreen, ABC):
 
     @cached_property
     def _drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        if isinstance(self.drawing_on_screen, DrawingOnScreen):
-            return (self.drawing_on_screen,)
-        return self.drawing_on_screen
+        if isinstance(self.resource, AnimationOnScreen):
+            return self.resource.drawing_on_screens
+        if isinstance(self.resource, DrawingOnScreen):
+            return (self.resource,)
+        res: list[DrawingOnScreen] = []
+        for resource in self.resource:
+            if isinstance(resource, AnimationOnScreen):
+                res += resource.drawing_on_screens
+            else:
+                res.append(resource)
+        return tuple(res)
 
     @property
     @abstractmethod
@@ -63,7 +89,7 @@ class _Fade(AnimationOnScreen, ABC):
     def _percentage(self) -> float: ...
 
 
-class FadeIn(_Fade):
+class FadeIn(Fade):
     @override
     @property
     def _start(self) -> tuple[DrawingOnScreen, ...]:
@@ -80,7 +106,7 @@ class FadeIn(_Fade):
         return self._timer.completed_percentage
 
 
-class FadeOut(_Fade):
+class FadeOut(Fade):
     @override
     @property
     def _percentage(self) -> float:

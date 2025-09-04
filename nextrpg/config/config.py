@@ -18,7 +18,7 @@ from nextrpg.config.save_config import SaveConfig
 from nextrpg.config.say_event_config import SayEventConfig
 from nextrpg.config.text_config import TextConfig
 from nextrpg.config.text_group_config import TextGroupConfig
-from nextrpg.config.transition_config import TransitionConfig
+from nextrpg.config.timing_config import TimingConfig
 from nextrpg.config.ui_config import UiConfig
 from nextrpg.config.window_config import WindowConfig
 
@@ -34,7 +34,7 @@ class Config:
         RpgMakerCharacterDrawingConfig()
     )
     key_mapping: KeyMappingConfig = KeyMappingConfig()
-    transition: TransitionConfig = TransitionConfig()
+    timing: TimingConfig = TimingConfig()
     text: TextConfig = TextConfig()
     text_group: TextGroupConfig = TextGroupConfig()
     drawing: DrawingConfig = DrawingConfig()
