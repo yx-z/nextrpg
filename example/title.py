@@ -8,22 +8,21 @@ from nextrpg import (
     Label,
     Panel,
     PanelConfig,
-    Scene,
     Text,
+    TitleScene,
     TransitionScene,
     WidgetGroup,
     config,
     quit,
-    title,
 )
 
 
-def create_title() -> Scene:
+def title() -> TitleScene:
     highlight = config().text.colored(BLUE)
 
     start_text_idle = Text("Start")
     start_text_selected = start_text_idle.configured(highlight)
-    scene = TransitionScene(create_title, interior_scene)
+    scene = TransitionScene(title, interior_scene)
     start = Button(
         name="start",
         idle=start_text_idle.drawing_group,
@@ -61,7 +60,7 @@ def create_title() -> Scene:
     group = WidgetGroup(children=(start, load, settings, exit_button))
 
     tmx = Path("example/asset/title.tmx")
-    return title(tmx, "background", group)
+    return TitleScene(tmx_file=tmx, background="background", widget_input=group)
 
 
 def load_panel() -> Panel:

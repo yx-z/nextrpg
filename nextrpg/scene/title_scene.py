@@ -1,7 +1,6 @@
-from dataclasses import KW_ONLY, replace
+from dataclasses import KW_ONLY
 from functools import cached_property
 from pathlib import Path
-from typing import Self, override
 
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.core.dataclass_with_default import (
@@ -9,41 +8,40 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
-from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_coordinate, get_geometry
+from nextrpg.draw.color import Color
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.scene.scene import Scene
-from nextrpg.scene.ui.widget import Widget
+from nextrpg.scene.ui.widget_group import WidgetGroupOnScreen
+from nextrpg.scene.view_only_scene import ViewOnlyScene
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
-class TitleScene(Scene):
+class TitleScene(WidgetGroupOnScreen):
     tmx_file: Path
-    background: str | DrawingOnScreen | AnimationOnScreen
+    background: str | Color | DrawingOnScreen | AnimationOnScreen
     _: KW_ONLY = private_init_below()
-    _tmx: TmxLoader = default(lambda self: TmxLoader(self.tmx_file))
+    name_to_on_screens: dict[str, Coordinate | AreaOnScreen] = default(
+        lambda self: self._init_name_to_on_screens
+    )
+    _parent: ViewOnlyScene = default(lambda self: self._init_parent)
+    _is_selected: bool = True
 
-    @override
-    def tick(self, time_delta: Millisecond) -> Self:
-        if isinstance(self.background, AnimationOnScreen):
-            background = self.background.tick(time_delta)
-        else:
-            background = self.background
-        return replace(self, background=background)
-
-    @override
-    @cached_property
-    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+    @property
+    def _init_parent(self) -> ViewOnlyScene:
         if isinstance(self.background, str):
-            return (self._tmx.image_layer(self.background),)
-        if isinstance(self.background, AnimationOnScreen):
-            return self.background.drawing_on_screens
-        return (self.background,)
+            drawing = self._tmx.image_layer(self.background)
+        else:
+            drawing = self.background
+        return ViewOnlyScene(drawing)
 
     @cached_property
-    def name_to_on_screens(self) -> dict[str, Coordinate | AreaOnScreen]:
+    def _tmx(self) -> TmxLoader:
+        return TmxLoader(self.tmx_file)
+
+    @property
+    def _init_name_to_on_screens(self) -> dict[str, Coordinate | AreaOnScreen]:
         name_to_on_screens: dict[str, Coordinate | AreaOnScreen] = {}
         for obj in self._tmx.all_objects:
             if isinstance(area := get_geometry(obj), AreaOnScreen):
@@ -52,16 +50,3 @@ class TitleScene(Scene):
                 res = get_coordinate(obj)
             name_to_on_screens[obj.name] = res
         return name_to_on_screens
-
-
-def title(
-    tmx_file: Path,
-    background: str | DrawingOnScreen | AnimationOnScreen,
-    widget: Widget,
-) -> Scene:
-    title_scene = TitleScene(tmx_file=tmx_file, background=background)
-    return (
-        widget.widget_on_screen(title_scene.name_to_on_screens)
-        .with_parent(title_scene)
-        .select
-    )
