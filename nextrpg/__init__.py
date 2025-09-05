@@ -166,7 +166,7 @@ from nextrpg.scene.map.map_loader import (
     MapLoader,
     TileBottomAndDrawOnScreen,
 )
-from nextrpg.scene.map.map_scene import MapScene, Move
+from nextrpg.scene.map.map_scene import MapMove, MapScene
 from nextrpg.scene.map.map_shift import center_player
 from nextrpg.scene.rpg_event.cutscene import cutscene
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene

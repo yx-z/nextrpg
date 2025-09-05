@@ -9,8 +9,8 @@ from nextrpg import (
     EventfulScene,
     EventSpec,
     Height,
+    MapMove,
     MapScene,
-    Move,
     NpcEventStartMode,
     NpcOnScreen,
     NpcSpec,
@@ -46,7 +46,7 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
     from exterior_scene import exterior_scene
 
     tmx = Path("example/asset/interior.tmx")
-    move = Move("from_interior", "to_exterior", exterior_scene)
+    move = MapMove("from_interior", "to_exterior", exterior_scene)
     npcs = (david, alisa, auto_trigger)
     return MapScene(tmx_file=tmx, player_spec=player, move=move, npc_specs=npcs)
 

@@ -46,7 +46,7 @@ log = Log()
 class MapScene[R](EventfulScene[R]):
     tmx_file: Path
     player_spec: CharacterSpec
-    move: Move | tuple[Move, ...] = ()
+    move: MapMove | tuple[MapMove, ...] = ()
     npc_specs: NpcSpec | tuple[NpcSpec, ...] = ()
     _: KW_ONLY = private_init_below()
     npcs: tuple[NpcOnScreen, ...] = default(
@@ -123,7 +123,7 @@ class MapScene[R](EventfulScene[R]):
         return None
 
     @cached_property
-    def _moves(self) -> tuple[Move, ...]:
+    def _moves(self) -> tuple[MapMove, ...]:
         if isinstance(self.move, tuple):
             return self.move
         return (self.move,)
@@ -141,7 +141,7 @@ class MapScene[R](EventfulScene[R]):
             for m in self._moves
         )
 
-    def _move(self, move: Move, time_delta: Millisecond) -> Scene | None:
+    def _move(self, move: MapMove, time_delta: Millisecond) -> Scene | None:
         move_area = get_geometry(
             self._map_loader.get_object(move.trigger_object)
         )
@@ -221,7 +221,7 @@ class MapScene[R](EventfulScene[R]):
 
 
 @dataclass(frozen=True)
-class Move:
+class MapMove:
     to_object: str
     trigger_object: str
     next_scene: (

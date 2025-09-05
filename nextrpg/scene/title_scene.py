@@ -3,6 +3,7 @@ from functools import cached_property
 from pathlib import Path
 from typing import Self, override
 
+from nextrpg.animation.animated_drawing_on_screen import AnimatedDrawingOnScreen
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -11,47 +12,56 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_coordinate, get_geometry
-from nextrpg.draw.color import Color
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.ui.widget_group import WidgetGroupOnScreen
-from nextrpg.scene.view_only_scene import ViewOnlyScene
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class TitleScene(WidgetGroupOnScreen):
     tmx_file: Path
-    background: str | Color | DrawingOnScreen | AnimationOnScreen
+    background: (
+        str
+        | DrawingOnScreen
+        | AnimationOnScreen
+        | tuple[str | DrawingOnScreen | AnimationOnScreen, ...]
+    )
     _: KW_ONLY = private_init_below()
     name_to_on_screens: dict[str, Coordinate | AreaOnScreen] = default(
         lambda self: self._init_name_to_on_screens
     )
     _is_selected: bool = True
-    _background_scene: ViewOnlyScene = default(
-        lambda self: self._init_background_scene
+    _background: AnimatedDrawingOnScreen = default(
+        lambda self: self._init_background
     )
 
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        return (
-            self._background_scene.drawing_on_screens
-            + super().drawing_on_screens
-        )
+        return self._background.drawing_on_screens + super().drawing_on_screens
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        background_scene = self._background_scene.tick(time_delta)
-        return replace(self, _background_scene=background_scene)
+        background = self._background.tick(time_delta)
+        return replace(self, _background=background)
 
     @property
-    def _init_background_scene(self) -> ViewOnlyScene:
-        if isinstance(self.background, str):
-            drawing = self._tmx.image_layer(self.background)
-        else:
-            drawing = self.background
-        return ViewOnlyScene(drawing)
+    def _init_background(self) -> AnimatedDrawingOnScreen:
+        match self.background:
+            case str():
+                drawing = self._image_layer(self.background)
+            case tuple():
+                drawing = tuple(
+                    (self._image_layer(res) if isinstance(res, str) else res)
+                    for res in self.background
+                )
+            case _:
+                drawing = self.background
+        return AnimatedDrawingOnScreen(drawing)
+
+    def _image_layer(self, layer: str) -> DrawingOnScreen:
+        return self._tmx.image_layer(layer)
 
     @cached_property
     def _tmx(self) -> TmxLoader:

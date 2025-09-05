@@ -40,7 +40,7 @@ _AnimationOnScreen = TypeVar("_AnimationOnScreen", bound=AnimationOnScreen)
 
 def tick_optional(
     animation: _AnimationOnScreen | None, time_delta: Millisecond
-) -> _AnimationOnScreen:
+) -> _AnimationOnScreen | None:
     if animation:
         return animation.tick(time_delta)
     return None

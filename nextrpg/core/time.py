@@ -26,7 +26,11 @@ class Timer:
         return replace(self, elapsed=0)
 
     @property
-    def complete(self) -> bool:
+    def started(self) -> bool:
+        return self.elapsed > 0
+
+    @property
+    def overdue(self) -> bool:
         return self.elapsed > self.duration
 
     @property

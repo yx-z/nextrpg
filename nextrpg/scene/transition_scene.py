@@ -11,7 +11,6 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.color import Color
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.gui.area import screen
 from nextrpg.scene.scene import Scene
@@ -21,18 +20,18 @@ from nextrpg.scene.scene import Scene
 class TransitionScene(Scene):
     from_scene: Scene | Callable[[], Scene]
     to_scene: Scene | Callable[[], Scene]
-    intermediary: DrawingOnScreen | tuple[DrawingOnScreen, ...] | Color = field(
-        default_factory=lambda: config().window.background
+    intermediary: DrawingOnScreen | tuple[DrawingOnScreen, ...] = field(
+        default_factory=lambda: screen().fill(config().window.background)
     )
     duration: Millisecond = field(
         default_factory=lambda: config().timing.transition_total_duration
     )
     _: KW_ONLY = private_init_below()
     _fade_in: FadeIn = default(
-        lambda self: FadeIn(self._intermediary, self.duration // 2)
+        lambda self: FadeIn(self.intermediary, self.duration // 2)
     )
     _fade_out: FadeOut = default(
-        lambda self: FadeOut(self._intermediary, self.duration // 2)
+        lambda self: FadeOut(self.intermediary, self.duration // 2)
     )
 
     @override
@@ -55,12 +54,6 @@ class TransitionScene(Scene):
             self._from_scene.drawing_on_screens
             + self._fade_in.drawing_on_screens
         )
-
-    @property
-    def _intermediary(self) -> DrawingOnScreen | tuple[DrawingOnScreen, ...]:
-        if isinstance(self.intermediary, Color):
-            return screen().fill(self.intermediary)
-        return self.intermediary
 
     @cached_property
     def _from_scene(self) -> Scene:

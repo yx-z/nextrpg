@@ -37,14 +37,6 @@ class WidgetOnScreen(Scene):
         lambda self: self._init_animation
     )
 
-    @property
-    def _init_animation(self) -> AnimationOnScreen | None:
-        if self.widget_input.entering_animation:
-            return self.widget_input.entering_animation(
-                self.drawing_on_screens_after_parent
-            )
-        return None
-
     def exit(self, to_scene: Scene) -> Self:
         if self.widget_input.exiting_animation:
             animation = self.widget_input.exiting_animation(
@@ -124,6 +116,14 @@ class WidgetOnScreen(Scene):
 
     def with_parent(self, parent: Scene | None) -> Self:
         return replace(self, parent=parent)
+
+    @property
+    def _init_animation(self) -> AnimationOnScreen | None:
+        if self.widget_input.entering_animation:
+            return self.widget_input.entering_animation(
+                self.drawing_on_screens_after_parent
+            )
+        return None
 
 
 _WidgetOnScreen = TypeVar("_WidgetOnScreen", bound=WidgetOnScreen)
