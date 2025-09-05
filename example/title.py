@@ -6,6 +6,7 @@ from nextrpg import (
     Button,
     Color,
     FadeIn,
+    FadeOut,
     Label,
     Panel,
     PanelConfig,
@@ -69,5 +70,6 @@ def load_panel() -> Panel:
         name="load_panel",
         children=(Label(message="No save data found."),),
         config=PanelConfig(background=Color(0, 0, 0, 128)),
-        entering_animation=lambda d: FadeIn(d),
+        entering_animation=FadeIn,
+        exiting_animation=FadeOut,
     )

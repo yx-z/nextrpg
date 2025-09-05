@@ -47,11 +47,10 @@ class WidgetOnScreen(Scene):
     def exit(self, to_scene: Scene) -> Self:
         if self.widget_input.exiting_animation:
             animation = self.widget_input.exiting_animation(
-                self.drawing_on_screens
+                self.drawing_on_screens_after_parent
             )
-        else:
-            animation = None
-        return replace(self, _animation=animation, _to_scene=to_scene)
+            return replace(self, _animation=animation, _to_scene=to_scene)
+        return to_scene
 
     @property
     def select(self) -> Self:
@@ -98,7 +97,7 @@ class WidgetOnScreen(Scene):
             and event.key is KeyboardKey.CANCEL
             and self.parent
         ):
-            return self.parent
+            return self.exit(self.parent)
         return self.event_after_selected(event)
 
     def tick_after_parent(self, time_delta: Millisecond) -> Self:
