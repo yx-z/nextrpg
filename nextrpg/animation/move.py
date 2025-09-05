@@ -11,16 +11,15 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.geometry.dimension import PixelPerMillisecond
 from nextrpg.geometry.direction import DirectionalOffset
 
 
 @dataclass_with_default(frozen=True)
 class Move(AnimationOnScreens):
     offset: DirectionalOffset
-    speed: PixelPerMillisecond
+    duration: Millisecond
     _: KW_ONLY = private_init_below()
-    _timer: Timer = default(lambda self: Timer(self.offset.offset / self.speed))
+    _timer: Timer = default(lambda self: Timer(self.duration))
 
     @override
     @property
@@ -40,10 +39,6 @@ class Move(AnimationOnScreens):
             drawing_on_screen + self.offset * self._percentage
             for drawing_on_screen in super().drawing_on_screens
         )
-
-    @property
-    def duration(self) -> Millisecond:
-        return self._timer.duration
 
     @property
     @abstractmethod
