@@ -79,7 +79,7 @@ class MapScene[R](EventfulScene[R]):
 
     @cached_property
     @override
-    def drawing_on_screen_shift(self) -> Coordinate:
+    def drawing_on_screens_shift(self) -> Coordinate:
         player_coord = self.player.center
         shift = center_player(player_coord, self._map_loader.map_size)
         log.debug(

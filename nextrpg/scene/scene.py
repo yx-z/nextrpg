@@ -11,12 +11,12 @@ from nextrpg.geometry.coordinate import Coordinate
 
 class Scene(AnimationOnScreen):
     @property
-    def drawing_on_screen_shift(self) -> Coordinate | None:
+    def drawing_on_screens_shift(self) -> Coordinate | None:
         return None
 
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        if shift := self.drawing_on_screen_shift:
+        if shift := self.drawing_on_screens_shift:
             return tuple(
                 d.add_fast(shift) for d in self.drawing_on_screens_before_shift
             )

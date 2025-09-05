@@ -255,10 +255,10 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     def _character_position(self) -> _CharacterPosition:
-        if self.scene.drawing_on_screen_shift:
+        if self.scene.drawing_on_screens_shift:
             rect = (
                 self.character.drawing_on_screen.visible_rectangle_area_on_screen
-            ) + self.scene.drawing_on_screen_shift
+            ) + self.scene.drawing_on_screens_shift
         else:
             rect = (
                 self.character.drawing_on_screen.visible_rectangle_area_on_screen

@@ -39,7 +39,7 @@ class WidgetOnScreen(Scene):
     def enter(self) -> Self:
         if self.widget_input.entering_animation:
             animation = self.widget_input.entering_animation(
-                self.drawing_on_screens
+                self.drawing_on_screens_after_parent
             )
         else:
             animation = None
