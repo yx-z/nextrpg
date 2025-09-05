@@ -32,6 +32,15 @@ class DirectionalOffset:
     direction: Direction | Degree
     offset: Pixel
 
+    def __mul__(self, scale: float) -> Self:
+        return replace(self, offset=self.offset * scale)
+
+    def __rmul__(self, scale: float) -> Self:
+        return self * scale
+
+    def __truediv__(self, scale: float) -> Self:
+        return self * (1.0 / scale)
+
     @cached_property
     def shift(self) -> Size:
         width = cos(self.radian) * self.offset

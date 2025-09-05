@@ -5,9 +5,13 @@ from nextrpg import (
     BLUE,
     Button,
     Color,
+    Direction,
+    DirectionalOffset,
     FadeIn,
     FadeOut,
     Label,
+    MoveFrom,
+    MoveTo,
     Panel,
     PanelConfig,
     Text,
@@ -70,6 +74,12 @@ def load_panel() -> Panel:
         name="load_panel",
         children=(Label(message="No save data found."),),
         config=PanelConfig(background=Color(0, 0, 0, 128)),
-        entering_animation=FadeIn,
-        exiting_animation=FadeOut,
+        entering_animation=lambda d: FadeIn(
+            (move := MoveTo(d, DirectionalOffset(Direction.DOWN, 50), 0.1)),
+            move.duration,
+        ),
+        exiting_animation=lambda d: FadeOut(
+            (move := MoveFrom(d, DirectionalOffset(Direction.UP, 50), 0.1)),
+            move.duration,
+        ),
     )

@@ -36,9 +36,9 @@ class Fade(AnimationOnScreens, ABC):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        resource_ticked = super().tick(time_delta)
+        ticked = super().tick(time_delta)
         timer = self._timer.tick(time_delta)
-        return replace(resource_ticked, _timer=timer)
+        return replace(ticked, _timer=timer)
 
     @override
     @property

@@ -89,7 +89,7 @@ class WidgetOnScreen(Scene):
 
     @override
     def event(self, event: IoEvent) -> Scene:
-        if not self._is_selected:
+        if not self._is_selected or self._animation:
             return self
         if (
             isinstance(event, KeyPressDown)

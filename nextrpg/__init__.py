@@ -8,6 +8,7 @@ from nextrpg.animation.animation_on_screen import (
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.animation.fade import Fade, FadeIn, FadeOut
+from nextrpg.animation.move import Move, MoveFrom, MoveTo
 from nextrpg.animation.typewriter import Typewriter
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import (

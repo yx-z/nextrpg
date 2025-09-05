@@ -7,7 +7,6 @@ if TYPE_CHECKING:
     from nextrpg.geometry.coordinate import Coordinate, XAxis, YAxis
 
 type Pixel = int | float
-
 type PixelPerMillisecond = int | float
 
 

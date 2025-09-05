@@ -10,6 +10,7 @@ from nextrpg.draw.color import Alpha
 from nextrpg.draw.drawing import Drawing
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size, Width
+from nextrpg.geometry.direction import DirectionalOffset
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
 
@@ -43,7 +44,7 @@ class DrawingOnScreen(Sizable):
         return self.drawing.size
 
     def __add__(
-        self, other: Coordinate | Size | Width | Height
+        self, other: Coordinate | Size | Width | Height | DirectionalOffset
     ) -> DrawingOnScreen:
         top_left = self.top_left + other
         return replace(self, top_left=top_left, drawing=self.drawing)
@@ -58,6 +59,6 @@ class DrawingOnScreen(Sizable):
         )
 
     def __sub__(
-        self, other: Coordinate | Size | Width | Height
+        self, other: Coordinate | Size | Width | Height | DirectionalOffset
     ) -> DrawingOnScreen:
         return self + -other
