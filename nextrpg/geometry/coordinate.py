@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from math import atan2, degrees, hypot, sqrt
+from math import atan2, degrees, hypot
 from typing import TYPE_CHECKING, NamedTuple, Self, overload
 
 from nextrpg.geometry.dimension import Dimension, Height, Pixel, Size, Width
@@ -121,27 +121,7 @@ class Coordinate(NamedTuple):
             return Coordinate(
                 self.left_value + arg.left_value, self.top_value + arg.top_value
             )
-
-        match arg.direction:
-            case Direction.UP:
-                return Coordinate(self.left_value, self.top_value - arg.offset)
-            case Direction.DOWN:
-                return Coordinate(self.left_value, self.top_value + arg.offset)
-            case Direction.LEFT:
-                return Coordinate(self.left_value - arg.offset, self.top_value)
-            case Direction.RIGHT:
-                return Coordinate(self.left_value + arg.offset, self.top_value)
-
-        diag = arg.offset / sqrt(2)
-        match arg.direction:
-            case Direction.UP_LEFT:
-                return Coordinate(self.left_value - diag, self.top_value - diag)
-            case Direction.UP_RIGHT:
-                return Coordinate(self.left_value + diag, self.top_value - diag)
-            case Direction.DOWN_LEFT:
-                return Coordinate(self.left_value - diag, self.top_value + diag)
-            case Direction.DOWN_RIGHT:
-                return Coordinate(self.left_value + diag, self.top_value + diag)
+        return self + arg.shift
 
     def __sub__(
         self, arg: DirectionalOffset | Size | Width | Height | Coordinate

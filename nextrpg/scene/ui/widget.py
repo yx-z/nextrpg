@@ -7,9 +7,15 @@ from enum import Enum, auto
 from functools import cached_property
 from typing import ClassVar, Generic, Self, TypeVar, override
 
-from nextrpg import AnimationOnScreen, dataclass_with_default
-from nextrpg.animation.animation_on_screen import tick_optional
-from nextrpg.core.dataclass_with_default import default, private_init_below
+from nextrpg.animation.animation_on_screen import (
+    AnimationOnScreen,
+    tick_optional,
+)
+from nextrpg.core.dataclass_with_default import (
+    dataclass_with_default,
+    default,
+    private_init_below,
+)
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown

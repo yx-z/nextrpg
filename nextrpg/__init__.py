@@ -5,6 +5,7 @@ from nextrpg.animation.animation_on_screen import (
     AnimationOnScreen,
     tick_optional,
 )
+from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.animation.fade import Fade, FadeIn, FadeOut
 from nextrpg.animation.typewriter import Typewriter

@@ -7,7 +7,7 @@ from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 
 
 @dataclass(frozen=True)
-class AnimatedDrawingOnScreen(AnimationOnScreen):
+class AnimationOnScreens(AnimationOnScreen):
     resource: (
         AnimationOnScreen
         | DrawingOnScreen
@@ -54,6 +54,7 @@ class AnimatedDrawingOnScreen(AnimationOnScreen):
             return self.resource.complete
         if isinstance(self.resource, DrawingOnScreen):
             return True
+
         return all(
             (
                 resource.complete

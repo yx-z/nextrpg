@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 
-from nextrpg import Direction
+from nextrpg.animation.animation_on_screens import AnimationOnScreens
+from nextrpg.geometry.direction import Direction, DirectionalOffset
 
 
 @dataclass(frozen=True)
-class Move:
-    direction: Direction
+class Move(AnimationOnScreens):
+    offset: DirectionalOffset

@@ -3,7 +3,7 @@ from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.animation.animated_drawing_on_screen import AnimatedDrawingOnScreen
+from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -16,7 +16,7 @@ from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 
 
 @dataclass_with_default(frozen=True)
-class Fade(AnimatedDrawingOnScreen, ABC):
+class Fade(AnimationOnScreens, ABC):
     duration: Millisecond = field(
         default_factory=lambda: config().timing.fade_duration
     )
