@@ -70,12 +70,19 @@ class WidgetOnScreen(Scene):
         else:
             animation = None
 
+        if self._to_scene:
+            to_scene = self._to_scene.tick(time_delta)
+        else:
+            to_scene = None
+
         if self.parent:
             parent = self.parent.tick(time_delta)
         else:
             parent = None
         ticked = self.tick_after_parent(time_delta)
-        return replace(ticked, _animation=animation, parent=parent)
+        return replace(
+            ticked, _animation=animation, parent=parent, _to_scene=to_scene
+        )
 
     @override
     @cached_property
