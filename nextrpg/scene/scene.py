@@ -1,18 +1,15 @@
 from __future__ import annotations
 
-from abc import abstractmethod
 from functools import cached_property
+from typing import override
 
-from nextrpg.core.time import Millisecond
+from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent
 from nextrpg.geometry.coordinate import Coordinate
 
 
-class Scene:
-    @abstractmethod
-    def tick(self, time_delta: Millisecond) -> Scene: ...
-
+class Scene(AnimationOnScreen):
     @property
     def drawing_on_screen_shift(self) -> Coordinate | None:
         return None
@@ -31,3 +28,8 @@ class Scene:
 
     def event(self, event: IoEvent) -> Scene:
         return self
+
+    @override
+    @property
+    def complete(self) -> bool:
+        return False

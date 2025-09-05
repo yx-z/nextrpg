@@ -37,12 +37,9 @@ class TransitionScene(Scene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
-        fade_in = self._fade_in.tick(time_delta)
-        if not fade_in.complete:
+        if not (fade_in := self._fade_in.tick(time_delta)).complete:
             return replace(self, _fade_in=fade_in)
-
-        fade_out = self._fade_out.tick(time_delta)
-        if fade_out.complete:
+        if (fade_out := self._fade_out.tick(time_delta)).complete:
             return self._to_scene
         return replace(self, _fade_in=fade_in, _fade_out=fade_out)
 

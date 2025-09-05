@@ -8,6 +8,7 @@ from functools import cached_property
 from typing import ClassVar, Generic, Self, TypeVar, override
 
 from nextrpg import AnimationOnScreen
+from nextrpg.animation.animation_on_screen import tick_optional
 from nextrpg.core.dataclass_with_default import private_init_below
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
@@ -70,15 +71,8 @@ class WidgetOnScreen(Scene):
         else:
             animation = None
 
-        if self._to_scene:
-            to_scene = self._to_scene.tick(time_delta)
-        else:
-            to_scene = None
-
-        if self.parent:
-            parent = self.parent.tick(time_delta)
-        else:
-            parent = None
+        parent = tick_optional(self.parent, time_delta)
+        to_scene = tick_optional(self._to_scene, time_delta)
         ticked = self.tick_after_parent(time_delta)
         return replace(
             ticked, _animation=animation, parent=parent, _to_scene=to_scene

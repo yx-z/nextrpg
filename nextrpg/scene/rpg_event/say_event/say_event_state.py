@@ -5,6 +5,7 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Self, override
 
+from nextrpg.animation.animation_on_screen import tick_optional
 from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.animation.typewriter import Typewriter
 from nextrpg.config.say_event_config import SayEventConfig
@@ -66,8 +67,7 @@ class SayEventFadeInState(SayEventState):
 
     @override
     def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
-        fade_in = self._fade_in.tick(time_delta)
-        if not fade_in.complete:
+        if not (fade_in := self._fade_in.tick(time_delta)).complete:
             return replace(ticked, _fade_in=fade_in)
         return SayEventTypingState(
             generator=self.generator,
@@ -104,11 +104,7 @@ class SayEventTypingState(SayEventState):
 
     @override
     def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
-        if self._typewriter:
-            typewriter = self._typewriter.tick(time_delta)
-        else:
-            typewriter = None
-
+        typewriter = tick_optional(self._typewriter, time_delta)
         return replace(ticked, _typewriter=typewriter)
 
     @override
