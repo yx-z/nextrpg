@@ -29,11 +29,7 @@ class PanelOnScreen(WidgetOnScreen):
     @override
     @cached_property
     def drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
-        drawing_on_screens = tuple(
-            drawing_on_screen
-            for child in self._children
-            for drawing_on_screen in child.drawing_on_screens_after_parent
-        )
+        drawing_on_screens = tuple()
         return (
             self.widget_input.config.drawing_on_screens(self.area)
             + drawing_on_screens

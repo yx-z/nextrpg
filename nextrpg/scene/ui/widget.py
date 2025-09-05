@@ -7,9 +7,9 @@ from enum import Enum, auto
 from functools import cached_property
 from typing import ClassVar, Generic, Self, TypeVar, override
 
-from nextrpg import AnimationOnScreen
+from nextrpg import AnimationOnScreen, dataclass_with_default
 from nextrpg.animation.animation_on_screen import tick_optional
-from nextrpg.core.dataclass_with_default import private_init_below
+from nextrpg.core.dataclass_with_default import default, private_init_below
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
@@ -24,7 +24,7 @@ class WidgetOnScreenState(Enum):
     EXITING = auto()
 
 
-@dataclass(frozen=True)
+@dataclass_with_default(frozen=True)
 class WidgetOnScreen(Scene):
     widget_input: Widget
     name_to_on_screens: dict[str, Coordinate | AreaOnScreen]
@@ -32,18 +32,18 @@ class WidgetOnScreen(Scene):
     _: KW_ONLY = private_init_below()
     _is_selected: bool = False
     _state: WidgetOnScreenState = WidgetOnScreenState.ON_SCREEN
-    _animation: AnimationOnScreen | None = None
     _to_scene: Scene | None = None
+    _animation: AnimationOnScreen | None = default(
+        lambda self: self._init_animation
+    )
 
     @property
-    def enter(self) -> Self:
+    def _init_animation(self) -> AnimationOnScreen | None:
         if self.widget_input.entering_animation:
-            animation = self.widget_input.entering_animation(
+            return self.widget_input.entering_animation(
                 self.drawing_on_screens_after_parent
             )
-        else:
-            animation = None
-        return replace(self, _animation=animation)
+        return None
 
     def exit(self, to_scene: Scene) -> Self:
         if self.widget_input.exiting_animation:
