@@ -63,7 +63,8 @@ def title() -> TitleScene:
         on_click=quit,
     )
 
-    group = WidgetGroup(children=(start, load, settings, exit_button))
+    children = (start, load, settings, exit_button)
+    group = WidgetGroup(children=children)
 
     tmx = Path("example/asset/title.tmx")
     return TitleScene(tmx_file=tmx, background="background", widget_input=group)

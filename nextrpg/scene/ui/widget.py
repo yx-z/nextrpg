@@ -3,7 +3,6 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass, replace
-from enum import Enum, auto
 from functools import cached_property
 from typing import ClassVar, Generic, Self, TypeVar, override
 
@@ -15,6 +14,7 @@ from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
     private_init_below,
+    type_name,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
@@ -24,12 +24,6 @@ from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.scene import Scene
 
 
-class WidgetOnScreenState(Enum):
-    ENTERING = auto()
-    ON_SCREEN = auto()
-    EXITING = auto()
-
-
 @dataclass_with_default(frozen=True)
 class WidgetOnScreen(Scene):
     widget_input: Widget
@@ -37,19 +31,13 @@ class WidgetOnScreen(Scene):
     parent: Scene | None = None
     _: KW_ONLY = private_init_below()
     _is_selected: bool = False
-    _state: WidgetOnScreenState = WidgetOnScreenState.ON_SCREEN
     _to_scene: Scene | None = None
     _animation: AnimationOnScreen | None = default(
         lambda self: self._init_animation
     )
 
-    def exit(self, to_scene: Scene) -> Self:
-        if self.widget_input.exiting_animation:
-            animation = self.widget_input.exiting_animation(
-                self.drawing_on_screens_after_parent
-            )
-            return replace(self, _animation=animation, _to_scene=to_scene)
-        return to_scene
+    def __str__(self) -> str:
+        return f"{type_name(self)}({self.widget_input})"
 
     @property
     def select(self) -> Self:
@@ -89,6 +77,7 @@ class WidgetOnScreen(Scene):
 
     @override
     def event(self, event: IoEvent) -> Scene:
+        print(event)
         if not self._is_selected or self._animation:
             return self
         if (
@@ -96,7 +85,7 @@ class WidgetOnScreen(Scene):
             and event.key is KeyboardKey.CANCEL
             and self.parent
         ):
-            return self.exit(self.parent)
+            return self._exit(self.parent)
         return self.event_after_selected(event)
 
     def tick_after_parent(self, time_delta: Millisecond) -> Self:
@@ -130,6 +119,14 @@ class WidgetOnScreen(Scene):
                 self.drawing_on_screens_after_parent
             )
         return None
+
+    def _exit(self, to_scene: Scene) -> Self:
+        if self.widget_input.exiting_animation:
+            animation = self.widget_input.exiting_animation(
+                self.drawing_on_screens_after_parent
+            )
+            return replace(self, _animation=animation, _to_scene=to_scene)
+        return to_scene
 
 
 _WidgetOnScreen = TypeVar("_WidgetOnScreen", bound=WidgetOnScreen)

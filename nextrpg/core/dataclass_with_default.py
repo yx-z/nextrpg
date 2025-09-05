@@ -57,4 +57,12 @@ def dataclass_with_default[T](
     return datacls
 
 
+def type_name[T](obj: T | type) -> str:
+    if isinstance(obj, type):
+        cls = obj
+    else:
+        cls = type(obj)
+    return str(cls)[2:-2].split(".")[-1]
+
+
 _NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"

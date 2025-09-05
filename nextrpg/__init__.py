@@ -66,6 +66,7 @@ from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
     private_init_below,
+    type_name,
 )
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
 from nextrpg.core.save import (

@@ -100,7 +100,8 @@ class SaveIo:
     def _save(self, key: str, data: SaveData) -> None:
         self._log.debug(t"Saving {key} at {self.slot}")
         if isinstance(data, bytes):
-            return self._write_bytes(key, data)
+            self._write_bytes(key, data)
+            return
         self._write_text(key, data)
 
     def remove(self) -> None:
