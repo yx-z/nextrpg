@@ -1,6 +1,7 @@
 from pathlib import Path
 
-from example.common import create_player, sprite_sheet
+from common import create_player, sprite_sheet
+
 from nextrpg import (
     CharacterSpec,
     Color,

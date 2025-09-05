@@ -9,13 +9,12 @@ from nextrpg import (
     Height,
     RpgMakerCharacterDrawing,
     RpgMakerSpriteSheet,
-    SpriteSheet,
     SpriteSheetSelection,
 )
 
 
 @cache
-def sprite_sheet() -> SpriteSheet:
+def sprite_sheet() -> RpgMakerSpriteSheet:
     sprite_sheet_drawing = Drawing(Path("example/asset/Characters_MV.png"))
     sprite_sheet_trim = DrawingTrim(top=Height(25))
     return RpgMakerSpriteSheet(

@@ -5,6 +5,6 @@ sys.path.append(str((Path(__file__) / "../..").absolute()))
 
 from exterior_scene import exterior_scene
 
-from nextrpg import Game
+from nextrpg import Config, DebugConfig, Game
 
-Game(exterior_scene).start()
+Game(exterior_scene, Config(debug=DebugConfig())).start()
