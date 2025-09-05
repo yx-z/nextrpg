@@ -29,9 +29,12 @@ class Typewriter(AnimationOnScreen):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        timer = self._timer.tick(time_delta)
-        if not timer.complete:
+        if not (timer := self._timer.tick(time_delta)).complete:
             return replace(self, _timer=timer)
-
         index = self._index + timer.elapsed // self.delay
         return replace(self, _index=index, _timer=timer.modulo)
+
+    @override
+    @property
+    def complete(self) -> bool:
+        return self._timer.complete

@@ -32,14 +32,26 @@ class WidgetOnScreen(Scene):
     _is_selected: bool = False
     _state: WidgetOnScreenState = WidgetOnScreenState.ON_SCREEN
     _animation: AnimationOnScreen | None = None
+    _to_scene: Scene | None = None
 
     @property
     def enter(self) -> Self:
-        return replace(self, _state=WidgetOnScreenState.ENTERING)
+        if self.widget_input.entering_animation:
+            animation = self.widget_input.entering_animation(
+                self.drawing_on_screens
+            )
+        else:
+            animation = None
+        return replace(self, _animation=animation)
 
-    @property
-    def exit(self) -> Self:
-        return replace(self, _state=WidgetOnScreenState.EXITING)
+    def exit(self, to_scene: Scene) -> Self:
+        if self.widget_input.exiting_animation:
+            animation = self.widget_input.exiting_animation(
+                self.drawing_on_screens
+            )
+        else:
+            animation = None
+        return replace(self, _animation=animation, _to_scene=to_scene)
 
     @property
     def select(self) -> Self:
@@ -51,12 +63,20 @@ class WidgetOnScreen(Scene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
+        if self._animation:
+            if (animation := self._animation.tick(time_delta)).complete:
+                if self._to_scene:
+                    return self._to_scene
+                animation = None
+        else:
+            animation = None
+
         if self.parent:
             parent = self.parent.tick(time_delta)
         else:
             parent = None
         ticked = self.tick_after_parent(time_delta)
-        return replace(ticked, parent=parent)
+        return replace(ticked, _animation=animation, parent=parent)
 
     @override
     @cached_property
@@ -65,6 +85,8 @@ class WidgetOnScreen(Scene):
             parent = self.parent.drawing_on_screens
         else:
             parent = ()
+        if self._animation:
+            return parent + self._animation.drawing_on_screens
         return parent + self.drawing_on_screens_after_parent
 
     @override

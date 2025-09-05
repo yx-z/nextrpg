@@ -48,7 +48,7 @@ class ButtonOnScreen(SizableWidgetOnScreen):
         if isinstance(self._button.on_click, Widget):
             return self._button.on_click.widget_on_screen(
                 self.name_to_on_screens, self.parent
-            ).select
+            ).select.enter
 
         return self._button.on_click
 

@@ -58,6 +58,7 @@ class Fade(AnimationOnScreen, ABC):
         timer = self._timer.tick(time_delta)
         return replace(self, resource=resource, _timer=timer)
 
+    @override
     @property
     def complete(self) -> bool:
         return self._timer.complete

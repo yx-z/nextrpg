@@ -19,6 +19,10 @@ class AnimationOnScreen(Sizable, ABC):
     def tick(self, time_delta: Millisecond) -> Self: ...
 
     @property
+    @abstractmethod
+    def complete(self) -> bool: ...
+
+    @property
     def size(self) -> Size:
         return self._sized.size
 
