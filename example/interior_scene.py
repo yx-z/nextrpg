@@ -1,11 +1,10 @@
 from pathlib import Path
 
+from example.common import create_player, sprite_sheet
 from nextrpg import (
     CharacterSpec,
     Color,
     Direction,
-    Drawing,
-    DrawingTrim,
     EventfulScene,
     EventSpec,
     Height,
@@ -16,7 +15,6 @@ from nextrpg import (
     NpcSpec,
     PlayerOnScreen,
     RpgMakerCharacterDrawing,
-    RpgMakerSpriteSheet,
     SpriteSheetSelection,
     Text,
     config,
@@ -25,35 +23,18 @@ from nextrpg import (
 
 
 def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
-    sprite_sheet_drawing = Drawing(Path("example/asset/Characters_MV.png"))
-    sprite_sheet_trim = DrawingTrim(top=Height(25))
-    sprite_sheet = RpgMakerSpriteSheet(
-        drawing=sprite_sheet_drawing, trim=sprite_sheet_trim
-    )
-
     if player_spec:
         player = player_spec
     else:
-        player_drawing = RpgMakerCharacterDrawing(
-            Direction.DOWN,
-            sprite_sheet,
-            SpriteSheetSelection(row=0, column=0),
-        )
-        avatar = Drawing(Path("example/asset/avatar.png"))
-        player = CharacterSpec(
-            unique_name="player",
-            display_name="Will",
-            character=player_drawing,
-            avatar=avatar,
-        )
+        player = create_player()
 
     alisa_drawing = RpgMakerCharacterDrawing(
-        Direction.RIGHT, sprite_sheet, SpriteSheetSelection(row=0, column=1)
+        Direction.RIGHT, sprite_sheet(), SpriteSheetSelection(row=0, column=1)
     )
     alisa = NpcSpec(unique_name="alisa", character=alisa_drawing, event=greet)
 
     david_drawing = RpgMakerCharacterDrawing(
-        Direction.DOWN, sprite_sheet, SpriteSheetSelection(row=0, column=2)
+        Direction.DOWN, sprite_sheet(), SpriteSheetSelection(row=0, column=2)
     )
     david = NpcSpec(unique_name="david", character=david_drawing, event=greet)
 

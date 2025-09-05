@@ -17,20 +17,20 @@ from nextrpg.draw.drawing import (
     Drawing,
 )
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Height, Size
+from nextrpg.geometry.coordinate import Coordinate, YAxis
+from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 class TileBottomAndDrawOnScreen(NamedTuple):
-    bottom: Height
+    bottom: YAxis
     drawing_on_screen: DrawingOnScreen
 
 
 class LayerTileBottomAndDrawOnScreen(NamedTuple):
     layer: int
-    bottom: Height
+    bottom: YAxis
     drawing_on_screen: DrawingOnScreen
 
 
@@ -100,7 +100,7 @@ class MapLoader(TmxLoader):
     def _character_layer(self, character: CharacterOnScreen) -> int:
         for index, layer in enumerate(self._reversed_foregrounds):
             if _below_character_layer(layer, character):
-                return index
+                return index + 1
         return 0
 
     @cached_property
@@ -201,8 +201,7 @@ class MapLoader(TmxLoader):
     def _tile(self, left: int, top: int, surface: Surface) -> DrawingOnScreen:
         width, height = self._tile_size
         return DrawingOnScreen(
-            Coordinate(left * width, top * height),
-            Drawing(surface),
+            Coordinate(left * width, top * height), Drawing(surface)
         )
 
     def _class(
@@ -221,11 +220,11 @@ class MapLoader(TmxLoader):
         layer: TiledTileLayer,
         coordinate: _TileCoordinate,
         drawing: DrawingOnScreen,
-        coord_to_bottom: dict[_TileCoordinate, Height],
-    ) -> Height:
+        coordinate_to_bottom: dict[_TileCoordinate, YAxis],
+    ) -> YAxis:
         return (
             max(
-                coord_to_bottom[c]
+                coordinate_to_bottom[c]
                 for c in self._component(layer, coordinate, cls)
             )
             if (cls := self._class(layer, coordinate))

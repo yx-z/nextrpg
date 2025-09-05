@@ -121,7 +121,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="object">
-  <object id="1" name="player" x="879.758" y="640.606">
+  <object id="1" name="player" x="1250.92" y="902.007">
    <point/>
   </object>
   <object id="40" name="to_interior" x="738" y="404" width="30.6667" height="22.6667"/>

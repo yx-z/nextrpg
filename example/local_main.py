@@ -3,8 +3,8 @@ from pathlib import Path
 
 sys.path.append(str((Path(__file__) / "../..").absolute()))
 
-from title import title
+from exterior_scene import exterior_scene
 
-from nextrpg import Config, DebugConfig, Game
+from nextrpg import Game
 
-Game(title, Config(debug=DebugConfig())).start()
+Game(exterior_scene).start()
