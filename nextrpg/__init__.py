@@ -1,7 +1,10 @@
 __version__ = "0.1.17"
 
 from nextrpg.animation.animation import Animation
-from nextrpg.animation.animation_on_screen import AnimationOnScreen
+from nextrpg.animation.animation_on_screen import (
+    AnimationOnScreen,
+    tick_optional,
+)
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.animation.fade import Fade, FadeIn, FadeOut
 from nextrpg.animation.typewriter import Typewriter
