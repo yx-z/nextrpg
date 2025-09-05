@@ -22,7 +22,7 @@ class DebugConfig:
     draw_group_link_color: Color | None = Color(255, 0, 255, 200)
     player_collide_with_others: bool = True
     log_level: LogLevel = LogLevel.DEBUG
-    log_duration: Millisecond = 3000
+    log_duration: Millisecond = 2000
 
 
 def log_only(log_level: LogLevel = LogLevel.DEBUG) -> DebugConfig:

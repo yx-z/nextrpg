@@ -102,8 +102,11 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         return self.spec.unique_name == other.spec.unique_name
 
     def start_event(self, other: CharacterOnScreen) -> Self:
-        direction = other.coordinate.relative_to(self.coordinate)
-        character = self.character.turn(direction)
+        if isinstance(other.spec.character, PolygonCharacterDrawing):
+            character = self.character
+        else:
+            direction = other.coordinate.relative_to(self.coordinate)
+            character = self.character.turn(direction)
         return replace(self, character=character, _event_started=True)
 
     @property

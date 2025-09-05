@@ -51,9 +51,7 @@ class GameLoop:
             gc.collect()
 
         fps_info = f"FPS: {self._clock.get_fps():.0f}"
-        log.debug(fps_info, duration=None)
-
-        log.debug(t"Current scene {type_name(self._scene)}", duration=None)
+        log.debug(t"{type_name(self._scene)} {fps_info}", duration=None)
 
         max_fps = config().game_loop.max_frames_per_second
         self._clock.tick(max_fps)
