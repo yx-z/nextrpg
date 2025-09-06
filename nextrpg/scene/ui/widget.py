@@ -14,14 +14,16 @@ from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
     private_init_below,
-    type_name,
 )
+from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.scene import Scene
+
+log = Log()
 
 
 @dataclass_with_default(frozen=True)
@@ -30,22 +32,22 @@ class WidgetOnScreen(Scene):
     name_to_on_screens: dict[str, Coordinate | AreaOnScreen]
     parent: Scene | None = None
     _: KW_ONLY = private_init_below()
-    _is_selected: bool = False
+    is_selected: bool = False
     _to_scene: Scene | None = None
     _animation: AnimationOnScreen | None = default(
         lambda self: self._init_animation
     )
 
     def __str__(self) -> str:
-        return f"{type_name(self)}({self.widget_input})"
+        return str(self.widget_input)
 
     @property
     def select(self) -> Self:
-        return replace(self, _is_selected=True)
+        return replace(self, is_selected=True)
 
     @property
     def deselect(self) -> Self:
-        return replace(self, _is_selected=False)
+        return replace(self, is_selected=False)
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
@@ -77,7 +79,7 @@ class WidgetOnScreen(Scene):
 
     @override
     def event(self, event: IoEvent) -> Scene:
-        if not self._is_selected or self._animation:
+        if not self.is_selected or self._animation:
             return self
         if (
             isinstance(event, KeyPressDown)
@@ -120,6 +122,7 @@ class WidgetOnScreen(Scene):
         return None
 
     def _exit(self, to_scene: Scene) -> Self:
+        log.debug(t"Exit from {self} to {to_scene}")
         if self.widget_input.exiting_animation:
             animation = self.widget_input.exiting_animation(
                 self.drawing_on_screens_after_parent

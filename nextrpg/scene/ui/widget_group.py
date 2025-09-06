@@ -11,12 +11,15 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
+from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.ui.scroll_direction import ScrollDirection
 from nextrpg.scene.ui.widget import Widget, WidgetOnScreen
+
+log = Log()
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
@@ -31,7 +34,10 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     def event_after_selected(self, event: IoEvent) -> Scene:
         children: list[WidgetOnScreen] = []
         for child in self._children:
-            if (res := child.event(event)) is not child:
+            if (
+                child.is_selected
+                and (res := child.event_after_selected(event)) is not child
+            ):
                 return res
             children.append(child)
 
@@ -61,7 +67,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     @cached_property
     def _selected(self) -> WidgetOnScreen | None:
         for child in self._children:
-            if isinstance(child, WidgetOnScreen) and child._is_selected:
+            if isinstance(child, WidgetOnScreen) and child.is_selected:
                 return child
         return None
 
@@ -87,7 +93,6 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         ):
             return self
 
-        target: WidgetOnScreen | None = None
         for w1, w2 in pairwise(cycle(self._children)):
             if not forward and w2 is self._selected:
                 target = w1
@@ -95,7 +100,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
             if forward and w1 is self._selected:
                 target = w2
                 break
-        assert target
+        log.debug(t"Move from {self._selected} to {target}")
 
         children: list[WidgetOnScreen] = []
         for child in self._children:
@@ -121,6 +126,10 @@ class WidgetGroup(Widget[WidgetGroupOnScreen]):
     widget_on_screen_type: ClassVar[type[WidgetGroupOnScreen]] = (
         WidgetGroupOnScreen
     )
+
+    def __str__(self) -> str:
+        children = ",".join(map(str, self.children))
+        return f"WidgetGroup({children})"
 
 
 _SCROLL_AND_KEY_TO_FORWARD: dict[tuple[ScrollDirection, KeyboardKey], bool] = {

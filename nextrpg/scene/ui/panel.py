@@ -63,3 +63,6 @@ class Panel(Widget[PanelOnScreen]):
     children: tuple[SizableWidget, ...]
     config: PanelConfig = field(default_factory=lambda: config().ui.panel)
     widget_on_screen_type: ClassVar[type[PanelOnScreen]] = PanelOnScreen
+
+    def __str__(self) -> str:
+        return f"Panel({self.name})"

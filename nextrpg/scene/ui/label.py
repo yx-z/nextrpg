@@ -35,3 +35,6 @@ class Label(SizableWidget[LabelOnScreen]):
         if isinstance(self.message, str):
             return Text(self.message)
         return self.message
+
+    def __str__(self) -> str:
+        return f"Label({self.message})"

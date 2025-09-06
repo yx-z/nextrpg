@@ -29,7 +29,7 @@ class ButtonOnScreen(SizableWidgetOnScreen):
     @override
     @property
     def drawing(self) -> Drawing | DrawingGroup:
-        if self._is_selected:
+        if self.is_selected:
             return self._button.active
         return self._button.idle
 
@@ -75,6 +75,9 @@ class Button(SizableWidget[ButtonOnScreen]):
     active: Drawing | DrawingGroup | Animation
     on_click: Scene | Widget | Callable[[], None]
     widget_on_screen_type: ClassVar[type[ButtonOnScreen]] = ButtonOnScreen
+
+    def __str__(self) -> str:
+        return f"Button({self.name})"
 
     @override
     @property
