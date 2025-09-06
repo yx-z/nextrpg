@@ -19,7 +19,7 @@ from nextrpg.scene.ui.widget_group import WidgetGroupOnScreen
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
-class TitleScene(WidgetGroupOnScreen):
+class TmxWidgets(WidgetGroupOnScreen):
     tmx_file: Path
     background: (
         str

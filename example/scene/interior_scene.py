@@ -1,7 +1,6 @@
 from pathlib import Path
 
-from common import create_player, sprite_sheet
-
+from example.resource import create_player, sprite_sheet
 from nextrpg import (
     CharacterSpec,
     Color,
@@ -43,7 +42,7 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
     auto_trigger = NpcSpec(unique_name="auto", event=enter_room_spec)
 
     # Local import to avoid circular dependency.
-    from exterior_scene import exterior_scene
+    from example.scene.exterior_scene import exterior_scene
 
     tmx = Path("example/asset/interior.tmx")
     move = MapMove("from_interior", "to_exterior", exterior_scene)

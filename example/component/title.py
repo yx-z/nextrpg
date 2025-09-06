@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from example.interior_scene import interior_scene
+from example.scene.interior_scene import interior_scene
 from nextrpg import (
     BLUE,
     Button,
@@ -15,7 +15,7 @@ from nextrpg import (
     Panel,
     PanelConfig,
     Text,
-    TitleScene,
+    TmxWidgets,
     TransitionScene,
     WidgetGroup,
     config,
@@ -23,7 +23,7 @@ from nextrpg import (
 )
 
 
-def title() -> TitleScene:
+def title() -> TmxWidgets:
     highlight = config().text.colored(BLUE)
 
     start_text_idle = Text("Start")
@@ -67,7 +67,7 @@ def title() -> TitleScene:
     group = WidgetGroup(children=children)
 
     tmx = Path("example/asset/title.tmx")
-    return TitleScene(tmx_file=tmx, background="background", widget_input=group)
+    return TmxWidgets(tmx_file=tmx, background="background", widget_input=group)
 
 
 def load_panel() -> Panel:

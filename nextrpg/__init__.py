@@ -202,7 +202,7 @@ from nextrpg.scene.rpg_event.say_event.say_event_state import (
     SayEventTypingState,
 )
 from nextrpg.scene.scene import Scene
-from nextrpg.scene.title_scene import TitleScene
+from nextrpg.scene.tmx_widgets import TmxWidgets
 from nextrpg.scene.transition_scene import TransitionScene
 from nextrpg.scene.ui.button import Button, ButtonOnScreen
 from nextrpg.scene.ui.label import Label, LabelOnScreen

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from example.common import create_player
+from example.resource import create_player
 from nextrpg import CharacterSpec, MapMove, MapScene
 
 
@@ -11,7 +11,7 @@ def exterior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
         player = create_player()
 
     # Local import to avoid circular dependency.
-    from interior_scene import interior_scene
+    from example.scene.interior_scene import interior_scene
 
     tmx = Path("example/asset/exterior.tmx")
     move = MapMove("from_exterior", "to_interior", interior_scene)
