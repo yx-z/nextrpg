@@ -3,17 +3,17 @@ from pathlib import Path
 from example.scene.interior_scene import interior_scene
 from nextrpg import (
     BLUE,
+    AnimationOnScreen,
     Button,
-    Color,
     Direction,
     DirectionalOffset,
+    DrawingOnScreen,
     FadeIn,
     FadeOut,
     Label,
     MoveFrom,
     MoveTo,
     Panel,
-    PanelConfig,
     Text,
     TmxWidgets,
     TransitionScene,
@@ -71,16 +71,27 @@ def title() -> TmxWidgets:
 
 
 def load_panel() -> Panel:
-    offset = DirectionalOffset(Direction.DOWN, 50)
-    duration = 300  # ms
+    label = Label(message="No save data found.")
+    children = (label,)
     return Panel(
         name="load_panel",
-        children=(Label(message="No save data found."),),
-        config=PanelConfig(background=Color(0, 0, 0, 128)),
-        entering_animation=lambda d: FadeIn(
-            MoveTo(d, offset, duration), duration
-        ),
-        exiting_animation=lambda d: FadeOut(
-            MoveFrom(d, -offset, duration), duration
-        ),
+        children=children,
+        entering_animation=entering_animation,
+        exiting_animation=exiting_animation,
     )
+
+
+duration = 300  # ms
+offset = DirectionalOffset(Direction.DOWN, 50)
+
+
+def entering_animation(
+    drawing_on_screens: tuple[DrawingOnScreen, ...],
+) -> AnimationOnScreen:
+    return FadeIn(MoveTo(drawing_on_screens, offset, duration), duration)
+
+
+def exiting_animation(
+    drawing_on_screens: tuple[DrawingOnScreen, ...],
+) -> AnimationOnScreen:
+    return FadeOut(MoveFrom(drawing_on_screens, -offset, duration), duration)
