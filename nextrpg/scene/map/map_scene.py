@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import KW_ONLY, dataclass, replace
+from dataclasses import dataclass, replace
 from functools import cache, cached_property
 from pathlib import Path
-from typing import override
+from typing import Self, override
 
 from cachetools import LRUCache
 
@@ -22,6 +22,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.log import Log
+from nextrpg.core.save import SaveIo, UpdateFromSave
 from nextrpg.core.time import Millisecond, get_timepoint
 from nextrpg.core.tmx_loader import get_geometry
 from nextrpg.draw.color import TRANSPARENT
@@ -43,12 +44,13 @@ log = Log()
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
-class MapScene[R](EventfulScene[R]):
-    tmx_file: Path
+class MapScene(EventfulScene, UpdateFromSave):
+    tmx: Path
     player_spec: CharacterSpec
     move: MapMove | tuple[MapMove, ...] = ()
     npc_specs: NpcSpec | tuple[NpcSpec, ...] = ()
-    _: KW_ONLY = private_init_below()
+    save_io: SaveIo | None = None
+    _ = private_init_below()
     npcs: tuple[NpcOnScreen, ...] = default(
         lambda self: tuple(self._init_npc(n) for n in self._npc_specs)
     )
@@ -98,9 +100,20 @@ class MapScene[R](EventfulScene[R]):
             + self._debug_visuals
         )
 
+    @property
+    def save_data(self) -> dict:
+        return {}
+
+    @property
+    def key(self) -> tuple[str, ...]:
+        return super().key + (str(self.tmx),)
+
+    def update(self, data: dict) -> Self:
+        return self
+
     @cached_property
     def _map_loader(self) -> MapLoader:
-        return MapLoader(self.tmx_file)
+        return MapLoader(self.tmx)
 
     @cached_property
     def _foreground_and_characters(self) -> tuple[DrawingOnScreen, ...]:
@@ -239,7 +252,7 @@ class MapMove:
 
         if not (tmx := _tmxs().get(self.next_scene)):
             next_scene = self.next_scene(spec)
-            tmx = str(next_scene.tmx_file)
+            tmx = str(next_scene.tmx)
 
         if timed_scene := _scenes().get(tmx):
             scene = timed_scene.scene
@@ -251,7 +264,7 @@ class MapMove:
         else:
             to_scene = self.next_scene(spec)
 
-        _scenes()[str(from_scene.tmx_file)] = _TimedScene(now, from_scene)
+        _scenes()[str(from_scene.tmx)] = _TimedScene(now, from_scene)
         _tmxs()[self.next_scene] = tmx
 
         return TransitionScene(from_scene=from_scene, to_scene=to_scene)

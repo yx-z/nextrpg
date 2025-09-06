@@ -32,7 +32,7 @@ def title() -> TmxWidgets:
     start = Button(
         name="start",
         idle=start_text_idle.drawing_group,
-        active=start_text_selected.drawing_group,
+        selected=start_text_selected.drawing_group,
         on_click=scene,
     )
 
@@ -41,7 +41,7 @@ def title() -> TmxWidgets:
     load = Button(
         name="load",
         idle=load_text_idle.drawing_group,
-        active=load_text_selected.drawing_group,
+        selected=load_text_selected.drawing_group,
         on_click=load_panel(),
     )
 
@@ -50,7 +50,7 @@ def title() -> TmxWidgets:
     settings = Button(
         name="settings",
         idle=settings_text_idle.drawing_group,
-        active=settings_text_selected.drawing_group,
+        selected=settings_text_selected.drawing_group,
         on_click=quit,
     )
 
@@ -59,15 +59,15 @@ def title() -> TmxWidgets:
     exit_button = Button(
         name="exit",
         idle=exit_text_idle.drawing_group,
-        active=exit_text_selected.drawing_group,
+        selected=exit_text_selected.drawing_group,
         on_click=quit,
     )
 
     children = (start, load, settings, exit_button)
     group = WidgetGroup(children=children)
 
-    tmx = Path("example/asset/title.tmx")
-    return TmxWidgets(tmx_file=tmx, background="background", widget_input=group)
+    tmx = Path("example/component/title.tmx")
+    return TmxWidgets(tmx=tmx, background="background", widget_input=group)
 
 
 def load_panel() -> Panel:

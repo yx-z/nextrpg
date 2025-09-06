@@ -93,13 +93,13 @@ from nextrpg.draw.color import (
 )
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.draw.drawing_on_screens import DrawingOnScreens
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.draw.font import Font
 from nextrpg.draw.nine_slice import NineSlice
 from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.polyline_drawing import PolylineDrawing
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
-from nextrpg.draw.sizable_drawing_on_screens import SizableDrawingOnScreens
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup

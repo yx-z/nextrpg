@@ -27,7 +27,7 @@ from nextrpg.scene.scene import Scene
 class SayEventState(RpgEventScene, ABC):
     unique_name: str | None
     config: SayEventConfig
-    _: KW_ONLY = private_init_below()
+    _ = private_init_below()
     initial_coordinate: Coordinate | None = default(
         lambda self: (
             self.scene.get_character(n).coordinate
@@ -67,7 +67,7 @@ class SayEventFadeInState(SayEventState):
 
     @override
     def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
-        if not (fade_in := self._fade_in.tick(time_delta)).complete:
+        if not (fade_in := self._fade_in.tick(time_delta)).is_complete:
             return replace(ticked, _fade_in=fade_in)
         return SayEventTypingState(
             generator=self.generator,
@@ -84,7 +84,7 @@ class SayEventFadeInState(SayEventState):
 class SayEventTypingState(SayEventState):
     background: tuple[DrawingOnScreen, ...]
     text_on_screen: TextOnScreen
-    _: KW_ONLY = private_init_below()
+    _ = private_init_below()
     _typewriter: Typewriter | None = default(
         lambda self: (
             Typewriter(self.text_on_screen, delay)
@@ -145,6 +145,6 @@ class SayEventFadeOutState(SayEventState):
 
     @override
     def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
-        if (fade_out := self._fade_out.tick(time_delta)).complete:
+        if (fade_out := self._fade_out.tick(time_delta)).is_complete:
             return ticked.scene.complete(self.generator)
         return replace(ticked, _fade_out=fade_out)

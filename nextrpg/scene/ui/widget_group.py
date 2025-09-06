@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from dataclasses import KW_ONLY, dataclass, replace
+from dataclasses import dataclass, replace
 from functools import cached_property
 from itertools import cycle, pairwise
 from typing import ClassVar, Self, override
@@ -25,7 +25,7 @@ log = Log()
 @dataclass_with_default(frozen=True, kw_only=True)
 class WidgetGroupOnScreen(WidgetOnScreen):
     widget_input: WidgetGroup
-    _: KW_ONLY = private_init_below()
+    _ = private_init_below()
     _children: tuple[WidgetOnScreen, ...] = default(
         lambda self: self._init_children
     )

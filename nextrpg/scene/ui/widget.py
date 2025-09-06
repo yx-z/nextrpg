@@ -52,7 +52,7 @@ class WidgetOnScreen(Scene):
     @override
     def tick(self, time_delta: Millisecond) -> Self:
         if self._animation:
-            if (animation := self._animation.tick(time_delta)).complete:
+            if (animation := self._animation.tick(time_delta)).is_complete:
                 if self._to_scene:
                     return self._to_scene
                 animation = None

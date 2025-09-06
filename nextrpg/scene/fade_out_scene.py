@@ -27,7 +27,7 @@ class FadeOutScene(Scene):
 
     def tick(self, time_delta: Millisecond) -> Scene:
         to_scene = self.to_scene.tick(time_delta)
-        if (fade_out := self._fade_out.tick(time_delta)).complete:
+        if (fade_out := self._fade_out.tick(time_delta)).is_complete:
             return to_scene
         from_scene = self.from_scene.tick(time_delta)
         return replace(

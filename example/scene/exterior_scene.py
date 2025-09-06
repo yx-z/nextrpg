@@ -15,4 +15,4 @@ def exterior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
 
     tmx = Path("example/asset/exterior.tmx")
     move = MapMove("from_exterior", "to_interior", interior_scene)
-    return MapScene(tmx_file=tmx, player_spec=player, move=move)
+    return MapScene(tmx=tmx, player_spec=player, move=move)

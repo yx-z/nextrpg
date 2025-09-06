@@ -1,4 +1,4 @@
-from dataclasses import KW_ONLY, replace
+from dataclasses import replace
 from functools import cached_property
 from pathlib import Path
 from typing import Self, override
@@ -20,35 +20,46 @@ from nextrpg.scene.ui.widget_group import WidgetGroupOnScreen
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class TmxWidgets(WidgetGroupOnScreen):
-    tmx_file: Path
+    tmx: Path
     background: (
         str
         | DrawingOnScreen
         | AnimationOnScreen
         | tuple[str | DrawingOnScreen | AnimationOnScreen, ...]
-    )
-    _: KW_ONLY = private_init_below()
+        | None
+    ) = None
+    _ = private_init_below()
     name_to_on_screens: dict[str, Coordinate | AreaOnScreen] = default(
         lambda self: self._init_name_to_on_screens
     )
     is_selected: bool = True
-    _background: AnimationOnScreens = default(
+    _background: AnimationOnScreens | None = default(
         lambda self: self._init_background
     )
 
     @override
     @cached_property
-    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        return self._background.drawing_on_screens + super().drawing_on_screens
+    def drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
+        if self._background:
+            return (
+                self._background.drawing_on_screens
+                + super().drawing_on_screens_after_parent
+            )
+        return super().drawing_on_screens_after_parent
 
     @override
-    def tick(self, time_delta: Millisecond) -> Self:
-        background = self._background.tick(time_delta)
+    def tick_after_parent(self, time_delta: Millisecond) -> Self:
+        if self._background:
+            background = self._background.tick(time_delta)
+        else:
+            background = None
         return replace(self, _background=background)
 
     @property
-    def _init_background(self) -> AnimationOnScreens:
+    def _init_background(self) -> AnimationOnScreens | None:
         match self.background:
+            case None:
+                return None
             case str():
                 drawing = (self._image_layer(self.background),)
             case tuple():
@@ -65,7 +76,7 @@ class TmxWidgets(WidgetGroupOnScreen):
 
     @cached_property
     def _tmx(self) -> TmxLoader:
-        return TmxLoader(self.tmx_file)
+        return TmxLoader(self.tmx)
 
     @property
     def _init_name_to_on_screens(self) -> dict[str, Coordinate | AreaOnScreen]:

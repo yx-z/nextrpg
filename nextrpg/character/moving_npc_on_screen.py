@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import KW_ONLY, replace
+from dataclasses import replace
 from typing import Self, override
 
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
@@ -19,7 +19,7 @@ from nextrpg.geometry.walk import Walk
 @dataclass_with_default(frozen=True, kw_only=True)
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     path: PolylineOnScreen
-    _: KW_ONLY = private_init_below()
+    _ = private_init_below()
     # `coordinate` is initialized in the base class.
     # Hence, invoke `_walk` (given it's still an `_Init`) to initialize.
     coordinate: Coordinate = default(lambda self: self._walk(self).coordinate)

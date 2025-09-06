@@ -3,11 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from functools import cached_property
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 
 from pygame import SRCALPHA, Surface
 from pygame.image import load
-from pygame.transform import flip, smoothscale
+from pygame.transform import flip, gaussian_blur, smoothscale
 
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
@@ -67,27 +67,27 @@ class Drawing(Sizable):
             return self._debug_surface
         return self.surface
 
-    def cut(self, area: RectangleAreaOnScreen) -> Drawing:
+    def cut(self, area: RectangleAreaOnScreen) -> Self:
         surface = self.surface.copy()
         surface.fill(TRANSPARENT, (area.top_left, area.size))
         return replace(self, resource=surface)
 
-    def flip(self, horizontal: bool = False, vertical: bool = False) -> Drawing:
+    def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
         surface = flip(self.surface, horizontal, vertical)
         return replace(self, resource=surface)
 
-    def crop(self, area: RectangleAreaOnScreen) -> Drawing:
+    def crop(self, area: RectangleAreaOnScreen) -> Self:
         surface = self.pygame.subsurface(area.pygame)
         return replace(self, resource=surface)
 
-    def trim(self, drawing_trim: DrawingTrim) -> Drawing:
+    def trim(self, drawing_trim: DrawingTrim) -> Self:
         coordinate = (drawing_trim.left * drawing_trim.top).coordinate
         width = self.width - drawing_trim.left - drawing_trim.right
         height = self.height - drawing_trim.top - drawing_trim.bottom
         area = coordinate.anchor(width * height).rectangle_area_on_screen
         return self.crop(area)
 
-    def set_alpha(self, alpha: Alpha) -> Drawing:
+    def set_alpha(self, alpha: Alpha) -> Self:
         surface = self.surface.copy()
         surface.set_alpha(alpha)
         return replace(self, resource=surface)
@@ -99,7 +99,7 @@ class Drawing(Sizable):
 
     def __mul__(
         self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
-    ) -> Drawing:
+    ) -> Self:
         size = self.size * scaling
         surface = smoothscale(self.surface, size)
         return replace(self, resource=surface)
@@ -148,6 +148,10 @@ class Drawing(Sizable):
         if self.convert_alpha is None or not self.convert_alpha:
             return res.convert()
         return res.convert_alpha()
+
+    def blur(self, radius: int | float) -> Self:
+        surface = gaussian_blur(self.surface, radius)
+        return replace(self, resource=surface)
 
     @cached_property
     def _debug_surface(self) -> Surface | None:

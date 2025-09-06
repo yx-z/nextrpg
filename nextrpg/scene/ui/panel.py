@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import KW_ONLY, dataclass, field, replace
+from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import ClassVar, Self, override
 
@@ -21,7 +21,7 @@ from nextrpg.scene.ui.widget import Widget, WidgetOnScreen
 @dataclass_with_default(frozen=True, kw_only=True)
 class PanelOnScreen(WidgetOnScreen):
     widget_input: Panel
-    _: KW_ONLY = private_init_below()
+    _ = private_init_below()
     _children: tuple[SizableWidgetOnScreen, ...] = default(
         lambda self: self._init_children
     )

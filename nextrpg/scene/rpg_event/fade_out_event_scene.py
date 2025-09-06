@@ -37,7 +37,7 @@ class BackgroundFadeOutEvent(BackgroundEvent):
     @property
     @override
     def complete(self) -> bool:
-        return self.fade.complete
+        return self.fade.is_complete
 
 
 @dataclass_with_default(frozen=True)
@@ -65,7 +65,7 @@ class FadeOutEventScene(RpgEventScene[BackgroundFadeOutEvent]):
                 self.generator, background_event=background_event
             )
 
-        if fade.complete:
+        if fade.is_complete:
             return background_removed.complete(self.generator)
 
         return replace(ticked, scene=background_removed, _fade=fade)

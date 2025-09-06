@@ -4,7 +4,7 @@ from typing import Self, TypeVar
 
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.sizable_drawing_on_screens import SizableDrawingOnScreens
+from nextrpg.draw.drawing_on_screens import DrawingOnScreens
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.sizable import Sizable
@@ -20,7 +20,7 @@ class AnimationOnScreen(Sizable, ABC):
 
     @property
     @abstractmethod
-    def complete(self) -> bool: ...
+    def is_complete(self) -> bool: ...
 
     @property
     def size(self) -> Size:
@@ -31,8 +31,8 @@ class AnimationOnScreen(Sizable, ABC):
         return self._sized.top_left
 
     @cached_property
-    def _sized(self) -> SizableDrawingOnScreens:
-        return SizableDrawingOnScreens(self.drawing_on_screens)
+    def _sized(self) -> DrawingOnScreens:
+        return DrawingOnScreens(self.drawing_on_screens)
 
 
 _AnimationOnScreen = TypeVar("_AnimationOnScreen", bound=AnimationOnScreen)

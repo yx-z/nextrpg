@@ -47,7 +47,7 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
     tmx = Path("example/asset/interior.tmx")
     move = MapMove("from_interior", "to_exterior", exterior_scene)
     npcs = (david, alisa, auto_trigger)
-    return MapScene(tmx_file=tmx, player_spec=player, move=move, npc_specs=npcs)
+    return MapScene(tmx=tmx, player_spec=player, move=move, npc_specs=npcs)
 
 
 def enter_room(

@@ -43,7 +43,7 @@ class Window:
     )
     last_config: WindowConfig = default(lambda self: self.initial_config)
     current_config: WindowConfig = default(
-        lambda self: self._saved_config or self.initial_config
+        lambda self: self._init_saved_config or self.initial_config
     )
     __: None = field(
         default_factory=lambda: os.environ.setdefault("SDL_VIDEO_CENTERED", "1")
@@ -139,7 +139,9 @@ class Window:
         self, drawing_on_screens: tuple[DrawingOnScreen, ...]
     ) -> DrawingOnScreen:
         screen = Surface(self.initial_config.size, SRCALPHA)
-        surfaces = tuple(d.pygame for d in drawing_on_screens)
+        surfaces = tuple(
+            drawing_on_screen.pygame for drawing_on_screen in drawing_on_screens
+        )
         screen.blits(surfaces)
         scaled_draw = Drawing(screen).scale_fast(self._scaling)
         return DrawingOnScreen(self._center_shift, scaled_draw)
@@ -175,8 +177,8 @@ class Window:
         set_config(full_config)
         return self.tick()
 
-    @cached_property
-    def _saved_config(self) -> WindowConfig | None:
+    @property
+    def _init_saved_config(self) -> WindowConfig | None:
         saved_config = SaveIo().update(self.initial_config)
         if saved_config == self.initial_config:
             return None

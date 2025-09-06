@@ -23,7 +23,7 @@ class Move(AnimationOnScreens):
 
     @override
     @property
-    def complete(self) -> bool:
+    def is_complete(self) -> bool:
         return self._timer.overdue
 
     @override

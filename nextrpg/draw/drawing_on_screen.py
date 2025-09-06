@@ -62,3 +62,7 @@ class DrawingOnScreen(Sizable):
         self, other: Coordinate | Size | Width | Height | DirectionalOffset
     ) -> DrawingOnScreen:
         return self + -other
+
+    def blur(self, radius: int | float) -> Self:
+        drawing = self.drawing.blur(radius)
+        return replace(self, drawing=drawing)

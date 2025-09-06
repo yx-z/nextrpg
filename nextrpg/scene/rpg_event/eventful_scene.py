@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
-from typing import TYPE_CHECKING, Self, override
+from typing import TYPE_CHECKING, Any, Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen
@@ -12,7 +12,6 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.log import Log
-from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.background_event import (
@@ -30,15 +29,14 @@ log = Log()
 
 
 @dataclass(frozen=True)
-class EventfulScene[R](EventAsAttr, Scene):
+class EventfulScene(EventAsAttr, Scene):
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...]
-    save_io: SaveIo | None = None
     _: KW_ONLY = private_init_below()
     _started_npc: NpcOnScreen | None = None
     _ended_npc: NpcOnScreen | None = None
     _event: EventGenerator | None = None
-    _event_result: R | None = None
+    _event_result: Any = None
     _background_events: tuple[BackgroundEvent, ...] = ()
 
     def get_character(self, unique_name: str) -> CharacterOnScreen:
@@ -58,15 +56,6 @@ class EventfulScene[R](EventAsAttr, Scene):
             and npc_event.start_mode is NpcEventStartMode.CONFIRM
         ):
             return replace(self, player=player, _started_npc=npc)
-
-        if (
-            self.save_io
-            and isinstance(event, KeyPressDown)
-            and event.key is KeyboardKey.CONFIRM
-        ):
-            for character in self.npcs + (player,):
-                self.save_io.save(character)
-
         return replace(self, player=player)
 
     def tick(self, time_delta: Millisecond) -> Scene:
@@ -113,7 +102,7 @@ class EventfulScene[R](EventAsAttr, Scene):
     def complete(
         self,
         event: EventGenerator,
-        event_result: R | None = None,
+        event_result: Any = None,
         background_event: BackgroundEvent | None = None,
     ) -> Self:
         if background_event:

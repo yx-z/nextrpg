@@ -59,7 +59,7 @@ class SayEventNineSliceBackgroundConfig:
 
     @cached_property
     def tip_at_bottom(self) -> Drawing:
-        if self.tip_at_bottom_input is None:
+        if not self.tip_at_bottom_input:
             return self.tip_at_top.flip(vertical=True)
         if callable(self.tip_at_bottom_input):
             return self.tip_at_bottom_input()

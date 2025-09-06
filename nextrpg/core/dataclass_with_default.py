@@ -38,7 +38,7 @@ def dataclass_with_default[T](cls: type[T]) -> type[T]: ...
 def dataclass_with_default[T](
     cls: type[T] | None = None, /, **kwargs: Any
 ) -> Callable[[type[T]], type[T]] | type[T]:
-    if cls is None:
+    if not cls:
         return lambda c: dataclass_with_default(c, **kwargs)
 
     def post_init(self, *_: Any, **__: Any) -> None:

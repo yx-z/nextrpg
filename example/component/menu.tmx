@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="1" height="1" tilewidth="1280" tileheight="720" infinite="0" nextlayerid="11" nextobjectid="8">
+ <objectgroup id="10" name="buttons">
+  <object id="6" name="save" x="200.942" y="188.383">
+   <point/>
+  </object>
+  <object id="7" name="title" x="1014.13" y="178.964">
+   <point/>
+  </object>
+ </objectgroup>
+</map>

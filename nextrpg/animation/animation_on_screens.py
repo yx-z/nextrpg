@@ -49,15 +49,15 @@ class AnimationOnScreens(AnimationOnScreen):
 
     @override
     @property
-    def complete(self) -> bool:
+    def is_complete(self) -> bool:
         if isinstance(self.resource, AnimationOnScreen):
-            return self.resource.complete
+            return self.resource.is_complete
         if isinstance(self.resource, DrawingOnScreen):
             return True
 
         return all(
             (
-                resource.complete
+                resource.is_complete
                 if isinstance(resource, AnimationOnScreen)
                 else True
             )
