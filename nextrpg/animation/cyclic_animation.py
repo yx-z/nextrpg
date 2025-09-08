@@ -14,10 +14,10 @@ from nextrpg.draw.drawing import Drawing
 @dataclass_with_default(frozen=True)
 class CyclicAnimation(Animation):
     frames: tuple[Drawing, ...]
-    duration_per_frame: Millisecond
+    duration_per_frame: Millisecond | tuple[Millisecond, ...]
     _: KW_ONLY = private_init_below()
     _index: int = 0
-    _timer: Timer = default(lambda self: Timer(self.duration_per_frame))
+    _timer: Timer = default(lambda self: Timer(self._duration(0)))
 
     @property
     @override
@@ -26,11 +26,34 @@ class CyclicAnimation(Animation):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        timer = self._timer.tick(time_delta)
-        frames_to_step = timer.elapsed // self.duration_per_frame
-        index = (self._index + frames_to_step) % len(self.frames)
-        return replace(self, _index=index, _timer=timer.modulo)
+        if not (updated_timer := self._timer.tick(time_delta)).overdue:
+            return replace(self, _timer=updated_timer)
+        current_index = self._index
+        remaining_time = updated_timer.elapsed - updated_timer.duration
+        while remaining_time > 0:
+            current_index = (current_index + 1) % len(self.frames)
+            current_frame_duration = (
+                self.duration_per_frame[current_index]
+                if isinstance(self.duration_per_frame, tuple)
+                else self.duration_per_frame
+            )
+            if remaining_time < current_frame_duration:
+                break
+            remaining_time -= current_frame_duration
+        current_frame_duration = self._duration(current_index)
+        new_timer = Timer(current_frame_duration).tick(remaining_time)
+        return replace(self, _index=current_index, _timer=new_timer)
 
     @property
     def reset(self) -> Self:
-        return replace(self, _index=0, _timer=self._timer.reset)
+        timer = Timer(self._duration(0))
+        return replace(self, _index=0, _timer=timer)
+
+    def _duration(self, index: int) -> Millisecond:
+        if isinstance(self.duration_per_frame, tuple):
+            return self.duration_per_frame[index]
+        return self.duration_per_frame
+
+    @property
+    def is_complete(self) -> bool:
+        return False

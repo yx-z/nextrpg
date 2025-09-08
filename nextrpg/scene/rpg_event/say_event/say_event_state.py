@@ -67,7 +67,7 @@ class SayEventFadeInState(SayEventState):
 
     @override
     def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
-        if not (fade_in := self._fade_in.tick(time_delta)).complete:
+        if not (fade_in := self._fade_in.tick(time_delta)).is_complete:
             return replace(ticked, _fade_in=fade_in)
         return SayEventTypingState(
             generator=self.generator,
@@ -145,6 +145,6 @@ class SayEventFadeOutState(SayEventState):
 
     @override
     def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
-        if (fade_out := self._fade_out.tick(time_delta)).complete:
-            return ticked.scene.complete(self.generator)
+        if (fade_out := self._fade_out.tick(time_delta)).is_complete:
+            return ticked.scene.is_complete(self.generator)
         return replace(ticked, _fade_out=fade_out)

@@ -3,6 +3,7 @@ __version__ = "0.1.17"
 from nextrpg.animation.animation import Animation
 from nextrpg.animation.animation_on_screen import (
     AnimationOnScreen,
+    FromAnimation,
     tick_optional,
 )
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
@@ -165,9 +166,9 @@ from nextrpg.gui.window import Window
 from nextrpg.scene.fade_in_scene import FadeInScene
 from nextrpg.scene.fade_out_scene import FadeOutScene
 from nextrpg.scene.map.map_loader import (
-    LayerTileBottomAndDrawOnScreen,
+    LayerBottomAndTile,
     MapLoader,
-    TileBottomAndDrawOnScreen,
+    _TileBottomAndDrawings,
 )
 from nextrpg.scene.map.map_scene import MapMove, MapScene
 from nextrpg.scene.map.map_shift import center_player

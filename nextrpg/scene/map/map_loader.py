@@ -1,19 +1,24 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from functools import cached_property
-from typing import NamedTuple
+from typing import NamedTuple, Self
 
-from pygame import Surface
 from pytmx import TiledObject, TiledTileLayer
 
+from nextrpg.animation.animation_on_screen import (
+    AnimationOnScreen,
+    FromAnimation,
+)
+from nextrpg.animation.animation_on_screens import AnimationOnScreens
+from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.log import Log
-from nextrpg.core.tmx_loader import TmxLoader, _is_rect, get_geometry
-from nextrpg.draw.drawing import (
-    Drawing,
-)
+from nextrpg.core.time import Millisecond
+from nextrpg.core.tmx_loader import TmxLoader, get_geometry, is_rect
+from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.coordinate import Coordinate, YAxis
 from nextrpg.geometry.dimension import Size
@@ -21,17 +26,6 @@ from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 log = Log()
-
-
-class TileBottomAndDrawOnScreen(NamedTuple):
-    bottom: YAxis
-    drawing_on_screen: DrawingOnScreen
-
-
-class LayerTileBottomAndDrawOnScreen(NamedTuple):
-    layer: int
-    bottom: YAxis
-    drawing_on_screen: DrawingOnScreen
 
 
 @cached(lambda: config().map.cache_size)
@@ -43,13 +37,13 @@ class MapLoader(TmxLoader):
         return width * height
 
     @cached_property
-    def background(self) -> tuple[DrawingOnScreen, ...]:
+    def background(self) -> tuple[DrawingOnScreen | AnimationOnScreen, ...]:
         return self._draw_tile_layers(config().map.background)
 
     @cached_property
     def foreground(
         self,
-    ) -> tuple[tuple[LayerTileBottomAndDrawOnScreen, ...], ...]:
+    ) -> tuple[tuple[LayerBottomAndTile, ...], ...]:
         return tuple(
             _foreground_layer(i, tiles)
             for i, layer in enumerate(
@@ -59,7 +53,9 @@ class MapLoader(TmxLoader):
         )
 
     @cached_property
-    def above_character(self) -> tuple[DrawingOnScreen, ...]:
+    def above_character(
+        self,
+    ) -> tuple[DrawingOnScreen | AnimationOnScreen, ...]:
         return self._draw_tile_layers(config().map.above_character)
 
     @cached_property
@@ -84,9 +80,11 @@ class MapLoader(TmxLoader):
         return ()
 
     def layer_bottom_and_drawing(
-        self, character: CharacterOnScreen
-    ) -> tuple[LayerTileBottomAndDrawOnScreen, ...]:
-        character_layer = self._character_layer(character)
+        self,
+        character: CharacterOnScreen,
+        foreground: tuple[tuple[LayerBottomAndTile, ...], ...],
+    ) -> tuple[LayerBottomAndTile, ...]:
+        character_layer = self._character_layer(character, foreground)
         log.debug(
             t"{character.name} layered at {character_layer}", duration=None
         )
@@ -94,23 +92,19 @@ class MapLoader(TmxLoader):
             character.drawing_on_screen.visible_rectangle_area_on_screen.bottom
         )
         return tuple(
-            LayerTileBottomAndDrawOnScreen(
-                character_layer, character_bottom, draw_on_screen
-            )
-            for draw_on_screen in character.drawing_on_screens
+            LayerBottomAndTile(resource, character_layer, character_bottom)
+            for resource in character.drawing_on_screens
         )
 
-    def _character_layer(self, character: CharacterOnScreen) -> int:
-        for index, layer in enumerate(self._reversed_foregrounds):
+    def _character_layer(
+        self,
+        character: CharacterOnScreen,
+        foreground: tuple[tuple[LayerBottomAndTile, ...], ...],
+    ) -> int:
+        for index, layer in enumerate(reversed(foreground)):
             if _below_character_layer(layer, character):
                 return index + 1
         return 0
-
-    @cached_property
-    def _reversed_foregrounds(
-        self,
-    ) -> tuple[tuple[LayerTileBottomAndDrawOnScreen, ...], ...]:
-        return tuple(reversed(self.foreground))
 
     @cached_property
     def _colliders(self) -> tuple[_Collider, ...]:
@@ -145,7 +139,7 @@ class MapLoader(TmxLoader):
     def _from_rect(
         self, coordinate: _TileCoordinate, obj: TiledObject
     ) -> RectangleAreaOnScreen | None:
-        if not _is_rect(obj):
+        if not is_rect(obj):
             return None
 
         w, h = self._tile_size
@@ -159,6 +153,7 @@ class MapLoader(TmxLoader):
             layer
             for layer in self._all_tile_layers
             if getattr(layer, "class", None) == class_name
+            or class_name in layer.name
         )
 
     @cached_property
@@ -167,26 +162,30 @@ class MapLoader(TmxLoader):
 
     def _bottom_and_drawing(
         self, layer: TiledTileLayer
-    ) -> tuple[TileBottomAndDrawOnScreen, ...]:
-        coord_and_draws = self._drawing(layer)
-        coord_to_bottom = {
-            coordinate: drawing.visible_rectangle_area_on_screen.bottom
-            for coordinate, drawing in coord_and_draws.items()
+    ) -> tuple[_TileBottomAndDrawings, ...]:
+        coordinate_and_drawings = self._drawing(layer)
+        coordinate_to_bottom = {
+            coordinate: _visible_area(drawing).bottom
+            for coordinate, drawing in coordinate_and_drawings.items()
         }
-        bottom_and_draw = tuple(
-            TileBottomAndDrawOnScreen(
-                self._bottom(layer, coordinate, drawing, coord_to_bottom),
+        bottom_and_drawings = tuple(
+            _TileBottomAndDrawings(
+                self._bottommost(
+                    layer, coordinate, drawing, coordinate_to_bottom
+                ),
                 drawing,
             )
-            for coordinate, drawing in coord_and_draws.items()
+            for coordinate, drawing in coordinate_and_drawings.items()
         )
-        return tuple(sorted(bottom_and_draw, key=lambda t: t.bottom))
+        return tuple(sorted(bottom_and_drawings, key=lambda t: t.bottommost))
 
     @property
     def _tile_size(self) -> Size:
         return Size(self._tmx.tilewidth, self._tmx.tileheight)
 
-    def _draw_tile_layers(self, class_name: str) -> tuple[DrawingOnScreen, ...]:
+    def _draw_tile_layers(
+        self, class_name: str
+    ) -> tuple[DrawingOnScreen | AnimationOnScreen, ...]:
         return tuple(
             drawing
             for layer in self._tile_layers(class_name)
@@ -195,17 +194,28 @@ class MapLoader(TmxLoader):
 
     def _drawing(
         self, layer: TiledTileLayer
-    ) -> dict[_TileCoordinate, DrawingOnScreen]:
+    ) -> dict[_TileCoordinate, DrawingOnScreen | AnimationOnScreen]:
         return {
-            _TileCoordinate(top, left): self._tile(left, top, surface)
-            for left, top, surface in layer.tiles()
+            _TileCoordinate(top, left): self._tile(left, top, gid)
+            for left, top, gid in layer
+            if gid
         }
 
-    def _tile(self, left: int, top: int, surface: Surface) -> DrawingOnScreen:
+    def _tile(
+        self, left: int, top: int, gid: _Gid
+    ) -> DrawingOnScreen | AnimationOnScreen:
         width, height = self._tile_size
-        return DrawingOnScreen(
-            Coordinate(left * width, top * height), Drawing(surface)
-        )
+        coordinate = Coordinate(left * width, top * height)
+        if frame_infos := self._tmx.tile_properties.get(gid, {}).get("frames"):
+            frames = tuple(
+                Drawing(self._tmx.images[frame_info.gid])
+                for frame_info in frame_infos
+            )
+            durations = tuple(frame_info.duration for frame_info in frame_infos)
+            animation = CyclicAnimation(frames, durations)
+            return FromAnimation(coordinate, animation)
+        drawing = Drawing(self._tmx.images[gid])
+        return DrawingOnScreen(coordinate, drawing)
 
     def _class(
         self, layer: TiledTileLayer, coordinate: _TileCoordinate
@@ -218,11 +228,11 @@ class MapLoader(TmxLoader):
             )
         return None
 
-    def _bottom(
+    def _bottommost(
         self,
         layer: TiledTileLayer,
         coordinate: _TileCoordinate,
-        drawing: DrawingOnScreen,
+        drawing: DrawingOnScreen | AnimationOnScreen,
         coordinate_to_bottom: dict[_TileCoordinate, YAxis],
     ) -> YAxis:
         return (
@@ -231,7 +241,7 @@ class MapLoader(TmxLoader):
                 for c in self._component(layer, coordinate, cls)
             )
             if (cls := self._class(layer, coordinate))
-            else drawing.visible_rectangle_area_on_screen.bottom
+            else _visible_area(drawing).bottom
         )
 
     def _component(
@@ -268,25 +278,26 @@ class MapLoader(TmxLoader):
 
 
 def _below_character_layer(
-    layer: tuple[LayerTileBottomAndDrawOnScreen, ...],
+    layer: tuple[LayerBottomAndTile, ...],
     character: CharacterOnScreen,
 ) -> bool:
     rect = character.drawing_on_screen.visible_rectangle_area_on_screen
     return any(
-        bottom < rect.bottom
-        and rect.collide(drawing.visible_rectangle_area_on_screen)
-        for _, bottom, drawing in layer
+        tile.bottommost < rect.bottom
+        and rect.collide(_visible_area(tile.resource))
+        for tile in layer
     )
 
 
 def _foreground_layer(
-    index: int, tiles: tuple[TileBottomAndDrawOnScreen, ...]
-) -> tuple[LayerTileBottomAndDrawOnScreen, ...]:
+    index: int, tiles: tuple[_TileBottomAndDrawings, ...]
+) -> tuple[LayerBottomAndTile, ...]:
     with_index = tuple(
-        LayerTileBottomAndDrawOnScreen(index, bottom, drawing)
-        for bottom, drawing in tiles
+        LayerBottomAndTile(drawing, index, bottom) for bottom, drawing in tiles
     )
-    sorted_by_bottom = sorted(with_index, key=lambda t: t[1], reverse=True)
+    sorted_by_bottom = sorted(
+        with_index, key=lambda t: t.bottommost, reverse=True
+    )
     return tuple(sorted_by_bottom)
 
 
@@ -301,3 +312,54 @@ class _TileCoordinate(NamedTuple):
 class _Collider(NamedTuple):
     coordinate: _TileCoordinate
     obj: TiledObject
+
+
+class _TileBottomAndDrawings(NamedTuple):
+    bottommost: YAxis
+    resource: DrawingOnScreen | AnimationOnScreen
+
+
+@dataclass(frozen=True)
+class LayerBottomAndTile(AnimationOnScreens):
+    layer: int
+    bottommost: YAxis
+
+    def __lt__(self, other: Self) -> bool:
+        if self.layer == other.layer:
+            return self.bottommost < other.bottommost
+        return self.layer < other.layer
+
+
+def _visible_area(
+    drawing: DrawingOnScreen | AnimationOnScreen,
+) -> RectangleAreaOnScreen:
+    if isinstance(drawing, DrawingOnScreen):
+        return drawing.visible_rectangle_area_on_screen
+    return drawing.drawing_on_screens[0].visible_rectangle_area_on_screen
+
+
+def tick_layer(
+    drawings: tuple[DrawingOnScreen | AnimationOnScreen, ...],
+    time_delta: Millisecond,
+) -> tuple[DrawingOnScreen | AnimationOnScreen, ...]:
+    return tuple(_tick_drawing(drawing, time_delta) for drawing in drawings)
+
+
+def drawing_on_screens(
+    drawings: tuple[DrawingOnScreen | AnimationOnScreen, ...],
+) -> tuple[DrawingOnScreen, ...]:
+    res: list[DrawingOnScreen] = []
+    for drawing in drawings:
+        if isinstance(drawing, AnimationOnScreen):
+            res += drawing.drawing_on_screens
+        else:
+            res.append(drawing)
+    return tuple(res)
+
+
+def _tick_drawing(
+    drawing: DrawingOnScreen | AnimationOnScreen, time_delta: Millisecond
+) -> DrawingOnScreen | AnimationOnScreen:
+    if isinstance(drawing, AnimationOnScreen):
+        return drawing.tick(time_delta)
+    return drawing

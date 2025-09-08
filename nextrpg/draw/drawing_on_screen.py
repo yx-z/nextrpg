@@ -20,10 +20,6 @@ class DrawingOnScreen(Sizable):
     top_left: Coordinate
     drawing: Drawing
 
-    @property
-    def rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
-        return self.top_left.anchor(self.size).rectangle_area_on_screen
-
     @cached_property
     def visible_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
         shift = self.drawing.visible_rectangle_area_on_screen.top_left

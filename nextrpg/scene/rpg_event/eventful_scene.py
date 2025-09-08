@@ -110,7 +110,7 @@ class EventfulScene[R](EventAsAttr, Scene):
             ticked, _background_events=not_completed_background_events
         )
 
-    def complete(
+    def is_complete(
         self,
         event: EventGenerator,
         event_result: R | None = None,

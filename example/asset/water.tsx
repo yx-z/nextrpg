@@ -3,9 +3,9 @@
  <image source="water.png" width="1008" height="1008"/>
  <tile id="0">
   <animation>
-   <frame tileid="0" duration="100"/>
-   <frame tileid="105" duration="100"/>
-   <frame tileid="210" duration="100"/>
+   <frame tileid="0" duration="200"/>
+   <frame tileid="105" duration="200"/>
+   <frame tileid="210" duration="200"/>
   </animation>
  </tile>
  <tile id="1">

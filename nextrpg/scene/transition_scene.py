@@ -36,16 +36,16 @@ class TransitionScene(Scene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
-        if not (fade_in := self._fade_in.tick(time_delta)).complete:
+        if not (fade_in := self._fade_in.tick(time_delta)).is_complete:
             return replace(self, _fade_in=fade_in)
-        if (fade_out := self._fade_out.tick(time_delta)).complete:
+        if (fade_out := self._fade_out.tick(time_delta)).is_complete:
             return self._to_scene
         return replace(self, _fade_in=fade_in, _fade_out=fade_out)
 
     @cached_property
     @override
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        if self._fade_in.complete:
+        if self._fade_in.is_complete:
             return (
                 self._to_scene.drawing_on_screens
                 + self._fade_out.drawing_on_screens

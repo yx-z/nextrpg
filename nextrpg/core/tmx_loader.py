@@ -33,7 +33,7 @@ def get_geometry(
         if obj.closed:
             return PolygonAreaOnScreen(points)
         return PolylineOnScreen(points)
-    if _is_rect(obj):
+    if is_rect(obj):
         coordinate = Coordinate(obj.x, obj.y)
         size = Size(obj.width, obj.height)
         return coordinate.anchor(size).rectangle_area_on_screen
@@ -89,5 +89,5 @@ class TmxLoader:
         return self._tmx.layers[index]
 
 
-def _is_rect(obj: TiledObject) -> bool:
+def is_rect(obj: TiledObject) -> bool:
     return obj.x is not None and obj.y is not None and obj.width and obj.height

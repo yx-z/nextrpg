@@ -18,6 +18,10 @@ class Animation(Sizable, ABC):
     def drawing(self) -> Drawing | DrawingGroup: ...
 
     @property
+    @abstractmethod
+    def is_complete(self) -> bool: ...
+
+    @property
     def top_left(self) -> Coordinate:
         return self.drawing.top_left
 
