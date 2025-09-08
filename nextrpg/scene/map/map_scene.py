@@ -89,7 +89,8 @@ class MapScene[R](EventfulScene[R]):
     def tick(self, time_delta: Millisecond) -> Scene:
         if move_to := self._move_to_scene(time_delta):
             return move_to
-        ticked = super().tick(time_delta)
+        if not isinstance(ticked := super().tick(time_delta), MapScene):
+            return ticked
         background = tick_layer(self._background, time_delta)
         foreground = tuple(
             tuple(tile.tick(time_delta) for tile in layer)

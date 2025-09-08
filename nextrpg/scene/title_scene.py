@@ -15,7 +15,7 @@ from nextrpg.core.tmx_loader import TmxLoader, get_coordinate, get_geometry
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.scene.ui.widget_group import WidgetGroupOnScreen
+from nextrpg.scene.widget.widget_group import WidgetGroupOnScreen
 
 
 @dataclass_with_default(frozen=True, kw_only=True)

@@ -3,12 +3,12 @@ __version__ = "0.1.17"
 from nextrpg.animation.animation import Animation
 from nextrpg.animation.animation_on_screen import (
     AnimationOnScreen,
-    FromAnimation,
     tick_optional,
 )
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.animation.fade import Fade, FadeIn, FadeOut
+from nextrpg.animation.from_animation import FromAnimation
 from nextrpg.animation.move import Move, MoveFrom, MoveTo
 from nextrpg.animation.typewriter import Typewriter
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -94,13 +94,13 @@ from nextrpg.draw.color import (
 )
 from nextrpg.draw.drawing import Drawing
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.draw.drawing_on_screens import DrawingOnScreens
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.draw.font import Font
 from nextrpg.draw.nine_slice import NineSlice
 from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.polyline_drawing import PolylineDrawing
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
-from nextrpg.draw.sizable_drawing_on_screens import SizableDrawingOnScreens
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
@@ -206,13 +206,13 @@ from nextrpg.scene.rpg_event.say_event.say_event_state import (
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.title_scene import TitleScene
 from nextrpg.scene.transition_scene import TransitionScene
-from nextrpg.scene.ui.button import Button, ButtonOnScreen
-from nextrpg.scene.ui.label import Label, LabelOnScreen
-from nextrpg.scene.ui.panel import Panel
-from nextrpg.scene.ui.scroll_direction import ScrollDirection
-from nextrpg.scene.ui.sizable_widget import SizableWidget
-from nextrpg.scene.ui.widget import Widget, WidgetOnScreen
-from nextrpg.scene.ui.widget_group import (
+from nextrpg.scene.widget.button import Button, ButtonOnScreen
+from nextrpg.scene.widget.label import Label, LabelOnScreen
+from nextrpg.scene.widget.panel import Panel
+from nextrpg.scene.widget.scroll_direction import ScrollDirection
+from nextrpg.scene.widget.sizable_widget import SizableWidget
+from nextrpg.scene.widget.widget import Widget, WidgetOnScreen
+from nextrpg.scene.widget.widget_group import (
     WidgetGroup,
     WidgetGroupOnScreen,
 )

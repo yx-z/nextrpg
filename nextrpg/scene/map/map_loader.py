@@ -6,12 +6,10 @@ from typing import NamedTuple, Self
 
 from pytmx import TiledObject, TiledTileLayer
 
-from nextrpg.animation.animation_on_screen import (
-    AnimationOnScreen,
-    FromAnimation,
-)
+from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.cyclic_animation import CyclicAnimation
+from nextrpg.animation.from_animation import FromAnimation
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached

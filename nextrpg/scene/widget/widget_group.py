@@ -15,8 +15,8 @@ from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.scene.scene import Scene
-from nextrpg.scene.ui.scroll_direction import ScrollDirection
-from nextrpg.scene.ui.widget import Widget, WidgetOnScreen
+from nextrpg.scene.widget.scroll_direction import ScrollDirection
+from nextrpg.scene.widget.widget import Widget, WidgetOnScreen
 
 
 @dataclass_with_default(frozen=True, kw_only=True)

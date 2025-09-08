@@ -10,7 +10,7 @@ from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
-from nextrpg.scene.ui.widget import Widget, WidgetOnScreen
+from nextrpg.scene.widget.widget import Widget, WidgetOnScreen
 
 
 @dataclass(frozen=True, kw_only=True)

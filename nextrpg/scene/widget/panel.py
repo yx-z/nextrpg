@@ -14,8 +14,11 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.scene.ui.sizable_widget import SizableWidget, SizableWidgetOnScreen
-from nextrpg.scene.ui.widget import Widget, WidgetOnScreen
+from nextrpg.scene.widget.sizable_widget import (
+    SizableWidget,
+    SizableWidgetOnScreen,
+)
+from nextrpg.scene.widget.widget import Widget, WidgetOnScreen
 
 
 @dataclass_with_default(frozen=True, kw_only=True)

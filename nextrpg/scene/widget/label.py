@@ -7,7 +7,10 @@ from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.text import Text
 from nextrpg.draw.text_group import TextGroup
 from nextrpg.geometry.dimension import Size
-from nextrpg.scene.ui.sizable_widget import SizableWidget, SizableWidgetOnScreen
+from nextrpg.scene.widget.sizable_widget import (
+    SizableWidget,
+    SizableWidgetOnScreen,
+)
 
 
 @dataclass(frozen=True)

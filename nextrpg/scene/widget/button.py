@@ -16,8 +16,11 @@ from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.dimension import Size
 from nextrpg.scene.scene import Scene
-from nextrpg.scene.ui.sizable_widget import SizableWidget, SizableWidgetOnScreen
-from nextrpg.scene.ui.widget import Widget
+from nextrpg.scene.widget.sizable_widget import (
+    SizableWidget,
+    SizableWidgetOnScreen,
+)
+from nextrpg.scene.widget.widget import Widget
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
