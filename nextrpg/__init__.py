@@ -14,8 +14,8 @@ from nextrpg.animation.typewriter import Typewriter
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import (
     CharacterOnScreen,
-    CharacterSpec,
 )
+from nextrpg.character.character_spec import CharacterSpec
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen, StrictNpcSpec
@@ -170,7 +170,8 @@ from nextrpg.scene.map.map_loader import (
     MapLoader,
     _TileBottomAndDrawings,
 )
-from nextrpg.scene.map.map_scene import MapMove, MapScene
+from nextrpg.scene.map.map_move import MapMove
+from nextrpg.scene.map.map_scene import MapScene
 from nextrpg.scene.map.map_shift import center_player
 from nextrpg.scene.rpg_event.cutscene import cutscene
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from dataclasses import KW_ONLY, dataclass, field, replace
+from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Any, Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
+from nextrpg.character.character_spec import CharacterSpec
 from nextrpg.character.polygon_character_drawing import PolygonCharacterDrawing
-from nextrpg.config.character_config import CharacterConfig
 from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -15,8 +15,6 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 from nextrpg.draw.polygon_drawing import PolygonDrawing
 from nextrpg.draw.rectangle_drawing import RectangleDrawing
@@ -28,20 +26,6 @@ from nextrpg.geometry.direction import Direction
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
-
-
-@dataclass_with_default(frozen=True)
-class _BaseCharacterSpec:
-    unique_name: str
-    collide_with_others: bool = True
-    avatar: Drawing | DrawingGroup | None = None
-    display_name: str = default(lambda self: self.unique_name)
-    config: CharacterConfig = field(default_factory=lambda: config().character)
-
-
-@dataclass(frozen=True, kw_only=True)
-class CharacterSpec(_BaseCharacterSpec):
-    character: CharacterDrawing
 
 
 @dataclass_with_default(frozen=True)

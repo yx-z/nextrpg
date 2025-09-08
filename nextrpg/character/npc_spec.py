@@ -4,10 +4,7 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.character.character_on_screen import (
-    CharacterSpec,
-    _BaseCharacterSpec,
-)
+from nextrpg.character.character_spec import CharacterSpec, _BaseCharacterSpec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.polygon_character_drawing import PolygonCharacterDrawing
 from nextrpg.core.dataclass_with_default import (

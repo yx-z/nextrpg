@@ -1,16 +1,13 @@
 from __future__ import annotations
 
-from collections.abc import Callable
-from dataclasses import KW_ONLY, dataclass, replace
-from functools import cache, cached_property
+from dataclasses import KW_ONLY, replace
+from functools import cached_property
 from pathlib import Path
 from typing import override
 
-from cachetools import LRUCache
-
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.character.character_on_screen import CharacterSpec
+from nextrpg.character.character_spec import CharacterSpec
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen
 from nextrpg.character.npc_spec import NpcSpec, to_strict
@@ -23,7 +20,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.log import Log
-from nextrpg.core.time import Millisecond, get_timepoint
+from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import get_geometry
 from nextrpg.draw.color import TRANSPARENT
 from nextrpg.draw.drawing_on_screen import DrawingOnScreen
@@ -40,10 +37,10 @@ from nextrpg.scene.map.map_loader import (
     drawing_on_screens,
     tick_layer,
 )
+from nextrpg.scene.map.map_move import MapMove
 from nextrpg.scene.map.map_shift import center_player
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
 from nextrpg.scene.scene import Scene
-from nextrpg.scene.transition_scene import TransitionScene
 
 log = Log()
 
@@ -252,62 +249,3 @@ class MapScene[R](EventfulScene[R]):
         if isinstance(self.npc_specs, NpcSpec):
             return (self.npc_specs,)
         return self.npc_specs
-
-
-@dataclass(frozen=True)
-class MapMove:
-    to_object: str
-    trigger_object: str
-    next_scene: (
-        Callable[[CharacterSpec | None], MapScene]
-        | Callable[[CharacterSpec], MapScene]
-    )
-
-    def to_scene(
-        self, from_scene: MapScene, player: PlayerOnScreen
-    ) -> TransitionScene:
-        spec = replace(
-            player.spec, unique_name=self.to_object, character=player.character
-        )
-        now = get_timepoint()
-
-        if not (tmx := _tmxs().get(self.next_scene)):
-            next_scene = self.next_scene(spec)
-            tmx = str(next_scene.tmx_file)
-
-        if timed_scene := _scenes().get(tmx):
-            scene = timed_scene.scene
-            player = scene.init_player(spec)
-            scene_with_player = replace(scene, player=player)
-
-            time_delta = now - timed_scene.time
-            to_scene = scene_with_player.tick(time_delta)
-        else:
-            to_scene = self.next_scene(spec)
-
-        _scenes()[str(from_scene.tmx_file)] = _TimedScene(now, from_scene)
-        _tmxs()[self.next_scene] = tmx
-
-        return TransitionScene(from_scene=from_scene, to_scene=to_scene)
-
-
-@dataclass(frozen=True)
-class _TimedScene:
-    time: Millisecond
-    scene: MapScene
-
-
-@cache
-def _scenes() -> LRUCache[str, _TimedScene]:
-    return LRUCache(config().map.cache_size)
-
-
-@cache
-def _tmxs() -> LRUCache[
-    (
-        Callable[[CharacterSpec | None], MapScene]
-        | Callable[[CharacterSpec], MapScene]
-    ),
-    str,
-]:
-    return LRUCache(config().map.cache_size)
