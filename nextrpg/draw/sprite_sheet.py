@@ -14,8 +14,8 @@ class SpriteSheetSelection:
 @dataclass(frozen=True, kw_only=True)
 class SpriteSheet:
     drawing: Drawing
-    num_row: int
-    num_column: int
+    num_rows: int
+    num_columns: int
     color_key: Color | None = None
 
     @cached_property
@@ -23,14 +23,18 @@ class SpriteSheet:
         return tuple(
             tuple(
                 self.select(SpriteSheetSelection(row=row, column=column))
-                for column in range(self.num_column)
+                for column in range(self.num_columns)
             )
-            for row in range(self.num_row)
+            for row in range(self.num_rows)
         )
 
+    def __getitem__(self, item: tuple[int, int]) -> Drawing:
+        row, col = item
+        return self.select(SpriteSheetSelection(row=row, column=col))
+
     def select(self, selection: SpriteSheetSelection) -> Drawing:
-        width = self.drawing.width / self.num_column
-        height = self.drawing.height / self.num_row
+        width = self.drawing.width / self.num_columns
+        height = self.drawing.height / self.num_rows
         top_left = (
             (width * selection.column) * (height * selection.row)
         ).coordinate

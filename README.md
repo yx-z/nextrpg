@@ -15,4 +15,3 @@ player: f"Hello {npc.display_name}! I am {player.display_name}."
 ```
 
 into an RPG game scene!
-![interior](example/screenshot/interior.png)

@@ -61,7 +61,7 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         return self.drawing_on_screen.size
 
     @property
-    def display_name(self) -> str:
+    def name(self) -> str:
         return self.spec.display_name
 
     def tick(

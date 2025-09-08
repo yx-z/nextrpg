@@ -51,8 +51,8 @@ type RpgMakerCharacterDrawingFrameType = type[
 
 @dataclass(frozen=True, kw_only=True)
 class RpgMakerSpriteSheet(SpriteSheet):
-    num_column: int = 4
-    num_row: int = 2
+    num_columns: int = 4
+    num_rows: int = 2
     trim: DrawingTrim | None = None
     style: RpgMakerCharacterDrawingFrameType = (
         RpgMakerCharacterDrawingDefaultFrameType

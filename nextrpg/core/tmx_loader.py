@@ -64,7 +64,9 @@ class TmxLoader:
         assert isinstance(
             layer, TiledImageLayer
         ), f"Require {name} to be a TiledImageLayer"
-        coordinate = Coordinate(layer.offsetx, layer.offsety)
+        left = getattr(layer, "offsetx", 0)
+        top = getattr(layer, "offsety", 0)
+        coordinate = Coordinate(left, top)
         drawing = Drawing(layer.image)
         return DrawingOnScreen(coordinate, drawing)
 

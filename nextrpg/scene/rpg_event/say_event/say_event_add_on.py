@@ -251,7 +251,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
     def _name(self) -> str:
         if self.config.name_override:
             return self.config.name_override
-        return self.character.display_name
+        return self.character.name
 
     @cached_property
     def _character_position(self) -> _CharacterPosition:

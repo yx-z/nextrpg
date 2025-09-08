@@ -78,7 +78,7 @@ def _config() -> SaveConfig:
 def _log() -> Log:
     from nextrpg.core.log import Log
 
-    return Log("save")
+    return Log()
 
 
 @dataclass_with_default(frozen=True)

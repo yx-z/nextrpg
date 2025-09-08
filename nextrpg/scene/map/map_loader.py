@@ -4,14 +4,12 @@ from functools import cached_property
 from typing import NamedTuple
 
 from pygame import Surface
-from pytmx import (
-    TiledObject,
-    TiledTileLayer,
-)
+from pytmx import TiledObject, TiledTileLayer
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
+from nextrpg.core.log import Log
 from nextrpg.core.tmx_loader import TmxLoader, _is_rect, get_geometry
 from nextrpg.draw.drawing import (
     Drawing,
@@ -21,6 +19,8 @@ from nextrpg.geometry.coordinate import Coordinate, YAxis
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+
+log = Log()
 
 
 class TileBottomAndDrawOnScreen(NamedTuple):
@@ -87,6 +87,9 @@ class MapLoader(TmxLoader):
         self, character: CharacterOnScreen
     ) -> tuple[LayerTileBottomAndDrawOnScreen, ...]:
         character_layer = self._character_layer(character)
+        log.debug(
+            t"{character.name} layered at {character_layer}", duration=None
+        )
         character_bottom = (
             character.drawing_on_screen.visible_rectangle_area_on_screen.bottom
         )
@@ -269,7 +272,7 @@ def _below_character_layer(
     character: CharacterOnScreen,
 ) -> bool:
     rect = character.drawing_on_screen.visible_rectangle_area_on_screen
-    return layer[-1].bottom < rect.bottom and any(
+    return any(
         bottom < rect.bottom
         and rect.collide(drawing.visible_rectangle_area_on_screen)
         for _, bottom, drawing in layer
@@ -277,12 +280,14 @@ def _below_character_layer(
 
 
 def _foreground_layer(
-    idx: int, tiles: tuple[TileBottomAndDrawOnScreen, ...]
+    index: int, tiles: tuple[TileBottomAndDrawOnScreen, ...]
 ) -> tuple[LayerTileBottomAndDrawOnScreen, ...]:
-    return tuple(
-        LayerTileBottomAndDrawOnScreen(idx, bottom, drawing)
+    with_index = tuple(
+        LayerTileBottomAndDrawOnScreen(index, bottom, drawing)
         for bottom, drawing in tiles
     )
+    sorted_by_bottom = sorted(with_index, key=lambda t: t[1], reverse=True)
+    return tuple(sorted_by_bottom)
 
 
 type _Gid = int

@@ -3,47 +3,95 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "interior.tmx",
+    "activeFile": "exterior.tmx",
     "expandedProjectPaths": [
-        "."
     ],
     "fileStates": {
-        "base.tsx": {
+        "C:/Users/yxz/Downloads/Tiled_SampleProject_November041122/Tiled_SampleProject_November041122/maps/Tilesets/TileAuto_Water_01_Nature.json": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1.5
+        },
+        "PixelFantasy_Inside_A2.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
-        "builder.tsx": {
+        "PixelFantasy_Inside_B.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "PixelFantasy_Inside_C.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "PixelFantasy_Outside_B.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "PixelFantasy_Outside_C.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "exterior.tmx": {
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 691.5,
+                "y": 675.5
+            }
+        },
+        "exterior.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "interior.tmx": {
+            "expandedObjectLayers": [
+                6,
+                5
+            ],
             "scale": 1.5,
-            "selectedLayer": 4,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 646.6666666666665,
-                "y": 419.66666666666663
+                "x": 597.6666666666666,
+                "y": 610.3333333333334
             }
         },
-        "objects.tsx": {
-            "dynamicWrapping": false,
+        "interior.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "water.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1.5
         }
     },
-    "last.imagePath": "C:/Users/yxz/Desktop/nextrpg/example/assets",
+    "frame.defaultDuration": 200,
+    "last.imagePath": "C:/msys64/home/yxz/nextrpg/example/asset/Pixel Fantasy RMMZ RTP Tiles/img/tilesets",
+    "map.height": 30,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 48,
     "map.tileWidth": 48,
+    "map.width": 30,
     "openFiles": [
-        "interior.tmx",
-        "base.tsx"
+        "exterior.tmx",
+        "PixelFantasy_Outside_B.tsx",
+        "PixelFantasy_Outside_C.tsx"
     ],
-    "project": "example.tiled-project",
+    "project": "",
     "recentFiles": [
-        "base.tsx",
+        "PixelFantasy_Outside_C.tsx",
+        "PixelFantasy_Outside_B.tsx",
+        "exterior.tmx",
         "interior.tmx",
-        "objects.tsx",
-        "builder.tsx"
+        "exterior.tsx",
+        "water.tsx",
+        "C:/Users/yxz/Downloads/Tiled_SampleProject_November041122/Tiled_SampleProject_November041122/maps/Tilesets/TileAuto_Water_01_Nature.json",
+        "PixelFantasy_Inside_C.tsx",
+        "PixelFantasy_Inside_B.tsx",
+        "PixelFantasy_Inside_A2.tsx",
+        "interior.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
