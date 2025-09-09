@@ -47,11 +47,15 @@ class WindowConfig(UpdateFromSave[dict[str, Any]]):
     @property
     @override
     def save_data(self) -> dict[str, Any]:
-        return {"size": self.size.save_data, "full_screen": self.full_screen}
+        return {
+            Size.save_key(): self.size.save_data,
+            "full_screen": self.full_screen,
+        }
 
     @override
-    def update(self, data: dict[str, Any]) -> Self:
-        size = Size.load(data["size"])
+    def update_from_save(self, data: dict[str, Any]) -> Self:
+        size_key = Size.save_key()
+        size = Size.load_from_save(data[size_key])
         full_screen = data["full_screen"]
         return replace(self, size=size, full_screen=full_screen)
 

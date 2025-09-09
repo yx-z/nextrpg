@@ -12,7 +12,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.log import Log
-from nextrpg.core.save import SaveIo
+from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.background_event import (
@@ -30,10 +30,9 @@ log = Log()
 
 
 @dataclass(frozen=True)
-class EventfulScene(EventAsAttr, Scene):
+class EventfulScene(EventAsAttr, Scene, UpdateFromSave):
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...]
-    save_io: SaveIo | None = None
     _: KW_ONLY = private_init_below()
     _started_npc: NpcOnScreen | None = None
     _ended_npc: NpcOnScreen | None = None
@@ -58,14 +57,6 @@ class EventfulScene(EventAsAttr, Scene):
             and npc_event.start_mode is NpcEventStartMode.CONFIRM
         ):
             return replace(self, player=player, _started_npc=npc)
-
-        if (
-            self.save_io
-            and isinstance(event, KeyPressDown)
-            and event.key is KeyboardKey.CONFIRM
-        ):
-            for character in self.npcs + (player,):
-                self.save_io.save(character)
 
         return replace(self, player=player)
 
@@ -150,6 +141,19 @@ class EventfulScene(EventAsAttr, Scene):
             e for e in self._background_events if e.sentinel is not sentinel
         )
         return replace(self, _background_events=background_events)
+
+    def save_data(self) -> dict:
+        return {
+            character.save_key: character.save_data
+            for character in self.npcs + (self.player,)
+        }
+
+    def update_from_save(self, data: dict) -> Self:
+        player = self.player.update_from_save(data[self.player.save_key])
+        npcs = tuple(
+            npc.update_from_save(data[npc.save_key]) for npc in self.npcs
+        )
+        return replace(self, player=player, npcs=npcs)
 
     def _others(self, npc: NpcOnScreen) -> tuple[NpcOnScreen, ...]:
         return (self.player,) + tuple(n for n in self.npcs if n is not npc)

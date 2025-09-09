@@ -7,15 +7,7 @@ from enum import Enum
 from functools import cache
 from pathlib import Path
 from shutil import rmtree
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Iterable,
-    Self,
-    TypeAlias,
-    TypeVar,
-    override,
-)
+from typing import TYPE_CHECKING, Any, Self, TypeAlias, TypeVar, override
 
 from nextrpg import __version__
 from nextrpg.config.save_config import SaveConfig
@@ -33,22 +25,26 @@ type _Json = _Primitive | list["_Json"] | dict[str, "_Json"]
 type SaveData = _Primitive | bytes | list["SaveData"] | dict[str, "SaveData"]
 
 
-class Savable[_S]:
+class _Savable[_S]:
     @property
     def save_data(self) -> _S: ...
 
+
+class UpdateFromSave[_S](_Savable[_S]):
+    def update_from_save(self, data: _S) -> Self | None: ...
+
     @property
-    def key(self) -> tuple[str, ...]:
-        return _module_and_class(self)
+    def save_key(self) -> str:
+        return module_and_class(self)
 
 
-class UpdateFromSave[_S](Savable[_S]):
-    def update(self, data: _S) -> Self | None: ...
-
-
-class LoadFromSave[_S](Savable[_S]):
+class LoadFromSave[_S](_Savable[_S]):
     @classmethod
-    def load(cls, data: _S) -> Self: ...
+    def save_key(cls) -> str:
+        return module_and_class(cls)
+
+    @classmethod
+    def load_from_save(cls, data: _S) -> Self: ...
 
 
 class LoadFromSaveEnum(LoadFromSave[str], Enum):
@@ -59,11 +55,10 @@ class LoadFromSaveEnum(LoadFromSave[str], Enum):
 
     @override
     @classmethod
-    def load(cls, data: str) -> Self:
+    def load_from_save(cls, data: str) -> Self:
         return cls[data]
 
 
-_S = TypeVar("_S", bound=Savable)
 _L = TypeVar("_L", bound=LoadFromSave)
 _U = TypeVar("_U", bound=UpdateFromSave)
 
@@ -89,8 +84,12 @@ class SaveIo:
     _log: Log = field(default_factory=_log)
     _thread = ThreadPoolExecutor(max_workers=1)
 
-    def save(self, savable: Savable) -> Future:
-        key = _concat(savable.key)
+    def save(self, savable: _U | _L) -> Future:
+        if isinstance(savable, UpdateFromSave):
+            key = concat_save_key(savable.save_key)
+        else:
+            key = concat_save_key(savable.save_key())
+
         future = self._thread.submit(self._save, key, savable.save_data)
         future.add_done_callback(
             lambda _: self._log.debug(t"Saved {key} at {self.slot}")
@@ -108,13 +107,13 @@ class SaveIo:
         rmtree(self.config.directory / self.slot, ignore_errors=True)
 
     def update(self, arg: _U) -> _U:
-        key = _concat(arg.key)
-        return self._load(key, loader=arg.update, fallback=arg)
+        return self._load(
+            arg.save_key, loader=arg.update_from_save, fallback=arg
+        )
 
     def load(self, arg: type[_L]) -> _L | None:
-        module_and_class = _module_and_class(arg)
-        key = _concat(module_and_class)
-        return self._load(key, loader=arg.load, fallback=None)
+        key = concat_save_key(arg.save_key())
+        return self._load(key, loader=arg.load_from_save, fallback=None)
 
     @property
     def web(self) -> bool:
@@ -146,11 +145,11 @@ class SaveIo:
             return data
         if isinstance(data, list):
             return [
-                self._deserialize(_concat((key, i)), j)
+                self._deserialize(concat_save_key(key, i), j)
                 for i, j in enumerate(data)
             ]
         return {
-            sub_key: self._deserialize(_concat((key, sub_key)), value)
+            sub_key: self._deserialize(concat_save_key(key, sub_key), value)
             for sub_key, value in data.items()
         }
 
@@ -180,11 +179,11 @@ class SaveIo:
             return data
         if isinstance(data, list):
             return [
-                self._serialize(_concat((key, index)), datum)
+                self._serialize(concat_save_key(key, index), datum)
                 for index, datum in enumerate(data)
             ]
         return {
-            sub_key: self._serialize(_concat((key, sub_key)), value)
+            sub_key: self._serialize(concat_save_key(key, sub_key), value)
             for sub_key, value in data.items()
         }
 
@@ -197,16 +196,16 @@ class SaveIo:
 
 
 def _update(arg: _U, data: SaveData) -> _U:
-    if res := arg.update(data):
+    if res := arg.update_from_save(data):
         return res
     return arg
 
 
-def _concat(args: Iterable[Any]) -> str:
-    return "|".join(map(str, args))
-
-
-def _module_and_class(x: type | Any) -> tuple[str, ...]:
+def module_and_class(x: type | Any) -> str:
     if isinstance(x, type):
-        return x.__module__, x.__qualname__
-    return x.__module__, x.__class__.__qualname__
+        return concat_save_key(x.__module__, x.__qualname__)
+    return concat_save_key(x.__module__, x.__class__.__qualname__)
+
+
+def concat_save_key(*args: Any) -> str:
+    return _config().key_delimiter.join(map(str, args))

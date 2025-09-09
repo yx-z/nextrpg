@@ -13,7 +13,7 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
-from nextrpg.core.save import UpdateFromSave
+from nextrpg.core.save import UpdateFromSave, concat_save_key
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
@@ -99,21 +99,25 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
 
     @override
     @property
-    def key(self) -> tuple[str, ...]:
-        return super().key + (self.spec.unique_name,)
+    def save_key(self) -> tuple[str, ...]:
+        return concat_save_key(super().save_key, self.spec.unique_name)
 
     @override
     @property
     def save_data(self) -> dict[str, Any]:
         return {
-            "coordinate": self.coordinate.save_data,
-            "direction": self.character.direction.save_data,
+            Coordinate.save_key(): self.coordinate.save_data,
+            Direction.save_key(): self.character.direction.save_data,
         }
 
     @override
-    def update(self, save: dict[str, Any]) -> Self:
-        coordinate = Coordinate.load(save["coordinate"])
-        direction = Direction.load(save["direction"])
+    def update_from_save(self, data: dict[str, Any]) -> Self:
+        coordinate_data = data[Coordinate.save_key()]
+        coordinate = Coordinate.load_from_save(coordinate_data)
+
+        direction_data = data[Direction.save_key()]
+        direction = Direction.load_from_save(direction_data)
+
         character = self.character.turn(direction)
         return replace(self, coordinate=coordinate, character=character)
 

@@ -67,12 +67,9 @@ class MapScene(EventfulScene):
         bottom_center = BottomCenterCoordinate(player_object.x, player_object.y)
         top_left = bottom_center.anchor(player_spec.character.drawing).top_left
         map_collisions = self._map_loader.collisions
-        player = PlayerOnScreen(
+        return PlayerOnScreen(
             player_spec, top_left, map_collisions=map_collisions
         )
-        if self.save_io:
-            return self.save_io.update(player)
-        return player
 
     @cached_property
     def _map_loader(self) -> MapLoader:
@@ -192,8 +189,7 @@ class MapScene(EventfulScene):
             bottom_center = BottomCenterCoordinate(npc_object.x, npc_object.y)
             coordinate = bottom_center.anchor(spec.character).top_left
             strict_spec = to_strict(spec)
-            npc = NpcOnScreen(coordinate=coordinate, spec=strict_spec)
-            return self._update_with_save(npc)
+            return NpcOnScreen(coordinate=coordinate, spec=strict_spec)
 
         if isinstance(spec.character, CharacterDrawing):
             points = [
@@ -203,8 +199,7 @@ class MapScene(EventfulScene):
             if isinstance(poly, AreaOnScreen):
                 points.append(points[0])
             path = PolylineOnScreen(tuple(points))
-            npc = MovingNpcOnScreen(path=path, spec=to_strict(spec))
-            return self._update_with_save(npc)
+            return MovingNpcOnScreen(path=path, spec=to_strict(spec))
 
         # AreaOnScreen without CharacterDrawing -> static area triggering events
         coordinate = poly.top_left
@@ -217,13 +212,7 @@ class MapScene(EventfulScene):
 
         character_draw = PolygonCharacterDrawing(rect_or_poly=drawing)
         strict_spec = to_strict(spec, character_draw)
-        npc = NpcOnScreen(coordinate=coordinate, spec=strict_spec)
-        return self._update_with_save(npc)
-
-    def _update_with_save(self, npc: NpcOnScreen) -> NpcOnScreen:
-        if self.save_io:
-            return self.save_io.update(npc)
-        return npc
+        return NpcOnScreen(coordinate=coordinate, spec=strict_spec)
 
     @cached_property
     def _npc_specs(self) -> tuple[NpcSpec, ...]:

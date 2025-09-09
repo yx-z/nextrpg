@@ -3,6 +3,7 @@ from __future__ import annotations
 from math import atan2, degrees, hypot
 from typing import TYPE_CHECKING, NamedTuple, Self, overload
 
+from nextrpg.core.save import module_and_class
 from nextrpg.geometry.dimension import Dimension, Height, Pixel, Size, Width
 from nextrpg.geometry.direction import Direction, DirectionalOffset
 
@@ -198,7 +199,11 @@ class Coordinate(NamedTuple):
         return list(self)
 
     @classmethod
-    def load(cls, data: list[Pixel]) -> Self:
+    def save_key(cls) -> str:
+        return module_and_class(cls)
+
+    @classmethod
+    def load_from_save(cls, data: list[Pixel]) -> Self:
         return cls(*data)
 
     def anchor(self, size: Size | Sizable) -> TopLeftSizable:

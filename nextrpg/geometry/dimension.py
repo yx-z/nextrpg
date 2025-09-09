@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, NamedTuple, Self, overload
 
+from nextrpg.core.save import module_and_class
+
 if TYPE_CHECKING:
     from nextrpg.geometry.coordinate import Coordinate, XAxis, YAxis
 
@@ -230,12 +232,16 @@ class Size(NamedTuple):
 
         return Coordinate(self.width_value, self.height_value)
 
+    @classmethod
+    def save_key(cls) -> str:
+        return module_and_class(cls)
+
     @property
     def save_data(self) -> list[Pixel]:
         return list(self)
 
     @classmethod
-    def load(cls, data: list[Pixel]) -> Self:
+    def load_from_save(cls, data: list[Pixel]) -> Self:
         return cls(*data)
 
 

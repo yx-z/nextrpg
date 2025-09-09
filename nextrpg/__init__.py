@@ -76,10 +76,10 @@ from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
 from nextrpg.core.save import (
     LoadFromSave,
     LoadFromSaveEnum,
-    Savable,
     SaveData,
     SaveIo,
     UpdateFromSave,
+    _Savable,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry
