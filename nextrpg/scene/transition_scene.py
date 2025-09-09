@@ -50,11 +50,10 @@ class TransitionScene(Scene):
     @override
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if self._fade_in.is_complete:
-            res = (
+            return (
                 self._to_scene.drawing_on_screens
                 + self._fade_out.drawing_on_screens
             )
-            return res
         return (
             self._from_scene.drawing_on_screens
             + self._fade_in.drawing_on_screens

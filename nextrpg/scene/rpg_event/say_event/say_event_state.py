@@ -57,7 +57,9 @@ class SayEventFadeInState(SayEventState):
     config: SayEventConfig
     _: KW_ONLY = private_init_below()
     _fade_in: FadeIn = default(
-        lambda self: FadeIn(self._init_background, self.config.fade_duration)
+        lambda self: FadeIn(
+            resource=self.background, duration=self.config.fade_duration
+        )
     )
 
     @property
@@ -134,7 +136,8 @@ class SayEventFadeOutState(SayEventState):
     _: KW_ONLY = private_init_below()
     _fade_out: FadeOut = default(
         lambda self: FadeOut(
-            self.drawing_on_screens_input, self.config.fade_duration
+            resource=self.drawing_on_screens_input,
+            duration=self.config.fade_duration,
         )
     )
 
