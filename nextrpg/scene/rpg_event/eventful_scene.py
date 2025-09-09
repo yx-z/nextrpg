@@ -142,12 +142,14 @@ class EventfulScene(EventAsAttr, Scene, UpdateFromSave):
         )
         return replace(self, _background_events=background_events)
 
+    @override
     def save_data(self) -> dict:
         return {
             character.save_key: character.save_data
             for character in self.npcs + (self.player,)
         }
 
+    @override
     def update_from_save(self, data: dict) -> Self:
         player = self.player.update_from_save(data[self.player.save_key])
         npcs = tuple(
