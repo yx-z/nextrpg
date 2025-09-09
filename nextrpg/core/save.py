@@ -107,9 +107,12 @@ class SaveIo:
         rmtree(self.config.directory / self.slot, ignore_errors=True)
 
     def update(self, arg: _U) -> _U:
-        return self._load(
-            arg.save_key, loader=arg.update_from_save, fallback=arg
-        )
+        def update_from_save(data: SaveData) -> _U:
+            if res := arg.update_from_save(data):
+                return res
+            return arg
+
+        return self._load(arg.save_key, loader=update_from_save, fallback=arg)
 
     def load(self, arg: type[_L]) -> _L | None:
         key = concat_save_key(arg.save_key())
@@ -195,12 +198,6 @@ class SaveIo:
         return self.config.directory / self.slot / self.config.text_save_file
 
 
-def _update(arg: _U, data: SaveData) -> _U:
-    if res := arg.update_from_save(data):
-        return res
-    return arg
-
-
 def module_and_class(x: type | Any) -> str:
     if isinstance(x, type):
         return concat_save_key(x.__module__, x.__qualname__)
@@ -208,4 +205,4 @@ def module_and_class(x: type | Any) -> str:
 
 
 def concat_save_key(*args: Any) -> str:
-    return _config().key_delimiter.join(map(str, args))
+    return _config().save_key_delimiter.join(map(str, args))
