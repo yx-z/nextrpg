@@ -23,9 +23,9 @@ class TmxWidgets(WidgetGroupOnScreen):
     tmx_file: Path
     background: (
         str
-        | DrawingOnScreen
         | AnimationOnScreen
-        | tuple[str | DrawingOnScreen | AnimationOnScreen, ...]
+        | DrawingOnScreen
+        | tuple[str | AnimationOnScreen | DrawingOnScreen, ...]
     )
     _: KW_ONLY = private_init_below()
     name_to_on_screens: dict[str, Coordinate | AreaOnScreen] = default(

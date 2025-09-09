@@ -33,13 +33,13 @@ log = Log()
 @dataclass_with_default(frozen=True)
 class MapLoader(TmxLoader):
     _: KW_ONLY = private_init_below()
-    background: tuple[DrawingOnScreen | AnimationOnScreen, ...] = default(
+    background: tuple[AnimationOnScreen | DrawingOnScreen, ...] = default(
         lambda self: self._init_background
     )
     foreground: tuple[tuple[_LayerBottomAndTile, ...], ...] = default(
         lambda self: self._init_foreground
     )
-    above_character: tuple[DrawingOnScreen | AnimationOnScreen, ...] = default(
+    above_character: tuple[AnimationOnScreen | DrawingOnScreen, ...] = default(
         lambda self: self._init_above_character
     )
     collisions: tuple[PolygonAreaOnScreen, ...] = default(
@@ -173,7 +173,7 @@ class MapLoader(TmxLoader):
 
     def _draw_tile_layers(
         self, class_name: str
-    ) -> tuple[DrawingOnScreen | AnimationOnScreen, ...]:
+    ) -> tuple[AnimationOnScreen | DrawingOnScreen, ...]:
         return tuple(
             drawing
             for layer in self._tile_layers(class_name)
@@ -182,7 +182,7 @@ class MapLoader(TmxLoader):
 
     def _drawing(
         self, layer: TiledTileLayer
-    ) -> dict[_TileCoordinate, DrawingOnScreen | AnimationOnScreen]:
+    ) -> dict[_TileCoordinate, AnimationOnScreen | DrawingOnScreen]:
         return {
             _TileCoordinate(top, left): self._tile(left, top, gid)
             for left, top, gid in layer
@@ -191,7 +191,7 @@ class MapLoader(TmxLoader):
 
     def _tile(
         self, left: int, top: int, gid: _Gid
-    ) -> DrawingOnScreen | AnimationOnScreen:
+    ) -> AnimationOnScreen | DrawingOnScreen:
         width, height = self._tile_size
         coordinate = Coordinate(left * width, top * height)
         if frame_infos := self._tmx.tile_properties.get(gid, {}).get("frames"):
@@ -220,7 +220,7 @@ class MapLoader(TmxLoader):
         self,
         layer: TiledTileLayer,
         coordinate: _TileCoordinate,
-        drawing: DrawingOnScreen | AnimationOnScreen,
+        drawing: AnimationOnScreen | DrawingOnScreen,
         coordinate_to_bottom: dict[_TileCoordinate, YAxis],
     ) -> YAxis:
         return (
@@ -267,7 +267,7 @@ class MapLoader(TmxLoader):
     @property
     def _init_background(
         self,
-    ) -> tuple[DrawingOnScreen | AnimationOnScreen, ...]:
+    ) -> tuple[AnimationOnScreen | DrawingOnScreen, ...]:
         return self._draw_tile_layers(config().map.background)
 
     @property
@@ -293,7 +293,7 @@ class MapLoader(TmxLoader):
     @property
     def _init_above_character(
         self,
-    ) -> tuple[DrawingOnScreen | AnimationOnScreen, ...]:
+    ) -> tuple[AnimationOnScreen | DrawingOnScreen, ...]:
         return self._draw_tile_layers(config().map.above_character)
 
     @property
@@ -349,7 +349,7 @@ class _Collider(NamedTuple):
 
 class _TileBottomAndDrawings(NamedTuple):
     bottommost: YAxis
-    resource: DrawingOnScreen | AnimationOnScreen
+    resource: AnimationOnScreen | DrawingOnScreen
 
 
 @dataclass(frozen=True)
@@ -364,20 +364,20 @@ class _LayerBottomAndTile(AnimationOnScreens):
 
 
 def _visible_area(
-    drawing: DrawingOnScreen | AnimationOnScreen,
+    drawing: AnimationOnScreen | DrawingOnScreen,
 ) -> RectangleAreaOnScreen:
     return drawing.drawing_on_screen.visible_rectangle_area_on_screen
 
 
 def _tick_layer(
-    drawings: tuple[DrawingOnScreen | AnimationOnScreen, ...],
+    drawings: tuple[AnimationOnScreen | DrawingOnScreen, ...],
     time_delta: Millisecond,
-) -> tuple[DrawingOnScreen | AnimationOnScreen, ...]:
+) -> tuple[AnimationOnScreen | DrawingOnScreen, ...]:
     return tuple(drawing.tick(time_delta) for drawing in drawings)
 
 
 def drawing_on_screens(
-    drawings: tuple[DrawingOnScreen | AnimationOnScreen, ...],
+    drawings: tuple[AnimationOnScreen | DrawingOnScreen, ...],
 ) -> tuple[DrawingOnScreen, ...]:
     return tuple(
         drawing_on_screen

@@ -75,9 +75,6 @@ class DrawingOnScreen(Sizable):
     def tick(self, time_delta: Millisecond) -> Self:
         return self
 
-    def tick_before_complete(self, time_delta: Millisecond) -> Self:
-        return self
-
     @property
     def is_complete(self) -> bool:
         return True

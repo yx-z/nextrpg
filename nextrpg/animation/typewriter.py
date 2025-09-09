@@ -28,7 +28,7 @@ class Typewriter(AnimationOnScreen):
         return replace(self.text_on_screen, text=text).drawing_on_screens
 
     @override
-    def tick_before_complete(self, time_delta: Millisecond) -> Self:
+    def _tick_before_complete(self, time_delta: Millisecond) -> Self:
         if not (
             timer := self._timer_per_character.tick(time_delta)
         ).is_complete:

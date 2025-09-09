@@ -132,7 +132,7 @@ from nextrpg.event.io_event import (
     quit,
     to_io_event,
 )
-from nextrpg.game import Game
+from nextrpg.game.game import Game
 from nextrpg.game.game_loop import GameLoop
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (

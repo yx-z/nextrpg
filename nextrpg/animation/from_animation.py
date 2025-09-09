@@ -20,7 +20,7 @@ class FromAnimation(AnimationOnScreen):
         return self.animation.drawing.drawing_on_screens(self.coordinate)
 
     @override
-    def tick_before_complete(self, time_delta: Millisecond) -> Self:
+    def _tick_before_complete(self, time_delta: Millisecond) -> Self:
         animation = self.animation.tick_before_complete(time_delta)
         return replace(self, animation=animation)
 

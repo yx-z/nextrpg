@@ -22,10 +22,10 @@ class AnimationOnScreen(Sizable, ABC):
     def tick(self, time_delta: Millisecond) -> Self:
         if self.is_complete:
             return self
-        return self.tick_before_complete(time_delta)
+        return self._tick_before_complete(time_delta)
 
     @abstractmethod
-    def tick_before_complete(self, time_delta: Millisecond) -> Self: ...
+    def _tick_before_complete(self, time_delta: Millisecond) -> Self: ...
 
     @property
     @abstractmethod

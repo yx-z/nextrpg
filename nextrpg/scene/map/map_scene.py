@@ -72,12 +72,6 @@ class MapScene(EventfulScene, UpdateFromSave):
             player_spec, top_left, map_collisions=map_collisions
         )
 
-    @cached_property
-    def _map_loader(self) -> MapLoader:
-        if callable(self._map_loader_input):
-            return self._map_loader_input(self)
-        return self._map_loader_input
-
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
         if move_to := self._move_to_scene(time_delta):
@@ -107,6 +101,12 @@ class MapScene(EventfulScene, UpdateFromSave):
             + drawing_on_screens(self._map_loader.above_character)
             + self._debug_visuals
         )
+
+    @cached_property
+    def _map_loader(self) -> MapLoader:
+        if callable(self._map_loader_input):
+            return self._map_loader_input(self)
+        return self._map_loader_input
 
     @override
     @cached_property

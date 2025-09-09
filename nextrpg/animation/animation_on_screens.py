@@ -16,17 +16,6 @@ class AnimationOnScreens(AnimationOnScreen):
     )
 
     @override
-    def tick_before_complete(self, time_delta: Millisecond) -> Self:
-        if isinstance(self.resource, DrawingOnScreen | AnimationOnScreen):
-            resource = self.resource.tick_before_complete(time_delta)
-            return replace(self, resource=resource)
-        resources = tuple(
-            resource.tick_before_complete(time_delta)
-            for resource in self.resource
-        )
-        return replace(self, resource=tuple(resources))
-
-    @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if isinstance(self.resource, AnimationOnScreen | DrawingOnScreen):
@@ -43,3 +32,13 @@ class AnimationOnScreens(AnimationOnScreen):
         if isinstance(self.resource, AnimationOnScreen | DrawingOnScreen):
             return self.resource.is_complete
         return all(resource.is_complete for resource in self.resource)
+
+    @override
+    def _tick_before_complete(self, time_delta: Millisecond) -> Self:
+        if isinstance(self.resource, AnimationOnScreen | DrawingOnScreen):
+            resource = self.resource.tick(time_delta)
+            return replace(self, resource=resource)
+        resources = tuple(
+            resource.tick(time_delta) for resource in self.resource
+        )
+        return replace(self, resource=tuple(resources))

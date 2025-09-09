@@ -17,8 +17,8 @@ class TimedAnimationOnScreens(AnimationOnScreens):
     _timer: Timer = default(lambda self: Timer(self.duration))
 
     @override
-    def tick_before_complete(self, time_delta: Millisecond) -> Self:
-        ticked = super().tick_before_complete(time_delta)
+    def _tick_before_complete(self, time_delta: Millisecond) -> Self:
+        ticked = super()._tick_before_complete(time_delta)
         timer = self._timer.tick(time_delta)
         return replace(ticked, _timer=timer)
 
