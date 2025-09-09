@@ -22,10 +22,10 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import get_geometry
-from nextrpg.draw.color import TRANSPARENT
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon_drawing import PolygonDrawing
-from nextrpg.draw.rectangle_drawing import RectangleDrawing
+from nextrpg.drawing.color import TRANSPARENT
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.polygon_drawing import PolygonDrawing
+from nextrpg.drawing.rectangle_drawing import RectangleDrawing
 from nextrpg.geometry.anchored_coordinate import BottomCenterCoordinate
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate

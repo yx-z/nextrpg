@@ -82,8 +82,8 @@ from nextrpg.core.save import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry
-from nextrpg.draw.anchor import Anchor
-from nextrpg.draw.color import (
+from nextrpg.drawing.anchor import Anchor
+from nextrpg.drawing.color import (
     BLACK,
     BLUE,
     GREEN,
@@ -94,20 +94,20 @@ from nextrpg.draw.color import (
     Color,
     alpha_from_percentage,
 )
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.drawing_on_screens import DrawingOnScreens
-from nextrpg.draw.drawing_trim import DrawingTrim
-from nextrpg.draw.font import Font
-from nextrpg.draw.nine_slice import NineSlice
-from nextrpg.draw.polygon_drawing import PolygonDrawing
-from nextrpg.draw.polyline_drawing import PolylineDrawing
-from nextrpg.draw.rectangle_drawing import RectangleDrawing
-from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
-from nextrpg.draw.text import Text
-from nextrpg.draw.text_group import TextGroup
-from nextrpg.draw.text_on_screen import TextOnScreen
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
+from nextrpg.drawing.drawing_trim import DrawingTrim
+from nextrpg.drawing.font import Font
+from nextrpg.drawing.nine_slice import NineSlice
+from nextrpg.drawing.polygon_drawing import PolygonDrawing
+from nextrpg.drawing.polyline_drawing import PolylineDrawing
+from nextrpg.drawing.rectangle_drawing import RectangleDrawing
+from nextrpg.drawing.sprite_sheet import SpriteSheet, SpriteSheetSelection
+from nextrpg.drawing.text import Text
+from nextrpg.drawing.text_group import TextGroup
+from nextrpg.drawing.text_on_screen import TextOnScreen
 from nextrpg.event.background_event import (
     BackgroundEvent,
     BackgroundEventSentinel,

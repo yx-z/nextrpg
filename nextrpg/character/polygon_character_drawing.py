@@ -3,9 +3,9 @@ from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.polygon_drawing import PolygonDrawing
-from nextrpg.draw.rectangle_drawing import RectangleDrawing
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.polygon_drawing import PolygonDrawing
+from nextrpg.drawing.rectangle_drawing import RectangleDrawing
 from nextrpg.geometry.direction import Direction
 
 

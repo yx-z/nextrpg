@@ -12,9 +12,9 @@ from pygame.transform import flip, gaussian_blur, smoothscale
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.log import Log
-from nextrpg.draw.anchor import Anchor
-from nextrpg.draw.color import TRANSPARENT, Alpha, Color
-from nextrpg.draw.drawing_trim import DrawingTrim
+from nextrpg.drawing.anchor import Anchor
+from nextrpg.drawing.color import TRANSPARENT, Alpha, Color
+from nextrpg.drawing.drawing_trim import DrawingTrim
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
     ZERO_SIZE,
@@ -27,8 +27,8 @@ from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
-    from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-    from nextrpg.draw.relative_drawing import RelativeDrawing
+    from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+    from nextrpg.drawing.relative_drawing import RelativeDrawing
 
 log = Log()
 
@@ -53,7 +53,7 @@ class Drawing(Sizable):
     def shift(
         self, shift: Size, anchor: Anchor = Anchor.TOP_LEFT
     ) -> RelativeDrawing:
-        from nextrpg.draw.relative_drawing import RelativeDrawing
+        from nextrpg.drawing.relative_drawing import RelativeDrawing
 
         return RelativeDrawing(self, shift, anchor)
 
@@ -93,7 +93,7 @@ class Drawing(Sizable):
         return replace(self, resource=surface)
 
     def drawing_on_screen(self, coordinate: Coordinate) -> DrawingOnScreen:
-        from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+        from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
         return DrawingOnScreen(coordinate, self)
 

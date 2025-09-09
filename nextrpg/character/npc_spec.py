@@ -12,7 +12,7 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
-from nextrpg.draw.color import Color
+from nextrpg.drawing.color import Color
 from nextrpg.event.event_transformer import transform
 
 if TYPE_CHECKING:

@@ -4,17 +4,17 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import TYPE_CHECKING, Self
 
-from nextrpg.draw.anchor import Anchor
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.relative_drawing import RelativeDrawing
+from nextrpg.drawing.anchor import Anchor
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.relative_drawing import RelativeDrawing
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import ZERO_SIZE, Size
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
-    from nextrpg.draw.drawing_group_on_screen import DrawingGroupOnScreen
+    from nextrpg.drawing.drawing_group_on_screen import DrawingGroupOnScreen
 
 
 @dataclass(frozen=True)
@@ -44,12 +44,12 @@ class DrawingGroup(Sizable):
     def drawing_on_screens(
         self, origin: Coordinate
     ) -> tuple[DrawingOnScreen, ...]:
-        from nextrpg.draw.drawing_group_on_screen import DrawingGroupOnScreen
+        from nextrpg.drawing.drawing_group_on_screen import DrawingGroupOnScreen
 
         return DrawingGroupOnScreen(origin, self).drawing_on_screens
 
     def group_on_screen(self, origin: Coordinate) -> DrawingGroupOnScreen:
-        from nextrpg.draw.drawing_group_on_screen import DrawingGroupOnScreen
+        from nextrpg.drawing.drawing_group_on_screen import DrawingGroupOnScreen
 
         return DrawingGroupOnScreen(origin, self)
 
@@ -73,6 +73,6 @@ class DrawingGroup(Sizable):
 
     @cached_property
     def _drawing_group_on_screen(self) -> DrawingGroupOnScreen:
-        from nextrpg.draw.drawing_group_on_screen import DrawingGroupOnScreen
+        from nextrpg.drawing.drawing_group_on_screen import DrawingGroupOnScreen
 
         return DrawingGroupOnScreen(ORIGIN, self)

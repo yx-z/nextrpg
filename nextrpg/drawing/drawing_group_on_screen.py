@@ -4,11 +4,11 @@ from dataclasses import dataclass
 from functools import cached_property
 
 from nextrpg.config.config import config
-from nextrpg.draw.color import Color
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.drawing_on_screens import DrawingOnScreens
+from nextrpg.drawing.color import Color
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen

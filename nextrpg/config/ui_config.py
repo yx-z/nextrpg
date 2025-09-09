@@ -1,14 +1,14 @@
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from nextrpg.draw.color import Color
+from nextrpg.drawing.color import Color
 from nextrpg.geometry.dimension import Pixel
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.scene.widget.scroll_direction import ScrollDirection
 
 if TYPE_CHECKING:
-    from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-    from nextrpg.draw.nine_slice import NineSlice
+    from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+    from nextrpg.drawing.nine_slice import NineSlice
 
 
 @dataclass(frozen=True)
@@ -20,7 +20,7 @@ class PanelConfig:
     def drawing_on_screens(
         self, area: RectangleAreaOnScreen
     ) -> tuple[DrawingOnScreen, ...]:
-        from nextrpg.draw.nine_slice import NineSlice
+        from nextrpg.drawing.nine_slice import NineSlice
 
         if not self.background:
             return ()

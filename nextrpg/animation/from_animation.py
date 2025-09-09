@@ -5,7 +5,7 @@ from typing import Self, override
 from nextrpg.animation.animation import Animation
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 
 

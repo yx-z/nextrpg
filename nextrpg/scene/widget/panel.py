@@ -12,7 +12,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.scene.widget.sizable_widget import (
     SizableWidget,

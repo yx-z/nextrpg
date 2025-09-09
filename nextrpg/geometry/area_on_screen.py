@@ -3,13 +3,13 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Self
 
-from nextrpg.draw.color import Color
+from nextrpg.drawing.color import Color
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size, Width
 from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
-    from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+    from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 
 class AreaOnScreen(Sizable, ABC):

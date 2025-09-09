@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from nextrpg.draw.color import Color
+from nextrpg.drawing.color import Color
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Pixel
 from nextrpg.geometry.polygon_area_on_screen import (
@@ -11,7 +11,7 @@ from nextrpg.geometry.polygon_area_on_screen import (
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 if TYPE_CHECKING:
-    from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+    from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 
 @dataclass(frozen=True)
@@ -26,8 +26,8 @@ class PolylineOnScreen:
     def fill(
         self, color: Color, allow_background_in_debug: bool = True
     ) -> DrawingOnScreen:
-        from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-        from nextrpg.draw.polyline_drawing import PolylineDrawing
+        from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+        from nextrpg.drawing.polyline_drawing import PolylineDrawing
 
         drawing = PolylineDrawing(
             self.points,

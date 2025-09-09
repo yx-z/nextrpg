@@ -5,14 +5,14 @@ from typing import TYPE_CHECKING
 
 from nextrpg.config.text_config import TextConfig
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.color import BLACK, BLUE, Color
+from nextrpg.drawing.color import BLACK, BLUE, Color
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Pixel, Size, Width
 
 if TYPE_CHECKING:
-    from nextrpg.draw.drawing import Drawing
-    from nextrpg.draw.drawing_group import DrawingGroup
-    from nextrpg.draw.nine_slice import NineSlice
+    from nextrpg.drawing.drawing import Drawing
+    from nextrpg.drawing.drawing_group import DrawingGroup
+    from nextrpg.drawing.nine_slice import NineSlice
 
 
 @dataclass(frozen=True)
@@ -25,7 +25,7 @@ class SayEventColorBackgroundConfig:
 
     @cached_property
     def tip_at_top(self) -> Drawing:
-        from nextrpg.draw.polygon_drawing import PolygonDrawing
+        from nextrpg.drawing.polygon_drawing import PolygonDrawing
         from nextrpg.geometry.coordinate import ORIGIN
 
         point1 = ORIGIN + self.tip_height + self.tip_width1

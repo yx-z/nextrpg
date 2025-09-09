@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from functools import cached_property
 
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.text import Text
-from nextrpg.draw.text_group import TextGroup
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.text import Text
+from nextrpg.drawing.text_group import TextGroup
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.sizable import Sizable

@@ -3,8 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from nextrpg.draw.anchor import Anchor
-from nextrpg.draw.drawing import Drawing
+from nextrpg.drawing.anchor import Anchor
+from nextrpg.drawing.drawing import Drawing
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import (
     ZERO_SIZE,
@@ -15,7 +15,7 @@ from nextrpg.geometry.dimension import (
 )
 
 if TYPE_CHECKING:
-    from nextrpg.draw.drawing_group import DrawingGroup
+    from nextrpg.drawing.drawing_group import DrawingGroup
 
 
 @dataclass(frozen=True)

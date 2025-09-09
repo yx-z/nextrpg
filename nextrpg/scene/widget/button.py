@@ -11,8 +11,8 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.dimension import Size
 from nextrpg.scene.scene import Scene

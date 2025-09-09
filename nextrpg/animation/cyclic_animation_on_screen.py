@@ -3,9 +3,9 @@ from functools import cached_property
 
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.animation.from_animation import FromAnimation
-from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.drawing_on_screens import DrawingOnScreens
+from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 
 
 @dataclass(frozen=True)

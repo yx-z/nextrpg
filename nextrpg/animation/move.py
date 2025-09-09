@@ -6,7 +6,7 @@ from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
 )
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.direction import DirectionalOffset
 
 

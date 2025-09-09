@@ -5,9 +5,9 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Self, TypeVar, override
 
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.scene.widget.widget import Widget, WidgetOnScreen

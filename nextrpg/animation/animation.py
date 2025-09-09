@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from typing import Self
 
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.sizable import Sizable

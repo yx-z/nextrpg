@@ -15,9 +15,9 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.polygon_drawing import PolygonDrawing
-from nextrpg.draw.rectangle_drawing import RectangleDrawing
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.polygon_drawing import PolygonDrawing
+from nextrpg.drawing.rectangle_drawing import RectangleDrawing
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate

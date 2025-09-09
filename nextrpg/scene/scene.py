@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from functools import cached_property
 
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent
 from nextrpg.geometry.coordinate import Coordinate
 

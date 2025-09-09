@@ -5,8 +5,8 @@ from functools import cached_property
 
 from pygame import SRCALPHA, Surface
 
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.sizable import Sizable

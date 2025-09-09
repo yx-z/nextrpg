@@ -6,8 +6,8 @@ from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config.character_config import CharacterConfig
 from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import dataclass_with_default, default
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing_group import DrawingGroup
 
 
 @dataclass_with_default(frozen=True)

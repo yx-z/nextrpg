@@ -9,8 +9,8 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond, Timer
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.text_on_screen import TextOnScreen
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.text_on_screen import TextOnScreen
 
 
 @dataclass_with_default(frozen=True)

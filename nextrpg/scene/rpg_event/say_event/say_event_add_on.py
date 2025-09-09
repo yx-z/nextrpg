@@ -9,15 +9,15 @@ from nextrpg.config.say_event_config import (
     SayEventConfig,
     SayEventNineSliceBackgroundConfig,
 )
-from nextrpg.draw.anchor import Anchor
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.rectangle_drawing import RectangleDrawing
-from nextrpg.draw.relative_drawing import RelativeDrawing
-from nextrpg.draw.text import Text
-from nextrpg.draw.text_group import TextGroup
-from nextrpg.draw.text_on_screen import TextOnScreen
+from nextrpg.drawing.anchor import Anchor
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.rectangle_drawing import RectangleDrawing
+from nextrpg.drawing.relative_drawing import RelativeDrawing
+from nextrpg.drawing.text import Text
+from nextrpg.drawing.text_group import TextGroup
+from nextrpg.drawing.text_on_screen import TextOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import WidthAndHeightScaling
 from nextrpg.gui.area import left_screen, screen, top_screen

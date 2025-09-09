@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from functools import cached_property
 
-from nextrpg.draw.color import Color
-from nextrpg.draw.drawing import Drawing
+from nextrpg.drawing.color import Color
+from nextrpg.drawing.drawing import Drawing
 
 
 @dataclass(frozen=True, kw_only=True)

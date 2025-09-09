@@ -6,8 +6,8 @@ from functools import cached_property
 from pygame import SRCALPHA, Rect, Surface
 from pygame.draw import rect
 
-from nextrpg.draw.color import Color
-from nextrpg.draw.drawing import Drawing
+from nextrpg.drawing.color import Color
+from nextrpg.drawing.drawing import Drawing
 from nextrpg.geometry.coordinate import ORIGIN
 from nextrpg.geometry.dimension import Pixel, Size
 

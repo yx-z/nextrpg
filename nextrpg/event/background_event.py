@@ -10,7 +10,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 if TYPE_CHECKING:
     from nextrpg.scene.rpg_event.eventful_scene import EventfulScene

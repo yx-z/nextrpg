@@ -3,9 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import ClassVar, override
 
-from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.text import Text
-from nextrpg.draw.text_group import TextGroup
+from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.text import Text
+from nextrpg.drawing.text_group import TextGroup
 from nextrpg.geometry.dimension import Size
 from nextrpg.scene.widget.sizable_widget import (
     SizableWidget,

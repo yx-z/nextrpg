@@ -19,10 +19,10 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
-from nextrpg.draw.text import Text
-from nextrpg.draw.text_on_screen import TextOnScreen
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.text import Text
+from nextrpg.drawing.text_on_screen import TextOnScreen
 from nextrpg.event.io_event import (
     IoEvent,
     KeyboardKey,

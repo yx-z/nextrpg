@@ -6,16 +6,16 @@ from typing import TYPE_CHECKING, Self
 
 from nextrpg.config.config import config
 from nextrpg.config.text_group_config import TextGroupConfig
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.relative_drawing import RelativeDrawing
-from nextrpg.draw.text import Text
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.relative_drawing import RelativeDrawing
+from nextrpg.drawing.text import Text
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size, Width
 from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
-    from nextrpg.draw.text_on_screen import TextOnScreen
+    from nextrpg.drawing.text_on_screen import TextOnScreen
 
 
 @dataclass(frozen=True)
@@ -27,7 +27,7 @@ class TextGroup(Sizable):
         return sum(len(text) for text in self.texts)
 
     def text_on_screen(self, coordinate: Coordinate) -> TextOnScreen:
-        from nextrpg.draw.text_on_screen import TextOnScreen
+        from nextrpg.drawing.text_on_screen import TextOnScreen
 
         return TextOnScreen(coordinate, self)
 

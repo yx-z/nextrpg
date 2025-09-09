@@ -11,10 +11,10 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.drawing_trim import DrawingTrim
-from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.drawing_trim import DrawingTrim
+from nextrpg.drawing.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.geometry.direction import Direction
 
 

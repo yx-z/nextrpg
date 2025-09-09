@@ -7,8 +7,8 @@ from typing import Self
 from pygame import Surface
 
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.color import Alpha
-from nextrpg.draw.drawing import Drawing
+from nextrpg.drawing.color import Alpha
+from nextrpg.drawing.drawing import Drawing
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size, Width
 from nextrpg.geometry.direction import DirectionalOffset

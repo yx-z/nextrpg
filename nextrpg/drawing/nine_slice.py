@@ -2,10 +2,10 @@ from dataclasses import dataclass
 from functools import cached_property
 
 from nextrpg.config.config import config
-from nextrpg.draw.anchor import Anchor
-from nextrpg.draw.drawing import Drawing
-from nextrpg.draw.drawing_group import DrawingGroup
-from nextrpg.draw.polyline_drawing import PolylineDrawing
+from nextrpg.drawing.anchor import Anchor
+from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.polyline_drawing import PolylineDrawing
 from nextrpg.geometry.coordinate import ORIGIN
 from nextrpg.geometry.dimension import Height, Size, Width
 

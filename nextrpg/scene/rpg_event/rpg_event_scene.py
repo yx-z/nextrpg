@@ -6,7 +6,7 @@ from functools import cached_property
 from typing import Any, Self, override
 
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
 from nextrpg.scene.scene import Scene
 

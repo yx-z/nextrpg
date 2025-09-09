@@ -14,7 +14,7 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.log import Log
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.background_event import (
     BackgroundEvent,
     BackgroundEventSentinel,

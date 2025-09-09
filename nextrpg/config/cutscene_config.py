@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from nextrpg.core.time import Millisecond
-from nextrpg.draw.color import Color
+from nextrpg.drawing.color import Color
 from nextrpg.geometry.dimension import HeightScaling
 
 
