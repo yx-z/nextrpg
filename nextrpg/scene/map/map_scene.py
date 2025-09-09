@@ -168,23 +168,20 @@ class MapScene(EventfulScene, UpdateFromSave):
     @cached_property
     def _move_areas(self) -> tuple[AreaOnScreen, ...]:
         return tuple(
-            get_geometry(self._map_loader.get_object(m.trigger_object))
+            get_geometry(self._map_loader.get_object(m.from_object))
             for m in self._moves
         )
 
     def _move(self, move: MapMove, time_delta: Millisecond) -> Scene | None:
-        move_area = get_geometry(
-            self._map_loader.get_object(move.trigger_object)
-        )
+        move_area = get_geometry(self._map_loader.get_object(move.from_object))
         assert isinstance(
             move_area, AreaOnScreen
-        ), f"'{move.trigger_object}' needs to be an area."
+        ), f"'{move.from_object}' needs to be an area."
 
         if self.player.drawing_on_screen.rectangle_area_on_screen.collide(
             move_area
         ):
-            to_scene = move.to_scene(self, self.player)
-            return to_scene.tick(time_delta)
+            return move.move_to_scene(self, self.player).tick(time_delta)
         return None
 
     @cached_property

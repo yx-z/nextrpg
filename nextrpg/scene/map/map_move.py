@@ -19,13 +19,13 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class MapMove:
     to_object: str
-    trigger_object: str
-    next_scene: (
+    from_object: str
+    to_scene: (
         Callable[[CharacterSpec | None], MapScene]
         | Callable[[CharacterSpec], MapScene]
     )
 
-    def to_scene(
+    def move_to_scene(
         self, from_scene: MapScene, player: PlayerOnScreen
     ) -> TransitionScene:
         spec = replace(
@@ -34,8 +34,8 @@ class MapMove:
         now = get_timepoint()
 
         next_scene: MapScene | None = None
-        if not (tmx := _tmxs().get(self.next_scene)):
-            next_scene = self.next_scene(spec)
+        if not (tmx := _tmxs().get(self.to_scene)):
+            next_scene = self.to_scene(spec)
             tmx = str(next_scene.tmx_file)
 
         if timed_scene := _scenes().get(tmx):
@@ -46,10 +46,12 @@ class MapMove:
             time_delta = now - timed_scene.time
             to_scene = scene_with_player.tick(time_delta)
         else:
-            to_scene = next_scene or self.next_scene(spec)
+            to_scene = next_scene or self.to_scene(spec)
 
+        # Cache from_scene.
         _scenes()[str(from_scene.tmx_file)] = _TimedScene(now, from_scene)
-        _tmxs()[self.next_scene] = tmx
+        # Cache to_scene.
+        _tmxs()[self.to_scene] = tmx
 
         return TransitionScene(from_scene=from_scene, to_scene=to_scene)
 
