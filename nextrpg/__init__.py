@@ -8,6 +8,7 @@ from nextrpg.animation.animation_on_screen import (
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.blur import Blur
 from nextrpg.animation.cyclic_animation import CyclicAnimation
+from nextrpg.animation.cyclic_animation_on_screen import CyclicAnimationOnScreen
 from nextrpg.animation.fade import Fade, FadeIn, FadeOut
 from nextrpg.animation.from_animation import FromAnimation
 from nextrpg.animation.move import Move, MoveFrom, MoveTo
@@ -168,11 +169,7 @@ from nextrpg.gui.area import (
 from nextrpg.gui.window import Window
 from nextrpg.scene.fade_in_scene import FadeInScene
 from nextrpg.scene.fade_out_scene import FadeOutScene
-from nextrpg.scene.map.map_loader import (
-    LayerBottomAndTile,
-    MapLoader,
-    _TileBottomAndDrawings,
-)
+from nextrpg.scene.map.map_loader import MapLoader
 from nextrpg.scene.map.map_move import MapMove
 from nextrpg.scene.map.map_scene import MapScene
 from nextrpg.scene.map.map_shift import center_player
@@ -207,13 +204,13 @@ from nextrpg.scene.rpg_event.say_event.say_event_state import (
     SayEventTypingState,
 )
 from nextrpg.scene.scene import Scene
-from nextrpg.scene.tmx_widgets import TmxWidgets
 from nextrpg.scene.transition_scene import TransitionScene
 from nextrpg.scene.widget.button import Button, ButtonOnScreen
 from nextrpg.scene.widget.label import Label, LabelOnScreen
 from nextrpg.scene.widget.panel import Panel
 from nextrpg.scene.widget.scroll_direction import ScrollDirection
 from nextrpg.scene.widget.sizable_widget import SizableWidget
+from nextrpg.scene.widget.tmx_widgets import TmxWidgets
 from nextrpg.scene.widget.widget import Widget, WidgetOnScreen
 from nextrpg.scene.widget.widget_group import (
     WidgetGroup,

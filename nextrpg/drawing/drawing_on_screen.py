@@ -65,6 +65,10 @@ class DrawingOnScreen(Sizable):
         return self + -other
 
     @property
+    def drawing_on_screen(self) -> DrawingOnScreen:
+        return self
+
+    @property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return (self,)
 

@@ -12,6 +12,10 @@ from nextrpg.geometry.sizable import Sizable
 
 class AnimationOnScreen(Sizable, ABC):
     @property
+    def drawing_on_screen(self) -> DrawingOnScreen:
+        return self._sized.merge
+
+    @property
     @abstractmethod
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]: ...
 

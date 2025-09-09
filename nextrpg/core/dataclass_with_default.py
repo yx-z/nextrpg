@@ -45,9 +45,15 @@ def dataclass_with_default[T](
         if getattr(self, _NEXTRPG_INSTANCE_INIT, None):
             return
 
+        field_to_value = {}
         for f in cls_fields:
-            if isinstance(attr := getattr(self, f.name, None), default):
-                object.__setattr__(self, f.name, attr(self))
+            if not isinstance(attr := getattr(self, f.name, None), default):
+                continue
+
+            if not (value := field_to_value.get(f.name)):
+                value = attr(self)
+                field_to_value[f.name] = value
+            object.__setattr__(self, f.name, value)
         object.__setattr__(self, _NEXTRPG_INSTANCE_INIT, True)
 
     cls.__post_init__ = post_init

@@ -28,10 +28,14 @@ class TransitionScene(Scene):
     )
     _: KW_ONLY = private_init_below()
     _fade_in: FadeIn = default(
-        lambda self: FadeIn(self.intermediary, self.duration // 2)
+        lambda self: FadeIn(
+            resource=self.intermediary, duration=self.duration // 2
+        )
     )
     _fade_out: FadeOut = default(
-        lambda self: FadeOut(self.intermediary, self.duration // 2)
+        lambda self: FadeOut(
+            resource=self.intermediary, duration=self.duration // 2
+        )
     )
 
     @override
@@ -46,10 +50,11 @@ class TransitionScene(Scene):
     @override
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if self._fade_in.is_complete:
-            return (
+            res = (
                 self._to_scene.drawing_on_screens
                 + self._fade_out.drawing_on_screens
             )
+            return res
         return (
             self._from_scene.drawing_on_screens
             + self._fade_in.drawing_on_screens

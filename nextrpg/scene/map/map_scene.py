@@ -5,7 +5,6 @@ from functools import cached_property
 from pathlib import Path
 from typing import override
 
-from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_spec import CharacterSpec
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
@@ -31,12 +30,7 @@ from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.scene.map.map_loader import (
-    LayerBottomAndTile,
-    MapLoader,
-    drawing_on_screens,
-    tick_layer,
-)
+from nextrpg.scene.map.map_loader import MapLoader, drawing_on_screens
 from nextrpg.scene.map.map_move import MapMove
 from nextrpg.scene.map.map_shift import center_player
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
@@ -52,6 +46,9 @@ class MapScene[R](EventfulScene[R]):
     move: MapMove | tuple[MapMove, ...] = ()
     npc_specs: NpcSpec | tuple[NpcSpec, ...] = ()
     _: KW_ONLY = private_init_below()
+    _map_loader_input: MapLoader = default(
+        lambda self: MapLoader(self.tmx_file)
+    )
     npcs: tuple[NpcOnScreen, ...] = default(
         lambda self: tuple(self._init_npc(n) for n in self._npc_specs)
     )
@@ -63,27 +60,25 @@ class MapScene[R](EventfulScene[R]):
         + self._npc_paths
         + self._move_visuals
     )
-    _background: tuple[DrawingOnScreen | AnimationOnScreen, ...] = default(
-        lambda self: self._map_loader.background
-    )
-    _foreground: tuple[tuple[LayerBottomAndTile, ...], ...] = default(
-        lambda self: self._map_loader.foreground
-    )
-    _above_character: tuple[DrawingOnScreen | AnimationOnScreen, ...] = default(
-        lambda self: self._map_loader.above_character
-    )
 
     def init_player(self, player_spec: CharacterSpec) -> PlayerOnScreen:
         log.debug(t"Spawn player at {player_spec.unique_name}.")
         player_object = self._map_loader.get_object(player_spec.unique_name)
         bottom_center = BottomCenterCoordinate(player_object.x, player_object.y)
         top_left = bottom_center.anchor(player_spec.character.drawing).top_left
+        map_collisions = self._map_loader.collisions
         player = PlayerOnScreen(
-            player_spec, top_left, map_collisions=self._map_loader.collisions
+            player_spec, top_left, map_collisions=map_collisions
         )
         if self.save_io:
             return self.save_io.update(player)
         return player
+
+    @cached_property
+    def _map_loader(self) -> MapLoader:
+        if callable(self._map_loader_input):
+            return self._map_loader_input(self)
+        return self._map_loader_input
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
@@ -91,18 +86,8 @@ class MapScene[R](EventfulScene[R]):
             return move_to
         if not isinstance(ticked := super().tick(time_delta), MapScene):
             return ticked
-        background = tick_layer(self._background, time_delta)
-        foreground = tuple(
-            tuple(tile.tick(time_delta) for tile in layer)
-            for layer in self._foreground
-        )
-        above_character = tick_layer(self._above_character, time_delta)
-        return replace(
-            ticked,
-            _background=background,
-            _foreground=foreground,
-            _above_character=above_character,
-        )
+        map_loader = self._map_loader.tick(time_delta)
+        return replace(ticked, _map_loader_input=map_loader)
 
     @cached_property
     @override
@@ -119,15 +104,11 @@ class MapScene[R](EventfulScene[R]):
     @override
     def drawing_on_screens_before_shift(self) -> tuple[DrawingOnScreen, ...]:
         return (
-            drawing_on_screens(self._background)
+            drawing_on_screens(self._map_loader.background)
             + self._foreground_and_characters
-            + drawing_on_screens(self._above_character)
+            + drawing_on_screens(self._map_loader.above_character)
             + self._debug_visuals
         )
-
-    @cached_property
-    def _map_loader(self) -> MapLoader:
-        return MapLoader(self.tmx_file)
 
     @cached_property
     def _foreground_and_characters(self) -> tuple[DrawingOnScreen, ...]:
@@ -135,18 +116,17 @@ class MapScene[R](EventfulScene[R]):
         layer_bottom_draws = tuple(
             drawing
             for character in characters
-            for drawing in self._map_loader.layer_bottom_and_drawing(
-                character, self._foreground
-            )
+            for drawing in self._map_loader.layer_bottom_and_drawing(character)
         )
         foregrounds = tuple(
-            tile for layer in self._foreground for tile in layer
+            tile for layer in self._map_loader.foreground for tile in layer
         )
         layers = sorted(foregrounds + layer_bottom_draws)
-        res: list[DrawingOnScreen] = []
-        for layer in layers:
-            res += layer.drawing_on_screens
-        return tuple(res)
+        return tuple(
+            drawing_on_screen
+            for layer in layers
+            for drawing_on_screen in layer.drawing_on_screens
+        )
 
     def _move_to_scene(self, time_delta: Millisecond) -> Scene | None:
         for move in self._moves:

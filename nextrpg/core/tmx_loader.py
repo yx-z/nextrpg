@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import KW_ONLY
 from functools import cached_property
 from pathlib import Path
 
@@ -13,6 +13,11 @@ from pytmx import (
     load_pygame,
 )
 
+from nextrpg.core.dataclass_with_default import (
+    dataclass_with_default,
+    default,
+    private_init_below,
+)
 from nextrpg.core.log import Log
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
@@ -44,9 +49,11 @@ def get_coordinate(obj: TiledObject) -> Coordinate:
     return Coordinate(obj.x, obj.y)
 
 
-@dataclass(frozen=True)
+@dataclass_with_default(frozen=True)
 class TmxLoader:
     file: Path
+    _: KW_ONLY = private_init_below()
+    _tmx: TiledMap = default(lambda self: load_pygame(str(self.file)))
 
     def get_object(self, name: str) -> TiledObject:
         for obj in self.all_objects:
@@ -77,11 +84,6 @@ class TmxLoader:
             for i in self._tmx.visible_object_groups
             for obj in self._layer(i)
         )
-
-    @cached_property
-    def _tmx(self) -> TiledMap:
-        log.debug(t"Loading {self.file}")
-        return load_pygame(str(self.file))
 
     def _layer(
         self, index: int
