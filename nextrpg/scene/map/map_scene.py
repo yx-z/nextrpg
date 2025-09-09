@@ -205,39 +205,50 @@ class MapScene(EventfulScene, UpdateFromSave):
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
         npc_object = self._map_loader.get_object(spec.unique_name)
         if not (poly := get_geometry(npc_object)):
-            assert isinstance(
-                spec.character, CharacterDrawing
-            ), "Require CharacterDrawing for point-like NPC."
-            bottom_center = BottomCenterCoordinate(npc_object.x, npc_object.y)
-            coordinate = bottom_center.anchor(spec.character).top_left
-            strict_spec = to_strict(spec)
-            return NpcOnScreen(coordinate=coordinate, spec=strict_spec)
+            coordinate = BottomCenterCoordinate(npc_object.x, npc_object.y)
+            return _init_standing_npc(spec, coordinate)
 
         if isinstance(spec.character, CharacterDrawing):
-            points = [
-                p.as_bottom_center_of(spec.character).top_left
-                for p in poly.points
-            ]
-            if isinstance(poly, AreaOnScreen):
-                points.append(points[0])
-            path = PolylineOnScreen(tuple(points))
-            return MovingNpcOnScreen(path=path, spec=to_strict(spec))
-
+            return _init_moving_npc(spec, poly)
         # AreaOnScreen without CharacterDrawing -> static area triggering events
-        coordinate = poly.top_left
-        color = spec.character or TRANSPARENT
-        if isinstance(poly, RectangleAreaOnScreen):
-            drawing = RectangleDrawing(poly.size, color)
-        else:
-            points = tuple(p - coordinate for p in poly.points)
-            drawing = PolygonDrawing(points, color)
-
-        character_draw = PolygonCharacterDrawing(rect_or_poly=drawing)
-        strict_spec = to_strict(spec, character_draw)
-        return NpcOnScreen(coordinate=coordinate, spec=strict_spec)
+        return _init_area_npc(spec, poly)
 
     @cached_property
     def _npc_specs(self) -> tuple[NpcSpec, ...]:
         if isinstance(self.npc_specs, NpcSpec):
             return (self.npc_specs,)
         return self.npc_specs
+
+
+def _init_standing_npc(
+    spec: NpcSpec, bottom_center: BottomCenterCoordinate
+) -> NpcOnScreen:
+    assert isinstance(
+        spec.character, CharacterDrawing
+    ), f"Require CharacterDrawing for coordinate-only NPC {spec.unique_name}."
+    coordinate = bottom_center.anchor(spec.character).top_left
+    strict_spec = to_strict(spec)
+    return NpcOnScreen(coordinate=coordinate, spec=strict_spec)
+
+
+def _init_moving_npc(spec: NpcSpec, poly: AreaOnScreen) -> MovingNpcOnScreen:
+    points = [
+        p.as_bottom_center_of(spec.character).top_left for p in poly.points
+    ]
+    if isinstance(poly, AreaOnScreen):
+        points.append(points[0])
+    path = PolylineOnScreen(tuple(points))
+    return MovingNpcOnScreen(path=path, spec=to_strict(spec))
+
+
+def _init_area_npc(spec: NpcSpec, poly: AreaOnScreen) -> NpcOnScreen:
+    coordinate = poly.top_left
+    color = spec.character or TRANSPARENT
+    if isinstance(poly, RectangleAreaOnScreen):
+        drawing = RectangleDrawing(poly.size, color)
+    else:
+        points = tuple(p - coordinate for p in poly.points)
+        drawing = PolygonDrawing(points, color)
+    character_draw = PolygonCharacterDrawing(rect_or_poly=drawing)
+    strict_spec = to_strict(spec, character_draw)
+    return NpcOnScreen(coordinate=coordinate, spec=strict_spec)
