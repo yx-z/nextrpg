@@ -69,7 +69,7 @@ class EventfulScene(EventAsAttr, Scene):
         if (
             (npc := self._collided_npc)
             and npc.restart_event
-            and (not (self._ended_npc and self._ended_npc.same_name(npc)))
+            and (not self._ended_npc or not self._ended_npc.is_same_name(npc))
             and (event := npc.spec.event)
             and event.start_mode is NpcEventStartMode.COLLIDE
         ):
@@ -151,16 +151,15 @@ class EventfulScene(EventAsAttr, Scene):
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:
         for npc in self.npcs:
-            collided = self.player.start_event_area_on_screen.collide(
-                npc.start_event_area_on_screen
-            )
-            if npc.spec.event and collided:
+            if npc.collide_start_event(self.player):
                 return npc
         return None
 
     def _start_event(self, npc: NpcOnScreen, time_delta: Millisecond) -> Self:
         started_npc = npc.start_event(self.player)
-        npcs = tuple(started_npc if n.same_name(npc) else n for n in self.npcs)
+        npcs = tuple(
+            started_npc if n.is_same_name(npc) else n for n in self.npcs
+        )
         player = self.player.start_event(started_npc)
         ticked = replace(
             self, player=player, npcs=npcs, _started_npc=started_npc
@@ -194,7 +193,8 @@ class EventfulScene(EventAsAttr, Scene):
 
         player = ticked.player.complete_event
         npcs = tuple(
-            (npc if n.same_name(npc) else n.complete_event) for n in ticked.npcs
+            (npc if n.is_same_name(npc) else n.complete_event)
+            for n in ticked.npcs
         )
         log.debug(
             t"Event {ticked._event} with {npc.spec.unique_name} completed."

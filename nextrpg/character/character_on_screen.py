@@ -66,23 +66,11 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
             return self._area_on_screen
         return self._collision_rectangle_area_on_screen(self.coordinate)
 
-    @cached_property
-    def start_event_area_on_screen(self) -> AreaOnScreen:
-        if self._area_on_screen:
-            return self._area_on_screen
-
-        scaling = self.spec.config.start_event_scaling
-        coordinate = (
-            self.coordinate - self.width * (scaling - WidthScaling(1)) / 2
-        )
-        size = self.size * scaling
-        return coordinate.anchor(size).rectangle_area_on_screen
-
     @property
     def drawing_on_screen(self) -> DrawingOnScreen:
         return DrawingOnScreen(self.coordinate, self.character.drawing)
 
-    def same_name(self, other: CharacterOnScreen) -> bool:
+    def is_same_name(self, other: CharacterOnScreen) -> bool:
         return self.spec.unique_name == other.spec.unique_name
 
     def start_event(self, other: CharacterOnScreen) -> Self:
@@ -122,6 +110,18 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         return replace(self, coordinate=coordinate, character=character)
 
     @cached_property
+    def _start_event_area_on_screen(self) -> AreaOnScreen:
+        if self._area_on_screen:
+            return self._area_on_screen
+
+        scaling = self.spec.config.start_event_scaling
+        coordinate = (
+            self.coordinate - self.width * (scaling - WidthScaling(1)) / 2
+        )
+        size = self.size * scaling
+        return coordinate.anchor(size).rectangle_area_on_screen
+
+    @cached_property
     def _area_on_screen(self) -> AreaOnScreen | None:
         if not isinstance(self.character, PolygonCharacterDrawing):
             return None
@@ -156,5 +156,5 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         if (debug := config().debug) and (
             color := debug.start_event_rectangle_color
         ):
-            return self.start_event_area_on_screen.fill(color)
+            return self._start_event_area_on_screen.fill(color)
         return None
