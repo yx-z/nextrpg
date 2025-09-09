@@ -112,11 +112,11 @@ class SaveIo:
                 return res
             return arg
 
-        return self._load(arg.save_key, loader=update_from_save, fallback=arg)
+        return self._load(arg.save_key, update_from_save, arg)
 
     def load(self, arg: type[_L]) -> _L | None:
         key = concat_save_key(arg.save_key())
-        return self._load(key, loader=arg.load_from_save, fallback=None)
+        return self._load(key, arg.load_from_save, fallback=None)
 
     @property
     def web(self) -> bool:
