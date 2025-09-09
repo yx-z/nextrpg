@@ -33,6 +33,7 @@ class MapMove:
         )
         now = get_timepoint()
 
+        next_scene: MapScene | None = None
         if not (tmx := _tmxs().get(self.next_scene)):
             next_scene = self.next_scene(spec)
             tmx = str(next_scene.tmx_file)
@@ -45,7 +46,7 @@ class MapMove:
             time_delta = now - timed_scene.time
             to_scene = scene_with_player.tick(time_delta)
         else:
-            to_scene = self.next_scene(spec)
+            to_scene = next_scene or self.next_scene(spec)
 
         _scenes()[str(from_scene.tmx_file)] = _TimedScene(now, from_scene)
         _tmxs()[self.next_scene] = tmx

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
-from typing import TYPE_CHECKING, Self, override
+from typing import TYPE_CHECKING, Any, Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.npc_on_screen import NpcOnScreen
@@ -30,7 +30,7 @@ log = Log()
 
 
 @dataclass(frozen=True)
-class EventfulScene[R](EventAsAttr, Scene):
+class EventfulScene(EventAsAttr, Scene):
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...]
     save_io: SaveIo | None = None
@@ -38,7 +38,7 @@ class EventfulScene[R](EventAsAttr, Scene):
     _started_npc: NpcOnScreen | None = None
     _ended_npc: NpcOnScreen | None = None
     _event: EventGenerator | None = None
-    _event_result: R | None = None
+    _event_result: Any = None
     _background_events: tuple[BackgroundEvent, ...] = ()
 
     def get_character(self, unique_name: str) -> CharacterOnScreen:
@@ -113,7 +113,7 @@ class EventfulScene[R](EventAsAttr, Scene):
     def is_complete(
         self,
         event: EventGenerator,
-        event_result: R | None = None,
+        event_result: Any = None,
         background_event: BackgroundEvent | None = None,
     ) -> Self:
         if background_event:

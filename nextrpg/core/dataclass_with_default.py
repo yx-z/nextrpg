@@ -42,8 +42,6 @@ def dataclass_with_default[T](
         return lambda c: dataclass_with_default(c, **kwargs)
 
     def post_init(self, *_: Any, **__: Any) -> None:
-        if getattr(self, _NEXTRPG_INSTANCE_INIT, None):
-            return
 
         field_to_value = {}
         for f in cls_fields:
@@ -54,7 +52,6 @@ def dataclass_with_default[T](
                 value = attr(self)
                 field_to_value[f.name] = value
             object.__setattr__(self, f.name, value)
-        object.__setattr__(self, _NEXTRPG_INSTANCE_INIT, True)
 
     cls.__post_init__ = post_init
 
@@ -69,6 +66,3 @@ def type_name[T](obj: T | type) -> str:
     else:
         cls = type(obj)
     return str(cls)[2:-2].split(".")[-1]
-
-
-_NEXTRPG_INSTANCE_INIT = "_nextrpg_instance_init"

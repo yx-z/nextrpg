@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
-from typing import override
+from typing import Self, override
 
 from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.config.config import config
@@ -41,10 +41,12 @@ class TransitionScene(Scene):
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
         if not (fade_in := self._fade_in.tick(time_delta)).is_complete:
-            return replace(self, _fade_in=fade_in)
+            return replace(self._cache_to_scene, _fade_in=fade_in)
         if (fade_out := self._fade_out.tick(time_delta)).is_complete:
             return self._to_scene
-        return replace(self, _fade_in=fade_in, _fade_out=fade_out)
+        return replace(
+            self._cache_from_scene, _fade_in=fade_in, _fade_out=fade_out
+        )
 
     @cached_property
     @override
@@ -70,3 +72,11 @@ class TransitionScene(Scene):
         if callable(self.to_scene):
             return self.to_scene()
         return self.to_scene
+
+    @property
+    def _cache_from_scene(self) -> Self:
+        return replace(self, from_scene=self._from_scene)
+
+    @property
+    def _cache_to_scene(self) -> Self:
+        return replace(self, to_scene=self._to_scene)
