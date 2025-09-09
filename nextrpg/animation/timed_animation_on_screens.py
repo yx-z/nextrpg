@@ -17,12 +17,12 @@ class TimedAnimationOnScreens(AnimationOnScreens):
     _timer: Timer = default(lambda self: Timer(self.duration))
 
     @override
+    @property
+    def is_complete(self) -> bool:
+        return super().is_complete and self._timer.is_complete
+
+    @override
     def _tick_before_complete(self, time_delta: Millisecond) -> Self:
         ticked = super()._tick_before_complete(time_delta)
         timer = self._timer.tick(time_delta)
         return replace(ticked, _timer=timer)
-
-    @override
-    @property
-    def is_complete(self) -> bool:
-        return super().is_complete and self._timer.is_complete

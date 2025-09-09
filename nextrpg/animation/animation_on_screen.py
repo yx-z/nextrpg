@@ -24,9 +24,6 @@ class AnimationOnScreen(Sizable, ABC):
             return self
         return self._tick_before_complete(time_delta)
 
-    @abstractmethod
-    def _tick_before_complete(self, time_delta: Millisecond) -> Self: ...
-
     @property
     @abstractmethod
     def is_complete(self) -> bool: ...
@@ -38,6 +35,9 @@ class AnimationOnScreen(Sizable, ABC):
     @property
     def top_left(self) -> Coordinate:
         return self._sized.top_left
+
+    @abstractmethod
+    def _tick_before_complete(self, time_delta: Millisecond) -> Self: ...
 
     @cached_property
     def _sized(self) -> DrawingOnScreens:
