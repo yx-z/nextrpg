@@ -4,7 +4,7 @@ from collections.abc import Callable
 from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import KW_ONLY, field
 from enum import Enum
-from functools import cache
+from functools import cache, cached_property
 from pathlib import Path
 from shutil import rmtree
 from typing import TYPE_CHECKING, Any, Self, TypeAlias, TypeVar, override
@@ -33,7 +33,7 @@ class _Savable[_S]:
 class UpdateFromSave[_S](_Savable[_S]):
     def update_from_save(self, data: _S) -> Self | None: ...
 
-    @property
+    @cached_property
     def save_key(self) -> str:
         return module_and_class(self)
 

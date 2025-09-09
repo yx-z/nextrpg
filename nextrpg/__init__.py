@@ -80,6 +80,8 @@ from nextrpg.core.save import (
     SaveIo,
     UpdateFromSave,
     _Savable,
+    concat_save_key,
+    module_and_class,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry

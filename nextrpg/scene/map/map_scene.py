@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from pathlib import Path
-from typing import override
+from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_spec import CharacterSpec
@@ -19,6 +19,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.log import Log
+from nextrpg.core.save import UpdateFromSave, concat_save_key
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import get_geometry
 from nextrpg.drawing.color import TRANSPARENT
@@ -40,7 +41,7 @@ log = Log()
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
-class MapScene(EventfulScene):
+class MapScene(EventfulScene, UpdateFromSave):
     tmx_file: Path
     player_spec: CharacterSpec
     move: MapMove | tuple[MapMove, ...] = ()
@@ -106,6 +107,27 @@ class MapScene(EventfulScene):
             + drawing_on_screens(self._map_loader.above_character)
             + self._debug_visuals
         )
+
+    @override
+    @cached_property
+    def save_key(self) -> str:
+        return concat_save_key(super().save_key, self.tmx_file)
+
+    @override
+    @property
+    def save_data(self) -> dict:
+        return {
+            character.save_key: character.save_data
+            for character in self.npcs + (self.player,)
+        }
+
+    @override
+    def update_from_save(self, data: dict) -> Self:
+        player = self.player.update_from_save(data[self.player.save_key])
+        npcs = tuple(
+            npc.update_from_save(data[npc.save_key]) for npc in self.npcs
+        )
+        return replace(self, player=player, npcs=npcs)
 
     @cached_property
     def _foreground_and_characters(self) -> tuple[DrawingOnScreen, ...]:

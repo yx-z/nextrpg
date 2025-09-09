@@ -98,8 +98,8 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         return replace(self, _event_started=False)
 
     @override
-    @property
-    def save_key(self) -> tuple[str, ...]:
+    @cached_property
+    def save_key(self) -> str:
         return concat_save_key(super().save_key, self.spec.unique_name)
 
     @override
