@@ -90,7 +90,6 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         ):
             return self
 
-        target: WidgetOnScreen | None = None
         for w1, w2 in pairwise(cycle(self._children)):
             if not forward and w2 is self._selected:
                 target = w1
@@ -98,7 +97,6 @@ class WidgetGroupOnScreen(WidgetOnScreen):
             if forward and w1 is self._selected:
                 target = w2
                 break
-        assert target
 
         children: list[WidgetOnScreen] = []
         for child in self._children:

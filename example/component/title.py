@@ -16,7 +16,7 @@ from nextrpg import (
     PanelConfig,
     ScrollDirection,
     Text,
-    TitleScene,
+    TmxWidgets,
     TransitionScene,
     WidgetGroup,
     config,
@@ -24,7 +24,7 @@ from nextrpg import (
 )
 
 
-def title() -> TitleScene:
+def title() -> TmxWidgets:
     highlight = config().text.colored(GREEN)
 
     start_text_idle = Text("Start")
@@ -70,7 +70,7 @@ def title() -> TitleScene:
     )
 
     tmx = Path("example/component/title.tmx")
-    return TitleScene(tmx_file=tmx, background="background", widget_input=group)
+    return TmxWidgets(tmx_file=tmx, background="background", widget_input=group)
 
 
 def load_panel() -> Panel:
