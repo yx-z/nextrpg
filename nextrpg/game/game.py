@@ -10,7 +10,7 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
-from nextrpg.game_loop import GameLoop
+from nextrpg.game.game_loop import GameLoop
 from nextrpg.scene.scene import Scene
 
 
