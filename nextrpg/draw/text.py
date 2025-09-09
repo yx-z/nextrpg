@@ -25,6 +25,9 @@ class Text(Sizable):
     def configured(self, text_config: TextConfig) -> Self:
         return replace(self, config=text_config)
 
+    def __len__(self) -> int:
+        return len(self.message)
+
     def __getitem__(self, s: slice) -> Self:
         return replace(self, message=self.message[s])
 

@@ -12,6 +12,7 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
+from nextrpg.draw.drawing_group import DrawingGroup
 from nextrpg.draw.drawing_trim import DrawingTrim
 from nextrpg.draw.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.geometry.direction import Direction
@@ -74,7 +75,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
 
     @override
     @property
-    def drawing(self) -> Drawing:
+    def drawing(self) -> Drawing | DrawingGroup:
         return self._animations[_adjust(self.direction)].drawing
 
     @override

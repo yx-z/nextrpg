@@ -6,6 +6,7 @@ from typing import Self
 
 from pygame import Surface
 
+from nextrpg.core.time import Millisecond
 from nextrpg.draw.color import Alpha
 from nextrpg.draw.drawing import Drawing
 from nextrpg.geometry.coordinate import Coordinate
@@ -31,8 +32,12 @@ class DrawingOnScreen(Sizable):
     def pygame(self) -> tuple[Surface, Coordinate]:
         return self.drawing.pygame, self.top_left
 
-    def set_alpha(self, alpha: Alpha) -> Self:
-        drawing = self.drawing.set_alpha(alpha)
+    def blur(self, radius: int | float) -> Self:
+        drawing = self.drawing.blur(radius)
+        return replace(self, drawing=drawing)
+
+    def with_alpha(self, alpha: Alpha) -> Self:
+        drawing = self.drawing.with_alpha(alpha)
         return replace(self, top_left=self.top_left, drawing=drawing)
 
     @property
@@ -58,3 +63,17 @@ class DrawingOnScreen(Sizable):
         self, other: Coordinate | Size | Width | Height | DirectionalOffset
     ) -> DrawingOnScreen:
         return self + -other
+
+    @property
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return (self,)
+
+    def tick(self, time_delta: Millisecond) -> Self:
+        return self
+
+    def tick_before_complete(self, time_delta: Millisecond) -> Self:
+        return self
+
+    @property
+    def is_complete(self) -> bool:
+        return True

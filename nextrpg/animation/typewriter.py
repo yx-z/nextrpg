@@ -19,7 +19,7 @@ class Typewriter(AnimationOnScreen):
     delay: Millisecond
     _: KW_ONLY = private_init_below()
     _index: int = 0
-    _timer: Timer = default(lambda self: Timer(self.delay))
+    _timer_per_character: Timer = default(lambda self: Timer(self.delay))
 
     @cached_property
     @override
@@ -28,13 +28,18 @@ class Typewriter(AnimationOnScreen):
         return replace(self.text_on_screen, text=text).drawing_on_screens
 
     @override
-    def tick(self, time_delta: Millisecond) -> Self:
-        if not (timer := self._timer.tick(time_delta)).overdue:
-            return replace(self, _timer=timer)
+    def tick_before_complete(self, time_delta: Millisecond) -> Self:
+        if not (
+            timer := self._timer_per_character.tick(time_delta)
+        ).is_complete:
+            return replace(self, _timer_per_character=timer)
         index = self._index + timer.elapsed // self.delay
-        return replace(self, _index=index, _timer=timer.modulo)
+        return replace(self, _index=index, _timer_per_character=timer.modulo)
 
     @override
     @property
     def is_complete(self) -> bool:
-        return self._timer.overdue
+        num_chars = len(self.text_on_screen.text)
+        return (
+            self._index >= num_chars and self._timer_per_character.is_complete
+        )

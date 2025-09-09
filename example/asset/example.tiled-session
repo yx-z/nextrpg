@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "exterior.tmx",
+    "activeFile": "water.tsx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
@@ -35,11 +35,11 @@
             "expandedObjectLayers": [
                 5
             ],
-            "scale": 1,
+            "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 729.5,
-                "y": 771.5
+                "x": 1062.25,
+                "y": 850.25
             }
         },
         "exterior.tsx": {
@@ -67,7 +67,7 @@
             "scaleInEditor": 1.5
         }
     },
-    "frame.defaultDuration": 200,
+    "frame.defaultDuration": 800,
     "last.imagePath": "C:/msys64/home/yxz/nextrpg/example/asset/Pixel Fantasy RMMZ RTP Tiles/img/tilesets",
     "map.height": 30,
     "map.lastUsedFormat": "tmx",
@@ -82,10 +82,10 @@
     ],
     "project": "",
     "recentFiles": [
-        "water.tsx",
-        "PixelFantasy_Outside_C.tsx",
-        "PixelFantasy_Outside_B.tsx",
         "exterior.tmx",
+        "PixelFantasy_Outside_B.tsx",
+        "PixelFantasy_Outside_C.tsx",
+        "water.tsx",
         "interior.tmx",
         "exterior.tsx",
         "C:/Users/yxz/Downloads/Tiled_SampleProject_November041122/Tiled_SampleProject_November041122/maps/Tilesets/TileAuto_Water_01_Nature.json",

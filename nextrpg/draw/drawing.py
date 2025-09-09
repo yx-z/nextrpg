@@ -3,11 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from functools import cached_property
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 
 from pygame import SRCALPHA, Surface
 from pygame.image import load
-from pygame.transform import flip, smoothscale
+from pygame.transform import flip, gaussian_blur, smoothscale
 
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
@@ -87,7 +87,7 @@ class Drawing(Sizable):
         area = coordinate.anchor(width * height).rectangle_area_on_screen
         return self.crop(area)
 
-    def set_alpha(self, alpha: Alpha) -> Drawing:
+    def with_alpha(self, alpha: Alpha) -> Drawing:
         surface = self.surface.copy()
         surface.set_alpha(alpha)
         return replace(self, resource=surface)
@@ -96,6 +96,11 @@ class Drawing(Sizable):
         from nextrpg.draw.drawing_on_screen import DrawingOnScreen
 
         return DrawingOnScreen(coordinate, self)
+
+    def drawing_on_screens(
+        self, coordinate: Coordinate
+    ) -> tuple[DrawingOnScreen, ...]:
+        return (self.drawing_on_screen(coordinate),)
 
     def __mul__(
         self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
@@ -148,6 +153,10 @@ class Drawing(Sizable):
         if self.convert_alpha is None or not self.convert_alpha:
             return res.convert()
         return res.convert_alpha()
+
+    def blur(self, radius: int | float) -> Self:
+        surface = gaussian_blur(self.surface, radius)
+        return replace(self, resource=surface)
 
     @cached_property
     def _debug_surface(self) -> Surface | None:

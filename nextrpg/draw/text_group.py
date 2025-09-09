@@ -23,6 +23,9 @@ class TextGroup(Sizable):
     texts: tuple[Text, ...]
     config: TextGroupConfig = field(default_factory=lambda: config().text_group)
 
+    def __len__(self) -> int:
+        return sum(len(text) for text in self.texts)
+
     def text_on_screen(self, coordinate: Coordinate) -> TextOnScreen:
         from nextrpg.draw.text_on_screen import TextOnScreen
 

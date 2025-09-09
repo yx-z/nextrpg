@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Self
+from typing import Any, Self
 
 from nextrpg.core.time import Millisecond
 from nextrpg.draw.drawing import Drawing
@@ -25,8 +25,11 @@ class CharacterDrawing(ABC, Sizable):
     @abstractmethod
     def tick_move(self, time_delta: Millisecond) -> Self: ...
 
-    @abstractmethod
-    def tick_idle(self, time_delta: Millisecond) -> Self: ...
+    def tick_idle(self, time_delta: Millisecond) -> Self:
+        return self
+
+    def tick_action(self, time_delta: Millisecond, action: Any) -> Self:
+        return self
 
     @property
     def top_left(self) -> Coordinate:

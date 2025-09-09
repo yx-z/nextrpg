@@ -108,7 +108,7 @@ def _pop(time_delta: Millisecond) -> None:
     _timed_entries = {
         k: replace(v, timer=timer)
         for k, v in _timed_entries.items()
-        if not (timer := v.timer.tick(time_delta)).overdue
+        if not (timer := v.timer.tick(time_delta)).is_complete
     }
 
 

@@ -10,8 +10,13 @@ from nextrpg.geometry.sizable import Sizable
 
 
 class Animation(Sizable, ABC):
+    def tick(self, time_delta: Millisecond) -> Self:
+        if self.is_complete:
+            return self
+        return self.tick_before_complete(time_delta)
+
     @abstractmethod
-    def tick(self, time_delta: Millisecond) -> Self: ...
+    def tick_before_complete(self, time_delta: Millisecond) -> Self: ...
 
     @property
     @abstractmethod

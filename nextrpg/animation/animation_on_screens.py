@@ -1,4 +1,5 @@
 from dataclasses import dataclass, replace
+from functools import cached_property
 from typing import Self, override
 
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
@@ -15,51 +16,30 @@ class AnimationOnScreens(AnimationOnScreen):
     )
 
     @override
-    def tick(self, time_delta: Millisecond) -> Self:
-        if isinstance(self.resource, DrawingOnScreen):
-            return self
-        if isinstance(self.resource, AnimationOnScreen):
-            resource = self.resource.tick(time_delta)
+    def tick_before_complete(self, time_delta: Millisecond) -> Self:
+        if isinstance(self.resource, DrawingOnScreen | AnimationOnScreen):
+            resource = self.resource.tick_before_complete(time_delta)
             return replace(self, resource=resource)
-
-        resources: list[AnimationOnScreen | DrawingOnScreen] = []
-        for resource in self.resource:
-            if isinstance(resource, AnimationOnScreen):
-                res = resource.tick(time_delta)
-            else:
-                res = resource
-            resources.append(res)
+        resources = tuple(
+            resource.tick_before_complete(time_delta)
+            for resource in self.resource
+        )
         return replace(self, resource=tuple(resources))
 
     @override
-    @property
+    @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        if isinstance(self.resource, AnimationOnScreen):
+        if isinstance(self.resource, AnimationOnScreen | DrawingOnScreen):
             return self.resource.drawing_on_screens
-        if isinstance(self.resource, DrawingOnScreen):
-            return (self.resource,)
-
-        res: list[DrawingOnScreen] = []
-        for resource in self.resource:
-            if isinstance(resource, AnimationOnScreen):
-                res += resource.drawing_on_screens
-            else:
-                res.append(resource)
-        return tuple(res)
+        return tuple(
+            drawing_on_screen
+            for resource in self.resource
+            for drawing_on_screen in resource.drawing_on_screens
+        )
 
     @override
-    @property
+    @cached_property
     def is_complete(self) -> bool:
-        if isinstance(self.resource, AnimationOnScreen):
+        if isinstance(self.resource, AnimationOnScreen | DrawingOnScreen):
             return self.resource.is_complete
-        if isinstance(self.resource, DrawingOnScreen):
-            return True
-
-        return all(
-            (
-                resource.is_complete
-                if isinstance(resource, AnimationOnScreen)
-                else True
-            )
-            for resource in self.resource
-        )
+        return all(resource.is_complete for resource in self.resource)

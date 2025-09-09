@@ -9,11 +9,12 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.draw.drawing import Drawing
+from nextrpg.draw.drawing_group import DrawingGroup
 
 
 @dataclass_with_default(frozen=True)
 class CyclicAnimation(Animation):
-    frames: tuple[Drawing, ...]
+    frames: tuple[Drawing | DrawingGroup, ...]
     duration_per_frame: Millisecond | tuple[Millisecond, ...]
     _: KW_ONLY = private_init_below()
     _index: int = 0
@@ -21,12 +22,12 @@ class CyclicAnimation(Animation):
 
     @property
     @override
-    def drawing(self) -> Drawing:
+    def drawing(self) -> Drawing | DrawingGroup:
         return self.frames[self._index]
 
     @override
-    def tick(self, time_delta: Millisecond) -> Self:
-        if not (updated_timer := self._timer.tick(time_delta)).overdue:
+    def tick_before_complete(self, time_delta: Millisecond) -> Self:
+        if not (updated_timer := self._timer.tick(time_delta)).is_complete:
             return replace(self, _timer=updated_timer)
         current_index = self._index
         remaining_time = updated_timer.elapsed - updated_timer.duration

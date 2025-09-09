@@ -340,24 +340,14 @@ def tick_layer(
     drawings: tuple[DrawingOnScreen | AnimationOnScreen, ...],
     time_delta: Millisecond,
 ) -> tuple[DrawingOnScreen | AnimationOnScreen, ...]:
-    return tuple(_tick_drawing(drawing, time_delta) for drawing in drawings)
+    return tuple(drawing.tick(time_delta) for drawing in drawings)
 
 
 def drawing_on_screens(
     drawings: tuple[DrawingOnScreen | AnimationOnScreen, ...],
 ) -> tuple[DrawingOnScreen, ...]:
-    res: list[DrawingOnScreen] = []
-    for drawing in drawings:
-        if isinstance(drawing, AnimationOnScreen):
-            res += drawing.drawing_on_screens
-        else:
-            res.append(drawing)
-    return tuple(res)
-
-
-def _tick_drawing(
-    drawing: DrawingOnScreen | AnimationOnScreen, time_delta: Millisecond
-) -> DrawingOnScreen | AnimationOnScreen:
-    if isinstance(drawing, AnimationOnScreen):
-        return drawing.tick(time_delta)
-    return drawing
+    return tuple(
+        drawing_on_screen
+        for drawing in drawings
+        for drawing_on_screen in drawing.drawing_on_screens
+    )
