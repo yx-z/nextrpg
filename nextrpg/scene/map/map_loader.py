@@ -27,7 +27,7 @@ from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry, is_rect
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
-from nextrpg.geometry.coordinate import Coordinate, YAxis
+from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
@@ -36,19 +36,16 @@ log = Log()
 
 
 @dataclass(frozen=True)
-class TileGroup:
+class TileGroup(AnimationOnScreens):
     index: int
-    tile: AnimationOnScreens
-    visible_bottom: YAxis
 
     def __lt__(self, other: Self) -> bool:
         if self.index == other.index:
-            return self.visible_bottom < other.visible_bottom
+            return (
+                self.visible_rectangle_area_on_screen.bottom
+                < other.visible_rectangle_area_on_screen.bottom
+            )
         return self.index < other.index
-
-    def tick(self, time_delta: Millisecond) -> Self:
-        tile = self.tile.tick(time_delta)
-        return replace(self, tile=tile)
 
 
 @dataclass(frozen=True)
@@ -81,18 +78,14 @@ class ForegroundLayers:
         return tuple(
             drawing_on_screen
             for tile in tiles
-            for drawing_on_screen in tile.tile.drawing_on_screens
+            for drawing_on_screen in tile.drawing_on_screens
         )
 
     def _character_layer(self, character: CharacterOnScreen) -> TileGroup:
         index = self._layer_index(character)
         log.debug(t"{character.name} layered at {index}", duration=None)
         resource = AnimationOnScreens(character.drawing_on_screens)
-        return TileGroup(
-            index,
-            resource,
-            character.drawing_on_screen.visible_rectangle_area_on_screen.bottom,
-        )
+        return TileGroup(resource, index)
 
     def _layer_index(self, character: CharacterOnScreen) -> int:
         for i, layer in enumerate(self.layers):
@@ -209,12 +202,7 @@ class MapLoader(TmxLoader):
                     if neighbor in drawings and neighbor not in visited:
                         visited.add(neighbor)
                         queue.append(neighbor)
-            visible_bottom = max(
-                resource.drawing_on_screen.visible_rectangle_area_on_screen.bottom
-                for resource in connected
-            )
-            animation_on_screens = AnimationOnScreens(tuple(connected))
-            tile_group = TileGroup(index, animation_on_screens, visible_bottom)
+            tile_group = TileGroup(tuple(connected), index)
             groups.append(tile_group)
         tile_groups = tuple(sorted(groups))
         return ForegroundLayer(index, tile_groups)
@@ -337,9 +325,7 @@ def _below_character_layer(
 ) -> bool:
     rect = character.drawing_on_screen.visible_rectangle_area_on_screen
     return any(
-        tile_group.visible_bottom < rect.bottom
-        and rect.collide(
-            tile_group.tile.drawing_on_screen.visible_rectangle_area_on_screen
-        )
+        tile_group.visible_rectangle_area_on_screen.bottom < rect.bottom
+        and rect.collide(tile_group.visible_rectangle_area_on_screen)
         for tile_group in layer.tiles
     )

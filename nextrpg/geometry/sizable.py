@@ -1,3 +1,4 @@
+from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
 from nextrpg.geometry.anchored_coordinate import (
@@ -26,7 +27,7 @@ class Sizable(Protocol):
     size: Size
     top_left: Coordinate
 
-    @property
+    @cached_property
     def rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
         from nextrpg.geometry.rectangle_area_on_screen import (
             RectangleAreaOnScreen,
