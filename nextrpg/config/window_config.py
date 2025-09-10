@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 from enum import Enum, auto

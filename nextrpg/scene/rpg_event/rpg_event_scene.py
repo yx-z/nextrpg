@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from collections.abc import Callable, Generator
 from dataclasses import dataclass, replace
 from functools import cached_property

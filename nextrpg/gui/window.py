@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import os
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property

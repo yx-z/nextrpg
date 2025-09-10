@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from dataclasses import KW_ONLY
 from functools import cached_property
 from pathlib import Path

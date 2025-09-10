@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import TYPE_CHECKING, Self

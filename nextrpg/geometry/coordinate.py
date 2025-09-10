@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from math import atan2, degrees, hypot
 from typing import TYPE_CHECKING, NamedTuple, Self, overload
 

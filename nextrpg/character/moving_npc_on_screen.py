@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 

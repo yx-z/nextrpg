@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from dataclasses import dataclass, replace
 from functools import cache
 from typing import TYPE_CHECKING, Callable

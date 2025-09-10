@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import ClassVar, Self, override

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass, replace
 from typing import ClassVar, Self, override

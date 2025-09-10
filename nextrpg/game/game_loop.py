@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import gc
 from collections.abc import Callable
 from dataclasses import KW_ONLY, field, replace
