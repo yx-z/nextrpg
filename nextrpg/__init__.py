@@ -5,14 +5,18 @@ from nextrpg.animation.animation_on_screen import (
     AnimationOnScreen,
     tick_optional,
 )
-from nextrpg.animation.animation_on_screens import AnimationOnScreens
+from nextrpg.animation.animation_on_screens import (
+    AnimationOnScreens,
+)
 from nextrpg.animation.blur import Blur
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.animation.cyclic_animation_on_screen import CyclicAnimationOnScreen
 from nextrpg.animation.fade import Fade, FadeIn, FadeOut
 from nextrpg.animation.from_animation import FromAnimation
 from nextrpg.animation.move import Move, MoveFrom, MoveTo
-from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
+from nextrpg.animation.timed_animation_on_screens import (
+    TimedAnimationOnScreens,
+)
 from nextrpg.animation.typewriter import Typewriter
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import (
@@ -86,6 +90,7 @@ from nextrpg.core.save import (
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry
 from nextrpg.drawing.anchor import Anchor
+from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.color import (
     BLACK,
     BLUE,
@@ -99,6 +104,7 @@ from nextrpg.drawing.color import (
 )
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.drawing_group_on_screen import DrawingGroupOnScreen
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.drawing.drawing_trim import DrawingTrim

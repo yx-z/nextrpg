@@ -5,19 +5,22 @@ from functools import cached_property
 
 from pygame import SRCALPHA, Surface
 
+from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
-from nextrpg.geometry.sizable import Sizable
 
 
 @dataclass(frozen=True)
-class DrawingOnScreens(Sizable):
+class DrawingOnScreens(AnimationOnScreenLike):
     drawing_on_screens: tuple[DrawingOnScreen, ...]
 
     @cached_property
-    def merge(self) -> DrawingOnScreen:
+    def drawing_on_screen(self) -> DrawingOnScreen:
+        if len(self.drawing_on_screens) == 1:
+            return self.drawing_on_screens[0]
+
         surface = Surface(self.size, SRCALPHA)
         surface.blits(d.pygame for d in self.drawing_on_screens)
         drawing = Drawing(surface)
@@ -38,3 +41,7 @@ class DrawingOnScreens(Sizable):
         width = max_left - min_left
         height = max_top - min_top
         return width * height
+
+    @property
+    def is_complete(self) -> bool:
+        return True

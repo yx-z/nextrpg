@@ -17,5 +17,5 @@ class CyclicAnimationOnScreen(FromAnimation):
         drawing = self.animation.drawing
         if isinstance(drawing, DrawingGroup):
             drawings = drawing.drawing_on_screens(self.coordinate)
-            return DrawingOnScreens(drawings).merge
+            return DrawingOnScreens(drawings).drawing_on_screen
         return drawing.drawing_on_screen(self.coordinate)

@@ -223,7 +223,7 @@ class Size(NamedTuple):
     ) -> Size:
         return self * type(scaling)(1.0 / scaling.value)
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         return f"({self.width_value:.0f}, {self.height_value:.0f})"
 
     @property

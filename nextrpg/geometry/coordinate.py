@@ -139,7 +139,7 @@ class Coordinate(NamedTuple):
         )
         return closest[1]
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         return f"({self.left_value:.0f}, {self.top_value:.0f})"
 
     def distance(self, other: Coordinate) -> Pixel:

@@ -7,17 +7,17 @@ from typing import Self
 from pygame import Surface
 
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.color import Alpha
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size, Width
 from nextrpg.geometry.direction import DirectionalOffset
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.geometry.sizable import Sizable
 
 
 @dataclass(frozen=True)
-class DrawingOnScreen(Sizable):
+class DrawingOnScreen(AnimationOnScreenLike):
     top_left: Coordinate
     drawing: Drawing
 

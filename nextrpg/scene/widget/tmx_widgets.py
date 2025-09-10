@@ -3,7 +3,6 @@ from functools import cached_property
 from pathlib import Path
 from typing import Self, override
 
-from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -12,6 +11,7 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_coordinate, get_geometry
+from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
@@ -22,10 +22,7 @@ from nextrpg.scene.widget.widget_group import WidgetGroupOnScreen
 class TmxWidgets(WidgetGroupOnScreen):
     tmx_file: Path
     background: (
-        str
-        | AnimationOnScreen
-        | DrawingOnScreen
-        | tuple[str | AnimationOnScreen | DrawingOnScreen, ...]
+        str | AnimationOnScreenLike | tuple[str | AnimationOnScreenLike, ...]
     )
     _: KW_ONLY = private_init_below()
     name_to_on_screens: dict[str, Coordinate | AreaOnScreen] = default(

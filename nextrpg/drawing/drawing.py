@@ -46,6 +46,13 @@ class Drawing(Sizable):
     convert_alpha: bool | None = None
     allow_background_in_debug: bool = True
 
+    def __str__(self) -> str:
+        if isinstance(self.resource, Surface):
+            resource_info = ""
+        else:
+            resource_info = f", {self.resource}"
+        return f"Drawing({self.size}{resource_info})"
+
     @property
     def no_shift(self) -> RelativeDrawing:
         return self.shift(ZERO_SIZE)

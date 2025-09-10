@@ -2,8 +2,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import cached_property
+from typing import Self
 
 from nextrpg.config.config import config
+from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.color import Color
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
@@ -12,11 +15,10 @@ from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
-from nextrpg.geometry.sizable import Sizable
 
 
 @dataclass(frozen=True)
-class DrawingGroupOnScreen(Sizable):
+class DrawingGroupOnScreen(AnimationOnScreenLike):
     origin: Coordinate
     drawing_group: DrawingGroup
 
@@ -27,6 +29,13 @@ class DrawingGroupOnScreen(Sizable):
     @property
     def top_left(self) -> Coordinate:
         return self._sized.top_left
+
+    def tick(self, time_delta: Millisecond) -> Self:
+        return self
+
+    @property
+    def is_complete(self) -> bool:
+        return True
 
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:

@@ -31,7 +31,7 @@ from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.scene.map.map_loader import MapLoader, drawing_on_screens
+from nextrpg.scene.map.map_loader import MapLoader
 from nextrpg.scene.map.map_move import MapMove
 from nextrpg.scene.map.map_shift import center_player
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
@@ -95,18 +95,17 @@ class MapScene(EventfulScene, UpdateFromSave):
     @cached_property
     @override
     def drawing_on_screens_before_shift(self) -> tuple[DrawingOnScreen, ...]:
+        foreground_and_characters = (
+            self._map_loader.foregrounds.drawing_on_screens(
+                self.player, self.npcs
+            )
+        )
         return (
-            drawing_on_screens(self._map_loader.background)
-            + self._foreground_and_characters
-            + drawing_on_screens(self._map_loader.above_character)
+            self._map_loader.background.drawing_on_screens
+            + foreground_and_characters
+            + self._map_loader.above_character.drawing_on_screens
             + self._debug_visuals
         )
-
-    @cached_property
-    def _map_loader(self) -> MapLoader:
-        if callable(self._map_loader_input):
-            return self._map_loader_input(self)
-        return self._map_loader_input
 
     @override
     @cached_property
@@ -130,22 +129,10 @@ class MapScene(EventfulScene, UpdateFromSave):
         return replace(self, player=player, npcs=npcs)
 
     @cached_property
-    def _foreground_and_characters(self) -> tuple[DrawingOnScreen, ...]:
-        characters = (self.player,) + self.npcs
-        layer_bottom_draws = tuple(
-            drawing
-            for character in characters
-            for drawing in self._map_loader.layer_bottom_and_drawing(character)
-        )
-        foregrounds = tuple(
-            tile for layer in self._map_loader.foreground for tile in layer
-        )
-        layers = sorted(foregrounds + layer_bottom_draws)
-        return tuple(
-            drawing_on_screen
-            for layer in layers
-            for drawing_on_screen in layer.drawing_on_screens
-        )
+    def _map_loader(self) -> MapLoader:
+        if callable(self._map_loader_input):
+            return self._map_loader_input(self)
+        return self._map_loader_input
 
     def _move_to_scene(self, time_delta: Millisecond) -> Scene | None:
         for move in self._moves:
