@@ -1,4 +1,4 @@
-from dataclasses import KW_ONLY, replace
+from dataclasses import replace
 from functools import cached_property
 from pathlib import Path
 from typing import Self, override
@@ -24,7 +24,7 @@ class TmxWidgets(WidgetGroupOnScreen):
     background: (
         str | AnimationOnScreenLike | tuple[str | AnimationOnScreenLike, ...]
     )
-    _: KW_ONLY = private_init_below()
+    _ = private_init_below()
     name_to_on_screens: dict[str, Coordinate | AreaOnScreen] = default(
         lambda self: self._init_name_to_on_screens
     )
