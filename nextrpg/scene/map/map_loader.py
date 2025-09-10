@@ -217,8 +217,6 @@ class MapLoader(TmxLoader):
             tile_group = TileGroup(index, animation_on_screens, visible_bottom)
             groups.append(tile_group)
         tile_groups = tuple(sorted(groups))
-        if layer.name == "foreground":
-            breakpoint()
         return ForegroundLayer(index, tile_groups)
 
     @property
