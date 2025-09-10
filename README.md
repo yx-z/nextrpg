@@ -11,7 +11,7 @@ Turn your Python code (Yes, what comes after `:` are annotations!)
 
 ```python
 npc: "Nice to meet you! What's your name?"
-player: f"Hello {npc.display_name}! I am {player.display_name}."
+player: f"Hello {npc.name}! I am {player.name}."
 ```
 
 into an RPG game scene!
