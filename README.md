@@ -7,7 +7,7 @@ Build your next RPG (Role Playing Game).
 
 ## Example
 
-Turn your Python code
+Turn your Python code (Yes, what comes after `:` are annotations!)
 
 ```python
 npc: "Nice to meet you! What's your name?"
