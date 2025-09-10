@@ -160,19 +160,17 @@ from nextrpg.geometry.polygon_area_on_screen import (
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.walk import Walk
-from nextrpg.gui.area import (
-    bottom_left_screen,
-    bottom_right_screen,
-    bottom_screen,
-    gui_height,
-    gui_size,
-    gui_width,
-    left_screen,
-    right_screen,
-    screen,
-    top_left_screen,
-    top_right_screen,
-    top_screen,
+from nextrpg.gui.screen_area import (
+    bottom_left_screen_area,
+    bottom_right_screen_area,
+    bottom_screen_area,
+    left_screen_area,
+    right_screen_area,
+    screen_area,
+    screen_size,
+    top_left_screen_area,
+    top_right_screen_area,
+    top_screen_area,
 )
 from nextrpg.gui.window import Window
 from nextrpg.scene.fade_in_scene import FadeInScene

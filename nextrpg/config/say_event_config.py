@@ -100,9 +100,9 @@ class SayEventConfig:
         if self.scene_coordinate_override:
             return self.scene_coordinate_override
 
-        from nextrpg.gui.area import screen
+        from nextrpg.gui.screen_area import screen_area
 
-        return screen().center
+        return screen_area().center
 
     @property
     def text_config(self) -> TextConfig:

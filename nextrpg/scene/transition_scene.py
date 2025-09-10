@@ -12,7 +12,7 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
-from nextrpg.gui.area import screen
+from nextrpg.gui.screen_area import screen_area
 from nextrpg.scene.scene import Scene
 
 
@@ -21,7 +21,7 @@ class TransitionScene(Scene):
     from_scene: Scene | Callable[[], Scene]
     to_scene: Scene | Callable[[], Scene]
     intermediary: DrawingOnScreen | tuple[DrawingOnScreen, ...] = field(
-        default_factory=lambda: screen().fill(config().window.background)
+        default_factory=lambda: screen_area().fill(config().window.background)
     )
     duration: Millisecond = field(
         default_factory=lambda: config().timing.transition_total_duration

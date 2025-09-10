@@ -20,7 +20,11 @@ from nextrpg.drawing.text_group import TextGroup
 from nextrpg.drawing.text_on_screen import TextOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import WidthAndHeightScaling
-from nextrpg.gui.area import left_screen, screen, top_screen
+from nextrpg.gui.screen_area import (
+    left_screen_area,
+    screen_area,
+    top_screen_area,
+)
 from nextrpg.scene.scene import Scene
 
 
@@ -223,8 +227,8 @@ class SayEventCharacterAddOn(SayEventAddOn):
         pad_width = self.config.padding.width
         if left.width < pad_width:
             left = pad_width.x_axis
-        elif left + background_width > screen().right - pad_width:
-            left = screen().right - background_width - pad_width
+        elif left + background_width > screen_area().right - pad_width:
+            left = screen_area().right - background_width - pad_width
 
         if self._character_position.at_top:
             top = (
@@ -264,8 +268,8 @@ class SayEventCharacterAddOn(SayEventAddOn):
                 self.character.drawing_on_screen.visible_rectangle_area_on_screen
             )
 
-        at_left = rect.center in left_screen()
-        if at_top := rect.center in top_screen():
+        at_left = rect.center in left_screen_area()
+        if at_top := rect.center in top_screen_area():
             coordinate = rect.bottom_center
         else:
             coordinate = rect.top_center

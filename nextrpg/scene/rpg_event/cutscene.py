@@ -6,7 +6,7 @@ from typing import Any, overload
 from nextrpg.config.config import config
 from nextrpg.config.cutscene_config import CutsceneConfig
 from nextrpg.geometry.coordinate import ORIGIN
-from nextrpg.gui.area import gui_size, screen
+from nextrpg.gui.screen_area import screen_area, screen_size
 from nextrpg.scene.rpg_event.fade_in_event_scene import fade_in
 from nextrpg.scene.rpg_event.fade_out_event_scene import fade_out
 from nextrpg.scene.rpg_event.rpg_event_scene import EventGenerator
@@ -37,10 +37,10 @@ def _cutscene[**P](
     cfg: CutsceneConfig, fun: Callable[P, Any]
 ) -> Callable[P, EventGenerator]:
     def decorated(*args: P.args, **kwargs: P.kwargs) -> EventGenerator:
-        size = gui_size() * cfg.cover_from_screen_scaling
+        size = screen_size() * cfg.cover_from_screen_scaling
         top_border = ORIGIN.anchor(size).rectangle_area_on_screen
         bottom_border = (
-            screen().bottom_left.anchor(size).rectangle_area_on_screen
+            screen_area().bottom_left.anchor(size).rectangle_area_on_screen
         )
         rectangle_area_on_screens = (top_border, bottom_border)
         borders = tuple(
