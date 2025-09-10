@@ -192,5 +192,5 @@ def _log_text(
     component_text = Text("\n".join(components)).text_on_screen(ORIGIN)
 
     messages = "\n".join(m.message for m in component_and_messages)
-    msg_text = Text(messages).text_on_screen(ORIGIN + component_text.width)
-    return component_text, msg_text
+    message_text = Text(messages).text_on_screen(ORIGIN + component_text.width)
+    return component_text, message_text
