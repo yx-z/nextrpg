@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "C:/msys64/home/yxz/nextrpg/example/component/menu.tmx",
+    "activeFile": "interior.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
@@ -15,8 +15,8 @@
             "scale": 0.2734375,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 625.3714285714285,
-                "y": 473.59999999999997
+                "x": 3988.114285714286,
+                "y": 1636.5714285714284
             }
         },
         "PixelFantasy_Inside_A2.tsx": {
@@ -46,8 +46,8 @@
             "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 1052.5,
-                "y": 789.25
+                "x": 1512.25,
+                "y": 947.75
             }
         },
         "exterior.tsx": {
@@ -56,14 +56,14 @@
         },
         "interior.tmx": {
             "expandedObjectLayers": [
-                6,
-                5
+                5,
+                6
             ],
             "scale": 1.5,
-            "selectedLayer": 3,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 597.6666666666666,
-                "y": 610.3333333333334
+                "x": 687,
+                "y": 352.99999999999994
             }
         },
         "interior.tsx": {
@@ -83,23 +83,19 @@
     "map.tileWidth": 48,
     "map.width": 30,
     "openFiles": [
-        "exterior.tmx",
-        "PixelFantasy_Outside_B.tsx",
-        "PixelFantasy_Outside_C.tsx",
-        "water.tsx",
-        "C:/msys64/home/yxz/nextrpg/example/component/menu.tmx"
+        "interior.tmx"
     ],
     "project": "",
     "recentFiles": [
-        "exterior.tmx",
-        "PixelFantasy_Outside_B.tsx",
-        "PixelFantasy_Outside_C.tsx",
-        "water.tsx",
-        "C:/msys64/home/yxz/nextrpg/example/component/menu.tmx",
         "interior.tmx",
+        "C:/msys64/home/yxz/nextrpg/example/component/menu.tmx",
+        "water.tsx",
+        "PixelFantasy_Outside_C.tsx",
+        "PixelFantasy_Outside_B.tsx",
+        "exterior.tmx",
+        "PixelFantasy_Inside_C.tsx",
         "exterior.tsx",
         "C:/Users/yxz/Downloads/Tiled_SampleProject_November041122/Tiled_SampleProject_November041122/maps/Tilesets/TileAuto_Water_01_Nature.json",
-        "PixelFantasy_Inside_C.tsx",
         "PixelFantasy_Inside_B.tsx",
         "PixelFantasy_Inside_A2.tsx",
         "interior.tsx"

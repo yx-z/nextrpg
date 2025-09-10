@@ -84,8 +84,8 @@ class TmxLoader:
     def all_objects(self) -> tuple[TiledObject, ...]:
         return tuple(
             obj
-            for i in self._tmx.visible_object_groups
-            for obj in self._layer(i)
+            for index in self._tmx.visible_object_groups
+            for obj in self._layer(index)
         )
 
     def _layer(

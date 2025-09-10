@@ -5,7 +5,7 @@ from collections.abc import Iterable
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from itertools import product
-from typing import NamedTuple, Self
+from typing import Self
 
 from pytmx import TiledObject, TiledTileLayer
 
@@ -27,6 +27,7 @@ from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry, is_rect
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
@@ -39,7 +40,7 @@ log = Log()
 class TileGroup(AnimationOnScreens):
     index: int
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: TileGroup) -> bool:
         if self.index == other.index:
             return (
                 self.visible_rectangle_area_on_screen.bottom
@@ -104,7 +105,7 @@ class MapLoader(TmxLoader):
     above_character: AnimationOnScreens = default(
         lambda self: self._draw_layers(config().map.above_character)
     )
-    collisions: tuple[PolygonAreaOnScreen, ...] = default(
+    collisions: tuple[AreaOnScreen, ...] = default(
         lambda self: self._init_collisions
     )
     collision_visuals: tuple[DrawingOnScreen, ...] = default(
@@ -128,12 +129,12 @@ class MapLoader(TmxLoader):
         height = self._tmx.height * self._tile_size.height
         return width * height
 
-    @property
-    def _init_colliders(self) -> tuple[_Collider, ...]:
+    @cached_property
+    def _colliders(self) -> tuple[_Collider, ...]:
         return tuple(
-            _Collider(_TileCoordinate(x, y), collider)
+            _Collider(_TileCoordinate(left, top), collider)
             for layer in self._all_tile_layers
-            for x, y, gid in layer
+            for top, left, gid in layer
             for collider in self._collider(gid)
         )
 
@@ -142,32 +143,28 @@ class MapLoader(TmxLoader):
             self._tmx.tile_properties.get(gid, {}).get("colliders", ())
         )
 
-    def _polygon(
-        self, coordinate: _TileCoordinate, obj: TiledObject
-    ) -> PolygonAreaOnScreen:
-        return self._from_rect(coordinate, obj) or self._from_points(
-            coordinate, obj
-        )
+    def _polygon(self, collider: _Collider) -> AreaOnScreen:
+        return self._from_rect(collider) or self._from_points(collider)
 
-    def _from_points(
-        self, coordinate: _TileCoordinate, obj: TiledObject
-    ) -> PolygonAreaOnScreen:
-        w, h = self._tile_size
-        cx, cy = coordinate
-        return PolygonAreaOnScreen(
-            tuple(Coordinate(cx * w + x, cy * h + y) for x, y in obj.as_points)
+    def _from_points(self, collider: _Collider) -> PolygonAreaOnScreen:
+        width, height = self._tile_size
+        left_shift = collider.coordinate.left * width
+        top_shift = collider.coordinate.top * height
+        points = tuple(
+            Coordinate(left + left_shift, top + top_shift)
+            for left, top in collider.object.as_points
         )
+        return PolygonAreaOnScreen(points)
 
-    def _from_rect(
-        self, coordinate: _TileCoordinate, obj: TiledObject
-    ) -> RectangleAreaOnScreen | None:
-        if not is_rect(obj):
+    def _from_rect(self, collider: _Collider) -> RectangleAreaOnScreen | None:
+        if not is_rect(collider.object):
             return None
 
-        w, h = self._tile_size
-        cx, cy = coordinate
-        map_coord = Coordinate(cx * w + obj.x, cy * h + obj.y)
-        size = Size(obj.width, obj.height)
+        width, height = self._tile_size
+        left = collider.object.x + collider.coordinate.left * width
+        top = collider.object.y + collider.coordinate.top * height
+        map_coord = Coordinate(left, top)
+        size = Size(collider.object.width, collider.object.height)
         return RectangleAreaOnScreen(map_coord, size)
 
     def _tile_layers(self, class_name: str) -> tuple[TiledTileLayer, ...]:
@@ -215,7 +212,7 @@ class MapLoader(TmxLoader):
         self, layer: TiledTileLayer
     ) -> dict[_TileCoordinate, AnimationOnScreen | DrawingOnScreen]:
         return {
-            _TileCoordinate(top, left): self._tile(left, top, gid)
+            _TileCoordinate(left, top): self._tile(left, top, gid)
             for left, top, gid in layer
             if gid
         }
@@ -239,9 +236,10 @@ class MapLoader(TmxLoader):
     def _class(
         self, layer: TiledTileLayer, coordinate: _TileCoordinate
     ) -> str | None:
-        x, y = coordinate
-        if 0 <= x < len(layer.data) and 0 <= y < len(layer.data[x]):
-            data_id = layer.data[x][y]
+        if 0 <= coordinate.left < len(layer.data) and 0 <= coordinate.top < len(
+            layer.data[coordinate.left]
+        ):
+            data_id = layer.data[coordinate.left][coordinate.top]
             return self._gid_to_cls.get(
                 self._tmx.tile_properties.get(data_id, {}).get("id")
             )
@@ -252,10 +250,13 @@ class MapLoader(TmxLoader):
     ) -> Iterable[_TileCoordinate]:
         if not (cls := self._class(layer, coordinate)):
             return
-        for dx, dy in product((-1, 0, 1), repeat=2):
-            x, y = coordinate
-            neighbor = _TileCoordinate(x + dx, y + dy)
-            if self._class(layer, neighbor) == cls:
+        for left_shift, top_shift in product((-1, 0, 1), repeat=2):
+            left = coordinate.left + left_shift
+            top = coordinate.top + top_shift
+            neighbor = _TileCoordinate(left, top)
+            if neighbor == coordinate:
+                continue
+            if cls == self._class(layer, neighbor):
                 yield neighbor
 
     @cached_property
@@ -294,30 +295,40 @@ class MapLoader(TmxLoader):
         return AnimationOnScreens(resource)
 
     @property
-    def _init_collisions(self) -> tuple[PolygonAreaOnScreen, ...]:
+    def _init_collisions(self) -> tuple[AreaOnScreen, ...]:
         from_tiles = tuple(
-            self._polygon(coordinate, obj)
-            for coordinate, obj in self._init_colliders
+            self._polygon(collider) for collider in self._colliders
         )
+        collision = config().map.collision
         from_objects = tuple(
             poly
-            for obj in self.get_objects_by_class_name(config().map.collision)
-            if (poly := get_geometry(obj))
+            for obj in self.get_objects_by_class_name(collision)
+            if isinstance(poly := get_geometry(obj), AreaOnScreen)
         )
-        return from_tiles + from_objects
+        from_layers = tuple(
+            poly
+            for index in self._tmx.visible_object_groups
+            if getattr(layer := self._layer(index), "class", None) == collision
+            or collision in layer.name
+            for obj in layer
+            if isinstance(poly := get_geometry(obj), AreaOnScreen)
+        )
+        return from_tiles + from_objects + from_layers
 
 
 type _Gid = int
 
 
-class _TileCoordinate(NamedTuple):
-    top: int
+@dataclass(frozen=True)
+class _TileCoordinate:
     left: int
+    top: int
 
 
-class _Collider(NamedTuple):
+@dataclass(frozen=True)
+class _Collider:
     coordinate: _TileCoordinate
-    obj: TiledObject
+    object: TiledObject
 
 
 def _below_character_layer(
