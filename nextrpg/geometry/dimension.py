@@ -226,6 +226,9 @@ class Size(NamedTuple):
     def __str__(self) -> str:
         return f"({self.width_value:.0f}, {self.height_value:.0f})"
 
+    def __repr__(self) -> str:
+        return str(self)
+
     @property
     def coordinate(self) -> Coordinate:
         from nextrpg.geometry.coordinate import Coordinate

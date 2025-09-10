@@ -15,3 +15,13 @@ player: f"Hello {npc.display_name}! I am {player.display_name}."
 ```
 
 into an RPG game scene!
+
+![img.png](example/screenshot/scene.png)
+
+It comes with rich debug-info with a simple config tweak:
+
+```python
+Config(debug=DebugConfig())
+```
+
+![img.png](example/screenshot/debug.png)

@@ -142,6 +142,9 @@ class Coordinate(NamedTuple):
     def __str__(self) -> str:
         return f"({self.left_value:.0f}, {self.top_value:.0f})"
 
+    def __repr__(self) -> str:
+        return str(self)
+
     def distance(self, other: Coordinate) -> Pixel:
         dx = self.left_value - other.left_value
         dy = self.top_value - other.top_value

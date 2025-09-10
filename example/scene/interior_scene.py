@@ -87,8 +87,8 @@ def greet(
     cfg = config().say_event.text_config
     # fmt: off
     scene["Interior Scene"]: Text("Greetings!", cfg.sized(Height(40))) + Text(
-        """This is...
-        a sample """, cfg) + Text("nextrpg event", cfg.colored(Color(128, 0, 255)))
+    """This is...
+    a sample """, cfg) + Text("nextrpg event", cfg.colored(Color(128, 0, 255)))
     # fmt: on
 
     npc: "Nice to meet you! What's your name?"
