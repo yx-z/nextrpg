@@ -21,7 +21,7 @@ class FromAnimation(AnimationOnScreen):
 
     @override
     def _tick_before_complete(self, time_delta: Millisecond) -> Self:
-        animation = self.animation.tick_before_complete(time_delta)
+        animation = self.animation._tick_before_complete(time_delta)
         return replace(self, animation=animation)
 
     @override

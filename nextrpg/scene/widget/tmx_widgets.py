@@ -34,14 +34,17 @@ class TmxWidgets(WidgetGroupOnScreen):
     )
 
     @override
-    @cached_property
-    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        return self._background.drawing_on_screens + super().drawing_on_screens
-
-    @override
     def tick(self, time_delta: Millisecond) -> Self:
         background = self._background.tick(time_delta)
         return replace(self, _background=background)
+
+    @override
+    @cached_property
+    def _drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
+        return (
+            self._background.drawing_on_screens
+            + super()._drawing_on_screens_after_parent
+        )
 
     @property
     def _init_background(self) -> AnimationOnScreens:

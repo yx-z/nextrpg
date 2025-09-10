@@ -28,12 +28,12 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     )
 
     @override
-    def event_after_selected(self, event: IoEvent) -> Scene:
+    def _event_after_selected(self, event: IoEvent) -> Scene:
         children: list[WidgetOnScreen] = []
         for child in self._children:
             if (
                 child._is_selected
-                and (res := child.event_after_selected(event)) is not child
+                and (res := child._event_after_selected(event)) is not child
             ):
                 return res
             children.append(child)
@@ -47,17 +47,17 @@ class WidgetGroupOnScreen(WidgetOnScreen):
 
     @override
     @cached_property
-    def drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
+    def _drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
         return tuple(
             drawing_on_screen
             for child in self._children
-            for drawing_on_screen in child.drawing_on_screens_after_parent
+            for drawing_on_screen in child._drawing_on_screens_after_parent
         )
 
     @override
-    def tick_after_parent(self, time_delta: Millisecond) -> Self:
+    def _tick_after_parent(self, time_delta: Millisecond) -> Self:
         children = tuple(
-            child.tick_after_parent(time_delta) for child in self._children
+            child._tick_after_parent(time_delta) for child in self._children
         )
         return self._with_children(children)
 

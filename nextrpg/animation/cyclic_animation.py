@@ -25,8 +25,22 @@ class CyclicAnimation(Animation):
     def drawing(self) -> Drawing | DrawingGroup:
         return self.frames[self._index]
 
+    @property
+    def is_complete(self) -> bool:
+        return False
+
+    @property
+    def reset(self) -> Self:
+        timer = Timer(self._duration(0))
+        return replace(self, _index=0, _timer=timer)
+
+    def _duration(self, index: int) -> Millisecond:
+        if isinstance(self.duration_per_frame, tuple):
+            return self.duration_per_frame[index]
+        return self.duration_per_frame
+
     @override
-    def tick_before_complete(self, time_delta: Millisecond) -> Self:
+    def _tick_before_complete(self, time_delta: Millisecond) -> Self:
         if not (updated_timer := self._timer.tick(time_delta)).is_complete:
             return replace(self, _timer=updated_timer)
         current_index = self._index
@@ -44,17 +58,3 @@ class CyclicAnimation(Animation):
         current_frame_duration = self._duration(current_index)
         new_timer = Timer(current_frame_duration).tick(remaining_time)
         return replace(self, _index=current_index, _timer=new_timer)
-
-    @property
-    def reset(self) -> Self:
-        timer = Timer(self._duration(0))
-        return replace(self, _index=0, _timer=timer)
-
-    def _duration(self, index: int) -> Millisecond:
-        if isinstance(self.duration_per_frame, tuple):
-            return self.duration_per_frame[index]
-        return self.duration_per_frame
-
-    @property
-    def is_complete(self) -> bool:
-        return False

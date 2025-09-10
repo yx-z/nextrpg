@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from functools import cached_property
-from typing import Self, TypeVar
+from typing import Self
 
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
@@ -44,12 +44,9 @@ class AnimationOnScreen(AnimationOnScreenLike, ABC):
         return DrawingOnScreens(self.drawing_on_screens)
 
 
-_AnimationOnScreen = TypeVar("_AnimationOnScreen", bound=AnimationOnScreen)
-
-
 def tick_optional(
-    animation: _AnimationOnScreen | None, time_delta: Millisecond
-) -> _AnimationOnScreen | None:
+    animation: AnimationOnScreenLike | None, time_delta: Millisecond
+) -> AnimationOnScreenLike | None:
     if animation:
         return animation.tick(time_delta)
     return None

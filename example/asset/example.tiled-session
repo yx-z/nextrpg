@@ -3,13 +3,21 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "water.tsx",
+    "activeFile": "C:/msys64/home/yxz/nextrpg/example/component/menu.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
         "C:/Users/yxz/Downloads/Tiled_SampleProject_November041122/Tiled_SampleProject_November041122/maps/Tilesets/TileAuto_Water_01_Nature.json": {
             "scaleInDock": 1,
             "scaleInEditor": 1.5
+        },
+        "C:/msys64/home/yxz/nextrpg/example/component/menu.tmx": {
+            "scale": 0.2734375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 625.3714285714285,
+                "y": 473.59999999999997
+            }
         },
         "PixelFantasy_Inside_A2.tsx": {
             "scaleInDock": 1,
@@ -38,8 +46,8 @@
             "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 1062.25,
-                "y": 850.25
+                "x": 1052.5,
+                "y": 789.25
             }
         },
         "exterior.tsx": {
@@ -78,7 +86,8 @@
         "exterior.tmx",
         "PixelFantasy_Outside_B.tsx",
         "PixelFantasy_Outside_C.tsx",
-        "water.tsx"
+        "water.tsx",
+        "C:/msys64/home/yxz/nextrpg/example/component/menu.tmx"
     ],
     "project": "",
     "recentFiles": [
@@ -86,6 +95,7 @@
         "PixelFantasy_Outside_B.tsx",
         "PixelFantasy_Outside_C.tsx",
         "water.tsx",
+        "C:/msys64/home/yxz/nextrpg/example/component/menu.tmx",
         "interior.tmx",
         "exterior.tsx",
         "C:/Users/yxz/Downloads/Tiled_SampleProject_November041122/Tiled_SampleProject_November041122/maps/Tilesets/TileAuto_Water_01_Nature.json",

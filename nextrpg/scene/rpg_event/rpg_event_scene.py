@@ -24,9 +24,9 @@ class RpgEventScene[R = None](Scene):
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
         ticked = replace(self, scene=self.scene.tick_without_event(time_delta))
-        return self.tick_after_scene(time_delta, ticked)
+        return self._tick_after_scene(time_delta, ticked)
 
-    def tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
+    def _tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
         return ticked
 
     @property

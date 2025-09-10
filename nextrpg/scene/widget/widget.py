@@ -59,7 +59,7 @@ class WidgetOnScreen(Scene):
 
         parent = tick_optional(self.parent, time_delta)
         to_scene = tick_optional(self._to_scene, time_delta)
-        ticked = self.tick_after_parent(time_delta)
+        ticked = self._tick_after_parent(time_delta)
         return replace(
             ticked, _animation=animation, parent=parent, _to_scene=to_scene
         )
@@ -73,7 +73,7 @@ class WidgetOnScreen(Scene):
             parent = ()
         if self._animation:
             return parent + self._animation.drawing_on_screens
-        return parent + self.drawing_on_screens_after_parent
+        return parent + self._drawing_on_screens_after_parent
 
     @override
     def event(self, event: IoEvent) -> Scene:
@@ -85,18 +85,18 @@ class WidgetOnScreen(Scene):
             and self.parent
         ):
             return self._exit(self.parent)
-        return self.event_after_selected(event)
+        return self._event_after_selected(event)
 
-    def tick_after_parent(self, time_delta: Millisecond) -> Self:
+    def _tick_after_parent(self, time_delta: Millisecond) -> Self:
         return self
 
     @property
     @abstractmethod
-    def drawing_on_screens_after_parent(
+    def _drawing_on_screens_after_parent(
         self,
     ) -> tuple[DrawingOnScreen, ...]: ...
 
-    def event_after_selected(self, event: IoEvent) -> Scene:
+    def _event_after_selected(self, event: IoEvent) -> Scene:
         return self
 
     def from_on_screen[T](self, cls: type[T]) -> T:
@@ -115,14 +115,14 @@ class WidgetOnScreen(Scene):
     def _init_animation(self) -> AnimationOnScreen | None:
         if self.widget_input.entering_animation:
             return self.widget_input.entering_animation(
-                self.drawing_on_screens_after_parent
+                self._drawing_on_screens_after_parent
             )
         return None
 
     def _exit(self, to_scene: Scene) -> Self:
         if self.widget_input.exiting_animation:
             animation = self.widget_input.exiting_animation(
-                self.drawing_on_screens_after_parent
+                self._drawing_on_screens_after_parent
             )
             return replace(self, _animation=animation, _to_scene=to_scene)
         return to_scene

@@ -31,7 +31,7 @@ class PanelOnScreen(WidgetOnScreen):
 
     @override
     @cached_property
-    def drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
+    def _drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
         drawing_on_screens = tuple()
         return (
             self.widget_input.config.drawing_on_screens(self.area)
@@ -39,9 +39,9 @@ class PanelOnScreen(WidgetOnScreen):
         )
 
     @override
-    def tick_after_parent(self, time_delta: Millisecond) -> Self:
+    def _tick_after_parent(self, time_delta: Millisecond) -> Self:
         children = tuple(
-            child.tick_after_parent(time_delta) for child in self._children
+            child._tick_after_parent(time_delta) for child in self._children
         )
         return replace(self, _children=children)
 
