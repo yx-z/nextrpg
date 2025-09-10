@@ -5,7 +5,6 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.animation.animation_on_screen import tick_optional
 from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.animation.typewriter import Typewriter
 from nextrpg.config.say_event_config import SayEventConfig
@@ -15,6 +14,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_on_screen_like import tick_optional
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.text_on_screen import TextOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown

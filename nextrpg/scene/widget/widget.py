@@ -8,7 +8,6 @@ from typing import ClassVar, Generic, Self, TypeVar, override
 
 from nextrpg.animation.animation_on_screen import (
     AnimationOnScreen,
-    tick_optional,
 )
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -17,6 +16,7 @@ from nextrpg.core.dataclass_with_default import (
     type_name,
 )
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_on_screen_like import tick_optional
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.area_on_screen import AreaOnScreen

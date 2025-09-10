@@ -1,9 +1,8 @@
-__version__ = "0.1.17"
+__version__ = "0.1.18"
 
 from nextrpg.animation.animation import Animation
 from nextrpg.animation.animation_on_screen import (
     AnimationOnScreen,
-    tick_optional,
 )
 from nextrpg.animation.animation_on_screens import (
     AnimationOnScreens,
@@ -90,7 +89,10 @@ from nextrpg.core.save import (
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry
 from nextrpg.drawing.anchor import Anchor
-from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
+from nextrpg.drawing.animation_on_screen_like import (
+    AnimationOnScreenLike,
+    tick_optional,
+)
 from nextrpg.drawing.color import (
     BLACK,
     BLUE,

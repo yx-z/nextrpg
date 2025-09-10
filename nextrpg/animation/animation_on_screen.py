@@ -42,11 +42,3 @@ class AnimationOnScreen(AnimationOnScreenLike, ABC):
     @cached_property
     def _sized(self) -> DrawingOnScreens:
         return DrawingOnScreens(self.drawing_on_screens)
-
-
-def tick_optional(
-    animation: AnimationOnScreenLike | None, time_delta: Millisecond
-) -> AnimationOnScreenLike | None:
-    if animation:
-        return animation.tick(time_delta)
-    return None
