@@ -264,10 +264,10 @@ class MapLoader(TmxLoader):
     def _neighbors(
         self, layer: TiledTileLayer, coordinate: _TileCoordinate
     ) -> Iterable[_TileCoordinate]:
-        x, y = coordinate
         if not (cls := self._class(layer, coordinate)):
             return
         for dx, dy in product((-1, 0, 1), repeat=2):
+            x, y = coordinate
             neighbor = _TileCoordinate(x + dx, y + dy)
             if self._class(layer, neighbor) == cls:
                 yield neighbor
