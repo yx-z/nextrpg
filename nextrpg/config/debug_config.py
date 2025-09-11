@@ -1,8 +1,8 @@
 import logging
+from dataclasses import dataclass, field
 from enum import IntEnum, auto
 from typing import Any
 
-from nextrpg.core.dataclass_with_default import dataclass_with_default, default
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import Color
 
@@ -10,23 +10,21 @@ from nextrpg.drawing.color import Color
 class LogLevel(IntEnum):
     DEBUG = auto()
     INFO = auto()
-    WARNING = auto()
     ERROR = auto()
 
     @property
-    def logging_level(self) -> int:
+    def standard(self) -> int:
         return _LOG_LEVEL[self]
 
 
 _LOG_LEVEL = {
     LogLevel.DEBUG: logging.DEBUG,
     LogLevel.INFO: logging.INFO,
-    LogLevel.WARNING: logging.WARNING,
     LogLevel.ERROR: logging.ERROR,
 }
 
 
-@dataclass_with_default(frozen=True)
+@dataclass(frozen=True)
 class DebugConfig:
     drawing_background_color: Color | None = Color(0, 0, 255, 16)
     collision_rectangle_color: Color | None = Color(255, 0, 0, 64)
@@ -38,10 +36,9 @@ class DebugConfig:
     log_level: LogLevel = LogLevel.DEBUG
     log_duration: Millisecond = 2000
     exclude_loggers: tuple[str, ...] = ()
-    console_log_configs: dict[str, Any] = default(
-        lambda self: {
-            "level": self.log_level.logging_level,
-            "format": "%(levelname)s - %(name)s - %(message)s",
+    console_log_configs: dict[str, Any] = field(
+        default_factory=lambda: {
+            "format": "%(levelname)s - %(name)s - %(message)s"
         }
     )
 
