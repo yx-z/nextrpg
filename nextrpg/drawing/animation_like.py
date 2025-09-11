@@ -7,6 +7,7 @@ from nextrpg.geometry.dimension import ZERO_SIZE, Size
 from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
+    from nextrpg.animation.animation_like_on_screen import AnimationLikeOnScreen
     from nextrpg.drawing.drawing import Drawing
     from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
@@ -30,6 +31,15 @@ class AnimationLike(Sizable):
         from nextrpg.drawing.relative_drawing import RelativeDrawing
 
         return RelativeDrawing(self.drawing, shift, anchor)
+
+    def animation_on_screen(
+        self, coordinate: Coordinate
+    ) -> AnimationLikeOnScreen:
+        from nextrpg.animation.animation_like_on_screen import (
+            AnimationLikeOnScreen,
+        )
+
+        return AnimationLikeOnScreen(coordinate, self)
 
     def drawing_on_screen(self, coordinate: Coordinate) -> DrawingOnScreen:
         from nextrpg.drawing.drawing_on_screens import DrawingOnScreens

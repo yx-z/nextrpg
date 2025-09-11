@@ -14,6 +14,11 @@ class Animation(AnimationLike, ABC):
             return self
         return self._tick_before_complete(time_delta)
 
+    @override
+    @property
+    @abstractmethod
+    def is_complete(self) -> bool: ...
+
     @property
     @abstractmethod
     def drawing(self) -> Drawing | DrawingGroup: ...
