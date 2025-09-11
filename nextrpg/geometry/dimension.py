@@ -174,6 +174,14 @@ class Size(NamedTuple):
     def height(self) -> Height:
         return Height(self.height_value)
 
+    @property
+    def negate_width(self) -> Size:
+        return Size(-self.width_value, self.height_value)
+
+    @property
+    def negate_height(self) -> Size:
+        return Size(self.width_value, -self.height_value)
+
     def __neg__(self) -> Size:
         return Size(-self.width_value, -self.height_value)
 

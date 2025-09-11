@@ -11,3 +11,20 @@ class Anchor(Enum):
     BOTTOM_LEFT = auto()
     BOTTOM_CENTER = auto()
     BOTTOM_RIGHT = auto()
+
+    @property
+    def __neg__(self) -> Anchor:
+        return _OPPOSITE_ANCHOR[self]
+
+
+_OPPOSITE_ANCHOR = {
+    Anchor.TOP_LEFT: Anchor.BOTTOM_RIGHT,
+    Anchor.TOP_CENTER: Anchor.BOTTOM_CENTER,
+    Anchor.TOP_RIGHT: Anchor.BOTTOM_LEFT,
+    Anchor.CENTER_LEFT: Anchor.CENTER_RIGHT,
+    Anchor.CENTER: Anchor.CENTER,
+    Anchor.CENTER_RIGHT: Anchor.CENTER_LEFT,
+    Anchor.BOTTOM_LEFT: Anchor.TOP_RIGHT,
+    Anchor.BOTTOM_CENTER: Anchor.TOP_CENTER,
+    Anchor.BOTTOM_RIGHT: Anchor.TOP_LEFT,
+}

@@ -55,7 +55,14 @@ class DrawingGroup(AnimationLike):
     def top_left(self) -> Coordinate:
         return self._drawing_group_on_screen.top_left
 
-    def cut(self, area: RectangleAreaOnScreen) -> Self:
+    def _flip(self, horizontal: bool, vertical: bool) -> Self:
+        relative_drawings = tuple(
+            relative_drawing.flip(horizontal, vertical)
+            for relative_drawing in self.relative_drawings
+        )
+        return replace(self, relative_drawings=relative_drawings)
+
+    def _cut(self, area: RectangleAreaOnScreen) -> Self:
         res: list[RelativeDrawing] = []
         for relative in self.relative_drawings:
             top_left = area.top_left - relative.top_left(ORIGIN)

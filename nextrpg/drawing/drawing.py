@@ -63,15 +63,6 @@ class Drawing(AnimationLike):
             return self._debug_surface
         return self.surface
 
-    def cut(self, area: RectangleAreaOnScreen) -> Self:
-        surface = self.surface.copy()
-        surface.fill(TRANSPARENT, (area.top_left, area.size))
-        return replace(self, resource=surface)
-
-    def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
-        surface = flip(self.surface, horizontal, vertical)
-        return replace(self, resource=surface)
-
     def crop(self, area: RectangleAreaOnScreen) -> Self:
         surface = self.pygame.subsurface(area.pygame)
         return replace(self, resource=surface)
@@ -168,3 +159,12 @@ class Drawing(AnimationLike):
         surface.fill(color)
         surface.blit(self.surface, ORIGIN)
         return surface
+
+    def _cut(self, area: RectangleAreaOnScreen) -> Self:
+        surface = self.surface.copy()
+        surface.fill(TRANSPARENT, (area.top_left, area.size))
+        return replace(self, resource=surface)
+
+    def _flip(self, horizontal: bool, vertical: bool) -> Self:
+        surface = flip(self.surface, horizontal, vertical)
+        return replace(self, resource=surface)

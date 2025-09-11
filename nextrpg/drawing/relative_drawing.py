@@ -1,5 +1,5 @@
-from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from dataclasses import dataclass, replace
+from typing import TYPE_CHECKING, Self
 
 from nextrpg.drawing.anchor import Anchor
 from nextrpg.drawing.drawing import Drawing
@@ -43,3 +43,13 @@ class RelativeDrawing:
             case Anchor.BOTTOM_RIGHT:
                 extra = self.drawing.size
         return origin + self.shift - extra
+
+    def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
+        drawing = self.drawing.flip(horizontal, vertical)
+        shift = self.shift
+        if horizontal:
+            shift = shift.negate_width
+        if vertical:
+            shift = shift.negate_height
+        anchor = -self.anchor
+        return replace(self, drawing=drawing, shift=shift, anchor=anchor)

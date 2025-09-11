@@ -4,6 +4,7 @@ from nextrpg.core.time import Millisecond
 from nextrpg.drawing.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import ZERO_SIZE, Size
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
@@ -15,6 +16,12 @@ if TYPE_CHECKING:
 
 class AnimationLike(Sizable):
     drawing: Drawing | DrawingGroup
+
+    def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
+        return self.drawing._flip(horizontal, vertical)
+
+    def cut(self, area: RectangleAreaOnScreen) -> Self:
+        return self.drawing._cut(area)
 
     @property
     def no_shift(self) -> RelativeDrawing:
