@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, NamedTuple, Self, overload
+from typing import TYPE_CHECKING, NamedTuple, Self, overload, override
 
 from nextrpg.core.save import module_and_class
 
@@ -229,9 +229,11 @@ class Size(NamedTuple):
     ) -> Size:
         return self * type(scaling)(1.0 / scaling.value)
 
+    @override
     def __str__(self) -> str:
         return f"({self.width_value:.0f}, {self.height_value:.0f})"
 
+    @override
     def __repr__(self) -> str:
         return str(self)
 

@@ -1,5 +1,5 @@
 from math import atan2, degrees, hypot
-from typing import TYPE_CHECKING, NamedTuple, Self, overload
+from typing import TYPE_CHECKING, NamedTuple, Self, overload, override
 
 from nextrpg.core.save import module_and_class
 from nextrpg.geometry.dimension import Dimension, Height, Pixel, Size, Width
@@ -137,9 +137,11 @@ class Coordinate(NamedTuple):
         )
         return closest[1]
 
+    @override
     def __str__(self) -> str:
         return f"({self.left_value:.0f}, {self.top_value:.0f})"
 
+    @override
     def __repr__(self) -> str:
         return str(self)
 

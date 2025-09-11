@@ -1,7 +1,7 @@
 from dataclasses import dataclass, replace
 from functools import cached_property
 from pathlib import Path
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Self, override
 
 from pygame import SRCALPHA, Surface
 from pygame.image import load
@@ -46,6 +46,7 @@ class Drawing(AnimationLike):
     def drawing(self) -> Drawing | DrawingGroup:
         return self
 
+    @override
     def __str__(self) -> str:
         if isinstance(self.resource, Surface):
             resource_info = ""
@@ -79,11 +80,18 @@ class Drawing(AnimationLike):
         surface.set_alpha(alpha)
         return replace(self, resource=surface)
 
+    @override
+    @property
+    def drawings(self) -> tuple[Drawing, ...]:
+        return (self,)
+
+    @override
     def drawing_on_screen(self, coordinate: Coordinate) -> DrawingOnScreen:
         from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
         return DrawingOnScreen(coordinate, self)
 
+    @override
     def drawing_on_screens(
         self, coordinate: Coordinate
     ) -> tuple[DrawingOnScreen, ...]:
@@ -145,6 +153,15 @@ class Drawing(AnimationLike):
         surface = gaussian_blur(self.surface, radius)
         return replace(self, resource=surface)
 
+    def cut(self, area: RectangleAreaOnScreen) -> Self:
+        surface = self.surface.copy()
+        surface.fill(TRANSPARENT, (area.top_left, area.size))
+        return replace(self, resource=surface)
+
+    def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
+        surface = flip(self.surface, horizontal, vertical)
+        return replace(self, resource=surface)
+
     @cached_property
     def _debug_surface(self) -> Surface | None:
         if (
@@ -159,12 +176,3 @@ class Drawing(AnimationLike):
         surface.fill(color)
         surface.blit(self.surface, ORIGIN)
         return surface
-
-    def _cut(self, area: RectangleAreaOnScreen) -> Self:
-        surface = self.surface.copy()
-        surface.fill(TRANSPARENT, (area.top_left, area.size))
-        return replace(self, resource=surface)
-
-    def _flip(self, horizontal: bool, vertical: bool) -> Self:
-        surface = flip(self.surface, horizontal, vertical)
-        return replace(self, resource=surface)

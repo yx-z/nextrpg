@@ -34,6 +34,7 @@ class WidgetOnScreen(Scene):
         lambda self: self._init_animation
     )
 
+    @override
     def __str__(self) -> str:
         return f"{type_name(self)}({self.widget_input})"
 

@@ -2,12 +2,14 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import TYPE_CHECKING, Self
 
+from typing_extensions import override
+
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.relative_drawing import RelativeDrawing
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
-from nextrpg.geometry.dimension import ZERO_SIZE, Size
+from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 if TYPE_CHECKING:
@@ -22,10 +24,6 @@ class DrawingGroup(AnimationLike):
     def drawing(self) -> DrawingGroup:
         return self
 
-    @property
-    def no_shift(self) -> RelativeDrawing:
-        return self.shift(ZERO_SIZE)
-
     @cached_property
     def drawings(self) -> tuple[Drawing, ...]:
         res: list[Drawing] = []
@@ -37,6 +35,7 @@ class DrawingGroup(AnimationLike):
                     res.append(drawing)
         return tuple(res)
 
+    @override
     def drawing_on_screens(
         self, origin: Coordinate
     ) -> tuple[DrawingOnScreen, ...]:
@@ -55,14 +54,14 @@ class DrawingGroup(AnimationLike):
     def top_left(self) -> Coordinate:
         return self._drawing_group_on_screen.top_left
 
-    def _flip(self, horizontal: bool, vertical: bool) -> Self:
+    def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
         relative_drawings = tuple(
             relative_drawing.flip(horizontal, vertical)
             for relative_drawing in self.relative_drawings
         )
         return replace(self, relative_drawings=relative_drawings)
 
-    def _cut(self, area: RectangleAreaOnScreen) -> Self:
+    def cut(self, area: RectangleAreaOnScreen) -> Self:
         res: list[RelativeDrawing] = []
         for relative in self.relative_drawings:
             top_left = area.top_left - relative.top_left(ORIGIN)
