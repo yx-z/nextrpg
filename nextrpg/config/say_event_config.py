@@ -5,13 +5,13 @@ from typing import TYPE_CHECKING
 
 from nextrpg.config.text_config import TextConfig
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import BLACK, BLUE, Color
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Pixel, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing import Drawing
-    from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.nine_slice import NineSlice
 
 
@@ -81,16 +81,10 @@ class SayEventConfig:
     character_coordinate_override: Coordinate | None = None
     name_text_config_override: TextConfig | None = None
     text_config_override: TextConfig | None = None
-    avatar_input: (
-        Drawing
-        | DrawingGroup
-        | Callable[[], Drawing]
-        | Callable[[], DrawingGroup]
-        | None
-    ) = None
+    avatar_input: AnimationLike | Callable[[], AnimationLike] | None = None
 
     @cached_property
-    def avatar(self) -> Drawing | DrawingGroup | None:
+    def avatar(self) -> AnimationLike | None:
         if callable(self.avatar_input):
             return self.avatar_input()
         return self.avatar_input

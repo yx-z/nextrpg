@@ -10,7 +10,7 @@ from pygame.transform import flip, gaussian_blur, smoothscale
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.log import Log
-from nextrpg.drawing.anchor import Anchor
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import TRANSPARENT, Alpha, Color
 from nextrpg.drawing.drawing_trim import DrawingTrim
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
@@ -22,9 +22,9 @@ from nextrpg.geometry.dimension import (
     WidthScaling,
 )
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
+    from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
     from nextrpg.drawing.relative_drawing import RelativeDrawing
 
@@ -38,11 +38,15 @@ log = Log()
     ),
 )
 @dataclass(frozen=True)
-class Drawing(Sizable):
+class Drawing(AnimationLike):
     resource: Path | Surface
     color_key: Color | Coordinate | None = None
     convert_alpha: bool | None = None
     allow_background_in_debug: bool = True
+
+    @property
+    def drawing(self) -> Drawing | DrawingGroup:
+        return self
 
     def __str__(self) -> str:
         if isinstance(self.resource, Surface):
@@ -54,13 +58,6 @@ class Drawing(Sizable):
     @property
     def no_shift(self) -> RelativeDrawing:
         return self.shift(ZERO_SIZE)
-
-    def shift(
-        self, shift: Size, anchor: Anchor = Anchor.TOP_LEFT
-    ) -> RelativeDrawing:
-        from nextrpg.drawing.relative_drawing import RelativeDrawing
-
-        return RelativeDrawing(self, shift, anchor)
 
     @property
     def size(self) -> Size:

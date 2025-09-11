@@ -2,12 +2,15 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import override
 
+from nextrpg.animation.animation_like_on_screen import AnimationLikeOnScreen
+from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.say_event_config import (
     SayEventConfig,
     SayEventNineSliceBackgroundConfig,
 )
 from nextrpg.drawing.anchor import Anchor
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
@@ -32,7 +35,7 @@ class SayEventAddOn:
     message: str | Text | TextGroup
 
     @cached_property
-    def background(self) -> tuple[DrawingOnScreen, ...]:
+    def background(self) -> AnimationOnScreen:
         contents = [self._text.drawing_group.no_shift]
         if self._name_relative_to_text:
             contents.append(self._name_relative_to_text)
@@ -42,18 +45,10 @@ class SayEventAddOn:
 
         background = self._background_relative_to_text.drawing
         shift = self._background_relative_to_text.shift
-        background_and_content = (
-            background.no_shift,
-            content.shift(-shift),
-        )
+        background_and_content = (background.no_shift, content.shift(-shift))
         add_on_group = DrawingGroup(background_and_content)
-        drawing_on_screens = add_on_group.drawing_on_screens(
-            self._add_on_top_left
-        )
-        return tuple(
-            drawing_on_screen
-            for drawing_on_screen in drawing_on_screens
-            if drawing_on_screen.drawing not in self._text.drawings
+        return _Background(
+            self._add_on_top_left, add_on_group, self._text.drawings
         )
 
     @cached_property
@@ -70,7 +65,7 @@ class SayEventAddOn:
         ).top_left
 
     @property
-    def _avatar(self) -> Drawing | DrawingGroup | None:
+    def _avatar(self) -> AnimationLike | None:
         return self.config.avatar
 
     @property
@@ -243,7 +238,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     @override
-    def _avatar(self) -> Drawing | DrawingGroup | None:
+    def _avatar(self) -> AnimationLike | None:
         if self.config.avatar:
             return self.config.avatar
         return self.character.spec.avatar
@@ -282,3 +277,18 @@ class _CharacterPosition:
     coordinate: Coordinate
     at_top: bool
     at_left: bool
+
+
+@dataclass(frozen=True)
+class _Background(AnimationLikeOnScreen):
+    text_drawings: tuple[Drawing, ...]
+
+    @override
+    @cached_property
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        drawing_on_screens = self.animation.drawing_on_screens(self.coordinate)
+        return tuple(
+            drawing_on_screen
+            for drawing_on_screen in drawing_on_screens
+            if drawing_on_screen.drawing not in self.text_drawings
+        )

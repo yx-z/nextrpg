@@ -22,11 +22,11 @@ class DrawingGroupOnScreen(AnimationOnScreenLike):
 
     @property
     def size(self) -> Size:
-        return self._sized.size
+        return self._drawing_on_screens.size
 
     @property
     def top_left(self) -> Coordinate:
-        return self._sized.top_left
+        return self._drawing_on_screens.top_left
 
     def tick(self, time_delta: Millisecond) -> Self:
         return self
@@ -56,7 +56,7 @@ class DrawingGroupOnScreen(AnimationOnScreenLike):
         return tuple(res)
 
     @cached_property
-    def _sized(self) -> DrawingOnScreens:
+    def _drawing_on_screens(self) -> DrawingOnScreens:
         return DrawingOnScreens(self.drawing_on_screens)
 
     @cached_property

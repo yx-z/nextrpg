@@ -13,7 +13,7 @@ from nextrpg.geometry.dimension import Size
 class AnimationOnScreen(AnimationOnScreenLike, ABC):
     @property
     def drawing_on_screen(self) -> DrawingOnScreen:
-        return self._sized.drawing_on_screen
+        return self._drawing_on_screens.drawing_on_screen
 
     @property
     @abstractmethod
@@ -30,15 +30,15 @@ class AnimationOnScreen(AnimationOnScreenLike, ABC):
 
     @property
     def size(self) -> Size:
-        return self._sized.size
+        return self._drawing_on_screens.size
 
     @property
     def top_left(self) -> Coordinate:
-        return self._sized.top_left
+        return self._drawing_on_screens.top_left
 
     @abstractmethod
     def _tick_before_complete(self, time_delta: Millisecond) -> Self: ...
 
     @cached_property
-    def _sized(self) -> DrawingOnScreens:
+    def _drawing_on_screens(self) -> DrawingOnScreens:
         return DrawingOnScreens(self.drawing_on_screens)

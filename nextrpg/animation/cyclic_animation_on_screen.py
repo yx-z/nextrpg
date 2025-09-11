@@ -1,15 +1,15 @@
 from dataclasses import dataclass
 from functools import cached_property
 
+from nextrpg.animation.animation_like_on_screen import AnimationLikeOnScreen
 from nextrpg.animation.cyclic_animation import CyclicAnimation
-from nextrpg.animation.from_animation import FromAnimation
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 
 
 @dataclass(frozen=True)
-class CyclicAnimationOnScreen(FromAnimation):
+class CyclicAnimationOnScreen(AnimationLikeOnScreen):
     animation: CyclicAnimation
 
     @cached_property

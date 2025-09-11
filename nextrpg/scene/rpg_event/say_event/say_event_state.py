@@ -3,6 +3,8 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Self, override
 
+from nextrpg.animation.animation_on_screen import AnimationOnScreen
+from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.animation.typewriter import Typewriter
 from nextrpg.config.say_event_config import SayEventConfig
@@ -50,7 +52,7 @@ class SayEventState(RpgEventScene, ABC):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class SayEventFadeInState(SayEventState):
-    background: tuple[DrawingOnScreen, ...]
+    background: AnimationOnScreen
     text_on_screen: TextOnScreen
     config: SayEventConfig
     _: KW_ONLY = private_init_below()
@@ -82,7 +84,7 @@ class SayEventFadeInState(SayEventState):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class SayEventTypingState(SayEventState):
-    background: tuple[DrawingOnScreen, ...]
+    background: AnimationOnScreen
     text_on_screen: TextOnScreen
     _: KW_ONLY = private_init_below()
     _typewriter: Typewriter | None = default(
@@ -100,12 +102,13 @@ class SayEventTypingState(SayEventState):
             text = self._typewriter.drawing_on_screens
         else:
             text = self.text_on_screen.drawing_on_screens
-        return self.background + text
+        return self.background.drawing_on_screens + text
 
     @override
     def _tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
+        background = self.background.tick(time_delta)
         typewriter = tick_optional(self._typewriter, time_delta)
-        return replace(ticked, _typewriter=typewriter)
+        return replace(ticked, background=background, _typewriter=typewriter)
 
     @override
     def event(self, event: IoEvent) -> Scene:
@@ -114,27 +117,27 @@ class SayEventTypingState(SayEventState):
             or event.key is not KeyboardKey.CONFIRM
         ):
             return self
-        drawing_on_screens = (
-            self.background + self.text_on_screen.drawing_on_screens
-        )
+
+        resource = (self.background,) + self.text_on_screen.drawing_on_screens
+        animation_on_screens = AnimationOnScreens(resource)
         return SayEventFadeOutState(
             generator=self.generator,
             scene=self.scene,
             unique_name=self.unique_name,
             initial_coordinate=self.initial_coordinate,
-            drawing_on_screens_input=drawing_on_screens,
+            animation_on_screen=animation_on_screens,
             config=self.config,
         )
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class SayEventFadeOutState(SayEventState):
-    drawing_on_screens_input: tuple[DrawingOnScreen, ...]
+    animation_on_screen: AnimationOnScreen
     config: SayEventConfig
     _: KW_ONLY = private_init_below()
     _fade_out: FadeOut = default(
         lambda self: FadeOut(
-            resource=self.drawing_on_screens_input,
+            resource=self.animation_on_screen,
             duration=self.config.fade_duration,
         )
     )

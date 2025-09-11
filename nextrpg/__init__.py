@@ -1,6 +1,7 @@
 __version__ = "0.1.18"
 
 from nextrpg.animation.animation import Animation
+from nextrpg.animation.animation_like_on_screen import AnimationLikeOnScreen
 from nextrpg.animation.animation_on_screen import (
     AnimationOnScreen,
 )
@@ -11,7 +12,6 @@ from nextrpg.animation.blur import Blur
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.animation.cyclic_animation_on_screen import CyclicAnimationOnScreen
 from nextrpg.animation.fade import Fade, FadeIn, FadeOut
-from nextrpg.animation.from_animation import FromAnimation
 from nextrpg.animation.move import Move, MoveFrom, MoveTo
 from nextrpg.animation.timed_animation_on_screens import (
     TimedAnimationOnScreens,
@@ -161,6 +161,7 @@ from nextrpg.geometry.polygon_area_on_screen import (
 )
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.sizable import Sizable
 from nextrpg.geometry.walk import Walk
 from nextrpg.gui.screen_area import (
     bottom_left_screen_area,

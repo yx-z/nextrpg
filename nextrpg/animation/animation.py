@@ -2,21 +2,18 @@ from abc import ABC, abstractmethod
 from typing import Self
 
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
-from nextrpg.geometry.sizable import Sizable
 
 
-class Animation(Sizable, ABC):
+class Animation(AnimationLike, ABC):
     def tick(self, time_delta: Millisecond) -> Self:
         if self.is_complete:
             return self
         return self._tick_before_complete(time_delta)
-
-    @abstractmethod
-    def _tick_before_complete(self, time_delta: Millisecond) -> Self: ...
 
     @property
     @abstractmethod
@@ -33,3 +30,6 @@ class Animation(Sizable, ABC):
     @property
     def size(self) -> Size:
         return self.drawing.size
+
+    @abstractmethod
+    def _tick_before_complete(self, time_delta: Millisecond) -> Self: ...
