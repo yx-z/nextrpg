@@ -56,14 +56,14 @@
         },
         "interior.tmx": {
             "expandedObjectLayers": [
-                5,
-                6
+                6,
+                5
             ],
             "scale": 1.5,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 687,
-                "y": 352.99999999999994
+                "x": 1101,
+                "y": 353.66666666666663
             }
         },
         "interior.tsx": {
