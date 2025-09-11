@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from functools import cached_property
+from typing import override
 
 from pygame import SRCALPHA, Surface
 
@@ -14,6 +15,7 @@ from nextrpg.geometry.dimension import Size
 class DrawingOnScreens(AnimationOnScreenLike):
     drawing_on_screens: tuple[DrawingOnScreen, ...]
 
+    @override
     @cached_property
     def drawing_on_screen(self) -> DrawingOnScreen:
         if len(self.drawing_on_screens) == 1:
@@ -40,6 +42,7 @@ class DrawingOnScreens(AnimationOnScreenLike):
         height = max_top - min_top
         return width * height
 
+    @override
     @property
     def is_complete(self) -> bool:
         return True

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from functools import cached_property
+from typing import override
 
 from nextrpg.animation.animation_like_on_screen import AnimationLikeOnScreen
 from nextrpg.animation.cyclic_animation import CyclicAnimation
@@ -12,6 +13,7 @@ from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 class CyclicAnimationOnScreen(AnimationLikeOnScreen):
     animation: CyclicAnimation
 
+    @override
     @cached_property
     def drawing_on_screen(self) -> DrawingOnScreen:
         drawing = self.animation.drawing

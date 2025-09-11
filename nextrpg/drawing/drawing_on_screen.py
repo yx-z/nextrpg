@@ -1,6 +1,6 @@
 from dataclasses import dataclass, replace
 from functools import cached_property
-from typing import Self
+from typing import Self, override
 
 from pygame import Surface
 
@@ -62,6 +62,7 @@ class DrawingOnScreen(AnimationOnScreenLike):
     ) -> DrawingOnScreen:
         return self + -other
 
+    @override
     @property
     def drawing_on_screen(self) -> DrawingOnScreen:
         return self
@@ -70,6 +71,7 @@ class DrawingOnScreen(AnimationOnScreenLike):
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return (self,)
 
+    @override
     def tick(self, time_delta: Millisecond) -> Self:
         return self
 

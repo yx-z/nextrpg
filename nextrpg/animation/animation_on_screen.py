@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from functools import cached_property
-from typing import Self
+from typing import Self, override
 
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
@@ -11,6 +11,7 @@ from nextrpg.geometry.dimension import Size
 
 
 class AnimationOnScreen(AnimationOnScreenLike, ABC):
+    @override
     @property
     def drawing_on_screen(self) -> DrawingOnScreen:
         return self._drawing_on_screens.drawing_on_screen

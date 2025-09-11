@@ -10,8 +10,10 @@ if TYPE_CHECKING:
 
 
 class AnimationOnScreenLike(Sizable):
-    drawing_on_screen: DrawingOnScreen
     drawing_on_screens: tuple[DrawingOnScreen, ...]
+
+    @property
+    def drawing_on_screen(self) -> DrawingOnScreen: ...
 
     def tick(self, time_delta: Millisecond) -> Self:
         return self
