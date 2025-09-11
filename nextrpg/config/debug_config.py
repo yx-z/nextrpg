@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 from enum import IntEnum, auto
 
@@ -11,6 +12,18 @@ class LogLevel(IntEnum):
     WARNING = auto()
     ERROR = auto()
 
+    @property
+    def logging_level(self) -> int:
+        return _LOG_LEVEL[self]
+
+
+_LOG_LEVEL = {
+    LogLevel.DEBUG: logging.DEBUG,
+    LogLevel.INFO: logging.INFO,
+    LogLevel.WARNING: logging.WARNING,
+    LogLevel.ERROR: logging.ERROR,
+}
+
 
 @dataclass(frozen=True)
 class DebugConfig:
@@ -23,6 +36,8 @@ class DebugConfig:
     player_collide_with_others: bool = True
     log_level: LogLevel = LogLevel.DEBUG
     log_duration: Millisecond = 2000
+    exclude_loggers: tuple[str, ...] = ()
+    console_log_format: str = "%(levelname)s - %(name)s - %(message)s"
 
 
 def log_only(log_level: LogLevel = LogLevel.DEBUG) -> DebugConfig:

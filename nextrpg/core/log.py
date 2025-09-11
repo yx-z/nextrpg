@@ -1,5 +1,7 @@
+import logging
 from dataclasses import dataclass, field, replace
 from inspect import stack
+from logging import Logger
 from pathlib import Path
 from string.templatelib import Interpolation, Template
 
@@ -73,10 +75,15 @@ def pop_messages(time_delta: Millisecond) -> tuple[ComponentAndMessage, ...]:
     msgs = tuple(
         ComponentAndMessage(e.component, e.formatted)
         for e in _entries + list(_timed_entries.values())
-        if e.level >= debug.log_level
+        if e.component not in debug.exclude_loggers
+        and e.level >= debug.log_level
     )
     _pop(time_delta)
     return msgs
+
+
+def console(name: str | None = None) -> Logger:
+    return logging.getLogger(name or _log_name())
 
 
 @dataclass(frozen=True)

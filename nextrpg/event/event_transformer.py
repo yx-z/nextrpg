@@ -1,10 +1,11 @@
-from ast import fix_missing_locations, parse
+from ast import fix_missing_locations, parse, unparse
 from collections.abc import Callable
 from inspect import getsource, isfunction
 from textwrap import dedent
 from typing import Any, Generator
 
 from nextrpg.config.config import config
+from nextrpg.core.log import console
 
 
 def transform[**P](
@@ -22,6 +23,7 @@ def transform[**P](
     for transformer in config().event.transformers:
         tree = transformer.visit(tree)
     tree = fix_missing_locations(tree)
+    console().debug(f"Parsed code for {fun}\n{unparse(tree)}")
     code = compile(tree, __file__, "exec")
     ctx = function.__globals__ | {
         v: c.cell_contents

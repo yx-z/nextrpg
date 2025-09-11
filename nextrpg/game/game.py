@@ -1,3 +1,4 @@
+import logging
 from asyncio import sleep
 from collections.abc import Callable
 from dataclasses import KW_ONLY
@@ -32,6 +33,11 @@ class Game:
             await sleep(0)
 
     def _init(self) -> None:
+        if debug := self.config.debug:
+            logging.basicConfig(
+                level=debug.log_level.logging_level,
+                format=debug.console_log_format,
+            )
         init()
         font.init()
         set_config(self.config)
