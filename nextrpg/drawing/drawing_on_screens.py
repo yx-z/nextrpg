@@ -28,18 +28,16 @@ class DrawingOnScreens(AnimationOnScreenLike):
 
     @cached_property
     def top_left(self) -> Coordinate:
-        min_left = min(d.top_left.left_value for d in self.drawing_on_screens)
-        min_top = min(d.top_left.top_value for d in self.drawing_on_screens)
-        return Coordinate(min_left, min_top)
+        min_left = min(d.top_left.left for d in self.drawing_on_screens)
+        min_top = min(d.top_left.top for d in self.drawing_on_screens)
+        return min_left.pair(min_top)
 
     @cached_property
     def size(self) -> Size:
-        min_left = min(d.top_left.left for d in self.drawing_on_screens)
-        min_top = min(d.top_left.top for d in self.drawing_on_screens)
         max_left = max(d.bottom_right.left for d in self.drawing_on_screens)
         max_top = max(d.bottom_right.top for d in self.drawing_on_screens)
-        width = max_left - min_left
-        height = max_top - min_top
+        width = max_left - self.top_left.left
+        height = max_top - self.top_left.top
         return width * height
 
     @override

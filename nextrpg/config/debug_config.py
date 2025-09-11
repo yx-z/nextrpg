@@ -1,7 +1,8 @@
 import logging
-from dataclasses import dataclass
 from enum import IntEnum, auto
+from typing import Any
 
+from nextrpg.core.dataclass_with_default import dataclass_with_default, default
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import Color
 
@@ -25,7 +26,7 @@ _LOG_LEVEL = {
 }
 
 
-@dataclass(frozen=True)
+@dataclass_with_default(frozen=True)
 class DebugConfig:
     drawing_background_color: Color | None = Color(0, 0, 255, 16)
     collision_rectangle_color: Color | None = Color(255, 0, 0, 64)
@@ -37,7 +38,12 @@ class DebugConfig:
     log_level: LogLevel = LogLevel.DEBUG
     log_duration: Millisecond = 2000
     exclude_loggers: tuple[str, ...] = ()
-    console_log_format: str = "%(levelname)s - %(name)s - %(message)s"
+    console_log_configs: dict[str, Any] = default(
+        lambda self: {
+            "level": self.log_level.logging_level,
+            "format": "%(levelname)s - %(name)s - %(message)s",
+        }
+    )
 
 
 def log_only(log_level: LogLevel = LogLevel.DEBUG) -> DebugConfig:

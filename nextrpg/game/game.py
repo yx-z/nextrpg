@@ -34,10 +34,7 @@ class Game:
 
     def _init(self) -> None:
         if debug := self.config.debug:
-            logging.basicConfig(
-                level=debug.log_level.logging_level,
-                format=debug.console_log_format,
-            )
+            logging.basicConfig(**debug.console_log_configs)
         init()
         font.init()
         set_config(self.config)
