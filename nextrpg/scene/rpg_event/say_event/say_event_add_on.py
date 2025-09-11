@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import override
 
+from nextrpg import AvatarPosition
 from nextrpg.animation.animation_like_on_screen import AnimationLikeOnScreen
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
@@ -88,7 +89,8 @@ class SayEventAddOn:
                 self._avatar_relative_to_text.drawing.size.width
                 + self.config.padding.width
             )
-            shift -= extra_width
+            if self.config.avatar_position is AvatarPosition.LEFT:
+                shift -= extra_width
             size += extra_width
 
         if isinstance(
@@ -107,8 +109,13 @@ class SayEventAddOn:
     def _avatar_relative_to_text(self) -> RelativeDrawing | None:
         if not self._avatar:
             return None
-        shift = self._text.bottom_left - self.config.padding.width
-        return self._avatar.shift(shift.size, Anchor.BOTTOM_RIGHT)
+        match self.config.avatar_position:
+            case AvatarPosition.LEFT:
+                shift = self._text.bottom_left - self.config.padding.width
+                return self._avatar.shift(shift.size, Anchor.BOTTOM_RIGHT)
+            case AvatarPosition.RIGHT:
+                shift = self._text.bottom_right + self.config.padding.width
+                return self._avatar.shift(shift.size, Anchor.BOTTOM_LEFT)
 
     @cached_property
     def _name_relative_to_text(self) -> RelativeDrawing | None:

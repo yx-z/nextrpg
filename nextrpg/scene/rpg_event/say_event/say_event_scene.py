@@ -4,9 +4,9 @@ from typing import override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.config import config
-from nextrpg.config.say_event_config import SayEventConfig
+from nextrpg.config.say_event_config import AvatarPosition, SayEventConfig
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
@@ -25,7 +25,7 @@ from nextrpg.scene.rpg_event.say_event.say_event_state import (
 )
 from nextrpg.scene.scene import Scene
 
-type SayEventArg = str | Coordinate | Size | Drawing | SayEventConfig
+type SayEventArg = str | Coordinate | Millisecond | Size | AnimationLike | AvatarPosition | SayEventConfig
 
 
 @dataclass(frozen=True)
@@ -46,11 +46,8 @@ class SayEventScene(RpgEventScene):
     @cached_property
     def config(self) -> SayEventConfig:
         cfg = config().say_event
-        if isinstance(self.args, str):
-            cfg = _update_config(cfg, self.args)
-        else:
-            for arg in self.args:
-                cfg = _update_config(cfg, arg)
+        for arg in self.args:
+            cfg = _update_config(cfg, arg)
         return cfg
 
     @cached_property
@@ -92,6 +89,8 @@ def _update_config(cfg: SayEventConfig, arg: SayEventArg) -> SayEventConfig:
     match arg:
         case SayEventConfig():
             return arg
+        case AvatarPosition():
+            return replace(cfg, avatar_position=arg)
         case int():
             return replace(cfg, text_delay=arg)
         case Coordinate():
@@ -100,10 +99,10 @@ def _update_config(cfg: SayEventConfig, arg: SayEventArg) -> SayEventConfig:
                 scene_coordinate_override=arg,
                 character_coordinate_override=arg,
             )
-        case Drawing():
+        case AnimationLike():
             return replace(cfg, avatar_input=arg)
         case str():
             return replace(cfg, name_override=arg)
     raise ValueError(
-        f"Expect str | Coordinate | Draw | SayEventConfig. Got {arg}"
+        f"Expect str | Coordinate | Millisecond | AnimationLike | AvatarPosition | SayEventConfig. Got {arg}"
     )

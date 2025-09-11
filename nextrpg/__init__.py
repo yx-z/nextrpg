@@ -60,6 +60,7 @@ from nextrpg.config.rpg_maker_character_drawing_config import (
 )
 from nextrpg.config.save_config import SaveConfig
 from nextrpg.config.say_event_config import (
+    AvatarPosition,
     SayEventColorBackgroundConfig,
     SayEventConfig,
     SayEventNineSliceBackgroundConfig,
@@ -89,6 +90,7 @@ from nextrpg.core.save import (
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry
 from nextrpg.drawing.anchor import Anchor
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.animation_on_screen_like import (
     AnimationOnScreenLike,
     tick_optional,

@@ -6,9 +6,11 @@ from ast import (
     Expr,
     Import,
     Index,
+    Load,
     Name,
     NodeTransformer,
     Subscript,
+    Tuple,
     Yield,
     YieldFrom,
     alias,
@@ -82,6 +84,8 @@ class AnnotateSay(NodeTransformer):
         if node.value is not None:
             return node
         target, args = _get_target_and_arg(node.target)
+        if len(args) == 1 and not isinstance(args[0], Tuple):
+            args = [Tuple(elts=[args[0]], ctx=Load())]
         say = Attribute(Name(target), self.say_event_name)
         return Expr(Call(say, [node.annotation] + args))
 

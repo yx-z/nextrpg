@@ -1,5 +1,6 @@
 from collections.abc import Callable
 from dataclasses import dataclass, replace
+from enum import Enum, auto
 from functools import cached_property
 from typing import TYPE_CHECKING
 
@@ -66,6 +67,11 @@ class SayEventNineSliceBackgroundConfig:
         return self.tip_at_bottom_input
 
 
+class AvatarPosition(Enum):
+    LEFT = auto()
+    RIGHT = auto()
+
+
 @dataclass(frozen=True)
 class SayEventConfig:
     background: (
@@ -82,6 +88,7 @@ class SayEventConfig:
     name_text_config_override: TextConfig | None = None
     text_config_override: TextConfig | None = None
     avatar_input: AnimationLike | Callable[[], AnimationLike] | None = None
+    avatar_position: AvatarPosition = AvatarPosition.LEFT
 
     @cached_property
     def avatar(self) -> AnimationLike | None:

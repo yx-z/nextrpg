@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from nextrpg import (
+    AvatarPosition,
     CharacterSpec,
     Color,
     Direction,
@@ -92,4 +93,4 @@ def greet(
     # fmt: on
 
     npc: "Nice to meet you! What's your name?"
-    player: f"Hello {npc.name}! I am {player.name}."
+    player[AvatarPosition.RIGHT]: f"Hello {npc.name}! I am {player.name}."

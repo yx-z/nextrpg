@@ -22,7 +22,6 @@ def transform[**P](
     for transformer in config().event.transformers:
         tree = transformer.visit(tree)
     tree = fix_missing_locations(tree)
-
     code = compile(tree, __file__, "exec")
     ctx = function.__globals__ | {
         v: c.cell_contents
