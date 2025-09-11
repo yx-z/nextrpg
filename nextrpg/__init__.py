@@ -83,7 +83,6 @@ from nextrpg.core.save import (
     SaveData,
     SaveIo,
     UpdateFromSave,
-    _Savable,
     concat_save_key,
     module_and_class,
 )

@@ -24,6 +24,7 @@ class DrawingGroup(AnimationLike):
     def drawing(self) -> DrawingGroup:
         return self
 
+    @override
     @cached_property
     def drawings(self) -> tuple[Drawing, ...]:
         res: list[Drawing] = []
@@ -46,10 +47,12 @@ class DrawingGroup(AnimationLike):
 
         return DrawingGroupOnScreen(origin, self)
 
+    @override
     @property
     def size(self) -> Size:
         return self._drawing_group_on_screen.size
 
+    @override
     @property
     def top_left(self) -> Coordinate:
         return self._drawing_group_on_screen.top_left

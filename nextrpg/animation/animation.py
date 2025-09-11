@@ -1,15 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import Self
+from typing import Self, override
 
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
-from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
 
 
 class Animation(AnimationLike, ABC):
+    @override
     def tick(self, time_delta: Millisecond) -> Self:
         if self.is_complete:
             return self
@@ -18,18 +17,6 @@ class Animation(AnimationLike, ABC):
     @property
     @abstractmethod
     def drawing(self) -> Drawing | DrawingGroup: ...
-
-    @property
-    @abstractmethod
-    def is_complete(self) -> bool: ...
-
-    @property
-    def top_left(self) -> Coordinate:
-        return self.drawing.top_left
-
-    @property
-    def size(self) -> Size:
-        return self.drawing.size
 
     @abstractmethod
     def _tick_before_complete(self, time_delta: Millisecond) -> Self: ...

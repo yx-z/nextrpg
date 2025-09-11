@@ -54,6 +54,7 @@ class Drawing(AnimationLike):
             resource_info = f", {self.resource}"
         return f"Drawing({self.size}{resource_info})"
 
+    @override
     @property
     def size(self) -> Size:
         return Size(self.surface.width, self.surface.height)
@@ -123,6 +124,7 @@ class Drawing(AnimationLike):
     def rectangle(self) -> RectangleAreaOnScreen:
         return ORIGIN.anchor(self.size).rectangle_area_on_screen
 
+    @override
     @property
     def top_left(self) -> Coordinate:
         return ORIGIN

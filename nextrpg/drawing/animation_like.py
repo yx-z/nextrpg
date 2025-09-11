@@ -48,3 +48,11 @@ class AnimationLike(Sizable):
     @property
     def is_complete(self) -> bool:
         return True
+
+    @property
+    def top_left(self) -> Coordinate:
+        return self.drawing.top_left
+
+    @property
+    def size(self) -> Size:
+        return self.drawing.size

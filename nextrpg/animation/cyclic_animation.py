@@ -25,6 +25,7 @@ class CyclicAnimation(Animation):
     def drawing(self) -> Drawing | DrawingGroup:
         return self.frames[self._index]
 
+    @override
     @property
     def is_complete(self) -> bool:
         return False
