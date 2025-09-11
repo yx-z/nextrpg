@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Self
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.dimension import ZERO_SIZE, Size
 from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
@@ -15,6 +15,10 @@ if TYPE_CHECKING:
 
 class AnimationLike(Sizable):
     drawing: Drawing | DrawingGroup
+
+    @property
+    def no_shift(self) -> RelativeDrawing:
+        return self.shift(ZERO_SIZE)
 
     def shift(
         self, shift: Size, anchor: Anchor = Anchor.TOP_LEFT
