@@ -5,6 +5,8 @@ from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size
 
 
 class Animation(AnimationLike, ABC):
@@ -14,6 +16,14 @@ class Animation(AnimationLike, ABC):
             return self
         return self._tick_before_complete(time_delta)
 
+    @property
+    def top_left(self) -> Coordinate:
+        return self.drawing.top_left
+
+    @property
+    def size(self) -> Size:
+        return self.drawing.size
+
     @override
     @property
     @abstractmethod
@@ -22,6 +32,11 @@ class Animation(AnimationLike, ABC):
     @property
     @abstractmethod
     def drawing(self) -> Drawing | DrawingGroup: ...
+
+    @override
+    @property
+    def drawings(self) -> tuple[Drawing, ...]:
+        return self.drawing.drawings
 
     @abstractmethod
     def _tick_before_complete(self, time_delta: Millisecond) -> Self: ...

@@ -15,11 +15,12 @@ if TYPE_CHECKING:
 
 
 class AnimationLike(Sizable):
-    drawing: Drawing | DrawingGroup
 
     @property
-    def drawings(self) -> tuple[Drawing, ...]:
-        return self.drawing.drawings
+    def drawing(self) -> Drawing | DrawingGroup: ...
+
+    @property
+    def drawings(self) -> tuple[Drawing, ...]: ...
 
     @property
     def no_shift(self) -> RelativeDrawing:
@@ -58,11 +59,3 @@ class AnimationLike(Sizable):
     @property
     def is_complete(self) -> bool:
         return True
-
-    @property
-    def top_left(self) -> Coordinate:
-        return self.drawing.top_left
-
-    @property
-    def size(self) -> Size:
-        return self.drawing.size

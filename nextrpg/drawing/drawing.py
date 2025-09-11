@@ -42,6 +42,7 @@ class Drawing(AnimationLike):
     convert_alpha: bool | None = None
     allow_background_in_debug: bool = True
 
+    @override
     @property
     def drawing(self) -> Drawing | DrawingGroup:
         return self

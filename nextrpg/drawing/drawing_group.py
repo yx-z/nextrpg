@@ -20,6 +20,7 @@ if TYPE_CHECKING:
 class DrawingGroup(AnimationLike):
     relative_drawings: tuple[RelativeDrawing, ...]
 
+    @override
     @property
     def drawing(self) -> DrawingGroup:
         return self
