@@ -12,8 +12,6 @@ from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.animation.cyclic_animation_on_screen import CyclicAnimationOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.character.npc_on_screen import NpcOnScreen
-from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -25,6 +23,7 @@ from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry, is_rect
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
@@ -35,62 +34,32 @@ log = Log()
 
 
 @dataclass(frozen=True)
-class TileGroup(AnimationOnScreens):
-    index: int
-
-    def __lt__(self, other: TileGroup) -> bool:
-        if self.index == other.index:
-            return (
-                self.visible_rectangle_area_on_screen.bottom
-                < other.visible_rectangle_area_on_screen.bottom
-            )
-        return self.index < other.index
-
-
-@dataclass(frozen=True)
-class ForegroundLayer:
-    index: int
-    tiles: tuple[TileGroup, ...]
+class ForegroundLayers:
+    tiles: tuple[AnimationOnScreens, ...]
 
     def tick(self, time_delta: Millisecond) -> Self:
         tiles = tuple(tile.tick(time_delta) for tile in self.tiles)
         return replace(self, tiles=tiles)
 
-
-@dataclass(frozen=True)
-class ForegroundLayers:
-    layers: tuple[ForegroundLayer, ...]
-
-    def tick(self, time_delta: Millisecond) -> Self:
-        layers = tuple(layer.tick(time_delta) for layer in self.layers)
-        return replace(self, layers=layers)
-
     def drawing_on_screens(
-        self, player: PlayerOnScreen, npcs: tuple[NpcOnScreen, ...]
+        self, characters: tuple[CharacterOnScreen, ...]
     ) -> tuple[DrawingOnScreen, ...]:
-        characters = (player,) + npcs
-        character_layers = tuple(
-            self._character_layer(character) for character in characters
+        character_drawing_on_screens = tuple(
+            DrawingOnScreens(character.drawing_on_screens)
+            for character in characters
         )
-        all_tiles = tuple(tile for layer in self.layers for tile in layer.tiles)
-        tiles = sorted(all_tiles + character_layers)
+        tile_drawing_on_screens = tuple(
+            DrawingOnScreens(tile.drawing_on_screens) for tile in self.tiles
+        )
+        all_drawing_on_screens = sorted(
+            character_drawing_on_screens + tile_drawing_on_screens,
+            key=lambda d: d.visible_rectangle_area_on_screen.bottom,
+        )
         return tuple(
             drawing_on_screen
-            for tile in tiles
-            for drawing_on_screen in tile.drawing_on_screens
+            for drawing_on_screens in all_drawing_on_screens
+            for drawing_on_screen in drawing_on_screens.drawing_on_screens
         )
-
-    def _character_layer(self, character: CharacterOnScreen) -> TileGroup:
-        index = self._layer_index(character)
-        log.debug(t"{character.name} layered at {index}", duration=None)
-        resource = AnimationOnScreens(character.drawing_on_screens)
-        return TileGroup(resource, index)
-
-    def _layer_index(self, character: CharacterOnScreen) -> int:
-        for i, layer in enumerate(self.layers):
-            if _below_character_layer(character, layer):
-                return i + 1
-        return 0
 
 
 @dataclass_with_default(frozen=True)
@@ -178,12 +147,12 @@ class MapLoader(TmxLoader):
         return tuple(self._layer(i) for i in self._tmx.visible_tile_layers)
 
     def _foreground(
-        self, index: int, layer: TiledTileLayer
-    ) -> ForegroundLayer | None:
+        self, layer: TiledTileLayer
+    ) -> tuple[AnimationOnScreens, ...]:
         visited: set[_TileCoordinate] = set()
-        groups: list[TileGroup] = []
+        groups: list[AnimationOnScreens] = []
         if not (drawings := self._drawing(layer)):
-            return None
+            return ()
         for coordinate, resource in drawings.items():
             if coordinate in visited:
                 continue
@@ -197,10 +166,9 @@ class MapLoader(TmxLoader):
                     if neighbor in drawings and neighbor not in visited:
                         visited.add(neighbor)
                         queue.append(neighbor)
-            tile_group = TileGroup(tuple(connected), index)
+            tile_group = AnimationOnScreens(tuple(connected))
             groups.append(tile_group)
-        tile_groups = tuple(sorted(groups))
-        return ForegroundLayer(index, tile_groups)
+        return tuple(groups)
 
     @property
     def _tile_size(self) -> Size:
@@ -275,14 +243,11 @@ class MapLoader(TmxLoader):
 
     @property
     def _init_foregrounds(self) -> ForegroundLayers:
-        layers = tuple(
-            layer
-            for i, tile_layer in enumerate(
-                self._tile_layers(config().map.foreground)
-            )
-            if (layer := self._foreground(i, tile_layer))
+        layers = self._tile_layers(config().map.foreground)
+        tiles = tuple(
+            tile for layer in layers for tile in self._foreground(layer)
         )
-        return ForegroundLayers(layers)
+        return ForegroundLayers(tiles)
 
     def _draw_layers(self, class_name: str) -> AnimationOnScreens:
         resource = tuple(

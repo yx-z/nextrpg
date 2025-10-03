@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from pathlib import Path
@@ -45,7 +46,7 @@ class MapScene(EventfulScene, UpdateFromSave):
     move: MapMove | tuple[MapMove, ...] = ()
     npc_specs: NpcSpec | tuple[NpcSpec, ...] = ()
     _: KW_ONLY = private_init_below()
-    _map_loader_input: MapLoader = default(
+    _map_loader_input: Callable[[MapScene], MapLoader] | MapLoader = default(
         lambda self: MapLoader(self.tmx_file)
     )
     npcs: tuple[NpcOnScreen, ...] = default(
@@ -93,10 +94,9 @@ class MapScene(EventfulScene, UpdateFromSave):
     @cached_property
     @override
     def drawing_on_screens_before_shift(self) -> tuple[DrawingOnScreen, ...]:
+        characters = (self.player,) + self.npcs
         foreground_and_characters = (
-            self._map_loader.foregrounds.drawing_on_screens(
-                self.player, self.npcs
-            )
+            self._map_loader.foregrounds.drawing_on_screens(characters)
         )
         return (
             self._map_loader.background.drawing_on_screens
