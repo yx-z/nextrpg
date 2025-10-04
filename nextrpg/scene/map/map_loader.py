@@ -1,4 +1,3 @@
-from collections import deque
 from collections.abc import Iterable
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
@@ -157,10 +156,10 @@ class MapLoader(TmxLoader):
             if coordinate in visited:
                 continue
             connected: list[AnimationOnScreen | DrawingOnScreen] = []
-            queue = deque([coordinate])
+            queue = [coordinate]
             visited.add(coordinate)
             while queue:
-                curr = queue.popleft()
+                curr = queue.pop(0)
                 connected.append(resource)
                 for neighbor in self._neighbors(layer, curr):
                     if neighbor in drawings and neighbor not in visited:
