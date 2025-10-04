@@ -169,18 +169,17 @@ class MapLoader(TmxLoader):
                 if neighbor not in visited and tile_class(neighbor) == cls:
                     yield neighbor
 
+        def dfs(coord: _TileCoordinate) -> list[_TileCoordinate]:
+            connected = [coord]
+            visited.add(coord)
+            for neighbor in neighbors(coord):
+                connected += dfs(neighbor)
+            return connected
+
         groups: list[AnimationOnScreens] = []
         for coordinate in (drawings := self._drawing(layer)):
             if coordinate in visited:
                 continue
-
-            def dfs(coord: _TileCoordinate) -> list[_TileCoordinate]:
-                connected = [coord]
-                visited.add(coord)
-                for neighbor in neighbors(coord):
-                    connected += dfs(neighbor)
-                return connected
-
             resources = tuple(
                 drawings[coordinate] for coordinate in dfs(coordinate)
             )
