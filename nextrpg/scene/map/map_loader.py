@@ -149,22 +149,36 @@ class MapLoader(TmxLoader):
         self, layer: TiledTileLayer
     ) -> tuple[AnimationOnScreens, ...]:
         visited: set[_TileCoordinate] = set()
+
+        def neighbors(coord: _TileCoordinate) -> Iterable[_TileCoordinate]:
+            if not (cls := self._class(layer, coord)):
+                return
+            for left_shift, top_shift in product((-1, 0, 1), repeat=2):
+                left = coord.left + left_shift
+                top = coord.top + top_shift
+                neighbor = _TileCoordinate(left, top)
+                if (
+                    neighbor not in visited
+                    and self._class(layer, neighbor) == cls
+                ):
+                    yield neighbor
+
         groups: list[AnimationOnScreens] = []
-        drawings = self._drawing(layer)
-        for coordinate, resource in drawings.items():
+        for coordinate in (drawings := self._drawing(layer)):
             if coordinate in visited:
                 continue
-            connected: list[AnimationOnScreen | DrawingOnScreen] = []
-            queue = [coordinate]
-            visited.add(coordinate)
-            while queue:
-                curr = queue.pop(0)
-                connected.append(resource)
-                for neighbor in self._neighbors(layer, curr):
-                    if neighbor in drawings and neighbor not in visited:
-                        visited.add(neighbor)
-                        queue.append(neighbor)
-            group = AnimationOnScreens(tuple(connected))
+
+            connected: list[_TileCoordinate] = []
+
+            def dfs(coord: _TileCoordinate) -> None:
+                visited.add(coord)
+                connected.append(coord)
+                for neighbor in neighbors(coord):
+                    dfs(neighbor)
+
+            dfs(coordinate)
+            resources = tuple(drawings[coordinate] for coordinate in connected)
+            group = AnimationOnScreens(resources)
             groups.append(group)
         return tuple(groups)
 
@@ -200,36 +214,12 @@ class MapLoader(TmxLoader):
     def _class(
         self, layer: TiledTileLayer, coordinate: _TileCoordinate
     ) -> str | None:
-        if 0 <= coordinate.left < len(layer.data) and 0 <= coordinate.top < len(
-            layer.data[coordinate.left]
+        if 0 <= coordinate.top < len(layer.data) and 0 <= coordinate.left < len(
+            layer.data[coordinate.top]
         ):
-            data_id = layer.data[coordinate.left][coordinate.top]
-            return self._gid_to_cls.get(
-                self._tmx.tile_properties.get(data_id, {}).get("id")
-            )
+            data_id = layer.data[coordinate.top][coordinate.left]
+            return self._tmx.tile_properties.get(data_id, {}).get("type")
         return None
-
-    def _neighbors(
-        self, layer: TiledTileLayer, coordinate: _TileCoordinate
-    ) -> Iterable[_TileCoordinate]:
-        if not (cls := self._class(layer, coordinate)):
-            return
-        for left_shift, top_shift in product((-1, 0, 1), repeat=2):
-            left = coordinate.left + left_shift
-            top = coordinate.top + top_shift
-            neighbor = _TileCoordinate(left, top)
-            if neighbor == coordinate:
-                continue
-            if cls == self._class(layer, neighbor):
-                yield neighbor
-
-    @cached_property
-    def _gid_to_cls(self) -> dict[_Gid, str]:
-        return {
-            tile["id"]: cls
-            for tile in self._tmx.tile_properties.values()
-            if (cls := tile.get("type"))
-        }
 
     @property
     def _init_collision_visuals(self) -> tuple[DrawingOnScreen, ...]:

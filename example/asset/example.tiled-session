@@ -59,11 +59,11 @@
                 6,
                 5
             ],
-            "scale": 1.5,
-            "selectedLayer": 2,
+            "scale": 0.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 1101,
-                "y": 353.66666666666663
+                "x": 738,
+                "y": 627
             }
         },
         "interior.tsx": {
@@ -83,17 +83,18 @@
     "map.tileWidth": 48,
     "map.width": 30,
     "openFiles": [
-        "interior.tmx"
+        "interior.tmx",
+        "PixelFantasy_Inside_C.tsx"
     ],
     "project": "",
     "recentFiles": [
+        "PixelFantasy_Inside_C.tsx",
         "interior.tmx",
         "C:/msys64/home/yxz/nextrpg/example/component/menu.tmx",
         "water.tsx",
         "PixelFantasy_Outside_C.tsx",
         "PixelFantasy_Outside_B.tsx",
         "exterior.tmx",
-        "PixelFantasy_Inside_C.tsx",
         "exterior.tsx",
         "C:/Users/yxz/Downloads/Tiled_SampleProject_November041122/Tiled_SampleProject_November041122/maps/Tilesets/TileAuto_Water_01_Nature.json",
         "PixelFantasy_Inside_B.tsx",
