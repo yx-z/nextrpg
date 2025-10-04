@@ -168,16 +168,17 @@ class MapLoader(TmxLoader):
             if coordinate in visited:
                 continue
 
-            connected: list[_TileCoordinate] = []
-
-            def dfs(coord: _TileCoordinate) -> None:
+            def dfs(coord: _TileCoordinate) -> list[_TileCoordinate]:
+                connected: list[_TileCoordinate] = []
                 visited.add(coord)
                 connected.append(coord)
                 for neighbor in neighbors(coord):
-                    dfs(neighbor)
+                    connected += dfs(neighbor)
+                return connected
 
-            dfs(coordinate)
-            resources = tuple(drawings[coordinate] for coordinate in connected)
+            resources = tuple(
+                drawings[coordinate] for coordinate in dfs(coordinate)
+            )
             group = AnimationOnScreens(resources)
             groups.append(group)
         return tuple(groups)
