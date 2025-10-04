@@ -18,6 +18,7 @@ from nextrpg.event.background_event import (
 )
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
+from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.scene import Scene
 
 if TYPE_CHECKING:
@@ -57,6 +58,7 @@ class EventfulScene(EventAsAttr, Scene):
 
         return replace(self, player=player)
 
+    @override
     def tick(self, time_delta: Millisecond) -> Scene:
         if next_event_scene := self._next_event(time_delta):
             return next_event_scene
@@ -98,6 +100,27 @@ class EventfulScene(EventAsAttr, Scene):
             ticked, _background_events=not_completed_background_events
         )
 
+    @property
+    def drawing_on_screens_shift(self) -> Coordinate | None:
+        return None
+
+    @override
+    @cached_property
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        background_events_drawing_on_screens = tuple(
+            d for c in self._background_events for d in c.drawing_on_screens
+        )
+        if shift := self.drawing_on_screens_shift:
+            drawing_on_screens = tuple(
+                d.add_fast(shift) for d in self.drawing_on_screens_before_shift
+            )
+            return drawing_on_screens + background_events_drawing_on_screens
+        return background_events_drawing_on_screens
+
+    @property
+    def drawing_on_screens_before_shift(self) -> tuple[DrawingOnScreen, ...]:
+        return ()
+
     def is_complete(
         self,
         event: EventGenerator,
@@ -114,14 +137,6 @@ class EventfulScene(EventAsAttr, Scene):
             _event_result=event_result,
             _background_events=background_events,
         )
-
-    @cached_property
-    @override
-    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        context_draws = tuple(
-            d for c in self._background_events for d in c.draw_on_screens
-        )
-        return super().drawing_on_screens + context_draws
 
     def get_background_event(
         self, sentinel: BackgroundEventSentinel

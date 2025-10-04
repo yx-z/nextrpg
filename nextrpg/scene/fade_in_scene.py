@@ -1,5 +1,6 @@
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
+from typing import override
 
 from nextrpg.animation.fade import FadeIn
 from nextrpg.config.config import config
@@ -25,6 +26,7 @@ class FadeInScene(Scene):
         lambda self: FadeIn(self.to_scene, self.duration)
     )
 
+    @override
     def tick(self, time_delta: Millisecond) -> Scene:
         to_scene = self.to_scene.tick(time_delta)
         if (fade_in := self._fade_in.tick(time_delta)).is_complete:
@@ -34,6 +36,7 @@ class FadeInScene(Scene):
             self, from_scene=from_scene, to_scene=to_scene, _fade_in=fade_in
         )
 
+    @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return (

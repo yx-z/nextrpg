@@ -2,11 +2,11 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import override
 
-from nextrpg import AvatarPosition
 from nextrpg.animation.animation_like_on_screen import AnimationLikeOnScreen
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.say_event_config import (
+    AvatarPosition,
     SayEventConfig,
     SayEventNineSliceBackgroundConfig,
 )
@@ -27,7 +27,7 @@ from nextrpg.gui.screen_area import (
     screen_area,
     top_screen_area,
 )
-from nextrpg.scene.scene import Scene
+from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
 
 
 @dataclass(frozen=True)
@@ -135,7 +135,7 @@ class SayEventAddOn:
 
 @dataclass(frozen=True)
 class SayEventCharacterAddOn(SayEventAddOn):
-    scene: Scene
+    scene: EventfulScene
     character: CharacterOnScreen
 
     @cached_property

@@ -27,7 +27,7 @@ class BackgroundFadeOutEvent(BackgroundEvent):
 
     @override
     @property
-    def draw_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return self.fade.drawing_on_screens
 
     @override
@@ -74,7 +74,7 @@ class FadeOutEventScene(RpgEventScene[BackgroundFadeOutEvent]):
     def _init_fade(self) -> FadeOut:
         resource = self.scene.get_background_event(
             self.sentinel
-        ).draw_on_screens
+        ).drawing_on_screens
         return FadeOut(resource, self.duration)
 
 
