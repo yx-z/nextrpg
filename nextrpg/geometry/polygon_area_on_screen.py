@@ -90,7 +90,7 @@ def get_bounding_rectangle_area_on_screen(
     min_y = min(c.top for c in points)
     max_x = max(c.left for c in points)
     max_y = max(c.top for c in points)
-    coordinate = min_x.pair(min_y)
+    coordinate = min_x @ min_y
     # The bounding rectangle must have a size of at least (1, 1).
     # Otherwise, no surface to blit.
     # This is useful for drawing vertical/horizontal lines.

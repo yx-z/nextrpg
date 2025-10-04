@@ -40,7 +40,7 @@ class AnimationOnScreenLike(Sizable):
             drawing_on_screen.visible_rectangle_area_on_screen.right
             for drawing_on_screen in self.drawing_on_screens
         )
-        coordinate = min_left.pair(min_top)
+        coordinate = min_left @ min_top
         width = max_right - min_left
         height = max_bottom - min_top
         size = width * height

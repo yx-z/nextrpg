@@ -43,12 +43,12 @@ class XAxis(Dimension):
             return XAxis(self.value - other.value)
         return XAxis(self.value - other)
 
-    def pair(self, y_axis: YAxis) -> Coordinate:
+    def __matmul__(self, y_axis: YAxis) -> Coordinate:
         return Coordinate(self.value, y_axis.value)
 
     @property
     def with_zero_y_axis(self) -> Coordinate:
-        return self.pair(YAxis(0))
+        return self @ YAxis(0)
 
 
 class YAxis(Dimension):
@@ -74,12 +74,12 @@ class YAxis(Dimension):
             return YAxis(self.value - other.value)
         return YAxis(self.value - other)
 
-    def pair(self, x_axis: XAxis) -> Coordinate:
+    def __matmul__(self, x_axis: XAxis) -> Coordinate:
         return Coordinate(x_axis.value, self.value)
 
     @property
     def with_zero_x_axis(self) -> Coordinate:
-        return self.pair(XAxis(0))
+        return self @ XAxis(0)
 
 
 class Coordinate(NamedTuple):
