@@ -59,11 +59,11 @@
                 6,
                 5
             ],
-            "scale": 0.5,
-            "selectedLayer": 1,
+            "scale": 1.5,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 738,
-                "y": 627
+                "x": 1083.3333333333333,
+                "y": 545
             }
         },
         "interior.tsx": {
