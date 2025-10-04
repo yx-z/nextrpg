@@ -150,8 +150,7 @@ class MapLoader(TmxLoader):
     ) -> tuple[AnimationOnScreens, ...]:
         visited: set[_TileCoordinate] = set()
         groups: list[AnimationOnScreens] = []
-        if not (drawings := self._drawing(layer)):
-            return ()
+        drawings = self._drawing(layer)
         for coordinate, resource in drawings.items():
             if coordinate in visited:
                 continue
@@ -165,8 +164,8 @@ class MapLoader(TmxLoader):
                     if neighbor in drawings and neighbor not in visited:
                         visited.add(neighbor)
                         queue.append(neighbor)
-            tile_group = AnimationOnScreens(tuple(connected))
-            groups.append(tile_group)
+            group = AnimationOnScreens(tuple(connected))
+            groups.append(group)
         return tuple(groups)
 
     @property
