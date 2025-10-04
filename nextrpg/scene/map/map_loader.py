@@ -1,7 +1,6 @@
 from collections.abc import Iterable
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
-from itertools import product
 from typing import Self
 
 from pytmx import TiledObject, TiledTileLayer
@@ -162,7 +161,7 @@ class MapLoader(TmxLoader):
         def neighbors(coord: _TileCoordinate) -> Iterable[_TileCoordinate]:
             if not (cls := tile_class(coord)):
                 return
-            for left_shift, top_shift in product((-1, 0, 1), repeat=2):
+            for left_shift, top_shift in ((-1, 0), (0, -1), (1, 0), (0, 1)):
                 left = coord.left + left_shift
                 top = coord.top + top_shift
                 neighbor = _TileCoordinate(left, top)
