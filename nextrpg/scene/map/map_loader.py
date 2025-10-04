@@ -148,19 +148,25 @@ class MapLoader(TmxLoader):
     def _foreground(
         self, layer: TiledTileLayer
     ) -> tuple[AnimationOnScreens, ...]:
+
+        def tile_class(coord: _TileCoordinate) -> str | None:
+            if 0 <= coord.top < len(layer.data) and 0 <= coord.left < len(
+                layer.data[coord.top]
+            ):
+                data_id = layer.data[coord.top][coord.left]
+                return self._tmx.tile_properties.get(data_id, {}).get("type")
+            return None
+
         visited: set[_TileCoordinate] = set()
 
         def neighbors(coord: _TileCoordinate) -> Iterable[_TileCoordinate]:
-            if not (cls := self._class(layer, coord)):
+            if not (cls := tile_class(coord)):
                 return
             for left_shift, top_shift in product((-1, 0, 1), repeat=2):
                 left = coord.left + left_shift
                 top = coord.top + top_shift
                 neighbor = _TileCoordinate(left, top)
-                if (
-                    neighbor not in visited
-                    and self._class(layer, neighbor) == cls
-                ):
+                if neighbor not in visited and tile_class(neighbor) == cls:
                     yield neighbor
 
         groups: list[AnimationOnScreens] = []
@@ -169,9 +175,8 @@ class MapLoader(TmxLoader):
                 continue
 
             def dfs(coord: _TileCoordinate) -> list[_TileCoordinate]:
-                connected: list[_TileCoordinate] = []
+                connected = [coord]
                 visited.add(coord)
-                connected.append(coord)
                 for neighbor in neighbors(coord):
                     connected += dfs(neighbor)
                 return connected
@@ -211,16 +216,6 @@ class MapLoader(TmxLoader):
             return CyclicAnimationOnScreen(coordinate, animation)
         drawing = Drawing(self._tmx.images[gid])
         return DrawingOnScreen(coordinate, drawing)
-
-    def _class(
-        self, layer: TiledTileLayer, coordinate: _TileCoordinate
-    ) -> str | None:
-        if 0 <= coordinate.top < len(layer.data) and 0 <= coordinate.left < len(
-            layer.data[coordinate.top]
-        ):
-            data_id = layer.data[coordinate.top][coordinate.left]
-            return self._tmx.tile_properties.get(data_id, {}).get("type")
-        return None
 
     @property
     def _init_collision_visuals(self) -> tuple[DrawingOnScreen, ...]:
