@@ -176,7 +176,7 @@ class MapLoader(TmxLoader):
             return connected
 
         groups: list[AnimationOnScreens] = []
-        for coordinate in (drawings := self._drawing(layer)):
+        for coordinate in (drawings := self._tile_coord_to_drawing(layer)):
             if coordinate in visited:
                 continue
             resources = tuple(
@@ -190,7 +190,7 @@ class MapLoader(TmxLoader):
     def _tile_size(self) -> Size:
         return Size(self._tmx.tilewidth, self._tmx.tileheight)
 
-    def _drawing(
+    def _tile_coord_to_drawing(
         self, layer: TiledTileLayer
     ) -> dict[_TileCoordinate, AnimationOnScreen | DrawingOnScreen]:
         return {
@@ -235,7 +235,7 @@ class MapLoader(TmxLoader):
         resource = tuple(
             drawing
             for layer in self._tile_layers(class_name)
-            for drawing in self._drawing(layer).values()
+            for drawing in self._tile_coord_to_drawing(layer).values()
         )
         return AnimationOnScreens(resource)
 
