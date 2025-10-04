@@ -144,45 +144,57 @@ class MapLoader(TmxLoader):
     def _all_tile_layers(self) -> tuple[TiledTileLayer, ...]:
         return tuple(self._layer(i) for i in self._tmx.visible_tile_layers)
 
+    def _tile_class(
+        self, layer: TiledTileLayer, coord: _TileCoordinate
+    ) -> str | None:
+        tile_id = layer.data[coord.top][coord.left]
+        return self._tmx.tile_properties.get(tile_id, {}).get("type")
+
+    def _neighbors(
+        self,
+        layer: TiledTileLayer,
+        coord: _TileCoordinate,
+        visited: set[_TileCoordinate],
+    ) -> Iterable[_TileCoordinate]:
+        if not (cls := self._tile_class(layer, coord)):
+            return
+        for left_shift, top_shift in ((-1, 0), (0, -1), (1, 0), (0, 1)):
+            left = coord.left + left_shift
+            top = coord.top + top_shift
+            neighbor = _TileCoordinate(left, top)
+            if (
+                neighbor not in visited
+                and self._tile_class(layer, neighbor) == cls
+            ):
+                yield neighbor
+
+    def _connected_component(
+        self,
+        layer: TiledTileLayer,
+        coord: _TileCoordinate,
+        visited: set[_TileCoordinate],
+    ) -> set[_TileCoordinate]:
+        connected = {coord}
+        visited.add(coord)
+        for neighbor in self._neighbors(layer, coord, visited):
+            connected |= self._connected_component(layer, neighbor, visited)
+        return connected
+
     def _foreground(
         self, layer: TiledTileLayer
     ) -> tuple[AnimationOnScreens, ...]:
-
-        def tile_class(coord: _TileCoordinate) -> str | None:
-            if 0 <= coord.top < len(layer.data) and 0 <= coord.left < len(
-                layer.data[coord.top]
-            ):
-                data_id = layer.data[coord.top][coord.left]
-                return self._tmx.tile_properties.get(data_id, {}).get("type")
-            return None
-
         visited: set[_TileCoordinate] = set()
-
-        def neighbors(coord: _TileCoordinate) -> Iterable[_TileCoordinate]:
-            if not (cls := tile_class(coord)):
-                return
-            for left_shift, top_shift in ((-1, 0), (0, -1), (1, 0), (0, 1)):
-                left = coord.left + left_shift
-                top = coord.top + top_shift
-                neighbor = _TileCoordinate(left, top)
-                if neighbor not in visited and tile_class(neighbor) == cls:
-                    yield neighbor
-
-        def dfs(coord: _TileCoordinate) -> list[_TileCoordinate]:
-            connected = [coord]
-            visited.add(coord)
-            for neighbor in neighbors(coord):
-                connected += dfs(neighbor)
-            return connected
-
         groups: list[AnimationOnScreens] = []
         for coordinate in (drawings := self._tile_coord_to_drawing(layer)):
             if coordinate in visited:
                 continue
-            resources = tuple(
-                drawings[coordinate] for coordinate in dfs(coordinate)
+            coordinates = self._connected_component(layer, coordinate, visited)
+            drawing_on_screens = tuple(
+                drawing_on_screen
+                for coordinate in coordinates
+                if (drawing_on_screen := drawings.get(coordinate))
             )
-            group = AnimationOnScreens(resources)
+            group = AnimationOnScreens(drawing_on_screens)
             groups.append(group)
         return tuple(groups)
 
