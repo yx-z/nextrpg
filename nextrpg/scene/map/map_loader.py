@@ -54,8 +54,8 @@ class ForegroundLayers:
         )
         return tuple(
             drawing_on_screen
-            for drawing_on_screens in all_drawing_on_screens
-            for drawing_on_screen in drawing_on_screens.drawing_on_screens
+            for resource in all_drawing_on_screens
+            for drawing_on_screen in resource.drawing_on_screens
         )
 
 
