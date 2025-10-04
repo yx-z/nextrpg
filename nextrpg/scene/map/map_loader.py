@@ -290,14 +290,3 @@ class _TileCoordinate:
 class _Collider:
     coordinate: _TileCoordinate
     object: TiledObject
-
-
-def _below_character_layer(
-    character: CharacterOnScreen, layer: ForegroundLayer
-) -> bool:
-    rect = character.drawing_on_screen.visible_rectangle_area_on_screen
-    return any(
-        tile_group.visible_rectangle_area_on_screen.bottom < rect.bottom
-        and rect.collide(tile_group.visible_rectangle_area_on_screen)
-        for tile_group in layer.tiles
-    )
