@@ -22,7 +22,6 @@ class DrawingOnScreens(AnimationOnScreenLike):
     def drawing_on_screen(self) -> DrawingOnScreen:
         if len(self.drawing_on_screens) == 1:
             return self.drawing_on_screens[0]
-
         surface = Surface(self.size, SRCALPHA)
         surface.blits(d.pygame for d in self.drawing_on_screens)
         drawing = Drawing(surface)
