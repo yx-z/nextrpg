@@ -36,9 +36,10 @@ class TmxWidgets(WidgetGroupOnScreen):
     )
 
     @override
-    def tick(self, time_delta: Millisecond) -> Self:
+    def _tick_after_parent(self, time_delta: Millisecond) -> Self:
+        ticked = super()._tick_after_parent(time_delta)
         background = self._background.tick(time_delta)
-        return replace(self, _background=background)
+        return replace(ticked, _background=background)
 
     @override
     @cached_property
@@ -52,15 +53,15 @@ class TmxWidgets(WidgetGroupOnScreen):
     def _init_background(self) -> AnimationOnScreens:
         match self.background:
             case str():
-                drawing = (self._image_layer(self.background),)
+                resources = (self._image_layer(self.background),)
             case tuple():
-                drawing = tuple(
-                    (self._image_layer(res) if isinstance(res, str) else res)
+                resources = tuple(
+                    self._image_layer(res) if isinstance(res, str) else res
                     for res in self.background
                 )
             case _:
-                drawing = (self.background,)
-        return AnimationOnScreens(drawing)
+                resources = (self.background,)
+        return AnimationOnScreens(resources)
 
     def _image_layer(self, layer: str) -> DrawingOnScreen:
         return self._tmx.image_layer(layer)

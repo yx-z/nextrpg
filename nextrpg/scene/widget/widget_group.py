@@ -69,9 +69,11 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     @property
     def _init_children(self) -> tuple[WidgetOnScreen, ...]:
         assert (children := self.widget.children), "Require non-empty children."
-        return (self._init_child(children[0]).select,) + tuple(
+        first_child_selected = self._init_child(children[0]).select
+        remaining_deselected = tuple(
             self._init_child(child) for child in children[1:]
         )
+        return (first_child_selected,) + remaining_deselected
 
     def _init_child(self, child: Widget) -> WidgetOnScreen:
         return child.widget_on_screen(self.name_to_on_screens, self)
@@ -95,7 +97,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
                 break
 
         children: list[WidgetOnScreen] = []
-        for child in self._children:
+        for i, child in enumerate(self._children):
             if child is self._selected:
                 child = self._selected.deselect
             elif child is target:
