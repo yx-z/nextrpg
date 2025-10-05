@@ -31,7 +31,7 @@ class DrawingOnScreen(AnimationOnScreenLike):
     def pygame(self) -> tuple[Surface, Coordinate]:
         return self.drawing.pygame, self.top_left
 
-    def blur(self, radius: int | float) -> Self:
+    def blur(self, radius: int) -> Self:
         drawing = self.drawing.blur(radius)
         return replace(self, drawing=drawing)
 

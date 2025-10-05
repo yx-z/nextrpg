@@ -152,7 +152,7 @@ class Drawing(AnimationLike):
             return res.convert()
         return res.convert_alpha()
 
-    def blur(self, radius: int | float) -> Self:
+    def blur(self, radius: int) -> Self:
         surface = gaussian_blur(self.surface, radius)
         return replace(self, resource=surface)
 

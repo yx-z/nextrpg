@@ -8,8 +8,8 @@ from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 @dataclass(frozen=True, kw_only=True)
 class Blur(TimedAnimationOnScreens):
-    to_radius: int | float
-    from_radius: int | float = 0
+    to_radius: int
+    from_radius: int = 0
 
     @override
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
@@ -19,8 +19,8 @@ class Blur(TimedAnimationOnScreens):
         )
 
     @cached_property
-    def _radius(self) -> float:
-        return (
+    def _radius(self) -> int:
+        return round(
             self._timer.completed_percentage
             * (self.to_radius - self.from_radius)
             + self.from_radius
