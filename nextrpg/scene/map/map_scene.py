@@ -99,9 +99,9 @@ class MapScene(EventfulScene, UpdateFromSave):
             self._map_loader.foregrounds.drawing_on_screens(characters)
         )
         return (
-            self._map_loader.background.drawing_on_screens
+            self._map_loader.backgrounds.drawing_on_screens
             + foreground_and_characters
-            + self._map_loader.above_character.drawing_on_screens
+            + self._map_loader.above_characters.drawing_on_screens
             + self._debug_visuals
         )
 

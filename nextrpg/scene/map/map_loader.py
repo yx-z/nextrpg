@@ -63,11 +63,11 @@ class ForegroundLayers:
 @dataclass_with_default(frozen=True)
 class MapLoader(TmxLoader):
     _: KW_ONLY = private_init_below()
-    background: AnimationOnScreens = default(
+    backgrounds: AnimationOnScreens = default(
         lambda self: self._draw_layers(config().map.background)
     )
     foregrounds: ForegroundLayers = default(lambda self: self._init_foregrounds)
-    above_character: AnimationOnScreens = default(
+    above_characters: AnimationOnScreens = default(
         lambda self: self._draw_layers(config().map.above_character)
     )
     collisions: tuple[AreaOnScreen, ...] = default(
@@ -78,14 +78,14 @@ class MapLoader(TmxLoader):
     )
 
     def tick(self, time_delta: Millisecond) -> Self:
-        background = self.background.tick(time_delta)
+        backgrounds = self.backgrounds.tick(time_delta)
         foregrounds = self.foregrounds.tick(time_delta)
-        above_character = self.above_character.tick(time_delta)
+        above_characters = self.above_characters.tick(time_delta)
         return replace(
             self,
-            background=background,
+            backgrounds=backgrounds,
             foregrounds=foregrounds,
-            above_character=above_character,
+            above_characters=above_characters,
         )
 
     @cached_property
@@ -145,22 +145,22 @@ class MapLoader(TmxLoader):
         return tuple(self._layer(i) for i in self._tmx.visible_tile_layers)
 
     def _tile_class(
-        self, layer: TiledTileLayer, coord: _TileCoordinate
+        self, layer: TiledTileLayer, coordinate: _TileCoordinate
     ) -> str | None:
-        tile_id = _tile_id(layer, coord)
+        tile_id = _tile_id(layer, coordinate)
         return self._tmx.tile_properties.get(tile_id, {}).get("type")
 
     def _connected(
         self,
         layer: TiledTileLayer,
-        coord: _TileCoordinate,
+        coordinate: _TileCoordinate,
         connected_tile_ids: set[_Gid] | None = None,
     ) -> set[_TileCoordinate]:
-        res = {coord}
-        if not (cls := self._tile_class(layer, coord)):
+        res = {coordinate}
+        if not (cls := self._tile_class(layer, coordinate)):
             return res
 
-        coord_tile_id = _tile_id(layer, coord)
+        coord_tile_id = _tile_id(layer, coordinate)
         if connected_tile_ids:
             connected_tile_ids.add(coord_tile_id)
         else:
@@ -169,9 +169,9 @@ class MapLoader(TmxLoader):
         # Only need to search bottom and right, given the foreground traversal
         # (coordinate_to_resource) is already top-to-bottom and left-to-right.
         for left_shift, top_shift in ((1, 0), (0, 1)):
-            left = coord.left + left_shift
-            top = coord.top + top_shift
-            neighbor = _TileCoordinate(left, top)
+            neighbor = _TileCoordinate(
+                coordinate.left + left_shift, coordinate.top + top_shift
+            )
             if (
                 self._tile_class(layer, neighbor) == cls
                 and _tile_id(layer, neighbor) not in connected_tile_ids
@@ -189,12 +189,12 @@ class MapLoader(TmxLoader):
                 continue
             connected_coordinates = self._connected(layer, coordinate)
             visited |= connected_coordinates
-            drawing_on_screens = tuple(
+            connected_resources = tuple(
                 resource
                 for coordinate in connected_coordinates
                 if (resource := resources.get(coordinate))
             )
-            group = AnimationOnScreens(drawing_on_screens)
+            group = AnimationOnScreens(connected_resources)
             groups.append(group)
         return tuple(groups)
 
@@ -288,5 +288,5 @@ class _Collider:
     object: TiledObject
 
 
-def _tile_id(layer: TiledTileLayer, coord: _TileCoordinate) -> _Gid:
-    return layer.data[coord.top][coord.left]
+def _tile_id(layer: TiledTileLayer, coordinate: _TileCoordinate) -> _Gid:
+    return layer.data[coordinate.top][coordinate.left]
