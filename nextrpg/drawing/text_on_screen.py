@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from functools import cached_property
 
-from typing_extensions import override
+from typing import override
 
 from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen

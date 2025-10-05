@@ -2,7 +2,7 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import TYPE_CHECKING, Self
 
-from typing_extensions import override
+from typing import override
 
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing import Drawing
