@@ -4,6 +4,7 @@ from typing import Self
 
 from pytmx import TiledObject, TiledTileLayer
 
+from nextrpg import AnimationOnScreenLike
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.cyclic_animation import CyclicAnimation
@@ -165,6 +166,8 @@ class MapLoader(TmxLoader):
         else:
             connected_tile_ids = {coord_tile_id}
 
+        # Only need to search bottom and right, given the foreground traversal
+        # (coordinate_to_resource) is already top-to-bottom and left-to-right.
         for left_shift, top_shift in ((1, 0), (0, 1)):
             left = coord.left + left_shift
             top = coord.top + top_shift
@@ -181,15 +184,15 @@ class MapLoader(TmxLoader):
     ) -> tuple[AnimationOnScreens, ...]:
         visited: set[_TileCoordinate] = set()
         groups: list[AnimationOnScreens] = []
-        for coordinate in (drawings := self._tile_coord_to_drawing(layer)):
+        for coordinate in (resources := self._coordinate_to_resource(layer)):
             if coordinate in visited:
                 continue
             connected_coordinates = self._connected(layer, coordinate)
             visited |= connected_coordinates
             drawing_on_screens = tuple(
-                drawing_on_screen
+                resource
                 for coordinate in connected_coordinates
-                if (drawing_on_screen := drawings.get(coordinate))
+                if (resource := resources.get(coordinate))
             )
             group = AnimationOnScreens(drawing_on_screens)
             groups.append(group)
@@ -199,9 +202,9 @@ class MapLoader(TmxLoader):
     def _tile_size(self) -> Size:
         return Size(self._tmx.tilewidth, self._tmx.tileheight)
 
-    def _tile_coord_to_drawing(
+    def _coordinate_to_resource(
         self, layer: TiledTileLayer
-    ) -> dict[_TileCoordinate, AnimationOnScreen | DrawingOnScreen]:
+    ) -> dict[_TileCoordinate, AnimationOnScreenLike]:
         return {
             _TileCoordinate(left, top): self._tile(left, top, gid)
             for left, top, gid in layer
@@ -241,12 +244,12 @@ class MapLoader(TmxLoader):
         return ForegroundLayers(tiles)
 
     def _draw_layers(self, class_name: str) -> AnimationOnScreens:
-        resource = tuple(
-            drawing
+        resources = tuple(
+            resource
             for layer in self._tile_layers(class_name)
-            for drawing in self._tile_coord_to_drawing(layer).values()
+            for resource in self._coordinate_to_resource(layer).values()
         )
-        return AnimationOnScreens(resource)
+        return AnimationOnScreens(resources)
 
     @property
     def _init_collisions(self) -> tuple[AreaOnScreen, ...]:
