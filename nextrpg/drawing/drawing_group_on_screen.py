@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from functools import cached_property
 
 from nextrpg.config.config import config
-from nextrpg.drawing.abstract_animation_on_screen_like import (
-    AbstractAnimationOnScreenLike,
+from nextrpg.drawing.animation_on_screen_like import (
+    AnimationOnScreenLike,
 )
 from nextrpg.drawing.color import Color
 from nextrpg.drawing.drawing import Drawing
@@ -14,7 +14,7 @@ from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 
 
 @dataclass(frozen=True)
-class DrawingGroupOnScreen(AbstractAnimationOnScreenLike):
+class DrawingGroupOnScreen(AnimationOnScreenLike):
     origin: Coordinate
     drawing_group: DrawingGroup
 

@@ -2,13 +2,13 @@ from abc import ABC, abstractmethod
 from typing import Self, override
 
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.abstract_animation_on_screen_like import (
-    AbstractAnimationOnScreenLike,
+from nextrpg.drawing.animation_on_screen_like import (
+    AnimationOnScreenLike,
 )
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 
-class AbstractAnimationOnScreen(AbstractAnimationOnScreenLike, ABC):
+class AbstractAnimationOnScreen(AnimationOnScreenLike, ABC):
     @property
     @abstractmethod
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]: ...
@@ -19,6 +19,7 @@ class AbstractAnimationOnScreen(AbstractAnimationOnScreenLike, ABC):
             return self
         return self._tick_before_complete(time_delta)
 
+    @override
     @property
     @abstractmethod
     def is_complete(self) -> bool: ...

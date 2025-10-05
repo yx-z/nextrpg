@@ -4,8 +4,8 @@ from typing import Self, override
 
 from pygame import Surface
 
-from nextrpg.drawing.abstract_animation_on_screen_like import (
-    AbstractAnimationOnScreenLike,
+from nextrpg.drawing.animation_on_screen_like import (
+    AnimationOnScreenLike,
 )
 from nextrpg.drawing.color import Alpha
 from nextrpg.drawing.drawing import Drawing
@@ -16,7 +16,7 @@ from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 @dataclass(frozen=True)
-class DrawingOnScreen(AbstractAnimationOnScreenLike):
+class DrawingOnScreen(AnimationOnScreenLike):
     top_left_input: Coordinate
     drawing: Drawing
 

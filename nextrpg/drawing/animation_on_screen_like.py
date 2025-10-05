@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 
 
-class AbstractAnimationOnScreenLike(Sizable):
+class AnimationOnScreenLike(Sizable):
     drawing_on_screens: tuple[DrawingOnScreen, ...]
 
     @property
@@ -66,8 +66,8 @@ class AbstractAnimationOnScreenLike(Sizable):
 
 
 def tick_optional(
-    animation: AbstractAnimationOnScreenLike | None, time_delta: Millisecond
-) -> AbstractAnimationOnScreenLike | None:
+    animation: AnimationOnScreenLike | None, time_delta: Millisecond
+) -> AnimationOnScreenLike | None:
     if animation:
         return animation.tick(time_delta)
     return None

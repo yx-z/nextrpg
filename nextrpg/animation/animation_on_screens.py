@@ -6,18 +6,15 @@ from nextrpg.animation.abstract_animation_on_screen import (
     AbstractAnimationOnScreen,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.abstract_animation_on_screen_like import (
-    AbstractAnimationOnScreenLike,
+from nextrpg.drawing.animation_on_screen_like import (
+    AnimationOnScreenLike,
 )
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 
 @dataclass(frozen=True)
 class AnimationOnScreens(AbstractAnimationOnScreen):
-    resource: (
-        AbstractAnimationOnScreenLike
-        | tuple[AbstractAnimationOnScreenLike, ...]
-    )
+    resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...]
 
     @override
     @cached_property

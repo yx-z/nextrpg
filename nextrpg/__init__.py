@@ -87,12 +87,12 @@ from nextrpg.core.save import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry
-from nextrpg.drawing.abstract_animation_on_screen_like import (
-    AbstractAnimationOnScreenLike,
-    tick_optional,
-)
 from nextrpg.drawing.anchor import Anchor
 from nextrpg.drawing.animation_like import AnimationLike
+from nextrpg.drawing.animation_on_screen_like import (
+    AnimationOnScreenLike,
+    tick_optional,
+)
 from nextrpg.drawing.color import (
     BLACK,
     BLUE,
