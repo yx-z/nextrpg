@@ -5,8 +5,8 @@ from typing import Self, override
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond
+from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 log = Log()
@@ -14,7 +14,7 @@ log = Log()
 
 @dataclass(frozen=True)
 class MovingCharacterOnScreen(CharacterOnScreen, ABC):
-    map_collisions: tuple[PolygonAreaOnScreen, ...] = ()
+    map_collisions: tuple[AreaOnScreen, ...] = ()
 
     @property
     @abstractmethod
@@ -62,7 +62,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         self,
         bounding_rect: RectangleAreaOnScreen,
         others: tuple[CharacterOnScreen, ...],
-    ) -> PolygonAreaOnScreen | None:
+    ) -> AreaOnScreen | None:
         other_rectangle_area_on_screens = tuple(
             c.collision_rectangle_area_on_screen
             for c in others

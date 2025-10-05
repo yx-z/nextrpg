@@ -80,11 +80,11 @@ def load_panel() -> Panel:
         name="load_panel",
         children=(Label(message="No save data found."),),
         config=PanelConfig(background=Color(0, 0, 0, 128)),
-        entering_animation=lambda d: FadeIn(
+        enter_animation=lambda d: FadeIn(
             resource=MoveTo(resource=d, offset=offset, duration=duration),
             duration=duration,
         ),
-        exiting_animation=lambda d: FadeOut(
+        exit_animation=lambda d: FadeOut(
             resource=MoveFrom(resource=d, offset=-offset, duration=duration),
             duration=duration,
         ),

@@ -100,11 +100,13 @@ class WidgetOnScreen(Scene):
 
     def from_on_screen[T](self, cls: type[T]) -> T:
         name = getattr(self.widget, "name", None)
-        assert name, f"Require 'name' attribute for widget {self.widget}."
+        assert (
+            name
+        ), f"Require 'name' attribute for widget fetching on-screen Coordinate/AreaOnScreen: {self.widget}."
         obj = self.name_to_on_screens.get(name)
         assert isinstance(
             obj, cls
-        ), f"Require {cls.__name__} for {name}. Got {obj}."
+        ), f"Require {cls.__name__} for widget {name}. Got {obj}."
         return obj
 
     def with_parent(self, parent: Scene | None) -> Self:
@@ -112,15 +114,15 @@ class WidgetOnScreen(Scene):
 
     @property
     def _init_animation(self) -> AnimationOnScreen | None:
-        if self.widget.entering_animation:
-            return self.widget.entering_animation(
+        if self.widget.enter_animation:
+            return self.widget.enter_animation(
                 self._drawing_on_screens_after_parent
             )
         return None
 
     def _exit(self, to_scene: Scene) -> Self:
-        if self.widget.exiting_animation:
-            animation = self.widget.exiting_animation(
+        if self.widget.exit_animation:
+            animation = self.widget.exit_animation(
                 self._drawing_on_screens_after_parent
             )
             return replace(self, _animation=animation, _to_scene=to_scene)
@@ -133,10 +135,10 @@ _WidgetOnScreen = TypeVar("_WidgetOnScreen", bound=WidgetOnScreen)
 @dataclass(frozen=True)
 class Widget(ABC, Generic[_WidgetOnScreen]):
     widget_on_screen_type: ClassVar[type]
-    entering_animation: (
+    enter_animation: (
         Callable[[tuple[DrawingOnScreen, ...]], AnimationOnScreen] | None
     ) = None
-    exiting_animation: (
+    exit_animation: (
         Callable[[tuple[DrawingOnScreen, ...]], AnimationOnScreen] | None
     ) = None
 
