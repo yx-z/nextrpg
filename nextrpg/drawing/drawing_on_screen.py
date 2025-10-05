@@ -30,7 +30,7 @@ class DrawingOnScreen(AnimationOnScreenLike):
 
     @property
     def pygame(self) -> tuple[Surface, Coordinate]:
-        return self.drawing.pygame, self.top_left_input
+        return self.drawing.pygame, self.top_left
 
     def blur(self, radius: int) -> Self:
         drawing = self.drawing.blur(radius)
@@ -43,7 +43,7 @@ class DrawingOnScreen(AnimationOnScreenLike):
     def __add__(
         self, other: Coordinate | Size | Width | Height | DirectionalOffset
     ) -> DrawingOnScreen:
-        top_left = self.top_left_input + other
+        top_left = self.top_left + other
         return replace(self, top_left_input=top_left)
 
     def add_fast(self, other: Coordinate) -> DrawingOnScreen:
