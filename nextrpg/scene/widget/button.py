@@ -1,13 +1,9 @@
 from collections.abc import Callable
-from dataclasses import KW_ONLY, dataclass, replace
+from dataclasses import dataclass, replace
 from typing import ClassVar, Self, override
 
 from nextrpg.animation.animation import Animation
-from nextrpg.core.dataclass_with_default import (
-    dataclass_with_default,
-    default,
-    private_init_below,
-)
+from nextrpg.core.dataclass_with_default import dataclass_with_default
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
