@@ -1,14 +1,14 @@
 from dataclasses import dataclass, field, replace
 from functools import cached_property
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Self, override
 
 from nextrpg.config.config import config
 from nextrpg.config.text_config import TextConfig
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
-from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
     from nextrpg.drawing.text_group import TextGroup
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class Text(Sizable):
+class Text(AnimationLike):
     message: str
     config: TextConfig = field(default_factory=lambda: config().text)
 
@@ -29,16 +29,9 @@ class Text(Sizable):
     def __getitem__(self, s: slice) -> Self:
         return replace(self, message=self.message[s])
 
+    @override
     @property
-    def size(self) -> Size:
-        return self.drawing_group.size
-
-    @property
-    def top_left(self) -> Coordinate:
-        return self.drawing_group.top_left
-
-    @cached_property
-    def drawing_group(self) -> DrawingGroup:
+    def drawing(self) -> DrawingGroup:
         draws = tuple(
             self._drawing(line).shift(self._line_shift(i))
             for i, line in enumerate(self.lines)
@@ -49,16 +42,6 @@ class Text(Sizable):
         from nextrpg.drawing.text_on_screen import TextOnScreen
 
         return TextOnScreen(coordinate, self)
-
-    @property
-    def drawings(self) -> tuple[Drawing, ...]:
-        return self.drawing_group.drawings
-
-    def _drawing(self, line: str) -> Drawing:
-        surface = self.config.font.pygame.render(
-            line, antialias=True, color=self.config.color
-        )
-        return Drawing(surface, allow_background_in_debug=False)
 
     def __radd__(self, other: str) -> TextGroup:
         return self + other
@@ -85,7 +68,7 @@ class Text(Sizable):
     @cached_property
     def lines(self) -> tuple[str, ...]:
         if not (wrap := self.config.wrap):
-            return self.message.splitlines(keepends=True)
+            return tuple(self.message.splitlines(keepends=True))
 
         # wrap lines
         lines: list[str] = []
@@ -107,3 +90,9 @@ class Text(Sizable):
     def _line_shift(self, index: int) -> Size:
         height = self.config.font.text_height + self.config.line_spacing
         return (height * index).with_zero_width
+
+    def _drawing(self, line: str) -> Drawing:
+        surface = self.config.font.pygame.render(
+            line, antialias=True, color=self.config.color
+        )
+        return Drawing(surface, allow_background_in_debug=False)

@@ -2,7 +2,9 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.animation.animation_on_screen import AnimationOnScreen
+from nextrpg.animation.abstract_animation_on_screen import (
+    AbstractAnimationOnScreen,
+)
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -14,7 +16,7 @@ from nextrpg.drawing.text_on_screen import TextOnScreen
 
 
 @dataclass_with_default(frozen=True)
-class Typewriter(AnimationOnScreen):
+class Typewriter(AbstractAnimationOnScreen):
     text_on_screen: TextOnScreen
     delay: Millisecond
     _: KW_ONLY = private_init_below()

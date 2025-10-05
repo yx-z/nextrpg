@@ -3,8 +3,7 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Self, TypeVar, override
 
-from nextrpg.drawing.drawing import Drawing
-from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
@@ -26,7 +25,7 @@ class SizableWidgetOnScreen(WidgetOnScreen):
 
     @property
     @abstractmethod
-    def drawing(self) -> Drawing | DrawingGroup: ...
+    def drawing(self) -> AnimationLike: ...
 
 
 _SizableWidgetOnScreen = TypeVar(

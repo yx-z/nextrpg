@@ -4,8 +4,8 @@ from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from typing import ClassVar, Generic, Self, TypeVar, override
 
-from nextrpg.animation.animation_on_screen import (
-    AnimationOnScreen,
+from nextrpg.animation.abstract_animation_on_screen import (
+    AbstractAnimationOnScreen,
 )
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -14,7 +14,7 @@ from nextrpg.core.dataclass_with_default import (
     type_name,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import tick_optional
+from nextrpg.drawing.abstract_animation_on_screen_like import tick_optional
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.area_on_screen import AreaOnScreen
@@ -30,7 +30,7 @@ class WidgetOnScreen(Scene):
     _: KW_ONLY = private_init_below()
     _is_selected: bool = False
     _to_scene: Scene | None = None
-    _animation: AnimationOnScreen | None = default(
+    _animation: AbstractAnimationOnScreen | None = default(
         lambda self: self._init_animation
     )
 
@@ -113,7 +113,7 @@ class WidgetOnScreen(Scene):
         return replace(self, parent=parent)
 
     @property
-    def _init_animation(self) -> AnimationOnScreen | None:
+    def _init_animation(self) -> AbstractAnimationOnScreen | None:
         if self.widget.enter_animation:
             return self.widget.enter_animation(
                 self._drawing_on_screens_after_parent
@@ -136,10 +136,12 @@ _WidgetOnScreen = TypeVar("_WidgetOnScreen", bound=WidgetOnScreen)
 class Widget(ABC, Generic[_WidgetOnScreen]):
     widget_on_screen_type: ClassVar[type]
     enter_animation: (
-        Callable[[tuple[DrawingOnScreen, ...]], AnimationOnScreen] | None
+        Callable[[tuple[DrawingOnScreen, ...]], AbstractAnimationOnScreen]
+        | None
     ) = None
     exit_animation: (
-        Callable[[tuple[DrawingOnScreen, ...]], AnimationOnScreen] | None
+        Callable[[tuple[DrawingOnScreen, ...]], AbstractAnimationOnScreen]
+        | None
     ) = None
 
     def widget_on_screen(

@@ -11,7 +11,9 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_coordinate, get_geometry
-from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
+from nextrpg.drawing.abstract_animation_on_screen_like import (
+    AbstractAnimationOnScreenLike,
+)
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
@@ -22,7 +24,9 @@ from nextrpg.scene.widget.widget_group import WidgetGroupOnScreen
 class TmxWidgets(WidgetGroupOnScreen):
     tmx_file: Path
     background: (
-        str | AnimationOnScreenLike | tuple[str | AnimationOnScreenLike, ...]
+        str
+        | AbstractAnimationOnScreenLike
+        | tuple[str | AbstractAnimationOnScreenLike, ...]
     )
     _ = private_init_below()
     name_to_on_screens: dict[str, Coordinate | AreaOnScreen] = default(

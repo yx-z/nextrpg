@@ -1,23 +1,22 @@
 from dataclasses import dataclass, field, replace
 from functools import cached_property
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Self, override
 
 from nextrpg.config.config import config
 from nextrpg.config.text_group_config import TextGroupConfig
-from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.relative_drawing import RelativeDrawing
 from nextrpg.drawing.text import Text
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Height, Size, Width
-from nextrpg.geometry.sizable import Sizable
+from nextrpg.geometry.dimension import Height, Width
 
 if TYPE_CHECKING:
     from nextrpg.drawing.text_on_screen import TextOnScreen
 
 
 @dataclass(frozen=True)
-class TextGroup(Sizable):
+class TextGroup(AnimationLike):
     texts: tuple[Text, ...]
     config: TextGroupConfig = field(default_factory=lambda: config().text_group)
 
@@ -28,10 +27,6 @@ class TextGroup(Sizable):
         from nextrpg.drawing.text_on_screen import TextOnScreen
 
         return TextOnScreen(coordinate, self)
-
-    @property
-    def drawings(self) -> tuple[Drawing, ...]:
-        return self.drawing_group.drawings
 
     def __getitem__(self, item: slice) -> Self:
         if item.step not in (None, 1):
@@ -62,16 +57,9 @@ class TextGroup(Sizable):
             text = other
         return replace(self, texts=self.texts + (text,))
 
-    @property
-    def top_left(self) -> Coordinate:
-        return self.drawing_group.top_left
-
-    @property
-    def size(self) -> Size:
-        return self.drawing_group.size
-
+    @override
     @cached_property
-    def drawing_group(self) -> DrawingGroup:
+    def drawing(self) -> DrawingGroup:
         lines = [[t] for t in self._no_wrap[0].line_texts]
         for text in self._no_wrap[1:]:
             lines[-1].append(text.line_texts[0])
@@ -85,7 +73,7 @@ class TextGroup(Sizable):
             for word in line:
                 height_diff = line_height - word.height
                 shift = curr_width * (curr_height + height_diff)
-                res.append(word.drawing_group.shift(shift))
+                res.append(word.drawing.shift(shift))
                 curr_width += word.width + self.config.margin
             curr_height += line_height + self.config.line_spacing
         return DrawingGroup(tuple(res))

@@ -1,16 +1,15 @@
 __version__ = "0.1.18"
 
-from nextrpg.animation.animation import Animation
-from nextrpg.animation.animation_like_on_screen import AnimationLikeOnScreen
-from nextrpg.animation.animation_on_screen import (
-    AnimationOnScreen,
+from nextrpg.animation.abstract_animation_on_screen import (
+    AbstractAnimationOnScreen,
 )
+from nextrpg.animation.animation import Animation
+from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.animation.animation_on_screens import (
     AnimationOnScreens,
 )
 from nextrpg.animation.blur import Blur
 from nextrpg.animation.cyclic_animation import CyclicAnimation
-from nextrpg.animation.cyclic_animation_on_screen import CyclicAnimationOnScreen
 from nextrpg.animation.fade import Fade, FadeIn, FadeOut
 from nextrpg.animation.move import Move, MoveFrom, MoveTo
 from nextrpg.animation.timed_animation_on_screens import (
@@ -88,12 +87,12 @@ from nextrpg.core.save import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry
-from nextrpg.drawing.anchor import Anchor
-from nextrpg.drawing.animation_like import AnimationLike
-from nextrpg.drawing.animation_on_screen_like import (
-    AnimationOnScreenLike,
+from nextrpg.drawing.abstract_animation_on_screen_like import (
+    AbstractAnimationOnScreenLike,
     tick_optional,
 )
+from nextrpg.drawing.anchor import Anchor
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import (
     BLACK,
     BLUE,

@@ -5,8 +5,7 @@ from typing import ClassVar, Self, override
 from nextrpg.animation.animation import Animation
 from nextrpg.core.dataclass_with_default import dataclass_with_default
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.drawing import Drawing
-from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.dimension import Size
 from nextrpg.scene.scene import Scene
@@ -23,7 +22,7 @@ class ButtonOnScreen(SizableWidgetOnScreen):
 
     @override
     @property
-    def drawing(self) -> Drawing | DrawingGroup:
+    def drawing(self) -> AnimationLike:
         if self._is_selected:
             return self.widget.active
         return self.widget.idle
@@ -66,8 +65,8 @@ class ButtonOnScreen(SizableWidgetOnScreen):
 @dataclass(frozen=True, kw_only=True)
 class Button(SizableWidget[ButtonOnScreen]):
     name: str
-    idle: Drawing | DrawingGroup | Animation
-    active: Drawing | DrawingGroup | Animation
+    idle: AnimationLike
+    active: AnimationLike
     on_click: Scene | Widget | Callable[[], None]
     widget_on_screen_type: ClassVar[type[ButtonOnScreen]] = ButtonOnScreen
 

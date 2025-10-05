@@ -3,7 +3,9 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.animation.animation_on_screen import AnimationOnScreen
+from nextrpg.animation.abstract_animation_on_screen import (
+    AbstractAnimationOnScreen,
+)
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.animation.typewriter import Typewriter
@@ -14,7 +16,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import tick_optional
+from nextrpg.drawing.abstract_animation_on_screen_like import tick_optional
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.text_on_screen import TextOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
@@ -52,7 +54,7 @@ class SayEventState(RpgEventScene, ABC):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class SayEventFadeInState(SayEventState):
-    background: AnimationOnScreen
+    background: AbstractAnimationOnScreen
     text_on_screen: TextOnScreen
     config: SayEventConfig
     _: KW_ONLY = private_init_below()
@@ -84,7 +86,7 @@ class SayEventFadeInState(SayEventState):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class SayEventTypingState(SayEventState):
-    background: AnimationOnScreen
+    background: AbstractAnimationOnScreen
     text_on_screen: TextOnScreen
     _: KW_ONLY = private_init_below()
     _typewriter: Typewriter | None = default(
@@ -132,7 +134,7 @@ class SayEventTypingState(SayEventState):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class SayEventFadeOutState(SayEventState):
-    animation_on_screen: AnimationOnScreen
+    animation_on_screen: AbstractAnimationOnScreen
     config: SayEventConfig
     _: KW_ONLY = private_init_below()
     _fade_out: FadeOut = default(

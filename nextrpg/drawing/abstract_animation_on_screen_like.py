@@ -2,18 +2,30 @@ from functools import cached_property
 from typing import TYPE_CHECKING, Self
 
 from nextrpg.core.time import Millisecond
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+    from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 
 
-class AnimationOnScreenLike(Sizable):
+class AbstractAnimationOnScreenLike(Sizable):
     drawing_on_screens: tuple[DrawingOnScreen, ...]
 
     @property
-    def drawing_on_screen(self) -> DrawingOnScreen: ...
+    def drawing_on_screen(self) -> DrawingOnScreen:
+        return self._drawing_on_screens.drawing_on_screen
+
+    @property
+    def top_left(self) -> Coordinate:
+        return self._drawing_on_screens.top_left
+
+    @property
+    def size(self) -> Size:
+        return self._drawing_on_screens.size
 
     def tick(self, time_delta: Millisecond) -> Self:
         return self
@@ -46,10 +58,16 @@ class AnimationOnScreenLike(Sizable):
         size = width * height
         return RectangleAreaOnScreen(coordinate, size)
 
+    @cached_property
+    def _drawing_on_screens(self) -> DrawingOnScreens:
+        from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
+
+        return DrawingOnScreens(self.drawing_on_screens)
+
 
 def tick_optional(
-    animation: AnimationOnScreenLike | None, time_delta: Millisecond
-) -> AnimationOnScreenLike | None:
+    animation: AbstractAnimationOnScreenLike | None, time_delta: Millisecond
+) -> AbstractAnimationOnScreenLike | None:
     if animation:
         return animation.tick(time_delta)
     return None

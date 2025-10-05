@@ -2,7 +2,9 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import override
 
-from nextrpg.animation.animation_like_on_screen import AnimationLikeOnScreen
+from nextrpg.animation.abstract_animation_on_screen import (
+    AbstractAnimationOnScreen,
+)
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.say_event_config import (
@@ -36,8 +38,8 @@ class SayEventAddOn:
     message: str | Text | TextGroup
 
     @cached_property
-    def background(self) -> AnimationOnScreen:
-        contents = [self._text.drawing_group.no_shift]
+    def background(self) -> AbstractAnimationOnScreen:
+        contents = [self._text.drawing.no_shift]
         if self._name_relative_to_text:
             contents.append(self._name_relative_to_text)
         if self._avatar_relative_to_text:
@@ -122,7 +124,7 @@ class SayEventAddOn:
         if not self._name:
             return None
         text = Text(self._name, self.config.name_text_config)
-        return text.drawing_group.shift(
+        return text.drawing.shift(
             -self.config.padding.height.with_zero_width, Anchor.BOTTOM_LEFT
         )
 
@@ -287,7 +289,7 @@ class _CharacterPosition:
 
 
 @dataclass(frozen=True)
-class _Background(AnimationLikeOnScreen):
+class _Background(AnimationOnScreen):
     text_drawings: tuple[Drawing, ...]
 
     @override

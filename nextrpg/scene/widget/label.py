@@ -18,7 +18,7 @@ class LabelOnScreen(SizableWidgetOnScreen):
     @override
     @property
     def drawing(self) -> DrawingGroup:
-        return self.widget.text.drawing_group
+        return self.widget.text.drawing
 
 
 @dataclass(frozen=True, kw_only=True)

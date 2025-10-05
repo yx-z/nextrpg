@@ -1,39 +1,22 @@
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Self
 
 from nextrpg.config.config import config
-from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
+from nextrpg.drawing.abstract_animation_on_screen_like import (
+    AbstractAnimationOnScreenLike,
+)
 from nextrpg.drawing.color import Color
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
-from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 
 
 @dataclass(frozen=True)
-class DrawingGroupOnScreen(AnimationOnScreenLike):
+class DrawingGroupOnScreen(AbstractAnimationOnScreenLike):
     origin: Coordinate
     drawing_group: DrawingGroup
-
-    @property
-    def size(self) -> Size:
-        return self._drawing_on_screens.size
-
-    @property
-    def top_left(self) -> Coordinate:
-        return self._drawing_on_screens.top_left
-
-    def tick(self, time_delta: Millisecond) -> Self:
-        return self
-
-    @property
-    def is_complete(self) -> bool:
-        return True
 
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
@@ -54,10 +37,6 @@ class DrawingGroupOnScreen(AnimationOnScreenLike):
                 link_drawing_on_screen = link.fill(self._link_color)
                 res.append(link_drawing_on_screen)
         return tuple(res)
-
-    @cached_property
-    def _drawing_on_screens(self) -> DrawingOnScreens:
-        return DrawingOnScreens(self.drawing_on_screens)
 
     @cached_property
     def _link_color(self) -> Color | None:

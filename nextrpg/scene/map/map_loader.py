@@ -4,11 +4,12 @@ from typing import Self
 
 from pytmx import TiledObject, TiledTileLayer
 
-from nextrpg import AnimationOnScreenLike
+from nextrpg.animation.abstract_animation_on_screen import (
+    AbstractAnimationOnScreen,
+)
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.cyclic_animation import CyclicAnimation
-from nextrpg.animation.cyclic_animation_on_screen import CyclicAnimationOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
@@ -213,7 +214,7 @@ class MapLoader(TmxLoader):
 
     def _tile(
         self, left: int, top: int, gid: _Gid
-    ) -> AnimationOnScreen | DrawingOnScreen:
+    ) -> AbstractAnimationOnScreen | DrawingOnScreen:
         width, height = self._tile_size
         coordinate = Coordinate(left * width, top * height)
         if frame_infos := self._tmx.tile_properties.get(gid, {}).get("frames"):
@@ -223,7 +224,7 @@ class MapLoader(TmxLoader):
             )
             durations = tuple(frame_info.duration for frame_info in frame_infos)
             animation = CyclicAnimation(frames, durations)
-            return CyclicAnimationOnScreen(coordinate, animation)
+            return AnimationOnScreen(coordinate, animation)
         drawing = Drawing(self._tmx.images[gid])
         return DrawingOnScreen(coordinate, drawing)
 

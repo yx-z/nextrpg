@@ -4,8 +4,9 @@ from typing import Self, override
 
 from pygame import Surface
 
-from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
+from nextrpg.drawing.abstract_animation_on_screen_like import (
+    AbstractAnimationOnScreenLike,
+)
 from nextrpg.drawing.color import Alpha
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.geometry.coordinate import Coordinate
@@ -15,8 +16,8 @@ from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 @dataclass(frozen=True)
-class DrawingOnScreen(AnimationOnScreenLike):
-    top_left: Coordinate
+class DrawingOnScreen(AbstractAnimationOnScreenLike):
+    top_left_input: Coordinate
     drawing: Drawing
 
     @override
@@ -29,7 +30,7 @@ class DrawingOnScreen(AnimationOnScreenLike):
 
     @property
     def pygame(self) -> tuple[Surface, Coordinate]:
-        return self.drawing.pygame, self.top_left
+        return self.drawing.pygame, self.top_left_input
 
     def blur(self, radius: int) -> Self:
         drawing = self.drawing.blur(radius)
@@ -37,23 +38,19 @@ class DrawingOnScreen(AnimationOnScreenLike):
 
     def with_alpha(self, alpha: Alpha) -> Self:
         drawing = self.drawing.with_alpha(alpha)
-        return replace(self, top_left=self.top_left, drawing=drawing)
-
-    @property
-    def size(self) -> Size:
-        return self.drawing.size
+        return replace(self, drawing=drawing)
 
     def __add__(
         self, other: Coordinate | Size | Width | Height | DirectionalOffset
     ) -> DrawingOnScreen:
-        top_left = self.top_left + other
-        return replace(self, top_left=top_left, drawing=self.drawing)
+        top_left = self.top_left_input + other
+        return replace(self, top_left_input=top_left)
 
     def add_fast(self, other: Coordinate) -> DrawingOnScreen:
         return DrawingOnScreen(
             Coordinate(
-                self.top_left.left_value + other.left_value,
-                self.top_left.top_value + other.top_value,
+                self.top_left_input.left_value + other.left_value,
+                self.top_left_input.top_value + other.top_value,
             ),
             self.drawing,
         )
@@ -63,19 +60,11 @@ class DrawingOnScreen(AnimationOnScreenLike):
     ) -> DrawingOnScreen:
         return self + -other
 
-    @override
-    @property
-    def drawing_on_screen(self) -> DrawingOnScreen:
-        return self
-
     @property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return (self,)
 
     @override
-    def tick(self, time_delta: Millisecond) -> Self:
-        return self
-
     @property
-    def is_complete(self) -> bool:
-        return True
+    def size(self) -> Size:
+        return self.drawing.size

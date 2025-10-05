@@ -2,15 +2,22 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.animation.animation_on_screen import AnimationOnScreen
+from nextrpg.animation.abstract_animation_on_screen import (
+    AbstractAnimationOnScreen,
+)
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
+from nextrpg.drawing.abstract_animation_on_screen_like import (
+    AbstractAnimationOnScreenLike,
+)
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 
 @dataclass(frozen=True)
-class AnimationOnScreens(AnimationOnScreen):
-    resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...]
+class AnimationOnScreens(AbstractAnimationOnScreen):
+    resource: (
+        AbstractAnimationOnScreenLike
+        | tuple[AbstractAnimationOnScreenLike, ...]
+    )
 
     @override
     @cached_property

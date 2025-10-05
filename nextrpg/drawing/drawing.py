@@ -23,7 +23,6 @@ from nextrpg.geometry.dimension import (
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 if TYPE_CHECKING:
-    from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 log = Log()
@@ -44,8 +43,13 @@ class Drawing(AnimationLike):
 
     @override
     @property
-    def drawing(self) -> Drawing | DrawingGroup:
+    def drawing(self) -> Drawing:
         return self
+
+    @override
+    @property
+    def drawings(self) -> tuple[Drawing, ...]:
+        return (self,)
 
     @override
     def __str__(self) -> str:
@@ -83,11 +87,6 @@ class Drawing(AnimationLike):
         return replace(self, resource=surface)
 
     @override
-    @property
-    def drawings(self) -> tuple[Drawing, ...]:
-        return (self,)
-
-    @override
     def drawing_on_screen(self, coordinate: Coordinate) -> DrawingOnScreen:
         from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
@@ -95,9 +94,9 @@ class Drawing(AnimationLike):
 
     @override
     def drawing_on_screens(
-        self, coordinate: Coordinate
+        self, top_left: Coordinate
     ) -> tuple[DrawingOnScreen, ...]:
-        return (self.drawing_on_screen(coordinate),)
+        return (self.drawing_on_screen(top_left),)
 
     def __mul__(
         self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling

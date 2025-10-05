@@ -32,8 +32,8 @@ def title() -> TmxWidgets:
     scene = TransitionScene(title, interior_scene)
     start = Button(
         name="start",
-        idle=start_text_idle.drawing_group,
-        active=start_text_selected.drawing_group,
+        idle=start_text_idle.drawing,
+        active=start_text_selected.drawing,
         on_click=scene,
     )
 
@@ -41,8 +41,8 @@ def title() -> TmxWidgets:
     load_text_selected = load_text_idle.configured(highlight)
     load = Button(
         name="load",
-        idle=load_text_idle.drawing_group,
-        active=load_text_selected.drawing_group,
+        idle=load_text_idle.drawing,
+        active=load_text_selected.drawing,
         on_click=load_panel(),
     )
 
@@ -50,8 +50,8 @@ def title() -> TmxWidgets:
     options_text_selected = options_text_idle.configured(highlight)
     options = Button(
         name="options",
-        idle=options_text_idle.drawing_group,
-        active=options_text_selected.drawing_group,
+        idle=options_text_idle.drawing,
+        active=options_text_selected.drawing,
         on_click=quit,
     )
 
@@ -59,8 +59,8 @@ def title() -> TmxWidgets:
     exit_text_selected = exit_text_idle.configured(highlight)
     exit_button = Button(
         name="exit",
-        idle=exit_text_idle.drawing_group,
-        active=exit_text_selected.drawing_group,
+        idle=exit_text_idle.drawing,
+        active=exit_text_selected.drawing,
         on_click=quit,
     )
 
