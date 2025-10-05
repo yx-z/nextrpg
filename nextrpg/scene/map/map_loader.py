@@ -149,40 +149,42 @@ class MapLoader(TmxLoader):
         tile_id = _tile_id(layer, coord)
         return self._tmx.tile_properties.get(tile_id, {}).get("type")
 
+    def _connected(
+        self,
+        layer: TiledTileLayer,
+        coord: _TileCoordinate,
+        connected_tile_ids: set[_Gid] | None = None,
+    ) -> set[_TileCoordinate]:
+        res = {coord}
+        if not (cls := self._tile_class(layer, coord)):
+            return res
+
+        coord_tile_id = _tile_id(layer, coord)
+        if connected_tile_ids:
+            connected_tile_ids.add(coord_tile_id)
+        else:
+            connected_tile_ids = {coord_tile_id}
+
+        for left_shift, top_shift in ((1, 0), (0, 1)):
+            left = coord.left + left_shift
+            top = coord.top + top_shift
+            neighbor = _TileCoordinate(left, top)
+            if (
+                self._tile_class(layer, neighbor) == cls
+                and _tile_id(layer, neighbor) not in connected_tile_ids
+            ):
+                res |= self._connected(layer, neighbor, connected_tile_ids)
+        return res
+
     def _foreground(
         self, layer: TiledTileLayer
     ) -> tuple[AnimationOnScreens, ...]:
-        def connected(
-            coord: _TileCoordinate, connected_tile_ids: set[_Gid] | None = None
-        ) -> set[_TileCoordinate]:
-            res = {coord}
-            if not (cls := self._tile_class(layer, coord)):
-                return res
-
-            coord_tile_id = _tile_id(layer, coord)
-            if connected_tile_ids:
-                connected_tile_ids.add(coord_tile_id)
-            else:
-                connected_tile_ids = {coord_tile_id}
-
-            for left_shift, top_shift in ((1, 0), (0, 1)):
-                left = coord.left + left_shift
-                top = coord.top + top_shift
-                neighbor = _TileCoordinate(left, top)
-                if (
-                        self._tile_class(layer, neighbor) == cls
-                        and _tile_id(layer,
-                                     neighbor) not in connected_tile_ids
-                ):
-                    res |= connected(neighbor, connected_tile_ids)
-            return res
-
         visited: set[_TileCoordinate] = set()
         groups: list[AnimationOnScreens] = []
         for coordinate in (drawings := self._tile_coord_to_drawing(layer)):
             if coordinate in visited:
                 continue
-            connected_coordinates = connected(coordinate)
+            connected_coordinates = self._connected(layer, coordinate)
             visited |= connected_coordinates
             drawing_on_screens = tuple(
                 drawing_on_screen
@@ -225,7 +227,7 @@ class MapLoader(TmxLoader):
     @property
     def _init_collision_visuals(self) -> tuple[DrawingOnScreen, ...]:
         if config().debug and (
-                color := config().debug.collision_rectangle_color
+            color := config().debug.collision_rectangle_color
         ):
             return tuple(c.fill(color) for c in self.collisions)
         return ()

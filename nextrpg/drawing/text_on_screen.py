@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from functools import cached_property
-
 from typing import override
 
 from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
