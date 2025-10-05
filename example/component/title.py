@@ -70,7 +70,7 @@ def title() -> TmxWidgets:
     )
 
     tmx = Path("example/component/title.tmx")
-    return TmxWidgets(tmx_file=tmx, background="background", widget_input=group)
+    return TmxWidgets(tmx_file=tmx, background="background", widget=group)
 
 
 def load_panel() -> Panel:

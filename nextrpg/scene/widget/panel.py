@@ -21,7 +21,7 @@ from nextrpg.scene.widget.widget import Widget, WidgetOnScreen
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class PanelOnScreen(WidgetOnScreen):
-    widget_input: Panel
+    widget: Panel
     _: KW_ONLY = private_init_below()
     _children: tuple[SizableWidgetOnScreen, ...] = default(
         lambda self: self._init_children
@@ -32,7 +32,7 @@ class PanelOnScreen(WidgetOnScreen):
     def _drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
         drawing_on_screens = tuple()
         return (
-            self.widget_input.config.drawing_on_screens(self.area)
+            self.widget.config.drawing_on_screens(self.area)
             + drawing_on_screens
         )
 
@@ -51,7 +51,7 @@ class PanelOnScreen(WidgetOnScreen):
     def _init_children(self) -> tuple[SizableWidgetOnScreen, ...]:
         # TODO: Init all children.
         return (
-            self.widget_input.children[0]
+            self.widget.children[0]
             .anchor(self.area.top_left)
             .widget_on_screen(self.name_to_on_screens, self)
             .select,

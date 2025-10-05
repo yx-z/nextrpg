@@ -19,7 +19,7 @@ from nextrpg.scene.widget.widget import Widget, WidgetOnScreen
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class WidgetGroupOnScreen(WidgetOnScreen):
-    widget_input: WidgetGroup
+    widget: WidgetGroup
     _: KW_ONLY = private_init_below()
     _children: tuple[WidgetOnScreen, ...] = default(
         lambda self: self._init_children
@@ -37,7 +37,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
             children.append(child)
 
         if isinstance(event, KeyPressDown):
-            key = (self.widget_input.scroll_direction, event.key)
+            key = (self.widget.scroll_direction, event.key)
             forward = _SCROLL_AND_KEY_TO_FORWARD.get(key)
             if forward is not None:
                 return self._step(forward)
@@ -68,9 +68,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
 
     @property
     def _init_children(self) -> tuple[WidgetOnScreen, ...]:
-        assert (
-            children := self.widget_input.children
-        ), "Require non-empty children."
+        assert (children := self.widget.children), "Require non-empty children."
         return (self._init_child(children[0]).select,) + tuple(
             self._init_child(child) for child in children[1:]
         )
@@ -80,7 +78,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
 
     def _step(self, forward: bool) -> Self:
         if len(self._children) < 2 or (
-            not self.widget_input.loop
+            not self.widget.loop
             and (
                 (not forward and self._selected is self._children[0])
                 or (forward and self._selected is self._children[-1])

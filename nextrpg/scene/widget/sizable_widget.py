@@ -13,13 +13,13 @@ from nextrpg.scene.widget.widget import Widget, WidgetOnScreen
 
 @dataclass(frozen=True, kw_only=True)
 class SizableWidgetOnScreen(WidgetOnScreen):
-    widget_input: SizableWidget
+    widget: SizableWidget
 
     @override
     @cached_property
     def _drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
-        if self.widget_input.coordinate:
-            coordinate = self.widget_input.coordinate
+        if self.widget.coordinate:
+            coordinate = self.widget.coordinate
         else:
             coordinate = self.from_on_screen(Coordinate)
         return self.drawing.drawing_on_screens(coordinate)

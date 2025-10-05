@@ -13,12 +13,12 @@ from nextrpg.scene.widget.sizable_widget import (
 
 @dataclass(frozen=True)
 class LabelOnScreen(SizableWidgetOnScreen):
-    widget_input: Label
+    widget: Label
 
     @override
     @property
     def drawing(self) -> DrawingGroup:
-        return self.widget_input.text.drawing_group
+        return self.widget.text.drawing_group
 
 
 @dataclass(frozen=True, kw_only=True)

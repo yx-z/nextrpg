@@ -23,16 +23,14 @@ from nextrpg.scene.widget.widget import Widget
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class ButtonOnScreen(SizableWidgetOnScreen):
-    widget_input: Button
-    _: KW_ONLY = private_init_below()
-    _button: Button = default(lambda self: self.widget_input)
+    widget: Button
 
     @override
     @property
     def drawing(self) -> Drawing | DrawingGroup:
         if self._is_selected:
-            return self._button.active
-        return self._button.idle
+            return self.widget.active
+        return self.widget.idle
 
     @override
     def _event_after_selected(self, event: IoEvent) -> Scene:
@@ -42,31 +40,31 @@ class ButtonOnScreen(SizableWidgetOnScreen):
         ):
             return self
 
-        if callable(self._button.on_click):
-            self._button.on_click()
+        if callable(self.widget.on_click):
+            self.widget.on_click()
             return self
 
-        if isinstance(self._button.on_click, Widget):
-            return self._button.on_click.widget_on_screen(
+        if isinstance(self.widget.on_click, Widget):
+            return self.widget.on_click.widget_on_screen(
                 self.name_to_on_screens, self.parent
             ).select
 
-        return self._button.on_click
+        return self.widget.on_click
 
     @override
     def _tick_after_parent(self, time_delta: Millisecond) -> Self:
-        if isinstance(self._button.idle, Animation):
-            idle = self._button.idle.tick(time_delta)
+        if isinstance(self.widget.idle, Animation):
+            idle = self.widget.idle.tick(time_delta)
         else:
-            idle = self._button.idle
+            idle = self.widget.idle
 
-        if isinstance(self._button.active, Animation):
-            active = self._button.active.tick(time_delta)
+        if isinstance(self.widget.active, Animation):
+            active = self.widget.active.tick(time_delta)
         else:
-            active = self._button.active
+            active = self.widget.active
 
-        button = replace(self._button, idle=idle, active=active)
-        return replace(self, _button=button)
+        widget = replace(self.widget, idle=idle, active=active)
+        return replace(self, widget=widget)
 
 
 @dataclass(frozen=True, kw_only=True)

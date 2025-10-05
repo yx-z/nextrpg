@@ -24,7 +24,7 @@ from nextrpg.scene.scene import Scene
 
 @dataclass_with_default(frozen=True)
 class WidgetOnScreen(Scene):
-    widget_input: Widget
+    widget: Widget
     name_to_on_screens: dict[str, Coordinate | AreaOnScreen]
     parent: Scene | None = None
     _: KW_ONLY = private_init_below()
@@ -36,7 +36,7 @@ class WidgetOnScreen(Scene):
 
     @override
     def __str__(self) -> str:
-        return f"{type_name(self)}({self.widget_input})"
+        return f"{type_name(self)}({self.widget})"
 
     @property
     def select(self) -> Self:
@@ -99,8 +99,8 @@ class WidgetOnScreen(Scene):
         return self
 
     def from_on_screen[T](self, cls: type[T]) -> T:
-        name = getattr(self.widget_input, "name", None)
-        assert name, f"Require 'name' attribute for widget {self.widget_input}."
+        name = getattr(self.widget, "name", None)
+        assert name, f"Require 'name' attribute for widget {self.widget}."
         obj = self.name_to_on_screens.get(name)
         assert isinstance(
             obj, cls
@@ -112,15 +112,15 @@ class WidgetOnScreen(Scene):
 
     @property
     def _init_animation(self) -> AnimationOnScreen | None:
-        if self.widget_input.entering_animation:
-            return self.widget_input.entering_animation(
+        if self.widget.entering_animation:
+            return self.widget.entering_animation(
                 self._drawing_on_screens_after_parent
             )
         return None
 
     def _exit(self, to_scene: Scene) -> Self:
-        if self.widget_input.exiting_animation:
-            animation = self.widget_input.exiting_animation(
+        if self.widget.exiting_animation:
+            animation = self.widget.exiting_animation(
                 self._drawing_on_screens_after_parent
             )
             return replace(self, _animation=animation, _to_scene=to_scene)
@@ -146,7 +146,7 @@ class Widget(ABC, Generic[_WidgetOnScreen]):
         parent: Scene | None,
     ) -> _WidgetOnScreen:
         return self.widget_on_screen_type(
-            widget_input=self,
+            widget=self,
             name_to_on_screens=name_to_on_screens,
             parent=parent,
         )
