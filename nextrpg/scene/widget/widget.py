@@ -140,11 +140,9 @@ class Widget(ABC, Generic[_WidgetOnScreen]):
         Callable[[tuple[DrawingOnScreen, ...]], TimedAnimationOnScreens] | None
     ) = default(
         lambda self: (
-            lambda d: (
-                self.enter_animation(d).reverse
-                if self.enter_animation
-                else None
-            )
+            (lambda d: self.enter_animation(d).reverse)
+            if self.enter_animation
+            else None
         )
     )
 
