@@ -1,7 +1,6 @@
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
-from nextrpg import AnimationOnScreenLike
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -9,6 +8,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond, Timer
+from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 
 
 @dataclass_with_default(frozen=True)
