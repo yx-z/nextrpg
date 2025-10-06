@@ -60,10 +60,12 @@ class Countdown(Timer):
         elapsed = max(self.elapsed - time_delta, 0)
         return replace(self, elapsed=elapsed)
 
+    @override
     @property
     def reset(self) -> Self:
         return replace(self, elapsed=self.duration)
 
+    @override
     @property
     def is_complete(self) -> bool:
         return self.elapsed <= 0
