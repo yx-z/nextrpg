@@ -1,6 +1,7 @@
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
+from nextrpg import AnimationOnScreenLike
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -16,6 +17,14 @@ class TimedAnimationOnScreens(AnimationOnScreens):
     _: KW_ONLY = private_init_below()
     _timer: Timer = default(lambda self: Timer(self.duration))
 
+    @property
+    def reverse(self) -> Self:
+        if isinstance(self.resource, tuple):
+            resource = tuple(_reverse(r) for r in self.resource)
+        else:
+            resource = _reverse(self.resource)
+        return replace(self, resource=resource, _timer=self._timer.countdown)
+
     @override
     @property
     def is_complete(self) -> bool:
@@ -26,3 +35,9 @@ class TimedAnimationOnScreens(AnimationOnScreens):
         ticked = super()._tick_before_complete(time_delta)
         timer = self._timer.tick(time_delta)
         return replace(ticked, _timer=timer)
+
+
+def _reverse(resource: AnimationOnScreenLike) -> AnimationOnScreenLike:
+    if isinstance(resource, TimedAnimationOnScreens):
+        return resource.reverse
+    return resource

@@ -8,9 +8,7 @@ from nextrpg import (
     Direction,
     DirectionalOffset,
     FadeIn,
-    FadeOut,
     Label,
-    MoveFrom,
     MoveTo,
     Panel,
     PanelConfig,
@@ -82,10 +80,6 @@ def load_panel() -> Panel:
         config=PanelConfig(background=Color(0, 0, 0, 128)),
         enter_animation=lambda d: FadeIn(
             resource=MoveTo(resource=d, offset=offset, duration=duration),
-            duration=duration,
-        ),
-        exit_animation=lambda d: FadeOut(
-            resource=MoveFrom(resource=d, offset=-offset, duration=duration),
             duration=duration,
         ),
     )

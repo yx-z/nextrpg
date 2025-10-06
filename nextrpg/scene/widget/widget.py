@@ -1,12 +1,10 @@
 from abc import ABC, abstractmethod
 from collections.abc import Callable
-from dataclasses import KW_ONLY, dataclass, replace
+from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import ClassVar, Generic, Self, TypeVar, override
 
-from nextrpg.animation.abstract_animation_on_screen import (
-    AbstractAnimationOnScreen,
-)
+from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -30,7 +28,7 @@ class WidgetOnScreen(Scene):
     _: KW_ONLY = private_init_below()
     _is_selected: bool = False
     _to_scene: Scene | None = None
-    _animation: AbstractAnimationOnScreen | None = default(
+    _animation: TimedAnimationOnScreens | None = default(
         lambda self: self._init_animation
     )
 
@@ -113,7 +111,7 @@ class WidgetOnScreen(Scene):
         return replace(self, parent=parent)
 
     @property
-    def _init_animation(self) -> AbstractAnimationOnScreen | None:
+    def _init_animation(self) -> TimedAnimationOnScreens | None:
         if self.widget.enter_animation:
             return self.widget.enter_animation(
                 self._drawing_on_screens_after_parent
@@ -132,17 +130,21 @@ class WidgetOnScreen(Scene):
 _WidgetOnScreen = TypeVar("_WidgetOnScreen", bound=WidgetOnScreen)
 
 
-@dataclass(frozen=True)
+@dataclass_with_default(frozen=True)
 class Widget(ABC, Generic[_WidgetOnScreen]):
     widget_on_screen_type: ClassVar[type]
     enter_animation: (
-        Callable[[tuple[DrawingOnScreen, ...]], AbstractAnimationOnScreen]
-        | None
+        Callable[[tuple[DrawingOnScreen, ...]], TimedAnimationOnScreens] | None
     ) = None
     exit_animation: (
-        Callable[[tuple[DrawingOnScreen, ...]], AbstractAnimationOnScreen]
-        | None
-    ) = None
+        Callable[[tuple[DrawingOnScreen, ...]], TimedAnimationOnScreens] | None
+    ) = default(
+        lambda self: (
+            (lambda d: self.enter_animation(d).reverse)
+            if self.enter_animation
+            else None
+        )
+    )
 
     def widget_on_screen(
         self,

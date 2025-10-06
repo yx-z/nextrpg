@@ -14,8 +14,13 @@ class Fade(TimedAnimationOnScreens, ABC):
     @cached_property
     @override
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        if self._percentage <= 0:
+            return ()
+        drawing_on_screens = super().drawing_on_screens
+        if self._percentage >= 1:
+            return drawing_on_screens
         alpha = alpha_from_percentage(self._percentage)
-        return tuple(d.with_alpha(alpha) for d in super().drawing_on_screens)
+        return tuple(d.with_alpha(alpha) for d in drawing_on_screens)
 
     @property
     @abstractmethod
