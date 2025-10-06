@@ -72,13 +72,13 @@ def title() -> TmxWidgets:
 
 
 def load_panel() -> Panel:
-    offset = DirectionalOffset(Direction.DOWN, 50)
-    duration = 300  # ms
     return Panel(
         name="load_panel",
         children=(Label(message="No save data found."),),
         config=PanelConfig(background=Color(0, 0, 0, 128)),
         enter_animation=lambda d: MoveTo(
-            resource=d, offset=offset, duration=duration
+            resource=d,
+            offset=DirectionalOffset(Direction.DOWN, 50),
+            duration=300,
         ).compose(FadeIn),
     )
