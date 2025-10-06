@@ -1,5 +1,5 @@
 from dataclasses import KW_ONLY, replace
-from typing import Any, Self, override
+from typing import Any, Self, TypeVar, override
 
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.core.dataclass_with_default import (
@@ -10,6 +10,8 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.time import Millisecond, Timer
 from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 
+_T = TypeVar("_T", bound="TimedAnimationOnScreens")
+
 
 @dataclass_with_default(frozen=True)
 class TimedAnimationOnScreens(AnimationOnScreens):
@@ -17,9 +19,7 @@ class TimedAnimationOnScreens(AnimationOnScreens):
     _: KW_ONLY = private_init_below()
     _timer: Timer = default(lambda self: Timer(self.duration))
 
-    def compose(
-        self, other: type[TimedAnimationOnScreens], **kwargs: Any
-    ) -> TimedAnimationOnScreens:
+    def compose(self, other: type[_T], **kwargs: Any) -> _T:
         return other(resource=self, duration=self.duration, **kwargs)
 
     @property

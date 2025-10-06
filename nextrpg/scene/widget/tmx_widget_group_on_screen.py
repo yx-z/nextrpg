@@ -21,7 +21,7 @@ from nextrpg.scene.widget.widget_group import WidgetGroupOnScreen
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
-class TmxWidgets(WidgetGroupOnScreen):
+class TmxWidgetGroupOnScreen(WidgetGroupOnScreen):
     tmx_file: Path
     background: (
         str | AnimationOnScreenLike | tuple[str | AnimationOnScreenLike, ...]

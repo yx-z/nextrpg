@@ -220,7 +220,9 @@ from nextrpg.scene.widget.label import Label, LabelOnScreen
 from nextrpg.scene.widget.panel import Panel
 from nextrpg.scene.widget.scroll_direction import ScrollDirection
 from nextrpg.scene.widget.sizable_widget import SizableWidget
-from nextrpg.scene.widget.tmx_widgets import TmxWidgets
+from nextrpg.scene.widget.tmx_widget_group_on_screen import (
+    TmxWidgetGroupOnScreen,
+)
 from nextrpg.scene.widget.widget import Widget, WidgetOnScreen
 from nextrpg.scene.widget.widget_group import (
     WidgetGroup,
