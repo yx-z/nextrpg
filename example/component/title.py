@@ -80,5 +80,5 @@ def load_panel() -> Panel:
         config=PanelConfig(background=Color(0, 0, 0, 128)),
         enter_animation=lambda d: MoveTo(
             resource=d, offset=offset, duration=duration
-        ).componse(FadeIn),
+        ).compose(FadeIn),
     )

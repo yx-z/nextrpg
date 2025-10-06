@@ -17,7 +17,7 @@ class TimedAnimationOnScreens(AnimationOnScreens):
     _: KW_ONLY = private_init_below()
     _timer: Timer = default(lambda self: Timer(self.duration))
 
-    def componse(
+    def compose(
         self, other: type[TimedAnimationOnScreens], **kwargs: Any
     ) -> TimedAnimationOnScreens:
         return other(resource=self, duration=self.duration, **kwargs)
