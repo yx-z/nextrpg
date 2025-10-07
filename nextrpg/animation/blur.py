@@ -12,6 +12,7 @@ class Blur(TimedAnimationOnScreens):
     from_radius: int = 0
 
     @override
+    @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return tuple(
             drawing_on_screen.blur(self._radius)

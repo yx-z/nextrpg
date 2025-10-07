@@ -25,6 +25,7 @@ from nextrpg.drawing.color import TRANSPARENT
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
+from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.geometry.anchored_coordinate import BottomCenterCoordinate
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
@@ -33,6 +34,7 @@ from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.scene.map.map_loader import MapLoader
 from nextrpg.scene.map.map_move import MapMove
 from nextrpg.scene.map.map_shift import center_player
+from nextrpg.scene.menu_scene import MenuScene
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
 from nextrpg.scene.scene import Scene
 
@@ -80,14 +82,14 @@ class MapScene(EventfulScene, UpdateFromSave):
         map_loader = self._map_loader.tick(time_delta)
         return replace(ticked, _map_loader_input=map_loader)
 
-    @cached_property
     @override
+    @cached_property
     def drawing_on_screens_shift(self) -> Coordinate:
         player_coord = self.player.center
         shift = center_player(player_coord, self._map_loader.map_size)
         log.debug(
             t"Player center coordinate {player_coord}. Shift {shift}",
-            duration=100,
+            duration=None,
         )
         return shift
 
@@ -109,6 +111,11 @@ class MapScene(EventfulScene, UpdateFromSave):
     @cached_property
     def save_key(self) -> str:
         return concat_save_key(super().save_key, self.tmx_file)
+
+    def event(self, event: IoEvent) -> Self:
+        if isinstance(event, KeyPressDown) and event.key is KeyboardKey.CANCEL:
+            return MenuScene(self)
+        return super().event(event)
 
     @override
     @property

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Self, override
 
 from pygame import SRCALPHA, Surface
 from pygame.image import load
-from pygame.transform import flip, gaussian_blur, smoothscale
+from pygame.transform import box_blur, flip, smoothscale
 
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
@@ -152,7 +152,7 @@ class Drawing(AnimationLike):
         return res.convert_alpha()
 
     def blur(self, radius: int) -> Self:
-        surface = gaussian_blur(self.surface, radius)
+        surface = box_blur(self.surface, radius)
         return replace(self, resource=surface)
 
     def cut(self, area: RectangleAreaOnScreen) -> Self:

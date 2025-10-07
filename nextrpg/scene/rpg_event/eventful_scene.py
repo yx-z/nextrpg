@@ -43,7 +43,7 @@ class EventfulScene(EventAsAttr, Scene):
             return self.player
         return self._npc_dict[unique_name]
 
-    def event(self, event: IoEvent) -> Scene:
+    def event(self, event: IoEvent) -> Self:
         player = self.player.event(event)
         if (
             not self._started_npc
@@ -55,7 +55,6 @@ class EventfulScene(EventAsAttr, Scene):
             and npc_event.start_mode is NpcEventStartMode.CONFIRM
         ):
             return replace(self, player=player, _started_npc=npc)
-
         return replace(self, player=player)
 
     @override

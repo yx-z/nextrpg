@@ -5,4 +5,5 @@ sys.path.append(str((Path(__file__) / "../..").absolute()))
 from example.component.title import title
 from nextrpg import Config, DebugConfig, Game
 
+# Game(title).start()
 Game(title, config=Config(debug=DebugConfig())).start()
