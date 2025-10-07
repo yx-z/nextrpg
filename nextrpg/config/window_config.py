@@ -1,10 +1,9 @@
 from collections.abc import Callable
 from dataclasses import dataclass, replace
-from enum import Enum, auto
 from functools import cached_property
 from typing import TYPE_CHECKING, Any, Self, override
 
-from pygame import DOUBLEBUF, SCALED
+from pygame import DOUBLEBUF
 from pygame.locals import FULLSCREEN, RESIZABLE
 
 from nextrpg.core.save import UpdateFromSave
@@ -54,7 +53,7 @@ class WindowConfig(UpdateFromSave[dict[str, Any]]):
 
     @property
     def flag(self) -> _WindowFlag:
-        flag = SCALED
+        flag = 0
         if self.double_buffer:
             flag |= DOUBLEBUF
         if self.full_screen:
