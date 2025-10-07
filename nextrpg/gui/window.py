@@ -17,7 +17,7 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing import scale_surface
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_on_screen import TextOnScreen
@@ -115,7 +115,8 @@ class Window:
 
         match self.current_config.resize:
             case ResizeMode.SCALE:
-                self._screen.blit(*self._scale(drawing_on_screens).pygame)
+                surface = self._scale(drawing_on_screens)
+                self._screen.blit(surface, self._center_shift)
             case ResizeMode.KEEP_NATIVE_SIZE:
                 drawing_on_screens = tuple(d.pygame for d in drawing_on_screens)
                 self._screen.blits(drawing_on_screens)
@@ -135,12 +136,11 @@ class Window:
 
     def _scale(
         self, drawing_on_screens: tuple[DrawingOnScreen, ...]
-    ) -> DrawingOnScreen:
+    ) -> Surface:
         screen = Surface(self.initial_config.size, SRCALPHA)
         surfaces = tuple(d.pygame for d in drawing_on_screens)
         screen.blits(surfaces)
-        scaled_draw = Drawing(screen).scale_fast(self._scaling)
-        return DrawingOnScreen(self._center_shift, scaled_draw)
+        return scale_surface(screen, self._scaling)
 
     @cached_property
     def _scaling(self) -> float:

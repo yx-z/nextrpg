@@ -105,14 +105,6 @@ class Drawing(AnimationLike):
         surface = smoothscale(self.surface, size)
         return replace(self, resource=surface)
 
-    def scale_fast(self, scaling: float) -> Drawing:
-        return Drawing(
-            smoothscale(
-                self.surface,
-                (self.surface.width * scaling, self.surface.height * scaling),
-            )
-        )
-
     @cached_property
     def visible_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
         rectangle = self.surface.get_bounding_rect()
@@ -178,3 +170,9 @@ class Drawing(AnimationLike):
         surface.fill(color)
         surface.blit(self.surface, ORIGIN)
         return surface
+
+
+def scale_surface(surface: Surface, scaling: float) -> Surface:
+    return smoothscale(
+        surface, (surface.width * scaling, surface.height * scaling)
+    )
