@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from typing import TYPE_CHECKING, Any, Self, override
@@ -117,8 +118,10 @@ class EventfulScene(EventAsAttr, Scene):
         return background_events_drawing_on_screens
 
     @property
-    def drawing_on_screens_before_shift(self) -> tuple[DrawingOnScreen, ...]:
-        return ()
+    @abstractmethod
+    def drawing_on_screens_before_shift(
+        self,
+    ) -> tuple[DrawingOnScreen, ...]: ...
 
     def is_complete(
         self,

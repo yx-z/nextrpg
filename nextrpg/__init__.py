@@ -8,7 +8,6 @@ from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.animation.animation_on_screens import (
     AnimationOnScreens,
 )
-from nextrpg.animation.blur import Blur
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.animation.fade import Fade, FadeIn, FadeOut
 from nextrpg.animation.move import Move, MoveFrom, MoveTo
@@ -104,7 +103,7 @@ from nextrpg.drawing.color import (
     Color,
     alpha_from_percentage,
 )
-from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.drawing import Drawing, scale_surface
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.drawing_group_on_screen import DrawingGroupOnScreen
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
