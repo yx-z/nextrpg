@@ -63,6 +63,7 @@ _L = TypeVar("_L", bound=LoadFromSave)
 _U = TypeVar("_U", bound=UpdateFromSave)
 
 
+@cache
 def _config() -> SaveConfig:
     from nextrpg.config.config import config
 
@@ -78,8 +79,8 @@ def _log() -> Log:
 
 @dataclass_with_default(frozen=True)
 class SaveIo:
-    config: SaveConfig = field(default_factory=_config)
     slot: str = default(lambda self: self.config.shared_slot)
+    config: SaveConfig = field(default_factory=_config)
     _: KW_ONLY = private_init_below()
     _log: Log = field(default_factory=_log)
     _thread = ThreadPoolExecutor(max_workers=1)

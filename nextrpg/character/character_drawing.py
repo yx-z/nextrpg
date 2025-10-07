@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from typing import Any, Self
 
 from nextrpg.core.time import Millisecond
@@ -11,7 +10,6 @@ from nextrpg.geometry.direction import Direction
 from nextrpg.geometry.sizable import Sizable
 
 
-@dataclass(frozen=True)
 class CharacterDrawing(ABC, Sizable):
     direction: Direction
 

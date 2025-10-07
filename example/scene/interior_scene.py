@@ -4,7 +4,6 @@ from nextrpg import (
     AvatarPosition,
     CharacterSpec,
     Color,
-    Direction,
     Drawing,
     DrawingTrim,
     EventfulScene,
@@ -54,7 +53,7 @@ def character_drawing(file: str) -> RpgMakerCharacterDrawing:
     drawing = Drawing(path)
     trim = DrawingTrim(top=Height(20), left=Width(10), right=Width(10))
     sprite_sheet = RpgMakerSpriteSheet(drawing=drawing, trim=trim)
-    return RpgMakerCharacterDrawing(Direction.DOWN, sprite_sheet)
+    return RpgMakerCharacterDrawing(sprite_sheet)
 
 
 def create_player() -> CharacterSpec:

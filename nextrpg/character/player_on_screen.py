@@ -4,6 +4,7 @@ from typing import Self, override
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
 from nextrpg.config.config import config
+from nextrpg.config.player_config import PlayerConfig
 from nextrpg.core.dataclass_with_default import private_init_below
 from nextrpg.core.time import Millisecond
 from nextrpg.event.io_event import (
@@ -18,6 +19,7 @@ from nextrpg.geometry.direction import Direction, DirectionalOffset
 
 @dataclass(frozen=True)
 class PlayerOnScreen(MovingCharacterOnScreen):
+    config: PlayerConfig = field(default_factory=lambda: config().player)
     _: KW_ONLY = private_init_below()
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
@@ -36,7 +38,7 @@ class PlayerOnScreen(MovingCharacterOnScreen):
         direction = _key_to_dir(updated_keys)
         character = (
             self.character.turn(direction)
-            if direction in config().player.directions
+            if direction in self.config.directions
             else self.character
         )
         return replace(self, character=character, _movement_keys=updated_keys)

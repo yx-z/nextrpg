@@ -5,6 +5,9 @@ from typing import Self, override
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.config.config import config
+from nextrpg.config.rpg_maker_character_drawing_config import (
+    RpgMakerCharacterDrawingConfig,
+)
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -63,10 +66,11 @@ class RpgMakerSpriteSheet(SpriteSheet):
 @dataclass_with_default(frozen=True)
 class RpgMakerCharacterDrawing(CharacterDrawing):
     sprite_sheet: RpgMakerSpriteSheet
+    direction: Direction = Direction.DOWN
     selection: SpriteSheetSelection | None = None
     animate_on_idle: bool = False
-    duration_per_frame: Millisecond = field(
-        default_factory=lambda: config().rpg_maker_character.duration_per_frame
+    config: RpgMakerCharacterDrawingConfig = field(
+        default_factory=lambda: config().rpg_maker_character
     )
     _: KW_ONLY = private_init_below()
     _animations: dict[Direction, CyclicAnimation] = default(
@@ -120,7 +124,8 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             frames[i] for i in self.sprite_sheet.style.frame_indices()
         )
         return CyclicAnimation(
-            frames=ordered_frames, duration_per_frame=self.duration_per_frame
+            frames=ordered_frames,
+            duration_per_frame=self.config.duration_per_frame,
         )
 
     def _crop_at_row(self, drawing: Drawing, row: int) -> tuple[Drawing, ...]:

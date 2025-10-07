@@ -18,15 +18,6 @@ def screen_size() -> Size:
             return config().window.size
 
 
-def window_size() -> Size:
-    return config().window.size
-
-
-def window_area() -> RectangleAreaOnScreen:
-    size = window_size()
-    return ORIGIN.anchor(size).rectangle_area_on_screen
-
-
 def screen_area() -> RectangleAreaOnScreen:
     size = screen_size()
     return ORIGIN.anchor(size).rectangle_area_on_screen

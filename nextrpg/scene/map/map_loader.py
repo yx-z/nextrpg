@@ -1,4 +1,4 @@
-from dataclasses import KW_ONLY, dataclass, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self
 
@@ -12,6 +12,7 @@ from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.config import config
+from nextrpg.config.map_config import MapConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -63,13 +64,14 @@ class ForegroundLayers:
 
 @dataclass_with_default(frozen=True)
 class MapLoader(TmxLoader):
+    config: MapConfig = field(default_factory=lambda: config().map)
     _: KW_ONLY = private_init_below()
     backgrounds: AnimationOnScreens = default(
-        lambda self: self._draw_layers(config().map.background)
+        lambda self: self._draw_layers(self.config.background)
     )
     foregrounds: ForegroundLayers = default(lambda self: self._init_foregrounds)
     above_characters: AnimationOnScreens = default(
-        lambda self: self._draw_layers(config().map.above_character)
+        lambda self: self._draw_layers(self.config.above_character)
     )
     collisions: tuple[AreaOnScreen, ...] = default(
         lambda self: self._init_collisions
@@ -238,7 +240,7 @@ class MapLoader(TmxLoader):
 
     @property
     def _init_foregrounds(self) -> ForegroundLayers:
-        layers = self._tile_layers(config().map.foreground)
+        layers = self._tile_layers(self.config.foreground)
         tiles = tuple(
             tile for layer in layers for tile in self._foreground(layer)
         )
@@ -257,7 +259,7 @@ class MapLoader(TmxLoader):
         from_tiles = tuple(
             self._polygon(collider) for collider in self._colliders
         )
-        collision = config().map.collision
+        collision = self.config.collision
         from_objects = tuple(
             poly
             for obj in self.get_objects_by_class_name(collision)

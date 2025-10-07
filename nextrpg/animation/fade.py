@@ -27,7 +27,7 @@ class Fade(TimedAnimationOnScreens, ABC):
     def _percentage(self) -> float: ...
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class FadeIn(Fade):
     final_alpha_percentage: float = 1.0
 
@@ -37,7 +37,7 @@ class FadeIn(Fade):
         return self._timer.completed_percentage * self.final_alpha_percentage
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class FadeOut(Fade):
     final_alpha_percentage: float = 0.0
 
