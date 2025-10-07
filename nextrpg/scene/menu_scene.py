@@ -21,6 +21,7 @@ class MenuScene(Scene):
         scene = self.scene.tick_without_event(time_delta)
         return replace(self, scene=scene)
 
+    @override
     def event(self, event: IoEvent) -> Self:
         scene = self.scene.event(event)
         return replace(self, scene=scene)
