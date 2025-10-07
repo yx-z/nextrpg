@@ -8,7 +8,7 @@ from pygame.display import flip, set_caption, set_icon, set_mode
 from pygame.surface import Surface
 
 from nextrpg.config.config import config, set_config
-from nextrpg.config.window_config import ResizeMode, WindowConfig
+from nextrpg.config.window_config import WindowConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -113,13 +113,11 @@ class Window:
                 d for text in _log_text(msgs) for d in text.drawing_on_screens
             )
 
-        match self.current_config.resize:
-            case ResizeMode.SCALE:
-                surface = self._scale(drawing_on_screens)
-                self._screen.blit(surface, self._center_shift)
-            case ResizeMode.KEEP_NATIVE_SIZE:
-                drawing_on_screens = tuple(d.pygame for d in drawing_on_screens)
-                self._screen.blits(drawing_on_screens)
+        screen = Surface(self.initial_config.size, SRCALPHA)
+        surfaces = tuple(d.pygame for d in drawing_on_screens)
+        screen.blits(surfaces)
+        scaled = scale_surface(screen, self._scaling)
+        self._screen.blit(scaled, self._center_shift)
         flip()
 
     def _toggle_include_fps_in_window_title(self) -> Self:
@@ -133,14 +131,6 @@ class Window:
 
     def _set_screen(self, cfg: WindowConfig) -> Surface:
         return set_mode(cfg.size, cfg.flag)
-
-    def _scale(
-        self, drawing_on_screens: tuple[DrawingOnScreen, ...]
-    ) -> Surface:
-        screen = Surface(self.initial_config.size, SRCALPHA)
-        surfaces = tuple(d.pygame for d in drawing_on_screens)
-        screen.blits(surfaces)
-        return scale_surface(screen, self._scaling)
 
     @cached_property
     def _scaling(self) -> float:

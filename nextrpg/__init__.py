@@ -66,7 +66,7 @@ from nextrpg.config.say_event_config import (
 from nextrpg.config.text_config import TextConfig
 from nextrpg.config.timing_config import TimingConfig
 from nextrpg.config.ui_config import PanelConfig
-from nextrpg.config.window_config import ResizeMode, WindowConfig
+from nextrpg.config.window_config import WindowConfig
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,

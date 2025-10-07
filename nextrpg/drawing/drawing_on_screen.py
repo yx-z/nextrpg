@@ -46,15 +46,6 @@ class DrawingOnScreen(AnimationOnScreenLike):
         top_left = self.top_left + other
         return replace(self, top_left_input=top_left)
 
-    def add_fast(self, other: Coordinate) -> DrawingOnScreen:
-        return DrawingOnScreen(
-            Coordinate(
-                self.top_left_input.left_value + other.left_value,
-                self.top_left_input.top_value + other.top_value,
-            ),
-            self.drawing,
-        )
-
     def __sub__(
         self, other: Coordinate | Size | Width | Height | DirectionalOffset
     ) -> DrawingOnScreen:

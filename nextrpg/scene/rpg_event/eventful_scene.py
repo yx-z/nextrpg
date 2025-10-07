@@ -112,7 +112,7 @@ class EventfulScene(EventAsAttr, Scene):
         )
         if shift := self.drawing_on_screens_shift:
             drawing_on_screens = tuple(
-                d.add_fast(shift) for d in self.drawing_on_screens_before_shift
+                d + shift for d in self.drawing_on_screens_before_shift
             )
             return drawing_on_screens + background_events_drawing_on_screens
         return background_events_drawing_on_screens

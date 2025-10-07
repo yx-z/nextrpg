@@ -4,6 +4,7 @@ from enum import Enum, auto
 from functools import cached_property
 from typing import TYPE_CHECKING, Any, Self, override
 
+from pygame import DOUBLEBUF, SCALED
 from pygame.locals import FULLSCREEN, RESIZABLE
 
 from nextrpg.core.save import UpdateFromSave
@@ -14,11 +15,6 @@ if TYPE_CHECKING:
     from nextrpg.drawing.drawing import Drawing
 
 
-class ResizeMode(Enum):
-    SCALE = auto()
-    KEEP_NATIVE_SIZE = auto()
-
-
 @dataclass(frozen=True)
 class WindowConfig(UpdateFromSave[dict[str, Any]]):
     title: str = "nextrpg"
@@ -26,7 +22,6 @@ class WindowConfig(UpdateFromSave[dict[str, Any]]):
     background: Color = BLACK
     double_buffer: bool = True
     full_screen: bool = False
-    resize: ResizeMode = ResizeMode.SCALE
     allow_resize: bool = True
     include_fps_in_window_title: bool = False
     icon_input: Drawing | Callable[[], Drawing] | None = None
@@ -59,7 +54,9 @@ class WindowConfig(UpdateFromSave[dict[str, Any]]):
 
     @property
     def flag(self) -> _WindowFlag:
-        flag = self.double_buffer
+        flag = SCALED
+        if self.double_buffer:
+            flag |= DOUBLEBUF
         if self.full_screen:
             flag |= FULLSCREEN
         if self.allow_resize:
