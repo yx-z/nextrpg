@@ -28,12 +28,7 @@ class MenuScene(Scene):
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        drawing_on_screens = DrawingOnScreens(
-            self.scene.drawing_on_screens_before_shift
-        )
-        blurred = (
-            drawing_on_screens.drawing_on_screen.blur(2)
-            + self.scene.drawing_on_screens_shift
-            - drawing_on_screens.top_left
-        )
-        return (blurred,)
+        drawing_on_screens = DrawingOnScreens(self.scene.drawing_on_screens)
+        blurred = drawing_on_screens.drawing_on_screen.blur(2)
+        shifted = blurred - drawing_on_screens.top_left
+        return (shifted,)
