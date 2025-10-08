@@ -113,10 +113,9 @@ class Window:
                 d for text in _log_text(msgs) for d in text.drawing_on_screens
             )
 
-        screen = Surface(self.initial_config.size, SRCALPHA)
-        surfaces = tuple(d.pygame for d in drawing_on_screens)
-        screen.blits(surfaces)
-        scaled = scale_surface(screen, self._scaling)
+        base = Surface(self.initial_config.size, SRCALPHA)
+        base.blits(d.pygame for d in drawing_on_screens)
+        scaled = scale_surface(base, self._scaling)
         self._screen.blit(scaled, self._center_shift)
         flip()
 
