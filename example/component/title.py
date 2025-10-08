@@ -88,8 +88,7 @@ def load_panel() -> Panel:
 
 
 def enter_panel(drawing_on_screens: tuple[DrawingOnScreen, ...]) -> FadeIn:
+    offset = DirectionalOffset(Direction.DOWN, 50)
     return MoveTo(
-        resource=drawing_on_screens,
-        offset=DirectionalOffset(Direction.DOWN, 50),
-        duration=300,
+        resource=drawing_on_screens, offset=offset, duration=300
     ).compose(FadeIn)
