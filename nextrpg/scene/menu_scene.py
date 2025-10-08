@@ -42,11 +42,9 @@ class MenuScene(Scene):
     def event(self, event: IoEvent) -> Scene:
         if isinstance(event, KeyPressDown) and event.key is KeyboardKey.CANCEL:
             return self.scene
-        if not isinstance(
-            tmx_event := self.tmx.event(event), TmxWidgetGroupOnScreen
-        ):
-            return tmx_event
-        return replace(self, tmx=tmx_event)
+        if isinstance(res := self.tmx.event(event), TmxWidgetGroupOnScreen):
+            return replace(self, tmx=res)
+        return res
 
     @override
     @cached_property
