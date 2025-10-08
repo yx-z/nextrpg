@@ -98,21 +98,6 @@ class SayEventTypingState(SayEventState):
     )
 
     @override
-    @property
-    def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
-        if self._typewriter:
-            text = self._typewriter.drawing_on_screens
-        else:
-            text = self.text_on_screen.drawing_on_screens
-        return self.background.drawing_on_screens + text
-
-    @override
-    def _tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
-        background = self.background.tick(time_delta)
-        typewriter = tick_optional(self._typewriter, time_delta)
-        return replace(ticked, background=background, _typewriter=typewriter)
-
-    @override
     def event(self, event: IoEvent) -> Scene:
         if (
             not isinstance(event, KeyPressDown)
@@ -130,6 +115,21 @@ class SayEventTypingState(SayEventState):
             animation_on_screen=animation_on_screens,
             config=self.config,
         )
+
+    @override
+    @property
+    def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
+        if self._typewriter:
+            text = self._typewriter.drawing_on_screens
+        else:
+            text = self.text_on_screen.drawing_on_screens
+        return self.background.drawing_on_screens + text
+
+    @override
+    def _tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
+        background = self.background.tick(time_delta)
+        typewriter = tick_optional(self._typewriter, time_delta)
+        return replace(ticked, background=background, _typewriter=typewriter)
 
 
 @dataclass_with_default(frozen=True, kw_only=True)

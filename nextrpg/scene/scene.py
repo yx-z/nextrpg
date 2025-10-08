@@ -10,8 +10,8 @@ class Scene(ABC):
     @abstractmethod
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]: ...
 
-    def tick(self, time_delta: Millisecond) -> Scene:
-        return self
+    @abstractmethod
+    def tick(self, time_delta: Millisecond) -> Scene: ...
 
     def event(self, event: IoEvent) -> Scene:
         return self

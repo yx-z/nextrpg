@@ -24,12 +24,12 @@ class RpgEventScene[R = None](Scene):
         ticked = replace(self, scene=self.scene.tick_without_event(time_delta))
         return self._tick_after_scene(time_delta, ticked)
 
-    def _tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
-        return ticked
-
     @property
     def add_ons(self) -> tuple[DrawingOnScreen, ...]:
         return ()
+
+    def _tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
+        return ticked
 
 
 def register_rpg_event_scene[R, **P](

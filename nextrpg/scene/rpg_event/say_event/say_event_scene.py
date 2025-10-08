@@ -10,6 +10,7 @@ from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
+from nextrpg.event.io_event import IoEvent
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.scene.rpg_event.rpg_event_scene import (
@@ -42,6 +43,10 @@ class SayEventScene(RpgEventScene):
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
         return self._state.tick(time_delta)
+
+    @override
+    def event(self, event: IoEvent) -> Scene:
+        return self._state.event(event)
 
     @cached_property
     def config(self) -> SayEventConfig:

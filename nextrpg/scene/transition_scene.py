@@ -18,6 +18,7 @@ from nextrpg.scene.scene import Scene
 
 @dataclass_with_default(frozen=True)
 class TransitionScene(Scene):
+
     from_scene: Scene | Callable[[], Scene]
     to_scene: Scene | Callable[[], Scene]
     intermediary: DrawingOnScreen | tuple[DrawingOnScreen, ...] = field(
@@ -51,8 +52,8 @@ class TransitionScene(Scene):
             self, to_scene=self._to_scene, _fade_in=fade_in, _fade_out=fade_out
         )
 
-    @cached_property
     @override
+    @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if self._fade_in.is_complete:
             return (
