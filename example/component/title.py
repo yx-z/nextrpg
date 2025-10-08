@@ -7,6 +7,7 @@ from nextrpg import (
     Color,
     Direction,
     DirectionalOffset,
+    DrawingOnScreen,
     FadeIn,
     Label,
     MoveTo,
@@ -74,13 +75,20 @@ def title() -> TmxWidgetGroupOnScreen:
 
 
 def load_panel() -> Panel:
+    child = Label(message="Loading...")
+    children = (child,)
+    panel_config = PanelConfig(background=Color(0, 0, 0, 128))
     return Panel(
         name="load_panel",
-        children=(Label(message="No save data found."),),
-        config=PanelConfig(background=Color(0, 0, 0, 128)),
-        enter_animation=lambda d: MoveTo(
-            resource=d,
-            offset=DirectionalOffset(Direction.DOWN, 50),
-            duration=300,
-        ).compose(FadeIn),
+        children=children,
+        config=panel_config,
+        enter_animation=enter_panel,
     )
+
+
+def enter_panel(drawing_on_screens: tuple[DrawingOnScreen, ...]) -> FadeIn:
+    return MoveTo(
+        resource=drawing_on_screens,
+        offset=DirectionalOffset(Direction.DOWN, 50),
+        duration=300,
+    ).compose(FadeIn)
