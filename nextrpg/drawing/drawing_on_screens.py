@@ -17,6 +17,11 @@ from nextrpg.geometry.dimension import Size
 class DrawingOnScreens(AnimationOnScreenLike):
     drawing_on_screens: tuple[DrawingOnScreen, ...]
 
+    def __post_init__(self) -> None:
+        assert (
+            len(self.drawing_on_screens) > 0
+        ), f"Require at least one DrawingOnScreen. Got {len(self.drawing_on_screens)}."
+
     @override
     @cached_property
     def drawing_on_screen(self) -> DrawingOnScreen:

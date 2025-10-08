@@ -15,6 +15,7 @@ from nextrpg import (
     PanelConfig,
     ScrollDirection,
     Text,
+    TmxLoader,
     TmxWidgetGroupOnScreen,
     TransitionScene,
     WidgetGroup,
@@ -68,9 +69,10 @@ def title() -> TmxWidgetGroupOnScreen:
         children=children, scroll_direction=ScrollDirection.HORIZONTAL
     )
 
-    tmx = Path("example/component/title.tmx")
+    tmx_path = Path("example/component/title.tmx")
+    tmx_loader = TmxLoader(tmx_path)
     return TmxWidgetGroupOnScreen(
-        tmx_file=tmx, background="background", widget=group
+        tmx=tmx_loader, background="background", widget=group
     )
 
 

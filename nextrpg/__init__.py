@@ -53,6 +53,7 @@ from nextrpg.config.event_config import EventConfig
 from nextrpg.config.game_loop_config import GameLoopConfig
 from nextrpg.config.key_mapping_config import KeyMappingConfig
 from nextrpg.config.map_config import MapConfig
+from nextrpg.config.menu_config import MenuConfig
 from nextrpg.config.rpg_maker_character_drawing_config import (
     RpgMakerCharacterDrawingConfig,
 )
@@ -182,6 +183,7 @@ from nextrpg.scene.map.map_loader import MapLoader
 from nextrpg.scene.map.map_move import MapMove
 from nextrpg.scene.map.map_scene import MapScene
 from nextrpg.scene.map.map_shift import center_player
+from nextrpg.scene.menu_scene import MenuScene
 from nextrpg.scene.rpg_event.cutscene import cutscene
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
 from nextrpg.scene.rpg_event.fade_in_event_scene import (

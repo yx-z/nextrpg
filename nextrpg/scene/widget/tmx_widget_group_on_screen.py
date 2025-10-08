@@ -1,6 +1,5 @@
 from dataclasses import replace
 from functools import cached_property
-from pathlib import Path
 from typing import Self, override
 
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
@@ -22,7 +21,7 @@ from nextrpg.scene.widget.widget_group import WidgetGroupOnScreen
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class TmxWidgetGroupOnScreen(WidgetGroupOnScreen):
-    tmx_file: Path
+    tmx: TmxLoader
     background: (
         str | AnimationOnScreenLike | tuple[str | AnimationOnScreenLike, ...]
     )
@@ -64,16 +63,12 @@ class TmxWidgetGroupOnScreen(WidgetGroupOnScreen):
         return AnimationOnScreens(resources)
 
     def _image_layer(self, layer: str) -> DrawingOnScreen:
-        return self._tmx.image_layer(layer)
-
-    @cached_property
-    def _tmx(self) -> TmxLoader:
-        return TmxLoader(self.tmx_file)
+        return self.tmx.image_layer(layer)
 
     @property
     def _init_name_to_on_screens(self) -> dict[str, Coordinate | AreaOnScreen]:
         name_to_on_screens: dict[str, Coordinate | AreaOnScreen] = {}
-        for obj in self._tmx.all_objects:
+        for obj in self.tmx.all_objects:
             if isinstance(area := get_geometry(obj), AreaOnScreen):
                 res = area
             else:

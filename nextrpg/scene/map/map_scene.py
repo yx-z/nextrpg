@@ -34,7 +34,6 @@ from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.scene.map.map_loader import MapLoader
 from nextrpg.scene.map.map_move import MapMove
 from nextrpg.scene.map.map_shift import center_player
-from nextrpg.scene.menu_scene import MenuScene
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
 from nextrpg.scene.scene import Scene
 
@@ -112,9 +111,14 @@ class MapScene(EventfulScene, UpdateFromSave):
     def save_key(self) -> str:
         return concat_save_key(super().save_key, self.tmx_file)
 
-    def event(self, event: IoEvent) -> Self:
-        if isinstance(event, KeyPressDown) and event.key is KeyboardKey.CANCEL:
-            return MenuScene(self)
+    @override
+    def event(self, event: IoEvent) -> Scene:
+        if (
+            (create_menu := config().menu.create)
+            and isinstance(event, KeyPressDown)
+            and event.key is KeyboardKey.CANCEL
+        ):
+            return create_menu(self)
         return super().event(event)
 
     @override

@@ -10,6 +10,7 @@ from nextrpg.config.event_config import EventConfig
 from nextrpg.config.game_loop_config import GameLoopConfig
 from nextrpg.config.key_mapping_config import KeyMappingConfig
 from nextrpg.config.map_config import MapConfig
+from nextrpg.config.menu_config import MenuConfig
 from nextrpg.config.player_config import PlayerConfig
 from nextrpg.config.rpg_maker_character_drawing_config import (
     RpgMakerCharacterDrawingConfig,
@@ -44,6 +45,7 @@ class Config:
     save: SaveConfig = SaveConfig()
     game_loop: GameLoopConfig = GameLoopConfig()
     ui: UiConfig = UiConfig()
+    menu: MenuConfig = MenuConfig()
 
 
 def set_config(cfg: Config) -> Config:
