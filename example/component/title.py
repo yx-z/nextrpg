@@ -77,7 +77,8 @@ def title() -> TmxWidgetGroupOnScreen:
 def load_panel() -> Panel:
     child = Label(message="Loading...")
     children = (child,)
-    panel_config = PanelConfig(background=Color(0, 0, 0, 128))
+    background = Color(0, 0, 0, 128)
+    panel_config = PanelConfig(background=background)
     return Panel(
         name="load_panel",
         children=children,
