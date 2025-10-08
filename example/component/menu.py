@@ -13,4 +13,5 @@ def menu(map: MapScene) -> MenuScene:
 def tmx_widget_group_on_screen() -> TmxWidgetGroupOnScreen:
     tmx_path = Path("example/component/menu.tmx")
     tmx = TmxLoader(tmx_path)
+    # TODO: Add widgets.
     return TmxWidgetGroupOnScreen(tmx=tmx, background=())
