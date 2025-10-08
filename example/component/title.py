@@ -1,3 +1,4 @@
+from functools import cache
 from pathlib import Path
 
 from example.scene.interior_scene import interior_scene
@@ -24,6 +25,7 @@ from nextrpg import (
 )
 
 
+@cache
 def title() -> TmxWidgetGroupOnScreen:
     highlight = config().text.colored(GREEN)
 
