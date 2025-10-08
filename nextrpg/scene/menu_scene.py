@@ -34,9 +34,8 @@ class MenuScene(Scene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        scene = self.scene.tick_without_event(time_delta)
         tmx = self.tmx.tick(time_delta)
-        return replace(self, scene=scene, tmx=tmx)
+        return replace(self, tmx=tmx)
 
     @override
     def event(self, event: IoEvent) -> Scene:
