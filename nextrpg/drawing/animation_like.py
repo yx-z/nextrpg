@@ -31,7 +31,7 @@ class AnimationLike(Sizable):
         return self.drawing.drawings
 
     @property
-    def no_shift(self) -> RelativeDrawing:
+    def with_no_shift(self) -> RelativeDrawing:
         return self.shift(ZERO_SIZE)
 
     def shift(

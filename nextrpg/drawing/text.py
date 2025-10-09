@@ -30,7 +30,7 @@ class Text(AnimationLike):
         return replace(self, message=self.message[s])
 
     @override
-    @property
+    @cached_property
     def drawing(self) -> DrawingGroup:
         draws = tuple(
             self._drawing(line).shift(self._line_shift(i))

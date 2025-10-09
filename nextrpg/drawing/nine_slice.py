@@ -29,7 +29,7 @@ class NineSlice:
         stretched_top_center = self._top_center * width_scale
         top_row = self._stretch_row(
             size, self._top_left, stretched_top_center, self._top_right
-        ).no_shift
+        ).with_no_shift
 
         stretched_center_left = self._center_left * height_scale
         stretched_center = self._center * width_scale * height_scale
@@ -63,7 +63,7 @@ class NineSlice:
     def _stretch_row(
         self, size: Size, left: Drawing, center: Drawing, right: Drawing
     ) -> DrawingGroup:
-        relative_left = left.no_shift
+        relative_left = left.with_no_shift
         relative_center = center.shift(self.left.with_zero_height)
         relative_right = right.shift(
             size.width.with_zero_height, Anchor.TOP_RIGHT

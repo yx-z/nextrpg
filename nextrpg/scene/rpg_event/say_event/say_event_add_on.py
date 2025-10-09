@@ -2,9 +2,6 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import override
 
-from nextrpg.animation.abstract_animation_on_screen import (
-    AbstractAnimationOnScreen,
-)
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.say_event_config import (
@@ -14,6 +11,7 @@ from nextrpg.config.say_event_config import (
 )
 from nextrpg.drawing.anchor import Anchor
 from nextrpg.drawing.animation_like import AnimationLike
+from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
@@ -38,8 +36,8 @@ class SayEventAddOn:
     message: str | Text | TextGroup
 
     @cached_property
-    def background(self) -> AbstractAnimationOnScreen:
-        contents = [self._text.drawing.no_shift]
+    def background(self) -> AnimationOnScreenLike:
+        contents = [self._text.drawing.with_no_shift]
         if self._name_relative_to_text:
             contents.append(self._name_relative_to_text)
         if self._avatar_relative_to_text:
@@ -48,11 +46,12 @@ class SayEventAddOn:
 
         background = self._background_relative_to_text.drawing
         shift = self._background_relative_to_text.shift
-        background_and_content = (background.no_shift, content.shift(-shift))
-        add_on_group = DrawingGroup(background_and_content)
-        return _Background(
-            self._add_on_top_left, add_on_group, self._text.drawings
+        background_and_content = (
+            background.with_no_shift,
+            content.shift(-shift),
         )
+        add_on_group = DrawingGroup(background_and_content)
+        return _Background(self._add_on_top_left, add_on_group, self._text)
 
     @cached_property
     def text_on_screen(self) -> TextOnScreen:
@@ -187,7 +186,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
             background_drawing = background_drawing.cut(background_crop)
 
         background_and_tip = (
-            background_drawing.no_shift,
+            background_drawing.with_no_shift,
             self._tip.shift(tip_shift),
         )
         background_and_tip_group = DrawingGroup(background_and_tip)
@@ -204,8 +203,8 @@ class SayEventCharacterAddOn(SayEventAddOn):
             tip = self.config.background.tip_at_bottom
         return tip.flip(horizontal=not self._character_position.at_left)
 
-    @cached_property
     @override
+    @cached_property
     def _add_on_top_left(self) -> Coordinate:
         if center := self.config.character_coordinate_override:
             return center.as_center_of(
@@ -290,14 +289,13 @@ class _CharacterPosition:
 
 @dataclass(frozen=True)
 class _Background(AnimationOnScreen):
-    text_drawings: tuple[Drawing, ...]
+    text: Text
 
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        drawing_on_screens = self.animation.drawing_on_screens(self.coordinate)
         return tuple(
             drawing_on_screen
-            for drawing_on_screen in drawing_on_screens
-            if drawing_on_screen.drawing not in self.text_drawings
+            for drawing_on_screen in super().drawing_on_screens
+            if drawing_on_screen.drawing not in self.text.drawings
         )
