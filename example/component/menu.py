@@ -39,7 +39,7 @@ def tmx_widget_group_on_screen(map: MapScene) -> TmxWidgetGroupOnScreen:
     title_selected = title_idle.configured(highlight)
 
     def from_scene() -> MenuScene:
-        return menu(map).tick(10000)
+        return menu(map).fade_in_complete
 
     title_scene = TransitionScene(from_scene, title)
     title_button = Button(

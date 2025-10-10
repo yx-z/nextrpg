@@ -1,4 +1,5 @@
 from dataclasses import KW_ONLY, dataclass, replace
+from functools import cached_property
 from typing import Self, override
 
 from pygame.time import get_ticks
@@ -17,6 +18,10 @@ class Timer:
     duration: Millisecond
     _: KW_ONLY = private_init_below()
     elapsed: Millisecond = 0
+
+    @cached_property
+    def complete(self) -> Self:
+        return replace(self, elapsed=self.duration)
 
     @property
     def countdown(self) -> Countdown:

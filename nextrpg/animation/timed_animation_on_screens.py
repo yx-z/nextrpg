@@ -1,4 +1,5 @@
 from dataclasses import KW_ONLY, replace
+from functools import cached_property
 from typing import Any, Self, TypeVar, override
 
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
@@ -18,6 +19,10 @@ class TimedAnimationOnScreens(AnimationOnScreens):
     duration: Millisecond
     _: KW_ONLY = private_init_below()
     _timer: Timer = default(lambda self: Timer(self.duration))
+
+    @cached_property
+    def complete(self) -> Self:
+        return replace(self, _timer=self._timer.complete)
 
     def compose(self, other: type[_T], **kwargs: Any) -> _T:
         return other(resource=self, duration=self.duration, **kwargs)

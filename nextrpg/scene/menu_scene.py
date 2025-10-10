@@ -2,10 +2,7 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import TYPE_CHECKING, Self, override
 
-from nextrpg.animation.abstract_animation_on_screen import (
-    AbstractAnimationOnScreen,
-)
-from nextrpg.animation.fade import FadeIn
+from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.config.config import config
 from nextrpg.config.menu_config import MenuConfig
 from nextrpg.core.dataclass_with_default import (
@@ -32,24 +29,41 @@ class MenuScene(Scene):
     tmx: TmxWidgetGroupOnScreen
     config: MenuConfig = field(default_factory=lambda: config().menu)
     _: KW_ONLY = private_init_below()
-    _animation: AbstractAnimationOnScreen = default(
-        lambda self: FadeIn(self._scene_drawing, self.config.fade_duration)
+    _fade_in: FadeIn = default(
+        lambda self: FadeIn(
+            DrawingOnScreens(
+                self.scene.drawing_on_screens
+            ).drawing_on_screen.blur(self.config.blur_radius),
+            self.config.fade_duration,
+        )
     )
+    _fade_out: FadeOut | None = None
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        if self._animation.is_complete:
+        if self._fade_in.is_complete:
+            if self._fade_out:
+                if (fade_out := self._fade_out.tick(time_delta)).is_complete:
+                    return self.scene
+                return replace(self, _fade_out=fade_out)
             tmx = self.tmx.tick(time_delta)
             return replace(self, tmx=tmx)
-        animation = self._animation.tick(time_delta)
-        return replace(self, _animation=animation)
+        fade_in = self._fade_in.tick(time_delta)
+        return replace(self, _fade_in=fade_in)
+
+    @property
+    def fade_in_complete(self) -> Self:
+        return replace(self, _fade_in=self._fade_in.complete)
 
     @override
     def event(self, event: IoEvent) -> Scene:
-        if not self._animation.is_complete:
+        if not self._fade_in.is_complete or self._fade_out:
             return self
         if isinstance(event, KeyPressDown) and event.key is KeyboardKey.CANCEL:
-            return self.scene
+            fade_out = FadeOut(
+                self._fade_in.resource, self.config.fade_duration
+            )
+            return replace(self, _fade_out=fade_out)
         if isinstance(res := self.tmx.event(event), TmxWidgetGroupOnScreen):
             return replace(self, tmx=res)
         return res
@@ -57,17 +71,13 @@ class MenuScene(Scene):
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        if self._animation.is_complete:
+        if self._fade_out:
             return (
-                self._animation.drawing_on_screens + self.tmx.drawing_on_screens
+                self.scene.drawing_on_screens
+                + self._fade_out.drawing_on_screens
             )
-        return (
-            self.scene.drawing_on_screens + self._animation.drawing_on_screens
-        )
-
-    @property
-    def _scene_drawing(self) -> DrawingOnScreen:
-        drawing_on_screens = DrawingOnScreens(self.scene.drawing_on_screens)
-        return drawing_on_screens.drawing_on_screen.blur(
-            self.config.blur_radius
-        )
+        if self._fade_in.is_complete:
+            return (
+                self._fade_in.drawing_on_screens + self.tmx.drawing_on_screens
+            )
+        return self.scene.drawing_on_screens + self._fade_in.drawing_on_screens
