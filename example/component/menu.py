@@ -1,4 +1,3 @@
-from functools import cache
 from pathlib import Path
 
 from example.component.title import title
@@ -11,18 +10,18 @@ from nextrpg import (
     Text,
     TmxLoader,
     TmxWidgetGroupOnScreen,
+    TransitionScene,
     WidgetGroup,
     config,
 )
 
 
 def menu(map: MapScene) -> MenuScene:
-    tmx = tmx_widget_group_on_screen()
+    tmx = tmx_widget_group_on_screen(map)
     return MenuScene(map, tmx)
 
 
-@cache
-def tmx_widget_group_on_screen() -> TmxWidgetGroupOnScreen:
+def tmx_widget_group_on_screen(map: MapScene) -> TmxWidgetGroupOnScreen:
     tmx_path = Path("example/component/menu.tmx")
     tmx = TmxLoader(tmx_path)
 
@@ -38,11 +37,16 @@ def tmx_widget_group_on_screen() -> TmxWidgetGroupOnScreen:
 
     title_idle = Text("Title")
     title_selected = title_idle.configured(highlight)
+
+    def from_scene() -> MenuScene:
+        return menu(map).tick(10000)
+
+    title_scene = TransitionScene(from_scene, title)
     title_button = Button(
         name="title",
         idle=title_idle.drawing,
         active=title_selected.drawing,
-        on_click=title(),
+        on_click=title_scene,
     )
 
     widgets = (save_button, title_button)
