@@ -41,15 +41,17 @@ class MenuScene(Scene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        if self._fade_in.is_complete:
-            if self._fade_out:
-                if (fade_out := self._fade_out.tick(time_delta)).is_complete:
-                    return self.scene
-                return replace(self, _fade_out=fade_out)
+        if not self._fade_in.is_complete:
+            fade_in = self._fade_in.tick(time_delta)
+            return replace(self, _fade_in=fade_in)
+
+        if not self._fade_out:
             tmx = self.tmx.tick(time_delta)
             return replace(self, tmx=tmx)
-        fade_in = self._fade_in.tick(time_delta)
-        return replace(self, _fade_in=fade_in)
+
+        if not (fade_out := self._fade_out.tick(time_delta)).is_complete:
+            return replace(self, _fade_out=fade_out)
+        return self.scene
 
     @property
     def fade_in_complete(self) -> Self:
@@ -57,27 +59,35 @@ class MenuScene(Scene):
 
     @override
     def event(self, event: IoEvent) -> Scene:
-        if not self._fade_in.is_complete or self._fade_out:
+        if not self._fade_in.is_complete:
             return self
-        if isinstance(event, KeyPressDown) and event.key is KeyboardKey.CANCEL:
-            fade_out = FadeOut(
-                self._fade_in.resource, self.config.fade_duration
-            )
-            return replace(self, _fade_out=fade_out)
-        if isinstance(res := self.tmx.event(event), TmxWidgetGroupOnScreen):
-            return replace(self, tmx=res)
-        return res
+
+        if not self._fade_out:
+            if (
+                isinstance(event, KeyPressDown)
+                and event.key is KeyboardKey.CANCEL
+            ):
+                fade_out = FadeOut(
+                    self._fade_in.resource, self.config.fade_duration
+                )
+                return replace(self, _fade_out=fade_out)
+            if isinstance(res := self.tmx.event(event), TmxWidgetGroupOnScreen):
+                return replace(self, tmx=res)
+            return res
+
+        return self
 
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        if self._fade_out:
+        if not self._fade_in.is_complete:
             return (
-                self.scene.drawing_on_screens
-                + self._fade_out.drawing_on_screens
+                self.scene.drawing_on_screens + self._fade_in.drawing_on_screens
             )
-        if self._fade_in.is_complete:
+
+        if not self._fade_out:
             return (
                 self._fade_in.drawing_on_screens + self.tmx.drawing_on_screens
             )
-        return self.scene.drawing_on_screens + self._fade_in.drawing_on_screens
+
+        return self.scene.drawing_on_screens + self._fade_out.drawing_on_screens
