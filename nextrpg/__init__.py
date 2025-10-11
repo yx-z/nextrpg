@@ -137,6 +137,7 @@ from nextrpg.event.io_event import (
     KeyPressUp,
     Quit,
     WindowResize,
+    is_key_press,
     quit,
     to_io_event,
 )

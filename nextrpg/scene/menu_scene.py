@@ -15,9 +15,7 @@ from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.event.io_event import IoEvent, KeyboardKey, is_key_press
 from nextrpg.scene.scene import Scene
-from nextrpg.scene.widget.tmx_widget_group_on_screen import (
-    TmxWidgetGroupOnScreen,
-)
+from nextrpg.scene.widget.widget_group import WidgetGroupOnScreen
 
 if TYPE_CHECKING:
     from nextrpg.scene.map.map_scene import MapScene
@@ -26,7 +24,7 @@ if TYPE_CHECKING:
 @dataclass_with_default(frozen=True)
 class MenuScene(Scene):
     parent: MapScene
-    tmx: TmxWidgetGroupOnScreen
+    widget: WidgetGroupOnScreen
     config: MenuConfig = field(default_factory=lambda: config().menu)
     _: KW_ONLY = private_init_below()
     _fade_in: FadeIn = default(
@@ -45,8 +43,8 @@ class MenuScene(Scene):
             return replace(self, _fade_in=fade_in)
 
         if not self._fade_out:
-            tmx = self.tmx.tick(time_delta)
-            return replace(self, tmx=tmx)
+            widget = self.widget.tick(time_delta)
+            return replace(self, widget=widget)
 
         if not (fade_out := self._fade_out.tick(time_delta)).is_complete:
             return replace(self, _fade_out=fade_out)
@@ -67,8 +65,8 @@ class MenuScene(Scene):
                     self._fade_in.resource, self.config.fade_duration
                 )
                 return replace(self, _fade_out=fade_out)
-            if isinstance(res := self.tmx.event(event), TmxWidgetGroupOnScreen):
-                return replace(self, tmx=res)
+            if isinstance(res := self.widget.event(event), WidgetGroupOnScreen):
+                return replace(self, widget=res)
             return res
 
         return self
@@ -84,7 +82,8 @@ class MenuScene(Scene):
 
         if not self._fade_out:
             return (
-                self._fade_in.drawing_on_screens + self.tmx.drawing_on_screens
+                self._fade_in.drawing_on_screens
+                + self.widget.drawing_on_screens
             )
 
         return (
