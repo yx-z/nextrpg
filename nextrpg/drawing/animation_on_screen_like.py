@@ -66,7 +66,8 @@ class AnimationOnScreenLike(Sizable):
 
 
 def tick_optional(
-    animation: AnimationOnScreenLike | None, time_delta: Millisecond
+    animation: AnimationOnScreenLike | None,
+    time_delta: Millisecond,
 ) -> AnimationOnScreenLike | None:
     if animation:
         return animation.tick(time_delta)

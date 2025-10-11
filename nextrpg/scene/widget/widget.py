@@ -27,10 +27,10 @@ class WidgetOnScreen(Scene):
     parent: Scene | None = None
     _: KW_ONLY = private_init_below()
     _is_selected: bool = False
-    _to_scene: Scene | None = None
-    _animation: TimedAnimationOnScreens | None = default(
-        lambda self: self._init_animation
+    _enter_animation: TimedAnimationOnScreens | None = default(
+        lambda self: self._init_enter_animation
     )
+    _exit_animation: TimedAnimationOnScreens | None = None
 
     @override
     def __str__(self) -> str:
@@ -46,19 +46,21 @@ class WidgetOnScreen(Scene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        if self._animation:
-            if (animation := self._animation.tick(time_delta)).is_complete:
-                if self._to_scene:
-                    return self._to_scene
-                animation = None
-        else:
-            animation = None
-
         parent = tick_optional(self.parent, time_delta)
-        to_scene = tick_optional(self._to_scene, time_delta)
         ticked = self._tick_after_parent(time_delta)
+        if (
+            enter_animation := tick_optional(self._enter_animation, time_delta)
+        ) and enter_animation.is_complete:
+            enter_animation = None
+        if (
+            exit_animation := tick_optional(self._exit_animation, time_delta)
+        ) and exit_animation.is_complete:
+            return parent
         return replace(
-            ticked, _animation=animation, parent=parent, _to_scene=to_scene
+            ticked,
+            parent=parent,
+            _enter_animation=enter_animation,
+            _exit_animation=exit_animation,
         )
 
     @override
@@ -68,29 +70,23 @@ class WidgetOnScreen(Scene):
             parent = self.parent.drawing_on_screens
         else:
             parent = ()
-        if self._animation:
-            return parent + self._animation.drawing_on_screens
+        if self._enter_animation:
+            return parent + self._enter_animation.drawing_on_screens
+        if self._exit_animation:
+            return parent + self._exit_animation.drawing_on_screens
         return parent + self._drawing_on_screens_after_parent
 
     @override
     def event(self, event: IoEvent) -> Scene:
-        if not self._is_selected or self._animation:
+        if (
+            not self._is_selected
+            or self._enter_animation
+            or self._exit_animation
+        ):
             return self
-        if is_key_press(event, KeyboardKey.CANCEL) and self.parent:
-            return self._exit(self.parent)
+        if is_key_press(event, KeyboardKey.CANCEL):
+            return self._exit
         return self._event_after_selected(event)
-
-    def _tick_after_parent(self, time_delta: Millisecond) -> Self:
-        return self
-
-    @property
-    @abstractmethod
-    def _drawing_on_screens_after_parent(
-        self,
-    ) -> tuple[DrawingOnScreen, ...]: ...
-
-    def _event_after_selected(self, event: IoEvent) -> Scene:
-        return self
 
     def from_on_screen[T](self, cls: type[T]) -> T:
         name = getattr(self.widget, "name", None)
@@ -106,21 +102,44 @@ class WidgetOnScreen(Scene):
     def with_parent(self, parent: Scene | None) -> Self:
         return replace(self, parent=parent)
 
+    def _tick_after_parent(self, time_delta: Millisecond) -> Self:
+        return self
+
     @property
-    def _init_animation(self) -> TimedAnimationOnScreens | None:
+    @abstractmethod
+    def _drawing_on_screens_after_parent(
+        self,
+    ) -> tuple[DrawingOnScreen, ...]: ...
+
+    def _event_after_selected(self, event: IoEvent) -> Scene:
+        return self
+
+    @property
+    def _init_enter_animation(self) -> TimedAnimationOnScreens | None:
         if self.widget.enter_animation:
             return self.widget.enter_animation(
                 self._drawing_on_screens_after_parent
             )
         return None
 
-    def _exit(self, to_scene: Scene) -> Self:
+    @property
+    def _init_exit_animation(self) -> TimedAnimationOnScreens | None:
         if self.widget.exit_animation:
-            animation = self.widget.exit_animation(
+            return self.widget.exit_animation(
                 self._drawing_on_screens_after_parent
             )
-            return replace(self, _animation=animation, _to_scene=to_scene)
-        return to_scene
+        return None
+
+    @cached_property
+    def _exit(self) -> Scene:
+        if not self.parent:
+            return self
+        if self.widget.exit_animation:
+            exit_animation = self.widget.exit_animation(
+                self._drawing_on_screens_after_parent
+            )
+            return replace(self, _exit_animation=exit_animation)
+        return self.parent
 
 
 _WidgetOnScreen = TypeVar("_WidgetOnScreen", bound=WidgetOnScreen)
@@ -134,13 +153,21 @@ class Widget(ABC, Generic[_WidgetOnScreen]):
     ) = None
     exit_animation: (
         Callable[[tuple[DrawingOnScreen, ...]], TimedAnimationOnScreens] | None
-    ) = default(
-        lambda self: (
-            (lambda d: self.enter_animation(d).reverse)
-            if self.enter_animation
-            else None
-        )
-    )
+    ) = default(lambda self: self._init_exit_animation)
+
+    @property
+    def _init_exit_animation(
+        self,
+    ) -> Callable[[DrawingOnScreen, ...], TimedAnimationOnScreens] | None:
+        if self.enter_animation:
+
+            def exit_animation(
+                d: tuple[DrawingOnScreen, ...],
+            ) -> TimedAnimationOnScreens:
+                return self.enter_animation(d).reverse
+
+            return exit_animation
+        return None
 
     def widget_on_screen(
         self,
