@@ -47,21 +47,25 @@ class WidgetOnScreen(Scene):
     @override
     def tick(self, time_delta: Millisecond) -> Self:
         parent = tick_optional(self.parent, time_delta)
-        ticked = self._tick_after_parent(time_delta)
+        if self._enter_animation:
+            if (
+                enter_animation := self._enter_animation.tick(time_delta)
+            ) and enter_animation.is_complete:
+                enter_animation = None
+            return replace(
+                self, parent=parent, _enter_animation=enter_animation
+            )
+
+        if not self._exit_animation:
+            ticked = self._tick_after_parent(time_delta)
+            return replace(ticked, parent=parent)
+
         if (
-            enter_animation := tick_optional(self._enter_animation, time_delta)
-        ) and enter_animation.is_complete:
-            enter_animation = None
-        if (
-            exit_animation := tick_optional(self._exit_animation, time_delta)
+            exit_animation := self._exit_animation.tick(time_delta)
         ) and exit_animation.is_complete:
             return parent
-        return replace(
-            ticked,
-            parent=parent,
-            _enter_animation=enter_animation,
-            _exit_animation=exit_animation,
-        )
+
+        return replace(self, parent=parent, _exit_animation=exit_animation)
 
     @override
     @cached_property
@@ -70,23 +74,28 @@ class WidgetOnScreen(Scene):
             parent = self.parent.drawing_on_screens
         else:
             parent = ()
+
         if self._enter_animation:
             return parent + self._enter_animation.drawing_on_screens
-        if self._exit_animation:
-            return parent + self._exit_animation.drawing_on_screens
-        return parent + self._drawing_on_screens_after_parent
+
+        if not self._exit_animation:
+            return parent + self._drawing_on_screens_after_parent
+
+        return parent + self._exit_animation.drawing_on_screens
 
     @override
     def event(self, event: IoEvent) -> Scene:
-        if (
-            not self._is_selected
-            or self._enter_animation
-            or self._exit_animation
-        ):
+        if self._enter_animation:
             return self
-        if is_key_press(event, KeyboardKey.CANCEL):
-            return self._exit
-        return self._event_after_selected(event)
+
+        if not self._exit_animation:
+            if not self._is_selected:
+                return self
+            if is_key_press(event, KeyboardKey.CANCEL):
+                return self._try_exit
+            return self._event_after_selected(event)
+
+        return self
 
     def from_on_screen[T](self, cls: type[T]) -> T:
         name = getattr(self.widget, "name", None)
@@ -131,7 +140,7 @@ class WidgetOnScreen(Scene):
         return None
 
     @cached_property
-    def _exit(self) -> Scene:
+    def _try_exit(self) -> Scene:
         if not self.parent:
             return self
         if self.widget.exit_animation:
