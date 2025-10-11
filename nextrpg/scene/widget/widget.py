@@ -47,6 +47,8 @@ class WidgetOnScreen(Scene):
     @override
     def tick(self, time_delta: Millisecond) -> Self:
         parent = tick_optional(self.parent, time_delta)
+
+        # Entering.
         if self._enter_animation:
             if (
                 enter_animation := self._enter_animation.tick(time_delta)
@@ -56,10 +58,12 @@ class WidgetOnScreen(Scene):
                 self, parent=parent, _enter_animation=enter_animation
             )
 
+        # In widget.
         if not self._exit_animation:
             ticked = self._tick_after_parent(time_delta)
             return replace(ticked, parent=parent)
 
+        # Exiting.
         if (
             exit_animation := self._exit_animation.tick(time_delta)
         ) and exit_animation.is_complete:
@@ -75,19 +79,24 @@ class WidgetOnScreen(Scene):
         else:
             parent = ()
 
+        # Entering.
         if self._enter_animation:
             return parent + self._enter_animation.drawing_on_screens
 
+        # In widget.
         if not self._exit_animation:
             return parent + self._drawing_on_screens_after_parent
 
+        # Exiting.
         return parent + self._exit_animation.drawing_on_screens
 
     @override
     def event(self, event: IoEvent) -> Scene:
+        # Entering.
         if self._enter_animation:
             return self
 
+        # In widget.
         if not self._exit_animation:
             if not self._is_selected:
                 return self
@@ -95,6 +104,7 @@ class WidgetOnScreen(Scene):
                 return self._try_exit
             return self._event_after_selected(event)
 
+        # Exiting.
         return self
 
     def from_on_screen[T](self, cls: type[T]) -> T:
