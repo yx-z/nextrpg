@@ -21,12 +21,12 @@ from nextrpg.scene.scene import Scene
 
 log = Log()
 
-_current_scene: Scene | None = None
+_last_scene: Scene | None = None
 
 
-def current_scene() -> Scene:
-    assert _current_scene, "Cannot call `current_scene` before `GameLoop.tick`."
-    return _current_scene
+def last_scene() -> Scene:
+    assert _last_scene, "Cannot call `last_scene` before `GameLoop.tick`."
+    return _last_scene
 
 
 @dataclass_with_default(frozen=True)
@@ -65,14 +65,15 @@ class GameLoop:
         window = self._window.tick(fps_info)
         window.blits(self._scene.drawing_on_screens, time_delta)
 
-        scene = self._scene
+        global _last_scene
+        _last_scene = self._scene
+
         ticked_scene = self._scene.tick(time_delta)
-        global _current_scene
-        _current_scene = scene
 
         loop = replace(self, _scene=ticked_scene, _window=window)
-        for e in pygame.event.get():
-            loop = loop._event(to_io_event(e))
+        for pygame_event in pygame.event.get():
+            io_event = to_io_event(pygame_event)
+            loop = loop._event(io_event)
         return loop
 
     def _event(self, e: IoEvent) -> Self:

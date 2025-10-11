@@ -12,7 +12,7 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
-from nextrpg.game.game_loop import current_scene
+from nextrpg.game.game_loop import last_scene
 from nextrpg.gui.screen_area import screen_area
 from nextrpg.scene.scene import Scene
 
@@ -27,7 +27,7 @@ class TransitionScene(Scene):
         default_factory=lambda: config().timing.transition_total_duration
     )
     _: KW_ONLY = private_init_below()
-    _from_scene_input: Callable[[], Scene] | Scene = current_scene
+    _from_scene_input: Callable[[], Scene] | Scene = last_scene
     _fade_in: FadeIn = default(
         lambda self: FadeIn(
             resource=self.intermediary, duration=self.duration // 2
