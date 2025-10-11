@@ -4,6 +4,7 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import ClassVar, Generic, Self, TypeVar, override
 
+from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -27,10 +28,11 @@ class WidgetOnScreen(Scene):
     parent: Scene | None = None
     _: KW_ONLY = private_init_below()
     _is_selected: bool = False
-    _enter_animation: TimedAnimationOnScreens | None = default(
+    _enter_animation: AnimationOnScreens | None = default(
         lambda self: self._init_enter_animation
     )
-    _exit_animation: TimedAnimationOnScreens | None = None
+    _exit_animation: AnimationOnScreens | None = None
+    _tick_parent: bool = True
 
     @override
     def __str__(self) -> str:
@@ -46,7 +48,10 @@ class WidgetOnScreen(Scene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        parent = tick_optional(self.parent, time_delta)
+        if self._tick_parent:
+            parent = tick_optional(self.parent, time_delta)
+        else:
+            parent = self.parent
 
         # Entering.
         if self._enter_animation:
@@ -68,7 +73,6 @@ class WidgetOnScreen(Scene):
             exit_animation := self._exit_animation.tick(time_delta)
         ) and exit_animation.is_complete:
             return parent
-
         return replace(self, parent=parent, _exit_animation=exit_animation)
 
     @override
@@ -134,7 +138,7 @@ class WidgetOnScreen(Scene):
         return self
 
     @property
-    def _init_enter_animation(self) -> TimedAnimationOnScreens | None:
+    def _init_enter_animation(self) -> AnimationOnScreens | None:
         if self.widget.enter_animation:
             return self.widget.enter_animation(
                 self._drawing_on_screens_after_parent
@@ -142,7 +146,7 @@ class WidgetOnScreen(Scene):
         return None
 
     @property
-    def _init_exit_animation(self) -> TimedAnimationOnScreens | None:
+    def _init_exit_animation(self) -> AnimationOnScreens | None:
         if self.widget.exit_animation:
             return self.widget.exit_animation(
                 self._drawing_on_screens_after_parent
@@ -153,10 +157,7 @@ class WidgetOnScreen(Scene):
     def _try_exit(self) -> Scene:
         if not self.parent:
             return self
-        if self.widget.exit_animation:
-            exit_animation = self.widget.exit_animation(
-                self._drawing_on_screens_after_parent
-            )
+        if exit_animation := self._init_exit_animation:
             return replace(self, _exit_animation=exit_animation)
         return self.parent
 

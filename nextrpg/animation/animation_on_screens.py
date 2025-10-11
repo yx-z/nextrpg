@@ -16,6 +16,10 @@ from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 class AnimationOnScreens(AbstractAnimationOnScreen):
     resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...]
 
+    def concurrent(self, another: AnimationOnScreenLike) -> AnimationOnScreens:
+        resource = (self, another)
+        return AnimationOnScreens(resource)
+
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:

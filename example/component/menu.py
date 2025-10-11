@@ -1,3 +1,4 @@
+from functools import cache
 from pathlib import Path
 
 from example.component.title import title
@@ -14,7 +15,6 @@ from nextrpg import (
     ScrollDirection,
     Text,
     TmxLoader,
-    TmxWidgetGroupOnScreen,
     TransitionScene,
     WidgetGroup,
     config,
@@ -22,14 +22,17 @@ from nextrpg import (
 
 
 def menu(map: MapScene) -> MenuScene:
-    tmx = tmx_widget_group_on_screen()
-    return MenuScene(map, tmx)
+    return MenuScene(map=map, widget=widget_group(), tmx=tmx())
 
 
-def tmx_widget_group_on_screen() -> TmxWidgetGroupOnScreen:
+@cache
+def tmx() -> TmxLoader:
     tmx_path = Path("example/component/menu.tmx")
-    tmx = TmxLoader(tmx_path)
+    return TmxLoader(tmx_path)
 
+
+@cache
+def widget_group() -> WidgetGroup:
     highlight = config().text.colored(BLUE)
     save_idle = Text("Save")
     save_selected = save_idle.configured(highlight)
@@ -42,7 +45,6 @@ def tmx_widget_group_on_screen() -> TmxWidgetGroupOnScreen:
 
     title_idle = Text("Title")
     title_selected = title_idle.configured(highlight)
-
     title_scene = TransitionScene(title)
     title_button = Button(
         name="title",
@@ -52,15 +54,14 @@ def tmx_widget_group_on_screen() -> TmxWidgetGroupOnScreen:
     )
 
     widgets = (save_button, title_button)
-    widget_group = WidgetGroup(
+    return WidgetGroup(
         children=widgets,
         scroll_direction=ScrollDirection.HORIZONTAL,
-        enter_animation=enter_group,
+        enter_animation=enter_animation,
     )
-    return TmxWidgetGroupOnScreen(tmx=tmx, background=(), widget=widget_group)
 
 
-def enter_group(drawing_on_screens: tuple[DrawingOnScreen, ...]) -> FadeIn:
+def enter_animation(drawing_on_screens: tuple[DrawingOnScreen, ...]) -> FadeIn:
     offset = DirectionalOffset(Direction.DOWN, 50)
-    move = MoveTo(resource=drawing_on_screens, offset=offset, duration=200)
+    move = MoveTo(resource=drawing_on_screens, offset=offset, duration=400)
     return move.compose(FadeIn)
