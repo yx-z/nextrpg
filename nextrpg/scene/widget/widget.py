@@ -14,7 +14,7 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_on_screen_like import tick_optional
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
-from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
+from nextrpg.event.io_event import IoEvent, KeyboardKey, is_key_press
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.scene import Scene
@@ -76,11 +76,7 @@ class WidgetOnScreen(Scene):
     def event(self, event: IoEvent) -> Scene:
         if not self._is_selected or self._animation:
             return self
-        if (
-            isinstance(event, KeyPressDown)
-            and event.key is KeyboardKey.CANCEL
-            and self.parent
-        ):
+        if is_key_press(event, KeyboardKey.CANCEL) and self.parent:
             return self._exit(self.parent)
         return self._event_after_selected(event)
 

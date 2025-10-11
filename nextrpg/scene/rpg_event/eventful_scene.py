@@ -18,7 +18,7 @@ from nextrpg.event.background_event import (
     BackgroundEventSentinel,
 )
 from nextrpg.event.event_as_attr import EventAsAttr
-from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
+from nextrpg.event.io_event import IoEvent, KeyboardKey, is_key_press
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.scene import Scene
 
@@ -48,8 +48,7 @@ class EventfulScene(EventAsAttr, Scene):
         player = self.player.event(event)
         if (
             not self._started_npc
-            and isinstance(event, KeyPressDown)
-            and event.key is KeyboardKey.CONFIRM
+            and is_key_press(event, KeyboardKey.CONFIRM)
             and (npc := self._collided_npc)
             and npc.restart_event
             and (npc_event := npc.spec.event)

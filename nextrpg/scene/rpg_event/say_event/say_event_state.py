@@ -19,7 +19,7 @@ from nextrpg.drawing.animation_on_screen_like import (
 )
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.text_on_screen import TextOnScreen
-from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
+from nextrpg.event.io_event import IoEvent, KeyboardKey, is_key_press
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.rpg_event.rpg_event_scene import RpgEventScene
 from nextrpg.scene.scene import Scene
@@ -32,7 +32,7 @@ class SayEventState(RpgEventScene, ABC):
     _: KW_ONLY = private_init_below()
     initial_coordinate: Coordinate | None = default(
         lambda self: (
-            self.scene.get_character(n).coordinate
+            self.parent.get_character(n).coordinate
             if (n := self.unique_name)
             else None
         )
@@ -99,10 +99,7 @@ class SayEventTypingState(SayEventState):
 
     @override
     def event(self, event: IoEvent) -> Scene:
-        if (
-            not isinstance(event, KeyPressDown)
-            or event.key is not KeyboardKey.CONFIRM
-        ):
+        if not is_key_press(event, KeyboardKey.CONFIRM):
             return self
 
         resource = (self.background,) + self.text_on_screen.drawing_on_screens

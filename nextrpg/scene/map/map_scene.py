@@ -25,7 +25,7 @@ from nextrpg.drawing.color import TRANSPARENT
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
-from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
+from nextrpg.event.io_event import IoEvent, KeyboardKey, is_key_press
 from nextrpg.geometry.anchored_coordinate import BottomCenterCoordinate
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
@@ -113,10 +113,8 @@ class MapScene(EventfulScene, UpdateFromSave):
 
     @override
     def event(self, event: IoEvent) -> Scene:
-        if (
-            (create_menu := config().menu.create)
-            and isinstance(event, KeyPressDown)
-            and event.key is KeyboardKey.CANCEL
+        if (create_menu := config().menu.create) and is_key_press(
+            event, KeyboardKey.CANCEL
         ):
             return create_menu(self)
         return super().event(event)

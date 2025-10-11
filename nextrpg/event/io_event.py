@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum, auto
 from functools import cache
+from typing import TypeIs
 
 from pygame.event import Event, post
 from pygame.locals import KEYDOWN, KEYUP, QUIT, VIDEORESIZE
@@ -39,6 +40,10 @@ class KeyboardKey(Enum):
     @classmethod
     def from_pygame(cls, key: KeyCode) -> KeyboardKey | KeyCode:
         return _key_mapping().get(key, key)
+
+
+def is_key_press(event: IoEvent, key: KeyboardKey) -> TypeIs[KeyPressDown]:
+    return isinstance(event, KeyPressDown) and event.key == key
 
 
 @cache

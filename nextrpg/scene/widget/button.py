@@ -6,7 +6,7 @@ from nextrpg.animation.animation import Animation
 from nextrpg.core.dataclass_with_default import dataclass_with_default
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
-from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
+from nextrpg.event.io_event import IoEvent, KeyboardKey, is_key_press
 from nextrpg.geometry.dimension import Size
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.widget.sizable_widget import (
@@ -29,10 +29,7 @@ class ButtonOnScreen(SizableWidgetOnScreen):
 
     @override
     def _event_after_selected(self, event: IoEvent) -> Scene:
-        if (
-            not isinstance(event, KeyPressDown)
-            or event.key is not KeyboardKey.CONFIRM
-        ):
+        if not is_key_press(event, KeyboardKey.CONFIRM):
             return self
 
         if callable(self.widget.on_click):

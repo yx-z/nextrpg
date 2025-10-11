@@ -13,7 +13,7 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
-from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
+from nextrpg.event.io_event import IoEvent, KeyboardKey, is_key_press
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.widget.tmx_widget_group_on_screen import (
     TmxWidgetGroupOnScreen,
@@ -25,14 +25,14 @@ if TYPE_CHECKING:
 
 @dataclass_with_default(frozen=True)
 class MenuScene(Scene):
-    scene: MapScene
+    parent: MapScene
     tmx: TmxWidgetGroupOnScreen
     config: MenuConfig = field(default_factory=lambda: config().menu)
     _: KW_ONLY = private_init_below()
     _fade_in: FadeIn = default(
         lambda self: FadeIn(
             DrawingOnScreens(
-                self.scene.drawing_on_screens
+                self.parent.drawing_on_screens
             ).drawing_on_screen.blur(self.config.blur_radius),
             self.config.fade_duration,
         )
@@ -41,8 +41,7 @@ class MenuScene(Scene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        if not self._fade_in.is_complete:
-            fade_in = self._fade_in.tick(time_delta)
+        if not (fade_in := self._fade_in.tick(time_delta)).is_complete:
             return replace(self, _fade_in=fade_in)
 
         if not self._fade_out:
@@ -51,7 +50,7 @@ class MenuScene(Scene):
 
         if not (fade_out := self._fade_out.tick(time_delta)).is_complete:
             return replace(self, _fade_out=fade_out)
-        return self.scene
+        return self.parent
 
     @property
     def fade_in_complete(self) -> Self:
@@ -63,10 +62,7 @@ class MenuScene(Scene):
             return self
 
         if not self._fade_out:
-            if (
-                isinstance(event, KeyPressDown)
-                and event.key is KeyboardKey.CANCEL
-            ):
+            if is_key_press(event, KeyboardKey.CANCEL):
                 fade_out = FadeOut(
                     self._fade_in.resource, self.config.fade_duration
                 )
@@ -82,7 +78,8 @@ class MenuScene(Scene):
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if not self._fade_in.is_complete:
             return (
-                self.scene.drawing_on_screens + self._fade_in.drawing_on_screens
+                self.parent.drawing_on_screens
+                + self._fade_in.drawing_on_screens
             )
 
         if not self._fade_out:
@@ -90,4 +87,6 @@ class MenuScene(Scene):
                 self._fade_in.drawing_on_screens + self.tmx.drawing_on_screens
             )
 
-        return self.scene.drawing_on_screens + self._fade_out.drawing_on_screens
+        return (
+            self.parent.drawing_on_screens + self._fade_out.drawing_on_screens
+        )
