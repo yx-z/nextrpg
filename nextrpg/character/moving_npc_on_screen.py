@@ -18,9 +18,7 @@ from nextrpg.geometry.walk import Walk
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     path: PolylineOnScreen
     _: KW_ONLY = private_init_below()
-    # `coordinate` is initialized in the base class.
-    # Hence, invoke `_walk` (given it's still an `_Init`) to initialize.
-    coordinate: Coordinate = default(lambda self: self._walk(self).coordinate)
+    coordinate: Coordinate = default(lambda self: self._walk.coordinate)
     _walk: Walk = default(lambda self: self._init_walk)
 
     @override
