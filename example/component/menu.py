@@ -4,8 +4,13 @@ from example.component.title import title
 from nextrpg import (
     BLUE,
     Button,
+    Direction,
+    DirectionalOffset,
+    DrawingOnScreen,
+    FadeIn,
     MapScene,
     MenuScene,
+    MoveTo,
     ScrollDirection,
     Text,
     TmxLoader,
@@ -48,6 +53,14 @@ def tmx_widget_group_on_screen() -> TmxWidgetGroupOnScreen:
 
     widgets = (save_button, title_button)
     widget_group = WidgetGroup(
-        children=widgets, scroll_direction=ScrollDirection.HORIZONTAL
+        children=widgets,
+        scroll_direction=ScrollDirection.HORIZONTAL,
+        enter_animation=enter_group,
     )
     return TmxWidgetGroupOnScreen(tmx=tmx, background=(), widget=widget_group)
+
+
+def enter_group(drawing_on_screens: tuple[DrawingOnScreen, ...]) -> FadeIn:
+    offset = DirectionalOffset(Direction.DOWN, 50)
+    move = MoveTo(resource=drawing_on_screens, offset=offset, duration=200)
+    return move.compose(FadeIn)
