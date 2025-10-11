@@ -64,7 +64,7 @@ class FadeInEventScene(RpgEventScene[BackgroundEventSentinel]):
             return replace(ticked, _fade=fade)
 
         background_fade_in = BackgroundFadeInEvent(fade=fade)
-        return ticked.scene.is_complete(
+        return ticked.scene.complete(
             self.generator, background_fade_in.sentinel, background_fade_in
         )
 

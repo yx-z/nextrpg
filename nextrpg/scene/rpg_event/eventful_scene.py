@@ -122,7 +122,7 @@ class EventfulScene(EventAsAttr, Scene):
         self,
     ) -> tuple[DrawingOnScreen, ...]: ...
 
-    def is_complete(
+    def complete(
         self,
         event: EventGenerator,
         event_result: Any = None,

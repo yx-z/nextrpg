@@ -32,8 +32,8 @@ class SayEventState(RpgEventScene, ABC):
     _: KW_ONLY = private_init_below()
     initial_coordinate: Coordinate | None = default(
         lambda self: (
-            self.parent.get_character(n).coordinate
-            if (n := self.unique_name)
+            self.scene.get_character(name).coordinate
+            if (name := self.unique_name)
             else None
         )
     )
@@ -149,5 +149,5 @@ class SayEventFadeOutState(SayEventState):
     @override
     def _tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
         if (fade_out := self._fade_out.tick(time_delta)).is_complete:
-            return ticked.scene.is_complete(self.generator)
+            return ticked.scene.complete(self.generator)
         return replace(ticked, _fade_out=fade_out)

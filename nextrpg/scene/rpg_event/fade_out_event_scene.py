@@ -61,12 +61,12 @@ class FadeOutEventScene(RpgEventScene[BackgroundFadeOutEvent]):
         background_removed = ticked.scene.remove_background_event(self.sentinel)
         if not self.wait:
             background_event = BackgroundFadeOutEvent(fade=fade)
-            return background_removed.is_complete(
+            return background_removed.complete(
                 self.generator, background_event=background_event
             )
 
         if fade.is_complete:
-            return background_removed.is_complete(self.generator)
+            return background_removed.complete(self.generator)
 
         return replace(ticked, scene=background_removed, _fade=fade)
 
