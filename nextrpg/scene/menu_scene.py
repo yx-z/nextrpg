@@ -23,14 +23,15 @@ if TYPE_CHECKING:
 
 @dataclass_with_default(frozen=True)
 class MenuScene(Scene):
-    parent: MapScene
+    map: MapScene
     widget: WidgetGroupOnScreen
     config: MenuConfig = field(default_factory=lambda: config().menu)
     _: KW_ONLY = private_init_below()
+    _parent: MapScene = default(lambda self: self.map.stop_player)
     _fade_in: FadeIn = default(
         lambda self: FadeIn(
             DrawingOnScreens(
-                self.parent.drawing_on_screens
+                self._parent.drawing_on_screens
             ).drawing_on_screen.blur(self.config.blur_radius),
             self.config.fade_duration,
         )
@@ -44,11 +45,11 @@ class MenuScene(Scene):
 
         if not self._fade_out:
             widget = self.widget.tick(time_delta)
-            return replace(self, widget=widget)
+            return replace(self, _fade_in=fade_in, widget=widget)
 
         if not (fade_out := self._fade_out.tick(time_delta)).is_complete:
             return replace(self, _fade_out=fade_out)
-        return self.parent
+        return self._parent
 
     @property
     def fade_in_complete(self) -> Self:
@@ -76,7 +77,7 @@ class MenuScene(Scene):
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if not self._fade_in.is_complete:
             return (
-                self.parent.drawing_on_screens
+                self._parent.drawing_on_screens
                 + self._fade_in.drawing_on_screens
             )
 
@@ -87,5 +88,5 @@ class MenuScene(Scene):
             )
 
         return (
-            self.parent.drawing_on_screens + self._fade_out.drawing_on_screens
+            self._parent.drawing_on_screens + self._fade_out.drawing_on_screens
         )

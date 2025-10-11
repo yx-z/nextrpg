@@ -1,4 +1,5 @@
 from dataclasses import KW_ONLY, dataclass, field, replace
+from functools import cached_property
 from typing import Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
@@ -23,10 +24,13 @@ class PlayerOnScreen(MovingCharacterOnScreen):
     _: KW_ONLY = private_init_below()
     _movement_keys: frozenset[KeyboardKey] = field(default_factory=frozenset)
 
+    @cached_property
+    def stop(self) -> Self:
+        return replace(self, _movement_keys=frozenset())
+
     @override
     def start_event(self, character: CharacterOnScreen) -> Self:
-        start_event = super().start_event(character)
-        return replace(start_event, _movement_keys=frozenset())
+        return super().start_event(character).stop
 
     def event(self, event: IoEvent) -> Self:
         if self._event_started or not isinstance(

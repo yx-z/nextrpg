@@ -62,6 +62,10 @@ class MapScene(EventfulScene, UpdateFromSave):
         + self._move_visuals
     )
 
+    @cached_property
+    def stop_player(self) -> Self:
+        return replace(self, player=self.player.stop)
+
     def init_player(self, player_spec: CharacterSpec) -> PlayerOnScreen:
         log.debug(t"Spawn player at {player_spec.unique_name}.")
         player_object = self._map_loader.get_object(player_spec.unique_name)
