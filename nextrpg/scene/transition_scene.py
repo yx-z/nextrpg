@@ -27,7 +27,7 @@ class TransitionScene(Scene):
         default_factory=lambda: config().timing.transition_total_duration
     )
     _: KW_ONLY = private_init_below()
-    _from_scene_input: Callable[[], Scene] | Scene = last_scene
+    _from_scene_member: Callable[[], Scene] | Scene = last_scene
     _fade_in: FadeIn = default(
         lambda self: FadeIn(
             resource=self.intermediary, duration=self.duration // 2
@@ -41,27 +41,34 @@ class TransitionScene(Scene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
+        # First half: don't load to_scene yet.
         if not (fade_in := self._fade_in.tick(time_delta)).is_complete:
-            # First half: don't load to_scene yet.
             return replace(
-                self, _from_scene_input=self._from_scene, _fade_in=fade_in
+                self, _from_scene_member=self._from_scene, _fade_in=fade_in
             )
-        if (fade_out := self._fade_out.tick(time_delta)).is_complete:
-            # Transition complete.
-            return self._to_scene
+
         # Second half.
-        return replace(
-            self, to_scene=self._to_scene, _fade_in=fade_in, _fade_out=fade_out
-        )
+        if not (fade_out := self._fade_out.tick(time_delta)).is_complete:
+            return replace(
+                self,
+                to_scene=self._to_scene,
+                _fade_in=fade_in,
+                _fade_out=fade_out,
+            )
+
+        # Transition complete.
+        return self._to_scene
 
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        # First half.
         if self._fade_in.is_complete:
             return (
                 self._to_scene.drawing_on_screens
                 + self._fade_out.drawing_on_screens
             )
+        # Second half.
         return (
             self._from_scene.drawing_on_screens
             + self._fade_in.drawing_on_screens
@@ -69,9 +76,9 @@ class TransitionScene(Scene):
 
     @cached_property
     def _from_scene(self) -> Scene:
-        if callable(self._from_scene_input):
-            return self._from_scene_input()
-        return self._from_scene_input
+        if callable(self._from_scene_member):
+            return self._from_scene_member()
+        return self._from_scene_member
 
     @cached_property
     def _to_scene(self) -> Scene:

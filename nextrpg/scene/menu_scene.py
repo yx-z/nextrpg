@@ -40,22 +40,27 @@ class MenuScene(Scene):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
+        # Entering.
         if not (fade_in := self._fade_in.tick(time_delta)).is_complete:
             return replace(self, _fade_in=fade_in)
 
+        # In menu.
         if not self._fade_out:
             widget = self.widget.tick(time_delta)
             return replace(self, _fade_in=fade_in, widget=widget)
 
+        # Exiting.
         if not (fade_out := self._fade_out.tick(time_delta)).is_complete:
             return replace(self, _fade_out=fade_out)
         return self._parent
 
     @override
     def event(self, event: IoEvent) -> Scene:
+        # Entering.
         if not self._fade_in.is_complete:
             return self
 
+        # In menu.
         if not self._fade_out:
             if is_key_press(event, KeyboardKey.CANCEL):
                 fade_out = FadeOut(
@@ -66,23 +71,27 @@ class MenuScene(Scene):
                 return replace(self, widget=res)
             return res
 
+        # Exiting.
         return self
 
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        # Entering.
         if not self._fade_in.is_complete:
             return (
                 self._parent.drawing_on_screens
                 + self._fade_in.drawing_on_screens
             )
 
+        # In menu.
         if not self._fade_out:
             return (
                 self._fade_in.drawing_on_screens
                 + self.widget.drawing_on_screens
             )
 
+        # Exiting.
         return (
             self._parent.drawing_on_screens + self._fade_out.drawing_on_screens
         )
