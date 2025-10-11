@@ -42,29 +42,21 @@ def dataclass_with_default[T](
         return lambda c: dataclass_with_default(c, **kwargs)
 
     def post_init(self, *_: Any, **__: Any) -> None:
-        field_to_value = {}
-        for f in cls_fields:
-            if not isinstance(attr := getattr(self, f.name, None), default):
-                continue
-
-            if not (value := field_to_value.get(f.name)):
+        for f in fields(self):
+            if isinstance(attr := getattr(self, f.name, None), default):
                 value = attr(self)
-                field_to_value[f.name] = value
-            object.__setattr__(self, f.name, value)
+                object.__setattr__(self, f.name, value)
 
     def getattribute(self, name: str) -> Any:
-        if isinstance(val := object.__getattribute__(self, name), default):
-            res = val(self)
+        if isinstance(value := object.__getattribute__(self, name), default):
+            res = value(self)
             object.__setattr__(self, name, res)
             return res
-        return val
+        return value
 
     cls.__post_init__ = post_init
     cls.__getattribute__ = getattribute
-
-    datacls = dataclass(cls, **kwargs)
-    cls_fields = fields(datacls)
-    return datacls
+    return dataclass(cls, **kwargs)
 
 
 def type_name[T](obj: T | type) -> str:
