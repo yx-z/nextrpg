@@ -20,14 +20,10 @@ class TimedAnimationOnScreens(AnimationOnScreens):
     _: KW_ONLY = private_init_below()
     _timer: Timer = default(lambda self: Timer(self.duration))
 
-    @cached_property
-    def complete(self) -> Self:
-        return replace(self, _timer=self._timer.complete)
-
     def compose(self, other: type[_T], **kwargs: Any) -> _T:
         return other(resource=self, duration=self.duration, **kwargs)
 
-    @property
+    @cached_property
     def reverse(self) -> Self:
         if isinstance(self.resource, tuple):
             resource = tuple(_reverse(r) for r in self.resource)
@@ -36,7 +32,7 @@ class TimedAnimationOnScreens(AnimationOnScreens):
         return replace(self, resource=resource, _timer=self._timer.countdown)
 
     @override
-    @property
+    @cached_property
     def is_complete(self) -> bool:
         return super().is_complete and self._timer.is_complete
 

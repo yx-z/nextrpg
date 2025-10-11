@@ -31,7 +31,7 @@ def title() -> TmxWidgetGroupOnScreen:
 
     start_text_idle = Text("Start")
     start_text_selected = start_text_idle.configured(highlight)
-    scene = TransitionScene(title, interior_scene)
+    scene = TransitionScene(interior_scene)
     start = Button(
         name="start",
         idle=start_text_idle.drawing,

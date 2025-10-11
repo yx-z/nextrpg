@@ -50,8 +50,7 @@ class MapMove:
         _scenes()[str(from_scene.tmx_file)] = _TimedScene(now, from_scene)
         # Cache to_scene.
         _tmxs()[self.to_scene] = tmx
-
-        return TransitionScene(from_scene=from_scene, to_scene=to_scene)
+        return TransitionScene(to_scene)
 
 
 @dataclass(frozen=True)

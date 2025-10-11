@@ -51,10 +51,6 @@ class MenuScene(Scene):
             return replace(self, _fade_out=fade_out)
         return self._parent
 
-    @property
-    def fade_in_complete(self) -> Self:
-        return replace(self, _fade_in=self._fade_in.complete)
-
     @override
     def event(self, event: IoEvent) -> Scene:
         if not self._fade_in.is_complete:

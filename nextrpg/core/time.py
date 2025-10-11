@@ -20,37 +20,33 @@ class Timer:
     elapsed: Millisecond = 0
 
     @cached_property
-    def complete(self) -> Self:
-        return replace(self, elapsed=self.duration)
-
-    @property
     def countdown(self) -> Countdown:
         return Countdown(self.duration)
 
-    @property
+    @cached_property
     def modulo(self) -> Self:
         return self.reset.tick(self.elapsed % self.duration)
 
     def tick(self, time_delta: Millisecond) -> Self:
         return replace(self, elapsed=self.elapsed + time_delta)
 
-    @property
+    @cached_property
     def reset(self) -> Self:
         return replace(self, elapsed=0)
 
-    @property
+    @cached_property
     def is_complete(self) -> bool:
         return self.elapsed >= self.duration
 
-    @property
+    @cached_property
     def completed_percentage(self) -> float:
         return self.elapsed / self.duration
 
-    @property
+    @cached_property
     def remaining(self) -> Millisecond:
         return self.duration - self.elapsed
 
-    @property
+    @cached_property
     def remaining_percentage(self) -> float:
         return self.remaining / self.duration
 
@@ -66,12 +62,12 @@ class Countdown(Timer):
         return replace(self, elapsed=elapsed)
 
     @override
-    @property
+    @cached_property
     def reset(self) -> Self:
         return replace(self, elapsed=self.duration)
 
     @override
-    @property
+    @cached_property
     def is_complete(self) -> bool:
         return self.elapsed <= 0
 

@@ -12,14 +12,13 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.game.game_loop import current_scene
 from nextrpg.gui.screen_area import screen_area
 from nextrpg.scene.scene import Scene
 
 
 @dataclass_with_default(frozen=True)
 class TransitionScene(Scene):
-
-    from_scene: Scene | Callable[[], Scene]
     to_scene: Scene | Callable[[], Scene]
     intermediary: DrawingOnScreen | tuple[DrawingOnScreen, ...] = field(
         default_factory=lambda: screen_area().fill(config().window.background)
@@ -28,6 +27,7 @@ class TransitionScene(Scene):
         default_factory=lambda: config().timing.transition_total_duration
     )
     _: KW_ONLY = private_init_below()
+    _from_scene_input: Callable[[], Scene] | Scene = current_scene
     _fade_in: FadeIn = default(
         lambda self: FadeIn(
             resource=self.intermediary, duration=self.duration // 2
@@ -43,7 +43,9 @@ class TransitionScene(Scene):
     def tick(self, time_delta: Millisecond) -> Scene:
         if not (fade_in := self._fade_in.tick(time_delta)).is_complete:
             # First half: don't load to_scene yet.
-            return replace(self, from_scene=self._from_scene, _fade_in=fade_in)
+            return replace(
+                self, _from_scene_input=self._from_scene, _fade_in=fade_in
+            )
         if (fade_out := self._fade_out.tick(time_delta)).is_complete:
             # Transition complete.
             return self._to_scene
@@ -67,9 +69,9 @@ class TransitionScene(Scene):
 
     @cached_property
     def _from_scene(self) -> Scene:
-        if callable(self.from_scene):
-            return self.from_scene()
-        return self.from_scene
+        if callable(self._from_scene_input):
+            return self._from_scene_input()
+        return self._from_scene_input
 
     @cached_property
     def _to_scene(self) -> Scene:

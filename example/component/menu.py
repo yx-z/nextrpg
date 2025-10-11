@@ -17,11 +17,11 @@ from nextrpg import (
 
 
 def menu(map: MapScene) -> MenuScene:
-    tmx = tmx_widget_group_on_screen(map)
+    tmx = tmx_widget_group_on_screen()
     return MenuScene(map, tmx)
 
 
-def tmx_widget_group_on_screen(map: MapScene) -> TmxWidgetGroupOnScreen:
+def tmx_widget_group_on_screen() -> TmxWidgetGroupOnScreen:
     tmx_path = Path("example/component/menu.tmx")
     tmx = TmxLoader(tmx_path)
 
@@ -38,10 +38,7 @@ def tmx_widget_group_on_screen(map: MapScene) -> TmxWidgetGroupOnScreen:
     title_idle = Text("Title")
     title_selected = title_idle.configured(highlight)
 
-    def from_scene() -> MenuScene:
-        return menu(map).fade_in_complete
-
-    title_scene = TransitionScene(from_scene, title)
+    title_scene = TransitionScene(title)
     title_button = Button(
         name="title",
         idle=title_idle.drawing,

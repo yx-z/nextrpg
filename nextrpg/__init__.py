@@ -142,7 +142,7 @@ from nextrpg.event.io_event import (
     to_io_event,
 )
 from nextrpg.game.game import Game
-from nextrpg.game.game_loop import GameLoop
+from nextrpg.game.game_loop import GameLoop, current_scene
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
     ZERO_SIZE,
