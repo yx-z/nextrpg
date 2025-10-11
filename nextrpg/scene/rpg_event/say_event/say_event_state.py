@@ -56,12 +56,9 @@ class SayEventState(RpgEventScene, ABC):
 class SayEventFadeInState(SayEventState):
     background: AnimationOnScreenLike
     text_on_screen: TextOnScreen
-    config: SayEventConfig
     _: KW_ONLY = private_init_below()
     _fade_in: FadeIn = default(
-        lambda self: FadeIn(
-            resource=self.background, duration=self.config.fade_duration
-        )
+        lambda self: FadeIn(self.background, self.config.fade_duration)
     )
 
     @property
@@ -103,13 +100,13 @@ class SayEventTypingState(SayEventState):
             return self
 
         resource = (self.background,) + self.text_on_screen.drawing_on_screens
-        animation_on_screens = AnimationOnScreens(resource)
+        resources = AnimationOnScreens(resource)
         return SayEventFadeOutState(
             generator=self.generator,
             scene=self.scene,
             unique_name=self.unique_name,
             initial_coordinate=self.initial_coordinate,
-            animation_on_screen=animation_on_screens,
+            resources=resources,
             config=self.config,
         )
 
@@ -131,14 +128,10 @@ class SayEventTypingState(SayEventState):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class SayEventFadeOutState(SayEventState):
-    animation_on_screen: AnimationOnScreenLike
-    config: SayEventConfig
+    resources: AnimationOnScreenLike
     _: KW_ONLY = private_init_below()
     _fade_out: FadeOut = default(
-        lambda self: FadeOut(
-            resource=self.animation_on_screen,
-            duration=self.config.fade_duration,
-        )
+        lambda self: FadeOut(self.resources, self.config.fade_duration)
     )
 
     @override
