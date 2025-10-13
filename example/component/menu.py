@@ -63,5 +63,5 @@ def widget_group() -> WidgetGroup:
 
 def enter_animation(drawing_on_screens: tuple[DrawingOnScreen, ...]) -> FadeIn:
     offset = DirectionalOffset(Direction.DOWN, 50)
-    move = MoveTo(resource=drawing_on_screens, offset=offset, duration=400)
+    move = MoveTo(resource=drawing_on_screens, offset=offset, duration=200)
     return move.compose(FadeIn)

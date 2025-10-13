@@ -184,7 +184,6 @@ from nextrpg.scene.map.map_loader import MapLoader
 from nextrpg.scene.map.map_move import MapMove
 from nextrpg.scene.map.map_scene import MapScene
 from nextrpg.scene.map.map_shift import center_player
-from nextrpg.scene.menu_scene import MenuScene
 from nextrpg.scene.rpg_event.cutscene import cutscene
 from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
 from nextrpg.scene.rpg_event.fade_in_event_scene import (
@@ -219,6 +218,7 @@ from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 from nextrpg.scene.widget.button import Button, ButtonOnScreen
 from nextrpg.scene.widget.label import Label, LabelOnScreen
+from nextrpg.scene.widget.menu_scene import MenuScene
 from nextrpg.scene.widget.panel import Panel
 from nextrpg.scene.widget.scroll_direction import ScrollDirection
 from nextrpg.scene.widget.sizable_widget import SizableWidget

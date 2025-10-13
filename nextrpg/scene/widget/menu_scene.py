@@ -1,7 +1,7 @@
 from dataclasses import KW_ONLY, field
 from typing import TYPE_CHECKING, override
 
-from nextrpg.animation.fade import FadeIn
+from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.config.config import config
 from nextrpg.config.menu_config import MenuConfig
@@ -30,9 +30,6 @@ class MenuScene(TmxWidgetGroupOnScreen):
     background: tuple[DrawingOnScreen, ...] = default(
         lambda self: self._init_blurred_background
     )
-    _fade_in: FadeIn = default(
-        lambda self: FadeIn(self.background, self.config.fade_duration)
-    )
     _tick_parent: bool = False
 
     @override
@@ -40,14 +37,28 @@ class MenuScene(TmxWidgetGroupOnScreen):
     def _init_enter_animation(self) -> TimedAnimationOnScreens:
         fade_in = FadeIn(self.background, self.config.fade_duration)
         if self.widget.enter_animation:
-            widget_drawing_on_screens = (
-                WidgetGroupOnScreen._drawing_on_screens_after_parent.__get__(
-                    self, WidgetGroupOnScreen
-                )
+            animation = self.widget.enter_animation(
+                self._widget_drawing_on_screens
             )
-            animation = self.widget.enter_animation(widget_drawing_on_screens)
-            return fade_in.concurrent(animation)
+            return fade_in.concur(animation)
         return fade_in
+
+    @override
+    @property
+    def _init_exit_animation(self) -> TimedAnimationOnScreens:
+        fade_out = FadeOut(self.background, self.config.fade_duration)
+        if self.widget.exit_animation:
+            animation = self.widget.exit_animation(
+                self._widget_drawing_on_screens
+            )
+            return fade_out.concur(animation)
+        return fade_out
+
+    @property
+    def _widget_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return WidgetGroupOnScreen._drawing_on_screens_after_parent.__get__(
+            self, WidgetGroupOnScreen
+        )
 
     @property
     def _init_blurred_background(self) -> tuple[DrawingOnScreen, ...]:
