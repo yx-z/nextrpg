@@ -36,8 +36,8 @@ class DrawingOnScreen(AnimationOnScreenLike):
         drawing = self.drawing.blur(radius)
         return replace(self, drawing=drawing)
 
-    def with_alpha(self, alpha: Alpha) -> Self:
-        drawing = self.drawing.with_alpha(alpha)
+    def alpha(self, alpha: Alpha) -> Self:
+        drawing = self.drawing.alpha(alpha)
         return replace(self, drawing=drawing)
 
     def __add__(

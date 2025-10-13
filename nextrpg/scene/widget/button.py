@@ -2,7 +2,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, replace
 from typing import ClassVar, Self, override
 
-from nextrpg.animation.animation import Animation
+from nextrpg.animation.abstract_animation import AbstractAnimation
 from nextrpg.core.dataclass_with_default import dataclass_with_default
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
@@ -45,12 +45,12 @@ class ButtonOnScreen(SizableWidgetOnScreen):
 
     @override
     def _tick_after_parent(self, time_delta: Millisecond) -> Self:
-        if isinstance(self.widget.idle, Animation):
+        if isinstance(self.widget.idle, AbstractAnimation):
             idle = self.widget.idle.tick(time_delta)
         else:
             idle = self.widget.idle
 
-        if isinstance(self.widget.active, Animation):
+        if isinstance(self.widget.active, AbstractAnimation):
             active = self.widget.active.tick(time_delta)
         else:
             active = self.widget.active

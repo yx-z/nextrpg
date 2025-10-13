@@ -7,7 +7,7 @@ from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
 
 
-class Animation(AnimationLike, ABC):
+class AbstractAnimation(AnimationLike, ABC):
     @override
     def tick(self, time_delta: Millisecond) -> Self:
         if self.is_complete:

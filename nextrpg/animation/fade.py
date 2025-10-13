@@ -20,7 +20,7 @@ class Fade(TimedAnimationOnScreens, ABC):
         if self._percentage >= 1:
             return drawing_on_screens
         alpha = alpha_from_percentage(self._percentage)
-        return tuple(d.with_alpha(alpha) for d in drawing_on_screens)
+        return tuple(d.alpha(alpha) for d in drawing_on_screens)
 
     @property
     @abstractmethod

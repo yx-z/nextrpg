@@ -89,7 +89,7 @@ class Text(AnimationLike):
 
     def _line_shift(self, index: int) -> Size:
         height = self.config.font.text_height + self.config.line_spacing
-        return (height * index).with_zero_width
+        return (height * index).zero_width
 
     def _drawing(self, line: str) -> Drawing:
         surface = self.config.font.pygame.render(

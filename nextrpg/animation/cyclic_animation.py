@@ -1,7 +1,7 @@
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
-from nextrpg.animation.animation import Animation
+from nextrpg.animation.abstract_animation import AbstractAnimation
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -13,7 +13,7 @@ from nextrpg.drawing.drawing_group import DrawingGroup
 
 
 @dataclass_with_default(frozen=True)
-class CyclicAnimation(Animation):
+class CyclicAnimation(AbstractAnimation):
     frames: tuple[Drawing | DrawingGroup, ...]
     duration_per_frame: Millisecond | tuple[Millisecond, ...]
     _: KW_ONLY = private_init_below()

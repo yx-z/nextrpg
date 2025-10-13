@@ -16,6 +16,7 @@ from nextrpg.drawing.drawing_trim import DrawingTrim
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
     HeightScaling,
+    Pixel,
     Size,
     WidthAndHeightScaling,
     WidthScaling,
@@ -23,6 +24,7 @@ from nextrpg.geometry.dimension import (
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 if TYPE_CHECKING:
+    from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 log = Log()
@@ -81,7 +83,7 @@ class Drawing(AnimationLike):
         area = coordinate.anchor(width * height).rectangle_area_on_screen
         return self.crop(area)
 
-    def with_alpha(self, alpha: Alpha) -> Self:
+    def alpha(self, alpha: Alpha) -> Self:
         surface = self.surface.copy()
         surface.set_alpha(alpha)
         return replace(self, resource=surface)
@@ -155,6 +157,18 @@ class Drawing(AnimationLike):
     def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
         surface = flip(self.surface, horizontal, vertical)
         return replace(self, resource=surface)
+
+    def background(
+        self, color: Color, border_radius: Pixel | None = None
+    ) -> DrawingGroup:
+        from nextrpg.drawing.drawing_group import DrawingGroup
+        from nextrpg.drawing.rectangle_drawing import RectangleDrawing
+
+        background = RectangleDrawing(
+            self.size, color, border_radius, self.allow_background_in_debug
+        )
+        group = (background.drawing.no_shift, self.no_shift)
+        return DrawingGroup(group)
 
     @cached_property
     def _debug_surface(self) -> Surface | None:

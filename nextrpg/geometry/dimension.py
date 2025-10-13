@@ -115,7 +115,7 @@ class Width(Dimension):
         return Width(self.value / arg.value)
 
     @property
-    def with_zero_height(self) -> Size:
+    def zero_height(self) -> Size:
         return self * Height(0)
 
 
@@ -158,7 +158,7 @@ class Height(Dimension):
         return Height(self.value / arg.value)
 
     @property
-    def with_zero_width(self) -> Size:
+    def zero_width(self) -> Size:
         return Width(0) * self
 
 

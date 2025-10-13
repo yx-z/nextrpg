@@ -37,7 +37,7 @@ class SayEventAddOn:
 
     @cached_property
     def background(self) -> AnimationOnScreenLike:
-        contents = [self._text.drawing.with_no_shift]
+        contents = [self._text.drawing.no_shift]
         if self._name_relative_to_text:
             contents.append(self._name_relative_to_text)
         if self._avatar_relative_to_text:
@@ -47,7 +47,7 @@ class SayEventAddOn:
         background = self._background_relative_to_text.drawing
         shift = self._background_relative_to_text.shift
         background_and_content = (
-            background.with_no_shift,
+            background.no_shift,
             content.shift(-shift),
         )
         add_on_group = DrawingGroup(background_and_content)
@@ -124,7 +124,7 @@ class SayEventAddOn:
             return None
         text = Text(self._name, self.config.name_text_config)
         return text.drawing.shift(
-            -self.config.padding.height.with_zero_width, Anchor.BOTTOM_LEFT
+            -self.config.padding.height.zero_width, Anchor.BOTTOM_LEFT
         )
 
     @cached_property
@@ -186,7 +186,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
             background_drawing = background_drawing.cut(background_crop)
 
         background_and_tip = (
-            background_drawing.with_no_shift,
+            background_drawing.no_shift,
             self._tip.shift(tip_shift),
         )
         background_and_tip_group = DrawingGroup(background_and_tip)
