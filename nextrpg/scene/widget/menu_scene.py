@@ -1,6 +1,8 @@
+from collections.abc import Callable
 from dataclasses import KW_ONLY, field
 from typing import TYPE_CHECKING, override
 
+from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.config.config import config
@@ -34,25 +36,32 @@ class MenuScene(TmxWidgetGroupOnScreen):
 
     @override
     @property
-    def _init_enter_animation(self) -> TimedAnimationOnScreens:
+    def _init_enter_animation(self) -> AnimationOnScreens:
         fade_in = FadeIn(self.background, self.config.fade_duration)
-        if self.widget.enter_animation:
-            animation = self.widget.enter_animation(
-                self._widget_drawing_on_screens
-            )
-            return fade_in.concur(animation)
-        return fade_in
+        return self._init_animation(fade_in, self.widget.enter_animation)
 
     @override
     @property
-    def _init_exit_animation(self) -> TimedAnimationOnScreens:
+    def _init_exit_animation(self) -> AnimationOnScreens:
         fade_out = FadeOut(self.background, self.config.fade_duration)
-        if self.widget.exit_animation:
-            animation = self.widget.exit_animation(
+        return self._init_animation(fade_out, self.widget.exit_animation)
+
+    def _init_animation(
+        self,
+        background_animation: FadeIn | FadeOut,
+        create_widget_animation: (
+            Callable[
+                [tuple[DrawingOnScreen, ...]], TimedAnimationOnScreens | None
+            ]
+            | None
+        ),
+    ) -> AnimationOnScreens:
+        if create_widget_animation:
+            widget_animation = create_widget_animation(
                 self._widget_drawing_on_screens
             )
-            return fade_out.concur(animation)
-        return fade_out
+            return background_animation.concur(widget_animation)
+        return background_animation
 
     @property
     def _widget_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
