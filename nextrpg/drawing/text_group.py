@@ -17,8 +17,14 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class TextGroup(AnimationLike):
-    texts: tuple[Text, ...]
+    resource: Text | tuple[Text, ...]
     config: TextGroupConfig = field(default_factory=lambda: config().text_group)
+
+    @property
+    def texts(self) -> tuple[Text, ...]:
+        if isinstance(self.resource, tuple):
+            return self.resource
+        return (self.resource,)
 
     def __len__(self) -> int:
         return sum(len(text) for text in self.texts)
@@ -45,7 +51,7 @@ class TextGroup(AnimationLike):
                 text_stop = stop - idx if stop is not None else msg_len
                 texts.append(text[text_start:text_stop])
             idx += msg_len
-        return replace(self, texts=tuple(texts))
+        return replace(self, resource=tuple(texts))
 
     def __radd__(self, other: str) -> TextGroup:
         return self + other
@@ -55,7 +61,8 @@ class TextGroup(AnimationLike):
             text = Text(other)
         else:
             text = other
-        return replace(self, texts=self.texts + (text,))
+        texts = self.texts + (text,)
+        return replace(self, resource=texts)
 
     @override
     @cached_property

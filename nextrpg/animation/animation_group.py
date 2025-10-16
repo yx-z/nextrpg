@@ -9,21 +9,29 @@ from nextrpg.drawing.drawing_group import DrawingGroup
 
 @dataclass(frozen=True)
 class AnimationGroup(AbstractAnimation):
-    resource: tuple[AnimationLike, ...]
+    resource: AnimationLike | tuple[AnimationLike, ...]
 
     @property
     def is_complete(self) -> bool:
-        return all(animation.is_complete for animation in self.resource)
+        if isinstance(self.resource, tuple):
+            return all(animation.is_complete for animation in self.resource)
+        return self.resource.is_complete
 
     @property
     def drawing(self) -> DrawingGroup:
-        relative_drawings = tuple(
-            animation.no_shift for animation in self.resource
-        )
+        if isinstance(self.resource, tuple):
+            relative_drawings = tuple(
+                animation.no_shift for animation in self.resource
+            )
+        else:
+            relative_drawings = self.resource.no_shift
         return DrawingGroup(relative_drawings)
 
     def _tick_before_complete(self, time_delta: Millisecond) -> Self:
-        resource = tuple(
-            animation.tick(time_delta) for animation in self.resource
-        )
+        if isinstance(self.resource, tuple):
+            resource = tuple(
+                animation.tick(time_delta) for animation in self.resource
+            )
+        else:
+            resource = self.resource.tick(time_delta)
         return replace(self, resource=resource)

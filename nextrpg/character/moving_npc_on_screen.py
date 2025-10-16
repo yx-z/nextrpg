@@ -9,6 +9,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
+from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.walk import Walk
@@ -19,6 +20,7 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     path: PolylineOnScreen
     _: KW_ONLY = private_init_below()
     coordinate: Coordinate = default(lambda self: self._walk.coordinate)
+    map_collisions: tuple[AreaOnScreen, ...] = ()
     _walk: Walk = default(lambda self: self._init_walk)
 
     @override

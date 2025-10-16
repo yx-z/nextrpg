@@ -12,9 +12,9 @@ from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 log = Log()
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class MovingCharacterOnScreen(CharacterOnScreen, ABC):
-    map_collisions: tuple[AreaOnScreen, ...] = ()
+    map_collisions: tuple[AreaOnScreen, ...]
 
     @property
     @abstractmethod

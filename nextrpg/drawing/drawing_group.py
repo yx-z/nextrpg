@@ -16,23 +16,28 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class DrawingGroup(AnimationLike):
-    relative_drawings: tuple[RelativeDrawing, ...]
+    resource: RelativeDrawing | tuple[RelativeDrawing, ...]
 
     @override
     @property
     def drawing(self) -> DrawingGroup:
         return self
 
+    @property
+    def relative_drawings(self) -> tuple[RelativeDrawing, ...]:
+        if isinstance(self.resource, tuple):
+            return self.resource
+        return (self.resource,)
+
     @override
     @cached_property
     def drawings(self) -> tuple[Drawing, ...]:
         res: list[Drawing] = []
         for relative in self.relative_drawings:
-            match relative.drawing:
-                case DrawingGroup() as drawing_group:
-                    res += drawing_group.drawings
-                case Drawing() as drawing:
-                    res.append(drawing)
+            if isinstance(relative.drawing, Drawing):
+                res.append(relative.drawing)
+            else:
+                res += relative.drawing.drawings
         return tuple(res)
 
     @override
@@ -57,11 +62,11 @@ class DrawingGroup(AnimationLike):
         return self._drawing_group_on_screen.top_left
 
     def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
-        relative_drawings = tuple(
+        resource = tuple(
             relative_drawing.flip(horizontal, vertical)
             for relative_drawing in self.relative_drawings
         )
-        return replace(self, relative_drawings=relative_drawings)
+        return replace(self, resource=resource)
 
     def cut(self, area: RectangleAreaOnScreen) -> Self:
         res: list[RelativeDrawing] = []
@@ -71,7 +76,7 @@ class DrawingGroup(AnimationLike):
             drawing = relative.drawing.cut(relative_area)
             relative_drawing = replace(relative, drawing=drawing)
             res.append(relative_drawing)
-        return replace(self, relative_drawings=tuple(res))
+        return replace(self, resource=tuple(res))
 
     @cached_property
     def _drawing_group_on_screen(self) -> DrawingGroupOnScreen:

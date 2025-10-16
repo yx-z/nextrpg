@@ -1,8 +1,8 @@
 from dataclasses import dataclass, replace
-from typing import TYPE_CHECKING, Self
+from typing import Self
 
 from nextrpg.drawing.anchor import Anchor
-from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import (
     ZERO_SIZE,
@@ -12,13 +12,10 @@ from nextrpg.geometry.dimension import (
     WidthScaling,
 )
 
-if TYPE_CHECKING:
-    from nextrpg.drawing.drawing_group import DrawingGroup
-
 
 @dataclass(frozen=True)
 class RelativeDrawing:
-    drawing: Drawing | DrawingGroup
+    drawing: AnimationLike
     shift: Size
     anchor: Anchor = Anchor.TOP_LEFT
 
