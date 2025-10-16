@@ -1,4 +1,5 @@
 from dataclasses import dataclass, replace
+from functools import cached_property
 from typing import Any, Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
@@ -12,7 +13,7 @@ class NpcOnScreen(CharacterOnScreen):
     restart_event: bool = True
 
     @override
-    @property
+    @cached_property
     def save_data(self) -> dict[str, Any]:
         return super().save_data | {"restart_event": self.restart_event}
 

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from functools import cached_property
 
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size, WidthAndHeightScaling
@@ -9,7 +10,7 @@ from nextrpg.geometry.sizable import Sizable
 class _SizableProxy:
     size_input: Sizable | Size
 
-    @property
+    @cached_property
     def size(self) -> Size:
         if isinstance(self.size_input, Size):
             return self.size_input
@@ -25,7 +26,7 @@ class TopLeftSizable(_SizableProxy, Sizable):
 class TopCenterSizable(_SizableProxy, Sizable):
     top_center_input: Coordinate
 
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
         return self.top_center_input - self.width / 2
 
@@ -34,7 +35,7 @@ class TopCenterSizable(_SizableProxy, Sizable):
 class TopRightSizable(_SizableProxy, Sizable):
     top_right_input: Coordinate
 
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
         return self.top_right_input - self.width
 
@@ -43,7 +44,7 @@ class TopRightSizable(_SizableProxy, Sizable):
 class CenterLeftSizable(_SizableProxy, Sizable):
     center_left_input: Coordinate
 
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
         return self.center_left_input - self.height / 2
 
@@ -52,7 +53,7 @@ class CenterLeftSizable(_SizableProxy, Sizable):
 class CenterSizable(_SizableProxy, Sizable):
     center_input: Coordinate
 
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
         return self.center_input - self.size / WidthAndHeightScaling(2)
 
@@ -61,7 +62,7 @@ class CenterSizable(_SizableProxy, Sizable):
 class CenterRightSizable(_SizableProxy, Sizable):
     center_right_input: Coordinate
 
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
         return self.center_right_input - self.height / 2 - self.width
 
@@ -70,7 +71,7 @@ class CenterRightSizable(_SizableProxy, Sizable):
 class BottomLeftSizable(_SizableProxy, Sizable):
     bottom_left_input: Coordinate
 
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
         return self.bottom_left_input - self.height
 
@@ -79,7 +80,7 @@ class BottomLeftSizable(_SizableProxy, Sizable):
 class BottomCenterSizable(_SizableProxy, Sizable):
     bottom_center_input: Coordinate
 
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
         return self.bottom_center_input - self.height - self.width / 2
 
@@ -88,6 +89,6 @@ class BottomCenterSizable(_SizableProxy, Sizable):
 class BottomRightSizable(_SizableProxy, Sizable):
     bottom_right_input: Coordinate
 
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
         return self.bottom_right_input - self.size

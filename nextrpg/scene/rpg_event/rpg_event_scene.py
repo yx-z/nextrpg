@@ -24,7 +24,7 @@ class RpgEventScene[R = None](Scene):
         ticked = replace(self, scene=self.scene.tick_without_event(time_delta))
         return self._tick_after_scene(time_delta, ticked)
 
-    @property
+    @cached_property
     def add_ons(self) -> tuple[DrawingOnScreen, ...]:
         return ()
 

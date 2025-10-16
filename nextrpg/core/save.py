@@ -49,7 +49,7 @@ class LoadFromSave[_S](_Savable[_S]):
 
 class LoadFromSaveEnum(LoadFromSave[str], Enum):
     @override
-    @property
+    @cached_property
     def save_data(self) -> str:
         return self.name
 
@@ -119,7 +119,7 @@ class SaveIo:
         key = concat_save_key(arg.save_key())
         return self._load(key, arg.load_from_save, fallback=None)
 
-    @property
+    @cached_property
     def web(self) -> bool:
         # TODO: Implement web save/load using IndexedDB.
         return sys.platform == "emscripten"
@@ -194,7 +194,7 @@ class SaveIo:
     def _bytes_path(self, key: str) -> Path:
         return self.config.directory / self.slot / key
 
-    @property
+    @cached_property
     def _text_path(self) -> Path:
         return self.config.directory / self.slot / self.config.text_save_file
 

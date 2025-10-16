@@ -38,11 +38,11 @@ class WidgetOnScreen(Scene):
     def __str__(self) -> str:
         return f"{type_name(self)}({self.widget})"
 
-    @property
+    @cached_property
     def select(self) -> Self:
         return replace(self, _is_selected=True)
 
-    @property
+    @cached_property
     def deselect(self) -> Self:
         return replace(self, _is_selected=False)
 

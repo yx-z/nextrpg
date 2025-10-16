@@ -112,7 +112,8 @@ class SayEventConfig:
 
         from nextrpg.config.config import config
 
-        return replace(config().text, color=BLACK)
+        text_config = config().text
+        return replace(text_config, color=BLACK)
 
     @property
     def name_text_config(self) -> TextConfig:

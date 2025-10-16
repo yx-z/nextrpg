@@ -56,8 +56,8 @@ class PlayerOnScreen(MovingCharacterOnScreen):
             return self._movement_keys | {event.key}
         return self._movement_keys - {event.key}
 
-    @property
     @override
+    @cached_property
     def moving(self) -> bool:
         return bool(self._movement_keys)
 

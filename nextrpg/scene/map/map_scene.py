@@ -124,7 +124,7 @@ class MapScene(EventfulScene, UpdateFromSave):
         return super().event(event)
 
     @override
-    @property
+    @cached_property
     def save_data(self) -> dict:
         return {
             character.save_key: character.save_data

@@ -44,12 +44,12 @@ class Drawing(AnimationLike):
     allow_background_in_debug: bool = True
 
     @override
-    @property
+    @cached_property
     def drawing(self) -> Drawing:
         return self
 
     @override
-    @property
+    @cached_property
     def drawings(self) -> tuple[Drawing, ...]:
         return (self,)
 
@@ -62,7 +62,7 @@ class Drawing(AnimationLike):
         return f"Drawing({self.size}{resource_info})"
 
     @override
-    @property
+    @cached_property
     def size(self) -> Size:
         return Size(self.surface.width, self.surface.height)
 
@@ -114,14 +114,9 @@ class Drawing(AnimationLike):
         size = Size(rectangle.width, rectangle.height)
         return coordinate.anchor(size).rectangle_area_on_screen
 
-    @property
+    @cached_property
     def rectangle(self) -> RectangleAreaOnScreen:
         return ORIGIN.anchor(self.size).rectangle_area_on_screen
-
-    @override
-    @property
-    def top_left(self) -> Coordinate:
-        return ORIGIN
 
     @cached_property
     def surface(self) -> Surface:

@@ -1,5 +1,6 @@
 from collections.abc import Callable
 from dataclasses import KW_ONLY, field
+from functools import cached_property
 from typing import TYPE_CHECKING, override
 
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
@@ -63,7 +64,7 @@ class MenuScene(TmxWidgetGroupOnScreen):
             return background_animation.concur(widget_animation)
         return background_animation
 
-    @property
+    @cached_property
     def _widget_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return WidgetGroupOnScreen._drawing_on_screens_after_parent.__get__(
             self, WidgetGroupOnScreen

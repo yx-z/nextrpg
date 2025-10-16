@@ -28,7 +28,7 @@ class DrawingOnScreen(AnimationOnScreenLike):
         coordinate = self.top_left + shift
         return coordinate.anchor(size).rectangle_area_on_screen
 
-    @property
+    @cached_property
     def pygame(self) -> tuple[Surface, Coordinate]:
         return self.drawing.pygame, self.top_left
 
@@ -51,11 +51,11 @@ class DrawingOnScreen(AnimationOnScreenLike):
     ) -> DrawingOnScreen:
         return self + -other
 
-    @property
+    @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return (self,)
 
     @override
-    @property
+    @cached_property
     def size(self) -> Size:
         return self.drawing.size

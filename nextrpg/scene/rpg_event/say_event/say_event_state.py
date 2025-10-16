@@ -61,8 +61,8 @@ class SayEventFadeInState(SayEventState):
         lambda self: FadeIn(self.background, self.config.fade_duration)
     )
 
-    @property
     @override
+    @cached_property
     def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
         return self._fade_in.drawing_on_screens
 
@@ -111,7 +111,7 @@ class SayEventTypingState(SayEventState):
         )
 
     @override
-    @property
+    @cached_property
     def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
         if self._typewriter:
             text = self._typewriter.drawing_on_screens
@@ -135,7 +135,7 @@ class SayEventFadeOutState(SayEventState):
     )
 
     @override
-    @property
+    @cached_property
     def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
         return self._fade_out.drawing_on_screens
 

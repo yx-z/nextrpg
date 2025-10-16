@@ -1,6 +1,7 @@
 import gc
 from collections.abc import Callable
 from dataclasses import KW_ONLY, field, replace
+from functools import cached_property
 from typing import Self
 
 import pygame
@@ -46,7 +47,7 @@ class GameLoop:
         )
     )
 
-    @property
+    @cached_property
     def tick(self) -> GameLoop:
         if (
             self._config.garbage_collect_time_threshold

@@ -1,5 +1,6 @@
 from dataclasses import KW_ONLY, dataclass, field, replace
 from enum import IntEnum
+from functools import cached_property
 from typing import Self, override
 
 from nextrpg.animation.cyclic_animation import CyclicAnimation
@@ -78,7 +79,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     )
 
     @override
-    @property
+    @cached_property
     def drawing(self) -> Drawing | DrawingGroup:
         return self._animations[_adjust(self.direction)].drawing
 

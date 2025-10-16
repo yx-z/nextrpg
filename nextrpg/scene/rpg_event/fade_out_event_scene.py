@@ -1,4 +1,5 @@
 from dataclasses import KW_ONLY, dataclass, field, replace
+from functools import cached_property
 from typing import Self, override
 
 from nextrpg.animation.fade import FadeOut
@@ -26,7 +27,7 @@ class BackgroundFadeOutEvent(BackgroundEvent):
     fade: FadeOut
 
     @override
-    @property
+    @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return self.fade.drawing_on_screens
 
@@ -34,8 +35,8 @@ class BackgroundFadeOutEvent(BackgroundEvent):
     def tick(self, time_delta: Millisecond) -> Self:
         return replace(self, fade=self.fade.tick(time_delta))
 
-    @property
     @override
+    @cached_property
     def complete(self) -> bool:
         return self.fade.is_complete
 
@@ -50,8 +51,8 @@ class FadeOutEventScene(RpgEventScene[BackgroundFadeOutEvent]):
     _: KW_ONLY = private_init_below()
     _fade: FadeOut = default(lambda self: self._init_fade)
 
-    @property
     @override
+    @cached_property
     def add_ons(self) -> tuple[DrawingOnScreen, ...]:
         return self._fade.drawing_on_screens
 
@@ -70,7 +71,7 @@ class FadeOutEventScene(RpgEventScene[BackgroundFadeOutEvent]):
 
         return replace(ticked, scene=background_removed, _fade=fade)
 
-    @property
+    @cached_property
     def _init_fade(self) -> FadeOut:
         resource = self.scene.get_background_event(
             self.sentinel

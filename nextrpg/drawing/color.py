@@ -1,3 +1,4 @@
+from functools import cached_property
 from typing import NamedTuple, Self
 
 type Alpha = int
@@ -9,7 +10,7 @@ class Color(NamedTuple):
     blue: int
     alpha: Alpha = 255
 
-    @property
+    @cached_property
     def save_data(self) -> list[int]:
         return list(self)
 

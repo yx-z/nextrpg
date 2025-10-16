@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from functools import cached_property
 from typing import ClassVar, override
 
 from nextrpg.drawing.drawing_group import DrawingGroup
@@ -16,7 +17,7 @@ class LabelOnScreen(SizableWidgetOnScreen):
     widget: Label
 
     @override
-    @property
+    @cached_property
     def drawing(self) -> DrawingGroup:
         return self.widget.text.drawing
 
@@ -27,11 +28,11 @@ class Label(SizableWidget[LabelOnScreen]):
     widget_on_screen_type: ClassVar[type[LabelOnScreen]] = LabelOnScreen
 
     @override
-    @property
+    @cached_property
     def size(self) -> Size:
         return self.text.size
 
-    @property
+    @cached_property
     def text(self) -> Text | TextGroup:
         if isinstance(self.message, str):
             return Text(self.message)

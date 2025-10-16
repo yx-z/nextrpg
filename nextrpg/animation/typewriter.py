@@ -39,7 +39,7 @@ class Typewriter(AbstractAnimationOnScreen):
         return replace(self, _index=index, _timer_per_character=timer.modulo)
 
     @override
-    @property
+    @cached_property
     def is_complete(self) -> bool:
         num_chars = len(self.text_on_screen.text)
         return (

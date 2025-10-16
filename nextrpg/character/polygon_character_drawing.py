@@ -1,4 +1,5 @@
 from dataclasses import KW_ONLY, dataclass
+from functools import cached_property
 from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -16,7 +17,7 @@ class PolygonCharacterDrawing(CharacterDrawing):
     direction: Direction = Direction.DOWN
 
     @override
-    @property
+    @cached_property
     def drawing(self) -> Drawing:
         return self.rect_or_poly.drawing
 

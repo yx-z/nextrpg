@@ -36,8 +36,8 @@ class WindowConfig(UpdateFromSave[dict[str, Any]]):
     def need_new_screen(self, other: WindowConfig) -> bool:
         return self.size != other.size or self.flag != other.flag
 
-    @property
     @override
+    @cached_property
     def save_data(self) -> dict[str, Any]:
         return {
             Size.save_key(): self.size.save_data,
@@ -51,7 +51,7 @@ class WindowConfig(UpdateFromSave[dict[str, Any]]):
         full_screen = data["full_screen"]
         return replace(self, size=size, full_screen=full_screen)
 
-    @property
+    @cached_property
     def flag(self) -> _WindowFlag:
         flag = 0
         if self.double_buffer:

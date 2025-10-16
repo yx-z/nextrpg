@@ -34,15 +34,15 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
     character: CharacterDrawing = default(lambda self: self.spec.character)
     _event_started: bool = False
 
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
         return self.coordinate
 
-    @property
+    @cached_property
     def size(self) -> Size:
         return self.drawing_on_screen.size
 
-    @property
+    @cached_property
     def name(self) -> str:
         return self.spec.display_name
 
@@ -51,22 +51,24 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
     ) -> Self:
         return replace(self, character=self.character.tick_idle(time_delta))
 
-    @property
+    @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         debug_visuals = tuple(
-            d for d in (self._collision_visual, self._start_event_visual) if d
+            d
+            for d in (self._collision_visual, self._start_event_visual)
+            if d is not None
         )
         return (self.drawing_on_screen,) + debug_visuals
 
     @cached_property
     def collision_rectangle_area_on_screen(self) -> AreaOnScreen:
-        if self._area_on_screen:
+        if self._area_on_screen is not None:
             return self._area_on_screen
         return self._collision_rectangle_area_on_screen(self.coordinate)
 
-    @property
+    @cached_property
     def drawing_on_screen(self) -> DrawingOnScreen:
-        return DrawingOnScreen(self.coordinate, self.character.drawing)
+        return self.character.drawing.drawing_on_screen(self.coordinate)
 
     def is_same_name(self, other: CharacterOnScreen) -> bool:
         return self.spec.unique_name == other.spec.unique_name
@@ -79,7 +81,7 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
             character = self.character.turn(direction)
         return replace(self, character=character, _event_started=True)
 
-    @property
+    @cached_property
     def complete_event(self) -> Self:
         return replace(self, _event_started=False)
 
@@ -89,7 +91,7 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
         return concat_save_key(super().save_key, self.spec.unique_name)
 
     @override
-    @property
+    @cached_property
     def save_data(self) -> dict[str, Any]:
         return {
             Coordinate.save_key(): self.coordinate.save_data,

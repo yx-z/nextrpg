@@ -1,4 +1,5 @@
 from dataclasses import KW_ONLY, dataclass, field, replace
+from functools import cached_property
 from typing import Self, override
 
 from nextrpg.animation.fade import FadeIn
@@ -25,8 +26,8 @@ from nextrpg.scene.scene import Scene
 class BackgroundFadeInEvent(BackgroundEvent):
     fade: FadeIn
 
-    @property
     @override
+    @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return self.fade.drawing_on_screens
 
@@ -34,8 +35,8 @@ class BackgroundFadeInEvent(BackgroundEvent):
     def tick(self, time_delta: Millisecond) -> Self:
         return replace(self, fade=self.fade.tick(time_delta))
 
-    @property
     @override
+    @cached_property
     def complete(self) -> bool:
         return False
 
@@ -52,8 +53,8 @@ class FadeInEventScene(RpgEventScene[BackgroundEventSentinel]):
         lambda self: FadeIn(self.drawing_on_screen, self.duration)
     )
 
-    @property
     @override
+    @cached_property
     def add_ons(self) -> tuple[DrawingOnScreen, ...]:
         return self._fade.drawing_on_screens
 

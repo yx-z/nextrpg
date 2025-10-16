@@ -1,3 +1,4 @@
+from functools import cached_property
 from math import atan2, degrees, hypot
 from typing import TYPE_CHECKING, NamedTuple, Self, overload, override
 
@@ -21,7 +22,7 @@ if TYPE_CHECKING:
 
 
 class XAxis(Dimension):
-    @property
+    @cached_property
     def width(self) -> Width:
         return Width(self.value)
 
@@ -46,13 +47,13 @@ class XAxis(Dimension):
     def __matmul__(self, y_axis: YAxis) -> Coordinate:
         return Coordinate(self.value, y_axis.value)
 
-    @property
+    @cached_property
     def zero_y_axis(self) -> Coordinate:
         return self @ YAxis(0)
 
 
 class YAxis(Dimension):
-    @property
+    @cached_property
     def height(self) -> Height:
         return Height(self.value)
 
@@ -77,7 +78,7 @@ class YAxis(Dimension):
     def __matmul__(self, x_axis: XAxis) -> Coordinate:
         return Coordinate(x_axis.value, self.value)
 
-    @property
+    @cached_property
     def zero_x_axis(self) -> Coordinate:
         return self @ XAxis(0)
 

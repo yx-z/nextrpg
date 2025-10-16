@@ -15,22 +15,22 @@ if TYPE_CHECKING:
 class AnimationOnScreenLike(Sizable):
     drawing_on_screens: tuple[DrawingOnScreen, ...]
 
-    @property
+    @cached_property
     def drawing_on_screen(self) -> DrawingOnScreen:
         return self._drawing_on_screens.drawing_on_screen
 
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
         return self._drawing_on_screens.top_left
 
-    @property
+    @cached_property
     def size(self) -> Size:
         return self._drawing_on_screens.size
 
     def tick(self, time_delta: Millisecond) -> Self:
         return self
 
-    @property
+    @cached_property
     def is_complete(self) -> bool:
         return True
 

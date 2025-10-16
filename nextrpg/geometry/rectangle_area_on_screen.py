@@ -17,7 +17,7 @@ class RectangleAreaOnScreen(AreaOnScreen):
     top_left: Coordinate
     size: Size
 
-    @property
+    @cached_property
     def pygame(self) -> tuple[Coordinate, Size]:
         return self.top_left, self.size
 

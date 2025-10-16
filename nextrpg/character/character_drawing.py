@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from functools import cached_property
 from typing import Any, Self
 
 from nextrpg.core.time import Millisecond
@@ -29,10 +30,10 @@ class CharacterDrawing(ABC, Sizable):
     def tick_action(self, time_delta: Millisecond, action: Any) -> Self:
         return self
 
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
         return self.drawing.top_left
 
-    @property
+    @cached_property
     def size(self) -> Size:
         return self.drawing.size

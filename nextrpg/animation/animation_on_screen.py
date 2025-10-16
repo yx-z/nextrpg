@@ -22,7 +22,7 @@ class AnimationOnScreen(AbstractAnimationOnScreen):
         return self.animation.drawing_on_screens(self.coordinate)
 
     @override
-    @property
+    @cached_property
     def is_complete(self) -> bool:
         return self.animation.is_complete
 

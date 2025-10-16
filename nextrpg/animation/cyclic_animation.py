@@ -1,4 +1,5 @@
 from dataclasses import KW_ONLY, replace
+from functools import cached_property
 from typing import Self, override
 
 from nextrpg.animation.abstract_animation import AbstractAnimation
@@ -20,17 +21,17 @@ class CyclicAnimation(AbstractAnimation):
     _index: int = 0
     _timer: Timer = default(lambda self: Timer(self._duration(0)))
 
-    @property
     @override
+    @cached_property
     def drawing(self) -> Drawing | DrawingGroup:
         return self.frames[self._index]
 
     @override
-    @property
+    @cached_property
     def is_complete(self) -> bool:
         return False
 
-    @property
+    @cached_property
     def reset(self) -> Self:
         timer = Timer(self._duration(0))
         return replace(self, _index=0, _timer=timer)

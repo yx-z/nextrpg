@@ -1,4 +1,5 @@
 from dataclasses import dataclass, replace
+from functools import cached_property
 from typing import Self
 
 from nextrpg.drawing.color import WHITE, Color
@@ -30,18 +31,18 @@ class TextConfig:
         font = self.font.scripted(script)
         return replace(self, font=font)
 
-    @property
+    @cached_property
     def italicized(self) -> Self:
         return replace(self, font=self.font.italicized)
 
-    @property
+    @cached_property
     def bolded(self) -> Self:
         return replace(self, font=self.font.bolded)
 
-    @property
+    @cached_property
     def underlined(self) -> Self:
         return replace(self, font=self.font.underlined)
 
-    @property
+    @cached_property
     def strikethroughed(self) -> Self:
         return replace(self, font=self.font.strikethroughed)

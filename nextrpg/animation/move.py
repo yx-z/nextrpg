@@ -29,13 +29,13 @@ class Move(TimedAnimationOnScreens):
 
 class MoveFrom(Move):
     @override
-    @property
+    @cached_property
     def _percentage(self) -> float:
         return self._timer.completed_percentage
 
 
 class MoveTo(Move):
     @override
-    @property
+    @cached_property
     def _percentage(self) -> float:
         return -self._timer.remaining_percentage

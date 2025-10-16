@@ -1,5 +1,6 @@
 import logging
 from dataclasses import dataclass, field, replace
+from functools import cached_property
 from inspect import stack
 from logging import Logger
 from pathlib import Path
@@ -98,7 +99,7 @@ class _LogEntry:
     level: LogLevel
     message: Template
 
-    @property
+    @cached_property
     def formatted(self) -> str:
         formatted = tuple(_format(m) for m in self.message)
         return "".join(formatted)

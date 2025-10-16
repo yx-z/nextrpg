@@ -20,7 +20,7 @@ class TextGroup(AnimationLike):
     resource: Text | tuple[Text, ...]
     config: TextGroupConfig = field(default_factory=lambda: config().text_group)
 
-    @property
+    @cached_property
     def texts(self) -> tuple[Text, ...]:
         if isinstance(self.resource, tuple):
             return self.resource

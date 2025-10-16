@@ -131,10 +131,10 @@ class NineSlice:
         area = top_left.anchor(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
-    @property
+    @cached_property
     def _center_width(self) -> Width:
         return self.drawing.width - self.left - self.right
 
-    @property
+    @cached_property
     def _center_height(self) -> Height:
         return self.drawing.height - self.top - self.bottom

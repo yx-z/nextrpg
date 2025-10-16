@@ -48,6 +48,6 @@ class DrawingOnScreens(AnimationOnScreenLike):
         return width * height
 
     @override
-    @property
+    @cached_property
     def is_complete(self) -> bool:
         return True

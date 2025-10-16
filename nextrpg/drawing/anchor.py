@@ -1,4 +1,5 @@
 from enum import Enum, auto
+from functools import cached_property
 
 
 class Anchor(Enum):
@@ -12,7 +13,7 @@ class Anchor(Enum):
     BOTTOM_CENTER = auto()
     BOTTOM_RIGHT = auto()
 
-    @property
+    @cached_property
     def __neg__(self) -> Anchor:
         return _OPPOSITE_ANCHOR[self]
 

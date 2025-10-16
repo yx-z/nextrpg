@@ -66,11 +66,11 @@ class SayEventAddOn:
             self._background_relative_to_text.drawing
         ).top_left
 
-    @property
+    @cached_property
     def _avatar(self) -> AnimationLike | None:
         return self.config.avatar
 
-    @property
+    @cached_property
     def _name(self) -> str | None:
         return self.config.name_override
 

@@ -1,4 +1,5 @@
 from dataclasses import KW_ONLY, replace
+from functools import cached_property
 from typing import Self, override
 
 from nextrpg.character.moving_character_on_screen import MovingCharacterOnScreen
@@ -32,8 +33,8 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
             ticked, character=ticked.character.turn(walk.direction), _walk=walk
         )
 
-    @property
     @override
+    @cached_property
     def moving(self) -> bool:
         return not self._event_started and not self._walk.complete
 

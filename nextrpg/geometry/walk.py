@@ -33,7 +33,7 @@ class Walk:
         current = self.path.points[self._target_index - 1]
         return target.relative_to(current)
 
-    @property
+    @cached_property
     def reset(self) -> Self:
         return replace(self, coordinate=self._initial_point, _target_index=1)
 
@@ -69,7 +69,7 @@ class Walk:
 
         return replace(self, coordinate=coordinate, _target_index=index)
 
-    @property
+    @cached_property
     def complete(self) -> bool:
         return self._target_index is None
 
@@ -88,10 +88,10 @@ class Walk:
             + reaming_poly.length
         )
 
-    @property
+    @cached_property
     def _initial_point(self) -> Coordinate:
         return self.path.points[0]
 
-    @property
+    @cached_property
     def _final_target(self) -> Coordinate:
         return self.path.points[-1]

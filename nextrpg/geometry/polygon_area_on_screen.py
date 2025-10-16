@@ -16,11 +16,11 @@ if TYPE_CHECKING:
 class PolygonAreaOnScreen(AreaOnScreen):
     points: tuple[Coordinate, ...]
 
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
         return self._bounding_rectangle_area_on_screen.top_left
 
-    @property
+    @cached_property
     def size(self) -> Size:
         return self._bounding_rectangle_area_on_screen.size
 

@@ -1,8 +1,9 @@
+from functools import cached_property
 from typing import TYPE_CHECKING, Self
 
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.anchor import Anchor
-from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import ZERO_SIZE, Size
 from nextrpg.geometry.sizable import Sizable
 
@@ -18,19 +19,19 @@ class AnimationLike(Sizable):
     @property
     def drawing(self) -> Drawing | DrawingGroup: ...
 
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
-        return Coordinate(0, 0)
+        return ORIGIN
 
-    @property
+    @cached_property
     def size(self) -> Size:
         return self.drawing.size
 
-    @property
+    @cached_property
     def drawings(self) -> tuple[Drawing, ...]:
         return self.drawing.drawings
 
-    @property
+    @cached_property
     def no_shift(self) -> RelativeDrawing:
         return self.shift(ZERO_SIZE)
 
@@ -62,6 +63,11 @@ class AnimationLike(Sizable):
     def tick(self, time_delta: Millisecond) -> Self:
         return self
 
-    @property
+    def flip(
+        self, horizontal: bool = False, vertical: bool = False
+    ) -> AnimationLike:
+        return self.drawing.flip(horizontal, vertical)
+
+    @cached_property
     def is_complete(self) -> bool:
         return True

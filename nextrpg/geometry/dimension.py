@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from functools import cached_property
 from typing import TYPE_CHECKING, NamedTuple, Self, overload, override
 
 from nextrpg.core.save import module_and_class
@@ -43,7 +44,7 @@ class Dimension:
 
 
 class _Scaling(Dimension):
-    @property
+    @cached_property
     def complement(self) -> Self:
         return type(self)(1.0 - self.value)
 
@@ -79,7 +80,7 @@ class HeightScaling(_Scaling):
 
 
 class Width(Dimension):
-    @property
+    @cached_property
     def x_axis(self) -> XAxis:
         from nextrpg.geometry.coordinate import XAxis
 
@@ -114,13 +115,13 @@ class Width(Dimension):
             return Width(self.value / arg)
         return Width(self.value / arg.value)
 
-    @property
+    @cached_property
     def zero_height(self) -> Size:
         return self * Height(0)
 
 
 class Height(Dimension):
-    @property
+    @cached_property
     def y_axis(self) -> YAxis:
         from nextrpg.geometry.coordinate import YAxis
 
@@ -157,7 +158,7 @@ class Height(Dimension):
             return Height(self.value / arg)
         return Height(self.value / arg.value)
 
-    @property
+    @cached_property
     def zero_width(self) -> Size:
         return Width(0) * self
 

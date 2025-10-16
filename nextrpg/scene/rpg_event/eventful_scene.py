@@ -99,7 +99,7 @@ class EventfulScene(EventAsAttr, Scene):
             ticked, _background_events=not_completed_background_events
         )
 
-    @property
+    @cached_property
     def drawing_on_screens_shift(self) -> Coordinate | None:
         return None
 

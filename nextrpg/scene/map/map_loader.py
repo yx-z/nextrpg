@@ -201,7 +201,7 @@ class MapLoader(TmxLoader):
             groups.append(group)
         return tuple(groups)
 
-    @property
+    @cached_property
     def _tile_size(self) -> Size:
         return Size(self._tmx.tilewidth, self._tmx.tileheight)
 

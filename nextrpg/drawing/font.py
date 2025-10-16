@@ -18,19 +18,19 @@ class Font:
     strikethrough: bool = False
     script: str | None = None
 
-    @property
+    @cached_property
     def bolded(self) -> Self:
         return replace(self, bold=True)
 
-    @property
+    @cached_property
     def italicized(self) -> Self:
         return replace(self, italic=True)
 
-    @property
+    @cached_property
     def underlined(self) -> Self:
         return replace(self, underline=True)
 
-    @property
+    @cached_property
     def strikethroughed(self) -> Self:
         return replace(self, strikethrough=True)
 
@@ -56,6 +56,6 @@ class Font:
         width, height = self.pygame.size(text)
         return Size(width, height)
 
-    @property
+    @cached_property
     def text_height(self) -> Height:
         return Height(self.pygame.get_linesize())

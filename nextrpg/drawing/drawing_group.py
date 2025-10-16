@@ -19,11 +19,11 @@ class DrawingGroup(AnimationLike):
     resource: RelativeDrawing | tuple[RelativeDrawing, ...]
 
     @override
-    @property
+    @cached_property
     def drawing(self) -> DrawingGroup:
         return self
 
-    @property
+    @cached_property
     def relative_drawings(self) -> tuple[RelativeDrawing, ...]:
         if isinstance(self.resource, tuple):
             return self.resource
@@ -52,12 +52,12 @@ class DrawingGroup(AnimationLike):
         return DrawingGroupOnScreen(origin, self)
 
     @override
-    @property
+    @cached_property
     def size(self) -> Size:
         return self._drawing_group_on_screen.size
 
     @override
-    @property
+    @cached_property
     def top_left(self) -> Coordinate:
         return self._drawing_group_on_screen.top_left
 

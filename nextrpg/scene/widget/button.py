@@ -1,5 +1,6 @@
 from collections.abc import Callable
 from dataclasses import dataclass, replace
+from functools import cached_property
 from typing import ClassVar, Self, override
 
 from nextrpg.animation.abstract_animation import AbstractAnimation
@@ -21,7 +22,7 @@ class ButtonOnScreen(SizableWidgetOnScreen):
     widget: Button
 
     @override
-    @property
+    @cached_property
     def drawing(self) -> AnimationLike:
         if self._is_selected:
             return self.widget.active
@@ -68,6 +69,6 @@ class Button(SizableWidget[ButtonOnScreen]):
     widget_on_screen_type: ClassVar[type[ButtonOnScreen]] = ButtonOnScreen
 
     @override
-    @property
+    @cached_property
     def size(self) -> Size:
         return self.idle.size

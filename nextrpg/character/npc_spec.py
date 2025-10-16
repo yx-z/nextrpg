@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass
 from enum import Enum, auto
+from functools import cached_property
 from typing import TYPE_CHECKING
 
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -52,7 +53,7 @@ class NpcSpec(_BaseCharacterSpec):
         and not isinstance(self.character, PolygonCharacterDrawing)
     )
 
-    @property
+    @cached_property
     def event_spec(self) -> EventSpec | None:
         if not self.event:
             return None

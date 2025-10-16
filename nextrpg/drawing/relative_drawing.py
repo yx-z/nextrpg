@@ -1,6 +1,7 @@
 from dataclasses import dataclass, replace
 from typing import Self
 
+from nextrpg.core.time import Millisecond
 from nextrpg.drawing.anchor import Anchor
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.geometry.coordinate import Coordinate
@@ -18,6 +19,10 @@ class RelativeDrawing:
     drawing: AnimationLike
     shift: Size
     anchor: Anchor = Anchor.TOP_LEFT
+
+    def tick(self, time_delta: Millisecond) -> Self:
+        drawing = self.drawing.tick(time_delta)
+        return replace(self, drawing=drawing)
 
     def top_left(self, origin: Coordinate) -> Coordinate:
         match self.anchor:

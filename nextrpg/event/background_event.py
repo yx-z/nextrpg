@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import KW_ONLY, dataclass
+from functools import cached_property
 from typing import TYPE_CHECKING, Self
 
 from nextrpg.core.dataclass_with_default import (
@@ -26,7 +27,7 @@ class BackgroundEvent(ABC):
         lambda self: BackgroundEventSentinel(type(self))
     )
 
-    @property
+    @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return ()
 

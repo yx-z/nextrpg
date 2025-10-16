@@ -35,72 +35,72 @@ class Sizable(Protocol):
 
         return RectangleAreaOnScreen(self.top_left, self.size)
 
-    @property
+    @cached_property
     def width(self) -> Width:
         return self.size.width
 
-    @property
+    @cached_property
     def height(self) -> Height:
         return self.size.height
 
-    @property
+    @cached_property
     def top(self) -> YAxis:
         return self.top_left.top
 
-    @property
+    @cached_property
     def left(self) -> XAxis:
         return self.top_left.left
 
-    @property
+    @cached_property
     def bottom(self) -> YAxis:
         return self.top_left.top + self.size.height
 
-    @property
+    @cached_property
     def right(self) -> XAxis:
         return self.top_left.left + self.size.width
 
-    @property
+    @cached_property
     def top_right(self) -> TopRightCoordinate:
         left, top = self.top_left
         return TopRightCoordinate(left + self.width.value, top)
 
-    @property
+    @cached_property
     def bottom_left(self) -> BottomLeftCoordinate:
         left, top = self.top_left
         return BottomLeftCoordinate(left, top + self.height.value)
 
-    @property
+    @cached_property
     def bottom_right(self) -> BottomRightCoordinate:
         left, top = self.top_left
         return BottomRightCoordinate(
             left + self.width.value, top + self.height.value
         )
 
-    @property
+    @cached_property
     def top_center(self) -> TopCenterCoordinate:
         left, top = self.top_left
         return TopCenterCoordinate(left + self.width.value / 2, top)
 
-    @property
+    @cached_property
     def bottom_center(self) -> BottomCenterCoordinate:
         left, top = self.top_left
         return BottomCenterCoordinate(
             left + self.width.value / 2, top + self.height.value
         )
 
-    @property
+    @cached_property
     def center_left(self) -> CenterLeftCoodinate:
         left, top = self.top_left
         return CenterLeftCoodinate(left, top + self.height.value / 2)
 
-    @property
+    @cached_property
     def center_right(self) -> CenterRightCoordinate:
         left, top = self.top_left
         return CenterRightCoordinate(
             left + self.width.value, top + self.height.value / 2
         )
 
-    @property
+    @cached_property
     def center(self) -> CenterCoordinate:
         left, top = self.top_left
         return CenterCoordinate(

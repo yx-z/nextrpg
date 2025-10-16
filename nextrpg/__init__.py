@@ -4,6 +4,7 @@ from nextrpg.animation.abstract_animation import AbstractAnimation
 from nextrpg.animation.abstract_animation_on_screen import (
     AbstractAnimationOnScreen,
 )
+from nextrpg.animation.animation_group import AnimationGroup
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.animation.animation_on_screens import (
     AnimationOnScreens,
@@ -11,6 +12,7 @@ from nextrpg.animation.animation_on_screens import (
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.animation.fade import Fade, FadeIn, FadeOut
 from nextrpg.animation.move import Move, MoveFrom, MoveTo
+from nextrpg.animation.timed_animation_group import TimedAnimationGroup
 from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.animation.typewriter import Typewriter
 from nextrpg.character.character_drawing import CharacterDrawing

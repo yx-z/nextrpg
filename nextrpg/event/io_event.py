@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
-from functools import cache
+from functools import cache, cached_property
 from typing import TypeIs
 
 from pygame.event import Event, post
@@ -21,7 +21,7 @@ class Quit(IoEvent):
 
 
 class WindowResize(IoEvent):
-    @property
+    @cached_property
     def size(self) -> Size:
         return Size(self.event.w, self.event.h)
 
@@ -61,7 +61,7 @@ def _key_mapping() -> dict[KeyCode, KeyboardKey]:
 
 
 class _KeyPressEvent(IoEvent):
-    @property
+    @cached_property
     def key(self) -> KeyboardKey | KeyCode:
         return KeyboardKey.from_pygame(self.event.key)
 
