@@ -4,6 +4,7 @@ from typing import Self, override
 
 from nextrpg.animation.abstract_animation import AbstractAnimation
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.relative_drawing import RelativeDrawing
 
@@ -11,6 +12,10 @@ from nextrpg.drawing.relative_drawing import RelativeDrawing
 @dataclass(frozen=True)
 class AnimationGroup(AbstractAnimation):
     resource: RelativeDrawing | tuple[RelativeDrawing, ...]
+
+    def concur(self, another: RelativeDrawing) -> AnimationGroup:
+        resource = (self.no_shift, another)
+        return AnimationGroup(resource)
 
     @override
     @cached_property
@@ -24,7 +29,7 @@ class AnimationGroup(AbstractAnimation):
 
     @override
     @cached_property
-    def drawing(self) -> DrawingGroup:
+    def drawing(self) -> Drawing | DrawingGroup:
         return DrawingGroup(self.resource)
 
     @override

@@ -51,13 +51,12 @@ class RectangleAreaOnScreen(AreaOnScreen):
         allow_background_in_debug: bool = True,
         border_radius: Pixel | None = None,
     ) -> DrawingOnScreen:
-        from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
         from nextrpg.drawing.rectangle_drawing import RectangleDrawing
 
         rect = RectangleDrawing(
             self.size, color, border_radius, allow_background_in_debug
         )
-        return DrawingOnScreen(self.top_left, rect.drawing)
+        return rect.drawing.drawing_on_screen(self.top_left)
 
     @cached_property
     def points(self) -> tuple[Coordinate, ...]:

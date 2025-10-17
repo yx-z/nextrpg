@@ -4,10 +4,6 @@ from typing import Self
 
 from pytmx import TiledObject, TiledTileLayer
 
-from nextrpg.animation.abstract_animation_on_screen import (
-    AbstractAnimationOnScreen,
-)
-from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.character.character_on_screen import CharacterOnScreen
@@ -21,6 +17,7 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry, is_rect
+from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
@@ -195,7 +192,7 @@ class MapLoader(TmxLoader):
             connected_resources = tuple(
                 resource
                 for coordinate in connected_coordinates
-                if (resource := resources.get(coordinate))
+                if (resource := resources.get(coordinate)) is not None
             )
             group = AnimationOnScreens(connected_resources)
             groups.append(group)
@@ -214,9 +211,7 @@ class MapLoader(TmxLoader):
             if gid
         }
 
-    def _tile(
-        self, left: int, top: int, gid: _Gid
-    ) -> AbstractAnimationOnScreen | DrawingOnScreen:
+    def _tile(self, left: int, top: int, gid: _Gid) -> AnimationOnScreenLike:
         width, height = self._tile_size
         coordinate = Coordinate(left * width, top * height)
         if frame_infos := self._tmx.tile_properties.get(gid, {}).get("frames"):
@@ -226,9 +221,9 @@ class MapLoader(TmxLoader):
             )
             durations = tuple(frame_info.duration for frame_info in frame_infos)
             animation = CyclicAnimation(frames, durations)
-            return AnimationOnScreen(coordinate, animation)
+            return animation.animation_on_screen(coordinate)
         drawing = Drawing(self._tmx.images[gid])
-        return DrawingOnScreen(coordinate, drawing)
+        return drawing.drawing_on_screen(coordinate)
 
     @property
     def _init_collision_visuals(self) -> tuple[DrawingOnScreen, ...]:

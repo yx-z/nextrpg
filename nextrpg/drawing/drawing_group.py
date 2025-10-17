@@ -3,6 +3,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING, Self, override
 
 from nextrpg.drawing.animation_like import AnimationLike
+from nextrpg.drawing.color import Alpha
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.relative_drawing import RelativeDrawing
@@ -17,6 +18,14 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class DrawingGroup(AnimationLike):
     resource: RelativeDrawing | tuple[RelativeDrawing, ...]
+
+    @override
+    def alpha(self, alpha: Alpha) -> Drawing | DrawingGroup:
+        if isinstance(self.resource, tuple):
+            resource = tuple(res.alpha(alpha) for res in self.resource)
+        else:
+            resource = self.resource.alpha(alpha)
+        return replace(self, resource=resource)
 
     @override
     @cached_property

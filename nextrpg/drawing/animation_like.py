@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Self
 
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.anchor import Anchor
+from nextrpg.drawing.color import Alpha
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import ZERO_SIZE, Size
 from nextrpg.geometry.sizable import Sizable
@@ -65,9 +66,12 @@ class AnimationLike(Sizable):
 
     def flip(
         self, horizontal: bool = False, vertical: bool = False
-    ) -> AnimationLike:
+    ) -> Drawing | DrawingGroup:
         return self.drawing.flip(horizontal, vertical)
 
     @cached_property
     def is_complete(self) -> bool:
         return True
+
+    def alpha(self, alpha: Alpha) -> Drawing | DrawingGroup:
+        return self.drawing.alpha(alpha)

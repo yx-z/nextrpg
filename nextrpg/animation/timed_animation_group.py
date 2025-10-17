@@ -1,11 +1,13 @@
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
-from typing import Self, override
+from typing import Any, Self, TypeVar, override
 
 from nextrpg.animation.animation_group import AnimationGroup
 from nextrpg.core.dataclass_with_default import default, private_init_below
 from nextrpg.core.time import Millisecond, Timer
-from nextrpg.drawing.animation_like import AnimationLike
+from nextrpg.drawing.relative_drawing import RelativeDrawing
+
+_T = TypeVar("_T", bound="TimedAnimationGroup")
 
 
 @dataclass(frozen=True)
@@ -13,6 +15,9 @@ class TimedAnimationGroup(AnimationGroup):
     duration: Millisecond
     _: KW_ONLY = private_init_below()
     _timer: Timer = default(lambda self: Timer(self.duration))
+
+    def compose(self, other: type[_T], **kwargs: Any) -> _T:
+        return other(resource=self, duration=self.duration, **kwargs)
 
     @cached_property
     def reverse(self) -> Self:
@@ -34,7 +39,7 @@ class TimedAnimationGroup(AnimationGroup):
         return replace(ticked, _timer=timer)
 
 
-def _reverse(resource: AnimationLike) -> AnimationLike:
-    if isinstance(resource, TimedAnimationGroup):
-        return resource.reverse
+def _reverse(resource: RelativeDrawing) -> RelativeDrawing:
+    if isinstance(drawing := resource.drawing, TimedAnimationGroup):
+        return replace(resource, drawing=drawing.reverse)
     return resource

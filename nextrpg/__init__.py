@@ -91,6 +91,7 @@ from nextrpg.drawing.anchor import Anchor
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.animation_on_screen_like import (
     AnimationOnScreenLike,
+    animate,
     tick_optional,
 )
 from nextrpg.drawing.color import (

@@ -28,16 +28,15 @@ class PolygonAreaOnScreen(AreaOnScreen):
     def fill(
         self, color: Color, allow_background_in_debug: bool = True
     ) -> DrawingOnScreen:
-        from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
         from nextrpg.drawing.polygon_drawing import PolygonDrawing
 
-        drawing = PolygonDrawing(
+        poly = PolygonDrawing(
             self.points,
             color,
             allow_background_in_debug,
             self._bounding_rectangle_area_on_screen,
         )
-        return DrawingOnScreen(self.top_left, drawing.drawing)
+        return poly.drawing.drawing_on_screen(self.top_left)
 
     @override
     def collide(self, area: AreaOnScreen) -> bool:

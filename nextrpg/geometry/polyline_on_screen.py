@@ -26,7 +26,6 @@ class PolylineOnScreen:
     def fill(
         self, color: Color, allow_background_in_debug: bool = True
     ) -> DrawingOnScreen:
-        from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
         from nextrpg.drawing.polyline_drawing import PolylineDrawing
 
         drawing = PolylineDrawing(
@@ -35,8 +34,8 @@ class PolylineOnScreen:
             allow_background_in_debug,
             self._bounding_rectangle_area_on_screen,
         )
-        return DrawingOnScreen(
-            self._bounding_rectangle_area_on_screen.top_left, drawing.drawing
+        return drawing.drawing.drawing_on_screen(
+            self._bounding_rectangle_area_on_screen.top_left
         )
 
     @cached_property

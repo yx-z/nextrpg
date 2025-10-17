@@ -83,6 +83,7 @@ class Drawing(AnimationLike):
         area = coordinate.anchor(width * height).rectangle_area_on_screen
         return self.crop(area)
 
+    @override
     def alpha(self, alpha: Alpha) -> Self:
         surface = self.surface.copy()
         surface.set_alpha(alpha)

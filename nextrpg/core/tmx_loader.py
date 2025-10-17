@@ -76,7 +76,7 @@ class TmxLoader:
         top = getattr(layer, "offsety", 0)
         coordinate = Coordinate(left, top)
         drawing = Drawing(layer.image)
-        return DrawingOnScreen(coordinate, drawing)
+        return drawing.drawing_on_screen(coordinate)
 
     @cached_property
     def all_objects(self) -> tuple[TiledObject, ...]:

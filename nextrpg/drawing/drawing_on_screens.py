@@ -31,7 +31,7 @@ class DrawingOnScreens(AnimationOnScreenLike):
         shifted = tuple(d - self.top_left for d in self.drawing_on_screens)
         surface.blits(d.pygame for d in shifted)
         drawing = Drawing(surface)
-        return DrawingOnScreen(self.top_left, drawing)
+        return drawing.drawing_on_screen(self.top_left)
 
     @cached_property
     def top_left(self) -> Coordinate:

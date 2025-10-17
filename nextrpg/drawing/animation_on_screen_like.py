@@ -1,15 +1,19 @@
 from functools import cached_property
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Any, Self, TypeVar
 
 from nextrpg.core.time import Millisecond
-from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
+    from nextrpg.animation.animation_group import AnimationGroup
+    from nextrpg.animation.animation_on_screen import AnimationOnScreen
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
     from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
+
+    _T = TypeVar("_T", bound=AnimationGroup)
 
 
 class AnimationOnScreenLike(Sizable):
@@ -58,6 +62,15 @@ class AnimationOnScreenLike(Sizable):
         size = width * height
         return RectangleAreaOnScreen(coordinate, size)
 
+    def animate(self, animation: type[_T], **kwargs: Any) -> AnimationOnScreen:
+        from nextrpg.animation.animation_on_screen import AnimationOnScreen
+
+        resource = tuple(
+            drawing_on_screen.drawing.shift(drawing_on_screen.top_left.size)
+            for drawing_on_screen in self.drawing_on_screens
+        )
+        return AnimationOnScreen(ORIGIN, animation(resource, **kwargs))
+
     @cached_property
     def _drawing_on_screens(self) -> DrawingOnScreens:
         from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
@@ -72,3 +85,16 @@ def tick_optional(
     if animation:
         return animation.tick(time_delta)
     return None
+
+
+def animate(
+    resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...],
+    animation: type[_T],
+    **kwargs: Any
+) -> AnimationOnScreenLike:
+    from nextrpg.animation.animation_on_screens import AnimationOnScreens
+
+    if isinstance(resource, tuple):
+        animations = tuple(res.animate(animation, **kwargs) for res in resource)
+        return AnimationOnScreens(animations)
+    return resource.animate(animation, **kwargs)

@@ -41,9 +41,9 @@ class AnimationOnScreens(AbstractAnimationOnScreen):
     @override
     def _tick_before_complete(self, time_delta: Millisecond) -> Self:
         if isinstance(self.resource, tuple):
-            resources = tuple(
+            resource = tuple(
                 resource.tick(time_delta) for resource in self.resource
             )
-            return replace(self, resource=tuple(resources))
-        resource = self.resource.tick(time_delta)
+        else:
+            resource = self.resource.tick(time_delta)
         return replace(self, resource=resource)

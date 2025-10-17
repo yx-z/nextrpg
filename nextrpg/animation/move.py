@@ -10,7 +10,7 @@ from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.direction import DirectionalOffset
 
 
-@dataclass_with_default(frozen=True, kw_only=True)
+@dataclass_with_default(frozen=True)
 class Move(TimedAnimationOnScreens):
     offset: DirectionalOffset
 

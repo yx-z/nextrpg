@@ -4,6 +4,7 @@ from typing import Self
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.anchor import Anchor
 from nextrpg.drawing.animation_like import AnimationLike
+from nextrpg.drawing.color import Alpha
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import (
     ZERO_SIZE,
@@ -55,3 +56,7 @@ class RelativeDrawing:
             shift = shift.negate_height
         anchor = -self.anchor
         return replace(self, drawing=drawing, shift=shift, anchor=anchor)
+
+    def alpha(self, alpha: Alpha) -> Self:
+        drawing = self.drawing.alpha(alpha)
+        return replace(self, drawing=drawing)

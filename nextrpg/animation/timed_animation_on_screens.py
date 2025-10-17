@@ -1,49 +1,33 @@
-from dataclasses import KW_ONLY, replace
+from dataclasses import replace
 from functools import cached_property
-from typing import Any, Self, TypeVar, override
+from typing import Self, TypeVar
 
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
+from nextrpg.animation.timed_animation_group import TimedAnimationGroup
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
-    default,
-    private_init_below,
 )
-from nextrpg.core.time import Millisecond, Timer
-from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 
-_T = TypeVar("_T", bound="TimedAnimationOnScreens")
+_T = TypeVar("_T", bound="TimedAnimationGroup")
 
 
 @dataclass_with_default(frozen=True)
 class TimedAnimationOnScreens(AnimationOnScreens):
-    duration: Millisecond
-    _: KW_ONLY = private_init_below()
-    _timer: Timer = default(lambda self: Timer(self.duration))
+    resource: TimedAnimationGroup | tuple[TimedAnimationGroup, ...]
 
-    def compose(self, other: type[_T], **kwargs: Any) -> _T:
-        return other(resource=self, duration=self.duration, **kwargs)
+    def compose(self, other: type[_T]) -> Self:
+        if isinstance(self.resource, tuple):
+            resource = tuple(
+                resource.compose(other) for resource in self.resource
+            )
+        else:
+            resource = self.resource.compose(other)
+        return replace(self, resource=resource)
 
     @cached_property
     def reverse(self) -> Self:
         if isinstance(self.resource, tuple):
-            resource = tuple(_reverse(r) for r in self.resource)
+            resource = tuple(resource.reverse for resource in self.resource)
         else:
-            resource = _reverse(self.resource)
-        return replace(self, resource=resource, _timer=self._timer.countdown)
-
-    @override
-    @cached_property
-    def is_complete(self) -> bool:
-        return super().is_complete and self._timer.is_complete
-
-    @override
-    def _tick_before_complete(self, time_delta: Millisecond) -> Self:
-        ticked = super()._tick_before_complete(time_delta)
-        timer = self._timer.tick(time_delta)
-        return replace(ticked, _timer=timer)
-
-
-def _reverse(resource: AnimationOnScreenLike) -> AnimationOnScreenLike:
-    if isinstance(resource, TimedAnimationOnScreens):
-        return resource.reverse
-    return resource
+            resource = self.resource.reverse
+        return replace(self, resource=resource)
