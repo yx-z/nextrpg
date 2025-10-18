@@ -42,5 +42,5 @@ class TimedAnimationGroup(AnimationGroup):
 
 def _reverse(resource: RelativeAnimationLike) -> RelativeAnimationLike:
     if isinstance(drawing := resource.resource, TimedAnimationGroup):
-        return replace(resource, drawing=drawing.reverse)
+        return replace(resource, resource=drawing.reverse)
     return resource
