@@ -4,7 +4,7 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import ClassVar, Generic, Self, TypeVar, override
 
-from nextrpg import TimedAnimationOnScreens
+from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
