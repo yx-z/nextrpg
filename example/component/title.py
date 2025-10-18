@@ -4,17 +4,21 @@ from pathlib import Path
 from example.scene.interior_scene import interior_scene
 from nextrpg import (
     GREEN,
+    WHITE,
     Button,
     Color,
     Direction,
     DirectionalOffset,
+    DrawingGroup,
     DrawingOnScreen,
     FadeIn,
+    FadeOut,
     Label,
     MoveTo,
     Panel,
     PanelConfig,
     ScrollDirection,
+    Sequence,
     Text,
     TimedAnimationOnScreens,
     TmxLoader,
@@ -25,19 +29,31 @@ from nextrpg import (
     config,
     quit,
 )
+from nextrpg.animation.cycle import Cycle
 
 
 @cache
 def title() -> TmxWidgetGroupOnScreen:
     highlight = config().text.colored(GREEN)
 
-    start_text_idle = Text("Start")
-    start_text_selected = start_text_idle.configured(highlight)
+    start_text = Text("Start").configured(highlight)
+    start_text_background = start_text.drawings[0].background(WHITE).no_shift
+    background_animation = Cycle(
+        Sequence(
+            (
+                FadeOut(start_text_background).no_shift,
+                FadeIn(start_text_background).no_shift,
+            )
+        ).no_shift
+    )
+    start_text_active = DrawingGroup(
+        (background_animation.no_shift, start_text.drawing.no_shift)
+    )
     scene = TransitionScene(interior_scene)
     start = Button(
         name="start",
-        idle=start_text_idle.drawing,
-        active=start_text_selected.drawing,
+        idle=start_text.drawing,
+        active=start_text_active,
         on_click=scene,
     )
 

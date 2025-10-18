@@ -1,12 +1,13 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from functools import cached_property
+from typing import Self, override
 
 from nextrpg.config.config import config
+from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_on_screen_like import (
     AnimationOnScreenLike,
 )
 from nextrpg.drawing.color import Color
-from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.coordinate import Coordinate
@@ -18,17 +19,22 @@ class DrawingGroupOnScreen(AnimationOnScreenLike):
     origin: Coordinate
     drawing_group: DrawingGroup
 
+    @override
+    @cached_property
+    def is_complete(self) -> bool:
+        return self.drawing_group.is_complete
+
+    @override
+    def tick(self, time_delta: Millisecond) -> Self:
+        drawing_group = self.drawing_group.tick(time_delta)
+        return replace(self, drawing_group=drawing_group)
+
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         res: list[DrawingOnScreen] = []
         for relative in self.drawing_group.resources:
             top_left = relative.top_left(self.origin)
-            match relative.drawing:
-                case DrawingGroup() as drawing_group:
-                    res += drawing_group.drawing_on_screens(top_left)
-                case Drawing() as drawing:
-                    drawing_on_screen = drawing.drawing_on_screen(top_left)
-                    res.append(drawing_on_screen)
+            res += relative.resource.drawing_on_screens(top_left)
 
             declared_coord = self.origin + relative.shift
             if self._link_color and self.origin != declared_coord:

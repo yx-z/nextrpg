@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from nextrpg.drawing.drawing import Drawing
     from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
-    from nextrpg.drawing.relative_drawing import RelativeDrawing
+    from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
 
 
 class AnimationLike(Sizable):
@@ -34,15 +34,17 @@ class AnimationLike(Sizable):
         return self.drawing.drawings
 
     @cached_property
-    def no_shift(self) -> RelativeDrawing:
+    def no_shift(self) -> RelativeAnimationLike:
         return self.shift(ZERO_SIZE)
 
     def shift(
         self, shift: Size, anchor: Anchor = Anchor.TOP_LEFT
-    ) -> RelativeDrawing:
-        from nextrpg.drawing.relative_drawing import RelativeDrawing
+    ) -> RelativeAnimationLike:
+        from nextrpg.drawing.relative_animation_like import (
+            RelativeAnimationLike,
+        )
 
-        return RelativeDrawing(self, shift, anchor)
+        return RelativeAnimationLike(self, shift, anchor)
 
     def animation_on_screen(self, coordinate: Coordinate) -> AnimationOnScreen:
         from nextrpg.animation.animation_on_screen import (

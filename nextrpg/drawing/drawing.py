@@ -24,7 +24,6 @@ from nextrpg.geometry.dimension import (
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 if TYPE_CHECKING:
-    from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 log = Log()
@@ -158,15 +157,12 @@ class Drawing(AnimationLike):
 
     def background(
         self, color: Color, border_radius: Pixel | None = None
-    ) -> DrawingGroup:
-        from nextrpg.drawing.drawing_group import DrawingGroup
+    ) -> Drawing:
         from nextrpg.drawing.rectangle_drawing import RectangleDrawing
 
-        background = RectangleDrawing(
+        return RectangleDrawing(
             self.size, color, border_radius, self.allow_background_in_debug
-        )
-        group = (background.drawing.no_shift, self.no_shift)
-        return DrawingGroup(group)
+        ).drawing
 
     @cached_property
     def _debug_surface(self) -> Surface | None:

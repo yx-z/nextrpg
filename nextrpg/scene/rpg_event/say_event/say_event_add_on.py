@@ -16,7 +16,7 @@ from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
-from nextrpg.drawing.relative_drawing import RelativeDrawing
+from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
 from nextrpg.drawing.text_on_screen import TextOnScreen
@@ -44,7 +44,7 @@ class SayEventAddOn:
             contents.append(self._avatar_relative_to_text)
         content = DrawingGroup(tuple(contents))
 
-        background = self._background_relative_to_text.drawing
+        background = self._background_relative_to_text.resource
         shift = self._background_relative_to_text.shift
         background_and_content = (
             background.no_shift,
@@ -63,7 +63,7 @@ class SayEventAddOn:
     @cached_property
     def _add_on_top_left(self) -> Coordinate:
         return self.config.scene_coordinate.as_center_of(
-            self._background_relative_to_text.drawing
+            self._background_relative_to_text.resource
         ).top_left
 
     @cached_property
@@ -75,19 +75,19 @@ class SayEventAddOn:
         return self.config.name_override
 
     @cached_property
-    def _background_relative_to_text(self) -> RelativeDrawing:
+    def _background_relative_to_text(self) -> RelativeAnimationLike:
         shift = -self.config.padding
         size = self._text.size + self.config.padding * WidthAndHeightScaling(2)
         if self._name_relative_to_text:
             extra_height = (
-                self._name_relative_to_text.drawing.height
+                self._name_relative_to_text.resource.height
                 + self.config.padding.height
             )
             shift -= extra_height
             size += extra_height
         if self._avatar_relative_to_text:
             extra_width = (
-                self._avatar_relative_to_text.drawing.size.width
+                self._avatar_relative_to_text.resource.size.width
                 + self.config.padding.width
             )
             if self.config.avatar_position is AvatarPosition.LEFT:
@@ -107,7 +107,7 @@ class SayEventAddOn:
         return rect.shift(shift)
 
     @cached_property
-    def _avatar_relative_to_text(self) -> RelativeDrawing | None:
+    def _avatar_relative_to_text(self) -> RelativeAnimationLike | None:
         if not self._avatar:
             return None
         match self.config.avatar_position:
@@ -119,7 +119,7 @@ class SayEventAddOn:
                 return self._avatar.shift(shift.size, Anchor.BOTTOM_LEFT)
 
     @cached_property
-    def _name_relative_to_text(self) -> RelativeDrawing | None:
+    def _name_relative_to_text(self) -> RelativeAnimationLike | None:
         if not self._name:
             return None
         text = Text(self._name, self.config.name_text_config)
@@ -141,8 +141,8 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     @override
-    def _background_relative_to_text(self) -> RelativeDrawing:
-        background_drawing = super()._background_relative_to_text.drawing
+    def _background_relative_to_text(self) -> RelativeAnimationLike:
+        background_drawing = super()._background_relative_to_text.resource
         if self._character_position.at_left:
             tip_left = (
                 background_drawing.width / 2
@@ -208,10 +208,10 @@ class SayEventCharacterAddOn(SayEventAddOn):
     def _add_on_top_left(self) -> Coordinate:
         if center := self.config.character_coordinate_override:
             return center.as_center_of(
-                self._background_relative_to_text.drawing
+                self._background_relative_to_text.resource
             ).top_left
 
-        background_width = self._background_relative_to_text.drawing.width
+        background_width = self._background_relative_to_text.resource.width
         if self._character_position.at_left:
             left = (
                 self._character_position.coordinate.left
@@ -240,7 +240,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
             top = (
                 self._character_position.coordinate.top
                 - self.config.character_position_to_add_on_edge_center.height
-                - self._background_relative_to_text.drawing.height
+                - self._background_relative_to_text.resource.height
             )
         return left @ top
 

@@ -6,7 +6,7 @@ from nextrpg.config.config import config
 from nextrpg.config.text_group_config import TextGroupConfig
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_group import DrawingGroup
-from nextrpg.drawing.relative_drawing import RelativeDrawing
+from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
 from nextrpg.drawing.text import Text
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Width
@@ -72,7 +72,7 @@ class TextGroup(AnimationLike):
             lines[-1].append(text.line_texts[0])
             lines += [[t] for t in text.line_texts[1:]]
 
-        res: list[RelativeDrawing] = []
+        res: list[RelativeAnimationLike] = []
         curr_height = Height(0)
         for line in lines:
             curr_width = Width(0)

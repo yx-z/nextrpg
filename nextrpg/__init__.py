@@ -9,9 +9,11 @@ from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.animation.animation_on_screens import (
     AnimationOnScreens,
 )
+from nextrpg.animation.cycle import Cycle
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.animation.fade import Fade, FadeIn, FadeOut
 from nextrpg.animation.move import Move, MoveFrom, MoveTo
+from nextrpg.animation.sequence import Sequence
 from nextrpg.animation.timed_animation_group import TimedAnimationGroup
 from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.animation.typewriter import Typewriter
@@ -116,6 +118,7 @@ from nextrpg.drawing.nine_slice import NineSlice
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
 from nextrpg.drawing.polyline_drawing import PolylineDrawing
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
+from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
 from nextrpg.drawing.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
