@@ -3,6 +3,7 @@ from functools import cached_property
 from typing import Self, override
 
 from nextrpg.animation.fade import FadeOut
+from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -10,6 +11,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_on_screen_like import animate
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.background_event import (
     BackgroundEvent,
@@ -24,7 +26,7 @@ from nextrpg.scene.scene import Scene
 
 @dataclass(frozen=True, kw_only=True)
 class BackgroundFadeOutEvent(BackgroundEvent):
-    fade: FadeOut
+    fade: TimedAnimationOnScreens
 
     @override
     @cached_property
@@ -49,7 +51,7 @@ class FadeOutEventScene(RpgEventScene[BackgroundFadeOutEvent]):
         default_factory=lambda: config().timing.fade_duration
     )
     _: KW_ONLY = private_init_below()
-    _fade: FadeOut = default(lambda self: self._init_fade)
+    _fade: TimedAnimationOnScreens = default(lambda self: self._init_fade)
 
     @override
     @cached_property
@@ -72,11 +74,11 @@ class FadeOutEventScene(RpgEventScene[BackgroundFadeOutEvent]):
         return replace(ticked, scene=background_removed, _fade=fade)
 
     @cached_property
-    def _init_fade(self) -> FadeOut:
+    def _init_fade(self) -> TimedAnimationOnScreens:
         resource = self.scene.get_background_event(
             self.sentinel
         ).drawing_on_screens
-        return FadeOut(resource, self.duration)
+        return animate(resource, FadeOut, duration=self.duration)
 
 
 @register_rpg_event_scene(FadeOutEventScene)

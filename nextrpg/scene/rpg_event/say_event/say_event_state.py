@@ -5,6 +5,7 @@ from typing import Self, override
 
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.fade import FadeIn, FadeOut
+from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.animation.typewriter import Typewriter
 from nextrpg.config.say_event_config import SayEventConfig
 from nextrpg.core.dataclass_with_default import (
@@ -15,6 +16,7 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_on_screen_like import (
     AnimationOnScreenLike,
+    animate,
     tick_optional,
 )
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
@@ -57,8 +59,10 @@ class SayEventFadeInState(SayEventState):
     background: AnimationOnScreenLike
     text_on_screen: TextOnScreen
     _: KW_ONLY = private_init_below()
-    _fade_in: FadeIn = default(
-        lambda self: FadeIn(self.background, self.config.fade_duration)
+    _fade_in: TimedAnimationOnScreens = default(
+        lambda self: animate(
+            self.background, FadeIn, duration=self.config.fade_duration
+        )
     )
 
     @override
@@ -130,8 +134,10 @@ class SayEventTypingState(SayEventState):
 class SayEventFadeOutState(SayEventState):
     resources: AnimationOnScreenLike
     _: KW_ONLY = private_init_below()
-    _fade_out: FadeOut = default(
-        lambda self: FadeOut(self.resources, self.config.fade_duration)
+    _fade_out: TimedAnimationOnScreens = default(
+        lambda self: animate(
+            self.resources, FadeOut, duration=self.config.fade_duration
+        )
     )
 
     @override

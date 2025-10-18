@@ -14,9 +14,11 @@ from nextrpg import (
     MoveTo,
     ScrollDirection,
     Text,
+    TimedAnimationOnScreens,
     TmxLoader,
     TransitionScene,
     WidgetGroup,
+    animate,
     config,
 )
 
@@ -61,7 +63,9 @@ def widget_group() -> WidgetGroup:
     )
 
 
-def enter_animation(drawing_on_screens: tuple[DrawingOnScreen, ...]) -> FadeIn:
+def enter_animation(
+    drawing_on_screens: tuple[DrawingOnScreen, ...],
+) -> TimedAnimationOnScreens:
     offset = DirectionalOffset(Direction.DOWN, 50)
-    move = MoveTo(resource=drawing_on_screens, offset=offset, duration=200)
+    move = animate(drawing_on_screens, MoveTo, offset=offset, duration=200)
     return move.compose(FadeIn)

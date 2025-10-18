@@ -14,19 +14,19 @@ from nextrpg.geometry.coordinate import Coordinate
 @dataclass(frozen=True)
 class AnimationOnScreen(AbstractAnimationOnScreen):
     coordinate: Coordinate
-    animation: AnimationLike
+    resource: AnimationLike
 
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        return self.animation.drawing_on_screens(self.coordinate)
+        return self.resource.drawing_on_screens(self.coordinate)
 
     @override
     @cached_property
     def is_complete(self) -> bool:
-        return self.animation.is_complete
+        return self.resource.is_complete
 
     @override
     def _tick_before_complete(self, time_delta: Millisecond) -> Self:
-        animation = self.animation.tick(time_delta)
-        return replace(self, animation=animation)
+        resource = self.resource.tick(time_delta)
+        return replace(self, resource=resource)

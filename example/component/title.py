@@ -16,10 +16,12 @@ from nextrpg import (
     PanelConfig,
     ScrollDirection,
     Text,
+    TimedAnimationOnScreens,
     TmxLoader,
     TmxWidgetGroupOnScreen,
     TransitionScene,
     WidgetGroup,
+    animate,
     config,
     quit,
 )
@@ -91,7 +93,9 @@ def load_panel() -> Panel:
     )
 
 
-def enter_panel(drawing_on_screens: tuple[DrawingOnScreen, ...]) -> FadeIn:
+def enter_panel(
+    drawing_on_screens: tuple[DrawingOnScreen, ...],
+) -> TimedAnimationOnScreens:
     offset = DirectionalOffset(Direction.DOWN, 50)
-    move = MoveTo(resource=drawing_on_screens, offset=offset, duration=300)
+    move = animate(drawing_on_screens, MoveTo, offset=offset, duration=300)
     return move.compose(FadeIn)

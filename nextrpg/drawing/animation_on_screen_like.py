@@ -1,5 +1,5 @@
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, Self, TypeVar
+from typing import TYPE_CHECKING, Any, Self, TypeVar, overload
 
 from nextrpg.core.time import Millisecond
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
@@ -10,10 +10,21 @@ from nextrpg.geometry.sizable import Sizable
 if TYPE_CHECKING:
     from nextrpg.animation.animation_group import AnimationGroup
     from nextrpg.animation.animation_on_screen import AnimationOnScreen
+    from nextrpg.animation.animation_on_screens import AnimationOnScreens
+    from nextrpg.animation.timed_animation_group import TimedAnimationGroup
+    from nextrpg.animation.timed_animation_on_screen import (
+        TimedAnimationOnScreen,
+    )
+    from nextrpg.animation.timed_animation_on_screens import (
+        TimedAnimationOnScreens,
+    )
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
     from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 
-    _T = TypeVar("_T", bound=AnimationGroup)
+    _AnimationGroup = TypeVar("_AnimationGroup", bound=AnimationGroup)
+    _TimedAnimationGroup = TypeVar(
+        "_TimedAnimationGroup", bound=TimedAnimationGroup
+    )
 
 
 class AnimationOnScreenLike(Sizable):
@@ -62,14 +73,35 @@ class AnimationOnScreenLike(Sizable):
         size = width * height
         return RectangleAreaOnScreen(coordinate, size)
 
-    def animate(self, animation: type[_T], **kwargs: Any) -> AnimationOnScreen:
+    @overload
+    def animate(
+        self, animation_type: type[_TimedAnimationGroup], **kwargs: Any
+    ) -> TimedAnimationOnScreen: ...
+
+    @overload
+    def animate(
+        self, animation_type: type[_AnimationGroup], **kwargs: Any
+    ) -> AnimationOnScreen: ...
+
+    def animate(
+        self,
+        animation_type: type[_AnimationGroup] | type[_TimedAnimationGroup],
+        **kwargs: Any,
+    ) -> AnimationOnScreen | TimedAnimationOnScreen:
         from nextrpg.animation.animation_on_screen import AnimationOnScreen
+        from nextrpg.animation.timed_animation_group import TimedAnimationGroup
+        from nextrpg.animation.timed_animation_on_screen import (
+            TimedAnimationOnScreen,
+        )
 
         resource = tuple(
             drawing_on_screen.drawing.shift(drawing_on_screen.top_left.size)
             for drawing_on_screen in self.drawing_on_screens
         )
-        return AnimationOnScreen(ORIGIN, animation(resource, **kwargs))
+        animation_group = animation_type(resource, **kwargs)
+        if issubclass(animation_type, TimedAnimationGroup):
+            return TimedAnimationOnScreen(ORIGIN, animation_group)
+        return AnimationOnScreen(ORIGIN, animation_group)
 
     @cached_property
     def _drawing_on_screens(self) -> DrawingOnScreens:
@@ -78,23 +110,54 @@ class AnimationOnScreenLike(Sizable):
         return DrawingOnScreens(self.drawing_on_screens)
 
 
+if TYPE_CHECKING:
+    from nextrpg.scene.scene import Scene
+
+    _Tick = TypeVar("_Tick", bound=AnimationOnScreenLike | Scene)
+
+
 def tick_optional(
-    animation: AnimationOnScreenLike | None,
-    time_delta: Millisecond,
-) -> AnimationOnScreenLike | None:
-    if animation:
-        return animation.tick(time_delta)
+    resource: _Tick | None, time_delta: Millisecond
+) -> _Tick | None:
+    if resource:
+        return resource.tick(time_delta)
     return None
+
+
+@overload
+def animate(
+    resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...],
+    animation: type[_TimedAnimationGroup],
+    **kwargs: Any,
+) -> TimedAnimationOnScreens: ...
+
+
+@overload
+def animate(
+    resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...],
+    animation: type[_AnimationGroup],
+    **kwargs: Any,
+) -> AnimationOnScreens: ...
 
 
 def animate(
     resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...],
-    animation: type[_T],
-    **kwargs: Any
-) -> AnimationOnScreenLike:
+    animation_type: type[_TimedAnimationGroup],
+    **kwargs: Any,
+) -> AnimationOnScreens | TimedAnimationOnScreens:
     from nextrpg.animation.animation_on_screens import AnimationOnScreens
+    from nextrpg.animation.timed_animation_group import TimedAnimationGroup
+    from nextrpg.animation.timed_animation_on_screens import (
+        TimedAnimationOnScreens,
+    )
 
     if isinstance(resource, tuple):
-        animations = tuple(res.animate(animation, **kwargs) for res in resource)
-        return AnimationOnScreens(animations)
-    return resource.animate(animation, **kwargs)
+        resources = tuple(
+            res.animate(animation_type, **kwargs) for res in resource
+        )
+    else:
+        resources = resource.animate(animation_type, **kwargs)
+
+    if issubclass(animation_type, TimedAnimationGroup):
+        return TimedAnimationOnScreens(resources)
+    return AnimationOnScreens(resources)

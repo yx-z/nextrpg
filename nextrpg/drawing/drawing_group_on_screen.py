@@ -21,7 +21,7 @@ class DrawingGroupOnScreen(AnimationOnScreenLike):
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         res: list[DrawingOnScreen] = []
-        for relative in self.drawing_group.relative_drawings:
+        for relative in self.drawing_group.resources:
             top_left = relative.top_left(self.origin)
             match relative.drawing:
                 case DrawingGroup() as drawing_group:

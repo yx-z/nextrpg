@@ -19,30 +19,27 @@ if TYPE_CHECKING:
 class DrawingGroup(AnimationLike):
     resource: RelativeDrawing | tuple[RelativeDrawing, ...]
 
+    @cached_property
+    def resources(self) -> tuple[RelativeDrawing, ...]:
+        if isinstance(self.resource, tuple):
+            return self.resource
+        return (self.resource,)
+
     @override
     def alpha(self, alpha: Alpha) -> Drawing | DrawingGroup:
-        if isinstance(self.resource, tuple):
-            resource = tuple(res.alpha(alpha) for res in self.resource)
-        else:
-            resource = self.resource.alpha(alpha)
-        return replace(self, resource=resource)
+        resources = tuple(res.alpha(alpha) for res in self.resources)
+        return replace(self, resource=resources)
 
     @override
     @cached_property
     def drawing(self) -> DrawingGroup:
         return self
 
-    @cached_property
-    def relative_drawings(self) -> tuple[RelativeDrawing, ...]:
-        if isinstance(self.resource, tuple):
-            return self.resource
-        return (self.resource,)
-
     @override
     @cached_property
     def drawings(self) -> tuple[Drawing, ...]:
         res: list[Drawing] = []
-        for relative in self.relative_drawings:
+        for relative in self.resources:
             if isinstance(relative.drawing, Drawing):
                 res.append(relative.drawing)
             else:
@@ -73,13 +70,14 @@ class DrawingGroup(AnimationLike):
     def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
         resource = tuple(
             relative_drawing.flip(horizontal, vertical)
-            for relative_drawing in self.relative_drawings
+            for relative_drawing in self.resources
         )
         return replace(self, resource=resource)
 
+    @override
     def cut(self, area: RectangleAreaOnScreen) -> Self:
         res: list[RelativeDrawing] = []
-        for relative in self.relative_drawings:
+        for relative in self.resources:
             top_left = area.top_left - relative.top_left(ORIGIN)
             relative_area = top_left.anchor(area.size).rectangle_area_on_screen
             drawing = relative.drawing.cut(relative_area)

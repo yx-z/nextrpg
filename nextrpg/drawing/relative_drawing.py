@@ -21,6 +21,13 @@ class RelativeDrawing:
     shift: Size
     anchor: Anchor = Anchor.TOP_LEFT
 
+    def __add__(self, other: Size) -> Self:
+        shift = self.shift + other
+        return replace(self, shift=shift)
+
+    def __sub__(self, other: Size) -> Self:
+        return self + -other
+
     def tick(self, time_delta: Millisecond) -> Self:
         drawing = self.drawing.tick(time_delta)
         return replace(self, drawing=drawing)

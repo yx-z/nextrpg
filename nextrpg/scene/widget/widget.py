@@ -4,8 +4,7 @@ from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import ClassVar, Generic, Self, TypeVar, override
 
-from nextrpg.animation.animation_on_screens import AnimationOnScreens
-from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
+from nextrpg import TimedAnimationOnScreens
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -28,10 +27,10 @@ class WidgetOnScreen(Scene):
     parent: Scene | None = None
     _: KW_ONLY = private_init_below()
     _is_selected: bool = False
-    _enter_animation: AnimationOnScreens | None = default(
+    _enter_animation: TimedAnimationOnScreens | None = default(
         lambda self: self._init_enter_animation
     )
-    _exit_animation: AnimationOnScreens | None = None
+    _exit_animation: TimedAnimationOnScreens | None = None
     _tick_parent: bool = True
 
     @override
@@ -138,7 +137,7 @@ class WidgetOnScreen(Scene):
         return self
 
     @property
-    def _init_enter_animation(self) -> AnimationOnScreens | None:
+    def _init_enter_animation(self) -> TimedAnimationOnScreens | None:
         if self.widget.enter_animation:
             return self.widget.enter_animation(
                 self._drawing_on_screens_after_parent
@@ -146,7 +145,7 @@ class WidgetOnScreen(Scene):
         return None
 
     @property
-    def _init_exit_animation(self) -> AnimationOnScreens | None:
+    def _init_exit_animation(self) -> TimedAnimationOnScreens | None:
         if self.widget.exit_animation:
             return self.widget.exit_animation(
                 self._drawing_on_screens_after_parent

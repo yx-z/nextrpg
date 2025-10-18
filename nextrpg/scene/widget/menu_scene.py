@@ -13,6 +13,7 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
+from nextrpg.drawing.animation_on_screen_like import animate
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.scene.widget.tmx_widget_group_on_screen import (
@@ -38,22 +39,24 @@ class MenuScene(TmxWidgetGroupOnScreen):
     @override
     @property
     def _init_enter_animation(self) -> AnimationOnScreens:
-        fade_in = FadeIn(self.background, self.config.fade_duration)
+        fade_in = animate(
+            self.background, FadeIn, duration=self.config.fade_duration
+        )
         return self._init_animation(fade_in, self.widget.enter_animation)
 
     @override
     @property
     def _init_exit_animation(self) -> AnimationOnScreens:
-        fade_out = FadeOut(self.background, self.config.fade_duration)
+        fade_out = animate(
+            self.background, FadeOut, duration=self.config.fade_duration
+        )
         return self._init_animation(fade_out, self.widget.exit_animation)
 
     def _init_animation(
         self,
-        background_animation: FadeIn | FadeOut,
+        background_animation: TimedAnimationOnScreens,
         create_widget_animation: (
-            Callable[
-                [tuple[DrawingOnScreen, ...]], TimedAnimationOnScreens | None
-            ]
+            Callable[[tuple[DrawingOnScreen, ...]], TimedAnimationOnScreens]
             | None
         ),
     ) -> AnimationOnScreens:

@@ -6,6 +6,7 @@ from nextrpg.drawing.anchor import Anchor
 from nextrpg.drawing.color import Alpha
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import ZERO_SIZE, Size
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
@@ -41,7 +42,7 @@ class AnimationLike(Sizable):
     ) -> RelativeDrawing:
         from nextrpg.drawing.relative_drawing import RelativeDrawing
 
-        return RelativeDrawing(self.drawing, shift, anchor)
+        return RelativeDrawing(self, shift, anchor)
 
     def animation_on_screen(self, coordinate: Coordinate) -> AnimationOnScreen:
         from nextrpg.animation.animation_on_screen import (
@@ -75,3 +76,6 @@ class AnimationLike(Sizable):
 
     def alpha(self, alpha: Alpha) -> Drawing | DrawingGroup:
         return self.drawing.alpha(alpha)
+
+    def cut(self, area: RectangleAreaOnScreen) -> Drawing | DrawingGroup:
+        return self.drawing.cut(area)

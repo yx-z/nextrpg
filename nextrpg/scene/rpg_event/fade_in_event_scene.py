@@ -3,6 +3,7 @@ from functools import cached_property
 from typing import Self, override
 
 from nextrpg.animation.fade import FadeIn
+from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -10,6 +11,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_on_screen_like import animate
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.background_event import (
     BackgroundEvent,
@@ -24,7 +26,7 @@ from nextrpg.scene.scene import Scene
 
 @dataclass(frozen=True, kw_only=True)
 class BackgroundFadeInEvent(BackgroundEvent):
-    fade: FadeIn
+    fade: TimedAnimationOnScreens
 
     @override
     @cached_property
@@ -49,8 +51,10 @@ class FadeInEventScene(RpgEventScene[BackgroundEventSentinel]):
         default_factory=lambda: config().timing.fade_duration
     )
     _: KW_ONLY = private_init_below()
-    _fade: FadeIn = default(
-        lambda self: FadeIn(self.drawing_on_screen, self.duration)
+    _fade: TimedAnimationOnScreens = default(
+        lambda self: animate(
+            self.drawing_on_screen, FadeIn, duration=self.duration
+        )
     )
 
     @override

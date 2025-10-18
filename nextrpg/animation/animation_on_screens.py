@@ -16,34 +16,33 @@ from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 class AnimationOnScreens(AbstractAnimationOnScreen):
     resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...]
 
+    @cached_property
+    def resources(self) -> tuple[AnimationOnScreenLike, ...]:
+        if isinstance(self.resource, tuple):
+            return self.resource
+        return (self.resource,)
+
     def concur(self, another: AnimationOnScreenLike) -> AnimationOnScreens:
-        resource = (self, another)
-        return AnimationOnScreens(resource)
+        resources = (self, another)
+        return AnimationOnScreens(resources)
 
     @override
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        if isinstance(self.resource, tuple):
-            return tuple(
-                drawing_on_screen
-                for resource in self.resource
-                for drawing_on_screen in resource.drawing_on_screens
-            )
-        return self.resource.drawing_on_screens
+        return tuple(
+            drawing_on_screen
+            for resource in self.resources
+            for drawing_on_screen in resource.drawing_on_screens
+        )
 
     @override
     @cached_property
     def is_complete(self) -> bool:
-        if isinstance(self.resource, tuple):
-            return all(resource.is_complete for resource in self.resource)
-        return self.resource.is_complete
+        return all(resource.is_complete for resource in self.resources)
 
     @override
     def _tick_before_complete(self, time_delta: Millisecond) -> Self:
-        if isinstance(self.resource, tuple):
-            resource = tuple(
-                resource.tick(time_delta) for resource in self.resource
-            )
-        else:
-            resource = self.resource.tick(time_delta)
+        resource = tuple(
+            resource.tick(time_delta) for resource in self.resources
+        )
         return replace(self, resource=resource)

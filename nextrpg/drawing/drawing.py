@@ -145,11 +145,13 @@ class Drawing(AnimationLike):
         surface = gaussian_blur(self.surface, radius)
         return replace(self, resource=surface)
 
+    @override
     def cut(self, area: RectangleAreaOnScreen) -> Self:
         surface = self.surface.copy()
         surface.fill(TRANSPARENT, (area.top_left, area.size))
         return replace(self, resource=surface)
 
+    @override
     def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
         surface = flip(self.surface, horizontal, vertical)
         return replace(self, resource=surface)
