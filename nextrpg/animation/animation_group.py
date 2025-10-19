@@ -2,15 +2,25 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.animation.abstract_animation import AbstractAnimation
+from nextrpg.animation.abstract_animation import (
+    AbstractAnimation,
+)
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_group import DrawingGroup
-from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
+from nextrpg.drawing.relative_animation_like import (
+    RelativeAnimationLike,
+    relative_animation_likes,
+)
 
 
 @dataclass(frozen=True)
 class AnimationGroup(AbstractAnimation):
-    resource: RelativeAnimationLike | tuple[RelativeAnimationLike, ...]
+    resource: (
+        AnimationLike
+        | RelativeAnimationLike
+        | tuple[AnimationLike | RelativeAnimationLike, ...]
+    )
 
     def concur(self, another: RelativeAnimationLike) -> Self:
         resource = (*self.resources, another)
@@ -18,9 +28,7 @@ class AnimationGroup(AbstractAnimation):
 
     @cached_property
     def resources(self) -> tuple[RelativeAnimationLike, ...]:
-        if isinstance(self.resource, tuple):
-            return self.resource
-        return (self.resource,)
+        return relative_animation_likes(self.resource)
 
     @override
     @cached_property

@@ -17,9 +17,9 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
-from nextrpg.drawing.drawing_trim import DrawingTrim
 from nextrpg.drawing.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.geometry.direction import Direction
+from nextrpg.geometry.padding import Padding
 
 
 class RpgMakerCharacterDrawingDefaultFrameType(IntEnum):
@@ -58,7 +58,7 @@ type RpgMakerCharacterDrawingFrameType = type[
 class RpgMakerSpriteSheet(SpriteSheet):
     num_columns: int = 4
     num_rows: int = 2
-    trim: DrawingTrim | None = None
+    trim: Padding = Padding()
     style: RpgMakerCharacterDrawingFrameType = (
         RpgMakerCharacterDrawingDefaultFrameType
     )
@@ -114,13 +114,11 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             return animation.tick(time_delta)
         return animation
 
-    def _trim(self, drawing: Drawing) -> Drawing:
-        if self.sprite_sheet.trim:
-            return drawing.trim(self.sprite_sheet.trim)
-        return drawing
-
     def _load_row(self, drawing: Drawing, row: int) -> CyclicAnimation:
-        frames = tuple(self._trim(d) for d in self._crop_at_row(drawing, row))
+        frames = tuple(
+            d.trim(self.sprite_sheet.trim)
+            for d in self._crop_at_row(drawing, row)
+        )
         ordered_frames = tuple(
             frames[i] for i in self.sprite_sheet.style.frame_indices()
         )

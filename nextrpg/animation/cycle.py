@@ -1,7 +1,7 @@
 from dataclasses import KW_ONLY, replace
 from typing import Self, override
 
-from nextrpg.animation.animation_group import AnimationGroup
+from nextrpg.animation.sequence import Sequence
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -12,7 +12,7 @@ from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
 
 
 @dataclass_with_default(frozen=True)
-class Cycle(AnimationGroup):
+class Cycle(Sequence):
     _: KW_ONLY = private_init_below()
     _copy: tuple[RelativeAnimationLike, ...] = default(
         lambda self: self.resources

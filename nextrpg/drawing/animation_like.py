@@ -5,7 +5,7 @@ from nextrpg.core.time import Millisecond
 from nextrpg.drawing.anchor import Anchor
 from nextrpg.drawing.color import Alpha
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
-from nextrpg.geometry.dimension import ZERO_SIZE, Size
+from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
 
@@ -32,10 +32,6 @@ class AnimationLike(Sizable):
     @cached_property
     def drawings(self) -> tuple[Drawing, ...]:
         return self.drawing.drawings
-
-    @cached_property
-    def no_shift(self) -> RelativeAnimationLike:
-        return self.shift(ZERO_SIZE)
 
     def shift(
         self, shift: Size, anchor: Anchor = Anchor.TOP_LEFT

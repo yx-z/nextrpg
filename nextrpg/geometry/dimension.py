@@ -6,6 +6,7 @@ from nextrpg.core.save import module_and_class
 
 if TYPE_CHECKING:
     from nextrpg.geometry.coordinate import Coordinate, XAxis, YAxis
+    from nextrpg.geometry.padding import Padding
 
 type Pixel = int | float
 type PixelPerMillisecond = int | float
@@ -186,7 +187,15 @@ class Size(NamedTuple):
     def __neg__(self) -> Size:
         return Size(-self.width_value, -self.height_value)
 
-    def __add__(self, other: Size | Width | Height) -> Size:
+    def __add__(self, other: Size | Width | Height | Padding) -> Size:
+        from nextrpg.geometry.padding import Padding
+
+        if isinstance(other, Padding):
+            return Size(
+                self.width_value + other.left.value + other.right.value,
+                self.height_value + other.top.value + other.bottom.value,
+            )
+
         if isinstance(other, Width):
             return Size(self.width_value + other.value, self.height_value)
 
@@ -198,14 +207,11 @@ class Size(NamedTuple):
             self.height_value + other.height_value,
         )
 
-    def __radd__(self, other: Size | Width | Height) -> Size:
+    def __radd__(self, other: Size | Width | Height | Padding) -> Size:
         return self + other
 
-    def __sub__(self, other: Size | Width | Height) -> Size:
+    def __sub__(self, other: Size | Width | Height | Padding) -> Size:
         return self + -other
-
-    def __rsub__(self, other: Size | Width | Height) -> Size:
-        return other + -self
 
     def __mul__(
         self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling

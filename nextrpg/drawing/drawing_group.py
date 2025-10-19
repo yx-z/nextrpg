@@ -7,7 +7,10 @@ from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import Alpha
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
-from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
+from nextrpg.drawing.relative_animation_like import (
+    RelativeAnimationLike,
+    relative_animation_likes,
+)
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
@@ -18,7 +21,11 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class DrawingGroup(AnimationLike):
-    resource: RelativeAnimationLike | tuple[RelativeAnimationLike, ...]
+    resource: (
+        AnimationLike
+        | RelativeAnimationLike
+        | tuple[AnimationLike | RelativeAnimationLike, ...]
+    )
 
     @override
     @cached_property
@@ -32,9 +39,7 @@ class DrawingGroup(AnimationLike):
 
     @cached_property
     def resources(self) -> tuple[RelativeAnimationLike, ...]:
-        if isinstance(self.resource, tuple):
-            return self.resource
-        return (self.resource,)
+        return relative_animation_likes(self.resource)
 
     @override
     def alpha(self, alpha: Alpha) -> Drawing | DrawingGroup:

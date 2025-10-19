@@ -1,6 +1,8 @@
 __version__ = "0.1.18"
 
-from nextrpg.animation.abstract_animation import AbstractAnimation
+from nextrpg.animation.abstract_animation import (
+    AbstractAnimation,
+)
 from nextrpg.animation.abstract_animation_on_screen import (
     AbstractAnimationOnScreen,
 )
@@ -112,13 +114,15 @@ from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.drawing_group_on_screen import DrawingGroupOnScreen
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
-from nextrpg.drawing.drawing_trim import DrawingTrim
 from nextrpg.drawing.font import Font
 from nextrpg.drawing.nine_slice import NineSlice
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
 from nextrpg.drawing.polyline_drawing import PolylineDrawing
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
-from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
+from nextrpg.drawing.relative_animation_like import (
+    RelativeAnimationLike,
+    relative_animation_likes,
+)
 from nextrpg.drawing.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
@@ -161,6 +165,11 @@ from nextrpg.geometry.dimension import (
     WidthScaling,
 )
 from nextrpg.geometry.direction import Direction, DirectionalOffset
+from nextrpg.geometry.padding import (
+    Padding,
+    padding_for_all_sides,
+    padding_for_both_sides,
+)
 from nextrpg.geometry.polygon_area_on_screen import (
     PolygonAreaOnScreen,
     get_bounding_rectangle_area_on_screen,

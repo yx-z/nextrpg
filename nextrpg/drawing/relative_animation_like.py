@@ -72,3 +72,23 @@ class RelativeAnimationLike:
     def alpha(self, alpha: Alpha) -> Self:
         resource = self.resource.alpha(alpha)
         return replace(self, resource=resource)
+
+
+def relative_animation_likes(
+    resource: (
+        AnimationLike
+        | RelativeAnimationLike
+        | tuple[AnimationLike | RelativeAnimationLike, ...]
+    ),
+) -> tuple[RelativeAnimationLike, ...]:
+    if isinstance(resource, tuple):
+        return tuple(relative_animation_like(res) for res in resource)
+    return (relative_animation_like(resource),)
+
+
+def relative_animation_like(
+    resource: AnimationLike | RelativeAnimationLike,
+) -> RelativeAnimationLike:
+    if isinstance(resource, AnimationLike):
+        return RelativeAnimationLike(resource, ZERO_SIZE)
+    return resource

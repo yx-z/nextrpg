@@ -37,7 +37,9 @@ class SayEventAddOn:
 
     @cached_property
     def background(self) -> AnimationOnScreenLike:
-        contents = [self._text.drawing.no_shift]
+        contents: list[AnimationLike | RelativeAnimationLike] = [
+            self._text.drawing
+        ]
         if self._name_relative_to_text:
             contents.append(self._name_relative_to_text)
         if self._avatar_relative_to_text:
@@ -46,10 +48,7 @@ class SayEventAddOn:
 
         background = self._background_relative_to_text.resource
         shift = self._background_relative_to_text.shift
-        background_and_content = (
-            background.no_shift,
-            content.shift(-shift),
-        )
+        background_and_content = (background, content.shift(-shift))
         add_on_group = DrawingGroup(background_and_content)
         return _Background(self._add_on_top_left, add_on_group, self._text)
 
@@ -185,10 +184,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
             ).rectangle_area_on_screen
             background_drawing = background_drawing.cut(background_crop)
 
-        background_and_tip = (
-            background_drawing.no_shift,
-            self._tip.shift(tip_shift),
-        )
+        background_and_tip = (background_drawing, self._tip.shift(tip_shift))
         background_and_tip_group = DrawingGroup(background_and_tip)
 
         return background_and_tip_group.shift(
@@ -289,7 +285,7 @@ class _CharacterPosition:
 
 @dataclass(frozen=True)
 class _Background(AnimationOnScreen):
-    text: Text
+    text: Text | TextGroup
 
     @override
     @cached_property

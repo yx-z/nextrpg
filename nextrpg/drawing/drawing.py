@@ -12,7 +12,7 @@ from nextrpg.core.cached_decorator import cached
 from nextrpg.core.log import Log
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import TRANSPARENT, Alpha, Color
-from nextrpg.drawing.drawing_trim import DrawingTrim
+from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
     HeightScaling,
@@ -21,6 +21,7 @@ from nextrpg.geometry.dimension import (
     WidthAndHeightScaling,
     WidthScaling,
 )
+from nextrpg.geometry.padding import Padding
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 if TYPE_CHECKING:
@@ -75,11 +76,10 @@ class Drawing(AnimationLike):
         surface = self.pygame.subsurface(area.pygame)
         return replace(self, resource=surface)
 
-    def trim(self, drawing_trim: DrawingTrim) -> Self:
-        coordinate = (drawing_trim.left * drawing_trim.top).coordinate
-        width = self.width - drawing_trim.left - drawing_trim.right
-        height = self.height - drawing_trim.top - drawing_trim.bottom
-        area = coordinate.anchor(width * height).rectangle_area_on_screen
+    def trim(self, trim: Padding) -> Self:
+        if trim == Padding():
+            return self
+        area = trim.top_left.anchor(self.size - trim).rectangle_area_on_screen
         return self.crop(area)
 
     @override
@@ -156,13 +156,20 @@ class Drawing(AnimationLike):
         return replace(self, resource=surface)
 
     def background(
-        self, color: Color, border_radius: Pixel | None = None
-    ) -> Drawing:
+        self,
+        color: Color,
+        padding: Padding = Padding(),
+        border_radius: Pixel | None = None,
+    ) -> RelativeAnimationLike:
         from nextrpg.drawing.rectangle_drawing import RectangleDrawing
 
-        return RectangleDrawing(
-            self.size, color, border_radius, self.allow_background_in_debug
-        ).drawing
+        rect = RectangleDrawing(
+            self.size + padding,
+            color,
+            border_radius,
+            self.allow_background_in_debug,
+        )
+        return rect.drawing.shift(-padding.top_left_shift)
 
     @cached_property
     def _debug_surface(self) -> Surface | None:

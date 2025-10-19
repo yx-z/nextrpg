@@ -5,7 +5,6 @@ from nextrpg import (
     CharacterSpec,
     Color,
     Drawing,
-    DrawingTrim,
     EventfulScene,
     EventSpec,
     Height,
@@ -14,6 +13,7 @@ from nextrpg import (
     NpcEventStartMode,
     NpcOnScreen,
     NpcSpec,
+    Padding,
     PlayerOnScreen,
     RpgMakerCharacterDrawing,
     RpgMakerSpriteSheet,
@@ -51,7 +51,7 @@ IMG_DIR = Path("example/asset/Pixel Fantasy RMMZ RTP Tiles/img")
 def character_drawing(file: str) -> RpgMakerCharacterDrawing:
     path = IMG_DIR / "characters" / file
     drawing = Drawing(path)
-    trim = DrawingTrim(top=Height(20), left=Width(10), right=Width(10))
+    trim = Padding(top=Height(20), left=Width(10), right=Width(10))
     sprite_sheet = RpgMakerSpriteSheet(drawing=drawing, trim=trim)
     return RpgMakerCharacterDrawing(sprite_sheet)
 

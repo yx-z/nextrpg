@@ -21,7 +21,7 @@ class TimedAnimationGroup(AnimationGroup):
     _timer: Timer = default(lambda self: Timer(self.duration))
 
     def compose(self, other: type[_T], **kwargs: Any) -> _T:
-        return other(resource=self.no_shift, duration=self.duration, **kwargs)
+        return other(resource=self, duration=self.duration, **kwargs)
 
     @cached_property
     def reverse(self) -> Self:
