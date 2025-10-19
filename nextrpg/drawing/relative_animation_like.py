@@ -104,5 +104,5 @@ def relative_animation_like(
     resource: AnimationLike | RelativeAnimationLike,
 ) -> RelativeAnimationLike:
     if isinstance(resource, AnimationLike):
-        return RelativeAnimationLike(resource, ZERO_SIZE)
+        return resource.shift(ZERO_SIZE)
     return resource
