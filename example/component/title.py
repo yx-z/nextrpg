@@ -39,7 +39,7 @@ def button(name: str, on_click: Scene | Widget | Callable[[], None]) -> Button:
 
     padding = padding_for_all_sides(10)
     background_color = Color(255, 255, 255, 150)
-    text = Text(name, green)
+    text = Text(name.capitalize(), green)
     background = text.drawings[0].background(
         background_color, padding, border_radius=5
     )
