@@ -2,9 +2,7 @@ from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.animation.abstract_animation import (
-    AbstractAnimation,
-)
+from nextrpg.animation.abstract_animation import AbstractAnimation
 from nextrpg.core.dataclass_with_default import private_init_below
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike

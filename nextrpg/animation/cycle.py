@@ -1,5 +1,5 @@
-from dataclasses import KW_ONLY, replace
-from typing import Self, override
+from dataclasses import KW_ONLY
+from typing import override
 
 from nextrpg.animation.sequence import Sequence
 from nextrpg.core.dataclass_with_default import (
@@ -8,6 +8,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
 
 
@@ -19,7 +20,7 @@ class Cycle(Sequence):
     )
 
     @override
-    def _tick_before_complete(self, time_delta: Millisecond) -> Self:
+    def _tick_before_complete(self, time_delta: Millisecond) -> AnimationLike:
         if (ticked := super()._tick_before_complete(time_delta)).is_complete:
-            return replace(self, resource=self._copy)
+            return Cycle(self._copy)
         return ticked
