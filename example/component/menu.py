@@ -1,10 +1,8 @@
 from functools import cache
 from pathlib import Path
 
-from example.component.title import title
+from example.component.title import button, title
 from nextrpg import (
-    BLUE,
-    Button,
     Direction,
     DirectionalOffset,
     DrawingOnScreen,
@@ -13,13 +11,11 @@ from nextrpg import (
     MenuScene,
     MoveTo,
     ScrollDirection,
-    Text,
     TimedAnimationOnScreens,
     TmxLoader,
     TransitionScene,
     WidgetGroup,
     animate,
-    config,
 )
 
 
@@ -35,25 +31,9 @@ def tmx() -> TmxLoader:
 
 @cache
 def widget_group() -> WidgetGroup:
-    highlight = config().text.colored(BLUE)
-    save_idle = Text("Save")
-    save_selected = save_idle.configured(highlight)
-    save_button = Button(
-        name="save",
-        idle=save_idle.drawing,
-        active=save_selected.drawing,
-        on_click=lambda: print("Save button clicked"),
-    )
-
-    title_idle = Text("Title")
-    title_selected = title_idle.configured(highlight)
+    save_button = button("save", lambda: print("Saved!"))
     title_scene = TransitionScene(title)
-    title_button = Button(
-        name="title",
-        idle=title_idle.drawing,
-        active=title_selected.drawing,
-        on_click=title_scene,
-    )
+    title_button = button("title", title_scene)
 
     widgets = (save_button, title_button)
     return WidgetGroup(
