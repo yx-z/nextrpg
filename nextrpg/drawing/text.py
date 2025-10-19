@@ -50,7 +50,8 @@ class Text(AnimationLike):
         from nextrpg.drawing.text_group import TextGroup
 
         if isinstance(other, TextGroup):
-            return replace(other, texts=(self,) + other.texts)
+            texts = (self,) + other.texts
+            return replace(other, texts=texts)
 
         if isinstance(other, str):
             txt = replace(self, message=other)

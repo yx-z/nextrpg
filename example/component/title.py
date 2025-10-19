@@ -64,9 +64,9 @@ def title() -> TmxWidgetGroupOnScreen:
     options = button("options", quit)
     exit_button = button("exit", quit)
 
-    children = (start, load, options, exit_button)
     group = WidgetGroup(
-        children=children, scroll_direction=ScrollDirection.HORIZONTAL
+        children=(start, load, options, exit_button),
+        scroll_direction=ScrollDirection.HORIZONTAL,
     )
 
     tmx_path = Path("example/component/title.tmx")

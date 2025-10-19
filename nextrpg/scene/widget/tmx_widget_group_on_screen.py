@@ -52,14 +52,14 @@ class TmxWidgetGroupOnScreen(WidgetGroupOnScreen):
     def _init_background(self) -> AnimationOnScreens:
         match self.background:
             case str():
-                resources = (self._image_layer(self.background),)
+                resources = self._image_layer(self.background)
             case tuple():
                 resources = tuple(
                     self._image_layer(res) if isinstance(res, str) else res
                     for res in self.background
                 )
             case _:
-                resources = (self.background,)
+                resources = self.background
         return AnimationOnScreens(resources)
 
     def _image_layer(self, layer: str) -> DrawingOnScreen:

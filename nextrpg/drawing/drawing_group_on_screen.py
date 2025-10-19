@@ -11,6 +11,7 @@ from nextrpg.drawing.color import Color
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import ZERO_SIZE
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 
 
@@ -34,10 +35,10 @@ class DrawingGroupOnScreen(AnimationOnScreenLike):
         res: list[DrawingOnScreen] = []
         for relative in self.drawing_group.resources:
             top_left = relative.top_left(self.origin)
-            res += relative.resource.drawing_on_screens(top_left)
+            res += relative.drawing_on_screens(top_left)
 
-            declared_coord = self.origin + relative.shift
-            if self._link_color and self.origin != declared_coord:
+            if self._link_color and relative.shift != ZERO_SIZE:
+                declared_coord = self.origin + relative.shift
                 points = (self.origin, declared_coord)
                 link = PolylineOnScreen(points)
                 link_drawing_on_screen = link.fill(self._link_color)

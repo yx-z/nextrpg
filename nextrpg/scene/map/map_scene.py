@@ -128,7 +128,7 @@ class MapScene(EventfulScene, UpdateFromSave):
     def save_data(self) -> dict:
         return {
             character.save_key: character.save_data
-            for character in self.npcs + (self.player,)
+            for character in (self.player,) + self.npcs
         }
 
     @override

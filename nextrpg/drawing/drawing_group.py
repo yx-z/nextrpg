@@ -54,13 +54,7 @@ class DrawingGroup(AnimationLike):
     @override
     @cached_property
     def drawings(self) -> tuple[Drawing, ...]:
-        res: list[Drawing] = []
-        for relative in self.resources:
-            if isinstance(relative.resource, Drawing):
-                res.append(relative.resource)
-            else:
-                res += relative.resource.drawings
-        return tuple(res)
+        return tuple(d for res in self.resources for d in res.drawings)
 
     @override
     def drawing_on_screens(
@@ -96,8 +90,8 @@ class DrawingGroup(AnimationLike):
         for relative in self.resources:
             top_left = area.top_left - relative.top_left(ORIGIN)
             relative_area = top_left.anchor(area.size).rectangle_area_on_screen
-            drawing = relative.resource.cut(relative_area)
-            relative_drawing = replace(relative, drawing=drawing)
+            resource = relative.resource.cut(relative_area)
+            relative_drawing = replace(relative, resource=resource)
             res.append(relative_drawing)
         return replace(self, resource=tuple(res))
 

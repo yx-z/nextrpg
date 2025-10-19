@@ -34,8 +34,7 @@ class AnimationGroup(AbstractAnimation):
     @cached_property
     def is_complete(self) -> bool:
         return all(
-            relative_drawing.resource.is_complete
-            for relative_drawing in self.resources
+            relative_drawing.is_complete for relative_drawing in self.resources
         )
 
     @override

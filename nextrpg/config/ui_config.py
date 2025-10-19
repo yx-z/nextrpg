@@ -28,7 +28,8 @@ class PanelConfig:
             return self.background.stretch(area.size).drawing_on_screens(
                 area.top_left
             )
-        return (area.fill(self.background),)
+        background = area.fill(self.background)
+        return (background,)
 
 
 @dataclass(frozen=True)

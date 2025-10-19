@@ -156,7 +156,8 @@ class EventfulScene(EventAsAttr, Scene):
         return replace(self, _background_events=background_events)
 
     def _others(self, npc: NpcOnScreen) -> tuple[NpcOnScreen, ...]:
-        return (self.player,) + tuple(n for n in self.npcs if n is not npc)
+        other_npcs = tuple(n for n in self.npcs if n is not npc)
+        return (self.player,) + other_npcs
 
     @cached_property
     def _npc_dict(self) -> dict[str, NpcOnScreen]:

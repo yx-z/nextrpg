@@ -98,7 +98,8 @@ class Drawing(AnimationLike):
     def drawing_on_screens(
         self, top_left: Coordinate
     ) -> tuple[DrawingOnScreen, ...]:
-        return (self.drawing_on_screen(top_left),)
+        drawing_on_screen = self.drawing_on_screen(top_left)
+        return (drawing_on_screen,)
 
     def __mul__(
         self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling

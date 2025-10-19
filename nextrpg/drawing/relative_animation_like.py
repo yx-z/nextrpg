@@ -1,6 +1,6 @@
 from dataclasses import dataclass, replace
 from functools import cached_property
-from typing import Self
+from typing import TYPE_CHECKING, Self
 
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.anchor import Anchor
@@ -14,6 +14,10 @@ from nextrpg.geometry.dimension import (
     WidthAndHeightScaling,
     WidthScaling,
 )
+
+if TYPE_CHECKING:
+    from nextrpg.drawing.drawing import Drawing
+    from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 
 @dataclass(frozen=True)
@@ -73,6 +77,15 @@ class RelativeAnimationLike:
         resource = self.resource.alpha(alpha)
         return replace(self, resource=resource)
 
+    @cached_property
+    def drawings(self) -> tuple[Drawing, ...]:
+        return self.resource.drawings
+
+    def drawing_on_screens(
+        self, coordinate: Coordinate
+    ) -> tuple[DrawingOnScreen, ...]:
+        return self.resource.drawing_on_screens(coordinate)
+
 
 def relative_animation_likes(
     resource: (
@@ -83,7 +96,8 @@ def relative_animation_likes(
 ) -> tuple[RelativeAnimationLike, ...]:
     if isinstance(resource, tuple):
         return tuple(relative_animation_like(res) for res in resource)
-    return (relative_animation_like(resource),)
+    animation_like = relative_animation_like(resource)
+    return (animation_like,)
 
 
 def relative_animation_like(
