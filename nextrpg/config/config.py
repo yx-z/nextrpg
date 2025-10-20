@@ -53,12 +53,6 @@ def set_config(cfg: Config) -> Config:
     global _cfg
     if not _initial_config:
         _initial_config = cfg
-
-    if _cfg and cfg.window != _cfg.window:
-        from nextrpg.core.save import SaveIo
-
-        SaveIo().save(cfg.window)
-
     _cfg = cfg
     return _cfg
 

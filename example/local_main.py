@@ -8,6 +8,6 @@ from nextrpg import Config, DebugConfig, Game, MenuConfig
 
 menu_config = MenuConfig(create=menu)
 debug_config = DebugConfig()
-# debug_config = None
+debug_config = None
 config = Config(menu=menu_config, debug=debug_config)
 Game(title, config=config).start()

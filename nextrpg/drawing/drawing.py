@@ -58,10 +58,20 @@ class Drawing(AnimationLike, HasMetadata):
     @override
     def __str__(self) -> str:
         if isinstance(self.resource, Surface):
-            resource_info = ""
+            resource = ""
         else:
-            resource_info = f", {self.resource}"
-        return f"Drawing({self.size}{resource_info})"
+            resource = f", {self.resource}"
+
+        if self.metadata:
+            metadata = f", metadata={self.metadata}"
+        else:
+            metadata = ""
+
+        return f"Drawing({self.size}{resource}{metadata})"
+
+    @override
+    def __repr__(self) -> str:
+        return str(self)
 
     @override
     @cached_property

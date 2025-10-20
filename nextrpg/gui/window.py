@@ -124,12 +124,11 @@ class Window:
             self.current_config,
             include_fps_in_window_title=not self.current_config.include_fps_in_window_title,
         )
-        full_config = replace(config(), window=window_config)
-        set_config(full_config)
+        _set_window_config(window_config)
         return self.tick()
 
     def _set_screen(self, cfg: WindowConfig) -> Surface:
-        return set_mode(cfg.size, cfg.flag)
+        return set_mode(cfg.size, cfg.flag, SRCALPHA)
 
     @cached_property
     def _scaling(self) -> float:
@@ -150,26 +149,29 @@ class Window:
     def _toggle_full_screen(self) -> Self:
         full_screen = not self.current_config.full_screen
         updated_config = replace(self.current_config, full_screen=full_screen)
-        full_config = replace(config(), window=updated_config)
-        set_config(full_config)
+        _set_window_config(updated_config)
         return self.tick()
 
     def _resize(self, size: Size) -> Self:
         if size == self.current_config.size:
             return self
         updated_config = replace(self.current_config, size=size)
-        full_config = replace(config(), window=updated_config)
-        set_config(full_config)
+        _set_window_config(updated_config)
         return self.tick()
 
     @cached_property
     def _saved_config(self) -> WindowConfig | None:
-        saved_config = SaveIo().update(self.initial_config)
-        if saved_config == self.initial_config:
+        if (
+            saved_config := SaveIo().update(self.initial_config)
+        ) == self.initial_config:
             return None
-        full_config = replace(config(), window=saved_config)
-        set_config(full_config)
+        _set_window_config(saved_config)
         return saved_config
+
+
+def _set_window_config(window_config: WindowConfig) -> None:
+    full_config = replace(config(), window=window_config)
+    set_config(full_config)
 
 
 def _log_text(
