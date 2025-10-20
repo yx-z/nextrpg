@@ -1,7 +1,8 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from functools import cached_property
-from typing import TYPE_CHECKING, Self, override
+from typing import TYPE_CHECKING, Any, Self, override
 
+from nextrpg.config.config import config
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import Alpha
@@ -26,6 +27,13 @@ class DrawingGroup(AnimationLike):
         | RelativeAnimationLike
         | tuple[AnimationLike | RelativeAnimationLike, ...]
     )
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def add_metadata(self, **kwargs: Any) -> Self:
+        if (debug := config().debug) and debug.add_metadata:
+            metadata = self.metadata | kwargs
+            return replace(self, metadata=metadata)
+        return self
 
     @override
     @cached_property

@@ -36,6 +36,7 @@ class DebugConfig:
     log_level: LogLevel = LogLevel.DEBUG
     log_duration: Millisecond = 2000
     exclude_loggers: tuple[str, ...] = ()
+    add_metadata: bool = True
     console_log_configs: dict[str, Any] = field(
         default_factory=lambda: {
             "format": "%(levelname)s - %(name)s - %(message)s"

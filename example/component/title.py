@@ -48,13 +48,10 @@ def button(name: str, on_click: Scene | Widget | Callable[[], None]) -> Button:
 
     fade_in = FadeIn((border, background))
     fade_out = FadeOut((border, background))
-    animation = Cycle((fade_out, fade_in))
+    animation = Cycle((fade_in, fade_out))
     active = DrawingGroup((animation, text.drawing))
     return Button(
-        name=name,
-        active=active,
-        idle=text.drawing,
-        on_click=on_click,
+        name=name, active=active, idle=text.drawing, on_click=on_click
     )
 
 

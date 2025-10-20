@@ -1,7 +1,7 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from functools import cached_property
 from pathlib import Path
-from typing import TYPE_CHECKING, Self, override
+from typing import TYPE_CHECKING, Any, Self, override
 
 from pygame import SRCALPHA, Surface
 from pygame.image import load
@@ -42,6 +42,13 @@ class Drawing(AnimationLike):
     color_key: Color | Coordinate | None = None
     convert_alpha: bool | None = None
     allow_background_in_debug: bool = True
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def add_metadata(self, **kwargs: Any) -> Self:
+        if (debug := config().debug) and debug.add_metadata:
+            metadata = self.metadata | kwargs
+            return replace(self, metadata=metadata)
+        return self
 
     @override
     @cached_property
@@ -74,19 +81,19 @@ class Drawing(AnimationLike):
 
     def crop(self, area: RectangleAreaOnScreen) -> Self:
         surface = self.pygame.subsurface(area.pygame)
-        return replace(self, resource=surface)
+        return replace(self, resource=surface).add_metadata(crop_area=area)
 
     def trim(self, trim: Padding) -> Self:
         if trim == Padding():
             return self
         area = trim.top_left.anchor(self.size - trim).rectangle_area_on_screen
-        return self.crop(area)
+        return self.crop(area).add_metadata(trim=trim)
 
     @override
     def alpha(self, alpha: Alpha) -> Self:
         surface = self.surface.copy()
         surface.set_alpha(alpha)
-        return replace(self, resource=surface)
+        return replace(self, resource=surface).add_metadata(alpha=alpha)
 
     @override
     def drawing_on_screen(self, coordinate: Coordinate) -> DrawingOnScreen:
@@ -143,18 +150,20 @@ class Drawing(AnimationLike):
 
     def blur(self, radius: int) -> Self:
         surface = gaussian_blur(self.surface, radius)
-        return replace(self, resource=surface)
+        return replace(self, resource=surface).add_metadata(blur_radius=radius)
 
     @override
     def cut(self, area: RectangleAreaOnScreen) -> Self:
         surface = self.surface.copy()
         surface.fill(TRANSPARENT, (area.top_left, area.size))
-        return replace(self, resource=surface)
+        return replace(self, resource=surface).add_metadata(cut_area=area)
 
     @override
     def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
         surface = flip(self.surface, horizontal, vertical)
-        return replace(self, resource=surface)
+        return replace(self, resource=surface).add_metadata(
+            flip_x=horizontal, flip_y=vertical
+        )
 
     def background(
         self,
