@@ -75,7 +75,7 @@ class FadeOutEventScene(RpgEventScene):
         if fade.is_complete:
             return background_removed.complete(self.generator)
 
-        return replace(ticked, scene=background_removed, _fade=fade)
+        return replace(ticked, parent=background_removed, _fade=fade)
 
     @cached_property
     def _init_fade(self) -> TimedAnimationOnScreens:
