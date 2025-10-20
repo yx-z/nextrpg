@@ -3,7 +3,7 @@ from functools import cached_property
 from typing import ClassVar, Self, override
 
 from nextrpg.config.config import config
-from nextrpg.config.ui_config import PanelConfig
+from nextrpg.config.widget.panel_config import PanelConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -62,5 +62,5 @@ class PanelOnScreen(WidgetOnScreen):
 class Panel(Widget[PanelOnScreen]):
     name: str
     children: tuple[SizableWidget, ...]
-    config: PanelConfig = field(default_factory=lambda: config().ui.panel)
-    widget_on_screen_type: ClassVar[type[PanelOnScreen]] = PanelOnScreen
+    config: PanelConfig = field(default_factory=lambda: config().widget.panel)
+    widget_on_screen_type: ClassVar[type] = PanelOnScreen

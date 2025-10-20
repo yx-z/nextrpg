@@ -4,7 +4,10 @@ from typing import override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.config import config
-from nextrpg.config.say_event_config import AvatarPosition, SayEventConfig
+from nextrpg.config.rpg_event.say_event_config import (
+    AvatarPosition,
+    SayEventConfig,
+)
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
@@ -59,9 +62,9 @@ class SayEventScene(RpgEventScene):
     def _add_on(self) -> SayEventAddOn:
         if isinstance(self.character_or_scene, CharacterOnScreen):
             name = self.character_or_scene.spec.unique_name
-            ticked_character = self.scene.get_character(name)
+            ticked_character = self.parent.get_character(name)
             return SayEventCharacterAddOn(
-                self.config, self.message, self.scene, ticked_character
+                self.config, self.message, self.parent, ticked_character
             )
         return SayEventAddOn(self.config, self.message)
 
@@ -74,7 +77,7 @@ class SayEventScene(RpgEventScene):
 
         return SayEventFadeInState(
             generator=self.generator,
-            scene=self.scene,
+            parent=self.parent,
             unique_name=unique_name,
             background=self._add_on.background,
             text_on_screen=self._add_on.text_on_screen,

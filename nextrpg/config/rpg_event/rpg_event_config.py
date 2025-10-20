@@ -5,15 +5,15 @@ from nextrpg.event.code_transformer import (
     ADD_PARENT,
     ADD_YIELD,
     ANNOTATE_SAY,
-    TRANSFORM_EVENT,
+    TRANSFORM_RPG_EVENT,
 )
 
 
 @dataclass(frozen=True)
-class EventConfig:
+class RpgEventConfig:
     transformers: tuple[NodeTransformer] = (
         ADD_PARENT,
         ANNOTATE_SAY,
         ADD_YIELD,
-        TRANSFORM_EVENT,
+        TRANSFORM_RPG_EVENT,
     )

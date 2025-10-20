@@ -49,7 +49,7 @@ class _TransformEvent(NodeTransformer):
         return Call(transform_fun, node.args, node.keywords)
 
 
-TRANSFORM_EVENT = _TransformEvent()
+TRANSFORM_RPG_EVENT = _TransformEvent()
 
 
 class _AddYield(NodeTransformer):

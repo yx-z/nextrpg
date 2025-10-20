@@ -43,7 +43,10 @@ from nextrpg.character.rpg_maker_character_drawing import (
     RpgMakerCharacterDrawingXpFrameType,
     RpgMakerSpriteSheet,
 )
-from nextrpg.config.character_config import CharacterConfig
+from nextrpg.config.character.character_config import CharacterConfig
+from nextrpg.config.character.rpg_maker_character_drawing_config import (
+    RpgMakerCharacterDrawingConfig,
+)
 from nextrpg.config.config import (
     Config,
     config,
@@ -52,25 +55,22 @@ from nextrpg.config.config import (
     set_config,
 )
 from nextrpg.config.debug_config import DebugConfig
-from nextrpg.config.drawing_config import DrawingConfig
-from nextrpg.config.event_config import EventConfig
+from nextrpg.config.drawing.drawing_config import DrawingConfig
+from nextrpg.config.drawing.text_config import TextConfig
 from nextrpg.config.game_loop_config import GameLoopConfig
 from nextrpg.config.key_mapping_config import KeyMappingConfig
 from nextrpg.config.map_config import MapConfig
 from nextrpg.config.menu_config import MenuConfig
-from nextrpg.config.rpg_maker_character_drawing_config import (
-    RpgMakerCharacterDrawingConfig,
-)
-from nextrpg.config.save_config import SaveConfig
-from nextrpg.config.say_event_config import (
+from nextrpg.config.rpg_event.rpg_event_config import RpgEventConfig
+from nextrpg.config.rpg_event.say_event_config import (
     AvatarPosition,
     SayEventColorBackgroundConfig,
     SayEventConfig,
     SayEventNineSliceBackgroundConfig,
 )
-from nextrpg.config.text_config import TextConfig
+from nextrpg.config.save_config import SaveConfig
 from nextrpg.config.timing_config import TimingConfig
-from nextrpg.config.ui_config import PanelConfig
+from nextrpg.config.widget.panel_config import PanelConfig
 from nextrpg.config.window_config import WindowConfig
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.dataclass_with_default import (

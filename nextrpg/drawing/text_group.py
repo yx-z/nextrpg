@@ -3,7 +3,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING, Self, override
 
 from nextrpg.config.config import config
-from nextrpg.config.text_group_config import TextGroupConfig
+from nextrpg.config.drawing.text_group_config import TextGroupConfig
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.relative_animation_like import RelativeAnimationLike

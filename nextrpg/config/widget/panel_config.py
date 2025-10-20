@@ -30,8 +30,3 @@ class PanelConfig:
             )
         background = area.fill(self.background)
         return (background,)
-
-
-@dataclass(frozen=True)
-class UiConfig:
-    panel: PanelConfig = PanelConfig()

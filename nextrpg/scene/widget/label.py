@@ -25,7 +25,7 @@ class LabelOnScreen(SizableWidgetOnScreen):
 @dataclass(frozen=True, kw_only=True)
 class Label(SizableWidget[LabelOnScreen]):
     message: str | Text | TextGroup
-    widget_on_screen_type: ClassVar[type[LabelOnScreen]] = LabelOnScreen
+    widget_on_screen_type: ClassVar[type] = LabelOnScreen
 
     @override
     @cached_property

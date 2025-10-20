@@ -10,30 +10,33 @@ from nextrpg.scene.scene import Scene
 
 
 @dataclass(frozen=True)
-class RpgEventScene[R = None](Scene):
+class RpgEventScene(Scene):
     generator: EventGenerator
-    scene: EventfulScene[R]
+    parent: EventfulScene
 
     @cached_property
     @override
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        return self.scene.drawing_on_screens + self.add_ons
+        return self.parent.drawing_on_screens + self.add_ons
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
-        ticked = replace(self, scene=self.scene.tick_without_event(time_delta))
-        return self._tick_after_scene(time_delta, ticked)
+        parent = self.parent.tick_without_event(time_delta)
+        ticked = replace(self, parent=parent)
+        return self._tick_after_parent(time_delta, ticked)
 
     @cached_property
     def add_ons(self) -> tuple[DrawingOnScreen, ...]:
         return ()
 
-    def _tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
+    def _tick_after_parent(
+        self, time_delta: Millisecond, ticked: Self
+    ) -> Scene:
         return ticked
 
 
 def register_rpg_event_scene[R, **P](
-    cls: type[RpgEventScene[Any]],
+    cls: type[RpgEventScene],
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     def decorate(f: Callable[P, R]) -> Callable[P, R]:
         def decorated(*args: P.args, **kwargs: P.kwargs) -> R:

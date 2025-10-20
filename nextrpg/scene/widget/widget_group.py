@@ -117,9 +117,7 @@ class WidgetGroup(Widget[WidgetGroupOnScreen]):
     children: tuple[Widget, ...]
     scroll_direction: ScrollDirection = ScrollDirection.VERTICAL
     loop: bool = True
-    widget_on_screen_type: ClassVar[type[WidgetGroupOnScreen]] = (
-        WidgetGroupOnScreen
-    )
+    widget_on_screen_type: ClassVar[type] = WidgetGroupOnScreen
 
 
 _SCROLL_AND_KEY_TO_FORWARD: dict[tuple[ScrollDirection, KeyboardKey], bool] = {

@@ -4,7 +4,7 @@ from typing import override
 
 from nextrpg.animation.animation_on_screen import AnimationOnScreen
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.config.say_event_config import (
+from nextrpg.config.rpg_event.say_event_config import (
     AvatarPosition,
     SayEventConfig,
     SayEventNineSliceBackgroundConfig,

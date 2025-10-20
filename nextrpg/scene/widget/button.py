@@ -1,9 +1,9 @@
 from collections.abc import Callable
-from dataclasses import dataclass, replace
+from dataclasses import replace
 from functools import cached_property
 from typing import ClassVar, Self, override
 
-from nextrpg.core.dataclass_with_default import dataclass_with_default
+from nextrpg.core.dataclass_with_default import dataclass_with_default, default
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.event.io_event import IoEvent, KeyboardKey, is_key_press
@@ -55,13 +55,13 @@ class ButtonOnScreen(SizableWidgetOnScreen):
         return replace(self, widget=widget)
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass_with_default(frozen=True, kw_only=True)
 class Button(SizableWidget[ButtonOnScreen]):
     name: str
-    idle: AnimationLike
-    active: AnimationLike
     on_click: Scene | Widget | Callable[[], None]
-    widget_on_screen_type: ClassVar[type[ButtonOnScreen]] = ButtonOnScreen
+    idle: AnimationLike = default(lambda self: config())
+    active: AnimationLike
+    widget_on_screen_type: ClassVar[type] = ButtonOnScreen
 
     @override
     @cached_property

@@ -7,7 +7,7 @@ from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.animation.typewriter import Typewriter
-from nextrpg.config.say_event_config import SayEventConfig
+from nextrpg.config.rpg_event.say_event_config import SayEventConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -34,7 +34,7 @@ class SayEventState(RpgEventScene, ABC):
     _: KW_ONLY = private_init_below()
     initial_coordinate: Coordinate | None = default(
         lambda self: (
-            self.scene.get_character(name).coordinate
+            self.parent.get_character(name).coordinate
             if (name := self.unique_name)
             else None
         )
@@ -44,7 +44,7 @@ class SayEventState(RpgEventScene, ABC):
     @cached_property
     def add_ons(self) -> tuple[DrawingOnScreen, ...]:
         if self.unique_name:
-            character = self.scene.get_character(self.unique_name)
+            character = self.parent.get_character(self.unique_name)
             diff = character.coordinate - self.initial_coordinate
             return tuple(a + diff for a in self._add_ons)
         return self._add_ons
@@ -71,12 +71,14 @@ class SayEventFadeInState(SayEventState):
         return self._fade_in.drawing_on_screens
 
     @override
-    def _tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
+    def _tick_after_parent(
+        self, time_delta: Millisecond, ticked: Self
+    ) -> Scene:
         if not (fade_in := self._fade_in.tick(time_delta)).is_complete:
             return replace(ticked, _fade_in=fade_in)
         return SayEventTypingState(
             generator=self.generator,
-            scene=ticked.scene,
+            parent=ticked.parent,
             unique_name=self.unique_name,
             initial_coordinate=self.initial_coordinate,
             background=self.background,
@@ -107,7 +109,7 @@ class SayEventTypingState(SayEventState):
         resources = AnimationOnScreens(resource)
         return SayEventFadeOutState(
             generator=self.generator,
-            scene=self.scene,
+            parent=self.parent,
             unique_name=self.unique_name,
             initial_coordinate=self.initial_coordinate,
             resources=resources,
@@ -124,7 +126,9 @@ class SayEventTypingState(SayEventState):
         return self.background.drawing_on_screens + text
 
     @override
-    def _tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
+    def _tick_after_parent(
+        self, time_delta: Millisecond, ticked: Self
+    ) -> Scene:
         background = self.background.tick(time_delta)
         typewriter = tick_optional(self._typewriter, time_delta)
         return replace(ticked, background=background, _typewriter=typewriter)
@@ -146,7 +150,9 @@ class SayEventFadeOutState(SayEventState):
         return self._fade_out.drawing_on_screens
 
     @override
-    def _tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
+    def _tick_after_parent(
+        self, time_delta: Millisecond, ticked: Self
+    ) -> Scene:
         if (fade_out := self._fade_out.tick(time_delta)).is_complete:
-            return ticked.scene.complete(self.generator)
+            return ticked.parent.complete(self.generator)
         return replace(ticked, _fade_out=fade_out)

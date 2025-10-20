@@ -39,12 +39,12 @@ class BackgroundFadeInEvent(BackgroundEvent):
 
     @override
     @cached_property
-    def complete(self) -> bool:
+    def is_complete(self) -> bool:
         return False
 
 
 @dataclass_with_default(frozen=True)
-class FadeInEventScene(RpgEventScene[BackgroundEventSentinel]):
+class FadeInEventScene(RpgEventScene):
     drawing_on_screen: DrawingOnScreen | tuple[DrawingOnScreen, ...]
     wait: bool = True
     duration: Millisecond = field(
@@ -63,13 +63,15 @@ class FadeInEventScene(RpgEventScene[BackgroundEventSentinel]):
         return self._fade.drawing_on_screens
 
     @override
-    def _tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
+    def _tick_after_parent(
+        self, time_delta: Millisecond, ticked: Self
+    ) -> Scene:
         fade = self._fade.tick(time_delta)
         if self.wait and not fade.is_complete:
             return replace(ticked, _fade=fade)
 
         background_fade_in = BackgroundFadeInEvent(fade=fade)
-        return ticked.scene.complete(
+        return ticked.parent.complete(
             self.generator, background_fade_in.sentinel, background_fade_in
         )
 

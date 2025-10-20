@@ -5,10 +5,10 @@ from typing import Self, override
 
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.config.config import config
-from nextrpg.config.rpg_maker_character_drawing_config import (
+from nextrpg.config.character.rpg_maker_character_drawing_config import (
     RpgMakerCharacterDrawingConfig,
 )
+from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,

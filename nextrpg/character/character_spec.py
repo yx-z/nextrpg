@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.config.character_config import CharacterConfig
+from nextrpg.config.character.character_config import CharacterConfig
 from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import dataclass_with_default, default
 from nextrpg.drawing.animation_like import AnimationLike

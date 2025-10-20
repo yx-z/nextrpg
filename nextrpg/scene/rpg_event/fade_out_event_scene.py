@@ -39,12 +39,12 @@ class BackgroundFadeOutEvent(BackgroundEvent):
 
     @override
     @cached_property
-    def complete(self) -> bool:
+    def is_complete(self) -> bool:
         return self.fade.is_complete
 
 
 @dataclass_with_default(frozen=True)
-class FadeOutEventScene(RpgEventScene[BackgroundFadeOutEvent]):
+class FadeOutEventScene(RpgEventScene):
     sentinel: BackgroundEventSentinel
     wait: bool = True
     duration: Millisecond = field(
@@ -59,9 +59,13 @@ class FadeOutEventScene(RpgEventScene[BackgroundFadeOutEvent]):
         return self._fade.drawing_on_screens
 
     @override
-    def _tick_after_scene(self, time_delta: Millisecond, ticked: Self) -> Scene:
+    def _tick_after_parent(
+        self, time_delta: Millisecond, ticked: Self
+    ) -> Scene:
         fade = self._fade.tick(time_delta)
-        background_removed = ticked.scene.remove_background_event(self.sentinel)
+        background_removed = ticked.parent.remove_background_event(
+            self.sentinel
+        )
         if not self.wait:
             background_event = BackgroundFadeOutEvent(fade=fade)
             return background_removed.complete(
@@ -75,7 +79,7 @@ class FadeOutEventScene(RpgEventScene[BackgroundFadeOutEvent]):
 
     @cached_property
     def _init_fade(self) -> TimedAnimationOnScreens:
-        resource = self.scene.get_background_event(
+        resource = self.parent.get_background_event(
             self.sentinel
         ).drawing_on_screens
         return animate(resource, FadeOut, duration=self.duration)

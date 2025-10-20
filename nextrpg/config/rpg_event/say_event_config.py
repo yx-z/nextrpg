@@ -4,7 +4,7 @@ from enum import Enum, auto
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from nextrpg.config.text_config import TextConfig
+from nextrpg.config.drawing.text_config import TextConfig
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import BLACK, BLUE, Color

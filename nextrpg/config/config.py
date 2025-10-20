@@ -2,25 +2,25 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Generator
 
-from nextrpg.config.character_config import CharacterConfig
-from nextrpg.config.cutscene_config import CutsceneConfig
+from nextrpg.config.character.character_config import CharacterConfig
+from nextrpg.config.character.player_config import PlayerConfig
+from nextrpg.config.character.rpg_maker_character_drawing_config import (
+    RpgMakerCharacterDrawingConfig,
+)
 from nextrpg.config.debug_config import DebugConfig
-from nextrpg.config.drawing_config import DrawingConfig
-from nextrpg.config.event_config import EventConfig
+from nextrpg.config.drawing.drawing_config import DrawingConfig
+from nextrpg.config.drawing.text_config import TextConfig
+from nextrpg.config.drawing.text_group_config import TextGroupConfig
 from nextrpg.config.game_loop_config import GameLoopConfig
 from nextrpg.config.key_mapping_config import KeyMappingConfig
 from nextrpg.config.map_config import MapConfig
 from nextrpg.config.menu_config import MenuConfig
-from nextrpg.config.player_config import PlayerConfig
-from nextrpg.config.rpg_maker_character_drawing_config import (
-    RpgMakerCharacterDrawingConfig,
-)
+from nextrpg.config.rpg_event.cutscene_config import CutsceneConfig
+from nextrpg.config.rpg_event.rpg_event_config import RpgEventConfig
+from nextrpg.config.rpg_event.say_event_config import SayEventConfig
 from nextrpg.config.save_config import SaveConfig
-from nextrpg.config.say_event_config import SayEventConfig
-from nextrpg.config.text_config import TextConfig
-from nextrpg.config.text_group_config import TextGroupConfig
 from nextrpg.config.timing_config import TimingConfig
-from nextrpg.config.ui_config import UiConfig
+from nextrpg.config.widget.widget_config import WidgetConfig
 from nextrpg.config.window_config import WindowConfig
 
 
@@ -39,12 +39,12 @@ class Config:
     text: TextConfig = TextConfig()
     text_group: TextGroupConfig = TextGroupConfig()
     drawing: DrawingConfig = DrawingConfig()
-    event: EventConfig = EventConfig()
+    event: RpgEventConfig = RpgEventConfig()
     say_event: SayEventConfig = SayEventConfig()
     cutscene: CutsceneConfig = CutsceneConfig()
     save: SaveConfig = SaveConfig()
     game_loop: GameLoopConfig = GameLoopConfig()
-    ui: UiConfig = UiConfig()
+    widget: WidgetConfig = WidgetConfig()
     menu: MenuConfig = MenuConfig()
 
 

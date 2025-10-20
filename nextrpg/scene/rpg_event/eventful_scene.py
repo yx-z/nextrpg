@@ -91,7 +91,7 @@ class EventfulScene(EventAsAttr, Scene):
             c.tick(time_delta) for c in self._background_events
         )
         not_completed_background_events = tuple(
-            c for c in ticked_background_events if not c.complete
+            c for c in ticked_background_events if not c.is_complete
         )
         for background_event in not_completed_background_events:
             ticked = background_event.apply(ticked)

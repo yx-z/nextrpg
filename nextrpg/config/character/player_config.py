@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from nextrpg.config.character_config import CharacterConfig
+from nextrpg.config.character.character_config import CharacterConfig
 from nextrpg.geometry.direction import Direction
 
 
