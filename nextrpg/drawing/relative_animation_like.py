@@ -82,9 +82,10 @@ class RelativeAnimationLike:
         return self.resource.drawings
 
     def drawing_on_screens(
-        self, coordinate: Coordinate
+        self, origin: Coordinate
     ) -> tuple[DrawingOnScreen, ...]:
-        return self.resource.drawing_on_screens(coordinate)
+        top_left = self.top_left(origin)
+        return self.resource.drawing_on_screens(top_left)
 
 
 def relative_animation_likes(

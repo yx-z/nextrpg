@@ -7,7 +7,6 @@ from nextrpg.animation.timed_animation_group import TimedAnimationGroup
 from nextrpg.config.config import config
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import alpha_from_percentage
-from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
 
 
@@ -19,7 +18,7 @@ class Fade(TimedAnimationGroup):
 
     @override
     @cached_property
-    def drawing(self) -> Drawing | DrawingGroup:
+    def drawing(self) -> DrawingGroup:
         alpha = alpha_from_percentage(self._percentage)
         return super().drawing.alpha(alpha)
 

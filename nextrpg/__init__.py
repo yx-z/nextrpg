@@ -78,6 +78,7 @@ from nextrpg.core.dataclass_with_default import (
     type_name,
 )
 from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
+from nextrpg.core.metadata import HasMetadata
 from nextrpg.core.save import (
     LoadFromSave,
     LoadFromSaveEnum,

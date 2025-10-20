@@ -2,7 +2,7 @@ from dataclasses import dataclass, field, replace
 from functools import cached_property
 from typing import TYPE_CHECKING, Any, Self, override
 
-from nextrpg.config.config import config
+from nextrpg.core.metadata import HasMetadata
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import Alpha
@@ -21,19 +21,13 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class DrawingGroup(AnimationLike):
+class DrawingGroup(AnimationLike, HasMetadata):
     resource: (
         AnimationLike
         | RelativeAnimationLike
         | tuple[AnimationLike | RelativeAnimationLike, ...]
     )
     metadata: dict[str, Any] = field(default_factory=dict)
-
-    def add_metadata(self, **kwargs: Any) -> Self:
-        if (debug := config().debug) and debug.add_metadata:
-            metadata = self.metadata | kwargs
-            return replace(self, metadata=metadata)
-        return self
 
     @override
     @cached_property
@@ -50,7 +44,7 @@ class DrawingGroup(AnimationLike):
         return relative_animation_likes(self.resource)
 
     @override
-    def alpha(self, alpha: Alpha) -> Drawing | DrawingGroup:
+    def alpha(self, alpha: Alpha) -> Self:
         resources = tuple(res.alpha(alpha) for res in self.resources)
         return replace(self, resource=resources)
 

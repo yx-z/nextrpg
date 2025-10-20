@@ -4,12 +4,13 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Self, override
 
 from pygame import SRCALPHA, Surface
-from pygame.image import load
+from pygame.image import load, save
 from pygame.transform import flip, gaussian_blur, smoothscale
 
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.log import Log
+from nextrpg.core.metadata import HasMetadata
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import TRANSPARENT, Alpha, Color
 from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
@@ -37,18 +38,12 @@ log = Log()
     ),
 )
 @dataclass(frozen=True)
-class Drawing(AnimationLike):
+class Drawing(AnimationLike, HasMetadata):
     resource: Path | Surface
     color_key: Color | Coordinate | None = None
     convert_alpha: bool | None = None
     allow_background_in_debug: bool = True
     metadata: dict[str, Any] = field(default_factory=dict)
-
-    def add_metadata(self, **kwargs: Any) -> Self:
-        if (debug := config().debug) and debug.add_metadata:
-            metadata = self.metadata | kwargs
-            return replace(self, metadata=metadata)
-        return self
 
     @override
     @cached_property
@@ -182,6 +177,9 @@ class Drawing(AnimationLike):
             self.allow_background_in_debug,
         )
         return rect.drawing.shift(-padding.top_left_shift)
+
+    def to_file(self, file: Path) -> None:
+        save(self.surface, file)
 
     @cached_property
     def _debug_surface(self) -> Surface | None:

@@ -34,9 +34,7 @@ class DrawingGroupOnScreen(AnimationOnScreenLike):
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         res: list[DrawingOnScreen] = []
         for relative in self.drawing_group.resources:
-            top_left = relative.top_left(self.origin)
-            res += relative.drawing_on_screens(top_left)
-
+            res += relative.drawing_on_screens(self.origin)
             if self._link_color and relative.shift != ZERO_SIZE:
                 declared_coord = self.origin + relative.shift
                 points = (self.origin, declared_coord)

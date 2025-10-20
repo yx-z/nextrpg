@@ -1,5 +1,6 @@
 from dataclasses import dataclass, replace
 from functools import cached_property
+from pathlib import Path
 from typing import Self, override
 
 from pygame import Surface
@@ -39,6 +40,9 @@ class DrawingOnScreen(AnimationOnScreenLike):
     def alpha(self, alpha: Alpha) -> Self:
         drawing = self.drawing.alpha(alpha)
         return replace(self, drawing=drawing)
+
+    def to_file(self, file: Path) -> None:
+        self.drawing.to_file(file)
 
     def __add__(
         self, other: Coordinate | Size | Width | Height | DirectionalOffset
