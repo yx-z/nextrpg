@@ -13,7 +13,7 @@ from nextrpg.drawing.drawing_group import DrawingGroup
 @dataclass(frozen=True)
 class Fade(TimedAnimationGroup):
     duration: Millisecond = field(
-        default_factory=lambda: config().timing.fade_duration
+        default_factory=lambda: config().timing.animation_duration
     )
 
     @override

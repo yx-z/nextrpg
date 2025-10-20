@@ -23,5 +23,5 @@ class CutsceneConfig:
         from nextrpg.config.config import config
 
         return (
-            self.duration_override or config().timing.transition_total_duration
+            self.duration_override or config().timing.transition_scene_duration
         )

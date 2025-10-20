@@ -6,9 +6,10 @@ from nextrpg import (
     Direction,
     DirectionalOffset,
     DrawingOnScreen,
-    FadeIn,
+    FadeOut,
     MapScene,
     MenuScene,
+    MoveFrom,
     MoveTo,
     ScrollDirection,
     TimedAnimationOnScreens,
@@ -40,12 +41,21 @@ def widget_group() -> WidgetGroup:
         children=widgets,
         scroll_direction=ScrollDirection.HORIZONTAL,
         enter_animation=enter_animation,
+        exit_animation=exit_animation,
     )
+
+
+offset = DirectionalOffset(Direction.DOWN, 50)
 
 
 def enter_animation(
     drawing_on_screens: tuple[DrawingOnScreen, ...],
 ) -> TimedAnimationOnScreens:
-    fade_in = animate(drawing_on_screens, FadeIn)
-    offset = DirectionalOffset(Direction.DOWN, 50)
-    return fade_in.compose(MoveTo, offset=offset)
+    return animate(drawing_on_screens, MoveTo, offset=offset)
+
+
+def exit_animation(
+    drawing_on_screens: tuple[DrawingOnScreen, ...],
+) -> TimedAnimationOnScreens:
+    fade_out = animate(drawing_on_screens, FadeOut)
+    return fade_out.compose(MoveFrom, offset=-offset)

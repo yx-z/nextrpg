@@ -21,4 +21,4 @@ class MenuConfig:
 
         if self.fade_duration_override is not None:
             return self.fade_duration_override
-        return config().timing.fade_duration
+        return config().timing.animation_duration

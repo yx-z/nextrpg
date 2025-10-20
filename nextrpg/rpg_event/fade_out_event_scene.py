@@ -48,7 +48,7 @@ class FadeOutEventScene(RpgEventScene):
     sentinel: BackgroundEventSentinel
     wait: bool = True
     duration: Millisecond = field(
-        default_factory=lambda: config().timing.fade_duration
+        default_factory=lambda: config().timing.animation_duration
     )
     _: KW_ONLY = private_init_below()
     _fade: TimedAnimationOnScreens = default(lambda self: self._init_fade)

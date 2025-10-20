@@ -28,7 +28,7 @@ class TransitionScene(Scene):
         default_factory=lambda: screen_area().fill(config().window.background)
     )
     duration: Millisecond = field(
-        default_factory=lambda: config().timing.transition_total_duration
+        default_factory=lambda: config().timing.transition_scene_duration
     )
     _: KW_ONLY = private_init_below()
     _from_scene_member: Callable[[], Scene] | Scene = last_scene

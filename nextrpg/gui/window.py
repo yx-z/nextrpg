@@ -128,7 +128,7 @@ class Window:
         return self.tick()
 
     def _set_screen(self, cfg: WindowConfig) -> Surface:
-        return set_mode(cfg.size, cfg.flag, SRCALPHA)
+        return set_mode(cfg.size, cfg.flag)
 
     @cached_property
     def _scaling(self) -> float:

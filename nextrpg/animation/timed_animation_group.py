@@ -1,8 +1,9 @@
-from dataclasses import KW_ONLY, replace
+from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import Any, Self, TypeVar, override
 
 from nextrpg.animation.animation_group import AnimationGroup
+from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -16,7 +17,9 @@ _T = TypeVar("_T", bound="TimedAnimationGroup")
 
 @dataclass_with_default(frozen=True)
 class TimedAnimationGroup(AnimationGroup):
-    duration: Millisecond
+    duration: Millisecond = field(
+        default_factory=lambda: config().timing.animation_duration
+    )
     _: KW_ONLY = private_init_below()
     _timer: Timer = default(lambda self: Timer(self.duration))
 
