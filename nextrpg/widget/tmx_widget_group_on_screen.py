@@ -16,7 +16,7 @@ from nextrpg.drawing.animation_on_screen_like import (
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.scene.widget.widget_group import WidgetGroupOnScreen
+from nextrpg.widget.widget_group import WidgetGroupOnScreen
 
 
 @dataclass_with_default(frozen=True, kw_only=True)

@@ -1,4 +1,3 @@
-import gc
 from collections.abc import Callable
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
@@ -39,23 +38,9 @@ class GameLoop:
     _window: Window = field(default_factory=Window)
     _scene: Scene = default(lambda self: self.entry_scene())
     _config: GameLoopConfig = field(default_factory=lambda: config().game_loop)
-    __: None = default(
-        lambda self: (
-            gc.disable()
-            if self._config.garbage_collect_time_threshold
-            else None
-        )
-    )
 
     @cached_property
     def tick(self) -> GameLoop:
-        if (
-            self._config.garbage_collect_time_threshold
-            and self._clock.get_time()
-            < self._config.garbage_collect_time_threshold
-        ):
-            gc.collect()
-
         fps_info = f"FPS: {self._clock.get_fps():.0f}"
         log.debug(t"{type_name(self._scene)} {fps_info}", duration=None)
 
@@ -68,7 +53,6 @@ class GameLoop:
 
         global _last_scene
         _last_scene = self._scene
-
         ticked_scene = self._scene.tick(time_delta)
 
         loop = replace(self, _scene=ticked_scene, _window=window)

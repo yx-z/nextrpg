@@ -12,11 +12,11 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.scene.widget.sizable_widget import (
+from nextrpg.widget.sizable_widget import (
     SizableWidget,
     SizableWidgetOnScreen,
 )
-from nextrpg.scene.widget.widget import Widget, WidgetOnScreen
+from nextrpg.widget.widget import Widget, WidgetOnScreen
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
@@ -63,4 +63,5 @@ class Panel(Widget[PanelOnScreen]):
     name: str
     children: tuple[SizableWidget, ...]
     config: PanelConfig = field(default_factory=lambda: config().widget.panel)
+    _: KW_ONLY = private_init_below()
     widget_on_screen_type: ClassVar[type] = PanelOnScreen

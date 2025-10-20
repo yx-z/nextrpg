@@ -1,12 +1,13 @@
-from dataclasses import dataclass
+from dataclasses import KW_ONLY, dataclass
 from functools import cached_property
 from typing import ClassVar, override
 
+from nextrpg.core.dataclass_with_default import private_init_below
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
 from nextrpg.geometry.dimension import Size
-from nextrpg.scene.widget.sizable_widget import (
+from nextrpg.widget.sizable_widget import (
     SizableWidget,
     SizableWidgetOnScreen,
 )
@@ -25,6 +26,7 @@ class LabelOnScreen(SizableWidgetOnScreen):
 @dataclass(frozen=True, kw_only=True)
 class Label(SizableWidget[LabelOnScreen]):
     message: str | Text | TextGroup
+    _: KW_ONLY = private_init_below()
     widget_on_screen_type: ClassVar[type] = LabelOnScreen
 
     @override

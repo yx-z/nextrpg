@@ -23,7 +23,7 @@ from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.scene import Scene
 
 if TYPE_CHECKING:
-    from nextrpg.scene.rpg_event.rpg_event_scene import EventGenerator
+    from nextrpg.rpg_event.rpg_event_scene import EventGenerator
 
 log = Log()
 

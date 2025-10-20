@@ -18,7 +18,7 @@ from nextrpg.event.event_transformer import transform
 
 if TYPE_CHECKING:
     from nextrpg.character.npc_on_screen import NpcOnScreen
-    from nextrpg.scene.rpg_event.rpg_event_scene import (
+    from nextrpg.rpg_event.rpg_event_scene import (
         EventfulScene,
         EventGenerator,
     )

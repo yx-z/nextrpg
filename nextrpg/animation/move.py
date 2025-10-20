@@ -33,11 +33,11 @@ class MoveFrom(Move):
     @override
     @cached_property
     def _percentage(self) -> float:
-        return self._timer.completed_percentage
+        return min(self._timer.completed_percentage, 1)
 
 
 class MoveTo(Move):
     @override
     @cached_property
     def _percentage(self) -> float:
-        return -self._timer.remaining_percentage
+        return min(-self._timer.remaining_percentage, 0)

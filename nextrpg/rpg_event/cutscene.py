@@ -7,9 +7,9 @@ from nextrpg.config.config import config
 from nextrpg.config.rpg_event.cutscene_config import CutsceneConfig
 from nextrpg.geometry.coordinate import ORIGIN
 from nextrpg.gui.screen_area import screen_area, screen_size
-from nextrpg.scene.rpg_event.fade_in_event_scene import fade_in
-from nextrpg.scene.rpg_event.fade_out_event_scene import fade_out
-from nextrpg.scene.rpg_event.rpg_event_scene import EventGenerator
+from nextrpg.rpg_event.fade_in_event_scene import fade_in
+from nextrpg.rpg_event.fade_out_event_scene import fade_out
+from nextrpg.rpg_event.rpg_event_scene import EventGenerator
 
 
 @overload

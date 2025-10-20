@@ -45,6 +45,5 @@ class FadeOut(Fade):
     @override
     @cached_property
     def _percentage(self) -> float:
-        return self._timer.remaining_percentage * (
-            1 - self.final_alpha_percentage
-        )
+        final_alpha_remaining = 1 - self.final_alpha_percentage
+        return self._timer.remaining_percentage * final_alpha_remaining

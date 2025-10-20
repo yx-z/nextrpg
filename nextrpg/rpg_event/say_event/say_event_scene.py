@@ -16,15 +16,15 @@ from nextrpg.drawing.text_group import TextGroup
 from nextrpg.event.io_event import IoEvent
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
-from nextrpg.scene.rpg_event.rpg_event_scene import (
+from nextrpg.rpg_event.rpg_event_scene import (
     RpgEventScene,
     register_rpg_event_scene,
 )
-from nextrpg.scene.rpg_event.say_event.say_event_add_on import (
+from nextrpg.rpg_event.say_event.say_event_add_on import (
     SayEventAddOn,
     SayEventCharacterAddOn,
 )
-from nextrpg.scene.rpg_event.say_event.say_event_state import (
+from nextrpg.rpg_event.say_event.say_event_state import (
     SayEventFadeInState,
 )
 from nextrpg.scene.scene import Scene

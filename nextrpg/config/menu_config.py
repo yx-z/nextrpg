@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from nextrpg.core.time import Millisecond
 
 if TYPE_CHECKING:
-    from nextrpg.scene.map.map_scene import MapScene
+    from nextrpg.map.map_scene import MapScene
     from nextrpg.scene.scene import Scene
 
 

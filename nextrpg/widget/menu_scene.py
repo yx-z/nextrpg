@@ -1,6 +1,5 @@
 from collections.abc import Callable
 from dataclasses import KW_ONLY, field
-from functools import cached_property
 from typing import TYPE_CHECKING, override
 
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
@@ -16,13 +15,13 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.drawing.animation_on_screen_like import animate
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
-from nextrpg.scene.widget.tmx_widget_group_on_screen import (
+from nextrpg.widget.tmx_widget_group_on_screen import (
     TmxWidgetGroupOnScreen,
 )
-from nextrpg.scene.widget.widget_group import WidgetGroupOnScreen
+from nextrpg.widget.widget_group import WidgetGroupOnScreen
 
 if TYPE_CHECKING:
-    from nextrpg.scene.map.map_scene import MapScene
+    from nextrpg.map.map_scene import MapScene
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
@@ -61,17 +60,16 @@ class MenuScene(TmxWidgetGroupOnScreen):
         ),
     ) -> AnimationOnScreens:
         if create_widget_animation:
+            widget_drawing_on_screens = (
+                WidgetGroupOnScreen._drawing_on_screens_after_parent.__get__(
+                    self, WidgetGroupOnScreen
+                )
+            )
             widget_animation = create_widget_animation(
-                self._widget_drawing_on_screens
+                widget_drawing_on_screens
             )
             return background_animation.concur(widget_animation)
         return background_animation
-
-    @cached_property
-    def _widget_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        return WidgetGroupOnScreen._drawing_on_screens_after_parent.__get__(
-            self, WidgetGroupOnScreen
-        )
 
     @property
     def _init_blurred_background(self) -> tuple[DrawingOnScreen, ...]:

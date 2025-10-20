@@ -12,7 +12,7 @@ from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 if TYPE_CHECKING:
-    from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
+    from nextrpg.rpg_event.eventful_scene import EventfulScene
 
 
 @dataclass(frozen=True)

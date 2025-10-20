@@ -23,7 +23,7 @@ from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.text_on_screen import TextOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, is_key_press
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.scene.rpg_event.rpg_event_scene import RpgEventScene
+from nextrpg.rpg_event.rpg_event_scene import RpgEventScene
 from nextrpg.scene.scene import Scene
 
 

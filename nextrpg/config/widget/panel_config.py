@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from nextrpg.drawing.color import Color
 from nextrpg.geometry.dimension import Pixel
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.scene.widget.scroll_direction import ScrollDirection
+from nextrpg.widget.scroll_direction import ScrollDirection
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen

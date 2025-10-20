@@ -6,7 +6,7 @@ from nextrpg.scene.scene import Scene
 
 class EventAsAttr:
     def __getattr__(self, attr: str) -> Callable[..., Scene]:
-        from nextrpg.scene.rpg_event.rpg_event_scene import (
+        from nextrpg.rpg_event.rpg_event_scene import (
             registered_rpg_event_scenes,
         )
 

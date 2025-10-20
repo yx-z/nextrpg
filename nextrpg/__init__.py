@@ -1,8 +1,6 @@
 __version__ = "0.1.18"
 
-from nextrpg.animation.abstract_animation import (
-    AbstractAnimation,
-)
+from nextrpg.animation.abstract_animation import AbstractAnimation
 from nextrpg.animation.abstract_animation_on_screen import (
     AbstractAnimationOnScreen,
 )
@@ -191,35 +189,34 @@ from nextrpg.gui.screen_area import (
     top_screen_area,
 )
 from nextrpg.gui.window import Window
-from nextrpg.scene.map.map_loader import MapLoader
-from nextrpg.scene.map.map_move import MapMove
-from nextrpg.scene.map.map_scene import MapScene
-from nextrpg.scene.map.map_shift import center_player
-from nextrpg.scene.rpg_event.cutscene import cutscene
-from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
-from nextrpg.scene.rpg_event.fade_in_event_scene import (
+from nextrpg.map.map_loader import MapLoader
+from nextrpg.map.map_move import MapMove
+from nextrpg.map.map_scene import MapScene, center_player
+from nextrpg.rpg_event.cutscene import cutscene
+from nextrpg.rpg_event.eventful_scene import EventfulScene
+from nextrpg.rpg_event.fade_in_event_scene import (
     BackgroundFadeInEvent,
     FadeInEventScene,
     fade_in,
 )
-from nextrpg.scene.rpg_event.fade_out_event_scene import (
+from nextrpg.rpg_event.fade_out_event_scene import (
     BackgroundFadeOutEvent,
     FadeOutEventScene,
     fade_out,
 )
-from nextrpg.scene.rpg_event.rpg_event_scene import (
+from nextrpg.rpg_event.rpg_event_scene import (
     EventCallable,
     EventGenerator,
     RpgEventScene,
     register_rpg_event_scene,
     registered_rpg_event_scenes,
 )
-from nextrpg.scene.rpg_event.say_event.say_event_add_on import (
+from nextrpg.rpg_event.say_event.say_event_add_on import (
     SayEventAddOn,
     SayEventCharacterAddOn,
 )
-from nextrpg.scene.rpg_event.say_event.say_event_scene import SayEventScene, say
-from nextrpg.scene.rpg_event.say_event.say_event_state import (
+from nextrpg.rpg_event.say_event.say_event_scene import SayEventScene, say
+from nextrpg.rpg_event.say_event.say_event_state import (
     SayEventFadeInState,
     SayEventFadeOutState,
     SayEventState,
@@ -227,17 +224,12 @@ from nextrpg.scene.rpg_event.say_event.say_event_state import (
 )
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
-from nextrpg.scene.widget.button import Button, ButtonOnScreen
-from nextrpg.scene.widget.label import Label, LabelOnScreen
-from nextrpg.scene.widget.menu_scene import MenuScene
-from nextrpg.scene.widget.panel import Panel
-from nextrpg.scene.widget.scroll_direction import ScrollDirection
-from nextrpg.scene.widget.sizable_widget import SizableWidget
-from nextrpg.scene.widget.tmx_widget_group_on_screen import (
-    TmxWidgetGroupOnScreen,
-)
-from nextrpg.scene.widget.widget import Widget, WidgetOnScreen
-from nextrpg.scene.widget.widget_group import (
-    WidgetGroup,
-    WidgetGroupOnScreen,
-)
+from nextrpg.widget.button import Button, ButtonOnScreen
+from nextrpg.widget.label import Label, LabelOnScreen
+from nextrpg.widget.menu_scene import MenuScene
+from nextrpg.widget.panel import Panel
+from nextrpg.widget.scroll_direction import ScrollDirection
+from nextrpg.widget.sizable_widget import SizableWidget, SizableWidgetOnScreen
+from nextrpg.widget.tmx_widget_group_on_screen import TmxWidgetGroupOnScreen
+from nextrpg.widget.widget import Widget, WidgetOnScreen
+from nextrpg.widget.widget_group import WidgetGroup, WidgetGroupOnScreen

@@ -13,8 +13,8 @@ from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.scene.scene import Scene
-from nextrpg.scene.widget.scroll_direction import ScrollDirection
-from nextrpg.scene.widget.widget import Widget, WidgetOnScreen
+from nextrpg.widget.scroll_direction import ScrollDirection
+from nextrpg.widget.widget import Widget, WidgetOnScreen
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
@@ -117,6 +117,7 @@ class WidgetGroup(Widget[WidgetGroupOnScreen]):
     children: tuple[Widget, ...]
     scroll_direction: ScrollDirection = ScrollDirection.VERTICAL
     loop: bool = True
+    _: KW_ONLY = private_init_below()
     widget_on_screen_type: ClassVar[type] = WidgetGroupOnScreen
 
 

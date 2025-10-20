@@ -31,10 +31,10 @@ from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.scene.map.map_loader import MapLoader
-from nextrpg.scene.map.map_move import MapMove
-from nextrpg.scene.map.map_shift import center_player
-from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
+from nextrpg.map.map_loader import MapLoader
+from nextrpg.map.map_move import MapMove
+from nextrpg.map.map_shift import center_player
+from nextrpg.rpg_event.eventful_scene import EventfulScene
 from nextrpg.scene.scene import Scene
 
 log = Log()

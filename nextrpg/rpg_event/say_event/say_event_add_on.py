@@ -27,7 +27,7 @@ from nextrpg.gui.screen_area import (
     screen_area,
     top_screen_area,
 )
-from nextrpg.scene.rpg_event.eventful_scene import EventfulScene
+from nextrpg.rpg_event.eventful_scene import EventfulScene
 
 
 @dataclass(frozen=True)

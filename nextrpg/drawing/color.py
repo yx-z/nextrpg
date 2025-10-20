@@ -32,4 +32,5 @@ TRANSPARENT = Color(0, 0, 0, 0)
 
 
 def alpha_from_percentage(percentage: float) -> Alpha:
-    return int(255 * percentage)
+    clamped = max(0.0, min(1.0, percentage))
+    return int(255 * clamped)

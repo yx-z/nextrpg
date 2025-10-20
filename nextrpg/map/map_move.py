@@ -11,7 +11,7 @@ from nextrpg.core.time import Millisecond, get_timepoint
 from nextrpg.scene.transition_scene import TransitionScene
 
 if TYPE_CHECKING:
-    from nextrpg.scene.map.map_scene import MapScene
+    from nextrpg.map.map_scene import MapScene
 
 
 @dataclass(frozen=True)
