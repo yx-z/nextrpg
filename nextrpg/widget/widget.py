@@ -84,12 +84,6 @@ class WidgetOnScreen(Scene):
 
         # Entering.
         if self._enter_animation:
-            print(
-                [
-                    d.drawing.metadata
-                    for d in self._enter_animation.drawing_on_screens
-                ]
-            )
             return parent + self._enter_animation.drawing_on_screens
 
         # In widget.
