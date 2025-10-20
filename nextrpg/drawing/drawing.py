@@ -160,13 +160,15 @@ class Drawing(AnimationLike):
         self,
         color: Color,
         padding: Padding = Padding(),
-        border_radius: Pixel | None = None,
+        border_radius: Pixel = -1,
+        width: Pixel = 0,
     ) -> RelativeAnimationLike:
         from nextrpg.drawing.rectangle_drawing import RectangleDrawing
 
         rect = RectangleDrawing(
             self.size + padding,
             color,
+            width,
             border_radius,
             self.allow_background_in_debug,
         )

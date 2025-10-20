@@ -48,13 +48,14 @@ class RectangleAreaOnScreen(AreaOnScreen):
     def fill(
         self,
         color: Color,
+        width: Pixel = 0,
+        border_radius: Pixel = -1,
         allow_background_in_debug: bool = True,
-        border_radius: Pixel | None = None,
     ) -> DrawingOnScreen:
         from nextrpg.drawing.rectangle_drawing import RectangleDrawing
 
         rect = RectangleDrawing(
-            self.size, color, border_radius, allow_background_in_debug
+            self.size, color, width, border_radius, allow_background_in_debug
         )
         return rect.drawing.drawing_on_screen(self.top_left)
 

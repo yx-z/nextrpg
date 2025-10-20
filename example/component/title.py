@@ -5,6 +5,7 @@ from pathlib import Path
 from example.scene.interior_scene import interior_scene
 from nextrpg import (
     GREEN,
+    WHITE,
     Button,
     Color,
     Direction,
@@ -38,16 +39,17 @@ def button(name: str, on_click: Scene | Widget | Callable[[], None]) -> Button:
     green = config().text.colored(GREEN)
 
     padding = padding_for_all_sides(10)
-    background_color = Color(255, 255, 255, 150)
     text = Text(name.capitalize(), green)
-    background = text.drawings[0].background(
-        background_color, padding, border_radius=5
+    border = text.drawings[0].background(
+        WHITE, padding, width=1, border_radius=5
     )
+    white = WHITE.percentage_alpha(0.7)
+    background = text.drawings[0].background(white, padding, border_radius=5)
 
-    fade_in = FadeIn(background)
-    fade_out = FadeOut(background)
-    background_animations = Cycle((fade_out, fade_in))
-    active = DrawingGroup((background_animations, text.drawing))
+    fade_in = FadeIn((border, background))
+    fade_out = FadeOut((border, background))
+    animation = Cycle((fade_out, fade_in))
+    active = DrawingGroup((animation, text.drawing))
     return Button(
         name=name,
         active=active,
