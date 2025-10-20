@@ -4,7 +4,7 @@ from functools import cached_property
 from typing import Self
 
 import pygame
-from pygame import Clock
+from pygame.time import Clock
 
 from nextrpg.config.config import config
 from nextrpg.config.game_loop_config import GameLoopConfig

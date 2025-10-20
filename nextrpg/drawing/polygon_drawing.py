@@ -2,8 +2,9 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from pygame import SRCALPHA, Surface
+from pygame.constants import SRCALPHA
 from pygame.draw import polygon
+from pygame.surface import Surface
 
 from nextrpg.drawing.color import Color
 from nextrpg.drawing.drawing import Drawing

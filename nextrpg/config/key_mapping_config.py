@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from pygame.locals import (
+from pygame.constants import (
     K_DOWN,
     K_ESCAPE,
     K_F1,

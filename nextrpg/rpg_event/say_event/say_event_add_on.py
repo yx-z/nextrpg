@@ -101,7 +101,7 @@ class SayEventAddOn:
             rect = RectangleDrawing(
                 size,
                 self.config.background.color,
-                self.config.background.border_radius,
+                border_radius=self.config.background.border_radius,
             ).drawing
         return rect.shift(shift)
 

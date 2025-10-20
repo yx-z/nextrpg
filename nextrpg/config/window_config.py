@@ -3,7 +3,7 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import TYPE_CHECKING, Any, Self, override
 
-from pygame.locals import DOUBLEBUF, FULLSCREEN, RESIZABLE
+from pygame.constants import DOUBLEBUF, FULLSCREEN, RESIZABLE
 
 from nextrpg.core.save import UpdateFromSave
 from nextrpg.drawing.color import BLACK, Color

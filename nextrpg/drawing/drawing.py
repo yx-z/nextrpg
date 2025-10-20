@@ -3,8 +3,9 @@ from functools import cached_property
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Self, override
 
-from pygame import SRCALPHA, Surface
+from pygame.constants import SRCALPHA
 from pygame.image import load, save
+from pygame.surface import Surface
 from pygame.transform import flip, gaussian_blur, smoothscale
 
 from nextrpg.config.config import config

@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 from functools import cached_property
 
-from pygame import SRCALPHA, Rect, Surface
+from pygame.constants import SRCALPHA
 from pygame.draw import rect
+from pygame.rect import Rect
+from pygame.surface import Surface
 
 from nextrpg.drawing.color import Color
 from nextrpg.drawing.drawing import Drawing

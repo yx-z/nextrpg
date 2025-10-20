@@ -3,7 +3,8 @@ from asyncio import sleep
 from collections.abc import Callable
 from dataclasses import KW_ONLY
 
-from pygame import font, init
+from pygame import font
+from pygame.base import init
 
 from nextrpg.config.config import Config, set_config
 from nextrpg.core.dataclass_with_default import (

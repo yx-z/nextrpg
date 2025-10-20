@@ -2,7 +2,8 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import override
 
-from pygame import SRCALPHA, Surface
+from pygame.constants import SRCALPHA
+from pygame.surface import Surface
 
 from nextrpg.drawing.animation_on_screen_like import (
     AnimationOnScreenLike,

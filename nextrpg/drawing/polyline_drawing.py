@@ -1,7 +1,7 @@
 from typing import override
 
-from pygame import Surface
 from pygame.draw import lines
+from pygame.surface import Surface
 
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
 from nextrpg.geometry.coordinate import Coordinate

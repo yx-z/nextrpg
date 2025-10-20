@@ -3,7 +3,7 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import Self
 
-from pygame import SRCALPHA
+from pygame.constants import SRCALPHA
 from pygame.display import flip, set_caption, set_icon, set_mode
 from pygame.surface import Surface
 

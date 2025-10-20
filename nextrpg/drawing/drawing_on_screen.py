@@ -3,7 +3,7 @@ from functools import cached_property
 from pathlib import Path
 from typing import Self, override
 
-from pygame import Surface
+from pygame.surface import Surface
 
 from nextrpg.drawing.animation_on_screen_like import (
     AnimationOnScreenLike,
