@@ -170,6 +170,7 @@ class Window:
 
 
 def _set_window_config(window_config: WindowConfig) -> None:
+    SaveIo().save(window_config)
     full_config = replace(config(), window=window_config)
     set_config(full_config)
 
