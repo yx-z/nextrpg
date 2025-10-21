@@ -41,11 +41,15 @@ def dataclass_with_default[T](
     if cls is None:
         return lambda c: dataclass_with_default(c, **kwargs)
 
+    orig_post_init = getattr(cls, "__post_init__", None)
+
     def post_init(self, *_: Any, **__: Any) -> None:
         for f in fields(self):
             if isinstance(attr := getattr(self, f.name, None), default):
                 value = attr(self)
                 object.__setattr__(self, f.name, value)
+        if orig_post_init:
+            orig_post_init(self)
 
     def getattribute(self, name: str) -> Any:
         if isinstance(value := object.__getattribute__(self, name), default):
@@ -59,9 +63,9 @@ def dataclass_with_default[T](
     return dataclass(cls, **kwargs)
 
 
-def type_name[T](obj: T | type) -> str:
+def type_name(obj: Any | type) -> str:
     if isinstance(obj, type):
         cls = obj
     else:
         cls = type(obj)
-    return str(cls)[2:-2].split(".")[-1]
+    return cls.__name__
