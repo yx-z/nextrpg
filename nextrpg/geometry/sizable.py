@@ -108,7 +108,7 @@ class Sizable(Protocol):
             left + self.width.value / 2, top + self.height.value / 2
         )
 
-    def get_coordinate(self, anchor: Anchor) -> Coordinate:
+    def coordinate_from(self, anchor: Anchor) -> Coordinate:
         match anchor:
             case Anchor.TOP_LEFT:
                 return self.top_left

@@ -76,12 +76,18 @@ class AnimationOnScreenLike(Sizable):
 
     @overload
     def animate(
-        self, animation_type: type[_TimedAnimationGroup], **kwargs: Any
+        self,
+        animation_type: type[_TimedAnimationGroup],
+        anchor: Anchor = Anchor.TOP_LEFT,
+        **kwargs: Any,
     ) -> TimedAnimationOnScreen: ...
 
     @overload
     def animate(
-        self, animation_type: type[_AnimationGroup], **kwargs: Any
+        self,
+        animation_type: type[_AnimationGroup],
+        anchor: Anchor = Anchor.TOP_LEFT,
+        **kwargs: Any,
     ) -> AnimationOnScreen: ...
 
     def animate(
@@ -96,10 +102,11 @@ class AnimationOnScreenLike(Sizable):
             TimedAnimationOnScreen,
         )
 
-        origin = self._drawing_on_screens.get_coordinate(anchor)
+        origin = self._drawing_on_screens.coordinate_from(anchor)
         resource = tuple(
             drawing_on_screen.drawing.shift(
-                (drawing_on_screen.get_coordinate(anchor) - origin).size, anchor
+                (drawing_on_screen.coordinate_from(anchor) - origin).size,
+                anchor,
             )
             for drawing_on_screen in self.drawing_on_screens
         )
@@ -133,6 +140,7 @@ def tick_optional(
 def animate(
     resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...],
     animation: type[_TimedAnimationGroup],
+    anchor: Anchor = Anchor.TOP_LEFT,
     **kwargs: Any,
 ) -> TimedAnimationOnScreens: ...
 
@@ -141,6 +149,7 @@ def animate(
 def animate(
     resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...],
     animation: type[_AnimationGroup],
+    anchor: Anchor = Anchor.TOP_LEFT,
     **kwargs: Any,
 ) -> AnimationOnScreens: ...
 
@@ -148,6 +157,7 @@ def animate(
 def animate(
     resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...],
     animation_type: type[_TimedAnimationGroup],
+    anchor: Anchor = Anchor.TOP_LEFT,
     **kwargs: Any,
 ) -> AnimationOnScreens | TimedAnimationOnScreens:
     from nextrpg.animation.animation_on_screens import AnimationOnScreens
@@ -158,10 +168,10 @@ def animate(
 
     if isinstance(resource, tuple):
         resources = tuple(
-            res.animate(animation_type, **kwargs) for res in resource
+            res.animate(animation_type, anchor, **kwargs) for res in resource
         )
     else:
-        resources = resource.animate(animation_type, **kwargs)
+        resources = resource.animate(animation_type, anchor, **kwargs)
 
     if issubclass(animation_type, TimedAnimationGroup):
         return TimedAnimationOnScreens(resources)
