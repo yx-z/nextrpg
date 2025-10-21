@@ -1,6 +1,7 @@
 from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.anchored_coordinate import (
     BottomCenterCoordinate,
     BottomLeftCoordinate,
@@ -106,3 +107,24 @@ class Sizable(Protocol):
         return CenterCoordinate(
             left + self.width.value / 2, top + self.height.value / 2
         )
+
+    def get_coordinate(self, anchor: Anchor) -> Coordinate:
+        match anchor:
+            case Anchor.TOP_LEFT:
+                return self.top_left
+            case Anchor.TOP_CENTER:
+                return self.top_center
+            case Anchor.TOP_RIGHT:
+                return self.top_right
+            case Anchor.CENTER_LEFT:
+                return self.center_left
+            case Anchor.CENTER:
+                return self.center
+            case Anchor.CENTER_RIGHT:
+                return self.center_right
+            case Anchor.BOTTOM_LEFT:
+                return self.bottom_left
+            case Anchor.BOTTOM_CENTER:
+                return self.bottom_center
+            case Anchor.BOTTOM_RIGHT:
+                return self.bottom_right

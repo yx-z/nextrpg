@@ -12,7 +12,12 @@ from nextrpg.animation.animation_on_screens import (
 from nextrpg.animation.cycle import Cycle
 from nextrpg.animation.cyclic_animation import CyclicAnimation
 from nextrpg.animation.fade import Fade, FadeIn, FadeOut
-from nextrpg.animation.move import Move, MoveFrom, MoveTo
+from nextrpg.animation.move import (
+    Move,
+    MoveFrom,
+    MoveTo,
+)
+from nextrpg.animation.scale import Scale, ScaleFrom, ScaleTo
 from nextrpg.animation.sequence import Sequence
 from nextrpg.animation.timed_animation_group import TimedAnimationGroup
 from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
@@ -90,7 +95,6 @@ from nextrpg.core.save import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry
-from nextrpg.drawing.anchor import Anchor
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.animation_on_screen_like import (
     AnimationOnScreenLike,
@@ -150,6 +154,7 @@ from nextrpg.event.io_event import (
 )
 from nextrpg.game.game import Game
 from nextrpg.game.game_loop import GameLoop, last_scene
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
     ZERO_SIZE,

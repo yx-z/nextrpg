@@ -3,9 +3,9 @@ from functools import cached_property
 from typing import TYPE_CHECKING, Self
 
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.anchor import Anchor
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import Alpha
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import (
     ZERO_SIZE,
@@ -32,6 +32,13 @@ class RelativeAnimationLike:
 
     def __sub__(self, other: Size) -> Self:
         return self + -other
+
+    def __mul__(
+        self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
+    ) -> Self:
+        shift = self.shift * scaling
+        resource = self.resource * scaling
+        return replace(self, resource=resource, shift=shift)
 
     def tick(self, time_delta: Millisecond) -> Self:
         resource = self.resource.tick(time_delta)

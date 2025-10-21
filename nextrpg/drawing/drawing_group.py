@@ -13,7 +13,7 @@ from nextrpg.drawing.relative_animation_like import (
     relative_animation_likes,
 )
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.dimension import HeightScaling, Size, WidthScaling
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 if TYPE_CHECKING:
@@ -47,6 +47,12 @@ class DrawingGroup(AnimationLike, HasMetadata):
     def alpha(self, alpha: Alpha) -> Self:
         resources = tuple(res.alpha(alpha) for res in self.resources)
         return replace(self, resource=resources)
+
+    def __mul__(
+        self, scaling: WidthScaling | HeightScaling | WidthScaling
+    ) -> Self:
+        resource = tuple(res * scaling for res in self.resources)
+        return replace(self, resource=resource)
 
     @override
     @cached_property

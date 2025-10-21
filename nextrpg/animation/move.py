@@ -1,4 +1,4 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from functools import cached_property
 from typing import override
 
@@ -11,7 +11,7 @@ from nextrpg.geometry.direction import DirectionalOffset
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
-class Move(TimedAnimationGroup):
+class Move(TimedAnimationGroup, ABC):
     offset: DirectionalOffset
 
     @override
@@ -19,25 +19,25 @@ class Move(TimedAnimationGroup):
     def drawing(self) -> DrawingGroup:
         drawing = super().drawing
         resource = tuple(
-            relative_drawing + (self._percentage * self.offset).shift
+            relative_drawing + (self.move_percentage * self.offset).shift
             for relative_drawing in drawing.resources
         )
         return DrawingGroup(resource)
 
     @property
     @abstractmethod
-    def _percentage(self) -> float: ...
+    def move_percentage(self) -> float: ...
 
 
 class MoveFrom(Move):
     @override
     @cached_property
-    def _percentage(self) -> float:
+    def move_percentage(self) -> float:
         return min(self._timer.completed_percentage, 1)
 
 
 class MoveTo(Move):
     @override
     @cached_property
-    def _percentage(self) -> float:
+    def move_percentage(self) -> float:
         return min(-self._timer.remaining_percentage, 0)

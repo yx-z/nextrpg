@@ -2,7 +2,8 @@ from functools import cached_property
 from typing import TYPE_CHECKING, Any, Self, TypeVar, overload
 
 from nextrpg.core.time import Millisecond
-from nextrpg.geometry.coordinate import ORIGIN, Coordinate
+from nextrpg.geometry.anchor import Anchor
+from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
@@ -86,6 +87,7 @@ class AnimationOnScreenLike(Sizable):
     def animate(
         self,
         animation_type: type[_AnimationGroup] | type[_TimedAnimationGroup],
+        anchor: Anchor = Anchor.TOP_LEFT,
         **kwargs: Any,
     ) -> AnimationOnScreen | TimedAnimationOnScreen:
         from nextrpg.animation.animation_on_screen import AnimationOnScreen
@@ -94,14 +96,17 @@ class AnimationOnScreenLike(Sizable):
             TimedAnimationOnScreen,
         )
 
+        origin = self._drawing_on_screens.get_coordinate(anchor)
         resource = tuple(
-            drawing_on_screen.drawing.shift(drawing_on_screen.top_left.size)
+            drawing_on_screen.drawing.shift(
+                (drawing_on_screen.get_coordinate(anchor) - origin).size, anchor
+            )
             for drawing_on_screen in self.drawing_on_screens
         )
         animation_group = animation_type(resource, **kwargs)
         if issubclass(animation_type, TimedAnimationGroup):
-            return TimedAnimationOnScreen(ORIGIN, animation_group)
-        return AnimationOnScreen(ORIGIN, animation_group)
+            return TimedAnimationOnScreen(origin, animation_group)
+        return AnimationOnScreen(origin, animation_group)
 
     @cached_property
     def _drawing_on_screens(self) -> DrawingOnScreens:

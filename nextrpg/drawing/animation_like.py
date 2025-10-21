@@ -2,10 +2,15 @@ from functools import cached_property
 from typing import TYPE_CHECKING, Self
 
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.anchor import Anchor
 from nextrpg.drawing.color import Alpha
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.dimension import (
+    HeightScaling,
+    Size,
+    WidthAndHeightScaling,
+    WidthScaling,
+)
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
 
@@ -24,6 +29,11 @@ class AnimationLike(Sizable):
     @cached_property
     def top_left(self) -> Coordinate:
         return ORIGIN
+
+    def __mul__(
+        self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
+    ) -> Drawing | DrawingGroup:
+        return self.drawing * scaling
 
     @cached_property
     def size(self) -> Size:

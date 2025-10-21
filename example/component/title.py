@@ -8,6 +8,7 @@ from nextrpg import (
     WHITE,
     Button,
     Color,
+    Cycle,
     Direction,
     DirectionalOffset,
     DrawingGroup,
@@ -32,7 +33,6 @@ from nextrpg import (
     padding_for_all_sides,
     quit,
 )
-from nextrpg.animation.cycle import Cycle
 
 
 def button(name: str, on_click: Scene | Widget | Callable[[], None]) -> Button:

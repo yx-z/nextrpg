@@ -9,7 +9,6 @@ from nextrpg.config.rpg_event.say_event_config import (
     SayEventConfig,
     SayEventNineSliceBackgroundConfig,
 )
-from nextrpg.drawing.anchor import Anchor
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing import Drawing
@@ -20,6 +19,7 @@ from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
 from nextrpg.drawing.text_on_screen import TextOnScreen
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import WidthAndHeightScaling
 from nextrpg.gui.screen_area import (
