@@ -33,7 +33,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
             return super().tick(time_delta, others)
 
         character = (
-            self.character.tick_move(time_delta)
+            self.character.tick(time_delta)
             if self.moving
             else self.character.tick_idle(time_delta)
         )

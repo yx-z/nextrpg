@@ -13,6 +13,7 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.save import UpdateFromSave, concat_save_key
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
@@ -23,29 +24,31 @@ from nextrpg.geometry.dimension import Size, WidthScaling
 from nextrpg.geometry.direction import Direction
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-from nextrpg.geometry.sizable import Sizable
 
 
 @dataclass_with_default(frozen=True)
-class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
+class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
     spec: CharacterSpec
     coordinate: Coordinate
     _: KW_ONLY = private_init_below()
     character: CharacterDrawing = default(lambda self: self.spec.character)
     _event_started: bool = False
 
+    @override
     @cached_property
     def top_left(self) -> Coordinate:
         return self.coordinate
 
+    @override
     @cached_property
     def size(self) -> Size:
-        return self.drawing_on_screen.size
+        return self.character.size
 
     @cached_property
     def name(self) -> str:
         return self.spec.display_name
 
+    @override
     def tick(
         self, time_delta: Millisecond, others: tuple[CharacterOnScreen, ...]
     ) -> Self:
@@ -53,22 +56,21 @@ class CharacterOnScreen(EventAsAttr, Sizable, UpdateFromSave):
 
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        character_drawing_on_screens = self.character.drawing_on_screens(
+            self.coordinate
+        )
         debug_visuals = tuple(
             d
             for d in (self._collision_visual, self._start_event_visual)
             if d is not None
         )
-        return (self.drawing_on_screen,) + debug_visuals
+        return character_drawing_on_screens + debug_visuals
 
     @cached_property
     def collision_rectangle_area_on_screen(self) -> AreaOnScreen:
         if self._area_on_screen is not None:
             return self._area_on_screen
         return self._collision_rectangle_area_on_screen(self.coordinate)
-
-    @cached_property
-    def drawing_on_screen(self) -> DrawingOnScreen:
-        return self.character.drawing.drawing_on_screen(self.coordinate)
 
     def is_same_name(self, other: CharacterOnScreen) -> bool:
         return self.spec.unique_name == other.spec.unique_name

@@ -92,7 +92,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         return replace(self, direction=direction, _animations=animation)
 
     @override
-    def tick_move(self, time_delta: Millisecond) -> Self:
+    def tick(self, time_delta: Millisecond) -> Self:
         animation = {
             direction: self._tick_animation(time_delta, direction)
             for direction, frames in self._animations.items()
@@ -102,7 +102,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     @override
     def tick_idle(self, time_delta: Millisecond) -> Self:
         if self.animate_on_idle:
-            return self.tick_move(time_delta)
+            return self.tick(time_delta)
         animation = {d: frames.reset for d, frames in self._animations.items()}
         return replace(self, _animations=animation)
 

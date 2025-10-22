@@ -26,5 +26,5 @@ class PolygonCharacterDrawing(CharacterDrawing):
         return self
 
     @override
-    def tick_move(self, time_delta: Millisecond) -> Self:
+    def tick(self, time_delta: Millisecond) -> Self:
         return self
