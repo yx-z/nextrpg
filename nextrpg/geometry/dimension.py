@@ -117,7 +117,7 @@ class Width(Dimension):
         return Width(self.value / arg.value)
 
     @cached_property
-    def zero_height(self) -> Size:
+    def with_zero_height(self) -> Size:
         return self * Height(0)
 
 
@@ -160,7 +160,7 @@ class Height(Dimension):
         return Height(self.value / arg.value)
 
     @cached_property
-    def zero_width(self) -> Size:
+    def with_zero_width(self) -> Size:
         return Width(0) * self
 
 

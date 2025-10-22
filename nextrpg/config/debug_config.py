@@ -5,6 +5,7 @@ from typing import Any
 
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import Color
+from nextrpg.geometry.dimension import Height, Width
 
 
 class LogLevel(IntEnum):
@@ -35,6 +36,8 @@ class DebugConfig:
     player_collide_with_others: bool = True
     log_level: LogLevel = LogLevel.DEBUG
     log_duration: Millisecond = 2000
+    log_width_spacing: Width = Width(3)
+    log_height_spacing: Height = Height(1)
     exclude_loggers: tuple[str, ...] = ()
     add_metadata: bool = True
     console_log_configs: dict[str, Any] = field(

@@ -1,5 +1,5 @@
 from functools import cached_property
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.anchored_coordinate import (
@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
+@runtime_checkable
 class Sizable(Protocol):
     # Subclass shall implement these.
     size: Size

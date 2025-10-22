@@ -123,7 +123,7 @@ class SayEventAddOn:
             return None
         text = Text(self._name, self.config.name_text_config)
         return text.drawing.shift(
-            -self.config.padding.height.zero_width, Anchor.BOTTOM_LEFT
+            -self.config.padding.height.with_zero_width, Anchor.BOTTOM_LEFT
         )
 
     @cached_property

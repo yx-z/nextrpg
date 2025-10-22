@@ -14,20 +14,21 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
-from nextrpg.core.log import ComponentAndMessage, Log, pop_messages
+from nextrpg.core.log import Log, LogEntry, MessageAndDrawing, pop_messages
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_like import AnimationLike
+from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing import scale_surface
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.text import Text
-from nextrpg.drawing.text_on_screen import TextOnScreen
 from nextrpg.event.io_event import (
     IoEvent,
     KeyboardKey,
     KeyPressDown,
     WindowResize,
 )
-from nextrpg.geometry.coordinate import ORIGIN, Coordinate
+from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 
 log = Log()
@@ -109,10 +110,7 @@ class Window:
         self._screen.fill(self.current_config.background)
 
         if msgs := pop_messages(time_delta):
-            drawing_on_screens += tuple(
-                d for text in _log_text(msgs) for d in text.drawing_on_screens
-            )
-
+            drawing_on_screens += _log(msgs)
         base = Surface(self.initial_config.size, SRCALPHA)
         base.blits(d.pygame for d in drawing_on_screens)
         scaled = scale_surface(base, self._scaling)
@@ -175,12 +173,55 @@ def _set_window_config(window_config: WindowConfig) -> None:
     set_config(full_config)
 
 
-def _log_text(
-    component_and_messages: tuple[ComponentAndMessage, ...],
-) -> tuple[TextOnScreen, ...]:
-    components = tuple(m.component for m in component_and_messages)
-    component_text = Text("\n".join(components)).text_on_screen(ORIGIN)
+def _log(entries: tuple[LogEntry, ...]) -> tuple[DrawingOnScreen, ...]:
+    assert (debug := config().debug)
 
-    messages = "\n".join(m.message for m in component_and_messages)
-    message_text = Text(messages).text_on_screen(ORIGIN + component_text.width)
-    return component_text, message_text
+    log_levels = tuple(Text(e.level.name) for e in entries)
+    log_level_width = max(t.width for t in log_levels)
+
+    components = tuple(Text(e.component) for e in entries)
+    component_width = max(t.width for t in components)
+
+    width_spacing = debug.log_width_spacing
+    height_spacing = debug.log_height_spacing
+
+    height = height_spacing
+    res: list[DrawingOnScreen] = []
+    for log_level, component, entry in zip(log_levels, components, entries):
+        if isinstance(content := entry.log, MessageAndDrawing):
+            drawing = content.drawing
+            message = Text(content.message)
+            height_spacing = max(height_spacing, message.height, drawing.height)
+        else:
+            drawing = None
+            message = Text(content)
+            height_spacing = max(height_spacing, message.height)
+        height += max(log_level.height, component.height) + height_spacing
+        log_level_coordinate = (width_spacing * height).coordinate
+        res += log_level.drawing_on_screens(log_level_coordinate)
+
+        component_coordinate = (
+            log_level_coordinate + log_level_width + width_spacing
+        )
+        res += component.drawing_on_screens(component_coordinate)
+
+        message_coordinate = (
+            component_coordinate + component_width + width_spacing
+        )
+        message_drawing_on_screens = message.drawing_on_screens(
+            message_coordinate
+        )
+        res += message_drawing_on_screens
+
+        if isinstance(drawing, AnimationOnScreenLike):
+            drawing_on_screens = drawing.drawing_on_screens
+        elif isinstance(drawing, AnimationLike):
+            drawing_coordinate = (
+                message_coordinate + message.width + width_spacing
+            )
+            drawing_on_screens = drawing.drawing_on_screens(drawing_coordinate)
+        else:
+            drawing_on_screens = []
+        res += drawing_on_screens
+
+    return tuple(res)

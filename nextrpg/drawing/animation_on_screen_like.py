@@ -1,5 +1,13 @@
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, Self, TypeVar, overload
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Protocol,
+    Self,
+    TypeVar,
+    overload,
+    runtime_checkable,
+)
 
 from nextrpg.core.time import Millisecond
 from nextrpg.geometry.anchor import Anchor
@@ -28,7 +36,8 @@ if TYPE_CHECKING:
     )
 
 
-class AnimationOnScreenLike(Sizable):
+@runtime_checkable
+class AnimationOnScreenLike(Sizable, Protocol):
     drawing_on_screens: tuple[DrawingOnScreen, ...]
 
     @cached_property

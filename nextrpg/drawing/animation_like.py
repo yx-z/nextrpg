@@ -1,5 +1,5 @@
 from functools import cached_property
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Protocol, Self, runtime_checkable
 
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import Alpha
@@ -22,7 +22,8 @@ if TYPE_CHECKING:
     from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
 
 
-class AnimationLike(Sizable):
+@runtime_checkable
+class AnimationLike(Sizable, Protocol):
     @property
     def drawing(self) -> Drawing | DrawingGroup: ...
 
