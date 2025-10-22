@@ -14,7 +14,7 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
-from nextrpg.core.log import Log, LogEntry, MessageAndDrawing, pop_messages
+from nextrpg.core.log import Log, LogEntry, MessageKeyAndDrawing, pop_messages
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
@@ -29,7 +29,7 @@ from nextrpg.event.io_event import (
     WindowResize,
 )
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.dimension import Height, Size
 
 log = Log()
 
@@ -174,40 +174,26 @@ def _set_window_config(window_config: WindowConfig) -> None:
 
 
 def _log(entries: tuple[LogEntry, ...]) -> tuple[DrawingOnScreen, ...]:
-    assert (debug := config().debug)
-
-    log_levels = tuple(Text(e.level.name) for e in entries)
-    log_level_width = max(t.width for t in log_levels)
-
     components = tuple(Text(e.component) for e in entries)
     component_width = max(t.width for t in components)
 
-    width_spacing = debug.log_width_spacing
-    height_spacing = debug.log_height_spacing
-
-    height = height_spacing
+    height = Height(0)
     res: list[DrawingOnScreen] = []
-    for log_level, component, entry in zip(log_levels, components, entries):
-        if isinstance(content := entry.log, MessageAndDrawing):
+    for component, entry in zip(components, entries):
+        if isinstance(content := entry.log, MessageKeyAndDrawing):
             drawing = content.drawing
-            message = Text(content.message)
-            height_spacing = max(height_spacing, message.height, drawing.height)
+            message = Text(f"{content.message_key}=")
+            line_height = max(message.height, drawing.height)
         else:
             drawing = None
             message = Text(content)
-            height_spacing = max(height_spacing, message.height)
-        height += max(log_level.height, component.height) + height_spacing
-        log_level_coordinate = (width_spacing * height).coordinate
-        res += log_level.drawing_on_screens(log_level_coordinate)
+            line_height = message.height
+        height += max(line_height, component.height)
 
-        component_coordinate = (
-            log_level_coordinate + log_level_width + width_spacing
-        )
+        component_coordinate = height.with_zero_width.coordinate
         res += component.drawing_on_screens(component_coordinate)
 
-        message_coordinate = (
-            component_coordinate + component_width + width_spacing
-        )
+        message_coordinate = component_coordinate + component_width
         message_drawing_on_screens = message.drawing_on_screens(
             message_coordinate
         )
@@ -216,9 +202,7 @@ def _log(entries: tuple[LogEntry, ...]) -> tuple[DrawingOnScreen, ...]:
         if isinstance(drawing, AnimationOnScreenLike):
             drawing_on_screens = drawing.drawing_on_screens
         elif isinstance(drawing, AnimationLike):
-            drawing_coordinate = (
-                message_coordinate + message.width + width_spacing
-            )
+            drawing_coordinate = message_coordinate + message.width
             drawing_on_screens = drawing.drawing_on_screens(drawing_coordinate)
         else:
             drawing_on_screens = []

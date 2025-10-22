@@ -7,6 +7,7 @@ from nextrpg import (
     DirectionalOffset,
     DrawingOnScreen,
     FadeOut,
+    Log,
     MapScene,
     MenuScene,
     MoveFrom,
@@ -18,6 +19,8 @@ from nextrpg import (
     WidgetGroup,
     animate,
 )
+
+log = Log()
 
 
 def menu(map: MapScene) -> MenuScene:
@@ -33,6 +36,7 @@ def tmx() -> TmxLoader:
 @cache
 def widget_group() -> WidgetGroup:
     save_button = button("save", lambda: print("Saved!"))
+    log.debug_drawing(save_button=save_button.active)
     title_scene = TransitionScene(title)
     title_button = button("title", title_scene)
 

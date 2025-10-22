@@ -82,7 +82,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
     type_name,
 )
-from nextrpg.core.log import Log, LogEntry, pop_messages
+from nextrpg.core.log import Log, LogEntry, MessageKeyAndDrawing, pop_messages
 from nextrpg.core.metadata import HasMetadata
 from nextrpg.core.save import (
     LoadFromSave,

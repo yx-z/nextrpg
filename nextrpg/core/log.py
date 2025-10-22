@@ -82,8 +82,8 @@ class Log:
 
 
 @dataclass(frozen=True)
-class MessageAndDrawing:
-    message: str
+class MessageKeyAndDrawing:
+    message_key: str
     drawing: AnimationLike | AnimationOnScreenLike
 
 
@@ -91,11 +91,11 @@ class MessageAndDrawing:
 class LogEntry:
     component: str
     level: LogLevel
-    message: Template | MessageAndDrawing
+    message: Template | MessageKeyAndDrawing
 
     @cached_property
-    def log(self) -> str | MessageAndDrawing:
-        if isinstance(self.message, MessageAndDrawing):
+    def log(self) -> str | MessageKeyAndDrawing:
+        if isinstance(self.message, MessageKeyAndDrawing):
             return self.message
         formatted = tuple(_format(m) for m in self.message)
         return "".join(formatted)
@@ -147,7 +147,7 @@ def _pop(time_delta: Millisecond) -> None:
 def _add(
     component: str,
     level: LogLevel,
-    message: Template | str | MessageAndDrawing,
+    message: Template | str | MessageKeyAndDrawing,
     duration: Millisecond | _DurationFromConfig | None,
 ) -> None:
     from nextrpg.config.config import config
@@ -172,8 +172,8 @@ def _add(
         timer_duration = duration
     timer = Timer(timer_duration)
 
-    if isinstance(msg, MessageAndDrawing):
-        msg_key = msg.message
+    if isinstance(msg, MessageKeyAndDrawing):
+        msg_key = msg.message_key
     else:
         msg_key = msg.strings
     if (k := _Key(component, msg_key)) not in _timed_entries:
@@ -193,7 +193,7 @@ def _add_drawings(
     **kwargs: AnimationLike | AnimationOnScreenLike,
 ) -> None:
     for key, drawing in kwargs.items():
-        message_and_drawing = MessageAndDrawing(key, drawing)
+        message_and_drawing = MessageKeyAndDrawing(key, drawing)
         _add(component, level, message_and_drawing, duration)
 
 
