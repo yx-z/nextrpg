@@ -180,7 +180,7 @@ def _log(entries: tuple[LogEntry, ...]) -> tuple[DrawingOnScreen, ...]:
     height = Height(0)
     res: list[DrawingOnScreen] = []
     for component, entry in zip(components, entries):
-        if isinstance(content := entry.log, MessageKeyAndDrawing):
+        if isinstance(content := entry.formatted, MessageKeyAndDrawing):
             drawing = content.drawing
             message = Text(f"{content.message_key}=")
             line_height = max(message.height, drawing.height)

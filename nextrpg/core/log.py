@@ -94,7 +94,7 @@ class LogEntry:
     message: Template | MessageKeyAndDrawing
 
     @cached_property
-    def log(self) -> str | MessageKeyAndDrawing:
+    def formatted(self) -> str | MessageKeyAndDrawing:
         if isinstance(self.message, MessageKeyAndDrawing):
             return self.message
         formatted = tuple(_format(m) for m in self.message)
