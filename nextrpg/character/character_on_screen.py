@@ -68,7 +68,7 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
 
     @cached_property
     def collision_rectangle_area_on_screen(self) -> AreaOnScreen:
-        if self._area_on_screen is not None:
+        if self._area_on_screen:
             return self._area_on_screen
         return self._collision_rectangle_area_on_screen(self.coordinate)
 
