@@ -7,7 +7,6 @@ from nextrpg import (
     GREEN,
     WHITE,
     Button,
-    Color,
     Cycle,
     Direction,
     DirectionalOffset,
@@ -15,10 +14,7 @@ from nextrpg import (
     DrawingOnScreen,
     FadeIn,
     FadeOut,
-    Label,
     MoveTo,
-    Panel,
-    PanelConfig,
     Scene,
     ScrollDirection,
     Text,
@@ -59,7 +55,7 @@ def button(name: str, on_click: Scene | Widget | Callable[[], None]) -> Button:
 def title() -> TmxWidgetGroupOnScreen:
     scene = TransitionScene(interior_scene)
     start = button("start", scene)
-    load = button("load", load_panel())
+    load = button("load", lambda: None)
     options = button("options", quit)
     exit_button = button("exit", quit)
 
@@ -72,19 +68,6 @@ def title() -> TmxWidgetGroupOnScreen:
     tmx_loader = TmxLoader(tmx_path)
     return TmxWidgetGroupOnScreen(
         tmx=tmx_loader, background="background", widget=group
-    )
-
-
-def load_panel() -> Panel:
-    child = Label(message="Loading...")
-    children = (child,)
-    background = Color(0, 0, 0, 128)
-    panel_config = PanelConfig(background=background)
-    return Panel(
-        name="load_panel",
-        children=children,
-        config=panel_config,
-        enter_animation=enter_panel,
     )
 
 

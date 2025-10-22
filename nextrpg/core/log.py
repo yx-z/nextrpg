@@ -7,7 +7,7 @@ from pathlib import Path
 from string.templatelib import Interpolation, Template
 from typing import TYPE_CHECKING
 
-from nextrpg.config.debug_config import LogLevel
+from nextrpg.config.system.debug_config import LogLevel
 from nextrpg.core.time import Millisecond, Timer
 
 if TYPE_CHECKING:

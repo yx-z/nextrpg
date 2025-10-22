@@ -7,21 +7,21 @@ from nextrpg.config.character.player_config import PlayerConfig
 from nextrpg.config.character.rpg_maker_character_drawing_config import (
     RpgMakerCharacterDrawingConfig,
 )
-from nextrpg.config.debug_config import DebugConfig
 from nextrpg.config.drawing.drawing_config import DrawingConfig
 from nextrpg.config.drawing.text_config import TextConfig
 from nextrpg.config.drawing.text_group_config import TextGroupConfig
-from nextrpg.config.game_loop_config import GameLoopConfig
-from nextrpg.config.key_mapping_config import KeyMappingConfig
 from nextrpg.config.map_config import MapConfig
 from nextrpg.config.menu_config import MenuConfig
 from nextrpg.config.rpg_event.cutscene_config import CutsceneConfig
 from nextrpg.config.rpg_event.rpg_event_config import RpgEventConfig
 from nextrpg.config.rpg_event.say_event_config import SayEventConfig
 from nextrpg.config.save_config import SaveConfig
+from nextrpg.config.system.debug_config import DebugConfig
+from nextrpg.config.system.game_loop_config import GameLoopConfig
+from nextrpg.config.system.key_mapping_config import KeyMappingConfig
+from nextrpg.config.system.window_config import WindowConfig
 from nextrpg.config.timing_config import TimingConfig
 from nextrpg.config.widget.widget_config import WidgetConfig
-from nextrpg.config.window_config import WindowConfig
 
 
 @dataclass(frozen=True)

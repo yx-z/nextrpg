@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass, replace
 from functools import cached_property
-from typing import Self, TypeVar, override
+from typing import Self, override
 
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
@@ -28,13 +28,8 @@ class SizableWidgetOnScreen(WidgetOnScreen):
     def drawing(self) -> AnimationLike: ...
 
 
-_SizableWidgetOnScreen = TypeVar(
-    "_SizableWidgetOnScreen", bound=SizableWidgetOnScreen
-)
-
-
 @dataclass(frozen=True)
-class SizableWidget(Widget[_SizableWidgetOnScreen]):
+class SizableWidget(Widget):
     coordinate: Coordinate | None = None
 
     def anchor(self, coordinate: Coordinate) -> Self:

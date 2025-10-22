@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from dataclasses import KW_ONLY, replace
 from functools import cached_property
-from typing import ClassVar, Generic, Self, TypeVar, override
+from typing import ClassVar, Self, override
 
 from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.core.dataclass_with_default import (
@@ -161,11 +161,9 @@ class WidgetOnScreen(Scene):
         return self.parent
 
 
-_WidgetOnScreen = TypeVar("_WidgetOnScreen", bound=WidgetOnScreen)
-
-
 @dataclass_with_default(frozen=True)
-class Widget(ABC, Generic[_WidgetOnScreen]):
+class Widget(ABC):
+    # Must be a subclass of WidgetOnScreen.
     widget_on_screen_type: ClassVar[type]
     enter_animation: (
         Callable[[tuple[DrawingOnScreen, ...]], TimedAnimationOnScreens] | None
@@ -192,9 +190,7 @@ class Widget(ABC, Generic[_WidgetOnScreen]):
         self,
         name_to_on_screens: dict[str, Coordinate | AreaOnScreen],
         parent: Scene | None,
-    ) -> _WidgetOnScreen:
+    ) -> WidgetOnScreen:
         return self.widget_on_screen_type(
-            widget=self,
-            name_to_on_screens=name_to_on_screens,
-            parent=parent,
+            widget=self, name_to_on_screens=name_to_on_screens, parent=parent
         )

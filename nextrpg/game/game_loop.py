@@ -7,7 +7,7 @@ import pygame
 from pygame.time import Clock
 
 from nextrpg.config.config import config
-from nextrpg.config.game_loop_config import GameLoopConfig
+from nextrpg.config.system.game_loop_config import GameLoopConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,

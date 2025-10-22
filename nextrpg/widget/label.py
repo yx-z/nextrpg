@@ -24,7 +24,7 @@ class LabelOnScreen(SizableWidgetOnScreen):
 
 
 @dataclass(frozen=True, kw_only=True)
-class Label(SizableWidget[LabelOnScreen]):
+class Label(SizableWidget):
     message: str | Text | TextGroup
     _: KW_ONLY = private_init_below()
     widget_on_screen_type: ClassVar[type] = LabelOnScreen

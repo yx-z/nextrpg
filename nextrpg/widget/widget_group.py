@@ -22,7 +22,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     widget: WidgetGroup
     _: KW_ONLY = private_init_below()
     _children: tuple[WidgetOnScreen, ...] = default(
-        lambda self: self._init_children
+        lambda self: self._init_children(self.widget.children)
     )
 
     @override
@@ -66,9 +66,10 @@ class WidgetGroupOnScreen(WidgetOnScreen):
                 return child
         return None
 
-    @property
-    def _init_children(self) -> tuple[WidgetOnScreen, ...]:
-        assert (children := self.widget.children), "Require non-empty children."
+    def _init_children(
+        self, children: tuple[Widget, ...]
+    ) -> tuple[WidgetOnScreen, ...]:
+        assert children, "Require non-empty children."
         first_child_selected = self._init_child(children[0]).select
         remaining_deselected = tuple(
             self._init_child(child) for child in children[1:]
@@ -113,7 +114,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
 
 
 @dataclass(frozen=True, kw_only=True)
-class WidgetGroup(Widget[WidgetGroupOnScreen]):
+class WidgetGroup(Widget):
     children: tuple[Widget, ...]
     scroll_direction: ScrollDirection = ScrollDirection.VERTICAL
     loop: bool = True

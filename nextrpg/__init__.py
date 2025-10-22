@@ -57,11 +57,8 @@ from nextrpg.config.config import (
     override_config,
     set_config,
 )
-from nextrpg.config.debug_config import DebugConfig
 from nextrpg.config.drawing.drawing_config import DrawingConfig
 from nextrpg.config.drawing.text_config import TextConfig
-from nextrpg.config.game_loop_config import GameLoopConfig
-from nextrpg.config.key_mapping_config import KeyMappingConfig
 from nextrpg.config.map_config import MapConfig
 from nextrpg.config.menu_config import MenuConfig
 from nextrpg.config.rpg_event.rpg_event_config import RpgEventConfig
@@ -72,9 +69,11 @@ from nextrpg.config.rpg_event.say_event_config import (
     SayEventNineSliceBackgroundConfig,
 )
 from nextrpg.config.save_config import SaveConfig
+from nextrpg.config.system.debug_config import DebugConfig
+from nextrpg.config.system.game_loop_config import GameLoopConfig
+from nextrpg.config.system.key_mapping_config import KeyMappingConfig
+from nextrpg.config.system.window_config import WindowConfig
 from nextrpg.config.timing_config import TimingConfig
-from nextrpg.config.widget.panel_config import PanelConfig
-from nextrpg.config.window_config import WindowConfig
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -233,7 +232,6 @@ from nextrpg.scene.transition_scene import TransitionScene
 from nextrpg.widget.button import Button, ButtonOnScreen
 from nextrpg.widget.label import Label, LabelOnScreen
 from nextrpg.widget.menu_scene import MenuScene
-from nextrpg.widget.panel import Panel
 from nextrpg.widget.scroll_direction import ScrollDirection
 from nextrpg.widget.sizable_widget import SizableWidget, SizableWidgetOnScreen
 from nextrpg.widget.tmx_widget_group_on_screen import TmxWidgetGroupOnScreen

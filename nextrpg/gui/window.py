@@ -8,7 +8,7 @@ from pygame.display import flip, set_caption, set_icon, set_mode
 from pygame.surface import Surface
 
 from nextrpg.config.config import config, set_config
-from nextrpg.config.window_config import WindowConfig
+from nextrpg.config.system.window_config import WindowConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,

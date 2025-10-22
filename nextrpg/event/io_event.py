@@ -7,7 +7,7 @@ from pygame.constants import KEYDOWN, KEYUP, QUIT, VIDEORESIZE
 from pygame.event import Event, post
 
 from nextrpg.config.config import config
-from nextrpg.config.key_mapping_config import KeyCode
+from nextrpg.config.system.key_mapping_config import KeyCode
 from nextrpg.geometry.dimension import Size
 
 
