@@ -20,6 +20,7 @@ from nextrpg.geometry.walk import Walk
 class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
     path: PolylineOnScreen
     _: KW_ONLY = private_init_below()
+    map_collisions: tuple[AreaOnScreen] = ()
     coordinate: Coordinate = default(lambda self: self._walk.coordinate)
     map_collisions: tuple[AreaOnScreen, ...]
     _walk: Walk = default(lambda self: self._init_walk)
