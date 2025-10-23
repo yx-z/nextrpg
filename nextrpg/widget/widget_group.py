@@ -4,12 +4,14 @@ from functools import cached_property
 from itertools import cycle, pairwise
 from typing import ClassVar, Self, override
 
+from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyboardKey, KeyPressDown
 from nextrpg.scene.scene import Scene
@@ -20,10 +22,26 @@ from nextrpg.widget.widget import Widget, WidgetOnScreen
 @dataclass_with_default(frozen=True, kw_only=True)
 class WidgetGroupOnScreen(WidgetOnScreen):
     widget: WidgetGroup
+    background: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...]
     _: KW_ONLY = private_init_below()
     _children: tuple[WidgetOnScreen, ...] = default(
         lambda self: self._init_children(self.widget.children)
     )
+    _background: AnimationOnScreens = default(
+        lambda self: self._init_background
+    )
+
+    @cached_property
+    def children_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return tuple(
+            drawing_on_screen
+            for child in self._children
+            for drawing_on_screen in child._drawing_on_screens_after_parent
+        )
+
+    @property
+    def _init_background(self) -> AnimationOnScreens:
+        return AnimationOnScreens(self.background)
 
     @override
     def _event_after_selected(self, event: IoEvent) -> Scene:
@@ -46,10 +64,9 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     @override
     @cached_property
     def _drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
-        return tuple(
-            drawing_on_screen
-            for child in self._children
-            for drawing_on_screen in child._drawing_on_screens_after_parent
+        return (
+            self._background.drawing_on_screens
+            + self.children_drawing_on_screens
         )
 
     @override
@@ -57,7 +74,9 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         children = tuple(
             child._tick_after_parent(time_delta) for child in self._children
         )
-        return self._with_children(children)
+        ticked = self._with_children(children)
+        background = self._background.tick(time_delta)
+        return replace(ticked, _background=background)
 
     @cached_property
     def _selected(self) -> WidgetOnScreen | None:

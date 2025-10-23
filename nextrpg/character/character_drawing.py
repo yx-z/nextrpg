@@ -6,7 +6,7 @@ from nextrpg.geometry.direction import Direction
 
 
 class CharacterDrawing(AnimationLike):
-    direction: Direction
+    direction: Direction = Direction.UP
 
     def turn(self, direction: Direction) -> Self:
         return self

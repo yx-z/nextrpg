@@ -18,7 +18,6 @@ from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.widget.tmx_widget_group_on_screen import (
     TmxWidgetGroupOnScreen,
 )
-from nextrpg.widget.widget_group import WidgetGroupOnScreen
 
 if TYPE_CHECKING:
     from nextrpg.map.map_scene import MapScene
@@ -60,13 +59,8 @@ class MenuScene(TmxWidgetGroupOnScreen):
         ),
     ) -> AnimationOnScreens:
         if create_widget_animation:
-            widget_drawing_on_screens = (
-                WidgetGroupOnScreen._drawing_on_screens_after_parent.__get__(
-                    self, WidgetGroupOnScreen
-                )
-            )
             widget_animation = create_widget_animation(
-                widget_drawing_on_screens
+                self.children_drawing_on_screens
             )
             return background_animation.concur(widget_animation)
         return background_animation

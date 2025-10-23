@@ -1,6 +1,4 @@
-from dataclasses import replace
-from functools import cached_property
-from typing import Self, override
+from typing import override
 
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.core.dataclass_with_default import (
@@ -8,7 +6,6 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
-from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_coordinate, get_geometry
 from nextrpg.drawing.animation_on_screen_like import (
     AnimationOnScreenLike,
@@ -30,24 +27,8 @@ class TmxWidgetGroupOnScreen(WidgetGroupOnScreen):
         lambda self: self._init_name_to_on_screens
     )
     _is_selected: bool = True
-    _background: AnimationOnScreens = default(
-        lambda self: self._init_background
-    )
 
     @override
-    def _tick_after_parent(self, time_delta: Millisecond) -> Self:
-        ticked = super()._tick_after_parent(time_delta)
-        background = self._background.tick(time_delta)
-        return replace(ticked, _background=background)
-
-    @override
-    @cached_property
-    def _drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
-        return (
-            self._background.drawing_on_screens
-            + super()._drawing_on_screens_after_parent
-        )
-
     @property
     def _init_background(self) -> AnimationOnScreens:
         match self.background:
