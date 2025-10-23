@@ -13,11 +13,15 @@ def private_init_below() -> Any:
 
 
 @dataclass(frozen=True)
-class default[O, R]:
+class _Default[O, R]:
     init: Callable[[O], R]
 
     def __call__(self, obj: O) -> R:
         return self.init(obj)
+
+
+def default(fun: Callable[..., Any]) -> Any:
+    return _Default(fun)
 
 
 _Type = TypeVar("_Type", bound=type)
