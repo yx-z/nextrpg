@@ -22,7 +22,7 @@ from nextrpg.widget.widget import Widget, WidgetOnScreen
 @dataclass_with_default(frozen=True, kw_only=True)
 class WidgetGroupOnScreen(WidgetOnScreen):
     widget: WidgetGroup
-    background: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...]
+    background: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...] = ()
     _: KW_ONLY = private_init_below()
     _children: tuple[WidgetOnScreen, ...] = default(
         lambda self: self._init_children(self.widget.children)

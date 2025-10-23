@@ -21,7 +21,7 @@ class TmxWidgetGroupOnScreen(WidgetGroupOnScreen):
     tmx: TmxLoader
     background: (
         str | AnimationOnScreenLike | tuple[str | AnimationOnScreenLike, ...]
-    )
+    ) = ()
     _ = private_init_below()
     name_to_on_screens: dict[str, Coordinate | AreaOnScreen] = default(
         lambda self: self._init_name_to_on_screens
