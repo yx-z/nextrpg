@@ -4,18 +4,18 @@
   <image source="title.png" width="1280" height="720"/>
  </imagelayer>
  <objectgroup id="4" name="buttons">
-  <object id="1" name="start" x="250" y="580">
+  <object id="1" name="start" x="200" y="580">
    <point/>
   </object>
   <object id="2" name="load" x="500" y="580">
    <point/>
   </object>
-  <object id="3" name="options" x="750" y="580">
+  <object id="3" name="options" x="790" y="580">
    <point/>
   </object>
-  <object id="4" name="exit" x="1000" y="580">
+  <object id="4" name="exit" x="1100" y="580">
    <point/>
   </object>
-  <object id="5" name="load_panel" x="250" y="64" width="750" height="480"/>
+  <object id="5" name="load_panel" x="270" y="64" width="750" height="480"/>
  </objectgroup>
 </map>

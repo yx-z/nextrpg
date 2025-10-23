@@ -2,6 +2,7 @@ from collections.abc import Callable
 from dataclasses import Field, dataclass, field, fields
 from typing import (
     Any,
+    TypeVar,
     dataclass_transform,
     overload,
 )
@@ -19,25 +20,28 @@ class default[O, R]:
         return self.init(obj)
 
 
+_Type = TypeVar("_Type", bound=type)
+
+
 @overload
-def dataclass_with_default[T](
+def dataclass_with_default(
     **kwargs: Any,
-) -> Callable[[type[T]], type[T]]: ...
+) -> Callable[[_Type], _Type]: ...
 
 
 @overload
 @dataclass_transform(
     field_descriptors=(field, Field, private_init_below, default)
 )
-def dataclass_with_default[T](cls: type[T]) -> type[T]: ...
+def dataclass_with_default(cls: _Type) -> _Type: ...
 
 
 @dataclass_transform(
     field_descriptors=(field, Field, private_init_below, default)
 )
-def dataclass_with_default[T](
-    cls: type[T] | None = None, /, **kwargs: Any
-) -> Callable[[type[T]], type[T]] | type[T]:
+def dataclass_with_default(
+    cls: _Type | None = None, /, **kwargs: Any
+) -> Callable[[_Type], _Type] | _Type:
     if cls is None:
         return lambda c: dataclass_with_default(c, **kwargs)
 

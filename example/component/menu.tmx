@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="1280" height="720" tilewidth="1" tileheight="1" infinite="0" nextlayerid="6" nextobjectid="9">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="1280" height="720" tilewidth="1" tileheight="1" infinite="0" nextlayerid="6" nextobjectid="11">
  <objectgroup id="5" name="buttons">
-  <object id="7" name="save" x="300" y="400">
+  <object id="7" name="save" x="200" y="400">
    <point/>
   </object>
-  <object id="8" name="title" x="1000" y="400">
+  <object id="8" name="title" x="1100" y="400">
    <point/>
   </object>
+  <object id="10" name="save_panel" x="270" y="64" width="750" height="480"/>
  </objectgroup>
 </map>
