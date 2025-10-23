@@ -53,14 +53,14 @@ def dataclass_with_default(
 
     def post_init(self, *_: Any, **__: Any) -> None:
         for f in fields(self):
-            if isinstance(attr := getattr(self, f.name, None), default):
+            if isinstance(attr := getattr(self, f.name, None), _Default):
                 value = attr(self)
                 object.__setattr__(self, f.name, value)
         if orig_post_init:
             orig_post_init(self)
 
     def getattribute(self, name: str) -> Any:
-        if isinstance(value := object.__getattribute__(self, name), default):
+        if isinstance(value := object.__getattribute__(self, name), _Default):
             res = value(self)
             object.__setattr__(self, name, res)
             return res
