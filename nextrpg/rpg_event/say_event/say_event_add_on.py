@@ -187,9 +187,8 @@ class SayEventCharacterAddOn(SayEventAddOn):
         background_and_tip = (background_drawing, self._tip.shift(tip_shift))
         background_and_tip_group = DrawingGroup(background_and_tip)
 
-        return background_and_tip_group.shift(
-            super()._background_relative_to_text.shift
-        )
+        background_shift = super()._background_relative_to_text.shift
+        return background_and_tip_group.shift(background_shift)
 
     @cached_property
     def _tip(self) -> Drawing:
