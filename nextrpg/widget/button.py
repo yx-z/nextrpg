@@ -60,10 +60,10 @@ class ButtonOnScreen(SizableWidgetOnScreen):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class Button(SizableWidget):
-    name: str
     on_click: Scene | Widget | Callable[[], None]
     idle: AnimationLike
     active: AnimationLike
+    name: str | None = None
     _: KW_ONLY = private_init_below()
     widget_on_screen_type: ClassVar[type] = ButtonOnScreen
 

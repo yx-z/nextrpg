@@ -39,7 +39,7 @@ def button(name: str, on_click: Scene | Widget | Callable[[], None]) -> Button:
     border = text.drawings[0].background(
         WHITE, padding, width=1, border_radius=5
     )
-    white = WHITE.percentage_alpha(0.7)
+    white = WHITE.with_percentage_alpha(0.7)
     background = text.drawings[0].background(white, padding, border_radius=5)
 
     fade_in = FadeIn((border, background))

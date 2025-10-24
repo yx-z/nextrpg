@@ -10,9 +10,16 @@ class Color(NamedTuple):
     blue: int
     alpha: Alpha = 255
 
-    def percentage_alpha(self, percentage: float) -> Color:
+    def with_alpha(self, alpha: Alpha) -> Color:
+        return Color(self.red, self.green, self.blue, alpha)
+
+    def with_percentage_alpha(self, percentage: float) -> Color:
         alpha = alpha_from_percentage(percentage)
         return Color(self.red, self.green, self.blue, alpha)
+
+    @cached_property
+    def percentage_alpha(self) -> float:
+        return self.alpha / 255
 
     @cached_property
     def save_data(self) -> list[int]:
