@@ -73,56 +73,56 @@ class NineSlice:
     @cached_property
     def _top_left(self) -> Drawing:
         size = self.left * self.top
-        area = ORIGIN.anchor(size).rectangle_area_on_screen
+        area = ORIGIN.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _top_center(self) -> Drawing:
         top_left = ORIGIN + self.left
         size = self._center_width * self.top
-        area = top_left.anchor(size).rectangle_area_on_screen
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _top_right(self) -> Drawing:
         top_left = ORIGIN + self.drawing.width - self.right
         size = self.right * self.top
-        area = top_left.anchor(size).rectangle_area_on_screen
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _center_left(self) -> Drawing:
         top_left = ORIGIN + self.top
         size = self.left * self._center_height
-        area = top_left.anchor(size).rectangle_area_on_screen
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _center(self) -> Drawing:
         top_left = ORIGIN + self.top + self.left
         size = self._center_width * self._center_height
-        area = top_left.anchor(size).rectangle_area_on_screen
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _center_right(self) -> Drawing:
         top_left = ORIGIN + self.drawing.width - self.right + self.top
         size = self.right * self._center_height
-        area = top_left.anchor(size).rectangle_area_on_screen
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _bottom_left(self) -> Drawing:
         top_left = ORIGIN + self.drawing.height - self.bottom
         size = self.left * self.bottom
-        area = top_left.anchor(size).rectangle_area_on_screen
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property
     def _bottom_center(self) -> Drawing:
         top_left = ORIGIN + self.left + self.drawing.height - self.bottom
         size = self._center_width * self.bottom
-        area = top_left.anchor(size).rectangle_area_on_screen
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)
 
     @cached_property

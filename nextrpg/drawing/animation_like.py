@@ -53,23 +53,27 @@ class AnimationLike(Sizable, Protocol):
 
         return RelativeAnimationLike(self, shift, anchor)
 
-    def animation_on_screen(self, coordinate: Coordinate) -> AnimationOnScreen:
+    def animation_on_screen(
+        self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
+    ) -> AnimationOnScreen:
         from nextrpg.animation.animation_on_screen import (
             AnimationOnScreen,
         )
 
-        return AnimationOnScreen(coordinate, self)
+        return AnimationOnScreen(coordinate, self, anchor)
 
-    def drawing_on_screen(self, coordinate: Coordinate) -> DrawingOnScreen:
+    def drawing_on_screen(
+        self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
+    ) -> DrawingOnScreen:
         from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 
-        drawing_on_screens = self.drawing_on_screens(coordinate)
+        drawing_on_screens = self.drawing_on_screens(coordinate, anchor)
         return DrawingOnScreens(drawing_on_screens).drawing_on_screen
 
     def drawing_on_screens(
-        self, coordinate: Coordinate
+        self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
     ) -> tuple[DrawingOnScreen, ...]:
-        return self.drawing.drawing_on_screens(coordinate)
+        return self.drawing.drawing_on_screens(coordinate, anchor)
 
     def tick(self, time_delta: Millisecond) -> Self:
         return self

@@ -3,6 +3,7 @@ from math import atan2, degrees, hypot
 from typing import TYPE_CHECKING, NamedTuple, Self, overload, override
 
 from nextrpg.core.save import module_and_class
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.dimension import Dimension, Height, Pixel, Size, Width
 from nextrpg.geometry.direction import Direction, DirectionalOffset
 
@@ -198,6 +199,27 @@ class Coordinate(NamedTuple):
 
         return BottomRightSizable(sizable, self)
 
+    def as_anchor_of(self, sizable: Sizable | Size, anchor: Anchor) -> Sizable:
+        match anchor:
+            case Anchor.TOP_LEFT:
+                return self.as_top_left_of(sizable)
+            case Anchor.TOP_CENTER:
+                return self.as_center_left_of(sizable)
+            case Anchor.TOP_RIGHT:
+                return self.as_top_right_of(sizable)
+            case Anchor.CENTER_LEFT:
+                return self.as_center_left_of(sizable)
+            case Anchor.CENTER:
+                return self.as_center_of(sizable)
+            case Anchor.CENTER_RIGHT:
+                return self.as_center_right_of(sizable)
+            case Anchor.BOTTOM_LEFT:
+                return self.as_bottom_left_of(sizable)
+            case Anchor.BOTTOM_CENTER:
+                return self.as_bottom_center_of(sizable)
+            case Anchor.BOTTOM_RIGHT:
+                return self.as_bottom_right_of(sizable)
+
     @property
     def save_data(self) -> list[Pixel]:
         return list(self)
@@ -209,9 +231,6 @@ class Coordinate(NamedTuple):
     @classmethod
     def load_from_save(cls, data: list[Pixel]) -> Self:
         return cls(*data)
-
-    def anchor(self, size: Size | Sizable) -> TopLeftSizable:
-        return self.as_top_left_of(size)
 
 
 ORIGIN = Coordinate(0, 0)

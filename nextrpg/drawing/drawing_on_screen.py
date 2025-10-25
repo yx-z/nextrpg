@@ -27,7 +27,7 @@ class DrawingOnScreen(AnimationOnScreenLike):
         shift = self.drawing.visible_rectangle_area_on_screen.top_left
         size = self.drawing.visible_rectangle_area_on_screen.size
         coordinate = self.top_left + shift
-        return coordinate.anchor(size).rectangle_area_on_screen
+        return coordinate.as_top_left_of(size).rectangle_area_on_screen
 
     @cached_property
     def pygame(self) -> tuple[Surface, Coordinate]:

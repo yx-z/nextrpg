@@ -50,7 +50,11 @@ class SayEventAddOn:
         shift = self._background_relative_to_text.shift
         background_and_content = (background, content.shift(-shift))
         add_on_group = DrawingGroup(background_and_content)
-        return _Background(self._add_on_top_left, add_on_group, self._text)
+        return _Background(
+            coordinate=self._add_on_top_left,
+            resource=add_on_group,
+            text=self._text,
+        )
 
     @cached_property
     def text_on_screen(self) -> TextOnScreen:
@@ -179,7 +183,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
                 crop_size = (
                     self._tip.width * self.config.background.nine_slice.bottom
                 )
-            background_crop = tip_shift.coordinate.anchor(
+            background_crop = tip_shift.coordinate.as_top_left_of(
                 crop_size
             ).rectangle_area_on_screen
             background_drawing = background_drawing.cut(background_crop)
@@ -282,7 +286,7 @@ class _CharacterPosition:
     at_left: bool
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class _Background(AnimationOnScreen):
     text: Text | TextGroup
 

@@ -8,6 +8,7 @@ from nextrpg.animation.abstract_animation_on_screen import (
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 
 
@@ -15,6 +16,7 @@ from nextrpg.geometry.coordinate import Coordinate
 class AnimationOnScreen(AbstractAnimationOnScreen):
     coordinate: Coordinate
     resource: AnimationLike
+    anchor: Anchor = Anchor.TOP_LEFT
 
     @override
     @cached_property

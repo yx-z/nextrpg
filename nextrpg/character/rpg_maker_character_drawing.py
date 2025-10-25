@@ -136,7 +136,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         return tuple(
             drawing.crop(
                 ((width * i) * height_shift)
-                .coordinate.anchor(size)
+                .coordinate.as_top_left_of(size)
                 .rectangle_area_on_screen
             )
             for i in range(num_frames)

@@ -70,7 +70,9 @@ class MapScene(EventfulScene, UpdateFromSave):
         log.debug(t"Spawn player at {player_spec.unique_name}.")
         player_object = self._map_loader.get_object(player_spec.unique_name)
         bottom_center = BottomCenterCoordinate(player_object.x, player_object.y)
-        top_left = bottom_center.anchor(player_spec.character.drawing).top_left
+        top_left = bottom_center.as_top_left_of(
+            player_spec.character.drawing
+        ).top_left
         map_collisions = self._map_loader.collisions
         return PlayerOnScreen(
             player_spec, top_left, map_collisions=map_collisions
@@ -191,7 +193,8 @@ class MapScene(EventfulScene, UpdateFromSave):
             if not isinstance(npc, MovingNpcOnScreen):
                 continue
             points = tuple(
-                point.anchor(npc).bottom_center for point in npc.path.points
+                point.as_top_left_of(npc).bottom_center
+                for point in npc.path.points
             )
             path = PolylineOnScreen(points).fill(color)
             res.append(path)
@@ -221,7 +224,7 @@ def _init_standing_npc(
     assert isinstance(
         spec.character, CharacterDrawing
     ), f"Require CharacterDrawing for coordinate-only NPC {spec.unique_name}."
-    coordinate = bottom_center.anchor(spec.character).top_left
+    coordinate = bottom_center.as_top_left_of(spec.character).top_left
     strict_spec = to_strict(spec)
     return NpcOnScreen(coordinate=coordinate, spec=strict_spec)
 

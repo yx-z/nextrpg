@@ -96,7 +96,7 @@ def get_bounding_rectangle_area_on_screen(
     width = max(max_x - min_x, Width(1))
     height = max(max_y - min_y, Height(1))
     size = width * height
-    return coordinate.anchor(size).rectangle_area_on_screen
+    return coordinate.as_top_left_of(size).rectangle_area_on_screen
 
 
 def _project_polygon(axis: Coordinate, poly: PolygonAreaOnScreen) -> Coordinate:

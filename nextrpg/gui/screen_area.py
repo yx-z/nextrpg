@@ -15,12 +15,12 @@ def screen_size() -> Size:
 
 def screen_area() -> RectangleAreaOnScreen:
     size = screen_size()
-    return ORIGIN.anchor(size).rectangle_area_on_screen
+    return ORIGIN.as_top_left_of(size).rectangle_area_on_screen
 
 
 def left_screen_area() -> RectangleAreaOnScreen:
     size = screen_size() / WidthScaling(2)
-    return ORIGIN.anchor(size).rectangle_area_on_screen
+    return ORIGIN.as_top_left_of(size).rectangle_area_on_screen
 
 
 def right_screen_area() -> RectangleAreaOnScreen:
@@ -29,7 +29,7 @@ def right_screen_area() -> RectangleAreaOnScreen:
 
 def top_screen_area() -> RectangleAreaOnScreen:
     size = screen_size() / HeightScaling(2)
-    return ORIGIN.anchor(size).rectangle_area_on_screen
+    return ORIGIN.as_top_left_of(size).rectangle_area_on_screen
 
 
 def bottom_screen_area() -> RectangleAreaOnScreen:
@@ -38,7 +38,7 @@ def bottom_screen_area() -> RectangleAreaOnScreen:
 
 def top_left_screen_area() -> RectangleAreaOnScreen:
     size = screen_size() / WidthAndHeightScaling(2)
-    return ORIGIN.anchor(size).rectangle_area_on_screen
+    return ORIGIN.as_top_left_of(size).rectangle_area_on_screen
 
 
 def top_right_screen_area() -> RectangleAreaOnScreen:

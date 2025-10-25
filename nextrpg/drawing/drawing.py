@@ -15,6 +15,7 @@ from nextrpg.core.metadata import HasMetadata
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import TRANSPARENT, Alpha, Color
 from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
     HeightScaling,
@@ -92,7 +93,9 @@ class Drawing(AnimationLike, HasMetadata):
     def trim(self, trim: Padding) -> Self:
         if trim == Padding():
             return self
-        area = trim.top_left.anchor(self.size - trim).rectangle_area_on_screen
+        area = trim.top_left.as_top_left_of(
+            self.size - trim
+        ).rectangle_area_on_screen
         return self.crop(area).add_metadata(trim=trim)
 
     @override
@@ -109,8 +112,9 @@ class Drawing(AnimationLike, HasMetadata):
 
     @override
     def drawing_on_screens(
-        self, top_left: Coordinate
+        self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
     ) -> tuple[DrawingOnScreen, ...]:
+        top_left = coordinate.as_anchor_of(self, anchor).top_left
         drawing_on_screen = self.drawing_on_screen(top_left)
         return (drawing_on_screen,)
 
@@ -126,11 +130,11 @@ class Drawing(AnimationLike, HasMetadata):
         rectangle = self.surface.get_bounding_rect()
         coordinate = Coordinate(rectangle.x, rectangle.y)
         size = Size(rectangle.width, rectangle.height)
-        return coordinate.anchor(size).rectangle_area_on_screen
+        return coordinate.as_top_left_of(size).rectangle_area_on_screen
 
     @cached_property
     def rectangle(self) -> RectangleAreaOnScreen:
-        return ORIGIN.anchor(self.size).rectangle_area_on_screen
+        return ORIGIN.as_top_left_of(self.size).rectangle_area_on_screen
 
     @cached_property
     def surface(self) -> Surface:

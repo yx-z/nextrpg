@@ -48,28 +48,6 @@ class RelativeAnimationLike:
     def is_complete(self) -> bool:
         return self.resource.is_complete
 
-    def top_left(self, origin: Coordinate) -> Coordinate:
-        match self.anchor:
-            case Anchor.TOP_LEFT:
-                extra = ZERO_SIZE
-            case Anchor.TOP_CENTER:
-                extra = self.resource.width / 2
-            case Anchor.TOP_RIGHT:
-                extra = self.resource.width
-            case Anchor.CENTER_LEFT:
-                extra = self.resource.height / 2
-            case Anchor.CENTER:
-                extra = self.resource.size / WidthAndHeightScaling(2)
-            case Anchor.CENTER_RIGHT:
-                extra = self.resource.size / HeightScaling(2)
-            case Anchor.BOTTOM_LEFT:
-                extra = self.resource.height
-            case Anchor.BOTTOM_CENTER:
-                extra = self.resource.size / WidthScaling(2)
-            case Anchor.BOTTOM_RIGHT:
-                extra = self.resource.size
-        return origin + self.shift - extra
-
     def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
         resource = self.resource.flip(horizontal, vertical)
         shift = self.shift
@@ -91,8 +69,9 @@ class RelativeAnimationLike:
     def drawing_on_screens(
         self, origin: Coordinate
     ) -> tuple[DrawingOnScreen, ...]:
-        top_left = self.top_left(origin)
-        return self.resource.drawing_on_screens(top_left)
+        return self.resource.drawing_on_screens(
+            origin + self.shift, self.anchor
+        )
 
 
 def relative_animation_likes(

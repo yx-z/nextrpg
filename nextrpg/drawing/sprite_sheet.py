@@ -39,5 +39,5 @@ class SpriteSheet:
             (width * selection.column) * (height * selection.row)
         ).coordinate
         size = width * height
-        area = top_left.anchor(size).rectangle_area_on_screen
+        area = top_left.as_top_left_of(size).rectangle_area_on_screen
         return self.drawing.crop(area)

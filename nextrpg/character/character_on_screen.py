@@ -121,7 +121,7 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
             self.coordinate - self.width * (scaling - WidthScaling(1)) / 2
         )
         size = self.size * scaling
-        return coordinate.anchor(size).rectangle_area_on_screen
+        return coordinate.as_top_left_of(size).rectangle_area_on_screen
 
     @cached_property
     def _area_on_screen(self) -> AreaOnScreen | None:
@@ -130,7 +130,7 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
 
         match self.character.rect_or_poly:
             case RectangleDrawing() as rect:
-                return self.coordinate.anchor(
+                return self.coordinate.as_top_left_of(
                     rect.size
                 ).rectangle_area_on_screen
             case PolygonDrawing() as poly:
@@ -143,7 +143,7 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
         scaling = self.spec.config.bounding_rectangle_scaling
         coordinate = coordinate + self.height * scaling.complement / 2
         size = self.size * scaling
-        return coordinate.anchor(size).rectangle_area_on_screen
+        return coordinate.as_top_left_of(size).rectangle_area_on_screen
 
     @cached_property
     def _collision_visual(self) -> DrawingOnScreen | None:
