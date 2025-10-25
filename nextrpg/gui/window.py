@@ -199,10 +199,16 @@ def _log(entries: tuple[LogEntry, ...]) -> tuple[DrawingOnScreen, ...]:
         )
         res += message_drawing_on_screens
 
+        drawing_coordinate = message_coordinate + message.width
         if isinstance(drawing, AnimationOnScreenLike):
-            drawing_on_screens = drawing.drawing_on_screens
+            # Shift drawing to logging area.
+            group = drawing.drawing_group
+            drawing_on_screens = group.drawing_on_screens(
+                (drawing_coordinate + message.height)
+                .as_bottom_left_of(group)
+                .top_left
+            )
         elif isinstance(drawing, AnimationLike):
-            drawing_coordinate = message_coordinate + message.width
             drawing_on_screens = drawing.drawing_on_screens(drawing_coordinate)
         else:
             drawing_on_screens = []

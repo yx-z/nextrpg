@@ -27,6 +27,7 @@ if TYPE_CHECKING:
     from nextrpg.animation.timed_animation_on_screens import (
         TimedAnimationOnScreens,
     )
+    from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
     from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 
@@ -123,6 +124,21 @@ class AnimationOnScreenLike(Sizable, Protocol):
         if issubclass(animation_type, TimedAnimationGroup):
             return TimedAnimationOnScreen(origin, animation_group)
         return AnimationOnScreen(origin, animation_group)
+
+    @cached_property
+    def drawing_group(self) -> DrawingGroup:
+        from nextrpg.drawing.drawing_group import DrawingGroup
+
+        relative_animation_likes = tuple(
+            drawing_on_screen.drawing.shift(
+                (
+                    drawing_on_screen.top_left
+                    - self._drawing_on_screens.top_left
+                ).size
+            )
+            for drawing_on_screen in self.drawing_on_screens
+        )
+        return DrawingGroup(relative_animation_likes)
 
     @cached_property
     def _drawing_on_screens(self) -> DrawingOnScreens:
