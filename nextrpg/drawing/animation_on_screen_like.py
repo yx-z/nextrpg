@@ -126,7 +126,7 @@ class AnimationOnScreenLike(Sizable, Protocol):
         return AnimationOnScreen(origin, animation_group)
 
     @cached_property
-    def drawing_group_to_origin(self) -> DrawingGroup:
+    def drawing_group_at_origin(self) -> DrawingGroup:
         from nextrpg.drawing.drawing_group import DrawingGroup
 
         relative_animation_likes = tuple(

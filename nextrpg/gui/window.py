@@ -17,7 +17,6 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.log import Log, LogEntry, MessageKeyAndDrawing, pop_messages
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing import scale_surface
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
@@ -28,6 +27,7 @@ from nextrpg.event.io_event import (
     KeyPressDown,
     WindowResize,
 )
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size
 
@@ -182,11 +182,11 @@ def _log(entries: tuple[LogEntry, ...]) -> tuple[DrawingOnScreen, ...]:
     for component, entry in zip(components, entries):
         if isinstance(content := entry.formatted, MessageKeyAndDrawing):
             drawing = content.drawing
-            message = Text(f"{content.message_key}=")
+            message = Text(f" {content.message_key} = ")
             line_height = max(message.height, drawing.height)
         else:
             drawing = None
-            message = Text(content)
+            message = Text(f" {content}")
             line_height = message.height
         height += max(line_height, component.height)
 
@@ -199,19 +199,12 @@ def _log(entries: tuple[LogEntry, ...]) -> tuple[DrawingOnScreen, ...]:
         )
         res += message_drawing_on_screens
 
-        drawing_coordinate = message_coordinate + message.width
-        if isinstance(drawing, AnimationOnScreenLike):
-            # Shift drawing to logging area.
-            group = drawing.drawing_group_to_origin
-            drawing_on_screens = group.drawing_on_screens(
-                (drawing_coordinate + message.height)
-                .as_bottom_left_of(group)
-                .top_left
+        if drawing:
+            if isinstance(drawing, AnimationOnScreenLike):
+                # Shift its drawings to log area.
+                drawing = drawing.drawing_group_at_origin
+            res += drawing.drawing_on_screens(
+                message_coordinate + message.size, Anchor.BOTTOM_LEFT
             )
-        elif isinstance(drawing, AnimationLike):
-            drawing_on_screens = drawing.drawing_on_screens(drawing_coordinate)
-        else:
-            drawing_on_screens = []
-        res += drawing_on_screens
 
     return tuple(res)

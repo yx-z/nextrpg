@@ -11,10 +11,12 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
+from nextrpg.core.log import Log
 from nextrpg.core.save import UpdateFromSave, concat_save_key
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
 from nextrpg.event.event_as_attr import EventAsAttr
@@ -24,6 +26,8 @@ from nextrpg.geometry.dimension import Size, WidthScaling
 from nextrpg.geometry.direction import Direction
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+
+log = Log()
 
 
 @dataclass_with_default(frozen=True)
@@ -58,6 +62,10 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         character_drawing_on_screens = self.character.drawing_on_screens(
             self.coordinate
+        )
+        log.debug_drawing(
+            duration=None,
+            character=DrawingOnScreens(character_drawing_on_screens),
         )
         debug_visuals = tuple(
             d
