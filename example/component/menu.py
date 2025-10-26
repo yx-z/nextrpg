@@ -1,9 +1,9 @@
 from functools import cache
 from pathlib import Path
 
-from example.component.title import button, title
+from example.component.button import button
+from example.component.title import title
 from nextrpg import (
-    BLUE,
     AreaOnScreen,
     Button,
     Direction,
@@ -16,7 +16,6 @@ from nextrpg import (
     MoveFrom,
     MoveTo,
     Panel,
-    RectangleDrawing,
     ScrollDirection,
     TimedAnimationOnScreens,
     TmxLoader,
@@ -38,28 +37,28 @@ def tmx() -> TmxLoader:
     return TmxLoader(tmx_path)
 
 
+NUM_SAVE_SLOTS = 3
+
+
 def save_slots(area: AreaOnScreen) -> tuple[Widget, ...]:
-    NUM_SAVE_SLOTS = 3
+    return tuple(save_slot(area, i) for i in range(NUM_SAVE_SLOTS))
+
+
+def save_slot(area: AreaOnScreen, i: int) -> Button:
     PADDING_WIDTH = Width(10)
     PADDING_HEIGHT = Height(10)
-    COLOR = BLUE.with_percentage_alpha(0.2)
 
     button_width = area.width - PADDING_WIDTH * 2
     button_height = area.height / NUM_SAVE_SLOTS
     button_size = button_width * button_height
-    background = RectangleDrawing(button_size, COLOR, border_radius=5).drawing
 
-    return tuple(
-        Button(
-            coordinate=area.top_left
-            + PADDING_WIDTH
-            + button_height * i
-            + PADDING_HEIGHT * i,
-            idle=background,
-            active=background,
-            on_click=lambda: print(f"Save to slot {i + 1}"),
-        )
-        for i in range(NUM_SAVE_SLOTS)
+    return button(
+        name=f"Save #{i}",
+        coordinate=area.top_left
+        + PADDING_WIDTH
+        + button_height * i
+        + PADDING_HEIGHT * i,
+        on_click=lambda: print(f"Save to slot {i + 1}"),
     )
 
 

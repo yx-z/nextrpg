@@ -64,8 +64,8 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
             self.coordinate
         )
         log.debug_drawing(
+            {self.name: DrawingOnScreens(character_drawing_on_screens)},
             duration=None,
-            character=DrawingOnScreens(character_drawing_on_screens),
         )
         debug_visuals = tuple(
             d

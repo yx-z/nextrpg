@@ -58,27 +58,39 @@ class Log:
 
     def debug_drawing(
         self,
+        keyed_drawings: (
+            dict[str, AnimationLike | AnimationOnScreenLike] | None
+        ) = None,
         *,
         duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
         **kwargs: AnimationLike | AnimationOnScreenLike,
     ) -> None:
-        _add_drawings(self.component, LogLevel.DEBUG, duration, **kwargs)
+        drawings = (keyed_drawings or {}) | kwargs
+        _add_drawings(self.component, LogLevel.DEBUG, duration, drawings)
 
     def info_drawing(
         self,
+        keyed_drawings: (
+            dict[str, AnimationLike | AnimationOnScreenLike] | None
+        ) = None,
         *,
         duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
         **kwargs: AnimationLike | AnimationOnScreenLike,
     ) -> None:
-        _add_drawings(self.component, LogLevel.INFO, duration, **kwargs)
+        drawings = (keyed_drawings or {}) | kwargs
+        _add_drawings(self.component, LogLevel.INFO, duration, drawings)
 
     def error_drawing(
         self,
+        keyed_drawings: (
+            dict[str, AnimationLike | AnimationOnScreenLike] | None
+        ) = None,
         *,
         duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
         **kwargs: AnimationLike | AnimationOnScreenLike,
     ) -> None:
-        _add_drawings(self.component, LogLevel.ERROR, duration, **kwargs)
+        drawings = (keyed_drawings or {}) | kwargs
+        _add_drawings(self.component, LogLevel.ERROR, duration, drawings)
 
 
 @dataclass(frozen=True)
@@ -190,7 +202,7 @@ def _add_drawings(
     component: str,
     level: LogLevel,
     duration: Millisecond | _DurationFromConfig | None,
-    **kwargs: AnimationLike | AnimationOnScreenLike,
+    kwargs: dict[str, AnimationLike | AnimationOnScreenLike],
 ) -> None:
     for key, drawing in kwargs.items():
         message_and_drawing = MessageKeyAndDrawing(key, drawing)
