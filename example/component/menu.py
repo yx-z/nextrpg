@@ -9,11 +9,10 @@ from nextrpg import (
     Direction,
     DirectionalOffset,
     DrawingOnScreen,
-    FadeOut,
+    FadeIn,
     Height,
     MapScene,
     MenuScene,
-    MoveFrom,
     MoveTo,
     Panel,
     ScrollDirection,
@@ -56,14 +55,17 @@ def save_slot(area: AreaOnScreen, i: int) -> Button:
         name=f"Save slot #{i}",
         coordinate=coordinate,
         on_click=lambda: print(f"Save to slot {i}"),
-        enter_animation=enter_animation,
-        exit_animation=exit_animation,
     )
 
 
 @cache
 def widget_group() -> WidgetGroup:
-    save_panel = Panel(name="save_panel", create_children=save_slots)
+    save_panel = Panel(
+        name="save_panel",
+        create_children=save_slots,
+        enter_animation=enter_animation_with_fade,
+        exit_animation=exit_animation,
+    )
     save_button = button("save", save_panel)
 
     title_scene = TransitionScene(title)
@@ -87,8 +89,14 @@ def enter_animation(
     return animate(drawing_on_screens, MoveTo, offset=WIDGET_OFFSET)
 
 
+def enter_animation_with_fade(
+    drawing_on_screens: tuple[DrawingOnScreen, ...],
+) -> TimedAnimationOnScreens:
+    fade_in = animate(drawing_on_screens, FadeIn)
+    return fade_in.compose(MoveTo, offset=WIDGET_OFFSET)
+
+
 def exit_animation(
     drawing_on_screens: tuple[DrawingOnScreen, ...],
 ) -> TimedAnimationOnScreens:
-    fade_out = animate(drawing_on_screens, FadeOut)
-    return fade_out.compose(MoveFrom, offset=-WIDGET_OFFSET)
+    return enter_animation_with_fade(drawing_on_screens).reverse
