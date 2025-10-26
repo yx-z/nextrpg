@@ -36,7 +36,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         return tuple(
             drawing_on_screen
             for child in self._children
-            for drawing_on_screen in child._drawing_on_screens_after_parent
+            for drawing_on_screen in child._drawing_on_screens_without_parent
         )
 
     @property
@@ -72,7 +72,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     @override
     def _tick_after_parent(self, time_delta: Millisecond) -> Self:
         children = tuple(
-            child._tick_after_parent(time_delta) for child in self._children
+            child._tick_without_parent(time_delta) for child in self._children
         )
         ticked = self._with_children(children)
         background = self._background.tick(time_delta)

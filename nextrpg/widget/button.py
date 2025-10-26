@@ -40,9 +40,10 @@ class ButtonOnScreen(SizableWidgetOnScreen):
             return self
 
         if isinstance(self.widget.on_click, Widget):
-            return self.widget.on_click.widget_on_screen(
+            res = self.widget.on_click.widget_on_screen(
                 self.name_to_on_screens, self.parent
             ).select
+            return res
 
         return self.widget.on_click
 

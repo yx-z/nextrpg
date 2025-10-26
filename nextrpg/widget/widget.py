@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Callable
-from dataclasses import KW_ONLY, replace
+from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import ClassVar, Self, override
 
@@ -24,7 +24,7 @@ from nextrpg.scene.scene import Scene
 class WidgetOnScreen(Scene):
     widget: Widget
     name_to_on_screens: dict[str, Coordinate | AreaOnScreen]
-    parent: Scene | None = None
+    parent: Scene | None = field(default=None, repr=False)
     _: KW_ONLY = private_init_below()
     _is_selected: bool = False
     _enter_animation: TimedAnimationOnScreens | None = default(
@@ -51,28 +51,29 @@ class WidgetOnScreen(Scene):
             parent = tick_optional(self.parent, time_delta)
         else:
             parent = self.parent
+        if ticked := self._tick_without_parent(time_delta):
+            return replace(ticked, parent=parent)
+        return parent
 
+    def _tick_without_parent(self, time_delta: Millisecond) -> Self | None:
         # Entering.
         if self._enter_animation:
             if (
                 enter_animation := self._enter_animation.tick(time_delta)
             ) and enter_animation.is_complete:
                 enter_animation = None
-            return replace(
-                self, parent=parent, _enter_animation=enter_animation
-            )
+            return replace(self, _enter_animation=enter_animation)
 
         # In widget.
         if not self._exit_animation:
-            ticked = self._tick_after_parent(time_delta)
-            return replace(ticked, parent=parent)
+            return self._tick_after_parent(time_delta)
 
         # Exiting.
         if (
             exit_animation := self._exit_animation.tick(time_delta)
         ) and exit_animation.is_complete:
-            return parent
-        return replace(self, parent=parent, _exit_animation=exit_animation)
+            return None
+        return replace(self, _exit_animation=exit_animation)
 
     @override
     @cached_property
@@ -81,17 +82,7 @@ class WidgetOnScreen(Scene):
             parent = self.parent.drawing_on_screens
         else:
             parent = ()
-
-        # Entering.
-        if self._enter_animation:
-            return parent + self._enter_animation.drawing_on_screens
-
-        # In widget.
-        if not self._exit_animation:
-            return parent + self._drawing_on_screens_after_parent
-
-        # Exiting.
-        return parent + self._exit_animation.drawing_on_screens
+        return parent + self._drawing_on_screens_without_parent
 
     @override
     def event(self, event: IoEvent) -> Scene:
@@ -123,6 +114,19 @@ class WidgetOnScreen(Scene):
 
     def with_parent(self, parent: Scene | None) -> Self:
         return replace(self, parent=parent)
+
+    @cached_property
+    def _drawing_on_screens_without_parent(self) -> tuple[DrawingOnScreen, ...]:
+        # Entering.
+        if self._enter_animation:
+            return self._enter_animation.drawing_on_screens
+
+        # In widget.
+        if not self._exit_animation:
+            return self._drawing_on_screens_after_parent
+
+        # Exiting.
+        return self._exit_animation.drawing_on_screens
 
     def _tick_after_parent(self, time_delta: Millisecond) -> Self:
         return self

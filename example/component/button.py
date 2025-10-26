@@ -7,11 +7,13 @@ from nextrpg import (
     Coordinate,
     Cycle,
     DrawingGroup,
+    DrawingOnScreen,
     FadeIn,
     FadeOut,
     Padding,
     Scene,
     Text,
+    TimedAnimationOnScreens,
     Widget,
     config,
     padding_for_all_sides,
@@ -23,6 +25,12 @@ def button(
     on_click: Scene | Widget | Callable[[], None],
     padding: Padding = padding_for_all_sides(10),
     coordinate: Coordinate | None = None,
+    enter_animation: (
+        Callable[[tuple[DrawingOnScreen, ...]], TimedAnimationOnScreens] | None
+    ) = None,
+    exit_animation: (
+        Callable[[tuple[DrawingOnScreen, ...]], TimedAnimationOnScreens] | None
+    ) = None,
 ) -> Button:
     green = config().text.colored(GREEN)
 
@@ -43,4 +51,6 @@ def button(
         idle=text.drawing,
         on_click=on_click,
         coordinate=coordinate,
+        enter_animation=enter_animation,
+        exit_animation=exit_animation,
     )
