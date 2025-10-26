@@ -63,14 +63,18 @@ class WidgetGroupOnScreen(WidgetOnScreen):
 
     @override
     @cached_property
-    def _drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
+    def _drawing_on_screens_without_parent_and_animation(
+        self,
+    ) -> tuple[DrawingOnScreen, ...]:
         return (
             self._background.drawing_on_screens
             + self.children_drawing_on_screens
         )
 
     @override
-    def _tick_after_parent(self, time_delta: Millisecond) -> Self:
+    def _tick_without_parent_and_animation(
+        self, time_delta: Millisecond
+    ) -> Self:
         children = tuple(
             child._tick_without_parent(time_delta) for child in self._children
         )

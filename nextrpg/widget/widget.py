@@ -66,7 +66,7 @@ class WidgetOnScreen(Scene):
 
         # In widget.
         if not self._exit_animation:
-            return self._tick_after_parent(time_delta)
+            return self._tick_without_parent_and_animation(time_delta)
 
         # Exiting.
         if (
@@ -79,10 +79,12 @@ class WidgetOnScreen(Scene):
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if self.parent:
-            parent = self.parent.drawing_on_screens
+            parent_drawing_on_screens = self.parent.drawing_on_screens
         else:
-            parent = ()
-        return parent + self._drawing_on_screens_without_parent
+            parent_drawing_on_screens = ()
+        return (
+            parent_drawing_on_screens + self._drawing_on_screens_without_parent
+        )
 
     @override
     def event(self, event: IoEvent) -> Scene:
@@ -116,24 +118,28 @@ class WidgetOnScreen(Scene):
         return replace(self, parent=parent)
 
     @cached_property
-    def _drawing_on_screens_without_parent(self) -> tuple[DrawingOnScreen, ...]:
+    def _drawing_on_screens_without_parent(
+        self,
+    ) -> tuple[DrawingOnScreen, ...]:
         # Entering.
         if self._enter_animation:
             return self._enter_animation.drawing_on_screens
 
         # In widget.
         if not self._exit_animation:
-            return self._drawing_on_screens_after_parent
+            return self._drawing_on_screens_without_parent_and_animation
 
         # Exiting.
         return self._exit_animation.drawing_on_screens
 
-    def _tick_after_parent(self, time_delta: Millisecond) -> Self:
+    def _tick_without_parent_and_animation(
+        self, time_delta: Millisecond
+    ) -> Self:
         return self
 
     @property
     @abstractmethod
-    def _drawing_on_screens_after_parent(
+    def _drawing_on_screens_without_parent_and_animation(
         self,
     ) -> tuple[DrawingOnScreen, ...]: ...
 
@@ -144,7 +150,7 @@ class WidgetOnScreen(Scene):
     def _init_enter_animation(self) -> TimedAnimationOnScreens | None:
         if self.widget.enter_animation:
             return self.widget.enter_animation(
-                self._drawing_on_screens_after_parent
+                self._drawing_on_screens_without_parent_and_animation
             )
         return None
 
@@ -152,7 +158,7 @@ class WidgetOnScreen(Scene):
     def _init_exit_animation(self) -> TimedAnimationOnScreens | None:
         if self.widget.exit_animation:
             return self.widget.exit_animation(
-                self._drawing_on_screens_after_parent
+                self._drawing_on_screens_without_parent_and_animation
             )
         return None
 

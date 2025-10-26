@@ -48,7 +48,9 @@ class ButtonOnScreen(SizableWidgetOnScreen):
         return self.widget.on_click
 
     @override
-    def _tick_after_parent(self, time_delta: Millisecond) -> Self:
+    def _tick_without_parent_and_animation(
+        self, time_delta: Millisecond
+    ) -> Self:
         if self._is_selected:
             active = self.widget.active.tick(time_delta)
             idle = self.widget.idle
