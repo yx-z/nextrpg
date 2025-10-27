@@ -154,14 +154,14 @@ class Coordinate(NamedTuple):
         return hypot(dx, dy)
 
     def rectangle_area_on_screen(
-        self, sizable: Size, anchor: Anchor = Anchor.TOP_LEFT
+        self, size: Size, anchor: Anchor = Anchor.TOP_LEFT
     ) -> RectangleAreaOnScreen:
         from nextrpg.geometry.rectangle_area_on_screen import (
             RectangleAreaOnScreen,
         )
 
-        top_left = self.as_anchor_of(sizable, anchor).top_left
-        return RectangleAreaOnScreen(top_left, sizable)
+        top_left = self.as_anchor_of(size, anchor).top_left
+        return RectangleAreaOnScreen(top_left, size)
 
     def as_top_left_of(self, sizable: Sizable | Size) -> TopLeftSizable:
         from nextrpg.geometry.sizable_proxy import TopLeftSizable
