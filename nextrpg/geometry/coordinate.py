@@ -8,6 +8,7 @@ from nextrpg.geometry.dimension import Dimension, Height, Pixel, Size, Width
 from nextrpg.geometry.direction import Direction, DirectionalOffset
 
 if TYPE_CHECKING:
+    from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
     from nextrpg.geometry.sizable_proxy import (
         BottomCenterSizable,
         BottomLeftSizable,
@@ -151,6 +152,16 @@ class Coordinate(NamedTuple):
         dx = self.left_value - other.left_value
         dy = self.top_value - other.top_value
         return hypot(dx, dy)
+
+    def rectangle_area_on_screen(
+        self, sizable: Size, anchor: Anchor = Anchor.TOP_LEFT
+    ) -> RectangleAreaOnScreen:
+        from nextrpg.geometry.rectangle_area_on_screen import (
+            RectangleAreaOnScreen,
+        )
+
+        top_left = self.as_anchor_of(sizable, anchor).top_left
+        return RectangleAreaOnScreen(top_left, sizable)
 
     def as_top_left_of(self, sizable: Sizable | Size) -> TopLeftSizable:
         from nextrpg.geometry.sizable_proxy import TopLeftSizable
