@@ -4,6 +4,7 @@ from typing import Self
 
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Pixel, Size, Width
+from nextrpg.geometry.sizable import Sizable
 
 
 @dataclass(frozen=True)
@@ -39,3 +40,11 @@ def padding_for_all_sides(pixel: Pixel) -> Padding:
     width = Width(pixel)
     height = Height(pixel)
     return padding_for_both_sides(width, height)
+
+
+def padding_between(smaller: Sizable, bigger: Sizable) -> Padding:
+    top = smaller.top - bigger.top
+    left = smaller.left - bigger.left
+    bottom = bigger.bottom - smaller.bottom
+    right = bigger.right - smaller.right
+    return Padding(top, left, bottom, right)
