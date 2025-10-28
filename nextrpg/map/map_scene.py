@@ -74,7 +74,6 @@ class MapScene(EventfulScene, UpdateFromSave):
         return PlayerOnScreen(
             player_spec,
             coordinate,
-            anchor=Anchor.BOTTOM_CENTER,
             map_collisions=map_collisions,
         )
 
@@ -219,9 +218,7 @@ def _init_standing_npc(spec: NpcSpec, coordinate: Coordinate) -> NpcOnScreen:
         spec.character, CharacterDrawing
     ), f"Require CharacterDrawing for coordinate-only NPC {spec.unique_name}."
     strict_spec = to_strict(spec)
-    return NpcOnScreen(
-        coordinate=coordinate, spec=strict_spec, anchor=Anchor.BOTTOM_CENTER
-    )
+    return NpcOnScreen(coordinate=coordinate, spec=strict_spec)
 
 
 def _init_moving_npc(spec: NpcSpec, poly: AreaOnScreen) -> MovingNpcOnScreen:
@@ -230,9 +227,8 @@ def _init_moving_npc(spec: NpcSpec, poly: AreaOnScreen) -> MovingNpcOnScreen:
     else:
         points = tuple(poly.points)
     path = PolylineOnScreen(points)
-    return MovingNpcOnScreen(
-        path=path, spec=to_strict(spec), anchor=Anchor.BOTTOM_CENTER
-    )
+    strict_spec = to_strict(spec)
+    return MovingNpcOnScreen(path=path, spec=strict_spec)
 
 
 def _init_area_npc(spec: NpcSpec, poly: AreaOnScreen) -> NpcOnScreen:
@@ -245,4 +241,6 @@ def _init_area_npc(spec: NpcSpec, poly: AreaOnScreen) -> NpcOnScreen:
         drawing = PolygonDrawing(points, color)
     character_draw = PolygonCharacterDrawing(rect_or_poly=drawing)
     strict_spec = to_strict(spec, character_draw)
-    return NpcOnScreen(coordinate=coordinate, spec=strict_spec)
+    return NpcOnScreen(
+        coordinate=coordinate, spec=strict_spec, anchor=Anchor.TOP_LEFT
+    )

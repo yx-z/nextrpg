@@ -35,7 +35,7 @@ log = Log()
 class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
     spec: CharacterSpec
     coordinate: Coordinate
-    anchor: Anchor = Anchor.TOP_LEFT
+    anchor: Anchor = Anchor.BOTTOM_CENTER
     _: KW_ONLY = private_init_below()
     character: CharacterDrawing = default(lambda self: self.spec.character)
     _event_started: bool = False
@@ -80,7 +80,7 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
     def collision_rectangle_area_on_screen(self) -> AreaOnScreen:
         if self._area_on_screen:
             return self._area_on_screen
-        return self._collision_rectangle_area_on_screen(self.top_left)
+        return self._collision_rectangle_area_on_screen(self.coordinate)
 
     def is_same_name(self, other: CharacterOnScreen) -> bool:
         return self.spec.unique_name == other.spec.unique_name
@@ -146,11 +146,14 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
                 return PolygonAreaOnScreen(points)
 
     def _collision_rectangle_area_on_screen(
-        self, top_left: Coordinate
+        self, coordinate: Coordinate
     ) -> RectangleAreaOnScreen:
         scaling = self.spec.config.bounding_rectangle_scaling
-        top_left = top_left + self.height * scaling.complement / 2
         size = self.size * scaling
+        top_left = (
+            coordinate.as_anchor_of(self, self.anchor).top_left
+            + self.height * scaling.complement / 2
+        )
         return top_left.as_top_left_of(size).rectangle_area_on_screen
 
     @cached_property

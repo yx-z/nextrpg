@@ -3,14 +3,14 @@ from nextrpg.geometry.dimension import Pixel, Size
 from nextrpg.gui.screen_area import screen_size
 
 
-def center_player(player_coordinate: Coordinate, map_size: Size) -> Coordinate:
+def center_player(player_center: Coordinate, map_size: Size) -> Coordinate:
     left_shift = _center_player(
-        player_coordinate.left_value,
+        player_center.left_value,
         screen_size().width_value,
         map_size.width_value,
     )
     top_shift = _center_player(
-        player_coordinate.top_value,
+        player_center.top_value,
         screen_size().height_value,
         map_size.height_value,
     )

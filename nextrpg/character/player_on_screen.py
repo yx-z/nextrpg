@@ -70,11 +70,11 @@ class PlayerOnScreen(MovingCharacterOnScreen):
 
     @override
     def can_move(
-        self, top_left: Coordinate, others: tuple[CharacterOnScreen, ...]
+        self, coordinate: Coordinate, others: tuple[CharacterOnScreen, ...]
     ) -> bool:
         if (debug := config().debug) and not debug.player_collide_with_others:
             return True
-        return super().can_move(top_left, others)
+        return super().can_move(coordinate, others)
 
 
 _MOVEMENT_KEYS = {

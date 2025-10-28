@@ -28,7 +28,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         self, time_delta: Millisecond, others: tuple[CharacterOnScreen, ...]
     ) -> Self:
         if not self.moving or (
-            not self.can_move(moved_coord := self.move(time_delta), others)
+            not self.can_move(moved_coordinate := self.move(time_delta), others)
         ):
             return super().tick(time_delta, others)
 
@@ -37,18 +37,19 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
             if self.moving
             else self.character.tick_idle(time_delta)
         )
-        ticked = replace(self, character=character, coordinate=moved_coord)
+        ticked = replace(self, character=character, coordinate=moved_coordinate)
         return self._tick_after_character_and_coordinate(time_delta, ticked)
 
     def can_move(
-        self, top_left: Coordinate, others: tuple[CharacterOnScreen, ...]
+        self, coordinate: Coordinate, others: tuple[CharacterOnScreen, ...]
     ) -> bool:
         if not self.spec.collide_with_others:
             return True
 
-        if collision := self._collide(
-            self._collision_rectangle_area_on_screen(top_left), others
-        ):
+        collision_rectangle = self._collision_rectangle_area_on_screen(
+            coordinate
+        )
+        if collision := self._collide(collision_rectangle, others):
             log.debug(t"Collided {collision.points}")
             return False
         return True
