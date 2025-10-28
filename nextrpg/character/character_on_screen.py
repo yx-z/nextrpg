@@ -20,6 +20,7 @@ from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
 from nextrpg.event.event_as_attr import EventAsAttr
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size, WidthScaling
@@ -34,6 +35,7 @@ log = Log()
 class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
     spec: CharacterSpec
     coordinate: Coordinate
+    anchor: Anchor = Anchor.TOP_LEFT
     _: KW_ONLY = private_init_below()
     character: CharacterDrawing = default(lambda self: self.spec.character)
     _event_started: bool = False
@@ -41,7 +43,7 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
     @override
     @cached_property
     def top_left(self) -> Coordinate:
-        return self.coordinate
+        return self.coordinate.as_anchor_of(self, self.anchor).top_left
 
     @override
     @cached_property
@@ -61,7 +63,7 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         character_drawing_on_screens = self.character.drawing_on_screens(
-            self.coordinate
+            self.coordinate, self.anchor
         )
         log.debug_drawing(
             {self.name: DrawingOnScreens(character_drawing_on_screens)},
@@ -78,7 +80,7 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
     def collision_rectangle_area_on_screen(self) -> AreaOnScreen:
         if self._area_on_screen:
             return self._area_on_screen
-        return self._collision_rectangle_area_on_screen(self.coordinate)
+        return self._collision_rectangle_area_on_screen(self.top_left)
 
     def is_same_name(self, other: CharacterOnScreen) -> bool:
         return self.spec.unique_name == other.spec.unique_name
@@ -87,7 +89,7 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
         if isinstance(other.spec.character, PolygonCharacterDrawing):
             character = self.character
         else:
-            direction = other.coordinate.relative_to(self.coordinate)
+            direction = other.top_left.relative_to(self.top_left)
             character = self.character.turn(direction)
         return replace(self, character=character, _event_started=True)
 
@@ -104,7 +106,7 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
     @cached_property
     def save_data(self) -> dict[str, Any]:
         return {
-            Coordinate.save_key(): self.coordinate.save_data,
+            Coordinate.save_key(): self.top_left.save_data,
             Direction.save_key(): self.character.direction.save_data,
         }
 
@@ -125,11 +127,9 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
             return self._area_on_screen
 
         scaling = self.spec.config.start_event_scaling
-        coordinate = (
-            self.coordinate - self.width * (scaling - WidthScaling(1)) / 2
-        )
+        top_left = self.top_left - self.width * (scaling - WidthScaling(1)) / 2
         size = self.size * scaling
-        return coordinate.as_top_left_of(size).rectangle_area_on_screen
+        return top_left.as_top_left_of(size).rectangle_area_on_screen
 
     @cached_property
     def _area_on_screen(self) -> AreaOnScreen | None:
@@ -138,20 +138,20 @@ class CharacterOnScreen(EventAsAttr, AnimationOnScreenLike, UpdateFromSave):
 
         match self.character.rect_or_poly:
             case RectangleDrawing() as rect:
-                return self.coordinate.as_top_left_of(
+                return self.top_left.as_top_left_of(
                     rect.size
                 ).rectangle_area_on_screen
             case PolygonDrawing() as poly:
-                points = tuple(p + self.coordinate for p in poly.points)
+                points = tuple(p + self.top_left for p in poly.points)
                 return PolygonAreaOnScreen(points)
 
     def _collision_rectangle_area_on_screen(
-        self, coordinate: Coordinate
+        self, top_left: Coordinate
     ) -> RectangleAreaOnScreen:
         scaling = self.spec.config.bounding_rectangle_scaling
-        coordinate = coordinate + self.height * scaling.complement / 2
+        top_left = top_left + self.height * scaling.complement / 2
         size = self.size * scaling
-        return coordinate.as_top_left_of(size).rectangle_area_on_screen
+        return top_left.as_top_left_of(size).rectangle_area_on_screen
 
     @cached_property
     def _collision_visual(self) -> DrawingOnScreen | None:

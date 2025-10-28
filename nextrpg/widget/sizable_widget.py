@@ -5,6 +5,7 @@ from typing import Self, override
 
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.widget.widget import Widget, WidgetOnScreen
@@ -19,11 +20,15 @@ class SizableWidgetOnScreen(WidgetOnScreen):
     def _drawing_on_screens_without_parent_and_animation(
         self,
     ) -> tuple[DrawingOnScreen, ...]:
+        return self.drawing.drawing_on_screens(
+            self.coordinate, self.widget.anchor
+        )
+
+    @cached_property
+    def coordinate(self) -> Coordinate:
         if self.widget.coordinate:
-            coordinate = self.widget.coordinate
-        else:
-            coordinate = self.from_on_screen(Coordinate)
-        return self.drawing.drawing_on_screens(coordinate)
+            return self.widget.coordinate
+        return self.from_on_screen(Coordinate)
 
     @property
     @abstractmethod
@@ -33,9 +38,12 @@ class SizableWidgetOnScreen(WidgetOnScreen):
 @dataclass(frozen=True)
 class SizableWidget(Widget):
     coordinate: Coordinate | None = None
+    anchor: Anchor = Anchor.TOP_LEFT
 
-    def anchor(self, coordinate: Coordinate) -> Self:
-        return replace(self, coordinate=coordinate)
+    def anchored(
+        self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
+    ) -> Self:
+        return replace(self, coordinate=coordinate, anchor=anchor)
 
     @property
     @abstractmethod

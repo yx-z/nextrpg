@@ -7,6 +7,7 @@ from nextrpg.config.drawing.text_config import TextConfig
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 
@@ -38,10 +39,12 @@ class Text(AnimationLike):
         )
         return DrawingGroup(draws)
 
-    def text_on_screen(self, coordinate: Coordinate) -> TextOnScreen:
+    def text_on_screen(
+        self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
+    ) -> TextOnScreen:
         from nextrpg.drawing.text_on_screen import TextOnScreen
 
-        return TextOnScreen(coordinate, self)
+        return TextOnScreen(coordinate, self, anchor)
 
     def __radd__(self, other: str) -> TextGroup:
         return self + other

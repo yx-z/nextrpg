@@ -105,17 +105,18 @@ class Drawing(AnimationLike, HasMetadata):
         return replace(self, resource=surface).add_metadata(alpha=alpha)
 
     @override
-    def drawing_on_screen(self, coordinate: Coordinate) -> DrawingOnScreen:
+    def drawing_on_screen(
+        self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
+    ) -> DrawingOnScreen:
         from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
-        return DrawingOnScreen(coordinate, self)
+        return DrawingOnScreen(coordinate, self, anchor)
 
     @override
     def drawing_on_screens(
         self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
     ) -> tuple[DrawingOnScreen, ...]:
-        top_left = coordinate.as_anchor_of(self, anchor).top_left
-        drawing_on_screen = self.drawing_on_screen(top_left)
+        drawing_on_screen = self.drawing_on_screen(coordinate, anchor)
         return (drawing_on_screen,)
 
     def __mul__(

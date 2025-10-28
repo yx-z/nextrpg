@@ -10,6 +10,7 @@ from nextrpg.drawing.animation_on_screen_like import (
 )
 from nextrpg.drawing.color import Alpha
 from nextrpg.drawing.drawing import Drawing
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size, Width
 from nextrpg.geometry.direction import DirectionalOffset
@@ -18,8 +19,14 @@ from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 @dataclass(frozen=True)
 class DrawingOnScreen(AnimationOnScreenLike):
-    top_left_input: Coordinate
+    coordinate: Coordinate
     drawing: Drawing
+    anchor: Anchor = Anchor.TOP_LEFT
+
+    @override
+    @cached_property
+    def top_left(self) -> Coordinate:
+        return self.coordinate.as_anchor_of(self, self.anchor).top_left
 
     @override
     @cached_property
@@ -47,8 +54,8 @@ class DrawingOnScreen(AnimationOnScreenLike):
     def __add__(
         self, other: Coordinate | Size | Width | Height | DirectionalOffset
     ) -> DrawingOnScreen:
-        top_left = self.top_left + other
-        return replace(self, top_left_input=top_left)
+        coordinate = self.coordinate + other
+        return replace(self, coordinate=coordinate)
 
     def __sub__(
         self, other: Coordinate | Size | Width | Height | DirectionalOffset

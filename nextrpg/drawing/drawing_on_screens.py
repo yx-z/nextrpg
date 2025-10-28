@@ -34,10 +34,11 @@ class DrawingOnScreens(AnimationOnScreenLike):
         drawing = Drawing(surface)
         return drawing.drawing_on_screen(self.top_left)
 
+    @override
     @cached_property
     def top_left(self) -> Coordinate:
-        min_left = min(d.top_left_input.left for d in self.drawing_on_screens)
-        min_top = min(d.top_left_input.top for d in self.drawing_on_screens)
+        min_left = min(d.top_left.left for d in self.drawing_on_screens)
+        min_top = min(d.top_left.top for d in self.drawing_on_screens)
         return min_left @ min_top
 
     @cached_property

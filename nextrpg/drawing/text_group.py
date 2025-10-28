@@ -8,6 +8,7 @@ from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
 from nextrpg.drawing.text import Text
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Width
 
@@ -29,10 +30,12 @@ class TextGroup(AnimationLike):
     def __len__(self) -> int:
         return sum(len(text) for text in self.texts)
 
-    def text_on_screen(self, coordinate: Coordinate) -> TextOnScreen:
+    def text_on_screen(
+        self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
+    ) -> TextOnScreen:
         from nextrpg.drawing.text_on_screen import TextOnScreen
 
-        return TextOnScreen(coordinate, self)
+        return TextOnScreen(coordinate, self, anchor)
 
     def __getitem__(self, item: slice) -> Self:
         if item.step not in (None, 1):

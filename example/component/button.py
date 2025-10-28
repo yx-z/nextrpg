@@ -3,6 +3,7 @@ from typing import Callable
 from nextrpg import (
     GREEN,
     WHITE,
+    Anchor,
     Button,
     Color,
     Coordinate,
@@ -39,6 +40,7 @@ def button(
     text_color: Color = GREEN,
     background_color: Color = WHITE,
     border_color: Color = WHITE,
+    anchor: Anchor = Anchor.TOP_LEFT,
 ) -> Button:
     text_config = config().text.colored(text_color)
 
@@ -65,4 +67,5 @@ def button(
         coordinate=coordinate,
         enter_animation=enter_animation,
         exit_animation=exit_animation,
+        anchor=anchor,
     )

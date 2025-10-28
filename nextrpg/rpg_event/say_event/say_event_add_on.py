@@ -58,10 +58,10 @@ class SayEventAddOn:
 
     @cached_property
     def text_on_screen(self) -> TextOnScreen:
-        coordinate = (
+        top_left = (
             self._add_on_top_left - self._background_relative_to_text.shift
         )
-        return self._text.text_on_screen(coordinate)
+        return self._text.text_on_screen(top_left)
 
     @cached_property
     def _add_on_top_left(self) -> Coordinate:

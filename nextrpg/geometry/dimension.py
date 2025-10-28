@@ -3,12 +3,10 @@ from functools import cached_property
 from typing import TYPE_CHECKING, NamedTuple, Self, overload, override
 
 from nextrpg.core.save import module_and_class
-from nextrpg.geometry.anchor import Anchor
 
 if TYPE_CHECKING:
     from nextrpg.geometry.coordinate import Coordinate, XAxis, YAxis
     from nextrpg.geometry.padding import Padding
-    from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 type Pixel = int | float
 type PixelPerMillisecond = int | float
@@ -263,11 +261,6 @@ class Size(NamedTuple):
     @classmethod
     def load_from_save(cls, data: list[Pixel]) -> Self:
         return cls(*data)
-
-    def rectangle_area_on_screen(
-        self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
-    ) -> RectangleAreaOnScreen:
-        return coordinate.rectangle_area_on_screen(self, anchor)
 
 
 ZERO_SIZE = Size(0, 0)
