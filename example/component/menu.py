@@ -5,6 +5,7 @@ from example.component.title import title
 from nextrpg import (
     AreaOnScreen,
     Button,
+    DefaultButton,
     Direction,
     DirectionalOffset,
     DrawingOnScreen,
@@ -52,7 +53,7 @@ def save_slot(area: AreaOnScreen, i: int) -> Button:
     top_left = area.top_left + i * height
     center = top_left.as_top_left_of(size).center
     # text_drawing = TextOnScreen()
-    return button(
+    return DefaultButton(
         name=f"Save slot #{i}",
         coordinate=top_left,
         on_click=lambda: print(f"Save to slot {i}"),
@@ -67,10 +68,10 @@ def widget_group() -> WidgetGroup:
         enter_animation=enter_animation_with_fade,
         exit_animation=exit_animation,
     )
-    save_button = button("save", save_panel)
+    save_button = DefaultButton(name="save", on_click=save_panel)
 
     title_scene = TransitionScene(title)
-    title_button = button("title", title_scene)
+    title_button = DefaultButton(name="title", on_click=title_scene)
 
     widgets = (save_button, title_button)
     return WidgetGroup(
