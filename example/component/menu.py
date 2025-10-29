@@ -1,7 +1,6 @@
 from functools import cache
 from pathlib import Path
 
-from example.component.button import button
 from example.component.title import title
 from nextrpg import (
     AreaOnScreen,

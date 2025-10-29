@@ -1,14 +1,22 @@
 from collections.abc import Callable
-from dataclasses import KW_ONLY, replace
+from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import ClassVar, Self, override
 
+from nextrpg.animation.cycle import Cycle
+from nextrpg.animation.fade import FadeIn, FadeOut
+from nextrpg.config.config import config
+from nextrpg.config.widget.button_config import ButtonConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
+    default,
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
+from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.text import Text
+from nextrpg.drawing.text_group import TextGroup
 from nextrpg.event.io_event import IoEvent, KeyboardKey, is_key_press
 from nextrpg.geometry.dimension import Size
 from nextrpg.scene.scene import Scene
@@ -74,3 +82,49 @@ class Button(SizableWidget):
     @cached_property
     def size(self) -> Size:
         return self.idle.size
+
+
+@dataclass_with_default(frozen=True, kw_only=True)
+class DefaultButton(Button):
+    text: str | Text | TextGroup = default(lambda self: self.name)
+    config: ButtonConfig = field(default_factory=lambda: config().widget.button)
+    _: KW_ONLY = private_init_below()
+    idle: AnimationLike = default(lambda self: self._init_idle)
+    active: AnimationLike = default(lambda self: self._init_active)
+
+    @property
+    def _init_active(self) -> AnimationLike:
+        padding = self.config.padding
+        border_radius = self.config.border_radius
+
+        background_border = self._text.drawings[0].background(
+            self.config.background_color,
+            padding,
+            border_radius,
+            self.config.border_width,
+        )
+        background_fill = self.config.border_color.with_percentage_alpha(
+            self.config.background_alpha_percentage
+        )
+        background = self._text.drawings[0].background(
+            background_fill, padding, border_radius
+        )
+
+        fade_in = FadeIn(
+            (background_border, background), self.config.fade_duration
+        )
+        fade_out = FadeOut(
+            (background_border, background), self.config.fade_duration
+        )
+        animation = Cycle((fade_in, fade_out))
+        return DrawingGroup((animation, self._text.drawing))
+
+    @property
+    def _init_idle(self) -> DrawingGroup:
+        return self._text.drawing
+
+    @cached_property
+    def _text(self) -> Text | TextGroup:
+        if isinstance(self.text, str):
+            return Text(self.text, self.config.text_config)
+        return self.text

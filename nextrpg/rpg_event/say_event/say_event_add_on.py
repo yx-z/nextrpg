@@ -205,7 +205,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
     @override
     @cached_property
     def _add_on_top_left(self) -> Coordinate:
-        if center := self.config.character_coordinate_override:
+        if center := self.config.character_coordinate_input:
             return center.as_center_of(
                 self._background_relative_to_text.resource
             ).top_left

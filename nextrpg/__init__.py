@@ -66,6 +66,8 @@ from nextrpg.config.system.game_loop_config import GameLoopConfig
 from nextrpg.config.system.key_mapping_config import KeyMappingConfig
 from nextrpg.config.system.window_config import WindowConfig
 from nextrpg.config.timing_config import TimingConfig
+from nextrpg.config.widget.button_config import ButtonConfig
+from nextrpg.config.widget.widget_config import WidgetConfig
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -222,7 +224,7 @@ from nextrpg.rpg_event.say_event.say_event_state import (
 )
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
-from nextrpg.widget.button import Button, ButtonOnScreen
+from nextrpg.widget.button import Button, ButtonOnScreen, DefaultButton
 from nextrpg.widget.label import Label, LabelOnScreen
 from nextrpg.widget.menu_scene import MenuScene
 from nextrpg.widget.panel import Panel, PanelOnScreen

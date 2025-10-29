@@ -83,10 +83,10 @@ class SayEventConfig:
     padding: Size = Size(12, 12)
     text_delay: Millisecond = 20
     name_override: str | None = None
-    scene_coordinate_override: Coordinate | None = None
-    character_coordinate_override: Coordinate | None = None
-    name_text_config_override: TextConfig | None = None
-    text_config_override: TextConfig | None = None
+    scene_coordinate_input: Coordinate | None = None
+    character_coordinate_input: Coordinate | None = None
+    name_text_config_input: TextConfig | None = None
+    text_config_input: TextConfig | None = None
     avatar_input: AnimationLike | Callable[[], AnimationLike] | None = None
     avatar_position: AvatarPosition = AvatarPosition.LEFT
 
@@ -98,8 +98,8 @@ class SayEventConfig:
 
     @property
     def scene_coordinate(self) -> Coordinate:
-        if self.scene_coordinate_override:
-            return self.scene_coordinate_override
+        if self.scene_coordinate_input:
+            return self.scene_coordinate_input
 
         from nextrpg.gui.screen_area import screen_area
 
@@ -107,8 +107,8 @@ class SayEventConfig:
 
     @property
     def text_config(self) -> TextConfig:
-        if self.text_config_override:
-            return self.text_config_override
+        if self.text_config_input:
+            return self.text_config_input
 
         from nextrpg.config.config import config
 
@@ -117,6 +117,6 @@ class SayEventConfig:
 
     @property
     def name_text_config(self) -> TextConfig:
-        if self.name_text_config_override:
-            return self.name_text_config_override
+        if self.name_text_config_input:
+            return self.name_text_config_input
         return replace(self.text_config, color=BLUE)

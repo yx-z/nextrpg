@@ -1,9 +1,9 @@
 from functools import cache
 from pathlib import Path
 
-from example.component.button import button
 from example.scene.interior_scene import interior_scene
 from nextrpg import (
+    DefaultButton,
     Direction,
     DirectionalOffset,
     DrawingOnScreen,
@@ -23,10 +23,10 @@ from nextrpg import (
 @cache
 def title() -> TmxWidgetGroupOnScreen:
     scene = TransitionScene(interior_scene)
-    start = button("start", scene)
-    load = button("load", lambda: None)
-    options = button("options", quit)
-    exit_button = button("exit", quit)
+    start = DefaultButton(name="start", on_click=scene)
+    load = DefaultButton(name="load", on_click=lambda: None)
+    options = DefaultButton(name="options", on_click=quit)
+    exit_button = DefaultButton(name="exit", on_click=quit)
 
     group = WidgetGroup(
         children=(start, load, options, exit_button),
