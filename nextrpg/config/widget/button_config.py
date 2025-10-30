@@ -15,8 +15,7 @@ class ButtonConfig:
     fade_duration_input: Millisecond | None = None
     border_width: Pixel = 2
     border_radius: Pixel = 5
-    background_alpha_percentage: float = 0.7
-    background_color: Color = WHITE
+    background_color: Color = WHITE.with_percentage_alpha(0.7)
     border_color: Color = WHITE
     anchor: Anchor = Anchor.TOP_LEFT
 

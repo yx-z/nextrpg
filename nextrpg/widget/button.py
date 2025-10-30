@@ -105,11 +105,8 @@ class DefaultButton(Button):
             border_radius,
             self.config.border_width,
         )
-        background_color = self.config.background_color.with_percentage_alpha(
-            self.config.background_alpha_percentage
-        )
         background = self._text.drawings[0].background(
-            background_color, padding, border_radius
+            self.config.background_color, padding, border_radius
         )
 
         duration = self.config.fade_duration
