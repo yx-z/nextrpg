@@ -3,12 +3,16 @@ from pathlib import Path
 
 from example.component.title import title
 from nextrpg import (
+    TRANSPARENT,
+    Anchor,
     AreaOnScreen,
     Button,
+    ButtonConfig,
     DefaultButton,
     Direction,
     DirectionalOffset,
     DrawingOnScreen,
+    DrawingOnScreens,
     FadeIn,
     Height,
     MapScene,
@@ -16,6 +20,8 @@ from nextrpg import (
     MoveTo,
     Panel,
     ScrollDirection,
+    Text,
+    TextOnScreen,
     TimedAnimationOnScreens,
     TmxLoader,
     TransitionScene,
@@ -24,6 +30,7 @@ from nextrpg import (
     Width,
     animate,
 )
+from nextrpg.geometry.padding import Padding
 
 
 def menu(map: MapScene) -> MenuScene:
@@ -43,20 +50,28 @@ PADDING_HEIGHT = Height(10)
 
 
 def save_slots(area: AreaOnScreen) -> tuple[Widget, ...]:
-    return tuple(save_slot(area, i) for i in range(1, NUM_SAVE_SLOTS + 1))
+    return tuple(save_slot(area, i) for i in range(NUM_SAVE_SLOTS))
 
 
 def save_slot(area: AreaOnScreen, i: int) -> Button:
     height = area.height / NUM_SAVE_SLOTS - PADDING_HEIGHT * 2
     width = area.width - PADDING_WIDTH * 2
     size = width * height
-    top_left = area.top_left + i * height
-    center = top_left.as_top_left_of(size).center
-    # text_drawing = TextOnScreen()
+    top_left = area.top_left + i * height + PADDING_HEIGHT + PADDING_WIDTH
+    button = top_left.as_top_left_of(size)
+    center = button.center
+    background = button.rectangle_area_on_screen.fill(TRANSPARENT)
+    text = Text(f"Save #{i}")
+    text_on_screen = TextOnScreen(center, text, Anchor.CENTER)
+    group = DrawingOnScreens((background,) + text_on_screen.drawing_on_screens)
+    padding = Padding()
+    config = ButtonConfig(padding=padding)
     return DefaultButton(
-        text=f"Save slot #{i}",
-        coordinate=top_left,
+        text=group.drawing_group_at_origin,
+        coordinate=center,
         on_click=lambda: print(f"Save to slot {i}"),
+        config=config,
+        anchor=Anchor.CENTER,
     )
 
 

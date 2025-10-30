@@ -3,11 +3,12 @@ from enum import Enum, auto
 from functools import cache, cached_property
 from typing import TypeIs
 
-from pygame.constants import KEYDOWN, KEYUP, QUIT, VIDEORESIZE
+from pygame.constants import KEYDOWN, KEYUP, MOUSEBUTTONDOWN, QUIT, VIDEORESIZE
 from pygame.event import Event, post
 
 from nextrpg.config.config import config
 from nextrpg.config.system.key_mapping_config import KeyCode
+from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 
 
@@ -74,12 +75,19 @@ class KeyPressUp(_KeyPressEvent):
     pass
 
 
+class MouseButtonDown(IoEvent):
+    @cached_property
+    def coordinate(self) -> Coordinate:
+        return Coordinate(*self.event.pos)
+
+
 def to_io_event(event: Event) -> IoEvent:
     return {
         QUIT: Quit,
         VIDEORESIZE: WindowResize,
         KEYDOWN: KeyPressDown,
         KEYUP: KeyPressUp,
+        MOUSEBUTTONDOWN: MouseButtonDown,
     }.get(event.type, IoEvent)(event)
 
 

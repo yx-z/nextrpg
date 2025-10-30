@@ -7,6 +7,6 @@
   <object id="8" name="title" x="1100" y="400">
    <point/>
   </object>
-  <object id="10" name="save_panel" x="270" y="64" width="750" height="480"/>
+  <object id="10" name="save_panel" x="274" y="139" width="750" height="480"/>
  </objectgroup>
 </map>

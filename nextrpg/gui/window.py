@@ -25,6 +25,7 @@ from nextrpg.event.io_event import (
     IoEvent,
     KeyboardKey,
     KeyPressDown,
+    MouseButtonDown,
     WindowResize,
 )
 from nextrpg.geometry.anchor import Anchor
@@ -87,15 +88,17 @@ class Window:
             _screen=screen,
         )
 
-    def event(self, e: IoEvent) -> Self:
-        match e:
+    def event(self, event: IoEvent) -> Self:
+        match event:
             case WindowResize():
-                return self._resize(e.size)
+                return self._resize(event.size)
             case KeyPressDown():
-                if e.key is KeyboardKey.FULL_SCREEN_TOGGLE:
+                if event.key is KeyboardKey.FULL_SCREEN_TOGGLE:
                     return self._toggle_full_screen()
-                if e.key is KeyboardKey.INCLUDE_FPS_IN_WINDOW_TITLE_TOGGLE:
+                if event.key is KeyboardKey.INCLUDE_FPS_IN_WINDOW_TITLE_TOGGLE:
                     return self._toggle_include_fps_in_window_title()
+            case MouseButtonDown():
+                log.debug(t"Mouse clicked at {event.coordinate}")
         return self
 
     def blits(

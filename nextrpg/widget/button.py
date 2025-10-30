@@ -17,7 +17,6 @@ from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.text import Text
-from nextrpg.drawing.text_group import TextGroup
 from nextrpg.event.io_event import IoEvent, KeyboardKey, is_key_press
 from nextrpg.geometry.dimension import Size
 from nextrpg.scene.scene import Scene
@@ -87,7 +86,7 @@ class Button(SizableWidget):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class DefaultButton(Button):
-    text: str | Text | TextGroup = default(
+    text: str | AnimationLike = default(
         lambda self: self.name if self.name else throw("Require name or text.")
     )
     config: ButtonConfig = field(default_factory=lambda: config().widget.button)
@@ -99,13 +98,13 @@ class DefaultButton(Button):
     def _init_active(self) -> AnimationLike:
         padding = self.config.padding
         border_radius = self.config.border_radius
-        background_border = self._text.drawings[0].background(
+        background_border = self.idle.drawings[0].background(
             self.config.border_color,
             padding,
             border_radius,
             self.config.border_width,
         )
-        background = self._text.drawings[0].background(
+        background = self.idle.drawings[0].background(
             self.config.background_color, padding, border_radius
         )
 
@@ -113,14 +112,10 @@ class DefaultButton(Button):
         fade_in = FadeIn((background_border, background), duration)
         fade_out = FadeOut((background_border, background), duration)
         animation = Cycle((fade_in, fade_out))
-        return DrawingGroup((animation, self._text.drawing))
+        return DrawingGroup((animation, self.idle))
 
     @property
-    def _init_idle(self) -> DrawingGroup:
-        return self._text.drawing
-
-    @cached_property
-    def _text(self) -> Text | TextGroup:
+    def _init_idle(self) -> AnimationLike:
         if isinstance(self.text, str):
             return Text(self.text, self.config.text_config)
         return self.text
