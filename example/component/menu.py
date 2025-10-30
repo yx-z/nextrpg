@@ -78,8 +78,7 @@ def widget_group() -> WidgetGroup:
     save_panel = Panel(
         name="save_panel",
         create_children=save_slots,
-        enter_animation=enter_animation_with_fade,
-        exit_animation=exit_animation,
+        enter_animation=enter_animation,
     )
     save_button = DefaultButton(name="save", on_click=save_panel)
 
@@ -91,27 +90,12 @@ def widget_group() -> WidgetGroup:
         children=widgets,
         scroll_direction=ScrollDirection.HORIZONTAL,
         enter_animation=enter_animation,
-        exit_animation=exit_animation,
     )
-
-
-WIDGET_OFFSET = DirectionalOffset(Direction.DOWN, 50)
 
 
 def enter_animation(
     drawing_on_screens: tuple[DrawingOnScreen, ...],
 ) -> TimedAnimationOnScreens:
-    return animate(drawing_on_screens, MoveTo, offset=WIDGET_OFFSET)
-
-
-def enter_animation_with_fade(
-    drawing_on_screens: tuple[DrawingOnScreen, ...],
-) -> TimedAnimationOnScreens:
+    WIDGET_OFFSET = DirectionalOffset(Direction.DOWN, 50)
     fade_in = animate(drawing_on_screens, FadeIn)
     return fade_in.compose(MoveTo, offset=WIDGET_OFFSET)
-
-
-def exit_animation(
-    drawing_on_screens: tuple[DrawingOnScreen, ...],
-) -> TimedAnimationOnScreens:
-    return enter_animation_with_fade(drawing_on_screens).reverse

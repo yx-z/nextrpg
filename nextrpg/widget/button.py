@@ -111,7 +111,7 @@ class DefaultButton(Button):
         duration = self.config.fade_duration
         fade_in = FadeIn((background_border, background), duration)
         fade_out = FadeOut((background_border, background), duration)
-        animation = Cycle((fade_in, fade_out))
+        animation = Cycle((fade_out, fade_in))
         return DrawingGroup((animation, self.idle))
 
     @property
