@@ -15,8 +15,6 @@ from nextrpg import (
     DrawingOnScreens,
     FadeIn,
     Height,
-    MapScene,
-    MenuScene,
     MoveTo,
     Panel,
     ScrollDirection,
@@ -33,14 +31,30 @@ from nextrpg import (
 from nextrpg.geometry.padding import Padding
 
 
-def menu(map: MapScene) -> MenuScene:
-    return MenuScene(map=map, widget=widget_group(), tmx=tmx())
-
-
 @cache
 def tmx() -> TmxLoader:
     tmx_path = Path("example/component/menu.tmx")
     return TmxLoader(tmx_path)
+
+
+@cache
+def menu_widget() -> WidgetGroup:
+    save_panel = Panel(
+        name="save_panel",
+        create_children=save_slots,
+        enter_animation=enter_animation,
+    )
+    save_button = DefaultButton(name="save", on_click=save_panel)
+
+    title_scene = TransitionScene(title)
+    title_button = DefaultButton(name="title", on_click=title_scene)
+
+    widgets = (save_button, title_button)
+    return WidgetGroup(
+        children=widgets,
+        scroll_direction=ScrollDirection.HORIZONTAL,
+        enter_animation=enter_animation,
+    )
 
 
 NUM_SAVE_SLOTS = 3
@@ -70,26 +84,6 @@ def save_slot(area: AreaOnScreen, i: int) -> Button:
         coordinate=top_left,
         on_click=lambda: print(f"Save to slot {i}"),
         config=ButtonConfig(padding=Padding()),
-    )
-
-
-@cache
-def widget_group() -> WidgetGroup:
-    save_panel = Panel(
-        name="save_panel",
-        create_children=save_slots,
-        enter_animation=enter_animation,
-    )
-    save_button = DefaultButton(name="save", on_click=save_panel)
-
-    title_scene = TransitionScene(title)
-    title_button = DefaultButton(name="title", on_click=title_scene)
-
-    widgets = (save_button, title_button)
-    return WidgetGroup(
-        children=widgets,
-        scroll_direction=ScrollDirection.HORIZONTAL,
-        enter_animation=enter_animation,
     )
 
 

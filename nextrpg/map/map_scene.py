@@ -36,6 +36,7 @@ from nextrpg.map.map_move import MapMove
 from nextrpg.map.map_shift import center_player
 from nextrpg.rpg_event.eventful_scene import EventfulScene
 from nextrpg.scene.scene import Scene
+from nextrpg.widget.menu_scene import MenuScene
 
 log = Log()
 
@@ -118,10 +119,8 @@ class MapScene(EventfulScene, UpdateFromSave):
 
     @override
     def event(self, event: IoEvent) -> Scene:
-        if (create_menu := config().menu.create) and is_key_press(
-            event, KeyboardKey.CANCEL
-        ):
-            return create_menu(self)
+        if (menu := config().menu) and is_key_press(event, KeyboardKey.CANCEL):
+            return MenuScene(map=self, widget=menu.widget, tmx=menu.tmx)
         return super().event(event)
 
     @override

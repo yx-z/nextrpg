@@ -45,7 +45,7 @@ class Config:
     save: SaveConfig = SaveConfig()
     game_loop: GameLoopConfig = GameLoopConfig()
     widget: WidgetConfig = WidgetConfig()
-    menu: MenuConfig = MenuConfig()
+    menu: MenuConfig | None = None
 
 
 def set_config(cfg: Config) -> Config:
