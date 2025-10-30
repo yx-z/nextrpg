@@ -1,4 +1,4 @@
-__version__ = "0.1.18"
+__version__ = "0.1.20"
 
 from nextrpg.animation.abstract_animation import AbstractAnimation
 from nextrpg.animation.abstract_animation_on_screen import (
