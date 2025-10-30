@@ -11,6 +11,7 @@ from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
     private_init_below,
+    throw,
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
@@ -86,7 +87,9 @@ class Button(SizableWidget):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class DefaultButton(Button):
-    text: str | Text | TextGroup = default(lambda self: self.name)
+    text: str | Text | TextGroup = default(
+        lambda self: self.name if self.name else throw("Require name or text.")
+    )
     config: ButtonConfig = field(default_factory=lambda: config().widget.button)
     _: KW_ONLY = private_init_below()
     idle: AnimationLike = default(lambda self: self._init_idle)

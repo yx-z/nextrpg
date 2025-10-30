@@ -2,10 +2,15 @@ from collections.abc import Callable
 from dataclasses import Field, dataclass, field, fields
 from typing import (
     Any,
+    NoReturn,
     TypeVar,
     dataclass_transform,
     overload,
 )
+
+
+def throw(message: str) -> NoReturn:
+    raise RuntimeError(message)
 
 
 def private_init_below() -> Any:

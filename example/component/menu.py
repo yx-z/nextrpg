@@ -54,7 +54,7 @@ def save_slot(area: AreaOnScreen, i: int) -> Button:
     center = top_left.as_top_left_of(size).center
     # text_drawing = TextOnScreen()
     return DefaultButton(
-        name=f"Save slot #{i}",
+        text=f"Save slot #{i}",
         coordinate=top_left,
         on_click=lambda: print(f"Save to slot {i}"),
     )
