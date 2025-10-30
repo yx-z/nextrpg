@@ -63,7 +63,7 @@ def save_slot(area: AreaOnScreen, i: int) -> Button:
     text = Text(f"Save #{i}")
     text_on_screen = TextOnScreen(button.center, text, Anchor.CENTER)
     drawing_on_screens = DrawingOnScreens(
-        (background,) + text_on_screen.drawing_on_screens
+        (background, text_on_screen.drawing_on_screen)
     )
     return DefaultButton(
         text=drawing_on_screens.drawing_group_at_origin,
