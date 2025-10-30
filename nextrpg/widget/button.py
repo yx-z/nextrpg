@@ -99,26 +99,22 @@ class DefaultButton(Button):
     def _init_active(self) -> AnimationLike:
         padding = self.config.padding
         border_radius = self.config.border_radius
-
         background_border = self._text.drawings[0].background(
-            self.config.background_color,
+            self.config.border_color,
             padding,
             border_radius,
             self.config.border_width,
         )
-        background_fill = self.config.border_color.with_percentage_alpha(
+        background_color = self.config.background_color.with_percentage_alpha(
             self.config.background_alpha_percentage
         )
         background = self._text.drawings[0].background(
-            background_fill, padding, border_radius
+            background_color, padding, border_radius
         )
 
-        fade_in = FadeIn(
-            (background_border, background), self.config.fade_duration
-        )
-        fade_out = FadeOut(
-            (background_border, background), self.config.fade_duration
-        )
+        duration = self.config.fade_duration
+        fade_in = FadeIn((background_border, background), duration)
+        fade_out = FadeOut((background_border, background), duration)
         animation = Cycle((fade_in, fade_out))
         return DrawingGroup((animation, self._text.drawing))
 
