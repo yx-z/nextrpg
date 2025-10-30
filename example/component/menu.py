@@ -45,15 +45,15 @@ def tmx() -> TmxLoader:
 
 NUM_SAVE_SLOTS = 3
 
-PADDING_WIDTH = Width(10)
-PADDING_HEIGHT = Height(10)
-
 
 def save_slots(area: AreaOnScreen) -> tuple[Widget, ...]:
     return tuple(save_slot(area, i) for i in range(NUM_SAVE_SLOTS))
 
 
 def save_slot(area: AreaOnScreen, i: int) -> Button:
+    PADDING_WIDTH = Width(10)
+    PADDING_HEIGHT = Height(10)
+
     height = area.height / NUM_SAVE_SLOTS - PADDING_HEIGHT * 2
     width = area.width - PADDING_WIDTH * 2
     top_left = area.top_left + i * height + PADDING_HEIGHT + PADDING_WIDTH
