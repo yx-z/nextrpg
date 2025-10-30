@@ -56,22 +56,20 @@ def save_slots(area: AreaOnScreen) -> tuple[Widget, ...]:
 def save_slot(area: AreaOnScreen, i: int) -> Button:
     height = area.height / NUM_SAVE_SLOTS - PADDING_HEIGHT * 2
     width = area.width - PADDING_WIDTH * 2
-    size = width * height
     top_left = area.top_left + i * height + PADDING_HEIGHT + PADDING_WIDTH
-    button = top_left.as_top_left_of(size)
-    center = button.center
+    button = top_left.as_top_left_of(width * height)
+
     background = button.rectangle_area_on_screen.fill(TRANSPARENT)
     text = Text(f"Save #{i}")
-    text_on_screen = TextOnScreen(center, text, Anchor.CENTER)
-    group = DrawingOnScreens((background,) + text_on_screen.drawing_on_screens)
-    padding = Padding()
-    config = ButtonConfig(padding=padding)
+    text_on_screen = TextOnScreen(button.center, text, Anchor.CENTER)
+    drawing_on_screens = DrawingOnScreens(
+        (background,) + text_on_screen.drawing_on_screens
+    )
     return DefaultButton(
-        text=group.drawing_group_at_origin,
-        coordinate=center,
+        text=drawing_on_screens.drawing_group_at_origin,
+        coordinate=top_left,
         on_click=lambda: print(f"Save to slot {i}"),
-        config=config,
-        anchor=Anchor.CENTER,
+        config=ButtonConfig(padding=Padding()),
     )
 
 
