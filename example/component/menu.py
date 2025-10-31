@@ -49,7 +49,6 @@ def menu_widget() -> WidgetGroup:
         name="save_panel",
         children=save_slots,
         enter_animation=enter_animation,
-        exit_animation=enter_animation.reverse,
     )
     save_button = DefaultButton(name="save", on_click=save_panel)
 
@@ -61,7 +60,6 @@ def menu_widget() -> WidgetGroup:
         children=widgets,
         scroll_direction=ScrollDirection.HORIZONTAL,
         enter_animation=enter_animation,
-        exit_animation=enter_animation.reverse,
     )
 
 

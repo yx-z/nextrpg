@@ -177,7 +177,9 @@ class Widget(ABC):
     # Must be a subclass of WidgetOnScreen.
     widget_on_screen_type: ClassVar[type]
     enter_animation: TimedAnimationSpec | None = None
-    exit_animation: TimedAnimationSpec | None = None
+    exit_animation: TimedAnimationSpec | None = default(
+        lambda self: self._init_exit_animation
+    )
 
     def widget_on_screen(
         self,
@@ -187,3 +189,9 @@ class Widget(ABC):
         return self.widget_on_screen_type(
             widget=self, name_to_on_screens=name_to_on_screens, parent=parent
         )
+
+    @property
+    def _init_exit_animation(self) -> TimedAnimationOnScreens | None:
+        if self.enter_animation:
+            return self.enter_animation.reverse
+        return None

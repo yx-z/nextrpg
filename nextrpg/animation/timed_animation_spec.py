@@ -15,15 +15,13 @@ from nextrpg.geometry.anchor import Anchor
 @dataclass(frozen=True)
 class TimedAnimationSpec:
     _: KW_ONLY = private_init_below()
-    animations: tuple[
-        tuple[type[TimedAnimationGroup], dict[str, Any]], ...
-    ] = ()
-    anchor: Anchor = Anchor.TOP_LEFT
-    is_reverse: bool = False
+    animations: tuple[tuple[type[TimedAnimationGroup], dict[str, Any]], ...]
+    anchor: Anchor
+    is_reversed: bool
 
     @cached_property
     def reverse(self) -> Self:
-        return replace(self, is_reverse=True)
+        return replace(self, is_reversed=not self.is_reversed)
 
     def __init__(
         self,
@@ -32,16 +30,14 @@ class TimedAnimationSpec:
             tuple[type[TimedAnimationGroup], dict[str, Any]], ...
         ] = (),
         anchor: Anchor = Anchor.TOP_LEFT,
-        is_reverse: bool = False,
+        is_reversed: bool = False,
         **kwargs: Any,
     ) -> None:
         if animation_type:
             animations += ((animation_type, kwargs),)
-        else:
-            animations = animations
         object.__setattr__(self, "anchor", anchor)
         object.__setattr__(self, "animations", animations)
-        object.__setattr__(self, "is_reverse", is_reverse)
+        object.__setattr__(self, "is_reversed", is_reversed)
 
     def compose(
         self, animation_type: type[TimedAnimationGroup], **kwargs: Any
@@ -57,6 +53,6 @@ class TimedAnimationSpec:
         animation = animate(resource, animation_type, self.anchor, **kwargs)
         for animation_type, kwargs in self.animations[1:]:
             animation = animation.compose(animation_type, **kwargs)
-        if self.is_reverse:
+        if self.is_reversed:
             return animation.reverse
         return animation
