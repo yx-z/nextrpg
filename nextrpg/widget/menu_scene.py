@@ -1,10 +1,10 @@
-from collections.abc import Callable
 from dataclasses import KW_ONLY, field
 from typing import TYPE_CHECKING, override
 
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
+from nextrpg.animation.timed_animation_spec import TimedAnimationSpec
 from nextrpg.config.config import config
 from nextrpg.config.menu_config import MenuConfig
 from nextrpg.core.dataclass_with_default import (
@@ -53,15 +53,10 @@ class MenuScene(TmxWidgetGroupOnScreen):
     def _init_animation(
         self,
         background_animation: TimedAnimationOnScreens,
-        create_widget_animation: (
-            Callable[[tuple[DrawingOnScreen, ...]], TimedAnimationOnScreens]
-            | None
-        ),
+        spec: TimedAnimationSpec | None,
     ) -> AnimationOnScreens:
-        if create_widget_animation:
-            widget_animation = create_widget_animation(
-                self.children_drawing_on_screens
-            )
+        if spec:
+            widget_animation = spec.animate(self.children_drawing_on_screens)
             return background_animation.concur(widget_animation)
         return background_animation
 

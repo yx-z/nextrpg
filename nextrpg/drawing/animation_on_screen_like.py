@@ -181,7 +181,7 @@ def animate(
 
 def animate(
     resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...],
-    animation_type: type[_TimedAnimationGroup],
+    animation_type: type[_TimedAnimationGroup] | type[_AnimationGroup],
     anchor: Anchor = Anchor.TOP_LEFT,
     **kwargs: Any,
 ) -> AnimationOnScreens | TimedAnimationOnScreens:

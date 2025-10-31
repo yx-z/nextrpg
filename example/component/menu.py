@@ -11,24 +11,22 @@ from nextrpg import (
     DefaultButton,
     Direction,
     DirectionalOffset,
-    DrawingOnScreen,
     DrawingOnScreens,
     FadeIn,
     Height,
     MoveTo,
+    Padding,
     Panel,
     ScrollDirection,
     Text,
     TextOnScreen,
-    TimedAnimationOnScreens,
+    TimedAnimationSpec,
     TmxLoader,
     TransitionScene,
     Widget,
     WidgetGroup,
     Width,
-    animate,
 )
-from nextrpg.geometry.padding import Padding
 
 
 @cache
@@ -39,10 +37,15 @@ def tmx() -> TmxLoader:
 
 @cache
 def menu_widget() -> WidgetGroup:
+    WIDGET_OFFSET = DirectionalOffset(Direction.DOWN, 50)
+    enter_animation = TimedAnimationSpec(FadeIn).compose(
+        MoveTo, offset=WIDGET_OFFSET
+    )
     save_panel = Panel(
         name="save_panel",
         create_children=save_slots,
         enter_animation=enter_animation,
+        exit_animation=enter_animation.reverse,
     )
     save_button = DefaultButton(name="save", on_click=save_panel)
 
@@ -54,6 +57,7 @@ def menu_widget() -> WidgetGroup:
         children=widgets,
         scroll_direction=ScrollDirection.HORIZONTAL,
         enter_animation=enter_animation,
+        exit_animation=enter_animation.reverse,
     )
 
 
@@ -85,11 +89,3 @@ def save_slot(area: AreaOnScreen, i: int) -> Button:
         on_click=lambda: print(f"Save to slot {i}"),
         config=ButtonConfig(padding=Padding()),
     )
-
-
-def enter_animation(
-    drawing_on_screens: tuple[DrawingOnScreen, ...],
-) -> TimedAnimationOnScreens:
-    WIDGET_OFFSET = DirectionalOffset(Direction.DOWN, 50)
-    fade_in = animate(drawing_on_screens, FadeIn)
-    return fade_in.compose(MoveTo, offset=WIDGET_OFFSET)

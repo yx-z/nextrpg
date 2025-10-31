@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
-from collections.abc import Callable
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import ClassVar, Self, override
 
+from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
+from nextrpg.animation.timed_animation_spec import TimedAnimationSpec
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -147,17 +148,17 @@ class WidgetOnScreen(Scene):
         return self
 
     @property
-    def _init_enter_animation(self) -> TimedAnimationOnScreens | None:
+    def _init_enter_animation(self) -> AnimationOnScreens | None:
         if self.widget.enter_animation:
-            return self.widget.enter_animation(
+            return self.widget.enter_animation.animate(
                 self._drawing_on_screens_without_parent_and_animation
             )
         return None
 
     @property
-    def _init_exit_animation(self) -> TimedAnimationOnScreens | None:
+    def _init_exit_animation(self) -> AnimationOnScreens | None:
         if self.widget.exit_animation:
-            return self.widget.exit_animation(
+            return self.widget.exit_animation.animate(
                 self._drawing_on_screens_without_parent_and_animation
             )
         return None
@@ -175,26 +176,8 @@ class WidgetOnScreen(Scene):
 class Widget(ABC):
     # Must be a subclass of WidgetOnScreen.
     widget_on_screen_type: ClassVar[type]
-    enter_animation: (
-        Callable[[tuple[DrawingOnScreen, ...]], TimedAnimationOnScreens] | None
-    ) = None
-    exit_animation: (
-        Callable[[tuple[DrawingOnScreen, ...]], TimedAnimationOnScreens] | None
-    ) = default(lambda self: self._init_exit_animation)
-
-    @property
-    def _init_exit_animation(
-        self,
-    ) -> Callable[[DrawingOnScreen, ...], TimedAnimationOnScreens] | None:
-        if self.enter_animation:
-
-            def exit_animation(
-                d: tuple[DrawingOnScreen, ...],
-            ) -> TimedAnimationOnScreens:
-                return self.enter_animation(d).reverse
-
-            return exit_animation
-        return None
+    enter_animation: TimedAnimationSpec | None = None
+    exit_animation: TimedAnimationSpec | None = None
 
     def widget_on_screen(
         self,

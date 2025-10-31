@@ -5,6 +5,7 @@ from itertools import cycle, pairwise
 from typing import ClassVar, Self, override
 
 from nextrpg.animation.animation_on_screens import AnimationOnScreens
+from nextrpg.config.system.key_mapping_config import KeyCode
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -56,8 +57,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
 
         if isinstance(event, KeyPressDown):
             key = (self.widget.scroll_direction, event.key)
-            forward = _SCROLL_AND_KEY_TO_FORWARD.get(key)
-            if forward is not None:
+            if (forward := _SCROLL_AND_KEY_TO_FORWARD.get(key)) is not None:
                 return self._step(forward)
         return self._with_children(children)
 
@@ -145,7 +145,9 @@ class WidgetGroup(Widget):
     widget_on_screen_type: ClassVar[type] = WidgetGroupOnScreen
 
 
-_SCROLL_AND_KEY_TO_FORWARD: dict[tuple[ScrollDirection, KeyboardKey], bool] = {
+_SCROLL_AND_KEY_TO_FORWARD: dict[
+    tuple[ScrollDirection, KeyboardKey | KeyCode], bool
+] = {
     (ScrollDirection.HORIZONTAL, KeyboardKey.LEFT): False,
     (ScrollDirection.HORIZONTAL, KeyboardKey.RIGHT): True,
     (ScrollDirection.VERTICAL, KeyboardKey.UP): False,

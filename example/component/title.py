@@ -4,18 +4,11 @@ from pathlib import Path
 from example.scene.interior_scene import interior_scene
 from nextrpg import (
     DefaultButton,
-    Direction,
-    DirectionalOffset,
-    DrawingOnScreen,
-    FadeIn,
-    MoveTo,
     ScrollDirection,
-    TimedAnimationOnScreens,
     TmxLoader,
     TmxWidgetGroupOnScreen,
     TransitionScene,
     WidgetGroup,
-    animate,
     quit,
 )
 
@@ -38,11 +31,3 @@ def title() -> TmxWidgetGroupOnScreen:
     return TmxWidgetGroupOnScreen(
         tmx=tmx_loader, background="background", widget=group
     )
-
-
-def enter_panel(
-    drawing_on_screens: tuple[DrawingOnScreen, ...],
-) -> TimedAnimationOnScreens:
-    offset = DirectionalOffset(Direction.DOWN, 50)
-    move = animate(drawing_on_screens, MoveTo, offset=offset, duration=300)
-    return move.compose(FadeIn)

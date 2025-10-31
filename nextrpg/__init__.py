@@ -15,6 +15,7 @@ from nextrpg.animation.scale import Scale, ScaleFrom, ScaleTo
 from nextrpg.animation.sequence import Sequence
 from nextrpg.animation.timed_animation_group import TimedAnimationGroup
 from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
+from nextrpg.animation.timed_animation_spec import TimedAnimationSpec
 from nextrpg.animation.typewriter import Typewriter
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_on_screen import CharacterOnScreen
@@ -63,7 +64,7 @@ from nextrpg.config.rpg_event.say_event_config import (
 from nextrpg.config.save_config import SaveConfig
 from nextrpg.config.system.debug_config import DebugConfig
 from nextrpg.config.system.game_loop_config import GameLoopConfig
-from nextrpg.config.system.key_mapping_config import KeyMappingConfig
+from nextrpg.config.system.key_mapping_config import KeyCode, KeyMappingConfig
 from nextrpg.config.system.window_config import WindowConfig
 from nextrpg.config.timing_config import TimingConfig
 from nextrpg.config.widget.button_config import ButtonConfig
