@@ -74,16 +74,17 @@ def save_slot(i: int) -> Callable[[PanelOnScreen], Button]:
         top_left = area.top_left + i * height + PADDING_HEIGHT + PADDING_WIDTH
         button = top_left.as_top_left_of(width * height)
 
-        background = button.rectangle_area_on_screen.fill(TRANSPARENT)
+        # To keep button size stable between idle and active.
+        invisible_background = button.rectangle_area_on_screen.fill(TRANSPARENT)
         text = Text(f"Save #{i}")
         text_on_screen = TextOnScreen(button.center, text, Anchor.CENTER)
         drawing_on_screens = DrawingOnScreens(
-            (background, text_on_screen.drawing_on_screen)
+            (invisible_background, text_on_screen.drawing_on_screen)
         )
         return DefaultButton(
             text=drawing_on_screens.drawing_group_at_origin,
             coordinate=top_left,
-            on_click=lambda: print(f"Save to slot {i}"),
+            on_click=lambda _: print(f"Save to slot {i}"),
             config=ButtonConfig(padding=Padding()),
         )
 

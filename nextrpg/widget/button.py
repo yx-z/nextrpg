@@ -24,7 +24,7 @@ from nextrpg.widget.sizable_widget import (
     SizableWidget,
     SizableWidgetOnScreen,
 )
-from nextrpg.widget.widget import Widget
+from nextrpg.widget.widget import Widget, WidgetOnScreen
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
@@ -44,7 +44,8 @@ class ButtonOnScreen(SizableWidgetOnScreen):
             return self
 
         if callable(self.widget.on_click):
-            self.widget.on_click()
+            if isinstance(res := self.widget.on_click(self), WidgetOnScreen):
+                return res
             return self
 
         if isinstance(self.widget.on_click, Widget):
@@ -71,7 +72,7 @@ class ButtonOnScreen(SizableWidgetOnScreen):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class Button(SizableWidget):
-    on_click: Scene | Widget | Callable[[], None]
+    on_click: Scene | Widget | Callable[[ButtonOnScreen], None]
     idle: AnimationLike
     active: AnimationLike
     name: str | None = None
