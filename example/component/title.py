@@ -17,9 +17,9 @@ from nextrpg import (
 def title() -> TmxWidgetGroupOnScreen:
     scene = TransitionScene(interior_scene)
     start = DefaultButton(name="start", on_click=scene)
-    load = DefaultButton(name="load", on_click=lambda _: None)
-    options = DefaultButton(name="options", on_click=lambda _: quit())
-    exit_button = DefaultButton(name="exit", on_click=lambda _: quit())
+    load = DefaultButton(name="load", on_click=quit)
+    options = DefaultButton(name="options", on_click=quit)
+    exit_button = DefaultButton(name="exit", on_click=quit)
 
     group = WidgetGroup(
         children=(start, load, options, exit_button),

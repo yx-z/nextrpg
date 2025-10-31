@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum, auto
 from functools import cache, cached_property
-from typing import TypeIs
+from typing import Any, TypeIs
 
 from pygame.constants import KEYDOWN, KEYUP, MOUSEBUTTONDOWN, QUIT, VIDEORESIZE
 from pygame.event import Event, post
@@ -91,5 +91,5 @@ def to_io_event(event: Event) -> IoEvent:
     }.get(event.type, IoEvent)(event)
 
 
-def quit() -> None:
+def quit(*args: Any, **kwargs: Any) -> None:
     post(Event(QUIT))
