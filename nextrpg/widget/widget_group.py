@@ -40,6 +40,22 @@ class WidgetGroupOnScreen(WidgetOnScreen):
             for drawing_on_screen in child._drawing_on_screens_without_parent
         )
 
+    def append(self, child: WidgetOnScreen) -> Self:
+        children = self._children + (child,)
+        return replace(self, _children=children)
+
+    def pop(self, child: WidgetOnScreen) -> Self:
+        children = tuple(c for c in self._children if c != child)
+        return replace(self, _children=children)
+
+    def replace(
+        self, from_child: WidgetOnScreen, to_child: WidgetGroupOnScreen
+    ) -> Self:
+        children = tuple(
+            to_child if c == from_child else c for c in self._children
+        )
+        return replace(self, _children=children)
+
     @property
     def _init_background(self) -> AnimationOnScreens:
         return AnimationOnScreens(self.background)
