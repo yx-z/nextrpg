@@ -1,4 +1,4 @@
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from itertools import cycle, pairwise
@@ -90,7 +90,8 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         return None
 
     def _init_children(
-        self, children: tuple[Widget, ...]
+        self,
+        children: tuple[Widget | Callable[[WidgetGroupOnScreen], Widget], ...],
     ) -> tuple[WidgetOnScreen, ...]:
         assert children, "Require non-empty children."
         first_child_selected = self._init_child(children[0]).select
@@ -99,7 +100,11 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         )
         return (first_child_selected,) + remaining_deselected
 
-    def _init_child(self, child: Widget) -> WidgetOnScreen:
+    def _init_child(
+        self, child: Widget | Callable[[WidgetGroupOnScreen], Widget]
+    ) -> WidgetOnScreen:
+        if callable(child):
+            child = child(self)
         return child.widget_on_screen(self.name_to_on_screens, self)
 
     def _step(self, forward: bool) -> Self:
@@ -138,7 +143,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
 
 @dataclass(frozen=True, kw_only=True)
 class WidgetGroup(Widget):
-    children: tuple[Widget, ...]
+    children: tuple[Widget | Callable[[WidgetGroupOnScreen], Widget], ...]
     scroll_direction: ScrollDirection = ScrollDirection.VERTICAL
     loop: bool = True
     _: KW_ONLY = private_init_below()

@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from functools import cache
 from pathlib import Path
 
@@ -5,7 +6,6 @@ from example.component.title import title
 from nextrpg import (
     TRANSPARENT,
     Anchor,
-    AreaOnScreen,
     Button,
     ButtonConfig,
     DefaultButton,
@@ -17,13 +17,13 @@ from nextrpg import (
     MoveTo,
     Padding,
     Panel,
+    PanelOnScreen,
     ScrollDirection,
     Text,
     TextOnScreen,
     TimedAnimationSpec,
     TmxLoader,
     TransitionScene,
-    Widget,
     WidgetGroup,
     Width,
 )
@@ -35,15 +35,19 @@ def tmx() -> TmxLoader:
     return TmxLoader(tmx_path)
 
 
+NUM_SAVE_SLOTS = 3
+
+
 @cache
 def menu_widget() -> WidgetGroup:
     WIDGET_OFFSET = DirectionalOffset(Direction.DOWN, 50)
     enter_animation = TimedAnimationSpec(FadeIn).compose(
         MoveTo, offset=WIDGET_OFFSET
     )
+    save_slots = tuple(save_slot(i) for i in range(NUM_SAVE_SLOTS))
     save_panel = Panel(
         name="save_panel",
-        create_children=save_slots,
+        children=save_slots,
         enter_animation=enter_animation,
         exit_animation=enter_animation.reverse,
     )
@@ -61,31 +65,28 @@ def menu_widget() -> WidgetGroup:
     )
 
 
-NUM_SAVE_SLOTS = 3
-
-
-def save_slots(area: AreaOnScreen) -> tuple[Widget, ...]:
-    return tuple(save_slot(area, i) for i in range(NUM_SAVE_SLOTS))
-
-
-def save_slot(area: AreaOnScreen, i: int) -> Button:
+def save_slot(i: int) -> Callable[[PanelOnScreen], Button]:
     PADDING_WIDTH = Width(10)
     PADDING_HEIGHT = Height(10)
 
-    height = area.height / NUM_SAVE_SLOTS - PADDING_HEIGHT * 2
-    width = area.width - PADDING_WIDTH * 2
-    top_left = area.top_left + i * height + PADDING_HEIGHT + PADDING_WIDTH
-    button = top_left.as_top_left_of(width * height)
+    def create_button(panel: PanelOnScreen) -> Button:
+        area = panel.area
+        height = area.height / NUM_SAVE_SLOTS - PADDING_HEIGHT * 2
+        width = area.width - PADDING_WIDTH * 2
+        top_left = area.top_left + i * height + PADDING_HEIGHT + PADDING_WIDTH
+        button = top_left.as_top_left_of(width * height)
 
-    background = button.rectangle_area_on_screen.fill(TRANSPARENT)
-    text = Text(f"Save #{i}")
-    text_on_screen = TextOnScreen(button.center, text, Anchor.CENTER)
-    drawing_on_screens = DrawingOnScreens(
-        (background, text_on_screen.drawing_on_screen)
-    )
-    return DefaultButton(
-        text=drawing_on_screens.drawing_group_at_origin,
-        coordinate=top_left,
-        on_click=lambda: print(f"Save to slot {i}"),
-        config=ButtonConfig(padding=Padding()),
-    )
+        background = button.rectangle_area_on_screen.fill(TRANSPARENT)
+        text = Text(f"Save #{i}")
+        text_on_screen = TextOnScreen(button.center, text, Anchor.CENTER)
+        drawing_on_screens = DrawingOnScreens(
+            (background, text_on_screen.drawing_on_screen)
+        )
+        return DefaultButton(
+            text=drawing_on_screens.drawing_group_at_origin,
+            coordinate=top_left,
+            on_click=lambda: print(f"Save to slot {i}"),
+            config=ButtonConfig(padding=Padding()),
+        )
+
+    return create_button
