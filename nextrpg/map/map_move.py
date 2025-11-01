@@ -43,12 +43,8 @@ class MapMove:
         else:
             to_scene = self.to_scene(spec)
 
-        _scenes()[from_scene.map_scene_creation_function] = _TimedScene(
-            now, from_scene
-        )
-        _scenes()[to_scene.map_scene_creation_function] = _TimedScene(
-            now, to_scene
-        )
+        _scenes()[from_scene.creation_function] = _TimedScene(now, from_scene)
+        _scenes()[to_scene.creation_function] = _TimedScene(now, to_scene)
         return TransitionScene(to_scene)
 
 

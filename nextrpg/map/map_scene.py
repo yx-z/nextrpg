@@ -59,7 +59,7 @@ class MapScene(EventfulScene, UpdateFromSave):
     player_spec: CharacterSpec
     move: MapMove | tuple[MapMove, ...] = ()
     npc_specs: NpcSpec | tuple[NpcSpec, ...] = ()
-    map_scene_creation_function: ModuleAndAttribute = field(
+    creation_function: ModuleAndAttribute = field(
         default_factory=_infer_map_scene_creation_function
     )
     _: KW_ONLY = private_init_below()
@@ -133,9 +133,7 @@ class MapScene(EventfulScene, UpdateFromSave):
     @override
     @cached_property
     def save_key(self) -> str:
-        return concat_save_key(
-            super().save_key, self.map_scene_creation_function
-        )
+        return concat_save_key(super().save_key, self.creation_function)
 
     @override
     def event(self, event: IoEvent) -> Scene:
