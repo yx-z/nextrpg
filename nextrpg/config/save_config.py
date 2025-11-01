@@ -8,3 +8,4 @@ class SaveConfig:
     shared_slot: str = "shared"
     text_save_file: str = "text_save_file"
     save_key_delimiter: str = "|"
+    save_time_str_format: str = "%Y-%m-%d %H:%M:%S"

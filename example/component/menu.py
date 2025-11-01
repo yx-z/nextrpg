@@ -84,11 +84,9 @@ def save_slot(i: int) -> Callable[[PanelOnScreen], Button]:
         invisible_background = button.rectangle_area_on_screen.fill(TRANSPARENT)
 
         if game_save := SaveIo(str(i)).load(GameSave):
-            save_slot_title = (
-                f"Save #{i}: {game_save.save_time:%Y/%m/%d %H:%M:%S}"
-            )
+            save_slot_title = f"Save #{i + 1}: {game_save.save_time_str}"
         else:
-            save_slot_title = f"Empty Save Slot #{i}"
+            save_slot_title = f"Empty Save Slot #{i + 1}"
         text = Text(save_slot_title)
         text_on_screen = TextOnScreen(button.center, text, Anchor.CENTER)
         drawing_on_screens = DrawingOnScreens(
