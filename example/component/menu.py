@@ -107,7 +107,7 @@ def save_slot(i: int) -> Callable[[PanelOnScreen], Button]:
 def click_save(i: int) -> Callable[[ButtonOnScreen], WidgetOnScreen]:
     def create_button(from_button: ButtonOnScreen) -> WidgetOnScreen:
         assert isinstance(map_scene := from_button.root, MapScene)
-        game_save = GameSave(map_scene.map_scene_creation_function)
+        game_save = GameSave(map_scene.creation_function)
         save_io = SaveIo(str(i))
         save_io.save(game_save)
 

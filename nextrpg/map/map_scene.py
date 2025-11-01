@@ -46,11 +46,10 @@ from nextrpg.widget.menu_scene import MenuScene
 log = Log()
 
 
-def _infer_map_scene_creation_function() -> ModuleAndAttribute:
+def _infer_creation_function() -> ModuleAndAttribute:
     frame = inspect.stack()[2]
     module = inspect.getmodule(frame[0]).__name__
-    function = frame.function
-    return ModuleAndAttribute(module, function)
+    return ModuleAndAttribute(module, frame.function)
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
@@ -60,7 +59,7 @@ class MapScene(EventfulScene, UpdateFromSave):
     move: MapMove | tuple[MapMove, ...] = ()
     npc_specs: NpcSpec | tuple[NpcSpec, ...] = ()
     creation_function: ModuleAndAttribute = field(
-        default_factory=_infer_map_scene_creation_function
+        default_factory=_infer_creation_function
     )
     _: KW_ONLY = private_init_below()
     _map_loader_input: Callable[[MapScene], MapLoader] | MapLoader = default(
