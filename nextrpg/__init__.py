@@ -81,10 +81,12 @@ from nextrpg.core.metadata import HasMetadata
 from nextrpg.core.save import (
     LoadFromSave,
     LoadFromSaveEnum,
+    ModuleAndAttribute,
     SaveData,
     SaveIo,
     UpdateFromSave,
     concat_save_key,
+    module_and_attribute,
     module_and_class,
 )
 from nextrpg.core.time import Millisecond
@@ -148,6 +150,7 @@ from nextrpg.event.io_event import (
 )
 from nextrpg.game.game import Game
 from nextrpg.game.game_loop import GameLoop, last_scene
+from nextrpg.game.game_save import GameSave
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate

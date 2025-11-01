@@ -1,8 +1,9 @@
+import inspect
 from collections.abc import Callable
-from dataclasses import KW_ONLY, replace
+from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from pathlib import Path
-from typing import Self, override
+from typing import Any, Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_spec import CharacterSpec
@@ -18,7 +19,11 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.log import Log
-from nextrpg.core.save import UpdateFromSave, concat_save_key
+from nextrpg.core.save import (
+    ModuleAndAttribute,
+    UpdateFromSave,
+    concat_save_key,
+)
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import get_geometry
 from nextrpg.drawing.color import TRANSPARENT
@@ -41,15 +46,25 @@ from nextrpg.widget.menu_scene import MenuScene
 log = Log()
 
 
+def _infer_map_scene_creation_function() -> ModuleAndAttribute:
+    frame = inspect.stack()[2]
+    module = inspect.getmodule(frame[0]).__name__
+    function = frame.function
+    return ModuleAndAttribute(module, function)
+
+
 @dataclass_with_default(frozen=True, kw_only=True)
 class MapScene(EventfulScene, UpdateFromSave):
-    tmx_file: Path
+    tmx: Path
     player_spec: CharacterSpec
     move: MapMove | tuple[MapMove, ...] = ()
     npc_specs: NpcSpec | tuple[NpcSpec, ...] = ()
+    map_scene_creation_function: ModuleAndAttribute = field(
+        default_factory=_infer_map_scene_creation_function
+    )
     _: KW_ONLY = private_init_below()
     _map_loader_input: Callable[[MapScene], MapLoader] | MapLoader = default(
-        lambda self: MapLoader(self.tmx_file)
+        lambda self: MapLoader(self.tmx)
     )
     npcs: tuple[NpcOnScreen, ...] = default(
         lambda self: tuple(self._init_npc(n) for n in self._npc_specs)
@@ -82,8 +97,11 @@ class MapScene(EventfulScene, UpdateFromSave):
     def tick(self, time_delta: Millisecond) -> Scene:
         if move_to := self._move_to_scene(time_delta):
             return move_to
-        if not isinstance(ticked := super().tick(time_delta), MapScene):
-            return ticked
+        return self.tick_without_event(time_delta)
+
+    @override
+    def tick_without_event(self, time_delta: Millisecond) -> Self:
+        ticked = super().tick_without_event(time_delta)
         map_loader = self._map_loader.tick(time_delta)
         return replace(ticked, _map_loader_input=map_loader)
 
@@ -115,7 +133,9 @@ class MapScene(EventfulScene, UpdateFromSave):
     @override
     @cached_property
     def save_key(self) -> str:
-        return concat_save_key(super().save_key, self.tmx_file)
+        return concat_save_key(
+            super().save_key, self.map_scene_creation_function
+        )
 
     @override
     def event(self, event: IoEvent) -> Scene:
@@ -132,7 +152,7 @@ class MapScene(EventfulScene, UpdateFromSave):
         }
 
     @override
-    def update_from_save(self, data: dict) -> Self:
+    def update_from_save(self, data: dict[str, Any]) -> Self:
         player = self.player.update_from_save(data[self.player.save_key])
         npcs = tuple(
             npc.update_from_save(data[npc.save_key]) for npc in self.npcs

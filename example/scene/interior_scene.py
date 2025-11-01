@@ -42,7 +42,7 @@ def interior_scene(player_spec: CharacterSpec | None = None) -> MapScene:
     priscilla = create_npc("$PixelFantasy_2-Priscilla.png", "Priscilla")
     gale = create_npc("$PixelFantasy_3-Gale.png", "Gale")
     npcs = (priscilla, gale, auto)
-    return MapScene(tmx_file=tmx, player_spec=player, move=move, npc_specs=npcs)
+    return MapScene(tmx=tmx, player_spec=player, move=move, npc_specs=npcs)
 
 
 IMG_DIR = Path("example/asset/Pixel Fantasy RMMZ RTP Tiles/img")

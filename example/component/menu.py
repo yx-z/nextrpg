@@ -8,16 +8,20 @@ from nextrpg import (
     Anchor,
     Button,
     ButtonConfig,
+    ButtonOnScreen,
     DefaultButton,
     Direction,
     DirectionalOffset,
     DrawingOnScreens,
     FadeIn,
+    GameSave,
     Height,
+    MapScene,
     MoveTo,
     Padding,
     Panel,
     PanelOnScreen,
+    SaveIo,
     ScrollDirection,
     Text,
     TextOnScreen,
@@ -25,6 +29,7 @@ from nextrpg import (
     TmxLoader,
     TransitionScene,
     WidgetGroup,
+    WidgetOnScreen,
     Width,
 )
 
@@ -63,10 +68,11 @@ def menu_widget() -> WidgetGroup:
     )
 
 
-def save_slot(i: int) -> Callable[[PanelOnScreen], Button]:
-    PADDING_WIDTH = Width(10)
-    PADDING_HEIGHT = Height(10)
+PADDING_WIDTH = Width(10)
+PADDING_HEIGHT = Height(10)
 
+
+def save_slot(i: int) -> Callable[[PanelOnScreen], Button]:
     def create_button(panel: PanelOnScreen) -> Button:
         area = panel.area
         height = area.height / NUM_SAVE_SLOTS - PADDING_HEIGHT * 2
@@ -76,7 +82,14 @@ def save_slot(i: int) -> Callable[[PanelOnScreen], Button]:
 
         # To keep button size stable between idle and active.
         invisible_background = button.rectangle_area_on_screen.fill(TRANSPARENT)
-        text = Text(f"Save #{i}")
+
+        if game_save := SaveIo(str(i)).load(GameSave):
+            save_slot_title = (
+                f"Save #{i}: {game_save.save_time:%Y/%m/%d %H:%M:%S}"
+            )
+        else:
+            save_slot_title = f"Empty Save Slot #{i}"
+        text = Text(save_slot_title)
         text_on_screen = TextOnScreen(button.center, text, Anchor.CENTER)
         drawing_on_screens = DrawingOnScreens(
             (invisible_background, text_on_screen.drawing_on_screen)
@@ -84,8 +97,25 @@ def save_slot(i: int) -> Callable[[PanelOnScreen], Button]:
         return DefaultButton(
             text=drawing_on_screens.drawing_group_at_origin,
             coordinate=top_left,
-            on_click=lambda _: print(f"Save to slot {i}"),
+            on_click=click_save(i),
             config=ButtonConfig(padding=Padding()),
         )
+
+    return create_button
+
+
+def click_save(i: int) -> Callable[[ButtonOnScreen], WidgetOnScreen]:
+    def create_button(from_button: ButtonOnScreen) -> WidgetOnScreen:
+        assert isinstance(map_scene := from_button.root, MapScene)
+        game_save = GameSave(map_scene.map_scene_creation_function)
+        save_io = SaveIo(str(i))
+        save_io.save(game_save)
+
+        assert isinstance(panel := from_button.parent, PanelOnScreen)
+        button = save_slot(i)(panel)
+        button_on_screen = button.widget_on_screen(
+            panel.name_to_on_screens, panel
+        )
+        return panel.replace(from_button, button_on_screen)
 
     return create_button

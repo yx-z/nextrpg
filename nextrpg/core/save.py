@@ -2,9 +2,10 @@ import json
 import sys
 from collections.abc import Callable
 from concurrent.futures import Future, ThreadPoolExecutor
-from dataclasses import KW_ONLY, field
+from dataclasses import KW_ONLY, dataclass, field
 from enum import Enum
 from functools import cache, cached_property
+from importlib import import_module
 from pathlib import Path
 from shutil import rmtree
 from typing import TYPE_CHECKING, Any, Self, TypeAlias, TypeVar, override
@@ -87,22 +88,16 @@ class SaveIo:
 
     def save(self, savable: _U | _L) -> Future:
         if isinstance(savable, UpdateFromSave):
-            key = concat_save_key(savable.save_key)
+            save_key = savable.save_key
         else:
-            key = concat_save_key(savable.save_key())
+            save_key = savable.save_key()
+        key = concat_save_key(save_key)
 
         future = self._thread.submit(self._save, key, savable.save_data)
         future.add_done_callback(
             lambda _: self._log.debug(t"Saved {key} at {self.slot}")
         )
         return future
-
-    def _save(self, key: str, data: SaveData) -> None:
-        self._log.debug(t"Saving {key} at {self.slot}")
-        if isinstance(data, bytes):
-            self._write_bytes(key, data)
-            return
-        self._write_text(key, data)
 
     def remove(self) -> None:
         rmtree(self.config.directory / self.slot, ignore_errors=True)
@@ -123,6 +118,13 @@ class SaveIo:
     def web(self) -> bool:
         # TODO: Implement web save/load using IndexedDB.
         return sys.platform == "emscripten"
+
+    def _save(self, key: str, data: SaveData) -> None:
+        self._log.debug(t"Saving {key} at {self.slot}")
+        if isinstance(data, bytes):
+            self._write_bytes(key, data)
+            return
+        self._write_text(key, data)
 
     def _load(
         self,
@@ -207,3 +209,26 @@ def module_and_class(x: type | Any) -> str:
 
 def concat_save_key(*args: Any) -> str:
     return _config().save_key_delimiter.join(map(str, args))
+
+
+@dataclass(frozen=True)
+class ModuleAndAttribute(LoadFromSave):
+    module: str
+    attribute: str
+
+    @property
+    def save_data(self) -> list[str]:
+        return [self.module, self.attribute]
+
+    @classmethod
+    def load_from_save(cls, data: list[str]) -> Self:
+        return cls(*data)
+
+    @cached_property
+    def imported(self) -> Any:
+        module = import_module(self.module)
+        return getattr(module, self.attribute)
+
+
+def module_and_attribute(obj: Any) -> ModuleAndAttribute:
+    return ModuleAndAttribute(obj.__module__, obj.__qualname__)

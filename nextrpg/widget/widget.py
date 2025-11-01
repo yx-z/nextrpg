@@ -33,6 +33,15 @@ class WidgetOnScreen(Scene):
     )
     _exit_animation: TimedAnimationOnScreens | None = None
     _tick_parent: bool = True
+    _to_scene: Scene | None = None
+
+    @cached_property
+    def root(self) -> Scene:
+        if isinstance(self.parent, WidgetOnScreen):
+            return self.parent.root
+        if self.parent:
+            return self.parent
+        return self
 
     @override
     def __str__(self) -> str:
@@ -97,8 +106,8 @@ class WidgetOnScreen(Scene):
         if not self._exit_animation:
             if not self._is_selected:
                 return self
-            if is_key_press(event, KeyboardKey.CANCEL):
-                return self._try_exit
+            if is_key_press(event, KeyboardKey.CANCEL) and self.parent:
+                return self.exit(self.parent)
             return self._event_after_selected(event)
 
         # Exiting.
@@ -117,6 +126,13 @@ class WidgetOnScreen(Scene):
 
     def with_parent(self, parent: Scene | None) -> Self:
         return replace(self, parent=parent)
+
+    def exit(self, scene: Scene) -> Scene:
+        if exit_animation := self._init_exit_animation:
+            return replace(
+                self, _exit_animation=exit_animation, _to_scene=scene
+            )
+        return scene
 
     @cached_property
     def _drawing_on_screens_without_parent(
@@ -162,14 +178,6 @@ class WidgetOnScreen(Scene):
                 self._drawing_on_screens_without_parent_and_animation
             )
         return None
-
-    @cached_property
-    def _try_exit(self) -> Scene:
-        if not self.parent:
-            return self
-        if exit_animation := self._init_exit_animation:
-            return replace(self, _exit_animation=exit_animation)
-        return self.parent
 
 
 @dataclass_with_default(frozen=True)

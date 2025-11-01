@@ -49,7 +49,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         return replace(self, _children=children)
 
     def replace(
-        self, from_child: WidgetOnScreen, to_child: WidgetGroupOnScreen
+        self, from_child: WidgetOnScreen, to_child: WidgetOnScreen
     ) -> Self:
         children = tuple(
             to_child if c == from_child else c for c in self._children
