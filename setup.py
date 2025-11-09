@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="nextrpg",
-    version="0.1.22",
+    version="0.1.24",
     package=find_packages(),
     install_requires=["pygame-ce", "pytmx"],
     author="yx-z",
