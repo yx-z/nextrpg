@@ -26,6 +26,9 @@ class DrawingOnScreen(AnimationOnScreenLike):
     @override
     @cached_property
     def top_left(self) -> Coordinate:
+        # Optimize/Shortcut for the most common/default case.
+        if self.anchor is Anchor.TOP_LEFT:
+            return self.coordinate
         return self.coordinate.as_anchor_of(self, self.anchor).top_left
 
     @override

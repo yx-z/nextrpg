@@ -55,7 +55,6 @@ class CharacterOnScreen(
         return self.spec.display_name
 
     @override
-    @override
     def tick(self, time_delta: Millisecond) -> Self:
         return self.tick_with_others(time_delta, [])
 

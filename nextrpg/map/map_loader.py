@@ -1,3 +1,4 @@
+import heapq
 from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self
@@ -22,7 +23,7 @@ from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.geometry.area_on_screen import AreaOnScreen
-from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.coordinate import Coordinate, YAxis
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
@@ -41,17 +42,21 @@ class ForegroundLayers:
     def drawing_on_screens(
         self, characters: list[CharacterOnScreen]
     ) -> list[DrawingOnScreen]:
-        character_drawing_on_screens = [
-            DrawingOnScreens(tuple(character.drawing_on_screens))
-            for character in characters
-        ]
+        character_drawing_on_screens = sorted(
+            [
+                DrawingOnScreens(tuple(character.drawing_on_screens))
+                for character in characters
+            ],
+            key=_sort_by_bottom,
+        )
         tile_drawing_on_screens = [
             DrawingOnScreens(tuple(tile.drawing_on_screens))
             for tile in self.tiles
         ]
-        all_drawing_on_screens = sorted(
-            character_drawing_on_screens + tile_drawing_on_screens,
-            key=lambda d: d.visible_rectangle_area_on_screen.bottom,
+        all_drawing_on_screens = heapq.merge(
+            character_drawing_on_screens,
+            tile_drawing_on_screens,
+            key=_sort_by_bottom,
         )
         return [
             drawing_on_screen
@@ -230,10 +235,11 @@ class MapLoader(TmxLoader):
     @property
     def _init_foregrounds(self) -> ForegroundLayers:
         layers = self._tile_layers(self.config.foreground)
-        tiles = tuple(
-            tile for layer in layers for tile in self._foreground(layer)
+        tiles = sorted(
+            [tile for layer in layers for tile in self._foreground(layer)],
+            key=_sort_by_bottom,
         )
-        return ForegroundLayers(tiles)
+        return ForegroundLayers(tuple(tiles))
 
     def _draw_layers(self, class_name: str) -> AnimationOnScreens:
         resources = [
@@ -282,3 +288,7 @@ class _Collider:
 
 def _tile_id(layer: TiledTileLayer, coordinate: _TileCoordinate) -> _Gid:
     return layer.data[coordinate.top][coordinate.left]
+
+
+def _sort_by_bottom(animation_on_screen_like: AnimationOnScreenLike) -> YAxis:
+    return animation_on_screen_like.visible_rectangle_area_on_screen.bottom
