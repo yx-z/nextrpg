@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="1280" height="720" tilewidth="1" tileheight="1" infinite="0" nextlayerid="5" nextobjectid="7">
+ <imagelayer id="3" name="background">
+  <image source="title.png" width="1280" height="720"/>
+ </imagelayer>
+ <objectgroup id="4" name="buttons">
+  <object id="1" name="start" x="200" y="580">
+   <point/>
+  </object>
+  <object id="2" name="load" x="500" y="580">
+   <point/>
+  </object>
+  <object id="3" name="options" x="790" y="580">
+   <point/>
+  </object>
+  <object id="4" name="exit" x="1100" y="580">
+   <point/>
+  </object>
+  <object id="5" name="load_panel" x="270" y="64" width="750" height="480"/>
+ </objectgroup>
+</map>

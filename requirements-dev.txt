@@ -1,0 +1,12 @@
+black
+build
+isort
+mypy
+pdoc
+pylint
+pytest
+pytest-cov
+pytest-mock
+setuptools
+twine
+wheel
