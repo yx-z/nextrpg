@@ -43,10 +43,10 @@ class ForegroundLayers:
         self, characters: list[CharacterOnScreen]
     ) -> list[DrawingOnScreen]:
         character_drawing_on_screens = sorted(
-            [
+            (
                 DrawingOnScreens(tuple(character.drawing_on_screens))
                 for character in characters
-            ],
+            ),
             key=_sort_by_bottom,
         )
         tile_drawing_on_screens = [
@@ -236,7 +236,7 @@ class MapLoader(TmxLoader):
     def _init_foregrounds(self) -> ForegroundLayers:
         layers = self._tile_layers(self.config.foreground)
         tiles = sorted(
-            [tile for layer in layers for tile in self._foreground(layer)],
+            (tile for layer in layers for tile in self._foreground(layer)),
             key=_sort_by_bottom,
         )
         return ForegroundLayers(tuple(tiles))
