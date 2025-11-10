@@ -18,7 +18,7 @@ def create_character_drawing(file: str) -> RpgMakerCharacterDrawing:
     drawing = Drawing(path)
     trim = Padding(top=Height(20), left=Width(10), right=Width(10))
     sprite_sheet = RpgMakerSpriteSheet(drawing=drawing, trim=trim)
-    return RpgMakerCharacterDrawing(sprite_sheet)
+    return RpgMakerCharacterDrawing(sprite_sheet=sprite_sheet)
 
 
 def create_player_placeholder() -> PlayerSpec:

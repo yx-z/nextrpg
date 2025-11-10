@@ -12,6 +12,9 @@ from nextrpg.character.npc_spec import NpcSpec, to_strict_npc_spec
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.character.player_spec import PlayerSpec
 from nextrpg.character.polygon_character_drawing import PolygonCharacterDrawing
+from nextrpg.character.view_only_character_drawing import (
+    ViewOnlyCharacterDrawing,
+)
 from nextrpg.config.config import config
 from nextrpg.config.system.key_mapping_config import KeyMappingConfig
 from nextrpg.core.dataclass_with_default import (
@@ -27,6 +30,7 @@ from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import get_geometry
 from nextrpg.drawing.color import TRANSPARENT, Color
+from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
@@ -217,8 +221,16 @@ class MapScene(EventfulScene, UpdateFromSave[dict[str, Any]]):
         return res
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
+        print(spec.unique_name)
         npc_object = self._map_loader.get_object(spec.unique_name)
-        if not (poly := get_geometry(npc_object)):
+        poly = get_geometry(npc_object)
+        if (spec.character_drawing and not poly) or npc_object.image:
+            if npc_object.image:
+                # Tile as character drawing.
+                drawing = Drawing(npc_object.image)
+                character_drawing = ViewOnlyCharacterDrawing(resource=drawing)
+                spec = replace(spec, character_drawing=character_drawing)
+
             coordinate = Coordinate(npc_object.x, npc_object.y)
             return _init_standing_npc(spec, coordinate)
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="48" tileheight="48" infinite="0" nextlayerid="6" nextobjectid="3">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="48" tileheight="48" infinite="0" nextlayerid="7" nextobjectid="7">
  <tileset firstgid="1" source="water.tsx"/>
  <tileset firstgid="442" source="exterior.tsx"/>
  <tileset firstgid="883" source="PixelFantasy_Outside_B.tsx"/>
@@ -145,5 +145,9 @@
   <object id="2" name="from_interior" x="840.333" y="692.667">
    <point/>
   </object>
+ </objectgroup>
+ <objectgroup id="6" name="collectible">
+  <object id="5" gid="976" x="861.333" y="814.667" width="48" height="48"/>
+  <object id="6" name="fruit" gid="976" x="861.333" y="814.667" width="48" height="48"/>
  </objectgroup>
 </map>

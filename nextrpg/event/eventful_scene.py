@@ -46,7 +46,7 @@ class EventfulScene(EventAsAttr, SceneWithSound):
     def get_character(self, unique_name: str) -> CharacterOnScreen:
         if unique_name == self.player.spec.unique_name:
             return self.player
-        return self._npc_dict[unique_name]
+        return self.npc_dict[unique_name]
 
     def event(self, event: IoEvent) -> Self:
         player = self.player.event(event)
@@ -164,13 +164,13 @@ class EventfulScene(EventAsAttr, SceneWithSound):
         ]
         return replace(self, _background_events=background_events)
 
+    @cached_property
+    def npc_dict(self) -> dict[str, NpcOnScreen]:
+        return {n.spec.unique_name: n for n in self.npcs}
+
     def _others(self, npc: NpcOnScreen) -> list[CharacterOnScreen]:
         other_npcs = [n for n in self.npcs if n is not npc]
         return [self.player] + other_npcs
-
-    @cached_property
-    def _npc_dict(self) -> dict[str, NpcOnScreen]:
-        return {n.spec.unique_name: n for n in self.npcs}
 
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:

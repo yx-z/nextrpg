@@ -3,7 +3,7 @@ from functools import cache, cached_property
 from typing import Literal, Self, override
 
 from example.scene.character import create_character_drawing
-from example.scene.scene_common import SOUND_DIR, TMX_DIR, bgm_config
+from example.scene.scene_common import SOUND_DIR, TMX_DIR, bgm_config, sound
 from nextrpg import (
     DONT_RESTART_EVENT,
     AvatarPosition,
@@ -64,11 +64,6 @@ def enter_room(
     sound().play()
     scene: "You've entered this room!"
     return DONT_RESTART_EVENT
-
-
-@cache
-def sound() -> Sound:
-    return Sound(SOUND_DIR / "sound.mp3")
 
 
 @dataclass(frozen=True)

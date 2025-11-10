@@ -54,8 +54,8 @@ class ForegroundLayers:
             for tile in self.tiles
         ]
         all_drawing_on_screens = heapq.merge(
-            character_drawing_on_screens,
             tile_drawing_on_screens,
+            character_drawing_on_screens,
             key=_sort_by_bottom,
         )
         return [

@@ -5,6 +5,9 @@ from typing import Any, Self, override
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.character_spec import CharacterSpec
 from nextrpg.character.polygon_character_drawing import PolygonCharacterDrawing
+from nextrpg.character.view_only_character_drawing import (
+    ViewOnlyCharacterDrawing,
+)
 from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -22,7 +25,6 @@ from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size, WidthScaling
-from nextrpg.geometry.direction import Direction
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
@@ -89,7 +91,10 @@ class CharacterOnScreen(
         return self.spec.unique_name == other.spec.unique_name
 
     def start_event(self, other: CharacterOnScreen) -> Self:
-        if isinstance(other.spec.character_drawing, PolygonCharacterDrawing):
+        if isinstance(
+            other.spec.character_drawing,
+            PolygonCharacterDrawing | ViewOnlyCharacterDrawing,
+        ):
             character_drawing = self.character_drawing
         else:
             direction = other.top_left.relative_to(self.top_left)
@@ -107,7 +112,7 @@ class CharacterOnScreen(
     def save_data(self) -> dict[str, Any]:
         return {
             "top_left": self.top_left.save_data,
-            "direction": self.character_drawing.direction.save_data,
+            "character_drawing": self.character_drawing.save_data,
         }
 
     @override
@@ -115,8 +120,9 @@ class CharacterOnScreen(
         top_left = Coordinate.load_from_save(data["top_left"])
         coordinate = top_left.as_top_left_of(self).coordinate_from(self.anchor)
 
-        direction = Direction.load_from_save(data["direction"])
-        character_drawing = self.character_drawing.turn(direction)
+        character_drawing = self.character_drawing.update_from_save(
+            data["character_drawing"]
+        )
         return replace(
             self, coordinate=coordinate, character_drawing=character_drawing
         )

@@ -64,7 +64,7 @@ class RpgMakerSpriteSheet(SpriteSheet):
     )
 
 
-@dataclass_with_default(frozen=True)
+@dataclass_with_default(kw_only=True, frozen=True)
 class RpgMakerCharacterDrawing(CharacterDrawing):
     sprite_sheet: RpgMakerSpriteSheet
     direction: Direction = Direction.DOWN

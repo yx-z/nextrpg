@@ -40,6 +40,9 @@ from nextrpg.character.rpg_maker_character_drawing import (
     RpgMakerCharacterDrawingXpFrameType,
     RpgMakerSpriteSheet,
 )
+from nextrpg.character.view_only_character_drawing import (
+    ViewOnlyCharacterDrawing,
+)
 from nextrpg.config.character.character_config import CharacterConfig
 from nextrpg.config.character.rpg_maker_character_drawing_config import (
     RpgMakerCharacterDrawingConfig,
