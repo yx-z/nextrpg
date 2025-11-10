@@ -5,9 +5,9 @@ from typing import Self
 
 import pygame
 
-from nextrpg import cached
 from nextrpg.config.config import config
 from nextrpg.config.system.sound_config import SoundConfig
+from nextrpg.core.cached_decorator import cached
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,

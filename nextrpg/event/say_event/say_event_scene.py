@@ -90,7 +90,7 @@ def say(
     character_or_scene: CharacterOnScreen | Scene,
     message: str | Text | TextGroup,
     args: tuple[SayEventArg, ...],
-) -> Scene: ...
+) -> None: ...
 
 
 def _update_config(cfg: SayEventConfig, arg: SayEventArg) -> SayEventConfig:

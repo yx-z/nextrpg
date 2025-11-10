@@ -221,7 +221,6 @@ class MapScene(EventfulScene, UpdateFromSave[dict[str, Any]]):
         return res
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
-        print(spec.unique_name)
         npc_object = self._map_loader.get_object(spec.unique_name)
         poly = get_geometry(npc_object)
         if (spec.character_drawing and not poly) or npc_object.image:

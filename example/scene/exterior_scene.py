@@ -4,6 +4,7 @@ from typing import Literal
 from example.scene.scene_common import SOUND_DIR, TMX_DIR, bgm_config, sound
 from nextrpg import (
     DONT_RESTART_EVENT,
+    TRANSPARENT,
     EventfulScene,
     MapMove,
     MapScene,
@@ -12,7 +13,9 @@ from nextrpg import (
     PlayerOnScreen,
     PlayerSpec,
     Sound,
+    update_from_event,
 )
+from nextrpg.character.polygon_character_drawing import PolygonCharacterDrawing
 
 
 def exterior_scene(player: PlayerSpec) -> MapScene:
@@ -31,6 +34,14 @@ def pick_up_fruit(
     player: PlayerOnScreen, npc: NpcOnScreen, scene: EventfulScene
 ) -> Literal[DONT_RESTART_EVENT]:
     sound().play()
+
+    rect = npc.drawing_on_screen.rectangle_area_on_screen.rectangle_drawing(
+        TRANSPARENT
+    )
+    character_drawing = PolygonCharacterDrawing(rect_or_poly=rect)
+    npc_dismissed = npc.with_character_drawing(character_drawing)
+    yield update_from_event(npc_dismissed)
+
     scene: "You picked up the fruit!"
     return DONT_RESTART_EVENT
 

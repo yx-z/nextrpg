@@ -196,6 +196,7 @@ from nextrpg.event.say_event.say_event_state import (
     SayEventState,
     SayEventTypingState,
 )
+from nextrpg.event.update_from_event import UpdateFromEvent, update_from_event
 from nextrpg.game.game import Game
 from nextrpg.game.game_loop import GameLoop, last_scene
 from nextrpg.game.game_save import (

@@ -1,4 +1,3 @@
-from functools import cached_property
 from typing import NamedTuple, Self
 
 from nextrpg.core.time import Percentage
@@ -19,11 +18,11 @@ class Color(NamedTuple):
         alpha = alpha_from_percentage(percentage)
         return Color(self.red, self.green, self.blue, alpha)
 
-    @cached_property
+    @property
     def percentage_alpha(self) -> float:
         return self.alpha / 255
 
-    @cached_property
+    @property
     def save_data(self) -> list[int]:
         return list(self)
 

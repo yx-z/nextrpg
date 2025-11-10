@@ -74,12 +74,11 @@ class EventfulScene(EventAsAttr, SceneWithSound):
         if (
             (npc := self._collided_npc)
             and npc.restart_event
-            and (not self._ended_npc or not self._ended_npc.is_same_name(npc))
+            and (not self._ended_npc or not self._ended_npc.has_same_name(npc))
             and (spec := npc.spec.event_spec)
             and spec.start_mode is NpcEventStartMode.COLLIDE
         ):
             return self._start_event(npc, spec.generator, time_delta)
-
         return self.tick_without_event(time_delta)
 
     def tick_without_event(self, time_delta: Millisecond) -> Self:
@@ -187,7 +186,7 @@ class EventfulScene(EventAsAttr, SceneWithSound):
     ) -> Self:
         started_npc = npc.start_event(self.player)
         npcs = tuple(
-            started_npc if n.is_same_name(npc) else n for n in self.npcs
+            started_npc if n.has_same_name(npc) else n for n in self.npcs
         )
         player = self.player.start_event(started_npc)
         ticked = replace(
@@ -202,45 +201,43 @@ class EventfulScene(EventAsAttr, SceneWithSound):
             event_callable = next(event)
             return event_callable(event, ticked)
         except StopIteration as res:
-            return ticked._complete_event(ticked, res.value)
+            return _complete_event(ticked, res.value)
 
     def _next_event(self, time_delta: Millisecond) -> Scene | None:
         if not self._event:
             return None
-
         ticked = self.tick_without_event(time_delta)
         try:
             create_next_scene = ticked._event.send(self._event_result)
             return create_next_scene(ticked._event, ticked)
         except StopIteration as res:
-            return self._complete_event(ticked, res.value)
+            return _complete_event(ticked, res.value)
 
-    def _complete_event(
-        self, ticked: Self, event_spec: Any | Literal[DONT_RESTART_EVENT] | None
-    ) -> Self:
-        assert (npc := ticked._started_npc)
 
-        npc = npc.complete_event
-        if event_spec is DONT_RESTART_EVENT:
-            npc = replace(npc, restart_event=False)
-        elif event_spec is not None:
-            spec = npc.spec.with_event_spec(event_spec)
-            npc = replace(npc, spec=spec)
+def _complete_event[T: EventfulScene](
+    ticked: T, event_spec: Any | Literal[DONT_RESTART_EVENT] | None
+) -> T:
+    assert (npc := ticked._started_npc)
+    assert ticked._event
 
-        player = ticked.player.complete_event
-        npcs = [
-            (npc if n.is_same_name(npc) else n.complete_event)
-            for n in ticked.npcs
-        ]
-        log.debug(
-            t"Event {ticked._event} with {npc.spec.unique_name} completed."
-        )
-        return replace(
-            self,
-            player=player,
-            npcs=npcs,
-            _ended_npc=npc,
-            _started_npc=None,
-            _event=None,
-            _event_result=None,
-        )
+    npc = npc.complete_event
+    if event_spec is DONT_RESTART_EVENT:
+        npc = replace(npc, restart_event=False)
+    elif event_spec is not None:
+        spec = npc.spec.with_event_spec(event_spec)
+        npc = replace(npc, spec=spec)
+
+    player = ticked.player.complete_event
+    npcs = [
+        n.complete_event if n.has_same_name(npc) else n for n in ticked.npcs
+    ]
+    log.debug(t"Event {ticked._event} with {npc.spec.unique_name} completed.")
+    return replace(
+        ticked,
+        player=player,
+        npcs=npcs,
+        _ended_npc=npc,
+        _started_npc=None,
+        _event=None,
+        _event_result=None,
+    )

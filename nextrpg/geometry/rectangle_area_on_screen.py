@@ -11,6 +11,7 @@ from nextrpg.geometry.sizable import Sizable
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+    from nextrpg.drawing.rectangle_drawing import RectangleDrawing
 
 
 @dataclass(frozen=True)
@@ -45,6 +46,19 @@ class RectangleAreaOnScreen(AreaOnScreen, Sizable):
         coordinate = self.top_left + other
         return replace(self, top_left=coordinate)
 
+    def rectangle_drawing(
+        self,
+        color: Color,
+        width: Pixel = 0,
+        border_radius: Pixel = -1,
+        allow_background_in_debug: bool = True,
+    ) -> RectangleDrawing:
+        from nextrpg.drawing.rectangle_drawing import RectangleDrawing
+
+        return RectangleDrawing(
+            self.size, color, width, border_radius, allow_background_in_debug
+        )
+
     @override
     def fill(
         self,
@@ -53,10 +67,8 @@ class RectangleAreaOnScreen(AreaOnScreen, Sizable):
         border_radius: Pixel = -1,
         allow_background_in_debug: bool = True,
     ) -> DrawingOnScreen:
-        from nextrpg.drawing.rectangle_drawing import RectangleDrawing
-
-        rect = RectangleDrawing(
-            self.size, color, width, border_radius, allow_background_in_debug
+        rect = self.rectangle_drawing(
+            color, width, border_radius, allow_background_in_debug
         )
         return rect.drawing.drawing_on_screen(self.top_left)
 

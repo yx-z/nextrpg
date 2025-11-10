@@ -42,6 +42,11 @@ class CharacterOnScreen(
     )
     _event_started: bool = False
 
+    def with_character_drawing(
+        self, character_drawing: CharacterDrawing
+    ) -> Self:
+        return replace(self, character_drawing=character_drawing)
+
     @override
     @cached_property
     def top_left(self) -> Coordinate:
@@ -87,7 +92,7 @@ class CharacterOnScreen(
             return self._area_on_screen
         return self._collision_rectangle_area_on_screen(self.coordinate)
 
-    def is_same_name(self, other: CharacterOnScreen) -> bool:
+    def has_same_name(self, other: CharacterOnScreen) -> bool:
         return self.spec.unique_name == other.spec.unique_name
 
     def start_event(self, other: CharacterOnScreen) -> Self:
