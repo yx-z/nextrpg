@@ -217,20 +217,17 @@ class EventfulScene(EventAsAttr, SceneWithSound):
 def _complete_event[T: EventfulScene](
     ticked: T, event_spec: Any | Literal[DONT_RESTART_EVENT] | None
 ) -> T:
-    assert (npc := ticked._started_npc)
-    assert ticked._event
-
-    npc = npc.complete_event
-    if event_spec is DONT_RESTART_EVENT:
-        npc = replace(npc, restart_event=False)
-    elif event_spec is not None:
-        spec = npc.spec.with_event_spec(event_spec)
-        npc = replace(npc, spec=spec)
-
-    player = ticked.player.complete_event
+    assert (
+        npc := ticked._started_npc
+    ), f"Expect _complete_event with a started_npc. Got {ticked}"
     npcs = [
-        n.complete_event if n.has_same_name(npc) else n for n in ticked.npcs
+        _complete(n, event_spec) if n.has_same_name(npc) else n
+        for n in ticked.npcs
     ]
+    assert (
+        ticked._event
+    ), f"Expect _complete_event with an ongoing _event. Got {ticked}"
+    player = ticked.player.complete_event
     log.debug(t"Event {ticked._event} with {npc.spec.unique_name} completed.")
     return replace(
         ticked,
@@ -241,3 +238,14 @@ def _complete_event[T: EventfulScene](
         _event=None,
         _event_result=None,
     )
+
+
+def _complete(
+    npc: NpcOnScreen, event_spec: Any | Literal[DONT_RESTART_EVENT] | None
+) -> NpcOnScreen:
+    if event_spec is DONT_RESTART_EVENT:
+        return replace(npc, restart_event=False)
+    elif event_spec is not None:
+        spec = npc.spec.with_event_spec(event_spec)
+        return replace(npc, spec=spec)
+    return npc
