@@ -4,6 +4,7 @@ from typing import Literal
 from example.scene.scene_common import SOUND_DIR, TMX_DIR, bgm_config, sound
 from nextrpg import (
     DONT_RESTART_EVENT,
+    ORIGIN,
     TRANSPARENT,
     EventfulScene,
     MapMove,
@@ -36,7 +37,11 @@ def pick_up_fruit(
 ) -> Literal[DONT_RESTART_EVENT]:
     sound().play()
 
-    fade_out(npc.drawing_on_screen, wait=False)
+    if scene.drawing_on_screens_shift:
+        shift = scene.drawing_on_screens_shift
+    else:
+        shift = ORIGIN
+    fade_out(npc.drawing_on_screen + shift, wait=False)
     rect = npc.drawing_on_screen.rectangle_area_on_screen.rectangle_drawing(
         TRANSPARENT
     )
