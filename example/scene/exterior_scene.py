@@ -36,13 +36,13 @@ def pick_up_fruit(
 ) -> Literal[DONT_RESTART_EVENT]:
     sound().play()
 
+    fade_out(npc.drawing_on_screen, wait=False)
     rect = npc.drawing_on_screen.rectangle_area_on_screen.rectangle_drawing(
         TRANSPARENT
     )
     character_drawing = PolygonCharacterDrawing(rect_or_poly=rect)
     npc_dismissed = npc.with_character_drawing(character_drawing)
     update_from_event(npc_dismissed)
-    fade_out(npc.drawing_on_screen, wait=False)
 
     scene: "You picked up the fruit!"
     return DONT_RESTART_EVENT

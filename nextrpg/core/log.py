@@ -5,7 +5,7 @@ from inspect import stack
 from logging import Logger
 from pathlib import Path
 from string.templatelib import Interpolation, Template
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from nextrpg.config.system.debug_config import LogLevel
 from nextrpg.core.time import Millisecond, Timer
@@ -59,7 +59,7 @@ class Log:
     def debug_drawing(
         self,
         keyed_drawings: (
-            dict[str, AnimationLike | AnimationOnScreenLike] | None
+            dict[Any, AnimationLike | AnimationOnScreenLike] | None
         ) = None,
         *,
         duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
@@ -71,7 +71,7 @@ class Log:
     def info_drawing(
         self,
         keyed_drawings: (
-            dict[str, AnimationLike | AnimationOnScreenLike] | None
+            dict[Any, AnimationLike | AnimationOnScreenLike] | None
         ) = None,
         *,
         duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
@@ -83,7 +83,7 @@ class Log:
     def error_drawing(
         self,
         keyed_drawings: (
-            dict[str, AnimationLike | AnimationOnScreenLike] | None
+            dict[Any, AnimationLike | AnimationOnScreenLike] | None
         ) = None,
         *,
         duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
@@ -95,7 +95,7 @@ class Log:
 
 @dataclass(frozen=True)
 class MessageKeyAndDrawing:
-    message_key: str
+    message_key: Any
     drawing: AnimationLike | AnimationOnScreenLike
 
 
@@ -138,7 +138,7 @@ def console(name: str | None = None) -> Logger:
 @dataclass(frozen=True)
 class _Key:
     component: str
-    template: list[str] | str
+    template: list[str] | Any
 
 
 @dataclass(frozen=True)
