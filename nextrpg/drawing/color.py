@@ -28,7 +28,7 @@ class Color(NamedTuple):
         return list(self)
 
     @classmethod
-    def load(cls, data: list[int]) -> Self:
+    def load_from_save(cls, data: list[int]) -> Self:
         assert (
             len(data) == 4
         ), f"Color only takes [red, green, blue, alpha]. Got {data}."

@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from functools import cached_property
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Self, override
 
 from pygame import SRCALPHA, Surface
 from pygame.draw import polygon
 
+from nextrpg.core.save import LoadFromSave
 from nextrpg.drawing.color import Color
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.geometry.coordinate import Coordinate
@@ -17,11 +18,29 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class PolygonDrawing:
+class PolygonDrawing(LoadFromSave):
     points: tuple[Coordinate, ...]
     color: Color
     allow_background_in_debug: bool = True
     bounding_rectangle_area_on_screen: RectangleAreaOnScreen | None = None
+
+    @override
+    @cached_property
+    def save_data(self) -> dict[str, Any]:
+        points = [p.save_data for p in self.points]
+        return {
+            "points": points,
+            "color": self.color.save_data,
+            "allow_background_in_debug": self.allow_background_in_debug,
+        }
+
+    @override
+    @classmethod
+    def load_from_save(cls, data: dict[str, Any]) -> Self:
+        points = tuple(Coordinate.load_from_save(p) for p in data["points"])
+        color = Color.load_from_save(data["color"])
+        allow_background_in_debug = data["allow_background_in_debug"]
+        return cls(points, color, allow_background_in_debug)
 
     @cached_property
     def drawing(self) -> Drawing:
