@@ -13,6 +13,7 @@ from nextrpg import (
     PlayerOnScreen,
     PlayerSpec,
     Sound,
+    fade_out,
     update_from_event,
 )
 from nextrpg.character.polygon_character_drawing import PolygonCharacterDrawing
@@ -40,7 +41,8 @@ def pick_up_fruit(
     )
     character_drawing = PolygonCharacterDrawing(rect_or_poly=rect)
     npc_dismissed = npc.with_character_drawing(character_drawing)
-    yield update_from_event(npc_dismissed)
+    update_from_event(npc_dismissed)
+    fade_out(npc.drawing_on_screen, wait=False)
 
     scene: "You picked up the fruit!"
     return DONT_RESTART_EVENT

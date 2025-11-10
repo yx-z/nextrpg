@@ -60,7 +60,7 @@ class FadeInEventScene(RpgEventScene):
 
     @override
     @cached_property
-    def add_ons(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens_after_parent(self) -> list[DrawingOnScreen]:
         return self._fade.drawing_on_screens
 
     @override

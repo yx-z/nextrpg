@@ -1,9 +1,14 @@
+from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass
 from functools import cached_property
 from typing import Any, Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.dataclass_with_default import private_init_below
+from nextrpg.core.module_and_attribute import (
+    ModuleAndAttribute,
+    to_module_and_attribute,
+)
 from nextrpg.core.save import LoadFromSave
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
@@ -20,13 +25,15 @@ def _update_polygon_character_drawing(
 class PolygonCharacterDrawing(CharacterDrawing, LoadFromSave):
     rect_or_poly: RectangleDrawing | PolygonDrawing
     _: KW_ONLY = private_init_below()
-    update_function = _update_polygon_character_drawing
+    _update_function: ModuleAndAttribute[
+        Callable[[CharacterDrawing, dict[str, Any]], PolygonCharacterDrawing]
+    ] = to_module_and_attribute(_update_polygon_character_drawing)
 
     @override
     @cached_property
     def save_data(self) -> dict[str, Any]:
         return super().save_data | {
-            "is_rect": isinstance(self, RectangleDrawing),
+            "is_rect": isinstance(self.rect_or_poly, RectangleDrawing),
             "rect_or_poly": self.rect_or_poly.save_data,
         }
 

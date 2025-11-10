@@ -11,7 +11,10 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import animate
+from nextrpg.drawing.animation_on_screen_like import (
+    AnimationOnScreenLike,
+    animate,
+)
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.background_event import (
     BackgroundEvent,
@@ -45,7 +48,7 @@ class BackgroundFadeOutEvent(BackgroundEvent):
 
 @dataclass_with_default(frozen=True)
 class FadeOutEventScene(RpgEventScene):
-    sentinel: BackgroundEventSentinel
+    resource: BackgroundEventSentinel | AnimationOnScreenLike
     wait: bool = True
     duration: Millisecond = field(
         default_factory=lambda: config().animation.default_timed_animation_duration
@@ -55,39 +58,47 @@ class FadeOutEventScene(RpgEventScene):
 
     @override
     @cached_property
-    def add_ons(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens_after_parent(self) -> list[DrawingOnScreen]:
         return self._fade.drawing_on_screens
 
     @override
     def _tick_after_parent(
         self, time_delta: Millisecond, ticked: Self
     ) -> Scene:
+        if self._is_sentinel_based:
+            scene = ticked.parent.remove_background_event(self.resource)
+        else:
+            scene = ticked.parent
+
         fade = self._fade.tick(time_delta)
-        background_removed = ticked.parent.remove_background_event(
-            self.sentinel
-        )
         if not self.wait:
             background_event = BackgroundFadeOutEvent(fade=fade)
-            return background_removed.complete(
+            return scene.complete(
                 self.generator, background_event=background_event
             )
 
         if fade.is_complete:
-            return background_removed.complete(self.generator)
-
-        return replace(ticked, parent=background_removed, _fade=fade)
+            return scene.complete(self.generator)
+        return replace(ticked, parent=scene, _fade=fade)
 
     @cached_property
+    def _is_sentinel_based(self) -> bool:
+        return isinstance(self.resource, BackgroundEventSentinel)
+
+    @property
     def _init_fade(self) -> TimedAnimationOnScreens:
-        resource = self.parent.get_background_event(
-            self.sentinel
-        ).drawing_on_screens
+        if self._is_sentinel_based:
+            resource = self.parent.get_background_event(
+                self.resource
+            ).drawing_on_screens
+        else:
+            resource = self.resource
         return animate(resource, FadeOut, duration=self.duration)
 
 
 @register_rpg_event_scene(FadeOutEventScene)
 def fade_out(
-    sentinel: BackgroundEventSentinel,
+    sentinel: BackgroundEventSentinel | AnimationOnScreenLike,
     wait: bool = True,
     duration: Millisecond | None = None,
 ) -> None: ...

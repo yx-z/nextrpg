@@ -43,7 +43,7 @@ class SayEventState(RpgEventScene, ABC):
 
     @override
     @cached_property
-    def add_ons(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens_after_parent(self) -> list[DrawingOnScreen]:
         if self.unique_name:
             character = self.parent.get_character(self.unique_name)
             diff = character.coordinate - self.initial_coordinate

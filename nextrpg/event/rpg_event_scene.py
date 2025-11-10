@@ -19,7 +19,10 @@ class RpgEventScene(Scene):
     @cached_property
     @override
     def drawing_on_screens(self) -> list[DrawingOnScreen]:
-        return self.parent.drawing_on_screens + self.add_ons
+        return (
+            self.parent.drawing_on_screens
+            + self.drawing_on_screens_after_parent
+        )
 
     @override
     def tick(self, time_delta: Millisecond) -> Scene:
@@ -28,7 +31,7 @@ class RpgEventScene(Scene):
         return self._tick_after_parent(time_delta, ticked)
 
     @cached_property
-    def add_ons(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens_after_parent(self) -> list[DrawingOnScreen]:
         return []
 
     def _tick_after_parent(
