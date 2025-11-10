@@ -166,6 +166,7 @@ from nextrpg.event.fade_out_event_scene import (
     BackgroundFadeOutEvent,
     FadeOutEventScene,
     fade_out,
+    fade_out_character,
 )
 from nextrpg.event.io_event import (
     IoEvent,

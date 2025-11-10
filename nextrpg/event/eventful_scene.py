@@ -13,7 +13,9 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.event.background_event import (
     BackgroundEvent,
     BackgroundEventSentinel,
@@ -117,12 +119,9 @@ class EventfulScene(EventAsAttr, SceneWithSound):
         background_events_drawing_on_screens = tuple(
             d for c in self._background_events for d in c.drawing_on_screens
         )
-        if shift := self.drawing_on_screens_shift:
-            drawing_on_screens = tuple(
-                d + shift for d in self.drawing_on_screens_before_shift
-            )
-            return drawing_on_screens + background_events_drawing_on_screens
-        return background_events_drawing_on_screens
+        before_shift = DrawingOnScreens(self.drawing_on_screens_before_shift)
+        drawing_on_screens = self.drawing_on_screens_after_shift(before_shift)
+        return drawing_on_screens + background_events_drawing_on_screens
 
     @property
     @abstractmethod
@@ -166,6 +165,16 @@ class EventfulScene(EventAsAttr, SceneWithSound):
     @cached_property
     def npc_dict(self) -> dict[str, NpcOnScreen]:
         return {n.spec.unique_name: n for n in self.npcs}
+
+    def drawing_on_screens_after_shift(
+        self, animation_on_screen_like: AnimationOnScreenLike
+    ) -> tuple[DrawingOnScreen, ...]:
+        if self.drawing_on_screens_shift:
+            return tuple(
+                d + self.drawing_on_screens_shift
+                for d in animation_on_screen_like.drawing_on_screens
+            )
+        return animation_on_screen_like.drawing_on_screens
 
     def _others(self, npc: NpcOnScreen) -> tuple[CharacterOnScreen, ...]:
         other_npcs = tuple(n for n in self.npcs if n is not npc)
@@ -243,6 +252,7 @@ def _complete_event[T: EventfulScene](
 def _complete(
     npc: NpcOnScreen, event_spec: Any | Literal[DONT_RESTART_EVENT] | None
 ) -> NpcOnScreen:
+    npc = npc.complete_event
     if event_spec is DONT_RESTART_EVENT:
         return replace(npc, restart_event=False)
     elif event_spec is not None:

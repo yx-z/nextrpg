@@ -44,7 +44,7 @@ class _TransformEvent(NodeTransformer):
         if not isinstance(node.func, Name) or not _is_rpg_event(node.func.id):
             return node
         args = [Name(node.func.id)]
-        transform = Attribute(Name("nextrpg"), "transform")
+        transform = Attribute(Name("nextrpg"), "transform_event")
         transform_fun = Call(transform, args)
         return Call(transform_fun, node.args, node.keywords)
 
