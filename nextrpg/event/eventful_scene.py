@@ -98,9 +98,9 @@ class EventfulScene(EventAsAttr, SceneWithSound):
         ticked_background_events = [
             c.tick(time_delta) for c in self._background_events
         ]
-        not_completed_background_events = [
+        not_completed_background_events = tuple(
             c for c in ticked_background_events if not c.is_complete
-        ]
+        )
         for background_event in not_completed_background_events:
             ticked = background_event.apply(ticked)
         return replace(
@@ -137,7 +137,7 @@ class EventfulScene(EventAsAttr, SceneWithSound):
         background_event: BackgroundEvent | None = None,
     ) -> Self:
         if background_event:
-            background_events = self._background_events + [background_event]
+            background_events = self._background_events + (background_event,)
         else:
             background_events = self._background_events
         return replace(
@@ -158,9 +158,9 @@ class EventfulScene(EventAsAttr, SceneWithSound):
     def remove_background_event(
         self, sentinel: BackgroundEventSentinel
     ) -> Self:
-        background_events = [
+        background_events = tuple(
             e for e in self._background_events if e.sentinel is not sentinel
-        ]
+        )
         return replace(self, _background_events=background_events)
 
     @cached_property
