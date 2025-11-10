@@ -19,14 +19,14 @@ class SpriteSheet:
     color_key: Color | None = None
 
     @cached_property
-    def grid(self) -> list[list[Drawing]]:
-        return [
-            [
+    def grid(self) -> tuple[tuple[Drawing, ...], ...]:
+        return tuple(
+            tuple(
                 self.select(SpriteSheetSelection(row=row, column=column))
                 for column in range(self.num_columns)
-            ]
+            )
             for row in range(self.num_rows)
-        ]
+        )
 
     def __getitem__(self, item: tuple[int, int]) -> Drawing:
         row, col = item

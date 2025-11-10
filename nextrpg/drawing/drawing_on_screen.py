@@ -66,8 +66,8 @@ class DrawingOnScreen(AnimationOnScreenLike):
         return self + -other
 
     @cached_property
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
-        return [self]
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return (self,)
 
     @override
     @cached_property

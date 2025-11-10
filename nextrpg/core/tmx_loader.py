@@ -62,8 +62,10 @@ class TmxLoader:
                 return obj
         raise RuntimeError(f"Object {name} not found.")
 
-    def get_objects_by_class_name(self, class_name: str) -> list[TiledObject]:
-        return [obj for obj in self.all_objects if obj.type == class_name]
+    def get_objects_by_class_name(
+        self, class_name: str
+    ) -> tuple[TiledObject, ...]:
+        return tuple(obj for obj in self.all_objects if obj.type == class_name)
 
     def image_layer(self, name: str) -> DrawingOnScreen:
         layer = self._tmx.get_layer_by_name(name)
@@ -77,12 +79,12 @@ class TmxLoader:
         return drawing.drawing_on_screen(coordinate)
 
     @cached_property
-    def all_objects(self) -> list[TiledObject]:
-        return [
+    def all_objects(self) -> tuple[TiledObject, ...]:
+        return tuple(
             obj
             for index in self._tmx.visible_object_groups
             for obj in self._layer(index)
-        ]
+        )
 
     def _layer(
         self, index: int

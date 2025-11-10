@@ -65,7 +65,7 @@ class TransitionScene(Scene):
 
     @override
     @cached_property
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         # First phase.
         if not self._fade_in.is_complete:
             return (

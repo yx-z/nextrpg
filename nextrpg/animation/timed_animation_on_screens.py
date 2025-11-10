@@ -12,10 +12,10 @@ class TimedAnimationOnScreens(AnimationOnScreens):
     resource: TimedAnimationOnScreen | tuple[TimedAnimationOnScreen, ...]
 
     @cached_property
-    def resources(self) -> list[TimedAnimationOnScreen]:
+    def resources(self) -> tuple[TimedAnimationOnScreen, ...]:
         if isinstance(self.resource, TimedAnimationOnScreen):
-            return [self.resource]
-        return list(self.resource)
+            return (self.resource,)
+        return self.resource
 
     def compose(self, other: type[TimedAnimationGroup], **kwargs: Any) -> Self:
         resources = tuple(

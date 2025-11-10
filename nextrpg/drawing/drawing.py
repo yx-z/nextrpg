@@ -54,8 +54,8 @@ class Drawing(AnimationLike, HasMetadata):
 
     @override
     @cached_property
-    def drawings(self) -> list[Drawing]:
-        return [self]
+    def drawings(self) -> tuple[Drawing, ...]:
+        return (self,)
 
     @override
     def __str__(self) -> str:
@@ -125,9 +125,9 @@ class Drawing(AnimationLike, HasMetadata):
     @override
     def drawing_on_screens(
         self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
-    ) -> list[DrawingOnScreen]:
+    ) -> tuple[DrawingOnScreen, ...]:
         drawing_on_screen = self.drawing_on_screen(coordinate, anchor)
-        return [drawing_on_screen]
+        return (drawing_on_screen,)
 
     def __mul__(
         self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling

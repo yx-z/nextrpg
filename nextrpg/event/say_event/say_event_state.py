@@ -43,16 +43,16 @@ class SayEventState(RpgEventScene, ABC):
 
     @override
     @cached_property
-    def drawing_on_screens_after_parent(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens_after_parent(self) -> tuple[DrawingOnScreen, ...]:
         if self.unique_name:
             character = self.parent.get_character(self.unique_name)
             diff = character.coordinate - self.initial_coordinate
-            return [a + diff for a in self._add_ons]
+            return tuple(a + diff for a in self._add_ons)
         return self._add_ons
 
     @property
     @abstractmethod
-    def _add_ons(self) -> list[DrawingOnScreen]: ...
+    def _add_ons(self) -> tuple[DrawingOnScreen, ...]: ...
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
@@ -68,7 +68,7 @@ class SayEventFadeInState(SayEventState):
 
     @override
     @cached_property
-    def _add_ons(self) -> list[DrawingOnScreen]:
+    def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
         return self._fade_in.drawing_on_screens
 
     @override
@@ -106,7 +106,7 @@ class SayEventTypingState(SayEventState):
         if not is_key_press(event, KeyMappingConfig.confirm):
             return self
 
-        resource = [self.background] + self.text_on_screen.drawing_on_screens
+        resource = (self.background,) + self.text_on_screen.drawing_on_screens
         resources = AnimationOnScreens(resource)
         return SayEventFadeOutState(
             generator=self.generator,
@@ -119,7 +119,7 @@ class SayEventTypingState(SayEventState):
 
     @override
     @cached_property
-    def _add_ons(self) -> list[DrawingOnScreen]:
+    def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
         if self._typewriter:
             text = self._typewriter.drawing_on_screens
         else:
@@ -147,7 +147,7 @@ class SayEventFadeOutState(SayEventState):
 
     @override
     @cached_property
-    def _add_ons(self) -> list[DrawingOnScreen]:
+    def _add_ons(self) -> tuple[DrawingOnScreen, ...]:
         return self._fade_out.drawing_on_screens
 
     @override

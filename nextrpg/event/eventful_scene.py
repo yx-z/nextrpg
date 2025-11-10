@@ -113,14 +113,14 @@ class EventfulScene(EventAsAttr, SceneWithSound):
 
     @override
     @cached_property
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
-        background_events_drawing_on_screens = [
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        background_events_drawing_on_screens = tuple(
             d for c in self._background_events for d in c.drawing_on_screens
-        ]
+        )
         if shift := self.drawing_on_screens_shift:
-            drawing_on_screens = [
+            drawing_on_screens = tuple(
                 d + shift for d in self.drawing_on_screens_before_shift
-            ]
+            )
             return drawing_on_screens + background_events_drawing_on_screens
         return background_events_drawing_on_screens
 
@@ -128,7 +128,7 @@ class EventfulScene(EventAsAttr, SceneWithSound):
     @abstractmethod
     def drawing_on_screens_before_shift(
         self,
-    ) -> list[DrawingOnScreen]: ...
+    ) -> tuple[DrawingOnScreen, ...]: ...
 
     def complete(
         self,
@@ -167,9 +167,9 @@ class EventfulScene(EventAsAttr, SceneWithSound):
     def npc_dict(self) -> dict[str, NpcOnScreen]:
         return {n.spec.unique_name: n for n in self.npcs}
 
-    def _others(self, npc: NpcOnScreen) -> list[CharacterOnScreen]:
-        other_npcs = [n for n in self.npcs if n is not npc]
-        return [self.player] + other_npcs
+    def _others(self, npc: NpcOnScreen) -> tuple[CharacterOnScreen, ...]:
+        other_npcs = tuple(n for n in self.npcs if n is not npc)
+        return (self.player,) + other_npcs
 
     @cached_property
     def _collided_npc(self) -> NpcOnScreen | None:

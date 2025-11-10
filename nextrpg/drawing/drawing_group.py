@@ -64,13 +64,13 @@ class DrawingGroup(AnimationLike, HasMetadata):
 
     @override
     @cached_property
-    def drawings(self) -> list[Drawing]:
-        return [d for res in self.resources for d in res.drawings]
+    def drawings(self) -> tuple[Drawing, ...]:
+        return tuple(d for res in self.resources for d in res.drawings)
 
     @override
     def drawing_on_screens(
         self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
-    ) -> list[DrawingOnScreen]:
+    ) -> tuple[DrawingOnScreen, ...]:
         return self.group_on_screen(coordinate, anchor).drawing_on_screens
 
     def group_on_screen(

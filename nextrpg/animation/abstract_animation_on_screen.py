@@ -11,7 +11,7 @@ from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 class AbstractAnimationOnScreen(AnimationOnScreenLike, ABC):
     @property
     @abstractmethod
-    def drawing_on_screens(self) -> list[DrawingOnScreen]: ...
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]: ...
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:

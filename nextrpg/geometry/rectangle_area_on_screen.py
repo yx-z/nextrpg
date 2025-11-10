@@ -73,13 +73,13 @@ class RectangleAreaOnScreen(AreaOnScreen, Sizable):
         return rect.drawing.drawing_on_screen(self.top_left)
 
     @cached_property
-    def points(self) -> list[Coordinate]:
-        return [
+    def points(self) -> tuple[Coordinate, ...]:
+        return (
             self.top_left,
             self.top_right,
             self.bottom_right,
             self.bottom_left,
-        ]
+        )
 
     @cached_property
     def _polygon(self) -> PolygonAreaOnScreen:

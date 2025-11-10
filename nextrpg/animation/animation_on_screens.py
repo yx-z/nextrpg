@@ -17,10 +17,10 @@ class AnimationOnScreens(AbstractAnimationOnScreen):
     resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...]
 
     @cached_property
-    def resources(self) -> list[AnimationOnScreenLike]:
+    def resources(self) -> tuple[AnimationOnScreenLike, ...]:
         if isinstance(self.resource, AnimationOnScreenLike):
-            return [self.resource]
-        return list(self.resource)
+            return (self.resource,)
+        return self.resource
 
     def concur(self, another: AnimationOnScreenLike) -> AnimationOnScreens:
         resources = (self, another)
@@ -28,12 +28,12 @@ class AnimationOnScreens(AbstractAnimationOnScreen):
 
     @override
     @cached_property
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
-        return [
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return tuple(
             drawing_on_screen
             for resource in self.resources
             for drawing_on_screen in resource.drawing_on_screens
-        ]
+        )
 
     @override
     @cached_property

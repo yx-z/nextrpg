@@ -22,10 +22,10 @@ class TextGroup(AnimationLike):
     config: TextGroupConfig = field(default_factory=lambda: config().text_group)
 
     @cached_property
-    def texts(self) -> list[Text]:
+    def texts(self) -> tuple[Text, ...]:
         if isinstance(self.resource, Text):
-            return [self.resource]
-        return list(self.resource)
+            return (self.resource,)
+        return self.resource
 
     def __len__(self) -> int:
         return sum(len(text) for text in self.texts)
@@ -94,8 +94,8 @@ class TextGroup(AnimationLike):
         return widths + margins
 
     @cached_property
-    def _no_wrap(self) -> list[Text]:
-        return [_no_wrap(t) for t in self.texts]
+    def _no_wrap(self) -> tuple[Text, ...]:
+        return tuple(_no_wrap(t) for t in self.texts)
 
 
 def _no_wrap(text: Text) -> Text:

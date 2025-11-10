@@ -18,7 +18,7 @@ class TextOnScreen(AnimationOnScreenLike):
     anchor: Anchor = Anchor.TOP_LEFT
 
     @cached_property
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return self.text.drawing.drawing_on_screens(
             self.coordinate, self.anchor
         )

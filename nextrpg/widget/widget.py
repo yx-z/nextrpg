@@ -91,11 +91,11 @@ class WidgetOnScreen(Scene):
 
     @override
     @cached_property
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         if self.parent:
             parent_drawing_on_screens = self.parent.drawing_on_screens
         else:
-            parent_drawing_on_screens = []
+            parent_drawing_on_screens = ()
         return (
             parent_drawing_on_screens + self._drawing_on_screens_without_parent
         )
@@ -141,7 +141,7 @@ class WidgetOnScreen(Scene):
     @cached_property
     def _drawing_on_screens_without_parent(
         self,
-    ) -> list[DrawingOnScreen]:
+    ) -> tuple[DrawingOnScreen, ...]:
         # Entering.
         if self._enter_animation:
             return self._enter_animation.drawing_on_screens
@@ -162,7 +162,7 @@ class WidgetOnScreen(Scene):
     @abstractmethod
     def _drawing_on_screens_without_parent_and_animation(
         self,
-    ) -> list[DrawingOnScreen]: ...
+    ) -> tuple[DrawingOnScreen, ...]: ...
 
     def _event_after_selected(self, event: IoEvent) -> Scene:
         return self

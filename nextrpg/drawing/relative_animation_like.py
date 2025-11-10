@@ -64,10 +64,12 @@ class RelativeAnimationLike:
         return replace(self, resource=resource)
 
     @cached_property
-    def drawings(self) -> list[Drawing]:
+    def drawings(self) -> tuple[Drawing, ...]:
         return self.resource.drawings
 
-    def drawing_on_screens(self, origin: Coordinate) -> list[DrawingOnScreen]:
+    def drawing_on_screens(
+        self, origin: Coordinate
+    ) -> tuple[DrawingOnScreen, ...]:
         return self.resource.drawing_on_screens(
             origin + self.shift, self.anchor
         )

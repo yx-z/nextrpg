@@ -19,7 +19,7 @@ class SizableWidgetOnScreen(WidgetOnScreen):
     @cached_property
     def _drawing_on_screens_without_parent_and_animation(
         self,
-    ) -> list[DrawingOnScreen]:
+    ) -> tuple[DrawingOnScreen, ...]:
         return self.drawing.drawing_on_screens(
             self.coordinate, self.widget.anchor
         )

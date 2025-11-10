@@ -73,17 +73,17 @@ class CharacterOnScreen(
         )
 
     @cached_property
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         character_drawing_on_screens = (
             self.character_drawing.drawing_on_screens(
                 self.coordinate, self.anchor
             )
         )
-        debug_visuals = [
+        debug_visuals = tuple(
             d
             for d in (self._collision_visual, self._start_event_visual)
             if d is not None
-        ]
+        )
         return character_drawing_on_screens + debug_visuals
 
     @cached_property

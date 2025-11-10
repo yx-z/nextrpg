@@ -30,12 +30,12 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     )
 
     @cached_property
-    def children_drawing_on_screens(self) -> list[DrawingOnScreen]:
-        return [
+    def children_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return tuple(
             drawing_on_screen
             for child in self._children
             for drawing_on_screen in child._drawing_on_screens_without_parent
-        ]
+        )
 
     def replace(
         self, from_child: WidgetOnScreen, to_child: WidgetOnScreen
@@ -70,11 +70,11 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     @cached_property
     def _drawing_on_screens_without_parent_and_animation(
         self,
-    ) -> list[DrawingOnScreen]:
+    ) -> tuple[DrawingOnScreen, ...]:
         if self.background:
             drawing_on_screens = self.background.drawing_on_screens
         else:
-            drawing_on_screens = []
+            drawing_on_screens = ()
         return drawing_on_screens + self.children_drawing_on_screens
 
     @override

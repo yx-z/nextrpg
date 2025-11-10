@@ -31,7 +31,7 @@ class DrawingGroupOnScreen(AnimationOnScreenLike):
         return replace(self, drawing_group=drawing_group)
 
     @cached_property
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         res: list[DrawingOnScreen] = []
         for relative in self.drawing_group.resources:
             res += relative.drawing_on_screens(self.origin)
@@ -43,7 +43,7 @@ class DrawingGroupOnScreen(AnimationOnScreenLike):
                     self._link_color, allow_background_in_debug=False
                 )
                 res.append(link_drawing_on_screen)
-        return res
+        return tuple(res)
 
     @property
     def _link_color(self) -> Color | None:

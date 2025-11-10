@@ -20,7 +20,7 @@ class AnimationOnScreen(AbstractAnimationOnScreen):
 
     @override
     @cached_property
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return self.resource.drawing_on_screens(self.coordinate)
 
     @override

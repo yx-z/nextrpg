@@ -41,7 +41,7 @@ class AnimationLike(Sizable, Protocol):
         return self.drawing.size
 
     @cached_property
-    def drawings(self) -> list[Drawing]:
+    def drawings(self) -> tuple[Drawing, ...]:
         return self.drawing.drawings
 
     def shift(
@@ -72,7 +72,7 @@ class AnimationLike(Sizable, Protocol):
 
     def drawing_on_screens(
         self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
-    ) -> list[DrawingOnScreen]:
+    ) -> tuple[DrawingOnScreen, ...]:
         return self.drawing.drawing_on_screens(coordinate, anchor)
 
     def tick(self, time_delta: Millisecond) -> Self:

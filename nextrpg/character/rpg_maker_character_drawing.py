@@ -28,13 +28,13 @@ class RpgMakerCharacterDrawingDefaultFrameType(IntEnum):
     _LEFT_FOOT = 2
 
     @classmethod
-    def frame_indices(cls) -> list[int]:
-        return [
+    def frame_indices(cls) -> tuple[int, ...]:
+        return (
             RpgMakerCharacterDrawingDefaultFrameType._IDLE,
             RpgMakerCharacterDrawingDefaultFrameType._RIGHT_FOOT,
             RpgMakerCharacterDrawingDefaultFrameType._IDLE,
             RpgMakerCharacterDrawingDefaultFrameType._LEFT_FOOT,
-        ]
+        )
 
 
 class RpgMakerCharacterDrawingXpFrameType(IntEnum):
@@ -44,8 +44,8 @@ class RpgMakerCharacterDrawingXpFrameType(IntEnum):
     _LEFT_FOOT = 3
 
     @classmethod
-    def frame_indices(cls) -> list[int]:
-        return list(cls)
+    def frame_indices(cls) -> tuple[int, ...]:
+        return tuple(cls)
 
 
 type RpgMakerCharacterDrawingFrameType = type[
@@ -119,28 +119,28 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
             d.trim(self.sprite_sheet.trim)
             for d in self._crop_at_row(drawing, row)
         ]
-        ordered_frames = [
+        ordered_frames = tuple(
             frames[i] for i in self.sprite_sheet.style.frame_indices()
-        ]
+        )
         return CyclicAnimation(
             frames=ordered_frames,
             duration_per_frame=self.config.duration_per_frame,
         )
 
-    def _crop_at_row(self, drawing: Drawing, row: int) -> list[Drawing]:
+    def _crop_at_row(self, drawing: Drawing, row: int) -> tuple[Drawing, ...]:
         num_frames = len(self.sprite_sheet.style)
         width = drawing.width / num_frames
         height = drawing.height / len(_DIR_TO_ROW)
         size = width * height
         height_shift = row * height
-        return [
+        return tuple(
             drawing.crop(
                 ((width * i) * height_shift)
                 .coordinate.as_top_left_of(size)
                 .rectangle_area_on_screen
             )
             for i in range(num_frames)
-        ]
+        )
 
     @property
     def _init_animation(self) -> dict[Direction, CyclicAnimation]:

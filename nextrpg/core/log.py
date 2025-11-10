@@ -113,19 +113,19 @@ class LogEntry:
         return "".join(formatted)
 
 
-def pop_messages(time_delta: Millisecond) -> list[LogEntry]:
+def pop_messages(time_delta: Millisecond) -> tuple[LogEntry, ...]:
     from nextrpg.config.config import config
 
     if not (debug := config().debug):
         _pop(time_delta)
-        return []
+        return ()
 
-    msgs = [
+    msgs = tuple(
         e
         for e in _entries + list(_timed_entries.values())
         if e.component not in debug.exclude_loggers
         and e.level >= debug.log_level
-    ]
+    )
     _pop(time_delta)
     return msgs
 

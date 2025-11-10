@@ -40,13 +40,13 @@ class ForegroundLayers:
         return replace(self, tiles=tiles)
 
     def drawing_on_screens(
-        self, characters: list[CharacterOnScreen]
-    ) -> list[DrawingOnScreen]:
+        self, characters: tuple[CharacterOnScreen, ...]
+    ) -> tuple[DrawingOnScreen, ...]:
         character_drawing_on_screens = sorted(
-            (
+            [
                 DrawingOnScreens(tuple(character.drawing_on_screens))
                 for character in characters
-            ),
+            ],
             key=_sort_by_bottom,
         )
         tile_drawing_on_screens = [
@@ -58,11 +58,11 @@ class ForegroundLayers:
             character_drawing_on_screens,
             key=_sort_by_bottom,
         )
-        return [
+        return tuple(
             drawing_on_screen
             for resource in all_drawing_on_screens
             for drawing_on_screen in resource.drawing_on_screens
-        ]
+        )
 
 
 @dataclass_with_default(frozen=True)
@@ -98,16 +98,18 @@ class MapLoader(TmxLoader):
         return width * height
 
     @cached_property
-    def _colliders(self) -> list[_Collider]:
-        return [
+    def _colliders(self) -> tuple[_Collider, ...]:
+        return tuple(
             _Collider(_TileCoordinate(left, top), collider)
             for layer in self._all_tile_layers
             for top, left, gid in layer
             for collider in self._collider(gid)
-        ]
+        )
 
-    def _collider(self, gid: _Gid) -> list[TiledObject]:
-        return self._tmx.tile_properties.get(gid, {}).get("colliders", [])
+    def _collider(self, gid: _Gid) -> tuple[TiledObject, ...]:
+        return tuple(
+            self._tmx.tile_properties.get(gid, {}).get("colliders", ())
+        )
 
     def _polygon(self, collider: _Collider) -> AreaOnScreen:
         return self._from_rect(collider) or self._from_points(collider)
@@ -133,17 +135,17 @@ class MapLoader(TmxLoader):
         size = Size(collider.object.width, collider.object.height)
         return RectangleAreaOnScreen(map_coord, size)
 
-    def _tile_layers(self, class_name: str) -> list[TiledTileLayer]:
-        return [
+    def _tile_layers(self, class_name: str) -> tuple[TiledTileLayer, ...]:
+        return tuple(
             layer
             for layer in self._all_tile_layers
             if getattr(layer, "class", None) == class_name
             or class_name in layer.name
-        ]
+        )
 
     @cached_property
-    def _all_tile_layers(self) -> list[TiledTileLayer]:
-        return [self._layer(i) for i in self._tmx.visible_tile_layers]
+    def _all_tile_layers(self) -> tuple[TiledTileLayer, ...]:
+        return tuple(self._layer(i) for i in self._tmx.visible_tile_layers)
 
     def _tile_class(
         self, layer: TiledTileLayer, coordinate: _TileCoordinate
@@ -180,7 +182,9 @@ class MapLoader(TmxLoader):
                 res |= self._connected(layer, neighbor, connected_tile_ids)
         return res
 
-    def _foreground(self, layer: TiledTileLayer) -> list[AnimationOnScreens]:
+    def _foreground(
+        self, layer: TiledTileLayer
+    ) -> tuple[AnimationOnScreens, ...]:
         visited: set[_TileCoordinate] = set()
         groups: list[AnimationOnScreens] = []
         for coordinate in (resources := self._coordinate_to_resource(layer)):
@@ -195,7 +199,7 @@ class MapLoader(TmxLoader):
             )
             group = AnimationOnScreens(connected_resources)
             groups.append(group)
-        return groups
+        return tuple(groups)
 
     @cached_property
     def _tile_size(self) -> Size:
@@ -225,12 +229,12 @@ class MapLoader(TmxLoader):
         return drawing.drawing_on_screen(coordinate)
 
     @property
-    def collision_visuals(self) -> list[DrawingOnScreen]:
+    def collision_visuals(self) -> tuple[DrawingOnScreen, ...]:
         if (debug := config().debug) and (
             color := debug.collision_rectangle_color
         ):
-            return [c.fill(color) for c in self.collisions]
-        return []
+            return tuple(c.fill(color) for c in self.collisions)
+        return ()
 
     @property
     def _init_foregrounds(self) -> ForegroundLayers:

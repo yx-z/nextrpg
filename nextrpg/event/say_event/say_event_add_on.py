@@ -292,9 +292,9 @@ class _Background(AnimationOnScreen):
 
     @override
     @cached_property
-    def drawing_on_screens(self) -> list[DrawingOnScreen]:
-        return [
+    def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
+        return tuple(
             drawing_on_screen
             for drawing_on_screen in super().drawing_on_screens
             if drawing_on_screen.drawing not in self.text.drawings
-        ]
+        )

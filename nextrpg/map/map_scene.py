@@ -2,6 +2,7 @@ import inspect
 from collections.abc import Callable
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
+from itertools import chain
 from pathlib import Path
 from typing import Any, Self, override
 
@@ -77,7 +78,7 @@ class MapScene(EventfulScene, UpdateFromSave[dict[str, Any]]):
     )
 
     @cached_property
-    def _debug_visuals(self) -> list[DrawingOnScreen]:
+    def _debug_visuals(self) -> tuple[DrawingOnScreen, ...]:
         return (
             self._map_loader.collision_visuals
             + self._npc_paths
@@ -125,8 +126,8 @@ class MapScene(EventfulScene, UpdateFromSave[dict[str, Any]]):
 
     @cached_property
     @override
-    def drawing_on_screens_before_shift(self) -> list[DrawingOnScreen]:
-        characters = [self.player] + list(self.npcs)
+    def drawing_on_screens_before_shift(self) -> tuple[DrawingOnScreen, ...]:
+        characters = chain((self.player,), self.npcs)
         foreground_and_characters = (
             self._map_loader.foregrounds.drawing_on_screens(characters)
         )
@@ -172,20 +173,22 @@ class MapScene(EventfulScene, UpdateFromSave[dict[str, Any]]):
         return None
 
     @cached_property
-    def _moves(self) -> list[MapMove]:
+    def _moves(self) -> tuple[MapMove, ...]:
         if isinstance(self.move, MapMove):
-            return [self.move]
-        return list(self.move)
+            return (self.move,)
+        return self.move
 
     @cached_property
-    def _move_visuals(self) -> list[DrawingOnScreen]:
+    def _move_visuals(self) -> tuple[DrawingOnScreen, ...]:
         if (debug := config().debug) and debug.move_object_color:
-            return [m.fill(debug.move_object_color) for m in self._move_areas]
-        return []
+            return tuple(
+                m.fill(debug.move_object_color) for m in self._move_areas
+            )
+        return ()
 
     @cached_property
-    def _move_areas(self) -> list[AreaOnScreen]:
-        return [
+    def _move_areas(self) -> tuple[AreaOnScreen, ...]:
+        return tuple(
             geometry
             for move in self._moves
             if isinstance(
@@ -194,7 +197,7 @@ class MapScene(EventfulScene, UpdateFromSave[dict[str, Any]]):
                 ),
                 AreaOnScreen,
             )
-        ]
+        )
 
     def _move(self, move: MapMove, time_delta: Millisecond) -> Scene | None:
         move_object = self._map_loader.get_object(move.from_object)
@@ -210,15 +213,15 @@ class MapScene(EventfulScene, UpdateFromSave[dict[str, Any]]):
         return None
 
     @cached_property
-    def _npc_paths(self) -> list[DrawingOnScreen]:
+    def _npc_paths(self) -> tuple[DrawingOnScreen, ...]:
         if not (debug := config().debug) or not (color := debug.npc_path_color):
-            return []
+            return ()
         res: list[DrawingOnScreen] = []
         for npc in self.npcs:
             if isinstance(npc, MovingNpcOnScreen):
                 path = PolylineOnScreen(npc.path.points).fill(color)
                 res.append(path)
-        return res
+        return tuple(res)
 
     def _init_npc(self, spec: NpcSpec) -> NpcOnScreen:
         npc_object = self._map_loader.get_object(spec.unique_name)
@@ -239,10 +242,10 @@ class MapScene(EventfulScene, UpdateFromSave[dict[str, Any]]):
         return _init_area_npc(spec, poly)
 
     @cached_property
-    def _npc_specs(self) -> list[NpcSpec]:
+    def _npc_specs(self) -> tuple[NpcSpec, ...]:
         if isinstance(self.npc_specs, NpcSpec):
-            return [self.npc_specs]
-        return list(self.npc_specs)
+            return (self.npc_specs,)
+        return self.npc_specs
 
 
 def _init_standing_npc(spec: NpcSpec, coordinate: Coordinate) -> NpcOnScreen:
