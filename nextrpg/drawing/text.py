@@ -33,10 +33,10 @@ class Text(AnimationLike):
     @override
     @cached_property
     def drawing(self) -> DrawingGroup:
-        draws = [
+        draws = tuple(
             self._drawing(line).shift(self._line_shift(i))
             for i, line in enumerate(self.lines)
-        ]
+        )
         return DrawingGroup(draws)
 
     def text_on_screen(

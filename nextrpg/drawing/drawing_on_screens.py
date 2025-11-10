@@ -23,8 +23,9 @@ class DrawingOnScreens(AnimationOnScreenLike):
         if len(self.drawing_on_screens) == 1:
             return self.drawing_on_screens[0]
         surface = Surface(self.size, SRCALPHA)
-        shifted = [d - self.top_left for d in self.drawing_on_screens]
-        surface.blits(d.pygame for d in shifted)
+        surface.blits(
+            (d - self.top_left).pygame for d in self.drawing_on_screens
+        )
         drawing = Drawing(surface)
         return drawing.drawing_on_screen(self.top_left)
 

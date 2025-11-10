@@ -54,10 +54,10 @@ class NineSlice:
         if (debug := config().debug) and (color := debug.draw_group_link_color):
             points = (ORIGIN, size.height.with_zero_width.coordinate)
             vertical_line = PolylineDrawing(points, color).drawing
-            parts += [
+            parts += (
                 vertical_line.shift(self.left.with_zero_height),
                 vertical_line.shift((size.width - self.right).with_zero_height),
-            ]
+            )
         return DrawingGroup(parts)
 
     def _stretch_row(

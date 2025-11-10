@@ -97,17 +97,14 @@ class EventfulScene(EventAsAttr, SceneWithSound):
         base = super().tick(time_delta)
         ticked = replace(base, player=player, npcs=npcs, _ended_npc=ended_npc)
 
-        ticked_background_events = [
-            c.tick(time_delta) for c in self._background_events
-        ]
-        not_completed_background_events = tuple(
-            c for c in ticked_background_events if not c.is_complete
+        ticked_background_events = tuple(
+            e
+            for c in self._background_events
+            if not (e := c.tick(time_delta)).is_complete
         )
-        for background_event in not_completed_background_events:
+        for background_event in ticked_background_events:
             ticked = background_event.apply(ticked)
-        return replace(
-            ticked, _background_events=not_completed_background_events
-        )
+        return replace(ticked, _background_events=ticked_background_events)
 
     @cached_property
     def drawing_on_screens_shift(self) -> Coordinate | None:
@@ -229,10 +226,10 @@ def _complete_event[T: EventfulScene](
     assert (
         npc := ticked._started_npc
     ), f"Expect _complete_event with a started_npc. Got {ticked}"
-    npcs = [
+    npcs = tuple(
         _complete(n, event_spec) if n.has_same_name(npc) else n
         for n in ticked.npcs
-    ]
+    )
     assert (
         ticked._event
     ), f"Expect _complete_event with an ongoing _event. Got {ticked}"

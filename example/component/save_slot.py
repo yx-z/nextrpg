@@ -42,9 +42,9 @@ def create_save_panel(
     ],
 ) -> Callable[[ButtonOnScreen], PanelOnScreen]:
     def on_click(button: ButtonOnScreen) -> PanelOnScreen:
-        save_slots = [
+        save_slots = tuple(
             create_save_slot(i, click_save_slot) for i in range(NUM_SAVE_SLOTS)
-        ]
+        )
         panel = Panel(
             name=name, children=save_slots, enter_animation=ENTER_ANIMATION
         )

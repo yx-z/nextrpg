@@ -92,10 +92,10 @@ class DrawingGroup(AnimationLike, HasMetadata):
         return self._drawing_group_on_screen.top_left
 
     def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
-        resource = [
+        resource = tuple(
             relative_drawing.flip(horizontal, vertical)
             for relative_drawing in self.resources
-        ]
+        )
         return replace(self, resource=resource)
 
     @override

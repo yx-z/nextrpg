@@ -172,7 +172,7 @@ def _set_window_config(window_config: WindowConfig) -> None:
 
 
 def _log(entries: list[LogEntry]) -> tuple[DrawingOnScreen, ...]:
-    components = [Text(e.component) for e in entries]
+    components = tuple(Text(e.component) for e in entries)
     component_width = max(t.width for t in components)
 
     height = Height(0)
@@ -208,6 +208,6 @@ def _log(entries: list[LogEntry]) -> tuple[DrawingOnScreen, ...]:
     if (debug := config().debug) and (color := debug.log_background_color):
         drawing_on_screens = DrawingOnScreens(tuple(res))
         background = drawing_on_screens.rectangle_area_on_screen.fill(color)
-        res = [background] + res
+        res.insert(0, background)
 
     return tuple(res)

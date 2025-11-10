@@ -18,10 +18,10 @@ class Scale(TimedAnimationGroup):
     @override
     @cached_property
     def drawing(self) -> DrawingGroup:
-        group = [
+        group = tuple(
             relative_drawing * self.scaling
             for relative_drawing in super().drawing.resources
-        ]
+        )
         return DrawingGroup(group)
 
     @property

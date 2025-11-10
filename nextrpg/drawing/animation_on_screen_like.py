@@ -108,13 +108,13 @@ class AnimationOnScreenLike(Sizable, Protocol):
         )
 
         origin = self._drawing_on_screens.coordinate_from(anchor)
-        resource = [
+        resource = tuple(
             drawing_on_screen.drawing.shift(
                 (drawing_on_screen.coordinate_from(anchor) - origin).size,
                 anchor,
             )
             for drawing_on_screen in self.drawing_on_screens
-        ]
+        )
         animation_group = animation_type(resource, **kwargs)
         if isinstance(animation_group, TimedAnimationGroup):
             return TimedAnimationOnScreen(origin, animation_group)
@@ -124,7 +124,7 @@ class AnimationOnScreenLike(Sizable, Protocol):
     def drawing_group_at_origin(self) -> DrawingGroup:
         from nextrpg.drawing.drawing_group import DrawingGroup
 
-        relative_animation_likes = [
+        relative_animation_likes = tuple(
             drawing_on_screen.drawing.shift(
                 (
                     drawing_on_screen.top_left
@@ -132,7 +132,7 @@ class AnimationOnScreenLike(Sizable, Protocol):
                 ).size
             )
             for drawing_on_screen in self.drawing_on_screens
-        ]
+        )
         return DrawingGroup(relative_animation_likes)
 
     @cached_property

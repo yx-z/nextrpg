@@ -18,7 +18,7 @@ from nextrpg.widget.widget_group import WidgetGroupOnScreen
 class TmxWidgetGroupOnScreen(WidgetGroupOnScreen):
     tmx: TmxLoader
     background_resource: (
-        str | AnimationOnScreenLike | list[str | AnimationOnScreenLike]
+        str | AnimationOnScreenLike | tuple[str | AnimationOnScreenLike, ...]
     ) = ()
     _ = private_init_below()
     background: AnimationOnScreenLike = default(
@@ -34,11 +34,11 @@ class TmxWidgetGroupOnScreen(WidgetGroupOnScreen):
         match self.background_resource:
             case str():
                 resources = self._image_layer(self.background_resource)
-            case list():
-                resources = [
+            case tuple():
+                resources = tuple(
                     self._image_layer(res) if isinstance(res, str) else res
                     for res in self.background_resource
-                ]
+                )
             case _:
                 resources = self.background_resource
         return AnimationOnScreens(resources)

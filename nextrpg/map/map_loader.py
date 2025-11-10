@@ -118,10 +118,10 @@ class MapLoader(TmxLoader):
         width, height = self._tile_size
         left_shift = collider.coordinate.left * width
         top_shift = collider.coordinate.top * height
-        points = [
+        points = tuple(
             Coordinate(left + left_shift, top + top_shift)
             for left, top in collider.object.as_points
-        ]
+        )
         return PolygonAreaOnScreen(points)
 
     def _from_rect(self, collider: _Collider) -> RectangleAreaOnScreen | None:
@@ -246,11 +246,11 @@ class MapLoader(TmxLoader):
         return ForegroundLayers(tuple(tiles))
 
     def _draw_layers(self, class_name: str) -> AnimationOnScreens:
-        resources = [
+        resources = tuple(
             resource
             for layer in self._tile_layers(class_name)
             for resource in self._coordinate_to_resource(layer).values()
-        ]
+        )
         return AnimationOnScreens(resources)
 
     @property

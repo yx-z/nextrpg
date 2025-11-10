@@ -83,7 +83,7 @@ class PolygonAreaOnScreen(AreaOnScreen):
 
 
 def get_bounding_rectangle_area_on_screen(
-    points: list[Coordinate],
+    points: tuple[Coordinate, ...],
 ) -> RectangleAreaOnScreen:
     min_x = min(c.left for c in points)
     min_y = min(c.top for c in points)
@@ -100,7 +100,7 @@ def get_bounding_rectangle_area_on_screen(
 
 
 def _project_polygon(axis: Coordinate, poly: PolygonAreaOnScreen) -> Coordinate:
-    dots = [x * axis[0] + y * axis[1] for x, y in poly.points]
+    dots = tuple(x * axis[0] + y * axis[1] for x, y in poly.points)
     return Coordinate(min(dots), max(dots))
 
 

@@ -18,10 +18,10 @@ class Move(TimedAnimationGroup, ABC):
     @cached_property
     def drawing(self) -> DrawingGroup:
         drawing = super().drawing
-        resource = [
+        resource = tuple(
             relative_drawing + (self.move_percentage * self.offset).shift
             for relative_drawing in drawing.resources
-        ]
+        )
         return DrawingGroup(resource)
 
     @property

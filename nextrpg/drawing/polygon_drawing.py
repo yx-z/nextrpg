@@ -49,7 +49,7 @@ class PolygonDrawing(LoadFromSave):
             allow_background_in_debug=self.allow_background_in_debug,
         )
 
-    def _draw(self, surface: Surface, points: list[Coordinate]) -> None:
+    def _draw(self, surface: Surface, points: tuple[Coordinate, ...]) -> None:
         polygon(surface, self.color, points)
 
     @cached_property
@@ -59,6 +59,6 @@ class PolygonDrawing(LoadFromSave):
             or get_bounding_rectangle_area_on_screen(self.points)
         )
         surface = Surface(bounding_rect.size, SRCALPHA)
-        negated = [p - bounding_rect.top_left for p in self.points]
+        negated = tuple(p - bounding_rect.top_left for p in self.points)
         self._draw(surface, negated)
         return surface

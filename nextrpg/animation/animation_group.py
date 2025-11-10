@@ -44,8 +44,8 @@ class AnimationGroup(AbstractAnimation):
 
     @override
     def _tick_before_complete(self, time_delta: Millisecond) -> Self:
-        resource = [
+        resource = tuple(
             relative_drawing.tick(time_delta)
             for relative_drawing in self.resources
-        ]
+        )
         return replace(self, resource=resource)

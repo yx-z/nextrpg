@@ -43,10 +43,10 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         assert (
             meta := from_child.widget.metadata
         ), f"Require non-empty metadata matching to replace widget from {from_child}."
-        children = [
+        children = tuple(
             to_child.select if child.widget.metadata == meta else child
             for child in self._children
-        ]
+        )
         return replace(self, _children=children)
 
     @override

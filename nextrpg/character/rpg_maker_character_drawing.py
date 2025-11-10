@@ -115,10 +115,10 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
         return animation
 
     def _load_row(self, drawing: Drawing, row: int) -> CyclicAnimation:
-        frames = [
+        frames = tuple(
             d.trim(self.sprite_sheet.trim)
             for d in self._crop_at_row(drawing, row)
-        ]
+        )
         ordered_frames = tuple(
             frames[i] for i in self.sprite_sheet.style.frame_indices()
         )
