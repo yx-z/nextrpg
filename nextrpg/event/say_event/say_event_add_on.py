@@ -37,11 +37,11 @@ class SayEventAddOn:
 
     @cached_property
     def background(self) -> AnimationOnScreenLike:
-        contents = (
-            (self._text.drawing,)
-            + ((d,) if (d := self._name_relative_to_text) else ())
-            + ((d,) if (d := self._avatar_relative_to_text) else ())
-        )
+        contents = [self._text.drawing]
+        if self._name_relative_to_text:
+            contents.append(self._text.drawing)
+        if self._avatar_relative_to_text:
+            contents.append(self._text.drawing)
         content = DrawingGroup(tuple(contents))
 
         background = self._background_relative_to_text.resource
