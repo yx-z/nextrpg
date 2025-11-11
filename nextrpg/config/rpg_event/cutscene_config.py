@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from functools import cached_property
 
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import Color
@@ -12,13 +13,13 @@ class CutsceneConfig:
     wait: bool = True
     duration_override: Millisecond | None = None
 
-    @property
+    @cached_property
     def background(self) -> Color:
         from nextrpg.config.config import config
 
         return self.background_override or config().window.background
 
-    @property
+    @cached_property
     def duration(self) -> Millisecond:
         from nextrpg.config.config import config
 

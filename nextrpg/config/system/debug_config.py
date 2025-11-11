@@ -1,6 +1,7 @@
 import logging
 from dataclasses import dataclass
 from enum import IntEnum, auto
+from functools import cached_property
 from typing import Any
 
 from frozendict import frozendict
@@ -14,7 +15,7 @@ class LogLevel(IntEnum):
     INFO = auto()
     ERROR = auto()
 
-    @property
+    @cached_property
     def standard(self) -> int:
         return _LOG_LEVEL[self]
 

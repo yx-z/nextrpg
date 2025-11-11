@@ -96,7 +96,7 @@ class SayEventConfig:
             return self.avatar_input()
         return self.avatar_input
 
-    @property
+    @cached_property
     def scene_coordinate(self) -> Coordinate:
         if self.scene_coordinate_input:
             return self.scene_coordinate_input
@@ -105,7 +105,7 @@ class SayEventConfig:
 
         return screen_area().center
 
-    @property
+    @cached_property
     def text_config(self) -> TextConfig:
         if self.text_config_input:
             return self.text_config_input
@@ -115,7 +115,7 @@ class SayEventConfig:
         text_config = config().text
         return replace(text_config, color=BLACK)
 
-    @property
+    @cached_property
     def name_text_config(self) -> TextConfig:
         if self.name_text_config_input:
             return self.name_text_config_input

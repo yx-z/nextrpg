@@ -45,7 +45,7 @@ class DrawingGroupOnScreen(AnimationOnScreenLike):
                 res.append(link_drawing_on_screen)
         return tuple(res)
 
-    @property
+    @cached_property
     def _link_color(self) -> Color | None:
         if (debug := config().debug) and debug.draw_group_link_color:
             return debug.draw_group_link_color

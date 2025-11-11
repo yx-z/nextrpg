@@ -1,4 +1,5 @@
 from dataclasses import dataclass, replace
+from functools import cached_property
 from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
@@ -13,7 +14,7 @@ from nextrpg.geometry.direction import Direction
 class ViewOnlyCharacterDrawing(CharacterDrawing):
     resource: AnimationLike
 
-    @property
+    @cached_property
     def drawing(self) -> Drawing | DrawingGroup:
         return self.resource.drawing
 
