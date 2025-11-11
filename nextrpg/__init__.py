@@ -182,7 +182,7 @@ from nextrpg.event.io_event import (
     to_io_event,
 )
 from nextrpg.event.rpg_event_scene import (
-    DONT_RESTART_EVENT,
+    DISMISS_EVENT,
     EventCallable,
     EventGenerator,
     RpgEventScene,

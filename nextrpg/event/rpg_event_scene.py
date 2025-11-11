@@ -62,9 +62,9 @@ class _DontRestartEvent:
     pass
 
 
-DONT_RESTART_EVENT = _DontRestartEvent()
+DISMISS_EVENT = _DontRestartEvent()
 
 type EventCallable = Callable[[EventGenerator, EventfulScene], RpgEventScene]
 type EventGenerator = Generator[
-    EventCallable, Any, Any | Literal[DONT_RESTART_EVENT] | None
+    EventCallable, Any, Any | Literal[DISMISS_EVENT] | None
 ]

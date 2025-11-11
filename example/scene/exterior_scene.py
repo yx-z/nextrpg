@@ -3,7 +3,7 @@ from typing import Literal
 
 from example.scene.scene_common import SOUND_DIR, TMX_DIR, bgm_config, sound
 from nextrpg import (
-    DONT_RESTART_EVENT,
+    DISMISS_EVENT,
     EventfulScene,
     MapMove,
     MapScene,
@@ -29,11 +29,11 @@ def exterior_scene(player: PlayerSpec) -> MapScene:
 
 def pick_up_fruit(
     player: PlayerOnScreen, npc: NpcOnScreen, scene: EventfulScene
-) -> Literal[DONT_RESTART_EVENT]:
+) -> Literal[DISMISS_EVENT]:
     sound().play()
     scene.fade_out_character(npc)
     scene: "You picked up the fruit!"
-    return DONT_RESTART_EVENT
+    return DISMISS_EVENT
 
 
 @cache

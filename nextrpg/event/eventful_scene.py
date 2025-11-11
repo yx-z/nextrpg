@@ -23,7 +23,7 @@ from nextrpg.event.background_event import (
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.event.io_event import IoEvent, is_key_press
 from nextrpg.event.rpg_event_scene import (
-    DONT_RESTART_EVENT,
+    DISMISS_EVENT,
     EventGenerator,
     RpgEventScene,
 )
@@ -221,7 +221,7 @@ class EventfulScene(EventAsAttr, SceneWithSound):
 
 
 def _complete_event[T: EventfulScene](
-    ticked: T, event_spec: Any | Literal[DONT_RESTART_EVENT] | None
+    ticked: T, event_spec: Any | Literal[DISMISS_EVENT] | None
 ) -> T:
     assert (
         npc := ticked._started_npc
@@ -247,10 +247,10 @@ def _complete_event[T: EventfulScene](
 
 
 def _complete(
-    npc: NpcOnScreen, event_spec: Any | Literal[DONT_RESTART_EVENT] | None
+    npc: NpcOnScreen, event_spec: Any | Literal[DISMISS_EVENT] | None
 ) -> NpcOnScreen:
     npc = npc.complete_event
-    if event_spec is DONT_RESTART_EVENT:
+    if event_spec is DISMISS_EVENT:
         return replace(npc, restart_event=False)
     elif event_spec is not None:
         spec = npc.spec.with_event_spec(event_spec)

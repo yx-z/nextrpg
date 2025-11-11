@@ -5,7 +5,7 @@ from typing import Literal, Self, override
 from example.scene.character import create_character_drawing
 from example.scene.scene_common import SOUND_DIR, TMX_DIR, bgm_config, sound
 from nextrpg import (
-    DONT_RESTART_EVENT,
+    DISMISS_EVENT,
     AvatarPosition,
     Color,
     EventfulScene,
@@ -60,10 +60,10 @@ def create_npc(file: str, name: str) -> NpcSpec:
 
 def enter_room(
     player: PlayerOnScreen, npc: NpcOnScreen, scene: EventfulScene
-) -> Literal[DONT_RESTART_EVENT]:
+) -> Literal[DISMISS_EVENT]:
     sound().play()
     scene: "You've entered this room!"
-    return DONT_RESTART_EVENT
+    return DISMISS_EVENT
 
 
 @dataclass(frozen=True)
