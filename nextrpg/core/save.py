@@ -247,10 +247,14 @@ def shared_save_slot() -> SaveIo:
     return SaveIo(shared_slot)
 
 
+class _SaveSlotMeta(GameSaveMeta, LoadSavable):
+    pass
+
+
 def _create_save_slot_meta_class(
     save_slot: str,
-) -> type[GameSaveMeta & LoadSavable]:
-    class SaveSlotMeta(GameSaveMeta, LoadSavable):
+) -> type[_SaveSlotMeta]:
+    class SaveSlotMeta(_SaveSlotMeta):
         @override
         @classmethod
         def save_key(cls) -> str:
