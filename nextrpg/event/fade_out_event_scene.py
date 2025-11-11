@@ -115,18 +115,16 @@ def fade_out(
 
 @register_rpg_event
 def fade_out_character(
-    scene: EventfulScene, character_on_screen: CharacterOnScreen
+    scene: EventfulScene, character: CharacterOnScreen
 ) -> EventGenerator:
-    drawing_on_screens = DrawingOnScreens(
-        character_on_screen.drawing_on_screens
-    )
+    drawing_on_screens = DrawingOnScreens(character.drawing_on_screens)
     drawing_on_screen = scene.drawing_on_screens_after_shift(drawing_on_screens)
     yield fade_out(drawing_on_screen, wait=False)
-    rect = character_on_screen.drawing_on_screen.rectangle_area_on_screen.rectangle_drawing(
-        TRANSPARENT
+    rect = (
+        character.drawing_on_screen.rectangle_area_on_screen.rectangle_drawing(
+            TRANSPARENT
+        )
     )
     character_drawing = PolygonCharacterDrawing(rect_or_poly=rect)
-    npc_dismissed = character_on_screen.with_character_drawing(
-        character_drawing
-    )
+    npc_dismissed = character.with_character_drawing(character_drawing)
     yield update_from_event(npc_dismissed)
