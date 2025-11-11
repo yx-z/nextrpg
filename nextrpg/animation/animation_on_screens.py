@@ -8,6 +8,7 @@ from nextrpg.animation.abstract_animation_on_screen import (
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_on_screen_like import (
     AnimationOnScreenLike,
+    tick_all,
 )
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
@@ -42,7 +43,5 @@ class AnimationOnScreens(AbstractAnimationOnScreen):
 
     @override
     def _tick_before_complete(self, time_delta: Millisecond) -> Self:
-        resource = tuple(
-            resource.tick(time_delta) for resource in self.resources
-        )
+        resource = tick_all(self.resources, time_delta)
         return replace(self, resource=resource)

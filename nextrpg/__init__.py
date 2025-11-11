@@ -113,7 +113,9 @@ from nextrpg.core.util import type_name
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.animation_on_screen_like import (
     AnimationOnScreenLike,
+    Tickable,
     animate,
+    tick_all,
     tick_optional,
 )
 from nextrpg.drawing.color import (

@@ -7,6 +7,7 @@ from frozendict import frozendict
 from nextrpg.core.metadata import HasMetadata
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
+from nextrpg.drawing.animation_on_screen_like import tick_all
 from nextrpg.drawing.color import Alpha
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
@@ -39,7 +40,7 @@ class DrawingGroup(AnimationLike, HasMetadata):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        resources = tuple(res.tick(time_delta) for res in self.resources)
+        resources = tick_all(self.resources, time_delta)
         return replace(self, resource=resources)
 
     @cached_property

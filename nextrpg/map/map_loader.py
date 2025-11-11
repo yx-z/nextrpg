@@ -18,7 +18,10 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry, is_rect
-from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
+from nextrpg.drawing.animation_on_screen_like import (
+    AnimationOnScreenLike,
+    tick_all,
+)
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
@@ -36,7 +39,7 @@ class ForegroundLayers:
     tiles: tuple[AnimationOnScreens, ...]
 
     def tick(self, time_delta: Millisecond) -> Self:
-        tiles = tuple(tile.tick(time_delta) for tile in self.tiles)
+        tiles = tick_all(self.tiles, time_delta)
         return replace(self, tiles=tiles)
 
     def drawing_on_screens(

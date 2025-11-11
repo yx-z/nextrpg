@@ -29,7 +29,6 @@ if TYPE_CHECKING:
     from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
     from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
-    from nextrpg.scene.scene import Scene
 
 
 @runtime_checkable
@@ -142,12 +141,22 @@ class AnimationOnScreenLike(Sizable, Protocol):
         return DrawingOnScreens(self.drawing_on_screens)
 
 
-def tick_optional[_Tick: AnimationOnScreenLike | Scene](
+class Tickable(Protocol):
+    def tick(self, time_delta: Millisecond) -> Self: ...
+
+
+def tick_optional[_Tick: Tickable](
     resource: _Tick | None, time_delta: Millisecond
 ) -> _Tick | None:
     if resource:
         return resource.tick(time_delta)
     return None
+
+
+def tick_all[_Tick: Tickable](
+    tickable: tuple[_Tick, ...], time_delta: Millisecond
+) -> tuple[_Tick, ...]:
+    return tuple(t.tick(time_delta) for t in tickable)
 
 
 @overload

@@ -7,6 +7,7 @@ from nextrpg.animation.abstract_animation import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_like import AnimationLike
+from nextrpg.drawing.animation_on_screen_like import tick_all
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.relative_animation_like import (
     RelativeAnimationLike,
@@ -44,8 +45,5 @@ class AnimationGroup(AbstractAnimation):
 
     @override
     def _tick_before_complete(self, time_delta: Millisecond) -> Self:
-        resource = tuple(
-            relative_drawing.tick(time_delta)
-            for relative_drawing in self.resources
-        )
+        resource = tick_all(self.resources, time_delta)
         return replace(self, resource=resource)
