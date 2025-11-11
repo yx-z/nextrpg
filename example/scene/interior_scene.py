@@ -49,7 +49,7 @@ def interior_scene(player: PlayerSpec) -> MapScene:
 
 @cache
 def bgm() -> Sound:
-    return Sound(SOUND_DIR / "bgm1.mp3", config=bgm_config())
+    return Sound(SOUND_DIR / "bgm1.mp3", loop=True, config=bgm_config())
 
 
 def create_npc(file: str, name: str) -> NpcSpec:

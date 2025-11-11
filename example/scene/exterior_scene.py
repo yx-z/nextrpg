@@ -38,4 +38,4 @@ def pick_up_fruit(
 
 @cache
 def bgm() -> Sound:
-    return Sound(SOUND_DIR / "bgm2.mp3", config=bgm_config())
+    return Sound(SOUND_DIR / "bgm2.mp3", loop=True, config=bgm_config())
