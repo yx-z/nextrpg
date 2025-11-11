@@ -147,7 +147,6 @@
   </object>
  </objectgroup>
  <objectgroup id="6" name="collectible">
-  <object id="5" gid="976" x="861.333" y="814.667" width="48" height="48"/>
-  <object id="6" name="fruit" gid="976" x="861.333" y="814.667" width="48" height="48"/>
+  <object id="6" name="fruit" gid="976" x="895.333" y="786.667" width="48" height="48"/>
  </objectgroup>
 </map>
