@@ -47,25 +47,23 @@ class GameLoop:
 
     @cached_property
     def tick(self) -> GameLoop:
-        fps_info = f"FPS: {self._clock.get_fps():.0f}"
-        log.debug(t"{type_name(self._scene)} {fps_info}", duration=None)
-
-        max_fps = self._config.max_frames_per_second
-        self._clock.tick(max_fps)
-        time_delta = self._clock.get_time()
-
-        window = self._window.tick(fps_info)
-        window.blits(self._scene.drawing_on_screens, time_delta)
-
-        last_scene = self._scene
-        ticked_scene = self._scene.tick(time_delta)
-
-        loop = replace(self, _scene=ticked_scene, _window=window)
+        loop = self
         for pygame_event in pygame.event.get():
             io_event = to_io_event(pygame_event)
             loop = loop._event(io_event)
+
+        time_delta = loop._clock.tick(loop._config.max_frames_per_second)
+        ticked_scene = loop._scene.tick(time_delta)
+        loop = replace(loop, _scene=ticked_scene)
+
+        fps_info = f"FPS: {self._clock.get_fps():.0f}"
+        log.debug(t"{type_name(self._scene)} {fps_info}", duration=None)
+        ticked_window = loop._window.tick(fps_info)
+        loop = replace(loop, _window=ticked_window)
+        loop._window.blits(loop._scene.drawing_on_screens, time_delta)
+
         global _last_scene
-        _last_scene = last_scene
+        _last_scene = self._scene
         return loop
 
     def _event(self, event: IoEvent) -> Self:

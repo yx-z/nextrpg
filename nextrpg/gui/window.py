@@ -63,7 +63,8 @@ class Window:
             self.current_config.include_fps_in_window_title
             and not updated_config.include_fps_in_window_title
         ):
-            set_caption(config().window.title)
+            title = config().window.title
+            set_caption(title)
 
         if updated_config is self.current_config:
             return self
