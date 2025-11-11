@@ -34,8 +34,8 @@ log = Log()
 
 
 @cached(
-    lambda: config().resource.drawing_cache_size,
-    lambda resource, *args, **kwargs: (
+    lambda resource_config: resource_config.drawing_cache_size,
+    lambda cls, resource, *args, **kwargs: (
         None if isinstance(resource, Surface) else resource
     ),
 )

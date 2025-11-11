@@ -11,7 +11,6 @@ from pytmx import (
     load_pygame,
 )
 
-from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -49,7 +48,7 @@ def get_coordinate(obj: TiledObject) -> Coordinate:
     return Coordinate(obj.x, obj.y)
 
 
-@cached(lambda: config().resource.tmx_cache_size, lambda file, *args: file)
+@cached(lambda resource_config: resource_config.tmx_cache_size)
 @dataclass_with_default(frozen=True)
 class TmxLoader:
     file: Path

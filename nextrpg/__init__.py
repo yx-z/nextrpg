@@ -105,6 +105,7 @@ from nextrpg.core.save import (
     UpdateSavable,
     load_save_meta,
     save_meta,
+    shared_save_slot,
 )
 from nextrpg.core.time import Millisecond, Percentage
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry

@@ -12,14 +12,15 @@ from typing import TYPE_CHECKING, Any, Self, override
 
 from nextrpg import __version__
 from nextrpg.config.system.save_config import SaveConfig
+from nextrpg.core.cached_decorator import cached
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
-    default,
     private_init_below,
 )
 from nextrpg.core.util import background_thread
 
 if TYPE_CHECKING:
+    from nextrpg.config.system.save_config import SaveConfig
     from nextrpg.core.log import Log
 
 
@@ -115,32 +116,21 @@ class GameSaveMeta:
         )
 
 
-def _create_save_slot_meta_class(
-    save_slot: str,
-) -> type[GameSaveMeta & LoadSavable]:
-    class SaveSlotMeta(GameSaveMeta, LoadSavable):
-        @override
-        @classmethod
-        def save_key(cls) -> str:
-            return save_slot
-
-    return SaveSlotMeta
-
-
 def save_meta(save_slot: str) -> Future[None]:
     meta_type = _create_save_slot_meta_class(save_slot)
     meta = meta_type()
-    return SaveIo().save(meta)
+    return shared_save_slot().save(meta)
 
 
 def load_save_meta(save_slot: str) -> GameSaveMeta | None:
     meta_type = _create_save_slot_meta_class(save_slot)
-    return SaveIo().load(meta_type)
+    return shared_save_slot().load(meta_type)
 
 
+@cached(lambda resource_config: resource_config.save_slot_cache_size)
 @dataclass_with_default(frozen=True)
 class SaveIo:
-    slot: str = default(lambda self: self.config.shared_slot)
+    slot: str
     config: SaveConfig = field(default_factory=_config)
     _: KW_ONLY = private_init_below()
     _log: Log = field(default_factory=_log)
@@ -250,3 +240,20 @@ class SaveIo:
 
     def _key_and_alias(self, key: str, alias: str) -> str:
         return self.config.key_delimiter.join((key, alias))
+
+
+def shared_save_slot() -> SaveIo:
+    shared_slot = _config().shared_slot
+    return SaveIo(shared_slot)
+
+
+def _create_save_slot_meta_class(
+    save_slot: str,
+) -> type[GameSaveMeta & LoadSavable]:
+    class SaveSlotMeta(GameSaveMeta, LoadSavable):
+        @override
+        @classmethod
+        def save_key(cls) -> str:
+            return save_slot
+
+    return SaveSlotMeta

@@ -15,7 +15,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.log import Log, LogEntry, MessageKeyAndDrawing, pop_messages
-from nextrpg.core.save import SaveIo
+from nextrpg.core.save import shared_save_slot
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing import scale_surface
@@ -158,7 +158,7 @@ class Window:
     @cached_property
     def _saved_config(self) -> WindowConfig | None:
         if (
-            saved_config := SaveIo().update(self.initial_config)
+            saved_config := shared_save_slot().update(self.initial_config)
         ) == self.initial_config:
             return None
         _set_window_config(saved_config)
@@ -166,7 +166,7 @@ class Window:
 
 
 def _set_window_config(window_config: WindowConfig) -> None:
-    SaveIo().save(window_config)
+    shared_save_slot().save(window_config)
     full_config = replace(config(), window=window_config)
     set_config(full_config)
 
