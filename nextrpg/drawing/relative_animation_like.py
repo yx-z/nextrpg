@@ -84,7 +84,7 @@ def relative_animation_likes(
 ) -> tuple[RelativeAnimationLike, ...]:
     if isinstance(resource, AnimationLike | RelativeAnimationLike):
         animation_like = relative_animation_like(resource)
-        return [animation_like]
+        return (animation_like,)
     return tuple(relative_animation_like(res) for res in resource)
 
 
