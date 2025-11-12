@@ -116,10 +116,9 @@ class MapScene(EventfulScene, UpdateFromSave[dict[str, Any]]):
     @override
     @cached_property
     def drawing_on_screens_shift(self) -> Coordinate:
-        player_coord = self.player.center
-        shift = center_player(player_coord, self._map_loader.map_size)
+        shift = center_player(self.player.center, self._map_loader.map_size)
         log.debug(
-            t"Player center coordinate {player_coord}. Shift {shift}",
+            t"Player center coordinate {self.player.center}. Shift {shift}",
             duration=None,
         )
         return shift
