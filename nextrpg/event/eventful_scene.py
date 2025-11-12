@@ -51,7 +51,6 @@ class EventfulScene(EventAsAttr, SceneWithSound):
         return self.npc_dict[unique_name]
 
     def event(self, event: IoEvent) -> Self:
-        player = self.player.event(event)
         if (
             not self._started_npc
             and is_key_press(event, KeyMappingConfig.confirm)
@@ -61,6 +60,7 @@ class EventfulScene(EventAsAttr, SceneWithSound):
             and spec.start_mode is NpcEventStartMode.CONFIRM
         ):
             return self._start_event(npc, spec.generator, time_delta=None)
+        player = self.player.event(event)
         return replace(self, player=player)
 
     @override
@@ -233,11 +233,10 @@ def _complete_event[T: EventfulScene](
     assert (
         ticked._event
     ), f"Expect _complete_event with an ongoing _event. Got {ticked}"
-    player = ticked.player.complete_event
     log.debug(t"Event {ticked._event} with {npc.spec.unique_name} completed.")
     return replace(
         ticked,
-        player=player,
+        player=ticked.player.complete_event,
         npcs=npcs,
         _ended_npc=npc,
         _started_npc=None,

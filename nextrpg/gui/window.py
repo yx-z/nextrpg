@@ -89,12 +89,10 @@ class Window:
             return self._toggle_full_screen()
         if is_key_press(event, KeyMappingConfig.include_fps_in_title_toggle):
             return self._toggle_include_fps_in_window_title()
-
-        match event:
-            case WindowResize():
-                return self._resize(event.size)
-            case MouseButtonDown():
-                log.debug(t"Mouse clicked at {event.coordinate}")
+        if isinstance(event, WindowResize):
+            return self._resize(event.size)
+        if isinstance(event, MouseButtonDown):
+            log.debug(t"Mouse clicked at {event.coordinate}")
         return self
 
     def blits(

@@ -3,7 +3,7 @@ from typing import Self, override
 
 from nextrpg.core.time import Millisecond
 from nextrpg.scene.scene import Scene
-from nextrpg.sound.sound import Sound, play_optional, stop_optional
+from nextrpg.sound.sound import Sound
 
 
 @dataclass(frozen=True)
@@ -13,14 +13,14 @@ class SceneWithSound(Scene):
     @override
     def tick(self, time_delta: Millisecond) -> Self:
         if isinstance(self.sound, Sound):
-            sound = play_optional(self.sound)
+            sound = self.sound.play()
         else:
-            sound = tuple(play_optional(s) for s in self.sound)
+            sound = tuple(s.play() for s in self.sound)
         return replace(self, sound=sound)
 
     def stop_sound(self) -> Self:
         if isinstance(self.sound, Sound):
-            sound = stop_optional(self.sound)
+            sound = self.sound.stop()
         else:
-            sound = tuple(stop_optional(s) for s in self.sound)
+            sound = tuple(s.stop() for s in self.sound)
         return replace(self, sound=sound)

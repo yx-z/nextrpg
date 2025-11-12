@@ -26,11 +26,13 @@ class Sound:
     _loaded: pygame.Sound = default(lambda self: self._init_loaded)
 
     def play(self) -> Self:
-        self._loaded.play(self._loop, fade_ms=self.config.fade_in_duration)
+        if not self.started:
+            self._loaded.play(self._loop, fade_ms=self.config.fade_in_duration)
         return replace(self, started=True)
 
     def stop(self) -> Self:
-        self._loaded.fadeout(self.config.fade_out_duration)
+        if self.started:
+            self._loaded.fadeout(self.config.fade_out_duration)
         return replace(self, started=False)
 
     @property
@@ -42,15 +44,3 @@ class Sound:
         if self.loop:
             return -1
         return 0
-
-
-def play_optional[T: Sound | None](sound: T) -> T:
-    if sound and not sound.started:
-        return sound.play()
-    return sound
-
-
-def stop_optional[T: Sound | None](sound: T) -> T:
-    if sound:
-        return sound.stop()
-    return sound
