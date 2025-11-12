@@ -38,7 +38,8 @@ class BackgroundFadeInEvent(BackgroundEvent):
 
     @override
     def tick(self, time_delta: Millisecond) -> Self:
-        return replace(self, fade=self.fade.tick(time_delta))
+        fade = self.fade.tick(time_delta)
+        return replace(self, fade=fade)
 
     @override
     @cached_property
