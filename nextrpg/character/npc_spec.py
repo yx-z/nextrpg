@@ -57,7 +57,7 @@ class EventSpec(UpdateFromSave[dict[str, Any]]):
 
     @override
     @cached_property
-    def save_data(self) -> dict[str, Any]:
+    def _save_data(self) -> dict[str, Any]:
         return {
             "start_mode": self.start_mode.save_data,
             "event": (
@@ -68,7 +68,7 @@ class EventSpec(UpdateFromSave[dict[str, Any]]):
         }
 
     @override
-    def update_from_save(self, data: dict[str, Any]) -> Self:
+    def _update_from_save(self, data: dict[str, Any]) -> Self:
         start_mode = NpcEventStartMode.load_from_save(data["start_mode"])
         event_data = data["event"]
         match self.event:
@@ -108,7 +108,7 @@ class StrictNpcSpec(NpcSpec, CharacterSpec, UpdateFromSave[dict[str, Any]]):
 
     @override
     @cached_property
-    def save_data(self) -> dict[str, Any]:
+    def _save_data(self) -> dict[str, Any]:
         return {
             "unique_name": self.unique_name,
             "event_spec": (
@@ -117,7 +117,7 @@ class StrictNpcSpec(NpcSpec, CharacterSpec, UpdateFromSave[dict[str, Any]]):
         }
 
     @override
-    def update_from_save(self, data: dict[str, Any]) -> Self:
+    def _update_from_save(self, data: dict[str, Any]) -> Self:
         unique_name = data["unique_name"]
         if self.event_spec:
             event_spec = self.event_spec.update_from_save(data["event_spec"])

@@ -1,13 +1,11 @@
 from dataclasses import dataclass
 from functools import cached_property
 from importlib import import_module
-from typing import Self, override
-
-from nextrpg.core.save import LoadFromSave
+from typing import Self
 
 
 @dataclass(frozen=True)
-class ModuleAndAttribute[T](LoadFromSave[list[str]]):
+class ModuleAndAttribute[T]:
     module: str
     attribute: str
 
@@ -15,12 +13,10 @@ class ModuleAndAttribute[T](LoadFromSave[list[str]]):
     def qualname(self) -> str:
         return ".".join((self.module, self.attribute))
 
-    @override
     @cached_property
     def save_data(self) -> list[str]:
         return [self.module, self.attribute]
 
-    @override
     @classmethod
     def load_from_save(cls, data: list[str]) -> Self:
         assert (

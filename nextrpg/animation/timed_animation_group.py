@@ -21,9 +21,9 @@ class TimedAnimationGroup(AnimationGroup):
     _: KW_ONLY = private_init_below()
     _timer: Timer = default(lambda self: Timer(self.duration))
 
-    def compose[_T: TimedAnimationGroup](
-        self, other: type[_T], **kwargs: Any
-    ) -> _T:
+    def compose[T: TimedAnimationGroup](
+        self, other: type[T], **kwargs: Any
+    ) -> T:
         return other(resource=self, duration=self.duration, **kwargs)
 
     @cached_property

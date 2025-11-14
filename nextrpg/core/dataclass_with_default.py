@@ -24,24 +24,24 @@ def default(fun: Callable[..., Any]) -> Any:
 
 
 @overload
-def dataclass_with_default[_Type: type](
+def dataclass_with_default[Type: type](
     **kwargs: Any,
-) -> Callable[[_Type], _Type]: ...
+) -> Callable[[Type], Type]: ...
 
 
 @overload
 @dataclass_transform(
     field_descriptors=(field, Field, private_init_below, default)
 )
-def dataclass_with_default[_Type: type](cls: _Type) -> _Type: ...
+def dataclass_with_default[Type: type](cls: Type) -> Type: ...
 
 
 @dataclass_transform(
     field_descriptors=(field, Field, private_init_below, default)
 )
-def dataclass_with_default[_Type: type](
-    cls: _Type | None = None, /, **kwargs: Any
-) -> Callable[[_Type], _Type] | _Type:
+def dataclass_with_default[Type: type](
+    cls: Type | None = None, /, **kwargs: Any
+) -> Callable[[Type], Type] | Type:
     if cls is None:
         return lambda c: dataclass_with_default(c, **kwargs)
 

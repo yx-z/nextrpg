@@ -25,7 +25,7 @@ class cached[T, K, **P]:
     size_function: Callable[[ResourceConfig], int]
     create_key: Callable[type, P, K | None] = key_by_first_arg
 
-    def __call__[_Type: type](self, cls: _Type) -> _Type:
+    def __call__[Type: type](self, cls: Type) -> Type:
         def new(klass: type[T], *args: P.args, **kwargs: P.kwargs) -> T:
             if not (instances := getattr(klass, "_nextrpg_instances", None)):
                 from nextrpg.config.config import config

@@ -18,11 +18,11 @@ class _BaseCharacterSpec(UpdateFromSave[str]):
     config: CharacterConfig = field(default_factory=lambda: config().character)
 
     @override
-    def save_data(self) -> str:
+    def _save_data(self) -> str:
         return self.unique_name
 
     @override
-    def update_from_save(self, data: str) -> Self:
+    def _update_from_save(self, data: str) -> Self:
         return replace(self, unique_name=data)
 
 

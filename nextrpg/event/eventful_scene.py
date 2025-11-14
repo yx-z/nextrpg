@@ -12,6 +12,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.log import Log
+from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
@@ -35,7 +36,9 @@ log = Log()
 
 
 @dataclass(frozen=True, kw_only=True)
-class EventfulScene(EventAsAttr, SceneWithSound):
+class EventfulScene(
+    EventAsAttr, SceneWithSound, UpdateFromSave[dict[str, Any]]
+):
     player: PlayerOnScreen
     npcs: tuple[NpcOnScreen, ...] = ()
     _: KW_ONLY = private_init_below()
@@ -172,6 +175,20 @@ class EventfulScene(EventAsAttr, SceneWithSound):
                 for d in animation_on_screen_like.drawing_on_screens
             )
         return animation_on_screen_like.drawing_on_screens
+
+    @override
+    @cached_property
+    def _save_data(self) -> dict[str, Any]:
+        return {
+            character.name: character.save_data
+            for character in (self.player,) + self.npcs
+        }
+
+    @override
+    def _update_from_save(self, data: dict[str, Any]) -> Self:
+        player = self.player.update_from_save(data[self.player.name])
+        npcs = tuple(npc.update_from_save(data[npc.name]) for npc in self.npcs)
+        return replace(self, player=player, npcs=npcs)
 
     def _others(self, npc: NpcOnScreen) -> tuple[CharacterOnScreen, ...]:
         other_npcs = tuple(n for n in self.npcs if n is not npc)

@@ -17,6 +17,10 @@ from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     private_init_below,
 )
+from nextrpg.core.module_and_attribute import (
+    ModuleAndAttribute,
+    to_module_and_attribute,
+)
 from nextrpg.core.util import background_thread
 
 if TYPE_CHECKING:
@@ -37,38 +41,84 @@ type SaveData = Primitive | AliasAndBytes | list["SaveData"] | dict[
 ]
 
 
-class HasSaveData[_S: SaveData]:
+class HasSaveData[S: SaveData]:
     @property
-    def save_data(self) -> _S: ...
+    def save_data(self) -> S: ...
 
 
-class LoadFromSave[_S: SaveData](HasSaveData[_S]):
+class LoadFromSave[S: SaveData](HasSaveData[S]):
+    @override
+    @cached_property
+    def save_data(self) -> dict[str, list[str] | S]:
+        cls = type(self)
+        module_and_class = to_module_and_attribute(cls)
+        return {
+            "class": module_and_class.save_data,
+            "save_data": self._save_data,
+        }
+
+    @cached_property
+    def _save_data(self) -> S: ...
+
     @classmethod
-    def load_from_save(cls, data: _S) -> Self: ...
+    def load_from_save(cls, data: S) -> Self:
+        save_data = data["save_data"]
+        cls_str = data["class"]
+        clss = ModuleAndAttribute.load_from_save(cls_str).imported
+        if clss is not cls:
+            return clss.imported._load_from_save(save_data)
+        return cls._load_from_save(save_data)
+
+    @classmethod
+    def _load_from_save(cls, data: S) -> Self: ...
 
 
-class UpdateFromSave[_S: SaveData](HasSaveData[_S]):
-    def update_from_save(self, data: _S) -> Self | None: ...
+class UpdateFromSave[S: SaveData](HasSaveData[S]):
+    @override
+    @cached_property
+    def save_data(self) -> dict[str, list[str] | S]:
+        cls = type(self)
+        module_and_class = to_module_and_attribute(cls)
+        return {
+            "class": module_and_class.save_data,
+            "save_data": self._save_data,
+        }
+
+    @property
+    def _save_data(self) -> S: ...
+
+    def update_from_save(self, data: dict[str, list[str] | S]) -> Self | None:
+        save_data = data["save_data"]
+        cls_str = data["class"]
+        clss = ModuleAndAttribute.load_from_save(cls_str).imported
+        if clss is not type(self):
+            return clss._update_from_save(self, save_data)
+        return self._update_from_save(save_data)
+
+    def _update_from_save(self, data: S) -> Self | None: ...
+
+    @property
+    def _save_data(self) -> S: ...
 
 
 class LoadFromSaveEnum(LoadFromSave, Enum):
     @override
     @cached_property
-    def save_data(self) -> str:
+    def _save_data(self) -> str:
         return self.name
 
     @override
     @classmethod
-    def load_from_save(cls, data: str) -> Self:
+    def _load_from_save(cls, data: str) -> Self:
         return cls[data]
 
 
-class UpdateSavable[_S: SaveData](UpdateFromSave[_S]):
+class UpdateSavable[S: SaveData](UpdateFromSave[S]):
     def save_key(self) -> str:
         return type(self).__qualname__
 
 
-class LoadSavable[_S: SaveData](LoadFromSave[_S]):
+class LoadSavable[S: SaveData](LoadFromSave[S]):
     @classmethod
     def save_key(cls) -> str:
         return cls.__qualname__
@@ -147,14 +197,14 @@ class SaveIo:
     def remove(self) -> None:
         rmtree(self.config.directory / self.slot, ignore_errors=True)
 
-    def update[_U: UpdateSavable](self, update_from_save: _U) -> _U:
+    def update[U: UpdateSavable](self, update_from_save: U) -> U:
         key = update_from_save.save_key()
         return (
             self._load(key, update_from_save.update_from_save)
             or update_from_save
         )
 
-    def load[_L: LoadSavable](self, load_from_save: type[_L]) -> _L | None:
+    def load[L: LoadSavable](self, load_from_save: type[L]) -> L | None:
         key = load_from_save.save_key()
         return self._load(key, load_from_save.load_from_save)
 
@@ -179,9 +229,9 @@ class SaveIo:
         self._text_path.write_text(json_blob)
         self._read_text.cache_clear()
 
-    def _load[_U: UpdateSavable, _L: LoadSavable](
-        self, key: str, loader: Callable[[SaveData], _L | _U | None]
-    ) -> _U | _L | None:
+    def _load[U: UpdateSavable, L: LoadSavable](
+        self, key: str, loader: Callable[[SaveData], L | U | None]
+    ) -> U | L | None:
         self._log.debug(t"Loading {key} at {self.slot}")
         if json_like := self._read_text().get(key):
             data = self._deserialize(key, json_like)
@@ -254,10 +304,5 @@ class _SaveSlotMeta(GameSaveMeta, LoadSavable):
 def _create_save_slot_meta_class(
     save_slot: str,
 ) -> type[_SaveSlotMeta]:
-    class SaveSlotMeta(_SaveSlotMeta):
-        @override
-        @classmethod
-        def save_key(cls) -> str:
-            return save_slot
-
-    return SaveSlotMeta
+    _SaveSlotMeta.save_key = classmethod(lambda _: save_slot)
+    return _SaveSlotMeta

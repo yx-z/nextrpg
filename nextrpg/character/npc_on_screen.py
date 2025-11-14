@@ -14,15 +14,15 @@ class NpcOnScreen(CharacterOnScreen):
 
     @override
     @cached_property
-    def save_data(self) -> dict[str, Any]:
-        return super().save_data | {
+    def _save_data(self) -> dict[str, Any]:
+        return super()._save_data | {
             "restart_event": self.restart_event,
             "spec": self.spec.save_data,
         }
 
     @override
-    def update_from_save(self, data: dict[str, Any]) -> Self:
-        character = super().update_from_save(data)
+    def _update_from_save(self, data: dict[str, Any]) -> Self:
+        character = super()._update_from_save(data)
         restart_event = data["restart_event"]
         spec = self.spec.update_from_save(data["spec"])
         return replace(character, restart_event=restart_event, spec=spec)

@@ -26,7 +26,7 @@ class PolygonDrawing(LoadFromSave):
 
     @override
     @cached_property
-    def save_data(self) -> dict[str, Any]:
+    def _save_data(self) -> dict[str, Any]:
         points = [p.save_data for p in self.points]
         return {
             "points": points,
@@ -36,7 +36,7 @@ class PolygonDrawing(LoadFromSave):
 
     @override
     @classmethod
-    def load_from_save(cls, data: dict[str, Any]) -> Self:
+    def _load_from_save(cls, data: dict[str, Any]) -> Self:
         points = tuple(Coordinate.load_from_save(p) for p in data["points"])
         color = Color.load_from_save(data["color"])
         allow_background_in_debug = data["allow_background_in_debug"]

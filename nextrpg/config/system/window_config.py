@@ -37,11 +37,11 @@ class WindowConfig(UpdateSavable[dict[str, Any]]):
 
     @override
     @cached_property
-    def save_data(self) -> dict[str, Any]:
+    def _save_data(self) -> dict[str, Any]:
         return {"size": self.size.save_data, "full_screen": self.full_screen}
 
     @override
-    def update_from_save(self, data: dict[str, Any]) -> Self:
+    def _update_from_save(self, data: dict[str, Any]) -> Self:
         size = Size.load_from_save(data["size"])
         full_screen = data["full_screen"]
         return replace(self, size=size, full_screen=full_screen)

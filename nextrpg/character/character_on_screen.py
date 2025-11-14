@@ -114,17 +114,16 @@ class CharacterOnScreen(
 
     @override
     @cached_property
-    def save_data(self) -> dict[str, Any]:
+    def _save_data(self) -> dict[str, Any]:
         return {
             "top_left": self.top_left.save_data,
             "character_drawing": self.character_drawing.save_data,
         }
 
     @override
-    def update_from_save(self, data: dict[str, Any]) -> Self:
+    def _update_from_save(self, data: dict[str, Any]) -> Self:
         top_left = Coordinate.load_from_save(data["top_left"])
         coordinate = top_left.as_top_left_of(self).coordinate_from(self.anchor)
-
         character_drawing = self.character_drawing.update_from_save(
             data["character_drawing"]
         )

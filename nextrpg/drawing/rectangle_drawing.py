@@ -22,7 +22,7 @@ class RectangleDrawing(LoadFromSave):
 
     @override
     @cached_property
-    def save_data(self) -> dict[str, Any]:
+    def _save_data(self) -> dict[str, Any]:
         return {
             "size": self.size.save_data,
             "color": self.color.save_data,
@@ -33,7 +33,7 @@ class RectangleDrawing(LoadFromSave):
 
     @override
     @classmethod
-    def load_from_save(cls, data: dict[str, Any]) -> Self:
+    def _load_from_save(cls, data: dict[str, Any]) -> Self:
         size = Size.load_from_save(data["size"])
         color = Color.load_from_save(data["color"])
         width = data["width"]

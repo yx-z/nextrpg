@@ -4,7 +4,7 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from itertools import chain
 from pathlib import Path
-from typing import Any, Self, override
+from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.character.moving_npc_on_screen import MovingNpcOnScreen
@@ -27,7 +27,6 @@ from nextrpg.core.log import Log
 from nextrpg.core.module_and_attribute import (
     ModuleAndAttribute,
 )
-from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import get_geometry
 from nextrpg.drawing.color import TRANSPARENT, Color
@@ -58,7 +57,7 @@ def _infer_creation_function() -> ModuleAndAttribute[Callable]:
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
-class MapScene(EventfulScene, UpdateFromSave[dict[str, Any]]):
+class MapScene(EventfulScene):
     tmx: Path
     player_spec: PlayerSpec
     move: MapMove | tuple[MapMove, ...] = ()
@@ -144,20 +143,6 @@ class MapScene(EventfulScene, UpdateFromSave[dict[str, Any]]):
         ):
             return MenuScene(map=self, widget=menu.widget, tmx=menu.tmx)
         return super().event(event)
-
-    @override
-    @cached_property
-    def save_data(self) -> dict:
-        return {
-            character.name: character.save_data
-            for character in (self.player,) + self.npcs
-        }
-
-    @override
-    def update_from_save(self, data: dict[str, Any]) -> Self:
-        player = self.player.update_from_save(data[self.player.name])
-        npcs = tuple(npc.update_from_save(data[npc.name]) for npc in self.npcs)
-        return replace(self, player=player, npcs=npcs)
 
     @cached_property
     def _map_loader(self) -> MapLoader:

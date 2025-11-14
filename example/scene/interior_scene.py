@@ -72,12 +72,12 @@ class StatefulGreet(LoadFromSave[int]):
 
     @override
     @cached_property
-    def save_data(self) -> int:
+    def _save_data(self) -> int:
         return self.count
 
     @override
     @classmethod
-    def load_from_save(cls, data: int) -> Self:
+    def _load_from_save(cls, data: int) -> Self:
         return cls(data)
 
     @cutscene

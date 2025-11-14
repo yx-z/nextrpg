@@ -23,7 +23,6 @@ from nextrpg import (
     WidgetGroup,
     WidgetOnScreen,
     last_scene,
-    to_module_and_attribute,
 )
 
 
@@ -57,10 +56,7 @@ def menu_widget() -> WidgetGroup:
 def click_save(i: int) -> Callable[[ButtonOnScreen], WidgetOnScreen]:
     def create_button(from_button: ButtonOnScreen) -> WidgetOnScreen:
         assert isinstance(map_scene := from_button.root, MapScene)
-        player_creation_function = to_module_and_attribute(
-            create_player_placeholder
-        )
-        game_save = GameSave(player_creation_function, map_scene)
+        game_save = GameSave(create_player_placeholder, map_scene)
         save_io = SaveIo(str(i))
         save_io.save(game_save).result()
 

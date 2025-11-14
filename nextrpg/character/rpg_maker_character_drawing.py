@@ -81,7 +81,8 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     @override
     @cached_property
     def drawing(self) -> Drawing | DrawingGroup:
-        return self._animations[_adjust(self.direction)].drawing
+        adjusted_direction = _adjust(self.direction)
+        return self._animations[adjusted_direction].drawing
 
     @override
     def turn(self, direction: Direction) -> Self:

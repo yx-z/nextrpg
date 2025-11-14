@@ -26,12 +26,12 @@ class MovingNpcOnScreen(NpcOnScreen, MovingCharacterOnScreen):
 
     @override
     @cached_property
-    def save_data(self) -> dict[str, Any]:
-        return super().save_data | {"walk": self._walk.save_data}
+    def _save_data(self) -> dict[str, Any]:
+        return super()._save_data | {"walk": self._walk.save_data}
 
     @override
-    def update_from_save(self, data: dict[str, Any]) -> Self:
-        character = super().update_from_save(data)
+    def _update_from_save(self, data: dict[str, Any]) -> Self:
+        character = super()._update_from_save(data)
         walk = self._walk.update_from_save(data["walk"])
         return replace(character, _walk=walk)
 

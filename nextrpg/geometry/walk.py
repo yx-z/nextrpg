@@ -26,14 +26,14 @@ class Walk(UpdateFromSave[dict[str, Any]]):
 
     @override
     @cached_property
-    def save_data(self) -> dict[str, Any]:
+    def _save_data(self) -> dict[str, Any]:
         return {
             "coordinate": self.coordinate.save_data,
             "target_index": self._target_index,
         }
 
     @override
-    def update_from_save(self, data: dict[str, Any]) -> Self:
+    def _update_from_save(self, data: dict[str, Any]) -> Self:
         coordinate = Coordinate.load_from_save(data["coordinate"])
         target_index = data["target_index"]
         return replace(self, coordinate=coordinate, _target_index=target_index)
