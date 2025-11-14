@@ -66,7 +66,7 @@ class LoadFromSave[S: SaveData](HasSaveData[S]):
         cls_str = data["class"]
         clss = ModuleAndAttribute.load_from_save(cls_str).imported
         if clss is not cls:
-            return clss.imported._load_from_save(save_data)
+            return clss._load_from_save(save_data)
         return cls._load_from_save(save_data)
 
     @classmethod
