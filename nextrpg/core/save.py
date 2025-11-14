@@ -190,7 +190,7 @@ class SaveIo:
             save_meta(self.slot)
         key = savable.save_key()
         self._log.debug(t"Saving {key} at {self.slot}")
-        future = background_thread().submit(self._save, savable)
+        future = background_thread().submit(self._save, key, savable.save_data)
         future.add_done_callback(lambda fut: self._on_save_complete(key, fut))
         return future
 
@@ -219,9 +219,8 @@ class SaveIo:
             return
         self._log.debug(t"Saved {key} at {self.slot}")
 
-    def _save(self, savable: UpdateSavable | LoadSavable) -> None:
-        key = savable.save_key()
-        data = self._serialize(key, savable.save_data)
+    def _save(self, key: str, save_data: SaveData) -> None:
+        data = self._serialize(key, save_data)
         blob = self._read_text()
         blob[key] = data
         json_blob = json.dumps(blob)

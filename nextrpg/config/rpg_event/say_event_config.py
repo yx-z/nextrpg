@@ -6,12 +6,12 @@ from typing import TYPE_CHECKING
 
 from nextrpg.config.drawing.text_config import TextConfig
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import BLACK, BLUE, Color
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Pixel, Size, Width
 
 if TYPE_CHECKING:
+    from nextrpg.drawing.animation_like import AnimationLike
     from nextrpg.drawing.drawing import Drawing
     from nextrpg.drawing.nine_slice import NineSlice
 
@@ -43,8 +43,10 @@ class SayEventColorBackgroundConfig:
 @dataclass(frozen=True)
 class SayEventNineSliceBackgroundConfig:
     nine_slice_input: NineSlice | Callable[[], NineSlice]
-    tip_at_top_input: Drawing | Callable[[], Drawing]
-    tip_at_bottom_input: Drawing | Callable[[], Drawing] | None = None
+    tip_at_top_input: AnimationLike | Callable[[], AnimationLike]
+    tip_at_bottom_input: AnimationLike | Callable[[], AnimationLike] | None = (
+        None
+    )
 
     @cached_property
     def nine_slice(self) -> NineSlice:
@@ -53,13 +55,13 @@ class SayEventNineSliceBackgroundConfig:
         return self.nine_slice_input
 
     @cached_property
-    def tip_at_top(self) -> Drawing:
+    def tip_at_top(self) -> AnimationLike:
         if callable(self.tip_at_top_input):
             return self.tip_at_top_input()
         return self.tip_at_top_input
 
     @cached_property
-    def tip_at_bottom(self) -> Drawing:
+    def tip_at_bottom(self) -> AnimationLike:
         if self.tip_at_bottom_input is None:
             return self.tip_at_top.flip(vertical=True)
         if callable(self.tip_at_bottom_input):

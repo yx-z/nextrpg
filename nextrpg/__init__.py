@@ -249,9 +249,11 @@ from nextrpg.gui.screen_area import (
     top_screen_area,
 )
 from nextrpg.gui.window import Window
+from nextrpg.item.item import Item
 from nextrpg.map.map_loader import MapLoader
 from nextrpg.map.map_move import MapMove
 from nextrpg.map.map_scene import MapScene, center_player
+from nextrpg.player.player import Player
 from nextrpg.scene.scene import Scene
 from nextrpg.scene.transition_scene import TransitionScene
 from nextrpg.scene.view_only_scene import ViewOnlyScene

@@ -11,7 +11,6 @@ from nextrpg.config.rpg_event.say_event_config import (
 )
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
-from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
@@ -144,8 +143,8 @@ class SayEventCharacterAddOn(SayEventAddOn):
     scene: EventfulScene
     character: CharacterOnScreen
 
-    @cached_property
     @override
+    @cached_property
     def _background_relative_to_text(self) -> RelativeAnimationLike:
         background_drawing = super()._background_relative_to_text.resource
         if self._character_position.at_left:
@@ -197,7 +196,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
         return background_and_tip_group.shift(background_shift)
 
     @cached_property
-    def _tip(self) -> Drawing:
+    def _tip(self) -> AnimationLike:
         if self._character_position.at_top:
             tip = self.config.background.tip_at_top
         else:
