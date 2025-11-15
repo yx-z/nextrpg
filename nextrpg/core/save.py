@@ -28,17 +28,9 @@ if TYPE_CHECKING:
     from nextrpg.core.log import Log
 
 
-@dataclass(frozen=True)
-class AliasAndBytes:
-    alias: str
-    bytes: bytes
-
-
 type Primitive = str | int | float | bool | None
 type Json = Primitive | list["Json"] | dict[str, "Json"]
-type SaveData = Primitive | AliasAndBytes | list["SaveData"] | dict[
-    str, "SaveData"
-]
+type SaveData = Primitive | bytes | list["SaveData"] | dict[str, "SaveData"]
 
 
 class HasSaveData[S: SaveData]:
@@ -194,8 +186,10 @@ class SaveIo:
         future.add_done_callback(lambda fut: self._on_save_complete(key, fut))
         return future
 
-    def remove(self) -> None:
+    def remove(self) -> Self:
         rmtree(self.config.directory / self.slot, ignore_errors=True)
+        self._read_text.cache_clear()
+        return self
 
     def update[U: UpdateSavable](self, update_from_save: U) -> U:
         key = update_from_save.save_key()
@@ -237,28 +231,23 @@ class SaveIo:
             return loader(data)
         return None
 
-    def _write_bytes(self, key: str, alias_and_bytes: AliasAndBytes) -> None:
-        file = self._key_and_alias(key, alias_and_bytes.alias)
-        path = self._bytes_path(file)
-        path.write_bytes(alias_and_bytes.bytes)
+    def _write_bytes(self, key: str, data: bytes) -> None:
+        path = self._bytes_path(key)
+        path.write_bytes(data)
 
     def _deserialize(self, key: str, data: Json) -> SaveData:
         if isinstance(data, list):
-            return [self._deserialize(key, datum) for datum in data]
+            return [
+                self._deserialize(f"{key}_{i}", datum)
+                for i, datum in enumerate(data)
+            ]
         if isinstance(data, dict):
             return {
-                key: self._deserialize(key, value)
-                for key, value in data.items()
+                dict_key: self._deserialize(f"{key}_{dict_key}", value)
+                for dict_key, value in data.items()
             }
-        if (
-            isinstance(data, str)
-            and (
-                path := self._bytes_path(self._key_and_alias(key, data))
-            ).exists()
-        ):
-            alias = data.split(self.config.key_delimiter, maxsplit=1)[1]
-            read_bytes = path.read_bytes()
-            return AliasAndBytes(alias, read_bytes)
+        if isinstance(data, str) and (path := self._bytes_path(key)).exists():
+            return path.read_bytes()
         return data
 
     @cache
@@ -269,14 +258,18 @@ class SaveIo:
         return {}
 
     def _serialize(self, key: str, data: SaveData) -> Json:
-        if isinstance(data, AliasAndBytes):
+        if isinstance(data, bytes):
             self._write_bytes(key, data)
-            return self._key_and_alias(key, data)
+            return key
         if isinstance(data, list):
-            return [self._serialize(key, datum) for datum in data]
+            return [
+                self._serialize(f"{key}_{i}", datum)
+                for i, datum in enumerate(data)
+            ]
         if isinstance(data, dict):
             return {
-                key: self._serialize(key, value) for key, value in data.items()
+                dict_key: self._serialize(f"{key}_{dict_key}", value)
+                for dict_key, value in data.items()
             }
         return data
 
@@ -286,9 +279,6 @@ class SaveIo:
     @cached_property
     def _text_path(self) -> Path:
         return self.config.directory / self.slot / self.config.text_file
-
-    def _key_and_alias(self, key: str, alias: str) -> str:
-        return self.config.key_delimiter.join((key, alias))
 
 
 def shared_save_slot() -> SaveIo:

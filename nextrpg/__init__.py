@@ -92,7 +92,6 @@ from nextrpg.core.module_and_attribute import (
     to_module_and_attribute,
 )
 from nextrpg.core.save import (
-    AliasAndBytes,
     GameSaveMeta,
     HasSaveData,
     Json,

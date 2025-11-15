@@ -1,5 +1,7 @@
+import os
 from dataclasses import dataclass, replace
 from functools import cached_property
+from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Self, override
 
@@ -12,6 +14,7 @@ from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.log import Log
 from nextrpg.core.metadata import HasMetadata
+from nextrpg.core.save import LoadFromSave
 from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import TRANSPARENT, WHITE, Alpha, Color
 from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
@@ -40,12 +43,30 @@ log = Log()
     ),
 )
 @dataclass(frozen=True)
-class Drawing(AnimationLike, HasMetadata):
+class Drawing(AnimationLike, HasMetadata, LoadFromSave):
     resource: Path | Surface
     color_key: Color | Coordinate | None = None
     convert_alpha: bool | None = None
     allow_background_in_debug: bool = True
     metadata: frozendict[str, Any] = frozendict()
+
+    @override
+    def _save_data(self) -> str | bytes:
+        if isinstance(self.resource, Surface):
+            io = BytesIO()
+            save(self.surface, io)
+            return io.getvalue()
+        return os.fspath(self.resource)
+
+    @override
+    @classmethod
+    def _load_from_save(cls, data: str | bytes) -> Self:
+        if isinstance(data, bytes):
+            io = BytesIO(data)
+            surface = load(io)
+            return cls(surface)
+        path = Path(data)
+        return cls(path)
 
     @override
     @cached_property

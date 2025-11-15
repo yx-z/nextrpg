@@ -10,6 +10,7 @@ from nextrpg.config.character.rpg_maker_character_drawing_config import (
 from nextrpg.config.drawing.animation_config import AnimationConfig
 from nextrpg.config.drawing.text_config import TextConfig
 from nextrpg.config.drawing.text_group_config import TextGroupConfig
+from nextrpg.config.item_config import ItemConfig
 from nextrpg.config.map_config import MapConfig
 from nextrpg.config.menu_config import MenuConfig
 from nextrpg.config.rpg_event.cutscene_config import CutsceneConfig
@@ -46,6 +47,7 @@ class Config:
     game_loop: GameLoopConfig = GameLoopConfig()
     widget: WidgetConfig = WidgetConfig()
     resource: ResourceConfig = ResourceConfig()
+    item: ItemConfig = ItemConfig()
     menu: MenuConfig | None = None
     debug: DebugConfig | None = None
 

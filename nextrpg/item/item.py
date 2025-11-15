@@ -1,21 +1,16 @@
-from dataclasses import dataclass, replace
-from enum import auto
+from collections.abc import Callable
+from dataclasses import field
 from functools import cached_property
-from typing import Self
 
-from nextrpg.core.dataclass_with_default import dataclass_with_default
+from nextrpg.config.config import config
+from nextrpg.config.item_config import ItemCategory, ItemConfig
+from nextrpg.core.dataclass_with_default import dataclass_with_default, default
 from nextrpg.core.save import LoadFromSaveEnum
-from nextrpg.drawing.animation_like import AnimationLike
+from nextrpg.drawing.drawing import Drawing
 
 
 class ItemKey(LoadFromSaveEnum):
     pass
-
-
-class ItemCategory(LoadFromSaveEnum):
-    CONSUMABLE = auto()
-    EQUIPMENT = auto()
-    UNIQUE = auto()
 
 
 @dataclass_with_default(frozen=True)
@@ -24,31 +19,16 @@ class Item:
     name: str
     description: str
     category: ItemCategory
-    icon: AnimationLike | None = None
+    config: ItemConfig = field(default_factory=lambda: config().item)
+    icon_input: Drawing | Callable[[], Drawing] | None = default(
+        lambda self: self.config.icons.get(self.category)
+    )
 
     @cached_property
-    def singleton(self) -> ItemAndQuantity:
-        return self.with_quantity(1)
+    def icon(self) -> Drawing:
+        if isinstance(self.icon_input, Drawing):
+            return self.icon_input
+        return self.icon_input()
 
-    def with_quantity(self, quantity: int) -> ItemAndQuantity:
-        return ItemAndQuantity(self, quantity)
-
-
-@dataclass(frozen=True)
-class ItemAndQuantity:
-    item: Item
-    quantity: int
-
-    @cached_property
-    def increment(self) -> Self:
-        return self + 1
-
-    @cached_property
-    def decrement(self) -> Self:
-        return self - 1
-
-    def __add__(self, quantity: int) -> Self:
-        return replace(self, quantity=self.quantity + quantity)
-
-    def __sub__(self, quantity: int) -> Self:
-        return self + -quantity
+    def __eq__(self, other: Item) -> bool:
+        return self.key is other.key
