@@ -17,7 +17,6 @@ class RpgEventScene(Scene):
     parent: EventfulScene
 
     @cached_property
-    @override
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         return (
             self.parent.drawing_on_screens

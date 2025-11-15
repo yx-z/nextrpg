@@ -19,19 +19,19 @@ class UpdateFromEvent(RpgEventScene):
     def _tick_after_parent(
         self, time_delta: Millisecond, ticked: Self
     ) -> Scene:
-        if isinstance(scene := self.character_or_scene, Scene):
-            return scene.complete(self.generator)
+        if isinstance(scene := ticked.character_or_scene, Scene):
+            return scene.complete(ticked.generator)
         if (character := self.character_or_scene).has_same_name(
-            self.parent.player
+            ticked.parent.player
         ):
-            scene = replace(self.parent, player=character)
-            return scene.complete(self.generator)
+            scene = replace(ticked.parent, player=character)
+            return scene.complete(ticked.generator)
         npcs = tuple(
             character if character.has_same_name(n) else n
-            for n in self.parent.npcs
+            for n in ticked.parent.npcs
         )
-        scene = replace(self.parent, npcs=npcs)
-        return scene.complete(self.generator)
+        scene = replace(ticked.parent, npcs=npcs)
+        return scene.complete(ticked.generator)
 
 
 @register_rpg_event_scene(UpdateFromEvent)

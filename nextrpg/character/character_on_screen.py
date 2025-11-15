@@ -17,6 +17,7 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
+from nextrpg.drawing.color import TRANSPARENT
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
@@ -41,6 +42,16 @@ class CharacterOnScreen(
         lambda self: self.spec.character_drawing
     )
     _event_started: bool = False
+
+    @cached_property
+    def transparent_drawing(self) -> Self:
+        rect = (
+            self.drawing_on_screen.rectangle_area_on_screen.rectangle_drawing(
+                TRANSPARENT
+            )
+        )
+        character_drawing = PolygonCharacterDrawing(rect_or_poly=rect)
+        return self.with_character_drawing(character_drawing)
 
     def with_character_drawing(
         self, character_drawing: CharacterDrawing
