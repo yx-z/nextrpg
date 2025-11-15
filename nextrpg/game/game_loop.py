@@ -7,9 +7,9 @@ from typing import Self
 import pygame
 from pygame import Clock
 
-from nextrpg import KeyMappingConfig, is_key_press
 from nextrpg.config.config import config, force_debug_config, set_config
 from nextrpg.config.system.game_loop_config import GameLoopConfig
+from nextrpg.config.system.key_mapping_config import KeyMappingConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
     default,
@@ -17,11 +17,7 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.log import Log
 from nextrpg.core.util import type_name
-from nextrpg.event.io_event import (
-    IoEvent,
-    Quit,
-    to_io_event,
-)
+from nextrpg.event.io_event import IoEvent, Quit, is_key_press, to_io_event
 from nextrpg.gui.window import Window
 from nextrpg.scene.scene import Scene
 

@@ -4,7 +4,6 @@ from functools import cached_property
 from itertools import cycle, pairwise
 from typing import ClassVar, Self, override
 
-from nextrpg import tick_optional
 from nextrpg.config.system.key_mapping_config import KeyMappingConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
@@ -12,7 +11,10 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
+from nextrpg.drawing.animation_on_screen_like import (
+    AnimationOnScreenLike,
+    tick_optional,
+)
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyPressDown
 from nextrpg.scene.scene import Scene

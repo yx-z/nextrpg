@@ -3,10 +3,10 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import ClassVar, Self, override
 
-from nextrpg import KeyMappingConfig
 from nextrpg.animation.cycle import Cycle
 from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.config.config import config
+from nextrpg.config.system.key_mapping_config import KeyMappingConfig
 from nextrpg.config.widget.button_config import ButtonConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
