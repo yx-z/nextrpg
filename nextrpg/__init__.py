@@ -57,6 +57,7 @@ from nextrpg.config.config import (
 )
 from nextrpg.config.drawing.animation_config import AnimationConfig
 from nextrpg.config.drawing.text_config import TextConfig
+from nextrpg.config.item_config import BaseItemKey, ItemCategory, ItemConfig
 from nextrpg.config.map_config import MapConfig
 from nextrpg.config.menu_config import MenuConfig
 from nextrpg.config.rpg_event.rpg_event_config import RpgEventConfig
@@ -248,6 +249,7 @@ from nextrpg.gui.screen_area import (
     top_screen_area,
 )
 from nextrpg.gui.window import Window
+from nextrpg.item.inventory import Inventory
 from nextrpg.item.item import Item
 from nextrpg.map.map_loader import MapLoader
 from nextrpg.map.map_move import MapMove
