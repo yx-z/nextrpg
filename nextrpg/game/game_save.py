@@ -3,8 +3,10 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import Any, Self, override
 
-from nextrpg import to_module_and_attribute
-from nextrpg.core.module_and_attribute import ModuleAndAttribute
+from nextrpg.core.module_and_attribute import (
+    ModuleAndAttribute,
+    to_module_and_attribute,
+)
 from nextrpg.core.save import HasSaveData, LoadSavable
 from nextrpg.scene.scene import Scene
 
