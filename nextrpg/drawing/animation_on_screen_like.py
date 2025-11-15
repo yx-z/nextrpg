@@ -141,22 +141,18 @@ class AnimationOnScreenLike(Sizable, Protocol):
         return DrawingOnScreens(self.drawing_on_screens)
 
 
-class Tickable(Protocol):
-    def tick(self, time_delta: Millisecond) -> Self: ...
-
-
-def tick_optional[Tick: Tickable](
-    resource: Tick | None, time_delta: Millisecond
-) -> Tick | None:
+def tick_optional[_AnimationOnScreenLike: AnimationOnScreenLike](
+    resource: _AnimationOnScreenLike | None, time_delta: Millisecond
+) -> _AnimationOnScreenLike | None:
     if resource:
         return resource.tick(time_delta)
     return None
 
 
-def tick_all[Tick: Tickable](
-    tickable: tuple[Tick, ...], time_delta: Millisecond
-) -> tuple[Tick, ...]:
-    return tuple(t.tick(time_delta) for t in tickable)
+def tick_all[_AnimationOnScreenLike: AnimationOnScreenLike](
+    resource: tuple[_AnimationOnScreenLike, ...], time_delta: Millisecond
+) -> tuple[_AnimationOnScreenLike, ...]:
+    return tuple(t.tick(time_delta) for t in resource)
 
 
 @overload
