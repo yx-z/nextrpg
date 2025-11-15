@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from re import A
 
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
