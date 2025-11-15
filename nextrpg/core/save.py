@@ -238,12 +238,12 @@ class SaveIo:
     def _deserialize(self, key: str, data: Json) -> SaveData:
         if isinstance(data, list):
             return [
-                self._deserialize(f"{key}_{i}", datum)
+                self._deserialize(self._concat(key, i), datum)
                 for i, datum in enumerate(data)
             ]
         if isinstance(data, dict):
             return {
-                dict_key: self._deserialize(f"{key}_{dict_key}", value)
+                dict_key: self._deserialize(self._concat(key, dict_key), value)
                 for dict_key, value in data.items()
             }
         if isinstance(data, str) and (path := self._bytes_path(key)).exists():
@@ -263,12 +263,12 @@ class SaveIo:
             return key
         if isinstance(data, list):
             return [
-                self._serialize(f"{key}_{i}", datum)
+                self._serialize(self._concat(key, i), datum)
                 for i, datum in enumerate(data)
             ]
         if isinstance(data, dict):
             return {
-                dict_key: self._serialize(f"{key}_{dict_key}", value)
+                dict_key: self._serialize(self._concat(key, dict_key), value)
                 for dict_key, value in data.items()
             }
         return data
@@ -279,6 +279,9 @@ class SaveIo:
     @cached_property
     def _text_path(self) -> Path:
         return self.config.directory / self.slot / self.config.text_file
+
+    def _concat(self, k1: Any, k2: Any) -> str:
+        return f"{k1}{self.config.key_delimiter}{k2}"
 
 
 def shared_save_slot() -> SaveIo:
