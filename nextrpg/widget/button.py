@@ -123,8 +123,7 @@ class Button(BaseButton):
         backgrounds = background_group + self._padding.top_left
         fade_in = FadeIn(backgrounds, self.config.fade_duration)
         fade_out = FadeOut(backgrounds, self.config.fade_duration)
-        fades = (fade_out, fade_in)
-        animation = Cycle(fades)
+        animation = Cycle((fade_out, fade_in))
         return DrawingGroup((animation, self.idle))
 
     def _shift(self, resource: Sprite) -> Sprite:

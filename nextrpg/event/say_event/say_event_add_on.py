@@ -49,8 +49,7 @@ class SayEventAddOn:
 
         background = self._background_relative_to_text.resource
         shift = self._background_relative_to_text.offset
-        background_and_content = (background, content - shift)
-        add_on_group = DrawingGroup(background_and_content)
+        add_on_group = DrawingGroup((background, content - shift))
         return _Background(
             coordinate=self._add_on_top_left,
             resource=add_on_group,
@@ -189,8 +188,9 @@ class SayEventCharacterAddOn(SayEventAddOn):
             ).rectangle_area_on_screen
             background_drawing = background_drawing.cut(background_crop)
 
-        background_and_tip = (background_drawing, self._tip + tip_shift)
-        background_and_tip_group = DrawingGroup(background_and_tip)
+        background_and_tip_group = DrawingGroup(
+            (background_drawing, self._tip + tip_shift)
+        )
 
         background_shift = super()._background_relative_to_text.offset
         return background_and_tip_group + background_shift

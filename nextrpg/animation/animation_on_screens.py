@@ -24,8 +24,7 @@ class AnimationOnScreens(AbstractAnimationOnScreen):
         return self.resource
 
     def concur(self, another: SpriteOnScreen) -> AnimationOnScreens:
-        resources = (self, another)
-        return AnimationOnScreens(resources)
+        return AnimationOnScreens((self, another))
 
     @override
     @cached_property

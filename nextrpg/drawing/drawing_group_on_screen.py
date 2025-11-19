@@ -33,12 +33,11 @@ class DrawingGroupOnScreen(SpriteOnScreen):
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         res: list[DrawingOnScreen] = []
-        for relative in self.drawing_group.resources:
-            res += relative.drawing_on_screens(self.origin)
-            if self._link_color and relative.offset != ZERO_SIZE:
-                declared_coord = self.origin + relative.offset
-                points = (self.origin, declared_coord)
-                link = PolylineOnScreen(points)
+        for shifted in self.drawing_group.resources:
+            res += shifted.drawing_on_screens(self.origin)
+            if self._link_color and shifted.offset != ZERO_SIZE:
+                declared_coordinate = self.origin + shifted.offset
+                link = PolylineOnScreen((self.origin, declared_coordinate))
                 link_drawing_on_screen = link.fill(
                     self._link_color, allow_background_in_debug=False
                 )

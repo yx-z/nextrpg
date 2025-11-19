@@ -67,8 +67,7 @@ class NineSlice:
         relative_right = right.shift(
             size.width.with_zero_height, Anchor.TOP_RIGHT
         )
-        relatives = (left, relative_center, relative_right)
-        return DrawingGroup(relatives)
+        return DrawingGroup((left, relative_center, relative_right))
 
     @cached_property
     def _top_left(self) -> Drawing:

@@ -45,9 +45,8 @@ def _cutscene[**P](
             .bottom_left.as_top_left_of(size)
             .rectangle_area_on_screen
         )
-        rectangle_area_on_screens = (top_border, bottom_border)
         borders = tuple(
-            r.fill(cfg.background) for r in rectangle_area_on_screens
+            r.fill(cfg.background) for r in (top_border, bottom_border)
         )
         border_group = DrawingOnScreens(borders)
 
