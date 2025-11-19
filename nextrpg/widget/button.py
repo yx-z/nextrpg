@@ -15,8 +15,8 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.core.util import throw
-from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.sprite import Sprite
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
 from nextrpg.event.io_event import IoEvent, is_key_press
@@ -40,7 +40,7 @@ class ButtonOnScreen(SizableWidgetOnScreen):
 
     @override
     @cached_property
-    def drawing(self) -> AnimationLike:
+    def drawing(self) -> Sprite:
         if self._is_selected:
             return self.widget.active
         return self.widget.idle
@@ -83,8 +83,8 @@ OnClickResult = OnClickSceneResult | tuple[OnClickSceneResult, GameState]
 @dataclass_with_default(frozen=True, kw_only=True)
 class BaseButton(SizableWidget[ButtonOnScreen]):
     on_click: Callable[[ButtonOnScreen, GameState], OnClickResult]
-    idle: AnimationLike
-    active: AnimationLike
+    idle: Sprite
+    active: Sprite
     name: str | None = None
     _: KW_ONLY = private_init_below()
     widget_on_screen_type: ClassVar[type] = ButtonOnScreen
@@ -102,11 +102,11 @@ class Button(BaseButton):
     )
     config: ButtonConfig = field(default_factory=lambda: config().widget.button)
     _: KW_ONLY = private_init_below()
-    idle: AnimationLike = default(lambda self: self._shift(self._text))
-    active: AnimationLike = default(lambda self: self._init_active)
+    idle: Sprite = default(lambda self: self._shift(self._text))
+    active: Sprite = default(lambda self: self._init_active)
 
     @property
-    def _init_active(self) -> AnimationLike:
+    def _init_active(self) -> Sprite:
         background_border = self._text.drawings[0].background(
             self.config.border_color,
             self._padding,
@@ -120,15 +120,15 @@ class Button(BaseButton):
         )
 
         background_group = DrawingGroup((background_border, background))
-        backgrounds = background_group.shift(self._padding.top_left_shift)
+        backgrounds = background_group.shift(self._padding.top_left.size)
         fade_in = FadeIn(backgrounds, self.config.fade_duration)
         fade_out = FadeOut(backgrounds, self.config.fade_duration)
         fades = (fade_out, fade_in)
         animation = Cycle(fades)
         return DrawingGroup((animation, self.idle))
 
-    def _shift(self, resource: AnimationLike) -> AnimationLike:
-        shifted = resource.shift(self._padding.top_left_shift)
+    def _shift(self, resource: Sprite) -> Sprite:
+        shifted = resource.shift(self._padding.top_left.size)
         return DrawingGroup(shifted)
 
     @cached_property

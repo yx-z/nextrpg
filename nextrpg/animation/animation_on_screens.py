@@ -6,24 +6,24 @@ from nextrpg.animation.abstract_animation_on_screen import (
     AbstractAnimationOnScreen,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import (
-    AnimationOnScreenLike,
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.sprite_on_screen import (
+    SpriteOnScreen,
     tick_all,
 )
-from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 
 @dataclass(frozen=True)
 class AnimationOnScreens(AbstractAnimationOnScreen):
-    resource: AnimationOnScreenLike | tuple[AnimationOnScreenLike, ...]
+    resource: SpriteOnScreen | tuple[SpriteOnScreen, ...]
 
     @cached_property
-    def resources(self) -> tuple[AnimationOnScreenLike, ...]:
-        if isinstance(self.resource, AnimationOnScreenLike):
+    def resources(self) -> tuple[SpriteOnScreen, ...]:
+        if isinstance(self.resource, SpriteOnScreen):
             return (self.resource,)
         return self.resource
 
-    def concur(self, another: AnimationOnScreenLike) -> AnimationOnScreens:
+    def concur(self, another: SpriteOnScreen) -> AnimationOnScreens:
         resources = (self, another)
         return AnimationOnScreens(resources)
 

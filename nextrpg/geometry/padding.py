@@ -3,7 +3,7 @@ from functools import cached_property
 from typing import Self
 
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Height, Pixel, Size, Width
+from nextrpg.geometry.dimension import Height, Pixel, Width
 from nextrpg.geometry.sizable import Sizable
 
 
@@ -25,11 +25,7 @@ class Padding:
 
     @cached_property
     def top_left(self) -> Coordinate:
-        return self.top_left_shift.coordinate
-
-    @cached_property
-    def top_left_shift(self) -> Size:
-        return self.top * self.left
+        return (self.top * self.left).coordinate
 
 
 def padding_for_both_sides(width: Width, height: Height) -> Padding:

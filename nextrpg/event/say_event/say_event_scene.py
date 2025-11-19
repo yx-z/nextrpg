@@ -9,8 +9,8 @@ from nextrpg.config.rpg_event.say_event_config import (
     SayEventConfig,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.sprite import Sprite
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
 from nextrpg.event.io_event import IoEvent
@@ -30,7 +30,7 @@ from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 from nextrpg.scene.scene import Scene
 
-type SayEventArg = str | Coordinate | Millisecond | Size | AnimationLike | AvatarPosition | SayEventConfig
+type SayEventArg = str | Coordinate | Millisecond | Size | Sprite | AvatarPosition | SayEventConfig
 
 
 @dataclass(frozen=True)
@@ -111,7 +111,7 @@ def _update_config(cfg: SayEventConfig, arg: SayEventArg) -> SayEventConfig:
                 scene_coordinate_override=arg,
                 character_coordinate_override=arg,
             )
-        case AnimationLike():
+        case Sprite():
             return replace(cfg, avatar_input=arg)
         case str():
             return replace(cfg, name_override=arg)

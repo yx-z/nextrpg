@@ -10,7 +10,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond, Timer
-from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
+from nextrpg.drawing.shifted_sprite import ShiftedSprite
 
 
 @dataclass_with_default(frozen=True)
@@ -43,7 +43,7 @@ class TimedAnimationGroup(AnimationGroup):
         return replace(ticked, _timer=timer)
 
 
-def _reverse(resource: RelativeAnimationLike) -> RelativeAnimationLike:
+def _reverse(resource: ShiftedSprite) -> ShiftedSprite:
     if isinstance(drawing := resource.resource, TimedAnimationGroup):
         return replace(resource, resource=drawing.reverse)
     return resource

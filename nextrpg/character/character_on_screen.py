@@ -16,11 +16,11 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.color import TRANSPARENT
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
+from nextrpg.drawing.sprite_on_screen import SpriteOnScreen
 from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.area_on_screen import AreaOnScreen
@@ -32,7 +32,7 @@ from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 @dataclass_with_default(frozen=True)
 class CharacterOnScreen(
-    EventAsAttr, AnimationOnScreenLike, UpdateFromSave[dict[str, Any]]
+    EventAsAttr, SpriteOnScreen, UpdateFromSave[dict[str, Any]]
 ):
     spec: CharacterSpec
     coordinate: Coordinate
@@ -134,7 +134,7 @@ class CharacterOnScreen(
     @override
     def update_this_class_from_save(self, data: dict[str, Any]) -> Self:
         top_left = Coordinate.load_from_save(data["top_left"])
-        coordinate = top_left.as_top_left_of(self).coordinate_from(self.anchor)
+        coordinate = top_left.as_top_left_of(self).at_anchor(self.anchor)
         character_drawing = self.character_drawing.update_from_save(
             data["character_drawing"]
         )

@@ -11,8 +11,8 @@ from nextrpg.config.system.debug_config import LogLevel
 from nextrpg.core.time import Millisecond, Timer
 
 if TYPE_CHECKING:
-    from nextrpg.drawing.animation_like import AnimationLike
-    from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
+    from nextrpg.drawing.sprite import Sprite
+    from nextrpg.drawing.sprite_on_screen import SpriteOnScreen
 
 
 class _DurationFromConfig:
@@ -58,36 +58,30 @@ class Log:
 
     def debug_drawing(
         self,
-        keyed_drawings: (
-            dict[Any, AnimationLike | AnimationOnScreenLike] | None
-        ) = None,
+        keyed_drawings: dict[Any, Sprite | SpriteOnScreen] | None = None,
         *,
         duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
-        **kwargs: AnimationLike | AnimationOnScreenLike,
+        **kwargs: Sprite | SpriteOnScreen,
     ) -> None:
         drawings = (keyed_drawings or {}) | kwargs
         _add_drawings(self.component, LogLevel.DEBUG, duration, drawings)
 
     def info_drawing(
         self,
-        keyed_drawings: (
-            dict[Any, AnimationLike | AnimationOnScreenLike] | None
-        ) = None,
+        keyed_drawings: dict[Any, Sprite | SpriteOnScreen] | None = None,
         *,
         duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
-        **kwargs: AnimationLike | AnimationOnScreenLike,
+        **kwargs: Sprite | SpriteOnScreen,
     ) -> None:
         drawings = (keyed_drawings or {}) | kwargs
         _add_drawings(self.component, LogLevel.INFO, duration, drawings)
 
     def error_drawing(
         self,
-        keyed_drawings: (
-            dict[Any, AnimationLike | AnimationOnScreenLike] | None
-        ) = None,
+        keyed_drawings: dict[Any, Sprite | SpriteOnScreen] | None = None,
         *,
         duration: Millisecond | _DurationFromConfig | None = _FROM_CONFIG,
-        **kwargs: AnimationLike | AnimationOnScreenLike,
+        **kwargs: Sprite | SpriteOnScreen,
     ) -> None:
         drawings = (keyed_drawings or {}) | kwargs
         _add_drawings(self.component, LogLevel.ERROR, duration, drawings)
@@ -96,7 +90,7 @@ class Log:
 @dataclass(frozen=True)
 class MessageKeyAndDrawing:
     message_key: Any
-    drawing: AnimationLike | AnimationOnScreenLike
+    drawing: Sprite | SpriteOnScreen
 
 
 @dataclass(frozen=True)
@@ -202,7 +196,7 @@ def _add_drawings(
     component: str,
     level: LogLevel,
     duration: Millisecond | _DurationFromConfig | None,
-    kwargs: dict[str, AnimationLike | AnimationOnScreenLike],
+    kwargs: dict[str, Sprite | SpriteOnScreen],
 ) -> None:
     for key, drawing in kwargs.items():
         message_and_drawing = MessageKeyAndDrawing(key, drawing)

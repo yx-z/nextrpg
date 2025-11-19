@@ -4,8 +4,8 @@ from functools import cached_property
 from typing import TYPE_CHECKING, Self
 
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import Alpha
+from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import (
@@ -22,8 +22,8 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class RelativeAnimationLike:
-    resource: AnimationLike
+class ShiftedSprite:
+    resource: Sprite
     shift: Size
     anchor: Anchor = Anchor.TOP_LEFT
 
@@ -75,22 +75,18 @@ class RelativeAnimationLike:
         )
 
 
-def relative_animation_likes(
-    resource: (
-        AnimationLike
-        | RelativeAnimationLike
-        | Iterable[AnimationLike | RelativeAnimationLike]
-    ),
-) -> tuple[RelativeAnimationLike, ...]:
-    if isinstance(resource, AnimationLike | RelativeAnimationLike):
-        animation_like = relative_animation_like(resource)
-        return (animation_like,)
-    return tuple(relative_animation_like(res) for res in resource)
+def shifted_sprites(
+    resource: Sprite | ShiftedSprite | Iterable[Sprite | ShiftedSprite],
+) -> tuple[ShiftedSprite, ...]:
+    if isinstance(resource, Sprite | ShiftedSprite):
+        sprite = shifted_sprite(resource)
+        return (sprite,)
+    return tuple(shifted_sprite(res) for res in resource)
 
 
-def relative_animation_like(
-    resource: AnimationLike | RelativeAnimationLike,
-) -> RelativeAnimationLike:
-    if isinstance(resource, AnimationLike):
+def shifted_sprite(
+    resource: Sprite | ShiftedSprite,
+) -> ShiftedSprite:
+    if isinstance(resource, Sprite):
         return resource.shift(ZERO_SIZE)
     return resource

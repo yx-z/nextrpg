@@ -11,11 +11,11 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import (
-    AnimationOnScreenLike,
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.sprite_on_screen import (
+    SpriteOnScreen,
     animate,
 )
-from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.background_event import (
     BackgroundEvent,
     BackgroundEventSentinel,
@@ -54,7 +54,7 @@ class BackgroundFadeInEvent(BackgroundEvent):
 
 @dataclass_with_default(frozen=True)
 class FadeInEventScene(RpgEventScene):
-    resource: AnimationOnScreenLike
+    resource: SpriteOnScreen
     wait: bool = True
     duration: Millisecond = field(
         default_factory=lambda: config().animation.default_timed_animation_duration
@@ -86,7 +86,7 @@ class FadeInEventScene(RpgEventScene):
 
 @register_rpg_event_scene(FadeInEventScene)
 def fade_in(
-    resource: AnimationOnScreenLike,
+    resource: SpriteOnScreen,
     wait: bool = True,
     duration: Millisecond | None = None,
 ) -> BackgroundEventSentinel: ...

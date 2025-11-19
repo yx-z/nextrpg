@@ -12,9 +12,9 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
-from nextrpg.drawing.animation_on_screen_like import animate
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
+from nextrpg.drawing.sprite_on_screen import animate
 from nextrpg.widget.tmx_widget_group_on_screen import (
     TmxWidgetGroupOnScreen,
 )

@@ -6,30 +6,26 @@ from nextrpg.animation.abstract_animation import (
     AbstractAnimation,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_like import AnimationLike
-from nextrpg.drawing.animation_on_screen_like import tick_all
 from nextrpg.drawing.drawing_group import DrawingGroup
-from nextrpg.drawing.relative_animation_like import (
-    RelativeAnimationLike,
-    relative_animation_likes,
+from nextrpg.drawing.shifted_sprite import (
+    ShiftedSprite,
+    shifted_sprites,
 )
+from nextrpg.drawing.sprite import Sprite
+from nextrpg.drawing.sprite_on_screen import tick_all
 
 
 @dataclass(frozen=True)
 class AnimationGroup(AbstractAnimation):
-    resource: (
-        AnimationLike
-        | RelativeAnimationLike
-        | tuple[AnimationLike | RelativeAnimationLike, ...]
-    )
+    resource: Sprite | ShiftedSprite | tuple[Sprite | ShiftedSprite, ...]
 
-    def concur(self, another: RelativeAnimationLike) -> Self:
+    def concur(self, another: ShiftedSprite) -> Self:
         resource = self.resources + (another,)
         return replace(self, resource=resource)
 
     @cached_property
-    def resources(self) -> tuple[RelativeAnimationLike, ...]:
-        return relative_animation_likes(self.resource)
+    def resources(self) -> tuple[ShiftedSprite, ...]:
+        return shifted_sprites(self.resource)
 
     @override
     @cached_property

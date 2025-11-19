@@ -4,17 +4,17 @@ from typing import override
 
 from pygame import SRCALPHA, Surface
 
-from nextrpg.drawing.animation_on_screen_like import (
-    AnimationOnScreenLike,
-)
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.sprite_on_screen import (
+    SpriteOnScreen,
+)
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
 
 
 @dataclass(frozen=True)
-class DrawingOnScreens(AnimationOnScreenLike):
+class DrawingOnScreens(SpriteOnScreen):
     drawing_on_screens: tuple[DrawingOnScreen, ...]
 
     @override

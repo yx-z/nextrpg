@@ -4,12 +4,12 @@ from typing import Any, Self, override
 
 from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_like import AnimationLike
+from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.direction import Direction
 
 
 @dataclass(frozen=True)
-class CharacterDrawing(AnimationLike, UpdateFromSave):
+class CharacterDrawing(Sprite, UpdateFromSave):
     direction: Direction = Direction.DOWN
 
     @override

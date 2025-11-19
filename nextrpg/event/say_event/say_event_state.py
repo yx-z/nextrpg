@@ -15,12 +15,12 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import (
-    AnimationOnScreenLike,
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.sprite_on_screen import (
+    SpriteOnScreen,
     animate,
     tick_optional,
 )
-from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.text_on_screen import TextOnScreen
 from nextrpg.event.io_event import IoEvent, is_key_press
 from nextrpg.event.rpg_event_scene import RpgEventScene
@@ -58,7 +58,7 @@ class SayEventState(RpgEventScene, ABC):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class SayEventFadeInState(SayEventState):
-    background: AnimationOnScreenLike
+    background: SpriteOnScreen
     text_on_screen: TextOnScreen
     _: KW_ONLY = private_init_below()
     _fade_in: TimedAnimationOnScreens = default(
@@ -92,7 +92,7 @@ class SayEventFadeInState(SayEventState):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class SayEventTypingState(SayEventState):
-    background: AnimationOnScreenLike
+    background: SpriteOnScreen
     text_on_screen: TextOnScreen
     _: KW_ONLY = private_init_below()
     _typewriter: Typewriter | None = default(
@@ -142,7 +142,7 @@ class SayEventTypingState(SayEventState):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class SayEventFadeOutState(SayEventState):
-    resources: AnimationOnScreenLike
+    resources: SpriteOnScreen
     _: KW_ONLY = private_init_below()
     _fade_out: TimedAnimationOnScreens = default(
         lambda self: animate(

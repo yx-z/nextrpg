@@ -11,9 +11,9 @@ from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Pixel, Size, Width
 
 if TYPE_CHECKING:
-    from nextrpg.drawing.animation_like import AnimationLike
     from nextrpg.drawing.drawing import Drawing
     from nextrpg.drawing.nine_slice import NineSlice
+    from nextrpg.drawing.sprite import Sprite
 
 
 @dataclass(frozen=True)
@@ -43,10 +43,8 @@ class SayEventColorBackgroundConfig:
 @dataclass(frozen=True)
 class SayEventNineSliceBackgroundConfig:
     nine_slice_input: NineSlice | Callable[[], NineSlice]
-    tip_at_top_input: AnimationLike | Callable[[], AnimationLike]
-    tip_at_bottom_input: AnimationLike | Callable[[], AnimationLike] | None = (
-        None
-    )
+    tip_at_top_input: Sprite | Callable[[], Sprite]
+    tip_at_bottom_input: Sprite | Callable[[], Sprite] | None = None
 
     @cached_property
     def nine_slice(self) -> NineSlice:
@@ -55,13 +53,13 @@ class SayEventNineSliceBackgroundConfig:
         return self.nine_slice_input
 
     @cached_property
-    def tip_at_top(self) -> AnimationLike:
+    def tip_at_top(self) -> Sprite:
         if callable(self.tip_at_top_input):
             return self.tip_at_top_input()
         return self.tip_at_top_input
 
     @cached_property
-    def tip_at_bottom(self) -> AnimationLike:
+    def tip_at_bottom(self) -> Sprite:
         if self.tip_at_bottom_input is None:
             return self.tip_at_top.flip(vertical=True)
         if callable(self.tip_at_bottom_input):
@@ -89,11 +87,11 @@ class SayEventConfig:
     character_coordinate_input: Coordinate | None = None
     name_text_config_input: TextConfig | None = None
     text_config_input: TextConfig | None = None
-    avatar_input: AnimationLike | Callable[[], AnimationLike] | None = None
+    avatar_input: Sprite | Callable[[], Sprite] | None = None
     avatar_position: AvatarPosition = AvatarPosition.LEFT
 
     @cached_property
-    def avatar(self) -> AnimationLike | None:
+    def avatar(self) -> Sprite | None:
         if callable(self.avatar_input):
             return self.avatar_input()
         return self.avatar_input

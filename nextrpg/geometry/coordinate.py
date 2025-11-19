@@ -88,6 +88,10 @@ class Coordinate(NamedTuple):
     top_value: Pixel
 
     @property
+    def coordinate(self) -> Self:
+        return self
+
+    @property
     def left(self) -> XAxis:
         return XAxis(self.left_value)
 

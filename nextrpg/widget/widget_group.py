@@ -11,11 +11,11 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import (
-    AnimationOnScreenLike,
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.sprite_on_screen import (
+    SpriteOnScreen,
     tick_optional,
 )
-from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.event.io_event import IoEvent, KeyPressDown
 from nextrpg.game.game_state import GameState
 from nextrpg.scene.scene import Scene
@@ -26,7 +26,7 @@ from nextrpg.widget.widget import Widget, WidgetOnScreen
 @dataclass_with_default(frozen=True, kw_only=True)
 class WidgetGroupOnScreen(WidgetOnScreen):
     widget: WidgetGroup
-    background: AnimationOnScreenLike | None = None
+    background: SpriteOnScreen | None = None
     _: KW_ONLY = private_init_below()
     _children: tuple[WidgetOnScreen, ...] = default(
         lambda self: self._init_children(self.widget.children)

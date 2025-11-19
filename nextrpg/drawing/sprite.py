@@ -19,11 +19,11 @@ if TYPE_CHECKING:
     from nextrpg.drawing.drawing import Drawing
     from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
-    from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
+    from nextrpg.drawing.shifted_sprite import ShiftedSprite
 
 
 @runtime_checkable
-class AnimationLike(Sizable, Protocol):
+class Sprite(Sizable, Protocol):
     @property
     def drawing(self) -> Drawing | DrawingGroup: ...
 
@@ -46,12 +46,12 @@ class AnimationLike(Sizable, Protocol):
 
     def shift(
         self, shift: Size, anchor: Anchor = Anchor.TOP_LEFT
-    ) -> RelativeAnimationLike:
-        from nextrpg.drawing.relative_animation_like import (
-            RelativeAnimationLike,
+    ) -> ShiftedSprite:
+        from nextrpg.drawing.shifted_sprite import (
+            ShiftedSprite,
         )
 
-        return RelativeAnimationLike(self, shift, anchor)
+        return ShiftedSprite(self, shift, anchor)
 
     def animation_on_screen(
         self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT

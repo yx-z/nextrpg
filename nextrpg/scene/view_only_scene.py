@@ -4,8 +4,8 @@ from typing import Self, override
 
 from nextrpg.config.config import config
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.sprite_on_screen import SpriteOnScreen
 from nextrpg.game.game_state import GameState
 from nextrpg.gui.screen_area import screen_area
 from nextrpg.scene.scene import Scene
@@ -13,7 +13,7 @@ from nextrpg.scene.scene import Scene
 
 @dataclass(frozen=True)
 class ViewOnlyScene(Scene):
-    resource: AnimationOnScreenLike = field(
+    resource: SpriteOnScreen = field(
         default_factory=lambda: screen_area().fill(config().window.background)
     )
 

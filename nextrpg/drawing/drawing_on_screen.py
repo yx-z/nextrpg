@@ -5,11 +5,11 @@ from typing import Self, override
 
 from pygame import Surface
 
-from nextrpg.drawing.animation_on_screen_like import (
-    AnimationOnScreenLike,
-)
 from nextrpg.drawing.color import Alpha
 from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.sprite_on_screen import (
+    SpriteOnScreen,
+)
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size, Width
@@ -18,7 +18,7 @@ from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 @dataclass(frozen=True)
-class DrawingOnScreen(AnimationOnScreenLike):
+class DrawingOnScreen(SpriteOnScreen):
     coordinate: Coordinate
     drawing: Drawing
     anchor: Anchor = Anchor.TOP_LEFT

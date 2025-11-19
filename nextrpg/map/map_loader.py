@@ -19,13 +19,13 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry, is_rect
-from nextrpg.drawing.animation_on_screen_like import (
-    AnimationOnScreenLike,
-    tick_all,
-)
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
+from nextrpg.drawing.sprite_on_screen import (
+    SpriteOnScreen,
+    tick_all,
+)
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate, YAxis
 from nextrpg.geometry.dimension import Size
@@ -315,5 +315,5 @@ def _tile_id(layer: TiledTileLayer, coordinate: _TileCoordinate) -> _Gid:
     return layer.data[coordinate.top][coordinate.left]
 
 
-def _sort_by_bottom(animation_on_screen_like: AnimationOnScreenLike) -> YAxis:
+def _sort_by_bottom(animation_on_screen_like: SpriteOnScreen) -> YAxis:
     return animation_on_screen_like.visible_rectangle_area_on_screen.bottom

@@ -15,9 +15,9 @@ from nextrpg.core.cached_decorator import cached
 from nextrpg.core.log import Log
 from nextrpg.core.metadata import HasMetadata
 from nextrpg.core.save import LoadFromSave
-from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.color import TRANSPARENT, WHITE, Alpha, Color
-from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
+from nextrpg.drawing.shifted_sprite import ShiftedSprite
+from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
@@ -43,7 +43,7 @@ log = Log()
     ),
 )
 @dataclass(frozen=True)
-class Drawing(AnimationLike, HasMetadata, LoadFromSave):
+class Drawing(Sprite, HasMetadata, LoadFromSave):
     resource: Path | Surface
     allow_background_in_debug: bool = True
     metadata: frozendict[str, Any] = frozendict()
@@ -197,7 +197,7 @@ class Drawing(AnimationLike, HasMetadata, LoadFromSave):
         padding: Padding = Padding(),
         border_radius: Pixel = -1,
         width: Pixel = 0,
-    ) -> RelativeAnimationLike:
+    ) -> ShiftedSprite:
         from nextrpg.drawing.rectangle_drawing import RectangleDrawing
 
         rect = RectangleDrawing(
@@ -207,7 +207,7 @@ class Drawing(AnimationLike, HasMetadata, LoadFromSave):
             border_radius,
             self.allow_background_in_debug,
         )
-        return rect.drawing.shift(-padding.top_left_shift)
+        return rect.drawing.shift(-padding.top_left.size)
 
     def to_file(self, file: Path) -> None:
         save(self.surface, file)

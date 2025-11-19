@@ -9,12 +9,12 @@ from nextrpg.config.rpg_event.say_event_config import (
     SayEventConfig,
     SayEventNineSliceBackgroundConfig,
 )
-from nextrpg.drawing.animation_like import AnimationLike
-from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
-from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
+from nextrpg.drawing.shifted_sprite import ShiftedSprite
+from nextrpg.drawing.sprite import Sprite
+from nextrpg.drawing.sprite_on_screen import SpriteOnScreen
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
 from nextrpg.drawing.text_on_screen import TextOnScreen
@@ -35,7 +35,7 @@ class SayEventAddOn:
     message: str | Text | TextGroup
 
     @cached_property
-    def background(self) -> AnimationOnScreenLike:
+    def background(self) -> SpriteOnScreen:
         contents = [
             drawing
             for drawing in [
@@ -71,7 +71,7 @@ class SayEventAddOn:
         ).top_left
 
     @cached_property
-    def _avatar(self) -> AnimationLike | None:
+    def _avatar(self) -> Sprite | None:
         return self.config.avatar
 
     @cached_property
@@ -79,7 +79,7 @@ class SayEventAddOn:
         return self.config.name_override
 
     @cached_property
-    def _background_relative_to_text(self) -> RelativeAnimationLike:
+    def _background_relative_to_text(self) -> ShiftedSprite:
         shift = -self.config.padding
         size = self._text.size + self.config.padding * WidthAndHeightScaling(2)
         if self._name_relative_to_text:
@@ -111,7 +111,7 @@ class SayEventAddOn:
         return rect.shift(shift)
 
     @cached_property
-    def _avatar_relative_to_text(self) -> RelativeAnimationLike | None:
+    def _avatar_relative_to_text(self) -> ShiftedSprite | None:
         if not self._avatar:
             return None
         match self.config.avatar_position:
@@ -123,7 +123,7 @@ class SayEventAddOn:
                 return self._avatar.shift(shift.size, Anchor.BOTTOM_LEFT)
 
     @cached_property
-    def _name_relative_to_text(self) -> RelativeAnimationLike | None:
+    def _name_relative_to_text(self) -> ShiftedSprite | None:
         if not self._name:
             return None
         text = Text(self._name, self.config.name_text_config)
@@ -145,7 +145,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @override
     @cached_property
-    def _background_relative_to_text(self) -> RelativeAnimationLike:
+    def _background_relative_to_text(self) -> ShiftedSprite:
         background_drawing = super()._background_relative_to_text.resource
         if self._character_position.at_left:
             tip_left = (
@@ -196,7 +196,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
         return background_and_tip_group.shift(background_shift)
 
     @cached_property
-    def _tip(self) -> AnimationLike:
+    def _tip(self) -> Sprite:
         if self._character_position.at_top:
             tip = self.config.background.tip_at_top
         else:
@@ -246,7 +246,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
 
     @cached_property
     @override
-    def _avatar(self) -> AnimationLike | None:
+    def _avatar(self) -> Sprite | None:
         if self.config.avatar:
             return self.config.avatar
         return self.character.spec.avatar

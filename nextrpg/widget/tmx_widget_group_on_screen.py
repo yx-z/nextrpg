@@ -7,10 +7,10 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.tmx_loader import TmxLoader, get_coordinate, get_geometry
-from nextrpg.drawing.animation_on_screen_like import (
-    AnimationOnScreenLike,
-)
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.sprite_on_screen import (
+    SpriteOnScreen,
+)
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.widget.widget_group import WidgetGroupOnScreen
@@ -20,12 +20,10 @@ from nextrpg.widget.widget_group import WidgetGroupOnScreen
 class TmxWidgetGroupOnScreen(WidgetGroupOnScreen):
     tmx: TmxLoader
     background_layer: (
-        str | AnimationOnScreenLike | tuple[str | AnimationOnScreenLike, ...]
+        str | SpriteOnScreen | tuple[str | SpriteOnScreen, ...]
     ) = ()
     _ = private_init_below()
-    background: AnimationOnScreenLike = default(
-        lambda self: self._init_background
-    )
+    background: SpriteOnScreen = default(lambda self: self._init_background)
     name_to_on_screens: dict[str, Coordinate | AreaOnScreen] = default(
         lambda self: self._init_name_to_on_screens
     )

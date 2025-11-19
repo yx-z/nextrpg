@@ -4,9 +4,9 @@ from typing import TYPE_CHECKING, Self, override
 
 from nextrpg.config.config import config
 from nextrpg.config.drawing.text_config import TextConfig
-from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class Text(AnimationLike):
+class Text(Sprite):
     message: str
     config: TextConfig = field(default_factory=lambda: config().text)
 

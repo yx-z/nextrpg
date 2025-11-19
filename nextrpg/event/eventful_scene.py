@@ -14,9 +14,9 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.log import Log
 from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
+from nextrpg.drawing.sprite_on_screen import SpriteOnScreen
 from nextrpg.event.background_event import (
     BackgroundEvent,
     BackgroundEventSentinel,
@@ -172,7 +172,7 @@ class EventfulScene(
         return {n.spec.unique_name: n for n in self.npcs}
 
     def drawing_on_screens_after_shift(
-        self, animation_on_screen_like: AnimationOnScreenLike
+        self, animation_on_screen_like: SpriteOnScreen
     ) -> tuple[DrawingOnScreen, ...]:
         if self.drawing_on_screens_shift:
             top = self.drawing_on_screens_shift.top_value

@@ -6,14 +6,14 @@ from nextrpg.config.character.character_config import CharacterConfig
 from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import dataclass_with_default, default
 from nextrpg.core.save import UpdateFromSave
-from nextrpg.drawing.animation_like import AnimationLike
+from nextrpg.drawing.sprite import Sprite
 
 
 @dataclass_with_default(frozen=True)
 class _BaseCharacterSpec(UpdateFromSave[str]):
     unique_name: str
     collide_with_others: bool = True
-    avatar: AnimationLike | None = None
+    avatar: Sprite | None = None
     display_name: str = default(lambda self: self.unique_name)
     config: CharacterConfig = field(default_factory=lambda: config().character)
 

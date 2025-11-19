@@ -4,15 +4,15 @@ from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.direction import Direction
 
 
 @dataclass(frozen=True, kw_only=True)
 class ViewOnlyCharacterDrawing(CharacterDrawing):
-    resource: AnimationLike
+    resource: Sprite
 
     @cached_property
     def drawing(self) -> Drawing | DrawingGroup:

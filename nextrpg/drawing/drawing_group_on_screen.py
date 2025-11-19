@@ -4,19 +4,19 @@ from typing import Self, override
 
 from nextrpg.config.config import config
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import (
-    AnimationOnScreenLike,
-)
 from nextrpg.drawing.color import Color
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.sprite_on_screen import (
+    SpriteOnScreen,
+)
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import ZERO_SIZE
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 
 
 @dataclass(frozen=True)
-class DrawingGroupOnScreen(AnimationOnScreenLike):
+class DrawingGroupOnScreen(SpriteOnScreen):
     origin: Coordinate
     drawing_group: DrawingGroup
 

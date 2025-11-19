@@ -110,13 +110,6 @@ from nextrpg.core.save import (
 from nextrpg.core.time import Millisecond, Percentage
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry
 from nextrpg.core.util import type_name
-from nextrpg.drawing.animation_like import AnimationLike
-from nextrpg.drawing.animation_on_screen_like import (
-    AnimationOnScreenLike,
-    animate,
-    tick_all,
-    tick_optional,
-)
 from nextrpg.drawing.color import (
     BLACK,
     BLUE,
@@ -138,9 +131,16 @@ from nextrpg.drawing.nine_slice import NineSlice
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
 from nextrpg.drawing.polyline_drawing import PolylineDrawing
 from nextrpg.drawing.rectangle_drawing import RectangleDrawing
-from nextrpg.drawing.relative_animation_like import (
-    RelativeAnimationLike,
-    relative_animation_likes,
+from nextrpg.drawing.shifted_sprite import (
+    ShiftedSprite,
+    shifted_sprites,
+)
+from nextrpg.drawing.sprite import Sprite
+from nextrpg.drawing.sprite_on_screen import (
+    SpriteOnScreen,
+    animate,
+    tick_all,
+    tick_optional,
 )
 from nextrpg.drawing.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.drawing.text import Text

@@ -6,15 +6,15 @@ from frozendict import frozendict
 
 from nextrpg.core.metadata import HasMetadata
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_like import AnimationLike
-from nextrpg.drawing.animation_on_screen_like import tick_all
 from nextrpg.drawing.color import Alpha
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
-from nextrpg.drawing.relative_animation_like import (
-    RelativeAnimationLike,
-    relative_animation_likes,
+from nextrpg.drawing.shifted_sprite import (
+    ShiftedSprite,
+    shifted_sprites,
 )
+from nextrpg.drawing.sprite import Sprite
+from nextrpg.drawing.sprite_on_screen import tick_all
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import HeightScaling, Size, WidthScaling
@@ -25,12 +25,8 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class DrawingGroup(AnimationLike, HasMetadata):
-    resource: (
-        AnimationLike
-        | RelativeAnimationLike
-        | tuple[AnimationLike | RelativeAnimationLike, ...]
-    )
+class DrawingGroup(Sprite, HasMetadata):
+    resource: Sprite | ShiftedSprite | tuple[Sprite | ShiftedSprite, ...]
     metadata: frozendict[str, Any] = frozendict()
 
     @override
@@ -44,8 +40,8 @@ class DrawingGroup(AnimationLike, HasMetadata):
         return replace(self, resource=resources)
 
     @cached_property
-    def resources(self) -> tuple[RelativeAnimationLike, ...]:
-        return relative_animation_likes(self.resource)
+    def resources(self) -> tuple[ShiftedSprite, ...]:
+        return shifted_sprites(self.resource)
 
     @override
     def alpha(self, alpha: Alpha) -> Self:
@@ -101,7 +97,7 @@ class DrawingGroup(AnimationLike, HasMetadata):
 
     @override
     def cut(self, area: RectangleAreaOnScreen) -> Self:
-        res: list[RelativeAnimationLike] = []
+        res: list[ShiftedSprite] = []
         for relative in self.resources:
             top_left = area.top_left - relative.top_left(ORIGIN)
             relative_area = top_left.as_top_left_of(

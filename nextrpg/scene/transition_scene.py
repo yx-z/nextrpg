@@ -14,11 +14,11 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.core.util import background_thread
-from nextrpg.drawing.animation_on_screen_like import (
-    AnimationOnScreenLike,
+from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.sprite_on_screen import (
+    SpriteOnScreen,
     animate,
 )
-from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.game.game_loop import last_scene
 from nextrpg.game.game_state import GameState
 from nextrpg.gui.screen_area import screen_area
@@ -30,7 +30,7 @@ ToSceneAndState = Scene | tuple[Scene, GameState]
 @dataclass_with_default(frozen=True)
 class TransitionScene(Scene):
     to_scene_and_state: ToSceneAndState | Callable[[GameState], ToSceneAndState]
-    intermediary: AnimationOnScreenLike = field(
+    intermediary: SpriteOnScreen = field(
         default_factory=lambda: screen_area().fill(config().window.background)
     )
     duration: Millisecond = field(

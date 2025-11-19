@@ -3,8 +3,8 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Self, override
 
-from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Size
@@ -32,7 +32,7 @@ class SizableWidgetOnScreen(WidgetOnScreen):
 
     @property
     @abstractmethod
-    def drawing(self) -> AnimationLike: ...
+    def drawing(self) -> Sprite: ...
 
 
 @dataclass(frozen=True)

@@ -167,6 +167,10 @@ class Size(NamedTuple):
     height_value: Pixel
 
     @property
+    def size(self) -> Self:
+        return self
+
+    @property
     def width(self) -> Width:
         return Width(self.width_value)
 

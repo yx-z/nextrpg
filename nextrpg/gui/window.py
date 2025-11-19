@@ -17,10 +17,10 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.log import Log, LogEntry, MessageKeyAndDrawing, pop_messages
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.animation_on_screen_like import AnimationOnScreenLike
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
+from nextrpg.drawing.sprite_on_screen import SpriteOnScreen
 from nextrpg.drawing.text import Text
 from nextrpg.event.io_event import (
     IoEvent,
@@ -197,7 +197,7 @@ def _log(entries: list[LogEntry]) -> tuple[DrawingOnScreen, ...]:
         res += message_drawing_on_screens
 
         if drawing:
-            if isinstance(drawing, AnimationOnScreenLike):
+            if isinstance(drawing, SpriteOnScreen):
                 # Shift its drawings to log area.
                 drawing = drawing.drawing_group_at_origin
             res += drawing.drawing_on_screens(

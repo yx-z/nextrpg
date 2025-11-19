@@ -32,7 +32,7 @@ if TYPE_CHECKING:
 
 
 @runtime_checkable
-class AnimationOnScreenLike(Sizable, Protocol):
+class SpriteOnScreen(Sizable, Protocol):
     drawing_on_screens: tuple[DrawingOnScreen, ...]
 
     @cached_property
@@ -106,10 +106,10 @@ class AnimationOnScreenLike(Sizable, Protocol):
             TimedAnimationOnScreen,
         )
 
-        origin = self._drawing_on_screens.coordinate_from(anchor)
+        origin = self._drawing_on_screens.at_anchor(anchor)
         resource = tuple(
             drawing_on_screen.drawing.shift(
-                (drawing_on_screen.coordinate_from(anchor) - origin).size,
+                (drawing_on_screen.at_anchor(anchor) - origin).size,
                 anchor,
             )
             for drawing_on_screen in self.drawing_on_screens
@@ -123,7 +123,7 @@ class AnimationOnScreenLike(Sizable, Protocol):
     def drawing_group_at_origin(self) -> DrawingGroup:
         from nextrpg.drawing.drawing_group import DrawingGroup
 
-        relative_animation_likes = tuple(
+        sprites = tuple(
             drawing_on_screen.drawing.shift(
                 (
                     drawing_on_screen.top_left
@@ -132,7 +132,7 @@ class AnimationOnScreenLike(Sizable, Protocol):
             )
             for drawing_on_screen in self.drawing_on_screens
         )
-        return DrawingGroup(relative_animation_likes)
+        return DrawingGroup(sprites)
 
     @cached_property
     def _drawing_on_screens(self) -> DrawingOnScreens:
@@ -141,7 +141,7 @@ class AnimationOnScreenLike(Sizable, Protocol):
         return DrawingOnScreens(self.drawing_on_screens)
 
 
-def tick_optional[_AnimationOnScreenLike: AnimationOnScreenLike](
+def tick_optional[_AnimationOnScreenLike: SpriteOnScreen](
     resource: _AnimationOnScreenLike | None, time_delta: Millisecond
 ) -> _AnimationOnScreenLike | None:
     if resource:
@@ -149,7 +149,7 @@ def tick_optional[_AnimationOnScreenLike: AnimationOnScreenLike](
     return None
 
 
-def tick_all[_AnimationOnScreenLike: AnimationOnScreenLike](
+def tick_all[_AnimationOnScreenLike: SpriteOnScreen](
     resource: tuple[_AnimationOnScreenLike, ...], time_delta: Millisecond
 ) -> tuple[_AnimationOnScreenLike, ...]:
     return tuple(t.tick(time_delta) for t in resource)
@@ -157,7 +157,7 @@ def tick_all[_AnimationOnScreenLike: AnimationOnScreenLike](
 
 @overload
 def animate(
-    resource: AnimationOnScreenLike | list[AnimationOnScreenLike],
+    resource: SpriteOnScreen | list[SpriteOnScreen],
     animation: type[TimedAnimationGroup],
     anchor: Anchor = Anchor.TOP_LEFT,
     **kwargs: Any,
@@ -166,7 +166,7 @@ def animate(
 
 @overload
 def animate(
-    resource: AnimationOnScreenLike | list[AnimationOnScreenLike],
+    resource: SpriteOnScreen | list[SpriteOnScreen],
     animation: type[AnimationGroup],
     anchor: Anchor = Anchor.TOP_LEFT,
     **kwargs: Any,
@@ -174,7 +174,7 @@ def animate(
 
 
 def animate(
-    resource: AnimationOnScreenLike | list[AnimationOnScreenLike],
+    resource: SpriteOnScreen | list[SpriteOnScreen],
     animation_type: type[TimedAnimationGroup] | type[AnimationGroup],
     anchor: Anchor = Anchor.TOP_LEFT,
     **kwargs: Any,
@@ -185,7 +185,7 @@ def animate(
         TimedAnimationOnScreens,
     )
 
-    if isinstance(resource, AnimationOnScreenLike):
+    if isinstance(resource, SpriteOnScreen):
         resources = resource.animate(animation_type, anchor, **kwargs)
     else:
         resources = tuple(

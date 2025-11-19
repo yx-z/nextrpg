@@ -4,9 +4,9 @@ from typing import TYPE_CHECKING, Self, override
 
 from nextrpg.config.config import config
 from nextrpg.config.drawing.text_group_config import TextGroupConfig
-from nextrpg.drawing.animation_like import AnimationLike
 from nextrpg.drawing.drawing_group import DrawingGroup
-from nextrpg.drawing.relative_animation_like import RelativeAnimationLike
+from nextrpg.drawing.shifted_sprite import ShiftedSprite
+from nextrpg.drawing.sprite import Sprite
 from nextrpg.drawing.text import Text
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class TextGroup(AnimationLike):
+class TextGroup(Sprite):
     resource: Text | tuple[Text, ...]
     config: TextGroupConfig = field(default_factory=lambda: config().text_group)
 
@@ -75,7 +75,7 @@ class TextGroup(AnimationLike):
             lines[-1].append(text.line_texts[0])
             lines += [[t] for t in text.line_texts[1:]]
 
-        res: list[RelativeAnimationLike] = []
+        res: list[ShiftedSprite] = []
         curr_height = Height(0)
         for line in lines:
             curr_width = Width(0)

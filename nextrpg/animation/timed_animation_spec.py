@@ -5,8 +5,8 @@ from typing import Any, Self
 from nextrpg.animation.timed_animation_group import TimedAnimationGroup
 from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.core.dataclass_with_default import private_init_below
-from nextrpg.drawing.animation_on_screen_like import (
-    AnimationOnScreenLike,
+from nextrpg.drawing.sprite_on_screen import (
+    SpriteOnScreen,
     animate,
 )
 from nextrpg.geometry.anchor import Anchor
@@ -47,7 +47,7 @@ class TimedAnimationSpec:
 
     def animate(
         self,
-        resource: AnimationOnScreenLike | list[AnimationOnScreenLike],
+        resource: SpriteOnScreen | list[SpriteOnScreen],
     ) -> TimedAnimationOnScreens:
         animation_type, kwargs = self.animations[0]
         animation = animate(resource, animation_type, self.anchor, **kwargs)
