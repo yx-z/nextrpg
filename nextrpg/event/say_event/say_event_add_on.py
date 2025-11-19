@@ -48,7 +48,7 @@ class SayEventAddOn:
         content = DrawingGroup(tuple(contents))
 
         background = self._background_relative_to_text.resource
-        shift = self._background_relative_to_text.shift
+        shift = self._background_relative_to_text.offset
         background_and_content = (background, content.shift(-shift))
         add_on_group = DrawingGroup(background_and_content)
         return _Background(
@@ -60,7 +60,7 @@ class SayEventAddOn:
     @cached_property
     def text_on_screen(self) -> TextOnScreen:
         top_left = (
-            self._add_on_top_left - self._background_relative_to_text.shift
+            self._add_on_top_left - self._background_relative_to_text.offset
         )
         return self._text.text_on_screen(top_left)
 
@@ -192,7 +192,7 @@ class SayEventCharacterAddOn(SayEventAddOn):
         background_and_tip = (background_drawing, self._tip.shift(tip_shift))
         background_and_tip_group = DrawingGroup(background_and_tip)
 
-        background_shift = super()._background_relative_to_text.shift
+        background_shift = super()._background_relative_to_text.offset
         return background_and_tip_group.shift(background_shift)
 
     @cached_property

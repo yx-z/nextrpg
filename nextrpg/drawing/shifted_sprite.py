@@ -24,12 +24,12 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class ShiftedSprite:
     resource: Sprite
-    shift: Size
+    offset: Size
     anchor: Anchor = Anchor.TOP_LEFT
 
     def __add__(self, other: Size) -> Self:
-        shift = self.shift + other
-        return replace(self, shift=shift)
+        offset = self.offset + other
+        return replace(self, offset=offset)
 
     def __sub__(self, other: Size) -> Self:
         return self + -other
@@ -37,9 +37,9 @@ class ShiftedSprite:
     def __mul__(
         self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
     ) -> Self:
-        shift = self.shift * scaling
+        offset = self.offset * scaling
         resource = self.resource * scaling
-        return replace(self, resource=resource, shift=shift)
+        return replace(self, resource=resource, shift=offset)
 
     def tick(self, time_delta: Millisecond) -> Self:
         resource = self.resource.tick(time_delta)
@@ -51,13 +51,13 @@ class ShiftedSprite:
 
     def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
         resource = self.resource.flip(horizontal, vertical)
-        shift = self.shift
+        offset = self.offset
         if horizontal:
-            shift = shift.negate_width
+            offset = offset.negate_width
         if vertical:
-            shift = shift.negate_height
+            offset = offset.negate_height
         anchor = -self.anchor
-        return replace(self, resource=resource, shift=shift, anchor=anchor)
+        return replace(self, resource=resource, offset=offset, anchor=anchor)
 
     def alpha(self, alpha: Alpha) -> Self:
         resource = self.resource.alpha(alpha)
@@ -71,7 +71,7 @@ class ShiftedSprite:
         self, origin: Coordinate
     ) -> tuple[DrawingOnScreen, ...]:
         return self.resource.drawing_on_screens(
-            origin + self.shift, self.anchor
+            origin + self.offset, self.anchor
         )
 
 

@@ -35,8 +35,8 @@ class DrawingGroupOnScreen(SpriteOnScreen):
         res: list[DrawingOnScreen] = []
         for relative in self.drawing_group.resources:
             res += relative.drawing_on_screens(self.origin)
-            if self._link_color and relative.shift != ZERO_SIZE:
-                declared_coord = self.origin + relative.shift
+            if self._link_color and relative.offset != ZERO_SIZE:
+                declared_coord = self.origin + relative.offset
                 points = (self.origin, declared_coord)
                 link = PolylineOnScreen(points)
                 link_drawing_on_screen = link.fill(
