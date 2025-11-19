@@ -49,7 +49,7 @@ class SayEventAddOn:
 
         background = self._background_relative_to_text.resource
         shift = self._background_relative_to_text.offset
-        background_and_content = (background, content.shift(-shift))
+        background_and_content = (background, content - shift)
         add_on_group = DrawingGroup(background_and_content)
         return _Background(
             coordinate=self._add_on_top_left,
@@ -108,7 +108,7 @@ class SayEventAddOn:
                 self.config.background.color,
                 border_radius=self.config.background.border_radius,
             ).drawing
-        return rect.shift(shift)
+        return rect + shift
 
     @cached_property
     def _avatar_relative_to_text(self) -> ShiftedSprite | None:
@@ -189,11 +189,11 @@ class SayEventCharacterAddOn(SayEventAddOn):
             ).rectangle_area_on_screen
             background_drawing = background_drawing.cut(background_crop)
 
-        background_and_tip = (background_drawing, self._tip.shift(tip_shift))
+        background_and_tip = (background_drawing, self._tip + tip_shift)
         background_and_tip_group = DrawingGroup(background_and_tip)
 
         background_shift = super()._background_relative_to_text.offset
-        return background_and_tip_group.shift(background_shift)
+        return background_and_tip_group + background_shift
 
     @cached_property
     def _tip(self) -> Sprite:

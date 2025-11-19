@@ -1,11 +1,12 @@
 from dataclasses import dataclass, field, replace
 from functools import cached_property
-from typing import TYPE_CHECKING, Self, override
+from typing import TYPE_CHECKING, Self, overload, override
 
 from nextrpg.config.config import config
 from nextrpg.config.drawing.text_config import TextConfig
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.shifted_sprite import ShiftedSprite
 from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
@@ -34,7 +35,7 @@ class Text(Sprite):
     @cached_property
     def drawing(self) -> DrawingGroup:
         draws = tuple(
-            self._drawing(line).shift(self._line_shift(i))
+            self._drawing(line) + self._line_shift(i)
             for i, line in enumerate(self.lines)
         )
         return DrawingGroup(draws)
@@ -49,7 +50,19 @@ class Text(Sprite):
     def __radd__(self, other: str) -> TextGroup:
         return self + other
 
-    def __add__(self, other: str | Text | TextGroup) -> TextGroup:
+    @overload
+    def __add__(self, other: Coordinate | Size) -> ShiftedSprite: ...
+
+    @overload
+    def __add__(self, other: str | Text | TextGroup) -> TextGroup: ...
+
+    @override
+    def __add__(
+        self, other: Coordinate | Size | str | Text | TextGroup
+    ) -> ShiftedSprite | TextGroup:
+        if isinstance(other, Coordinate | Size):
+            return self.shift(other)
+
         from nextrpg.drawing.text_group import TextGroup
 
         if isinstance(other, TextGroup):
@@ -60,7 +73,7 @@ class Text(Sprite):
             txt = replace(self, message=other)
         else:
             txt = other
-        return TextGroup([self, txt])
+        return TextGroup((self, txt))
 
     @cached_property
     def line_texts(self) -> tuple[Self, ...]:

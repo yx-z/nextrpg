@@ -207,7 +207,7 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
             border_radius,
             self.allow_background_in_debug,
         )
-        return rect.drawing.shift(-padding.top_left.size)
+        return rect.drawing - padding.top_left
 
     def to_file(self, file: Path) -> None:
         save(self.surface, file)

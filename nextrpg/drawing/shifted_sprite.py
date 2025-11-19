@@ -88,5 +88,5 @@ def shifted_sprite(
     resource: Sprite | ShiftedSprite,
 ) -> ShiftedSprite:
     if isinstance(resource, Sprite):
-        return resource.shift(ZERO_SIZE)
+        return resource + ZERO_SIZE
     return resource

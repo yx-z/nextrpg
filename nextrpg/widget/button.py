@@ -120,7 +120,7 @@ class Button(BaseButton):
         )
 
         background_group = DrawingGroup((background_border, background))
-        backgrounds = background_group.shift(self._padding.top_left.size)
+        backgrounds = background_group + self._padding.top_left
         fade_in = FadeIn(backgrounds, self.config.fade_duration)
         fade_out = FadeOut(backgrounds, self.config.fade_duration)
         fades = (fade_out, fade_in)
@@ -128,7 +128,7 @@ class Button(BaseButton):
         return DrawingGroup((animation, self.idle))
 
     def _shift(self, resource: Sprite) -> Sprite:
-        shifted = resource.shift(self._padding.top_left.size)
+        shifted = resource + self._padding.top_left.size
         return DrawingGroup(shifted)
 
     @cached_property

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field, replace
 from functools import cached_property
-from typing import TYPE_CHECKING, Self, override
+from typing import TYPE_CHECKING, Self, overload, override
 
 from nextrpg.config.config import config
 from nextrpg.config.drawing.text_group_config import TextGroupConfig
@@ -10,7 +10,7 @@ from nextrpg.drawing.sprite import Sprite
 from nextrpg.drawing.text import Text
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Height, Width
+from nextrpg.geometry.dimension import Height, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.drawing.text_on_screen import TextOnScreen
@@ -59,12 +59,24 @@ class TextGroup(Sprite):
     def __radd__(self, other: str) -> TextGroup:
         return self + other
 
-    def __add__(self, other: str | Text) -> TextGroup:
+    @overload
+    def __add__(self, other: Coordinate | Size) -> ShiftedSprite: ...
+
+    @overload
+    def __add__(self, other: str | Text) -> TextGroup: ...
+
+    @override
+    def __add__(
+        self, other: Coordinate | Size | str | Text
+    ) -> ShiftedSprite | TextGroup:
+        if isinstance(other, Coordinate | Size):
+            return self.shift(other)
+
         if isinstance(other, str):
             text = Text(other)
         else:
             text = other
-        texts = self.texts + [text]
+        texts = self.texts + (text,)
         return replace(self, resource=texts)
 
     @override
@@ -83,7 +95,7 @@ class TextGroup(Sprite):
             for word in line:
                 height_diff = line_height - word.height
                 shift = curr_width * (curr_height + height_diff)
-                res.append(word.drawing.shift(shift))
+                res.append(word.drawing + shift)
                 curr_width += word.width + self.config.margin
             curr_height += line_height + self.config.line_spacing
         return DrawingGroup(tuple(res))

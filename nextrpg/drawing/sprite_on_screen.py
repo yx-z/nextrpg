@@ -109,7 +109,7 @@ class SpriteOnScreen(Sizable, Protocol):
         origin = self._drawing_on_screens.at_anchor(anchor)
         resource = tuple(
             drawing_on_screen.drawing.shift(
-                (drawing_on_screen.at_anchor(anchor) - origin).size,
+                drawing_on_screen.at_anchor(anchor) - origin,
                 anchor,
             )
             for drawing_on_screen in self.drawing_on_screens
@@ -124,12 +124,8 @@ class SpriteOnScreen(Sizable, Protocol):
         from nextrpg.drawing.drawing_group import DrawingGroup
 
         sprites = tuple(
-            drawing_on_screen.drawing.shift(
-                (
-                    drawing_on_screen.top_left
-                    - self._drawing_on_screens.top_left
-                ).size
-            )
+            drawing_on_screen.drawing
+            + (drawing_on_screen.top_left - self._drawing_on_screens.top_left)
             for drawing_on_screen in self.drawing_on_screens
         )
         return DrawingGroup(sprites)

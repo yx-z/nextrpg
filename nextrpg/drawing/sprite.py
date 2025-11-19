@@ -44,14 +44,20 @@ class Sprite(Sizable, Protocol):
     def drawings(self) -> tuple[Drawing, ...]:
         return self.drawing.drawings
 
+    def __add__(self, shift: Coordinate | Size) -> ShiftedSprite:
+        return self.shift(shift.size)
+
+    def __sub__(self, shift: Coordinate | Size) -> ShiftedSprite:
+        return self + -shift
+
     def shift(
-        self, shift: Size, anchor: Anchor = Anchor.TOP_LEFT
+        self, shift: Coordinate | Size, anchor: Anchor = Anchor.TOP_LEFT
     ) -> ShiftedSprite:
         from nextrpg.drawing.shifted_sprite import (
             ShiftedSprite,
         )
 
-        return ShiftedSprite(self, shift, anchor)
+        return ShiftedSprite(self, shift.size, anchor)
 
     def animation_on_screen(
         self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
