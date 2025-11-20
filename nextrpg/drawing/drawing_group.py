@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Any, Self, override
 
 from frozendict import frozendict
 
-from nextrpg.core.metadata import HasMetadata
+from nextrpg.core.metadata import HasMetadata, Metadata
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import Alpha
 from nextrpg.drawing.drawing import Drawing
@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class DrawingGroup(Sprite, HasMetadata):
     resource: Sprite | ShiftedSprite | tuple[Sprite | ShiftedSprite, ...]
-    metadata: frozendict[str, Any] = frozendict()
+    metadata: Metadata = ()
 
     @override
     @cached_property
