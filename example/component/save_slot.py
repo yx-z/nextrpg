@@ -30,6 +30,8 @@ ENTER_ANIMATION = TimedAnimationSpec(FadeIn).compose(
     MoveTo, offset=WIDGET_OFFSET
 )
 
+PANEL_NAME = "panel"
+
 
 def create_save_panel(
     click_save_slot: Callable[[int, ButtonOnScreen, GameState], OnClickResult],
@@ -39,7 +41,9 @@ def create_save_panel(
             create_save_slot(i, click_save_slot) for i in range(NUM_SAVE_SLOTS)
         )
         panel = Panel(
-            name="panel", children=save_slots, enter_animation=ENTER_ANIMATION
+            name=PANEL_NAME,
+            children=save_slots,
+            enter_animation=ENTER_ANIMATION,
         )
         assert button.parent, f"Button should have parent. Got {button}."
         return panel.with_parent(button.parent)
