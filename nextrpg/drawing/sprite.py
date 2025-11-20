@@ -99,6 +99,9 @@ class Sprite(Sizable, Protocol):
     def cut(self, area: RectangleAreaOnScreen) -> Drawing | DrawingGroup:
         return self.drawing.cut(area)
 
+    def blur(self, radius: int) -> Drawing:
+        return self.drawing.blur(radius)
+
 
 def tick_optional[T](resource: T | None, time_delta: Millisecond) -> T | None:
     if resource:

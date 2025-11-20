@@ -5,8 +5,8 @@ from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Self, override
 
+import pygame
 from pygame import BLEND_RGBA_MULT, SRCALPHA, Surface
-from pygame.image import load, save
 from pygame.transform import flip, gaussian_blur, smoothscale
 
 from nextrpg.config.config import config
@@ -35,7 +35,7 @@ if TYPE_CHECKING:
 log = Log()
 
 
-def _key_function(
+def _metadata_or_path(
     cls: type, resource: Path | Surface, *args: Any, **kwargs: Any
 ) -> Path | Metadata | None:
     if isinstance(resource, Surface):
@@ -48,7 +48,8 @@ def _key_function(
 
 
 @cached(
-    lambda resource_config: resource_config.drawing_cache_size, _key_function
+    lambda resource_config: resource_config.drawing_cache_size,
+    _metadata_or_path,
 )
 @dataclass(frozen=True)
 class Drawing(Sprite, HasMetadata, LoadFromSave):
@@ -61,7 +62,7 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
     def save_data_this_class(self) -> str | bytes:
         if isinstance(self.resource, Surface):
             io = BytesIO()
-            save(self.surface, io)
+            pygame.image.save(self.surface, io)
             return io.getvalue()
         return os.fspath(self.resource)
 
@@ -70,7 +71,7 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
     def load_this_class_from_save(cls, data: str | bytes) -> Self:
         if isinstance(data, bytes):
             io = BytesIO(data)
-            surface = load(io).convert_alpha()
+            surface = pygame.image.load(io).convert_alpha()
             return cls(surface)
         path = Path(data)
         return cls(path)
@@ -181,8 +182,9 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
             return self.resource
 
         log.debug(t"Loading {self.resource}")
-        return load(self.resource).convert_alpha()
+        return pygame.image.load(self.resource).convert_alpha()
 
+    @override
     def blur(self, radius: int) -> Self:
         surface = gaussian_blur(self.surface, radius)
         return replace(self, resource=surface).add_metadata(blur_radius=radius)
@@ -219,7 +221,7 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
         return rect.drawing - padding.top_left
 
     def to_file(self, file: Path) -> None:
-        save(self.surface, file)
+        pygame.image.save(self.surface, file)
 
     @property
     def _debug_surface(self) -> Surface | None:

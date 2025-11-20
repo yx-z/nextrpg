@@ -107,6 +107,14 @@ class DrawingGroup(Sprite, HasMetadata):
             res.append(relative_drawing)
         return replace(self, resource=tuple(res))
 
+    @override
+    def blur(self, radius: int) -> Drawing:
+        return self.combine_drawings.blur(radius)
+
+    @cached_property
+    def combine_drawings(self) -> Drawing:
+        return self._drawing_group_on_screen.drawing_on_screen.drawing
+
     @cached_property
     def _drawing_group_on_screen(self) -> DrawingGroupOnScreen:
         from nextrpg.drawing.drawing_group_on_screen import DrawingGroupOnScreen

@@ -81,6 +81,10 @@ class ShiftedSprite:
             origin + self.offset, self.anchor
         )
 
+    def blur(self, radius: int) -> Self:
+        resource = self.resource.blur(radius)
+        return replace(self, resource=resource)
+
 
 def shifted_sprites(
     resource: Sprite | ShiftedSprite | Iterable[Sprite | ShiftedSprite],
