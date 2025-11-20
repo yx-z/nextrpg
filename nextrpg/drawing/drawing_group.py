@@ -109,10 +109,10 @@ class DrawingGroup(Sprite, HasMetadata):
 
     @override
     def blur(self, radius: int) -> Drawing:
-        return self.combine_drawings.blur(radius)
+        return self.combined_drawing.blur(radius)
 
     @cached_property
-    def combine_drawings(self) -> Drawing:
+    def combined_drawing(self) -> Drawing:
         return self._drawing_group_on_screen.drawing_on_screen.drawing
 
     @cached_property
