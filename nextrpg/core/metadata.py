@@ -1,18 +1,20 @@
 from dataclasses import is_dataclass, replace
 from typing import Any, Protocol, Self
 
-from frozendict import frozendict
+type Metadata = tuple[tuple[str, Any], ...]
+
+METADATA_AS_CACHE_KEY = ("metadata_as_cache_key", True)
 
 
 class HasMetadata(Protocol):
-    metadata: frozendict[str, Any]
+    metadata: Metadata
 
     def add_metadata(self, **kwargs: Any) -> Self:
         assert is_dataclass(
             self
         ), f"Can only add metadata to dataclasses. Got {self}."
         assert isinstance(
-            meta := getattr(self, "metadata", None), dict
-        ), f"Need self.metadata dict. Got {self}."
-        metadata = meta | kwargs
+            meta := getattr(self, "metadata", None), tuple
+        ), f"Need self.metadata tuple[tuple[str, Any]]. Got {self}."
+        metadata = meta + tuple(kwargs.items())
         return replace(self, metadata=metadata)

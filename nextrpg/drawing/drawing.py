@@ -1,11 +1,10 @@
 import os
-from dataclasses import dataclass, replace
+from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Self, override
 
-from frozendict import frozendict
 from pygame import BLEND_RGBA_MULT, SRCALPHA, Surface
 from pygame.image import load, save
 from pygame.transform import flip, gaussian_blur, smoothscale
@@ -13,7 +12,7 @@ from pygame.transform import flip, gaussian_blur, smoothscale
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.log import Log
-from nextrpg.core.metadata import HasMetadata
+from nextrpg.core.metadata import METADATA_AS_CACHE_KEY, HasMetadata, Metadata
 from nextrpg.core.save import LoadFromSave
 from nextrpg.drawing.color import TRANSPARENT, WHITE, Alpha, Color
 from nextrpg.drawing.shifted_sprite import ShiftedSprite
@@ -36,17 +35,27 @@ if TYPE_CHECKING:
 log = Log()
 
 
+def _key_function(
+    cls: type, resource: Path | Surface, *args: Any, **kwargs: Any
+) -> Path | Metadata | None:
+    if isinstance(resource, Surface):
+        if (metadata := kwargs.get("metadata")) and metadata[
+            0
+        ] == METADATA_AS_CACHE_KEY:
+            return metadata
+        return None
+    return resource
+
+
 @cached(
-    lambda resource_config: resource_config.drawing_cache_size,
-    lambda cls, resource, *args, **kwargs: (
-        None if isinstance(resource, Surface) else resource
-    ),
+    lambda resource_config: resource_config.drawing_cache_size, _key_function
 )
 @dataclass(frozen=True)
 class Drawing(Sprite, HasMetadata, LoadFromSave):
     resource: Path | Surface
     allow_background_in_debug: bool = True
-    metadata: frozendict[str, Any] = frozendict()
+    _: KW_ONLY = None
+    metadata: Metadata = ()
 
     @override
     def save_data_this_class(self) -> str | bytes:
@@ -113,11 +122,11 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
         surface.blit(
             rectangle.drawing.surface, ORIGIN, special_flags=BLEND_RGBA_MULT
         )
-        return replace(self, surface=surface)
+        return replace(self, resource=surface)
 
     def crop(self, area: RectangleAreaOnScreen) -> Self:
         surface = self.pygame.subsurface(area.pygame)
-        return replace(self, resource=surface).add_metadata(crop_area=area)
+        return replace(self, resource=surface).add_metadata(crop=area)
 
     def trim(self, trim: Padding) -> Self:
         if trim == Padding():

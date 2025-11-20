@@ -17,6 +17,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.log import Log
+from nextrpg.core.metadata import METADATA_AS_CACHE_KEY, Metadata
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry, is_rect
 from nextrpg.drawing.drawing import Drawing
@@ -225,14 +226,20 @@ class MapLoader(TmxLoader):
         coordinate = Coordinate(left * width, top * height)
         if frame_infos := self._tmx.tile_properties.get(gid, {}).get("frames"):
             frames = tuple(
-                Drawing(self._tmx.images[frame_info.gid])
+                Drawing(
+                    self._tmx.images[frame_info.gid],
+                    metadata=self._metadata(frame_info.gid),
+                )
                 for frame_info in frame_infos
             )
             durations = tuple(frame_info.duration for frame_info in frame_infos)
             animation = CyclicAnimation(frames, durations)
             return animation.animation_on_screen(coordinate)
-        drawing = Drawing(self._tmx.images[gid])
+        drawing = Drawing(self._tmx.images[gid], metadata=self._metadata(gid))
         return drawing.drawing_on_screen(coordinate)
+
+    def _metadata(self, gid: _Gid) -> Metadata:
+        return METADATA_AS_CACHE_KEY, ("tmx", self.file), ("gid", gid)
 
     @property
     def collision_visuals(self) -> tuple[DrawingOnScreen, ...]:
