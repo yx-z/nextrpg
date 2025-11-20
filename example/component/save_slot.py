@@ -72,9 +72,13 @@ def create_save_slot(
             title = f"Empty Save Slot #{slot + 1}"
         text = Text(title)
 
-        button = Button(
-            coordinate=top_left, text=text, on_click=on_click, config=config
+        metadata = (("save_slot", slot),)
+        return Button(
+            coordinate=top_left,
+            text=text,
+            on_click=on_click,
+            config=config,
+            metadata=metadata,
         )
-        return button.add_metadata(save_slot=slot)
 
     return create_button
