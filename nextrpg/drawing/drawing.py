@@ -11,6 +11,11 @@ from pygame.transform import flip, gaussian_blur, smoothscale
 
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
+from nextrpg.core.dataclass_with_default import (
+    _Default,
+    default,
+    private_init_below,
+)
 from nextrpg.core.log import Log
 from nextrpg.core.metadata import METADATA_AS_CACHE_KEY, HasMetadata, Metadata
 from nextrpg.core.save import LoadFromSave
@@ -38,6 +43,8 @@ log = Log()
 def _key_function(
     cls: type, resource: Path | Surface, *args: Any, **kwargs: Any
 ) -> Path | Metadata | None:
+    if not isinstance(p := kwargs.get("path"), _Default) and p:
+        print(kwargs)
     if isinstance(resource, Surface):
         if (metadata := kwargs.get("metadata")) and metadata[
             0
@@ -56,6 +63,10 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
     allow_background_in_debug: bool = True
     _: KW_ONLY = None
     metadata: Metadata = ()
+    _: KW_ONLY = private_init_below()
+    _path: Path | None = default(
+        lambda self: self.resource if isinstance(self.resource, Path) else None
+    )
 
     @override
     def save_data_this_class(self) -> str | bytes:
