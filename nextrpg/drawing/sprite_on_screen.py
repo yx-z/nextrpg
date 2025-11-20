@@ -137,20 +137,6 @@ class SpriteOnScreen(Sizable, Protocol):
         return DrawingOnScreens(self.drawing_on_screens)
 
 
-def tick_optional[_AnimationOnScreenLike: SpriteOnScreen](
-    resource: _AnimationOnScreenLike | None, time_delta: Millisecond
-) -> _AnimationOnScreenLike | None:
-    if resource:
-        return resource.tick(time_delta)
-    return None
-
-
-def tick_all[_AnimationOnScreenLike: SpriteOnScreen](
-    resource: tuple[_AnimationOnScreenLike, ...], time_delta: Millisecond
-) -> tuple[_AnimationOnScreenLike, ...]:
-    return tuple(t.tick(time_delta) for t in resource)
-
-
 @overload
 def animate(
     resource: SpriteOnScreen | list[SpriteOnScreen],

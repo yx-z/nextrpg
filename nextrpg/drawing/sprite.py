@@ -98,3 +98,15 @@ class Sprite(Sizable, Protocol):
 
     def cut(self, area: RectangleAreaOnScreen) -> Drawing | DrawingGroup:
         return self.drawing.cut(area)
+
+
+def tick_optional[T](resource: T | None, time_delta: Millisecond) -> T | None:
+    if resource:
+        return resource.tick(time_delta)
+    return None
+
+
+def tick_all[T](
+    resource: tuple[T, ...], time_delta: Millisecond
+) -> tuple[T, ...]:
+    return tuple(t.tick(time_delta) for t in resource)

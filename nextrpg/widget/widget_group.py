@@ -12,9 +12,9 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.sprite import tick_optional
 from nextrpg.drawing.sprite_on_screen import (
     SpriteOnScreen,
-    tick_optional,
 )
 from nextrpg.event.io_event import IoEvent, KeyPressDown
 from nextrpg.game.game_state import GameState

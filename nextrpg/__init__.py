@@ -135,12 +135,10 @@ from nextrpg.drawing.shifted_sprite import (
     ShiftedSprite,
     shifted_sprites,
 )
-from nextrpg.drawing.sprite import Sprite
+from nextrpg.drawing.sprite import Sprite, tick_all, tick_optional
 from nextrpg.drawing.sprite_on_screen import (
     SpriteOnScreen,
     animate,
-    tick_all,
-    tick_optional,
 )
 from nextrpg.drawing.sprite_sheet import SpriteSheet, SpriteSheetSelection
 from nextrpg.drawing.text import Text

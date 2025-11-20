@@ -18,6 +18,7 @@ from nextrpg.geometry.dimension import (
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing import Drawing
+    from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
 
@@ -26,6 +27,12 @@ class ShiftedSprite:
     resource: Sprite
     offset: Size
     anchor: Anchor = Anchor.TOP_LEFT
+
+    @cached_property
+    def drawing_group(self) -> DrawingGroup:
+        from nextrpg.drawing.drawing_group import DrawingGroup
+
+        return DrawingGroup(self)
 
     def __add__(self, other: Size) -> Self:
         offset = self.offset + other

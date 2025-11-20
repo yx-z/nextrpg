@@ -13,8 +13,7 @@ from nextrpg.drawing.shifted_sprite import (
     ShiftedSprite,
     shifted_sprites,
 )
-from nextrpg.drawing.sprite import Sprite
-from nextrpg.drawing.sprite_on_screen import tick_all
+from nextrpg.drawing.sprite import Sprite, tick_all
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import HeightScaling, Size, WidthScaling

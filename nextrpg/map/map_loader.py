@@ -22,9 +22,9 @@ from nextrpg.core.tmx_loader import TmxLoader, get_geometry, is_rect
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
+from nextrpg.drawing.sprite import tick_all
 from nextrpg.drawing.sprite_on_screen import (
     SpriteOnScreen,
-    tick_all,
 )
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate, YAxis

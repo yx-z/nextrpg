@@ -7,9 +7,9 @@ from nextrpg.animation.abstract_animation_on_screen import (
 )
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.sprite import tick_all
 from nextrpg.drawing.sprite_on_screen import (
     SpriteOnScreen,
-    tick_all,
 )
 
 
