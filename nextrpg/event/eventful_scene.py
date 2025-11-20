@@ -11,7 +11,7 @@ from nextrpg.config.system.key_mapping_config import KeyMappingConfig
 from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
-from nextrpg.core.log import Log
+from nextrpg.core.log import log
 from nextrpg.core.save import UpdateFromSave
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
@@ -33,8 +33,6 @@ from nextrpg.game.game_state import GameState
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.scene import Scene
 from nextrpg.sound.scene_with_sound import SceneWithSound
-
-log = Log()
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -236,7 +234,7 @@ class EventfulScene(
             started.player, started._started_npc, started, state
         )
         event_callable = next(event_generator)
-        log.debug(t"Event {event_callable} with {npc.name} started.")
+        log().debug(t"Event {event_callable} with {npc.name} started.")
         ticked_with_event = replace(started, _event=event_generator)
         event = event_callable(ticked_with_event)
         return event, state
@@ -270,7 +268,7 @@ class EventfulScene(
         assert (
             self._event
         ), f"Expect _complete_event with an ongoing _event. Got {self}"
-        log.debug(t"Event {self._event} with {started_npc.name} completed.")
+        log().debug(t"Event {self._event} with {started_npc.name} completed.")
         return replace(
             self,
             player=self.player.complete_event,

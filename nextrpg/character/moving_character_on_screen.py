@@ -3,13 +3,10 @@ from dataclasses import dataclass, replace
 from typing import Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
-from nextrpg.core.log import Log
 from nextrpg.core.time import Millisecond
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-
-log = Log()
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -54,7 +51,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
             coordinate
         )
         if collision := self._collide(collision_rectangle, others):
-            log.debug(t"Collided {collision.points}")
+            log().debug(t"Collided {collision.points}")
             return False
         return True
 

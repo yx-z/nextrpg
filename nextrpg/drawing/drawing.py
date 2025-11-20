@@ -11,7 +11,7 @@ from pygame.transform import flip, gaussian_blur, smoothscale
 
 from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
-from nextrpg.core.log import Log
+from nextrpg.core.log import log
 from nextrpg.core.metadata import METADATA_AS_CACHE_KEY, HasMetadata, Metadata
 from nextrpg.core.save import LoadFromSave
 from nextrpg.drawing.color import TRANSPARENT, WHITE, Alpha, Color
@@ -31,8 +31,6 @@ from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
-
-log = Log()
 
 
 def _metadata_or_path(
@@ -181,7 +179,7 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
         if isinstance(self.resource, Surface):
             return self.resource
 
-        log.debug(t"Loading {self.resource}")
+        log().debug(t"Loading {self.resource}")
         return pygame.image.load(self.resource).convert_alpha()
 
     @override

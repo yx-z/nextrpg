@@ -15,14 +15,12 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
-from nextrpg.core.log import Log
+from nextrpg.core.log import log
 from nextrpg.core.util import type_name
 from nextrpg.event.io_event import IoEvent, Quit, is_key_press, to_io_event
 from nextrpg.game.game_state import GameState
 from nextrpg.gui.window import Window
 from nextrpg.scene.scene import Scene
-
-log = Log()
 
 _last_scene: Scene | None = None
 
@@ -57,7 +55,7 @@ class GameLoop:
         loop = replace(loop, _scene=ticked_scene, state=state)
 
         fps_info = f"FPS: {self._clock.get_fps():.0f}"
-        log.debug(t"{type_name(self._scene)} {fps_info}", duration=None)
+        log().debug(t"{type_name(self._scene)} {fps_info}", duration=None)
         ticked_window = loop._window.tick(fps_info)
         loop = replace(loop, _window=ticked_window)
         loop._window.blits(loop._scene.drawing_on_screens, time_delta)

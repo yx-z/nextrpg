@@ -14,7 +14,7 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
-from nextrpg.core.log import Log, LogEntry, MessageKeyAndDrawing, pop_messages
+from nextrpg.core.log import LogEntry, MessageKeyAndDrawing, log, pop_messages
 from nextrpg.core.save import SaveIo
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing import Drawing
@@ -31,8 +31,6 @@ from nextrpg.event.io_event import (
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size, WidthAndHeightScaling
-
-log = Log()
 
 
 @dataclass_with_default(frozen=True)
@@ -92,7 +90,7 @@ class Window:
         if isinstance(event, WindowResize):
             return self._resize(event.size)
         if isinstance(event, MouseButtonDown):
-            log.debug(t"Mouse clicked at {event.coordinate}")
+            log().debug(t"Mouse clicked at {event.coordinate}")
         return self
 
     def blits(
@@ -100,7 +98,7 @@ class Window:
         drawing_on_screens: list[DrawingOnScreen],
         time_delta: Millisecond,
     ) -> None:
-        log.debug(
+        log().debug(
             t"Size {self.current_config.size} Shift {self._center_shift}",
             duration=None,
         )

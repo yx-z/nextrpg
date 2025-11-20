@@ -22,7 +22,7 @@ from nextrpg.core.util import background_thread
 
 if TYPE_CHECKING:
     from nextrpg.config.system.save_config import SaveConfig
-    from nextrpg.core.log import Log
+    from nextrpg.core.log import log
     from nextrpg.game.game_save_meta import GameSaveMeta
 
 
@@ -119,10 +119,10 @@ def _config() -> SaveConfig:
 
 
 @cache
-def _log() -> Log:
-    from nextrpg.core.log import Log
+def _log() -> log:
+    from nextrpg.core.log import log
 
-    return Log()
+    return log()
 
 
 @cached(lambda resource_config: resource_config.save_slot_cache_size)
@@ -131,7 +131,7 @@ class SaveIo:
     slot: str = field(default_factory=lambda: _config().shared_slot)
     config: SaveConfig = field(default_factory=_config)
     _: KW_ONLY = private_init_below()
-    _log: Log = field(default_factory=_log)
+    _log: log = field(default_factory=_log)
 
     def save(
         self, savable: UpdateSavable | LoadSavable | GameSaveMeta

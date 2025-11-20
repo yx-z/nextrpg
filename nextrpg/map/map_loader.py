@@ -16,7 +16,6 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
-from nextrpg.core.log import Log
 from nextrpg.core.metadata import METADATA_AS_CACHE_KEY, Metadata
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry, is_rect
@@ -32,8 +31,6 @@ from nextrpg.geometry.coordinate import Coordinate, YAxis
 from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
-
-log = Log()
 
 
 @dataclass(frozen=True)

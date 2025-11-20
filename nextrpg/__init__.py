@@ -91,10 +91,10 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.log import (
-    Log,
     LogEntry,
     MessageKeyAndDrawing,
     console,
+    log,
     pop_messages,
 )
 from nextrpg.core.metadata import METADATA_AS_CACHE_KEY, HasMetadata, Metadata

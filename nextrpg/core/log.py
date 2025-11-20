@@ -29,7 +29,7 @@ def _log_name() -> str:
 
 
 @dataclass(frozen=True)
-class Log:
+class log:
     component: str = field(default_factory=_log_name)
 
     def debug(
