@@ -34,11 +34,11 @@ class ShiftedSprite:
 
         return DrawingGroup(self)
 
-    def __add__(self, other: Size) -> Self:
-        offset = self.offset + other
+    def __add__(self, other: Coordinate | Size) -> Self:
+        offset = self.offset + other.size
         return replace(self, offset=offset)
 
-    def __sub__(self, other: Size) -> Self:
+    def __sub__(self, other: Coordinate | Size) -> Self:
         return self + -other
 
     def __mul__(
