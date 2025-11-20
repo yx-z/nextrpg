@@ -26,6 +26,8 @@ class cached[T, K, **P]:
     create_key: Callable[type, P, K | None] = key_by_first_arg
 
     def __call__[Type: type](self, cls: Type) -> Type:
+        from nextrpg.core.log import console
+
         def new(klass: type[T], *args: P.args, **kwargs: P.kwargs) -> T:
             if not (instances := getattr(klass, "_nextrpg_instances", None)):
                 from nextrpg.config.config import config
@@ -45,6 +47,7 @@ class cached[T, K, **P]:
 
             instance = object.__new__(klass)
             instances[key] = instance
+            console().debug(f"Cache size for {klass} is {len(instances)}.")
             return instance
 
         cls.__new__ = new
