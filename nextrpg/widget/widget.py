@@ -40,6 +40,13 @@ class WidgetOnScreen(Scene):
     _to_scene: Scene | None = None
 
     @cached_property
+    def on_screen(self) -> Coordinate | AreaOnScreen | None:
+        assert (
+            self.widget.name
+        ), f"Require widget.name to get on_screen. Got {self.widget}"
+        return self.name_to_on_screens.get(self.widget.name)
+
+    @cached_property
     def root(self) -> Scene:
         if isinstance(self.parent, WidgetOnScreen):
             return self.parent.root
@@ -127,17 +134,6 @@ class WidgetOnScreen(Scene):
         # Exiting.
         return self, state
 
-    def from_on_screen[T](self, cls: type[T]) -> T:
-        name = getattr(self.widget, "name", None)
-        assert (
-            name
-        ), f"Require 'name' attribute for widget fetching on-screen Coordinate/AreaOnScreen: {self.widget}."
-        obj = self.name_to_on_screens.get(name)
-        assert isinstance(
-            obj, cls
-        ), f"Require {cls.__name__} for widget {name}. Got {obj}."
-        return obj
-
     def with_parent(self, parent: Scene | None) -> Self:
         return replace(self, parent=parent)
 
@@ -205,6 +201,7 @@ class Widget[_WidgetOnScreen: WidgetOnScreen](ABC, HasMetadata):
     exit_animation: TimedAnimationSpec | None = default(
         lambda self: self._init_exit_animation
     )
+    name: str | None = None
     metadata: Metadata = ()
 
     def with_parent(self, parent: WidgetOnScreen) -> _WidgetOnScreen:

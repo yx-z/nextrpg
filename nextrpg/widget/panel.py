@@ -17,7 +17,10 @@ class PanelOnScreen(WidgetGroupOnScreen):
 
     @cached_property
     def area(self) -> AreaOnScreen:
-        return self.from_on_screen(AreaOnScreen)
+        assert isinstance(
+            self.on_screen, AreaOnScreen
+        ), f"Expect AreaOnScreen for {self.widget.name}. Got {self.on_screen}."
+        return self.on_screen
 
 
 @dataclass(frozen=True, kw_only=True)

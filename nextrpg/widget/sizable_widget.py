@@ -28,7 +28,10 @@ class SizableWidgetOnScreen(WidgetOnScreen):
     def coordinate(self) -> Coordinate:
         if self.widget.coordinate:
             return self.widget.coordinate
-        return self.from_on_screen(Coordinate)
+        assert isinstance(
+            self.on_screen, Coordinate
+        ), f"Expect a point/Coordinate for {self.widget.name}. Got {self.on_screen}."
+        return self.on_screen
 
     @property
     @abstractmethod

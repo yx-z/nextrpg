@@ -24,7 +24,7 @@ class TmxWidgetGroupOnScreen(WidgetGroupOnScreen):
     ) = ()
     _ = private_init_below()
     background: SpriteOnScreen = default(lambda self: self._init_background)
-    name_to_on_screens: dict[str, Coordinate | AreaOnScreen] = default(
+    name_to_on_screens: frozendict[str, Coordinate | AreaOnScreen] = default(
         lambda self: self._init_name_to_on_screens
     )
     _is_selected: bool = True

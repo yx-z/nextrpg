@@ -85,7 +85,6 @@ class BaseButton(SizableWidget[ButtonOnScreen]):
     on_click: Callable[[ButtonOnScreen, GameState], OnClickResult]
     idle: Sprite
     active: Sprite
-    name: str | None = None
     _: KW_ONLY = private_init_below()
     widget_on_screen_type: ClassVar[type] = ButtonOnScreen
 
