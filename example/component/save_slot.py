@@ -1,7 +1,6 @@
 from typing import Callable
 
 from nextrpg import (
-    BaseButton,
     Button,
     ButtonConfig,
     ButtonOnScreen,
@@ -37,12 +36,9 @@ def create_save_panel(
     click_save_slot: Callable[[int, ButtonOnScreen, GameState], OnClickResult],
 ) -> Callable[[ButtonOnScreen, GameState], PanelOnScreen]:
     def on_click(button: ButtonOnScreen, state: GameState) -> PanelOnScreen:
-        save_slots = tuple(
-            create_save_slot(i, click_save_slot) for i in range(NUM_SAVE_SLOTS)
-        )
         panel = Panel(
             name=PANEL_NAME,
-            children=save_slots,
+            children=create_save_slot(click_save_slot),
             enter_animation=ENTER_ANIMATION,
         )
         assert button.parent, f"Button should have parent. Got {button}."
@@ -52,33 +48,38 @@ def create_save_panel(
 
 
 def create_save_slot(
-    slot: int,
     click_save_slot: Callable[[int, ButtonOnScreen, GameState], OnClickResult],
-) -> Callable[[PanelOnScreen], BaseButton]:
-    def on_click(button: ButtonOnScreen, state: GameState) -> OnClickResult:
-        return click_save_slot(slot, button, state)
+) -> Callable[[PanelOnScreen], tuple[Button, ...]]:
+    def create_button(panel: PanelOnScreen) -> tuple[Button, ...]:
+        res: list[Button] = []
+        for slot in range(NUM_SAVE_SLOTS):
+            height = panel.area.height / NUM_SAVE_SLOTS - PADDING_HEIGHT
+            width = panel.area.width - PADDING_WIDTH
+            size = width * height
+            config = ButtonConfig(padding_or_size=size)
+            top_left = panel.area.top_left + height * slot
 
-    def create_button(panel: PanelOnScreen) -> Button:
-        height = panel.area.height / NUM_SAVE_SLOTS - PADDING_HEIGHT
-        width = panel.area.width - PADDING_WIDTH
-        size = width * height
-        config = ButtonConfig(padding_or_size=size)
-        top_left = panel.area.top_left + height * slot
+            save_io = SaveIo(str(slot))
+            if game_save_meta := save_io.load(GameSaveMeta):
+                title = f"Save #{slot + 1}: {game_save_meta.save_time_str}"
+            else:
+                title = f"Empty Save Slot #{slot + 1}"
+            text = Text(title)
 
-        save_io = SaveIo(str(slot))
-        if game_save_meta := save_io.load(GameSaveMeta):
-            title = f"Save #{slot + 1}: {game_save_meta.save_time_str}"
-        else:
-            title = f"Empty Save Slot #{slot + 1}"
-        text = Text(title)
+            def on_click(
+                btn: ButtonOnScreen, state: GameState
+            ) -> OnClickResult:
+                return click_save_slot(slot, btn, state)
 
-        metadata = (("save_slot", slot),)
-        return Button(
-            coordinate=top_left,
-            text=text,
-            on_click=on_click,
-            config=config,
-            metadata=metadata,
-        )
+            metadata = (("save_slot", slot),)
+            button = Button(
+                coordinate=top_left,
+                text=text,
+                on_click=on_click,
+                config=config,
+                metadata=metadata,
+            )
+            res.append(button)
+        return tuple(res)
 
     return create_button

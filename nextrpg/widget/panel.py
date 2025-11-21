@@ -26,6 +26,6 @@ class PanelOnScreen(WidgetGroupOnScreen):
 @dataclass(frozen=True, kw_only=True)
 class Panel(WidgetGroup[PanelOnScreen]):
     name: str
-    children: tuple[Widget | Callable[[PanelOnScreen], Widget], ...]
+    children: tuple[Widget, ...] | Callable[[PanelOnScreen], tuple[Widget, ...]]
     _: KW_ONLY = private_init_below()
     widget_on_screen_type: ClassVar[type] = PanelOnScreen

@@ -108,21 +108,19 @@ class WidgetGroupOnScreen(WidgetOnScreen):
 
     def _init_children(
         self,
-        children: list[Widget | Callable[[WidgetGroupOnScreen], Widget]],
+        children: (
+            tuple[Widget, ...]
+            | Callable[[WidgetGroupOnScreen], tuple[Widget, ...]]
+        ),
     ) -> tuple[WidgetOnScreen, ...]:
+        if callable(children):
+            children = children(self)
         assert children, "Require non-empty children."
-        first_child_selected = self._init_child(children[0]).select
+        first_child_selected = children[0].with_parent(self).select
         remaining_deselected = tuple(
-            self._init_child(child) for child in children[1:]
+            child.with_parent(self) for child in children[1:]
         )
         return (first_child_selected,) + remaining_deselected
-
-    def _init_child(
-        self, child: Widget | Callable[[WidgetGroupOnScreen], Widget]
-    ) -> WidgetOnScreen:
-        if callable(child):
-            child = child(self)
-        return child.with_parent(self)
 
     def _step(self, forward: bool) -> Self:
         if len(self._children) < 2 or (
@@ -162,7 +160,9 @@ class WidgetGroupOnScreen(WidgetOnScreen):
 class WidgetGroup[_WidgetGroupOnScreen: WidgetOnScreen](
     Widget[_WidgetGroupOnScreen]
 ):
-    children: tuple[Widget | Callable[[WidgetGroupOnScreen], Widget], ...]
+    children: (
+        tuple[Widget, ...] | Callable[[WidgetGroupOnScreen], tuple[Widget, ...]]
+    )
     scroll_direction: ScrollDirection = ScrollDirection.VERTICAL
     loop: bool = True
     _: KW_ONLY = private_init_below()
