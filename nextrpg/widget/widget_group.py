@@ -1,4 +1,3 @@
-from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from itertools import cycle, pairwise
@@ -29,7 +28,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     background: SpriteOnScreen | None = None
     _: KW_ONLY = private_init_below()
     _children: tuple[WidgetOnScreen, ...] = default(
-        lambda self: self.init_children(self.widget.children)
+        lambda self: self._init_children(self.widget.children)
     )
 
     @cached_property
@@ -40,32 +39,15 @@ class WidgetGroupOnScreen(WidgetOnScreen):
             for drawing_on_screen in child._drawing_on_screens_without_parent
         )
 
-    def replace_children(
-        self,
-        children: (
-            tuple[Widget, ...]
-            | Callable[[WidgetGroupOnScreen], tuple[Widget, ...]]
-        ),
-    ) -> Self:
-        children = self.init_children(children)
+    def replace_children(self, children: tuple[Widget, ...]) -> Self:
+        children = self._init_children(children)
         return replace(self, _children=children)
 
-    def init_children(
-        self,
-        children: (
-            tuple[Widget | WidgetOnScreen, ...]
-            | Callable[
-                [WidgetGroupOnScreen], tuple[Widget | WidgetOnScreen, ...]
-            ]
-        ),
+    def _init_children(
+        self, children: tuple[Widget, ...]
     ) -> tuple[WidgetOnScreen, ...]:
-        if callable(children):
-            children = children(self)
         assert children, "Require non-empty children."
-        with_parent: tuple[WidgetOnScreen, ...] = tuple(
-            child.with_parent(self) if isinstance(child, Widget) else child
-            for child in children
-        )
+        with_parent = tuple(child.with_parent(self) for child in children)
         if any(child.is_selected for child in with_parent):
             return with_parent
         return (with_parent[0].select,) + with_parent[1:]
@@ -162,9 +144,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
 class WidgetGroup[_WidgetGroupOnScreen: WidgetOnScreen](
     Widget[_WidgetGroupOnScreen]
 ):
-    children: (
-        tuple[Widget, ...] | Callable[[WidgetGroupOnScreen], tuple[Widget, ...]]
-    )
+    children: tuple[Widget, ...]
     scroll_direction: ScrollDirection = ScrollDirection.VERTICAL
     loop: bool = True
     _: KW_ONLY = private_init_below()

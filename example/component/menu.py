@@ -21,7 +21,6 @@ from nextrpg import (
     TmxLoader,
     TransitionScene,
     WidgetGroup,
-    WidgetOnScreen,
     last_scene,
 )
 
@@ -54,13 +53,15 @@ def menu_widget() -> WidgetGroup:
 
 
 def click_save(
-    slot: int, from_button: ButtonOnScreen, state: GameState
-) -> WidgetOnScreen:
-    assert isinstance(map_scene := from_button.root, MapScene)
+    from_button: ButtonOnScreen, state: GameState, slot: int
+) -> PanelOnScreen:
+    map_scene = from_button.root
+    assert isinstance(map_scene, MapScene)
     game_save = GameSave(create_player_placeholder, state, map_scene)
     save_io = SaveIo(str(slot))
     save_io.save(game_save).result()
 
-    assert isinstance(panel := from_button.parent, PanelOnScreen)
-    buttons = create_save_slot(click_save)(panel)
+    panel = from_button.parent
+    assert isinstance(panel, PanelOnScreen)
+    buttons = create_save_slot(click_save)
     return panel.replace_children(buttons)

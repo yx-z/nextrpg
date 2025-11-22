@@ -2,7 +2,6 @@ from typing import Callable
 
 from nextrpg import (
     Button,
-    ButtonConfig,
     ButtonOnScreen,
     Direction,
     DirectionalOffset,
@@ -33,7 +32,7 @@ PANEL_NAME = "panel"
 
 
 def create_save_panel(
-    click_save_slot: Callable[[int, ButtonOnScreen, GameState], OnClickResult],
+    click_save_slot: Callable[[ButtonOnScreen, GameState, int], OnClickResult],
 ) -> Callable[[ButtonOnScreen, GameState], PanelOnScreen]:
     def on_click(button: ButtonOnScreen, state: GameState) -> PanelOnScreen:
         children = create_save_slot(click_save_slot)
@@ -46,33 +45,22 @@ def create_save_panel(
 
 
 def create_save_slot(
-    click_save_slot: Callable[[int, ButtonOnScreen, GameState], OnClickResult],
-) -> Callable[[PanelOnScreen], tuple[Button, ...]]:
-    def create_buttons(panel: PanelOnScreen) -> tuple[Button, ...]:
-        res: list[Button] = []
-        for slot in range(NUM_SAVE_SLOTS):
-            height = panel.area.height / NUM_SAVE_SLOTS - PADDING_HEIGHT
-            width = panel.area.width - PADDING_WIDTH
-            size = width * height
-            config = ButtonConfig(padding_or_size=size)
-            top_left = panel.area.top_left + height * slot
+    click_save_slot: Callable[[ButtonOnScreen, GameState, int], OnClickResult],
+) -> tuple[Button, ...]:
+    res: list[Button] = []
+    for slot in range(NUM_SAVE_SLOTS, 1):
+        save_io = SaveIo(str(slot))
+        if game_save_meta := save_io.load(GameSaveMeta):
+            title = f"Save #{slot + 1}: {game_save_meta.save_time_str}"
+        else:
+            title = f"Empty Save Slot #{slot}"
+        text = Text(title)
 
-            save_io = SaveIo(str(slot))
-            if game_save_meta := save_io.load(GameSaveMeta):
-                title = f"Save #{slot + 1}: {game_save_meta.save_time_str}"
-            else:
-                title = f"Empty Save Slot #{slot + 1}"
-            text = Text(title)
+        def on_click(
+            btn: ButtonOnScreen, state: GameState, slt: int = slot
+        ) -> OnClickResult:
+            return click_save_slot(btn, state, slt)
 
-            def on_click(
-                btn: ButtonOnScreen, state: GameState, slt: int = slot
-            ) -> OnClickResult:
-                return click_save_slot(slt, btn, state)
-
-            button = Button(
-                coordinate=top_left, text=text, on_click=on_click, config=config
-            )
-            res.append(button)
-        return tuple(res)
-
-    return create_buttons
+        button = Button(text=text, on_click=on_click)
+        res.append(button)
+    return tuple(res)

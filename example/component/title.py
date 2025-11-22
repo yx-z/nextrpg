@@ -50,7 +50,7 @@ def title(state: GameState) -> TmxWidgetGroupOnScreen:
 
 
 def click_load(
-    slot: int, button: ButtonOnScreen, state: GameState
+    button: ButtonOnScreen, state: GameState, slot: int
 ) -> TransitionScene | None:
     save_io = SaveIo(str(slot))
 

@@ -1,4 +1,3 @@
-from collections.abc import Callable
 from dataclasses import KW_ONLY, dataclass, field
 from functools import cached_property
 from typing import ClassVar, override
@@ -26,14 +25,8 @@ class PanelOnScreen(WidgetGroupOnScreen):
         return self.on_screen
 
     @override
-    def init_children(
-        self,
-        children: (
-            tuple[Widget | WidgetOnScreen, ...]
-            | Callable[
-                [WidgetGroupOnScreen], tuple[Widget | WidgetOnScreen, ...]
-            ]
-        ),
+    def _init_children(
+        self, children: tuple[Widget, ...]
     ) -> tuple[WidgetOnScreen, ...]:
         return ()
 
@@ -41,7 +34,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
 @dataclass(frozen=True, kw_only=True)
 class Panel(WidgetGroup[PanelOnScreen]):
     name: str
-    children: tuple[Widget, ...] | Callable[[PanelOnScreen], tuple[Widget, ...]]
+    children: tuple[Widget, ...]
     config: PanelConfig = field(default_factory=lambda: config().widget.panel)
     _: KW_ONLY = private_init_below()
     widget_on_screen_type: ClassVar[type] = PanelOnScreen
