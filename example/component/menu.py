@@ -65,6 +65,6 @@ def click_save(
     assert isinstance(panel := from_button.parent, PanelOnScreen)
     buttons = create_save_slot(click_save)(panel)
     button_on_screens = select_first_widget(
-        tuple(button.with_parent(panel.parent) for button in buttons)
+        tuple(button.with_same_parent_as(panel) for button in buttons)
     )
     return panel.replace(button_on_screens)

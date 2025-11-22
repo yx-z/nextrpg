@@ -202,6 +202,12 @@ class Widget[_WidgetOnScreen: WidgetOnScreen](ABC):
     )
     name: str | None = None
 
+    def with_same_parent_as(self, parent: WidgetOnScreen) -> _WidgetOnScreen:
+        assert (
+            parent.parent
+        ), f"Require parent has non-empty parent. Got {parent}."
+        return self.with_parent(parent.parent)
+
     def with_parent(self, parent: WidgetOnScreen) -> _WidgetOnScreen:
         return self.widget_on_screen_type(
             widget=self,

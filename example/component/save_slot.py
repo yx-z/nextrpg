@@ -40,8 +40,7 @@ def create_save_panel(
         panel = Panel(
             name=PANEL_NAME, children=children, enter_animation=ENTER_ANIMATION
         )
-        assert button.parent, f"Button should have parent. Got {button}."
-        return panel.with_parent(button.parent)
+        return panel.with_same_parent_as(button)
 
     return on_click
 
