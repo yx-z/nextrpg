@@ -120,7 +120,7 @@ from nextrpg.core.save import (
 )
 from nextrpg.core.time import Millisecond, Percentage
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry
-from nextrpg.core.util import type_name
+from nextrpg.core.util import background_thread, type_name
 from nextrpg.drawing.color import (
     BLACK,
     BLUE,
@@ -279,7 +279,7 @@ from nextrpg.widget.panel import Panel, PanelOnScreen
 from nextrpg.widget.scroll_direction import ScrollDirection
 from nextrpg.widget.sizable_widget import SizableWidget, SizableWidgetOnScreen
 from nextrpg.widget.tmx_widget_group_on_screen import TmxWidgetGroupOnScreen
-from nextrpg.widget.widget import Widget, WidgetOnScreen
+from nextrpg.widget.widget import Widget, WidgetOnScreen, WidgetSpec
 from nextrpg.widget.widget_group import (
     WidgetGroup,
     WidgetGroupOnScreen,

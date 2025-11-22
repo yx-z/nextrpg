@@ -1,10 +1,6 @@
 from concurrent.futures.thread import ThreadPoolExecutor
 from functools import cache
-from typing import Any, NoReturn
-
-
-def throw(message: str) -> NoReturn:
-    raise RuntimeError(message)
+from typing import Any
 
 
 def type_name(obj: Any | type) -> str:

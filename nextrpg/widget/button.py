@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
-from typing import ClassVar, Self, override
+from typing import Any, ClassVar, Self, override
 
 from nextrpg.animation.cycle import Cycle
 from nextrpg.animation.fade import FadeIn, FadeOut
@@ -14,7 +14,6 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.core.util import throw
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.sprite import Sprite
 from nextrpg.drawing.text import Text
@@ -31,7 +30,7 @@ from nextrpg.widget.sizable_widget import (
     SizableWidget,
     SizableWidgetOnScreen,
 )
-from nextrpg.widget.widget import WidgetOnScreen
+from nextrpg.widget.widget import WidgetOnScreen, WidgetSpec
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
@@ -94,11 +93,15 @@ class BaseButton(SizableWidget[ButtonOnScreen]):
         return self.idle.size
 
 
+def _name_or_text(self: Any) -> str | Text | TextGroup:
+    if self.name:
+        return self.name
+    raise RuntimeError("Require name or text.")
+
+
 @dataclass_with_default(frozen=True, kw_only=True)
 class Button(BaseButton):
-    text: str | Text | TextGroup = default(
-        lambda self: self.name if self.name else throw("Require name or text.")
-    )
+    text: str | Text | TextGroup = default(_name_or_text)
     config: ButtonConfig = field(default_factory=lambda: config().widget.button)
     _: KW_ONLY = private_init_below()
     idle: Sprite = default(lambda self: self._shift(self._text))
@@ -143,3 +146,13 @@ class Button(BaseButton):
         width = (button_size.width - self._text.width) / 2
         height = (button_size.height - self._text.height) / 2
         return padding_for_both_sides(width, height)
+
+
+@dataclass_with_default(frozen=True)
+class ButtonSpec(WidgetSpec):
+    on_click: Callable[[ButtonOnScreen, GameState], OnClickResult]
+    name: str | None = None
+    text: str | Text | TextGroup = default(_name_or_text)
+    config: ButtonConfig = field(default_factory=lambda: config().widget.button)
+    _: KW_ONLY = private_init_below()
+    widget_type: ClassVar[type] = Button

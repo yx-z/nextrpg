@@ -62,13 +62,13 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         if callable(children):
             children = children(self)
         assert children, "Require non-empty children."
-        with_parent = tuple(
+        with_parent: tuple[WidgetOnScreen, ...] = tuple(
             child.with_parent(self) if isinstance(child, Widget) else child
             for child in children
         )
         if any(child.is_selected for child in with_parent):
             return with_parent
-        return _select_first_widget(with_parent)
+        return (with_parent[0].select,) + with_parent[1:]
 
     @override
     def _event_after_selected(
@@ -169,12 +169,6 @@ class WidgetGroup[_WidgetGroupOnScreen: WidgetOnScreen](
     loop: bool = True
     _: KW_ONLY = private_init_below()
     widget_on_screen_type: ClassVar[type] = WidgetGroupOnScreen
-
-
-def _select_first_widget(
-    widget_on_screens: tuple[WidgetOnScreen, ...],
-) -> tuple[WidgetOnScreen, ...]:
-    return (widget_on_screens[0].select,) + widget_on_screens[1:]
 
 
 _SCROLL_AND_KEY_TO_FORWARD = {

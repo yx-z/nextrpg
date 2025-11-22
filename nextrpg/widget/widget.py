@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from dataclasses import KW_ONLY, field, replace
+from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
-from typing import ClassVar, Self, override
+from typing import Any, ClassVar, Self, override
 
 from frozendict import frozendict
 
@@ -193,7 +193,7 @@ class WidgetOnScreen(Scene):
 
 
 @dataclass_with_default(frozen=True)
-class Widget[_WidgetOnScreen: WidgetOnScreen](ABC):
+class Widget[_WidgetOnScreen: WidgetOnScreen]:
     # Must be a subclass of WidgetOnScreen.
     widget_on_screen_type: ClassVar[type]
     enter_animation: TimedAnimationSpec | None = None
@@ -220,3 +220,13 @@ class Widget[_WidgetOnScreen: WidgetOnScreen](ABC):
         if self.enter_animation:
             return self.enter_animation.reverse
         return None
+
+
+@dataclass(frozen=True)
+class WidgetSpec[_Widget: Widget]:
+    # Must be a subclass of Widget.
+    widget_type: ClassVar[type]
+
+    def to_widget(self, **kwargs: Any) -> _Widget:
+        var_args = vars(self)
+        return self.widget_type(**var_args, **kwargs)
