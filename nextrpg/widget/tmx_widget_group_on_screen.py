@@ -27,7 +27,7 @@ class TmxWidgetGroupOnScreen(WidgetGroupOnScreen):
     name_to_on_screens: frozendict[str, Coordinate | AreaOnScreen] = default(
         lambda self: self._init_name_to_on_screens
     )
-    _is_selected: bool = True
+    is_selected: bool = True
 
     @property
     def _init_background(self) -> AnimationOnScreens:

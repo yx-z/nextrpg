@@ -30,7 +30,7 @@ class WidgetOnScreen(Scene):
     name_to_on_screens: frozendict[str, Coordinate | AreaOnScreen]
     parent: Scene | None = field(default=None, repr=False)
     _: KW_ONLY = private_init_below()
-    _is_selected: bool = False
+    is_selected: bool = False
     _enter_animation: TimedAnimationOnScreens | None = default(
         lambda self: self._init_enter_animation
     )
@@ -59,11 +59,11 @@ class WidgetOnScreen(Scene):
 
     @cached_property
     def select(self) -> Self:
-        return replace(self, _is_selected=True)
+        return replace(self, is_selected=True)
 
     @cached_property
     def deselect(self) -> Self:
-        return replace(self, _is_selected=False)
+        return replace(self, is_selected=False)
 
     @override
     def tick(
@@ -123,7 +123,7 @@ class WidgetOnScreen(Scene):
 
         # In widget.
         if not self._exit_animation:
-            if not self._is_selected:
+            if not self.is_selected:
                 return self, state
             if is_key_press(event, KeyMappingConfig.cancel) and self.parent:
                 exit_scene = self.exit(self.parent)

@@ -41,7 +41,7 @@ class ButtonOnScreen(SizableWidgetOnScreen):
     @override
     @cached_property
     def drawing(self) -> Sprite:
-        if self._is_selected:
+        if self.is_selected:
             return self.widget.active
         return self.widget.idle
 
@@ -65,7 +65,7 @@ class ButtonOnScreen(SizableWidgetOnScreen):
     def _tick_without_parent_and_animation(
         self, time_delta: Millisecond, state: GameState
     ) -> tuple[Self, GameState]:
-        if self._is_selected:
+        if self.is_selected:
             active = self.widget.active.tick(time_delta)
             idle = self.widget.idle
         else:

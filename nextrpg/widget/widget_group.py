@@ -29,7 +29,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     background: SpriteOnScreen | None = None
     _: KW_ONLY = private_init_below()
     _children: tuple[WidgetOnScreen, ...] = default(
-        lambda self: self._init_children(self.widget.children)
+        lambda self: self.init_children(self.widget.children)
     )
 
     @cached_property
@@ -40,8 +40,35 @@ class WidgetGroupOnScreen(WidgetOnScreen):
             for drawing_on_screen in child._drawing_on_screens_without_parent
         )
 
-    def replace(self, children: tuple[WidgetOnScreen, ...]) -> Self:
+    def replace_children(
+        self,
+        children: (
+            tuple[Widget, ...]
+            | Callable[[WidgetGroupOnScreen], tuple[Widget, ...]]
+        ),
+    ) -> Self:
+        children = self.init_children(children)
         return replace(self, _children=children)
+
+    def init_children(
+        self,
+        children: (
+            tuple[Widget | WidgetOnScreen, ...]
+            | Callable[
+                [WidgetGroupOnScreen], tuple[Widget | WidgetOnScreen, ...]
+            ]
+        ),
+    ) -> tuple[WidgetOnScreen, ...]:
+        if callable(children):
+            children = children(self)
+        assert children, "Require non-empty children."
+        with_parent = tuple(
+            child.with_parent(self) if isinstance(child, Widget) else child
+            for child in children
+        )
+        if any(child.is_selected for child in with_parent):
+            return with_parent
+        return _select_first_widget(with_parent)
 
     @override
     def _event_after_selected(
@@ -50,7 +77,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         children: list[WidgetOnScreen] = []
         for child in self._children:
             if (
-                child._is_selected
+                child.is_selected
                 and (res := child._event_after_selected(event, state))[0]
                 is not child
             ):
@@ -93,25 +120,9 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     @cached_property
     def _selected(self) -> WidgetOnScreen | None:
         for child in self._children:
-            if isinstance(child, WidgetOnScreen) and child._is_selected:
+            if isinstance(child, WidgetOnScreen) and child.is_selected:
                 return child
         return None
-
-    def _init_children(
-        self,
-        children: (
-            tuple[Widget, ...]
-            | Callable[[WidgetGroupOnScreen], tuple[Widget, ...]]
-        ),
-    ) -> tuple[WidgetOnScreen, ...]:
-        if callable(children):
-            children = children(self)
-        assert children, "Require non-empty children."
-        first_child_selected = children[0].with_parent(self).select
-        remaining_deselected = tuple(
-            child.with_parent(self) for child in children[1:]
-        )
-        return (first_child_selected,) + remaining_deselected
 
     def _step(self, forward: bool) -> Self:
         if len(self._children) < 2 or (
@@ -160,7 +171,7 @@ class WidgetGroup[_WidgetGroupOnScreen: WidgetOnScreen](
     widget_on_screen_type: ClassVar[type] = WidgetGroupOnScreen
 
 
-def select_first_widget(
+def _select_first_widget(
     widget_on_screens: tuple[WidgetOnScreen, ...],
 ) -> tuple[WidgetOnScreen, ...]:
     return (widget_on_screens[0].select,) + widget_on_screens[1:]

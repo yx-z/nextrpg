@@ -283,5 +283,4 @@ from nextrpg.widget.widget import Widget, WidgetOnScreen
 from nextrpg.widget.widget_group import (
     WidgetGroup,
     WidgetGroupOnScreen,
-    select_first_widget,
 )
