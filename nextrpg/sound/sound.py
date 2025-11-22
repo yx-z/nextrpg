@@ -20,7 +20,7 @@ from nextrpg.core.dataclass_with_default import (
 class Sound:
     file: Path
     loop: bool = False
-    config: SoundConfig = field(default_factory=lambda: config().sound)
+    config: SoundConfig = field(default_factory=lambda: config().system.sound)
     _: KW_ONLY = private_init_below()
     started: bool = False
     _loaded: pygame.Sound = default(lambda self: self._init_loaded)

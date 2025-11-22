@@ -19,7 +19,9 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class TextGroup(Sprite):
     resource: Text | tuple[Text, ...]
-    config: TextGroupConfig = field(default_factory=lambda: config().text_group)
+    config: TextGroupConfig = field(
+        default_factory=lambda: config().drawing.text_group
+    )
 
     @cached_property
     def texts(self) -> tuple[Text, ...]:

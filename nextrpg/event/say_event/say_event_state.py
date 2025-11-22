@@ -7,7 +7,7 @@ from nextrpg.animation.animation_on_screens import AnimationOnScreens
 from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.animation.timed_animation_on_screens import TimedAnimationOnScreens
 from nextrpg.animation.typewriter import Typewriter
-from nextrpg.config.rpg_event.say_event_config import SayEventConfig
+from nextrpg.config.event.say_event_config import SayEventConfig
 from nextrpg.config.system.key_mapping_config import KeyMappingConfig
 from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,

@@ -112,7 +112,7 @@ class SayEventConfig:
 
         from nextrpg.config.config import config
 
-        text_config = config().text
+        text_config = config().drawing.text
         return replace(text_config, color=BLACK)
 
     @cached_property

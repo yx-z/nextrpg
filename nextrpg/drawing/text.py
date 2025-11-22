@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class Text(Sprite):
     message: str
-    config: TextConfig = field(default_factory=lambda: config().text)
+    config: TextConfig = field(default_factory=lambda: config().drawing.text)
 
     def configured(self, text_config: TextConfig) -> Self:
         return replace(self, config=text_config)

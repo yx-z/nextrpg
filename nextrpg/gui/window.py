@@ -37,7 +37,7 @@ from nextrpg.geometry.dimension import Height, Size, WidthAndHeightScaling
 class Window:
     _: KW_ONLY = private_init_below()
     initial_config: WindowConfig = field(
-        default_factory=lambda: config().window
+        default_factory=lambda: config().system.window
     )
     last_config: WindowConfig = default(lambda self: self.initial_config)
     current_config: WindowConfig = default(
@@ -54,14 +54,14 @@ class Window:
             set_icon(icon.pygame)
 
     def tick(self, fps_info: str | None = None) -> Self:
-        updated_config = config().window
+        updated_config = config().system.window
+        title = updated_config.title
         if updated_config.include_fps_in_window_title and fps_info:
-            set_caption(f"{config().window.title} {fps_info}")
-        if (
+            set_caption(f"{title} {fps_info}")
+        elif (
             self.current_config.include_fps_in_window_title
             and not updated_config.include_fps_in_window_title
         ):
-            title = config().window.title
             set_caption(title)
 
         if updated_config is self.current_config:
@@ -164,7 +164,8 @@ class Window:
 
 def _set_window_config(window_config: WindowConfig) -> None:
     SaveIo().save(window_config)
-    full_config = replace(config(), window=window_config)
+    system_config = replace(config().system, window=window_config)
+    full_config = replace(config(), system=system_config)
     set_config(full_config)
 
 
@@ -202,7 +203,9 @@ def _log(entries: list[LogEntry]) -> tuple[DrawingOnScreen, ...]:
                 message_coordinate + message.size, Anchor.BOTTOM_LEFT
             )
 
-    if (debug := config().debug) and (color := debug.log_background_color):
+    if (debug := config().system.debug) and (
+        color := debug.log_background_color
+    ):
         drawing_on_screens = DrawingOnScreens(tuple(res))
         background = drawing_on_screens.rectangle_area_on_screen.fill(color)
         res.insert(0, background)

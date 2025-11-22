@@ -32,4 +32,4 @@ class ButtonConfig:
 
         from nextrpg.config.config import config
 
-        return config().text
+        return config().drawing.text

@@ -46,6 +46,6 @@ class DrawingGroupOnScreen(SpriteOnScreen):
 
     @cached_property
     def _link_color(self) -> Color | None:
-        if (debug := config().debug) and debug.draw_group_link_color:
+        if (debug := config().system.debug) and debug.draw_group_link_color:
             return debug.draw_group_link_color
         return None

@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from nextrpg.config.character.character_config import CharacterConfig
+from nextrpg.config.character.behavior_config import BehaviorConfig
 from nextrpg.geometry.direction import Direction
 
 
 @dataclass(frozen=True)
-class PlayerConfig(CharacterConfig):
+class PlayerConfig(BehaviorConfig):
     directions: frozenset[Direction] = frozenset(Direction)

@@ -36,10 +36,9 @@ def create_save_panel(
     click_save_slot: Callable[[int, ButtonOnScreen, GameState], OnClickResult],
 ) -> Callable[[ButtonOnScreen, GameState], PanelOnScreen]:
     def on_click(button: ButtonOnScreen, state: GameState) -> PanelOnScreen:
+        children = create_save_slot(click_save_slot)
         panel = Panel(
-            name=PANEL_NAME,
-            children=create_save_slot(click_save_slot),
-            enter_animation=ENTER_ANIMATION,
+            name=PANEL_NAME, children=children, enter_animation=ENTER_ANIMATION
         )
         assert button.parent, f"Button should have parent. Got {button}."
         return panel.with_parent(button.parent)
@@ -50,7 +49,7 @@ def create_save_panel(
 def create_save_slot(
     click_save_slot: Callable[[int, ButtonOnScreen, GameState], OnClickResult],
 ) -> Callable[[PanelOnScreen], tuple[Button, ...]]:
-    def create_button(panel: PanelOnScreen) -> tuple[Button, ...]:
+    def create_buttons(panel: PanelOnScreen) -> tuple[Button, ...]:
         res: list[Button] = []
         for slot in range(NUM_SAVE_SLOTS):
             height = panel.area.height / NUM_SAVE_SLOTS - PADDING_HEIGHT
@@ -67,19 +66,14 @@ def create_save_slot(
             text = Text(title)
 
             def on_click(
-                btn: ButtonOnScreen, state: GameState
+                btn: ButtonOnScreen, state: GameState, slt: int = slot
             ) -> OnClickResult:
-                return click_save_slot(slot, btn, state)
+                return click_save_slot(slt, btn, state)
 
-            metadata = (("save_slot", slot),)
             button = Button(
-                coordinate=top_left,
-                text=text,
-                on_click=on_click,
-                config=config,
-                metadata=metadata,
+                coordinate=top_left, text=text, on_click=on_click, config=config
             )
             res.append(button)
         return tuple(res)
 
-    return create_button
+    return create_buttons

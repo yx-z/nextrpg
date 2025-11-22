@@ -179,7 +179,7 @@ class CharacterOnScreen(
 
     @cached_property
     def _collision_visual(self) -> DrawingOnScreen | None:
-        if (debug := config().debug) and (
+        if (debug := config().system.debug) and (
             color := debug.collision_rectangle_color
         ):
             return self.collision_rectangle_area_on_screen.fill(color)
@@ -187,7 +187,7 @@ class CharacterOnScreen(
 
     @cached_property
     def _start_event_visual(self) -> DrawingOnScreen | None:
-        if (debug := config().debug) and (
+        if (debug := config().system.debug) and (
             color := debug.start_event_rectangle_color
         ):
             return self._start_event_area_on_screen.fill(color)

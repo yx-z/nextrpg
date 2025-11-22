@@ -1,14 +1,16 @@
 from dataclasses import dataclass
 
-from nextrpg.geometry.dimension import (
-    HeightScaling,
-    PixelPerMillisecond,
-    WidthScaling,
+from nextrpg.config.character.behavior_config import BehaviorConfig
+from nextrpg.config.character.player_config import PlayerConfig
+from nextrpg.config.character.rpg_maker_character_drawing_config import (
+    RpgMakerCharacterDrawingConfig,
 )
 
 
 @dataclass(frozen=True)
 class CharacterConfig:
-    move_speed: PixelPerMillisecond = 0.2
-    bounding_rectangle_scaling: HeightScaling = HeightScaling(0.4)
-    start_event_scaling: WidthScaling = WidthScaling(1.2)
+    behavior: BehaviorConfig = BehaviorConfig()
+    player: PlayerConfig = PlayerConfig()
+    rpg_maker_character_drawing: RpgMakerCharacterDrawingConfig = (
+        RpgMakerCharacterDrawingConfig()
+    )

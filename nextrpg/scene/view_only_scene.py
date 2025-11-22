@@ -14,7 +14,9 @@ from nextrpg.scene.scene import Scene
 @dataclass(frozen=True)
 class ViewOnlyScene(Scene):
     resource: SpriteOnScreen = field(
-        default_factory=lambda: screen_area().fill(config().window.background)
+        default_factory=lambda: screen_area().fill(
+            config().system.window.background
+        )
     )
 
     @cached_property

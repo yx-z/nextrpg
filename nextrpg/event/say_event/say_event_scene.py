@@ -4,7 +4,7 @@ from typing import override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
 from nextrpg.config.config import config
-from nextrpg.config.rpg_event.say_event_config import (
+from nextrpg.config.event.say_event_config import (
     AvatarPosition,
     SayEventConfig,
 )
@@ -58,7 +58,7 @@ class SayEventScene(RpgEventScene):
 
     @cached_property
     def config(self) -> SayEventConfig:
-        cfg = config().say_event
+        cfg = config().event.say_event
         for arg in self.args:
             cfg = _update_config(cfg, arg)
         return cfg

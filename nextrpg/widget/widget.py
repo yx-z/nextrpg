@@ -14,7 +14,6 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
-from nextrpg.core.metadata import HasMetadata, Metadata
 from nextrpg.core.time import Millisecond
 from nextrpg.core.util import type_name
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
@@ -194,7 +193,7 @@ class WidgetOnScreen(Scene):
 
 
 @dataclass_with_default(frozen=True)
-class Widget[_WidgetOnScreen: WidgetOnScreen](ABC, HasMetadata):
+class Widget[_WidgetOnScreen: WidgetOnScreen](ABC):
     # Must be a subclass of WidgetOnScreen.
     widget_on_screen_type: ClassVar[type]
     enter_animation: TimedAnimationSpec | None = None
@@ -202,7 +201,6 @@ class Widget[_WidgetOnScreen: WidgetOnScreen](ABC, HasMetadata):
         lambda self: self._init_exit_animation
     )
     name: str | None = None
-    metadata: Metadata = ()
 
     def with_parent(self, parent: WidgetOnScreen) -> _WidgetOnScreen:
         return self.widget_on_screen_type(

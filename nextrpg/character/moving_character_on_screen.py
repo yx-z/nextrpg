@@ -3,6 +3,7 @@ from dataclasses import dataclass, replace
 from typing import Self, override
 
 from nextrpg.character.character_on_screen import CharacterOnScreen
+from nextrpg.core.log import log
 from nextrpg.core.time import Millisecond
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate

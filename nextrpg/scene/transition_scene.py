@@ -31,7 +31,9 @@ ToSceneAndState = Scene | tuple[Scene, GameState]
 class TransitionScene(Scene):
     to_scene_and_state: ToSceneAndState | Callable[[GameState], ToSceneAndState]
     intermediary: SpriteOnScreen = field(
-        default_factory=lambda: screen_area().fill(config().window.background)
+        default_factory=lambda: screen_area().fill(
+            config().system.window.background
+        )
     )
     duration: Millisecond = field(
         default_factory=lambda: config().animation.default_timed_animation_duration

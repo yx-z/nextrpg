@@ -240,7 +240,7 @@ class MapLoader(TmxLoader):
 
     @property
     def collision_visuals(self) -> tuple[DrawingOnScreen, ...]:
-        if (debug := config().debug) and (
+        if (debug := config().system.debug) and (
             color := debug.collision_rectangle_color
         ):
             return tuple(c.fill(color) for c in self.collisions)

@@ -23,6 +23,7 @@ from nextrpg import (
     WidgetGroup,
     WidgetOnScreen,
     last_scene,
+    select_first_widget,
 )
 
 
@@ -62,7 +63,8 @@ def click_save(
     save_io.save(game_save).result()
 
     assert isinstance(panel := from_button.parent, PanelOnScreen)
-    button = create_save_slot(slot, click_save)(panel)
-    assert panel.parent, f"Panel should have parent. Got {panel}"
-    button_on_screen = button.with_parent(panel.parent)
-    return panel.replace(from_button, button_on_screen)
+    buttons = create_save_slot(click_save)(panel)
+    button_on_screens = select_first_widget(
+        tuple(button.with_parent(panel.parent) for button in buttons)
+    )
+    return panel.replace(button_on_screens)

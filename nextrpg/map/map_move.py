@@ -63,4 +63,5 @@ class _TimedScene:
 
 @cache
 def _map_scenes() -> LRUCache[ModuleAndAttribute, _TimedScene]:
-    return LRUCache(config().resource.map_scene_cache_size)
+    size = config().system.resource.map_scene_cache_size
+    return LRUCache(size)

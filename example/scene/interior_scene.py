@@ -92,7 +92,7 @@ class StatefulGreet(LoadFromSave[int]):
         scene: EventfulScene,
         state: GameState,
     ) -> Self:
-        cfg = config().say_event.text_config
+        cfg = config().event.say_event.text_config
         # fmt: off
         scene["Interior Scene"]: Text("Greetings!", cfg.with_size(Height(40))) + Text(
         """This is...

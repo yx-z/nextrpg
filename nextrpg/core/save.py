@@ -115,7 +115,7 @@ class LoadSavable[S: SaveData](LoadFromSave[S]):
 def _config() -> SaveConfig:
     from nextrpg.config.config import config
 
-    return config().save
+    return config().system.save
 
 
 @cache

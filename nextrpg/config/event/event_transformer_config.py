@@ -10,7 +10,7 @@ from nextrpg.event.code_transformer import (
 
 
 @dataclass(frozen=True)
-class RpgEventConfig:
+class EventTransformerConfig:
     transformers: tuple[NodeTransformer, ...] = (
         ADD_PARENT,
         ANNOTATE_SAY,

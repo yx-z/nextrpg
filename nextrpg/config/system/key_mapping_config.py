@@ -24,14 +24,14 @@ class KeyMapping:
     def resolve(self) -> KeyCode:
         from nextrpg.config.config import config
 
-        key_mappings = config().key_mapping
+        key_mappings = config().system.key_mapping
         return getattr(key_mappings, self.name)
 
     @classmethod
     def from_key(cls, key_code: KeyCode) -> Self | None:
         from nextrpg.config.config import config
 
-        key_mappings = config().key_mapping
+        key_mappings = config().system.key_mapping
         for field in fields(key_mappings):
             if getattr(key_mappings, field.name) == key_code:
                 return cls(field.name)

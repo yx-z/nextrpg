@@ -51,7 +51,9 @@ class NineSlice:
         )
 
         parts = [top_row, center_row, bottom_row]
-        if (debug := config().debug) and (color := debug.draw_group_link_color):
+        if (debug := config().system.debug) and (
+            color := debug.draw_group_link_color
+        ):
             points = (ORIGIN, size.height.with_zero_width.coordinate)
             vertical_line = PolylineDrawing(points, color).drawing
             parts += [

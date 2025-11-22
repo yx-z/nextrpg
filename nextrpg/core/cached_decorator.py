@@ -32,7 +32,7 @@ class cached[T, K, **P]:
             if not (instances := getattr(klass, "_nextrpg_instances", None)):
                 from nextrpg.config.config import config
 
-                size = self.size_function(config().resource)
+                size = self.size_function(config().system.resource)
                 instances: LRUCache[K, T] = LRUCache(size)
                 klass._nextrpg_instances = instances
 

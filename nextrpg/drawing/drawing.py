@@ -224,7 +224,7 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
     @property
     def _debug_surface(self) -> Surface | None:
         if (
-            not (debug := config().debug)
+            not (debug := config().system.debug)
             or not (color := debug.drawing_background_color)
             or not self.allow_background_in_debug
         ):

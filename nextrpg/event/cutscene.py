@@ -4,7 +4,7 @@ from types import FunctionType
 from typing import Any, overload
 
 from nextrpg.config.config import config
-from nextrpg.config.rpg_event.cutscene_config import CutsceneConfig
+from nextrpg.config.event.cutscene_config import CutsceneConfig
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.event.fade_in_event_scene import fade_in
 from nextrpg.event.fade_out_event_scene import fade_out
@@ -31,7 +31,7 @@ def cutscene[**P](
 ):
     if isinstance(arg, CutsceneConfig):
         return lambda f: _cutscene(arg, f)
-    return _cutscene(config().cutscene, arg)
+    return _cutscene(config().event.cutscene, arg)
 
 
 def _cutscene[**P](

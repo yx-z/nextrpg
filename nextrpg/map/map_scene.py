@@ -168,7 +168,7 @@ class MapScene(EventfulScene):
 
     @cached_property
     def _move_visuals(self) -> tuple[DrawingOnScreen, ...]:
-        if (debug := config().debug) and debug.move_object_color:
+        if (debug := config().system.debug) and debug.move_object_color:
             return tuple(
                 m.fill(debug.move_object_color) for m in self._move_areas
             )
@@ -206,7 +206,9 @@ class MapScene(EventfulScene):
 
     @cached_property
     def _npc_paths(self) -> tuple[DrawingOnScreen, ...]:
-        if not (debug := config().debug) or not (color := debug.npc_path_color):
+        if not (debug := config().system.debug) or not (
+            color := debug.npc_path_color
+        ):
             return ()
         res: list[DrawingOnScreen] = []
         for npc in self.npcs:

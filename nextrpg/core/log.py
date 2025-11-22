@@ -110,7 +110,7 @@ class LogEntry:
 def pop_messages(time_delta: Millisecond) -> tuple[LogEntry, ...]:
     from nextrpg.config.config import config
 
-    if not (debug := config().debug):
+    if not (debug := config().system.debug):
         _pop(time_delta)
         return ()
 
@@ -158,7 +158,7 @@ def _add(
 ) -> None:
     from nextrpg.config.config import config
 
-    if not (debug := config().debug) or debug.log_level > level:
+    if not (debug := config().system.debug) or debug.log_level > level:
         return
 
     if isinstance(message, str):

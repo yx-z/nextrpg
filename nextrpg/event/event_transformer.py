@@ -23,7 +23,7 @@ def transform_event[**P](
 
     src = dedent(getsource(function))
     tree = parse(src)
-    for transformer in config().event.transformers:
+    for transformer in config().event.event_transformer.transformers:
         tree = transformer.visit(tree)
     tree = fix_missing_locations(tree)
     console().debug(f"Parsed code for {fun}\n{unparse(tree)}")

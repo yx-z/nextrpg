@@ -73,7 +73,7 @@ class RpgMakerCharacterDrawing(CharacterDrawing):
     selection: SpriteSheetSelection | None = None
     animate_on_idle: bool = False
     config: RpgMakerCharacterDrawingConfig = field(
-        default_factory=lambda: config().rpg_maker_character
+        default_factory=lambda: config().character.rpg_maker_character_drawing
     )
     _: KW_ONLY = private_init_below()
     _animations: frozendict[Direction, CyclicAnimation] = default(

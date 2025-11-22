@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import Any, Self, override
 
-from nextrpg.character.player_on_screen import PlayerOnScreen
+from nextrpg.character.player_spec import PlayerSpec
 from nextrpg.core.module_and_attribute import (
     ModuleAndAttribute,
     to_module_and_attribute,
@@ -15,7 +15,7 @@ from nextrpg.map.map_scene import MapScene
 
 @dataclass(frozen=True)
 class GameSave(LoadSavable):
-    player_creation: Callable[[], PlayerOnScreen]
+    player_creation: Callable[[], PlayerSpec]
     state: GameState
     scene: MapScene
 

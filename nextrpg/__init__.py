@@ -47,6 +47,10 @@ from nextrpg.character.rpg_maker_character_drawing import (
 from nextrpg.character.view_only_character_drawing import (
     ViewOnlyCharacterDrawing,
 )
+from nextrpg.config.animation_config import AnimationConfig
+from nextrpg.config.character.behavior_config import (
+    BehaviorConfig,
+)
 from nextrpg.config.character.character_config import CharacterConfig
 from nextrpg.config.character.rpg_maker_character_drawing_config import (
     RpgMakerCharacterDrawingConfig,
@@ -59,18 +63,19 @@ from nextrpg.config.config import (
     override_config,
     set_config,
 )
-from nextrpg.config.drawing.animation_config import AnimationConfig
 from nextrpg.config.drawing.text_config import TextConfig
-from nextrpg.config.item_config import BaseItemKey, ItemCategory, ItemConfig
-from nextrpg.config.map_config import MapConfig
-from nextrpg.config.menu_config import MenuConfig
-from nextrpg.config.rpg_event.rpg_event_config import RpgEventConfig
-from nextrpg.config.rpg_event.say_event_config import (
+from nextrpg.config.event.cutscene_config import CutsceneConfig
+from nextrpg.config.event.event_config import RpgEventConfig
+from nextrpg.config.event.event_transformer_config import EventTransformerConfig
+from nextrpg.config.event.say_event_config import (
     AvatarPosition,
     SayEventColorBackgroundConfig,
     SayEventConfig,
     SayEventNineSliceBackgroundConfig,
 )
+from nextrpg.config.item_config import BaseItemKey, ItemCategory, ItemConfig
+from nextrpg.config.map_config import MapConfig
+from nextrpg.config.menu_config import MenuConfig
 from nextrpg.config.system.debug_config import DebugConfig
 from nextrpg.config.system.game_loop_config import GameLoopConfig
 from nextrpg.config.system.key_mapping_config import (
@@ -275,4 +280,8 @@ from nextrpg.widget.scroll_direction import ScrollDirection
 from nextrpg.widget.sizable_widget import SizableWidget, SizableWidgetOnScreen
 from nextrpg.widget.tmx_widget_group_on_screen import TmxWidgetGroupOnScreen
 from nextrpg.widget.widget import Widget, WidgetOnScreen
-from nextrpg.widget.widget_group import WidgetGroup, WidgetGroupOnScreen
+from nextrpg.widget.widget_group import (
+    WidgetGroup,
+    WidgetGroupOnScreen,
+    select_first_widget,
+)

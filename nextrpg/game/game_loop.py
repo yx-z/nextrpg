@@ -39,7 +39,9 @@ class GameLoop:
     _clock: Clock = field(default_factory=Clock)
     _window: Window = field(default_factory=Window)
     _scene: Scene = default(lambda self: self.entry_scene())
-    _config: GameLoopConfig = field(default_factory=lambda: config().game_loop)
+    _config: GameLoopConfig = field(
+        default_factory=lambda: config().system.game_loop
+    )
 
     @cached_property
     def tick(self) -> GameLoop:
@@ -80,7 +82,7 @@ class GameLoop:
 
 
 def _toggle_debug() -> None:
-    if (cfg := config()).debug:
+    if (cfg := config()).system.debug:
         cfg = replace(cfg, debug=None)
     else:
         debug = force_debug_config()

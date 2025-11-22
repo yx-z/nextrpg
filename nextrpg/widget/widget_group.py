@@ -40,16 +40,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
             for drawing_on_screen in child._drawing_on_screens_without_parent
         )
 
-    def replace(
-        self, from_child: WidgetOnScreen, to_child: WidgetOnScreen
-    ) -> Self:
-        assert (
-            meta := from_child.widget.metadata
-        ), f"Require non-empty metadata matching to replace widget from {from_child}."
-        children = tuple(
-            to_child.select if child.widget.metadata == meta else child
-            for child in self._children
-        )
+    def replace(self, children: tuple[WidgetOnScreen, ...]) -> Self:
         return replace(self, _children=children)
 
     @override
@@ -167,6 +158,12 @@ class WidgetGroup[_WidgetGroupOnScreen: WidgetOnScreen](
     loop: bool = True
     _: KW_ONLY = private_init_below()
     widget_on_screen_type: ClassVar[type] = WidgetGroupOnScreen
+
+
+def select_first_widget(
+    widget_on_screens: tuple[WidgetOnScreen, ...],
+) -> tuple[WidgetOnScreen, ...]:
+    return (widget_on_screens[0].select,) + widget_on_screens[1:]
 
 
 _SCROLL_AND_KEY_TO_FORWARD = {

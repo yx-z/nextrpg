@@ -21,7 +21,9 @@ from nextrpg.geometry.direction import Direction, DirectionalOffset
 @dataclass(frozen=True)
 class PlayerOnScreen(MovingCharacterOnScreen):
     spec: PlayerSpec
-    config: PlayerConfig = field(default_factory=lambda: config().player)
+    config: PlayerConfig = field(
+        default_factory=lambda: config().character.player
+    )
     _: KW_ONLY = private_init_below()
     _movement_keys: frozenset[KeyMapping] = field(default_factory=frozenset)
 
@@ -78,7 +80,9 @@ class PlayerOnScreen(MovingCharacterOnScreen):
     def can_move(
         self, coordinate: Coordinate, others: list[CharacterOnScreen]
     ) -> bool:
-        if (debug := config().debug) and not debug.player_collide_with_others:
+        if (
+            debug := config().system.debug
+        ) and not debug.player_collide_with_others:
             return True
         return super().can_move(coordinate, others)
 

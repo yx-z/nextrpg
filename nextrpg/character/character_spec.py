@@ -2,7 +2,7 @@ from dataclasses import dataclass, field, replace
 from typing import Self, override
 
 from nextrpg.character.character_drawing import CharacterDrawing
-from nextrpg.config.character.character_config import CharacterConfig
+from nextrpg.config.character.behavior_config import BehaviorConfig
 from nextrpg.config.config import config
 from nextrpg.core.dataclass_with_default import dataclass_with_default, default
 from nextrpg.core.save import UpdateFromSave
@@ -15,7 +15,9 @@ class _BaseCharacterSpec(UpdateFromSave[str]):
     collide_with_others: bool = True
     avatar: Sprite | None = None
     display_name: str = default(lambda self: self.unique_name)
-    config: CharacterConfig = field(default_factory=lambda: config().character)
+    config: BehaviorConfig = field(
+        default_factory=lambda: config().character.behavior
+    )
 
     @override
     def save_data_this_class(self) -> str:

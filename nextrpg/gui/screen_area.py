@@ -10,7 +10,7 @@ from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
 def screen_size() -> Size:
-    return initial_config().window.size
+    return initial_config().system.window.size
 
 
 def screen_area() -> RectangleAreaOnScreen:
