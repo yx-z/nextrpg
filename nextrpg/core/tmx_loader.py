@@ -20,10 +20,10 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.size import Size
 
 
 def get_geometry(

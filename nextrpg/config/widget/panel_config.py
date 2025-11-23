@@ -6,8 +6,8 @@ from nextrpg.core.dataclass_with_default import dataclass_with_default
 from nextrpg.drawing.color import WHITE, Color
 from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Height, Width
 from nextrpg.geometry.padding import Padding, padding_for_both_sides
+from nextrpg.geometry.size import Height, Width
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing import Drawing

@@ -3,10 +3,10 @@ from math import atan2, degrees, hypot
 from typing import TYPE_CHECKING, NamedTuple, Self, overload, override
 
 from nextrpg.geometry.anchor import Anchor
+from nextrpg.geometry.dimension import Dimension, Pixel
 from nextrpg.geometry.direction import Direction
 
 if TYPE_CHECKING:
-    from nextrpg.geometry.dimension import Dimension, Height, Pixel, Size, Width
     from nextrpg.geometry.directional_offset import DirectionalOffset
     from nextrpg.geometry.sizable_proxy import (
         BottomCenterSizable,
@@ -20,17 +20,18 @@ if TYPE_CHECKING:
         TopLeftSizable,
         TopRightSizable,
     )
+    from nextrpg.geometry.size import Height, Size, Width
 
 
 class XAxis(Dimension):
     @cached_property
     def width(self) -> Width:
-        from nextrpg.geometry.dimension import Width
+        from nextrpg.geometry.size import Width
 
         return Width(self.value)
 
     def __add__(self, other: Pixel | Width) -> XAxis:
-        from nextrpg.geometry.dimension import Width
+        from nextrpg.geometry.size import Width
 
         if isinstance(other, Width):
             return XAxis(self.value + other.value)
@@ -43,7 +44,7 @@ class XAxis(Dimension):
     def __sub__(self, other: XAxis) -> Width: ...
 
     def __sub__(self, other: Pixel | Width | XAxis) -> XAxis | Width:
-        from nextrpg.geometry.dimension import Width
+        from nextrpg.geometry.size import Width
 
         if isinstance(other, XAxis):
             return Width(self.value - other.value)
@@ -62,12 +63,12 @@ class XAxis(Dimension):
 class YAxis(Dimension):
     @cached_property
     def height(self) -> Height:
-        from nextrpg.geometry.dimension import Height
+        from nextrpg.geometry.size import Height
 
         return Height(self.value)
 
     def __add__(self, other: Pixel | Height) -> YAxis:
-        from nextrpg.geometry.dimension import Height
+        from nextrpg.geometry.size import Height
 
         if isinstance(other, Height):
             return YAxis(self.value + other.value)
@@ -80,7 +81,7 @@ class YAxis(Dimension):
     def __sub__(self, other: YAxis) -> Height: ...
 
     def __sub__(self, other: Pixel | Height | YAxis) -> YAxis | Height:
-        from nextrpg.geometry.dimension import Height
+        from nextrpg.geometry.size import Height
 
         if isinstance(other, YAxis):
             return Height(self.value - other.value)
@@ -122,17 +123,19 @@ class Coordinate(NamedTuple):
     def __add__(
         self, arg: Coordinate | Width | Height | Size | DirectionalOffset
     ) -> Coordinate:
-        if isinstance(arg, Width):
-            return Coordinate(self.left_value + arg.value, self.top_value)
-
-        if isinstance(arg, Height):
-            return Coordinate(self.left_value, self.top_value + arg.value)
+        from nextrpg.geometry.size import Height, Size, Width
 
         if isinstance(arg, Size):
             return Coordinate(
                 self.left_value + arg.width_value,
                 self.top_value + arg.height_value,
             )
+
+        if isinstance(arg, Width):
+            return Coordinate(self.left_value + arg.value, self.top_value)
+
+        if isinstance(arg, Height):
+            return Coordinate(self.left_value, self.top_value + arg.value)
 
         if isinstance(arg, Coordinate):
             return Coordinate(

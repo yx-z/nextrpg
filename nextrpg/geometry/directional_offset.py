@@ -4,8 +4,9 @@ from math import cos, radians, sin
 from typing import Self
 
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Pixel, Size, ValueScaling
+from nextrpg.geometry.dimension import Pixel, ValueScaling
 from nextrpg.geometry.direction import Direction
+from nextrpg.geometry.size import Size
 
 type Degree = int | float
 

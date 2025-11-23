@@ -11,9 +11,9 @@ from typing import (
 from nextrpg.core.time import Millisecond
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
+from nextrpg.geometry.size import Size
 
 if TYPE_CHECKING:
     from nextrpg.animation.animation_group import AnimationGroup

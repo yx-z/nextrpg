@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING, Self
 
 from nextrpg.drawing.color import Color
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Height, Size, Width
 from nextrpg.geometry.sizable import Sizable
+from nextrpg.geometry.size import Height, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen

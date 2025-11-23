@@ -10,7 +10,7 @@ from nextrpg.drawing.shifted_sprite import ShiftedSprite
 from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.size import Size
 
 if TYPE_CHECKING:
     from nextrpg.drawing.text_group import TextGroup

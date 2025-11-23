@@ -3,8 +3,9 @@ from functools import cached_property
 from typing import Self, overload
 
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Height, Pixel, Size, Width
+from nextrpg.geometry.dimension import Pixel
 from nextrpg.geometry.sizable import Sizable
+from nextrpg.geometry.size import Height, Size, Width
 
 
 @dataclass(frozen=True)

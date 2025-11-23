@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, override
 
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.size import Size
 
 if TYPE_CHECKING:
     from nextrpg.geometry.sizable import Sizable

@@ -31,7 +31,8 @@ from nextrpg.event.io_event import (
 )
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Height, Size, WidthAndHeightScaling
+from nextrpg.geometry.scaling import WidthAndHeightScaling
+from nextrpg.geometry.size import Height, Size
 
 
 @dataclass_with_default(frozen=True)

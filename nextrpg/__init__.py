@@ -218,18 +218,7 @@ from nextrpg.game.game_state import GameState
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
-from nextrpg.geometry.dimension import (
-    ZERO_SIZE,
-    Dimension,
-    Height,
-    HeightScaling,
-    Pixel,
-    PixelPerMillisecond,
-    Size,
-    Width,
-    WidthAndHeightScaling,
-    WidthScaling,
-)
+from nextrpg.geometry.dimension import Dimension, Pixel, PixelPerMillisecond
 from nextrpg.geometry.direction import Direction
 from nextrpg.geometry.directional_offset import (
     Degree,
@@ -246,7 +235,18 @@ from nextrpg.geometry.polygon_area_on_screen import (
 )
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.scaling import (
+    HeightScaling,
+    WidthAndHeightScaling,
+    WidthScaling,
+)
 from nextrpg.geometry.sizable import Sizable
+from nextrpg.geometry.size import (
+    ZERO_SIZE,
+    Height,
+    Size,
+    Width,
+)
 from nextrpg.geometry.walk import Walk
 from nextrpg.gui.screen_area import (
     bottom_left_screen_area,

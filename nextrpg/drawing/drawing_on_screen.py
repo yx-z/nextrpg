@@ -13,9 +13,9 @@ from nextrpg.drawing.sprite_on_screen import (
 )
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Height, Size, Width
 from nextrpg.geometry.directional_offset import DirectionalOffset
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.size import Height, Size, Width
 
 
 @dataclass(frozen=True)

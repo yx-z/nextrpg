@@ -6,7 +6,7 @@ from nextrpg.core.dataclass_with_default import private_init_below
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.size import Size
 from nextrpg.widget.sizable_widget import (
     SizableWidget,
     SizableWidgetOnScreen,

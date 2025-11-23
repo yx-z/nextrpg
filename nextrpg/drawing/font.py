@@ -6,7 +6,7 @@ from typing import Self
 import pygame
 from pygame.font import SysFont
 
-from nextrpg.geometry.dimension import Height, Size
+from nextrpg.geometry.size import Height, Size
 
 
 @dataclass(frozen=True)

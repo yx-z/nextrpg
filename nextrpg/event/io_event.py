@@ -7,7 +7,7 @@ from pygame import KEYDOWN, KEYUP, MOUSEBUTTONDOWN, QUIT, VIDEORESIZE, Event
 
 from nextrpg.config.system.key_mapping_config import KeyCode, KeyMapping
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.size import Size
 
 
 @dataclass(frozen=True)

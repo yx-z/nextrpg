@@ -8,7 +8,7 @@ from pygame import DOUBLEBUF, FULLSCREEN, RESIZABLE
 from nextrpg.core.save import UpdateSavable
 from nextrpg.drawing.color import BLACK, Color
 from nextrpg.drawing.sprite import Sprite
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.size import Size
 
 
 @dataclass(frozen=True)

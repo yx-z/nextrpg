@@ -20,11 +20,11 @@ from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
 from nextrpg.event.io_event import IoEvent, is_key_press
 from nextrpg.game.game_state import GameState
-from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.padding import (
     Padding,
     padding_for_both_sides,
 )
+from nextrpg.geometry.size import Size
 from nextrpg.scene.scene import Scene
 from nextrpg.widget.sizable_widget import (
     SizableWidget,

@@ -16,9 +16,10 @@ from nextrpg.drawing.shifted_sprite import (
 from nextrpg.drawing.sprite import BlurRadius, Sprite, tick_all
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
-from nextrpg.geometry.dimension import HeightScaling, Size, WidthScaling
 from nextrpg.geometry.directional_offset import Degree
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.scaling import HeightScaling, WidthScaling
+from nextrpg.geometry.size import Size
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing_group_on_screen import DrawingGroupOnScreen

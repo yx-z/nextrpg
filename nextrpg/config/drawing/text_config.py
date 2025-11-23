@@ -4,7 +4,7 @@ from typing import Self
 
 from nextrpg.drawing.color import WHITE, Color
 from nextrpg.drawing.font import Font
-from nextrpg.geometry.dimension import Height, Width
+from nextrpg.geometry.size import Height, Width
 
 
 @dataclass(frozen=True)

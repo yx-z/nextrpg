@@ -5,7 +5,7 @@ from typing import override
 
 from nextrpg.animation.timed_animation_group import TimedAnimationGroup
 from nextrpg.drawing.drawing_group import DrawingGroup
-from nextrpg.geometry.dimension import (
+from nextrpg.geometry.scaling import (
     HeightScaling,
     WidthAndHeightScaling,
     WidthScaling,

@@ -10,7 +10,7 @@ from nextrpg.drawing.sprite_on_screen import (
     SpriteOnScreen,
 )
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.size import Size
 
 
 @dataclass(frozen=True)

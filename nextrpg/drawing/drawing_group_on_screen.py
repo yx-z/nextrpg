@@ -11,8 +11,8 @@ from nextrpg.drawing.sprite_on_screen import (
     SpriteOnScreen,
 )
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import ZERO_SIZE
 from nextrpg.geometry.polyline_on_screen import PolylineOnScreen
+from nextrpg.geometry.size import ZERO_SIZE
 
 
 @dataclass(frozen=True)

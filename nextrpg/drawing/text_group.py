@@ -10,7 +10,7 @@ from nextrpg.drawing.sprite import Sprite
 from nextrpg.drawing.text import Text
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Height, Size, Width
+from nextrpg.geometry.size import Height, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.drawing.text_on_screen import TextOnScreen

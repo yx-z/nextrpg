@@ -7,7 +7,7 @@ from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.size import Size
 from nextrpg.widget.widget import Widget, WidgetOnScreen
 
 

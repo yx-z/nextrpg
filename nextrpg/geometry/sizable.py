@@ -13,11 +13,7 @@ from nextrpg.geometry.anchored_coordinate import (
     TopRightCoordinate,
 )
 from nextrpg.geometry.coordinate import Coordinate, XAxis, YAxis
-from nextrpg.geometry.dimension import (
-    Height,
-    Size,
-    Width,
-)
+from nextrpg.geometry.size import Height, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen

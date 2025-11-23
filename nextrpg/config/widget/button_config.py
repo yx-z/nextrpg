@@ -3,8 +3,9 @@ from dataclasses import dataclass
 from nextrpg.config.drawing.text_config import TextConfig
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import WHITE, Color
-from nextrpg.geometry.dimension import Pixel, Size
+from nextrpg.geometry.dimension import Pixel
 from nextrpg.geometry.padding import Padding, padding_for_all_sides
+from nextrpg.geometry.size import Size
 
 
 @dataclass(frozen=True)

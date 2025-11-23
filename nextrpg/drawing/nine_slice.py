@@ -7,7 +7,7 @@ from nextrpg.drawing.polyline_drawing import PolylineDrawing
 from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import ORIGIN
-from nextrpg.geometry.dimension import Height, Size, Width
+from nextrpg.geometry.size import Height, Size, Width
 
 
 @dataclass(frozen=True)

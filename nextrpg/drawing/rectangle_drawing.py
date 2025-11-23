@@ -9,7 +9,8 @@ from nextrpg.core.save import LoadFromSave
 from nextrpg.drawing.color import Color
 from nextrpg.drawing.drawing import Drawing
 from nextrpg.geometry.coordinate import ORIGIN
-from nextrpg.geometry.dimension import Pixel, Size
+from nextrpg.geometry.dimension import Pixel
+from nextrpg.geometry.size import Size
 
 
 @dataclass(frozen=True)

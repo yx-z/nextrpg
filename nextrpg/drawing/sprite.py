@@ -8,15 +8,15 @@ from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import Alpha
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
-from nextrpg.geometry.dimension import (
+from nextrpg.geometry.directional_offset import Degree, DirectionalOffset
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.scaling import (
     HeightScaling,
-    Size,
     WidthAndHeightScaling,
     WidthScaling,
 )
-from nextrpg.geometry.directional_offset import Degree, DirectionalOffset
-from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
+from nextrpg.geometry.size import Size
 
 if TYPE_CHECKING:
     from nextrpg.animation.animation_on_screen import AnimationOnScreen

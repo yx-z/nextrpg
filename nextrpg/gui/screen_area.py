@@ -1,12 +1,12 @@
 from nextrpg.config.config import initial_config
 from nextrpg.geometry.coordinate import ORIGIN
-from nextrpg.geometry.dimension import (
+from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.scaling import (
     HeightScaling,
-    Size,
     WidthAndHeightScaling,
     WidthScaling,
 )
-from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.size import Size
 
 
 def screen_size() -> Size:

@@ -27,7 +27,7 @@ from nextrpg.event.say_event.say_event_state import (
 )
 from nextrpg.game.game_state import GameState
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.size import Size
 from nextrpg.scene.scene import Scene
 
 type SayEventArg = str | Coordinate | Millisecond | Size | Sprite | AvatarPosition | SayEventConfig

@@ -2,8 +2,9 @@ from dataclasses import dataclass
 from functools import cached_property
 
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size, WidthAndHeightScaling
+from nextrpg.geometry.scaling import WidthAndHeightScaling
 from nextrpg.geometry.sizable import Sizable
+from nextrpg.geometry.size import Size
 
 
 @dataclass(frozen=True)

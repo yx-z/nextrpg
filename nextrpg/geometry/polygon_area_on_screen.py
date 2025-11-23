@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, override
 from nextrpg.drawing.color import Color
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Height, Size, Width
+from nextrpg.geometry.size import Height, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen

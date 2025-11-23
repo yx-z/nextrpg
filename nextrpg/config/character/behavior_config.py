@@ -1,10 +1,9 @@
 from dataclasses import dataclass
 
 from nextrpg.geometry.dimension import (
-    HeightScaling,
     PixelPerMillisecond,
-    WidthScaling,
 )
+from nextrpg.geometry.scaling import HeightScaling, WidthScaling
 
 
 @dataclass(frozen=True)

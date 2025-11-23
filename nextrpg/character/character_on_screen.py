@@ -26,9 +26,10 @@ from nextrpg.event.event_as_attr import EventAsAttr
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size, WidthScaling
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.scaling import WidthScaling
+from nextrpg.geometry.size import Size
 
 
 @dataclass_with_default(frozen=True)

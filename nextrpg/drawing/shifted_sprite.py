@@ -8,14 +8,13 @@ from nextrpg.drawing.color import Alpha
 from nextrpg.drawing.sprite import BlurRadius, Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import (
-    ZERO_SIZE,
+from nextrpg.geometry.directional_offset import Degree, DirectionalOffset
+from nextrpg.geometry.scaling import (
     HeightScaling,
-    Size,
     WidthAndHeightScaling,
     WidthScaling,
 )
-from nextrpg.geometry.directional_offset import Degree, DirectionalOffset
+from nextrpg.geometry.size import ZERO_SIZE, Size
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing import Drawing

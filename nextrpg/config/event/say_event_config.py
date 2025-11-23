@@ -8,7 +8,8 @@ from nextrpg.config.drawing.text_config import TextConfig
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import BLACK, BLUE, Color
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Height, Pixel, Size, Width
+from nextrpg.geometry.dimension import Pixel
+from nextrpg.geometry.size import Height, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing import Drawing

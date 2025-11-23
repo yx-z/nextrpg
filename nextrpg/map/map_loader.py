@@ -29,9 +29,9 @@ from nextrpg.drawing.sprite_on_screen import (
 )
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate, YAxis
-from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.polygon_area_on_screen import PolygonAreaOnScreen
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
+from nextrpg.geometry.size import Size
 
 
 @dataclass(frozen=True)

@@ -3,7 +3,7 @@ from functools import cached_property
 
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import Color
-from nextrpg.geometry.dimension import HeightScaling
+from nextrpg.geometry.scaling import HeightScaling
 
 
 @dataclass(frozen=True)

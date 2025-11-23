@@ -8,8 +8,8 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Size
 from nextrpg.geometry.directional_offset import DirectionalOffset
+from nextrpg.geometry.size import Size
 
 
 @dataclass_with_default(frozen=True, kw_only=True)

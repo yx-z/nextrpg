@@ -21,7 +21,7 @@ from nextrpg.drawing.text_on_screen import TextOnScreen
 from nextrpg.event.eventful_scene import EventfulScene
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import WidthAndHeightScaling
+from nextrpg.geometry.scaling import WidthAndHeightScaling
 from nextrpg.gui.screen_area import (
     left_screen_area,
     screen_area,
