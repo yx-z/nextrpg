@@ -83,11 +83,12 @@ class GameLoop:
 
 def _toggle_debug() -> None:
     if (cfg := config()).system.debug:
-        cfg = replace(cfg, debug=None)
+        system = replace(cfg.system, debug=None)
     else:
         debug = force_debug_config()
         logging.basicConfig(
             level=debug.log_level.standard, **debug.console_log_configs
         )
-        cfg = replace(cfg, debug=debug)
+        system = replace(cfg.system, debug=debug)
+    cfg = replace(cfg, system=system)
     set_config(cfg)

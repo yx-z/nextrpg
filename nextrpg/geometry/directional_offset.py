@@ -15,6 +15,10 @@ class DirectionalOffset:
     direction: Direction | Degree
     offset: Pixel
 
+    @cached_property
+    def directional_offset(self) -> Self:
+        return self
+
     def __mul__(self, scaling: ValueScaling) -> Self:
         return replace(self, offset=self.offset * scaling)
 

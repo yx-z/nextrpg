@@ -21,7 +21,8 @@ class Move(TimedAnimationGroup, ABC):
     def drawing(self) -> DrawingGroup:
         drawing = super().drawing
         resource = tuple(
-            relative_drawing + self.offset
+            relative_drawing
+            + self.offset.directional_offset * self.move_percentage
             for relative_drawing in drawing.resources
         )
         return DrawingGroup(resource)
