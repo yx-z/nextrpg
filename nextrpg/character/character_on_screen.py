@@ -77,11 +77,10 @@ class CharacterOnScreen(
         return self.tick_with_others(time_delta, [])
 
     def tick_with_others(
-        self, time_delta: Millisecond, others: list[CharacterOnScreen]
+        self, time_delta: Millisecond, others: tuple[CharacterOnScreen, ...]
     ) -> Self:
-        return replace(
-            self, character_drawing=self.character_drawing.tick_idle(time_delta)
-        )
+        character_drawing = self.character_drawing.tick_idle(time_delta)
+        return replace(self, character_drawing=character_drawing)
 
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:

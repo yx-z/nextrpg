@@ -95,7 +95,7 @@ class Window:
 
     def blits(
         self,
-        drawing_on_screens: list[DrawingOnScreen],
+        drawing_on_screens: tuple[DrawingOnScreen, ...],
         time_delta: Millisecond,
     ) -> None:
         log().debug(
@@ -169,7 +169,7 @@ def _set_window_config(window_config: WindowConfig) -> None:
     set_config(full_config)
 
 
-def _log(entries: list[LogEntry]) -> tuple[DrawingOnScreen, ...]:
+def _log(entries: tuple[LogEntry, ...]) -> tuple[DrawingOnScreen, ...]:
     components = tuple(Text(e.component) for e in entries)
     component_width = max(t.width for t in components)
 

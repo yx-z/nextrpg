@@ -102,11 +102,6 @@ class TextGroup(Sprite):
             curr_height += line_height + self.config.line_spacing
         return DrawingGroup(tuple(res))
 
-    def _width(self, line: list[Text]) -> Width:
-        widths = sum(t.size.width for t in line)
-        margins = (len(line) - 1) * self.config.margin
-        return widths + margins
-
     @cached_property
     def _no_wrap(self) -> tuple[Text, ...]:
         return tuple(_no_wrap(t) for t in self.texts)

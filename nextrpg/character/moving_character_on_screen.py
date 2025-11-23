@@ -23,7 +23,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
     @override
     def tick_with_others(
-        self, time_delta: Millisecond, others: list[CharacterOnScreen]
+        self, time_delta: Millisecond, others: tuple[CharacterOnScreen, ...]
     ) -> Self:
         if not self.moving or (
             not self.can_move(moved_coordinate := self.move(time_delta), others)
@@ -43,7 +43,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         return self._tick_after_character_and_coordinate(time_delta, ticked)
 
     def can_move(
-        self, coordinate: Coordinate, others: list[CharacterOnScreen]
+        self, coordinate: Coordinate, others: tuple[CharacterOnScreen, ...]
     ) -> bool:
         if not self.spec.collide_with_others:
             return True
@@ -64,7 +64,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
     def _collide(
         self,
         bounding_rect: RectangleAreaOnScreen,
-        others: list[CharacterOnScreen],
+        others: tuple[CharacterOnScreen, ...],
     ) -> AreaOnScreen | None:
         other_rectangle_area_on_screens = tuple(
             c.collision_rectangle_area_on_screen

@@ -1,17 +1,14 @@
-from dataclasses import KW_ONLY, dataclass, field, replace
+from dataclasses import KW_ONLY, dataclass, field
 from functools import cached_property
-from typing import ClassVar, override
+from typing import ClassVar
 
-from nextrpg import Anchor
 from nextrpg.config.config import config
 from nextrpg.config.widget.panel_config import PanelConfig
-from nextrpg.core.dataclass_with_default import (
-    private_init_below,
-)
+from nextrpg.core.dataclass_with_default import default, private_init_below
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.area_on_screen import AreaOnScreen
-from nextrpg.widget.sizable_widget import SizableWidget, SizableWidgetOnScreen
-from nextrpg.widget.widget import Widget, WidgetOnScreen
+from nextrpg.widget.sizable_widget import SizableWidget
 from nextrpg.widget.widget_group import WidgetGroup, WidgetGroupOnScreen
 
 
@@ -19,7 +16,7 @@ from nextrpg.widget.widget_group import WidgetGroup, WidgetGroupOnScreen
 class PanelOnScreen(WidgetGroupOnScreen):
     widget: Panel
     _: KW_ONLY = private_init_below()
-    _visible: range = ...
+    _visible: range = default(lambda self: self._init_visible)
 
     @cached_property
     def children_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
@@ -48,35 +45,14 @@ class PanelOnScreen(WidgetGroupOnScreen):
         ), f"Expect AreaOnScreen for {self.widget.name}. Got {self.on_screen}."
         return self.on_screen
 
-    @override
-    def _init_children(
-        self, children: tuple[Widget, ...]
-    ) -> tuple[WidgetOnScreen, ...]:
-        res: list[WidgetOnScreen] = []
-        for i, widget_on_screen in enumerate(super()._init_children(children)):
-            if (
-                isinstance(widget_on_screen, SizableWidgetOnScreen)
-                and not (widget := widget_on_screen.widget).coordinate
-            ):
-                widget = self._anchor(i, widget)
-                anchored = replace(widget_on_screen, widget=widget)
-            else:
-                anchored = widget_on_screen
-            res.append(anchored)
-        return tuple(res)
-
-    def _anchor[_SizableWidget: SizableWidget](
-        self, i: int, widget: _SizableWidget
-    ) -> _SizableWidget:
-        padding = self.widget.config.children_padding
-        top_left = ...
-        return widget.anchored(top_left)
+    @property
+    def _init_visible(self) -> range: ...
 
 
 @dataclass(frozen=True, kw_only=True)
 class Panel(WidgetGroup[PanelOnScreen]):
     name: str
-    children: tuple[Widget, ...]
+    children: tuple[SizableWidget, ...]
     config: PanelConfig = field(default_factory=lambda: config().widget.panel)
     _: KW_ONLY = private_init_below()
     widget_on_screen_type: ClassVar[type] = PanelOnScreen

@@ -139,7 +139,7 @@ class SpriteOnScreen(Sizable, Protocol):
 
 @overload
 def animate(
-    resource: SpriteOnScreen | list[SpriteOnScreen],
+    resource: SpriteOnScreen | tuple[SpriteOnScreen, ...],
     animation: type[TimedAnimationGroup],
     anchor: Anchor = Anchor.TOP_LEFT,
     **kwargs: Any,
@@ -148,7 +148,7 @@ def animate(
 
 @overload
 def animate(
-    resource: SpriteOnScreen | list[SpriteOnScreen],
+    resource: SpriteOnScreen | tuple[SpriteOnScreen, ...],
     animation: type[AnimationGroup],
     anchor: Anchor = Anchor.TOP_LEFT,
     **kwargs: Any,
@@ -156,7 +156,7 @@ def animate(
 
 
 def animate(
-    resource: SpriteOnScreen | list[SpriteOnScreen],
+    resource: SpriteOnScreen | tuple[SpriteOnScreen, ...],
     animation_type: type[TimedAnimationGroup] | type[AnimationGroup],
     anchor: Anchor = Anchor.TOP_LEFT,
     **kwargs: Any,

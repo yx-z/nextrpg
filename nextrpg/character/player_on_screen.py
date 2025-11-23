@@ -78,7 +78,7 @@ class PlayerOnScreen(MovingCharacterOnScreen):
 
     @override
     def can_move(
-        self, coordinate: Coordinate, others: list[CharacterOnScreen]
+        self, coordinate: Coordinate, others: tuple[CharacterOnScreen, ...]
     ) -> bool:
         if (
             debug := config().system.debug

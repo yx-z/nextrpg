@@ -47,7 +47,7 @@ class TimedAnimationSpec:
 
     def animate(
         self,
-        resource: SpriteOnScreen | list[SpriteOnScreen],
+        resource: SpriteOnScreen | tuple[SpriteOnScreen, ...],
     ) -> TimedAnimationOnScreens:
         animation_type, kwargs = self.animations[0]
         animation = animate(resource, animation_type, self.anchor, **kwargs)

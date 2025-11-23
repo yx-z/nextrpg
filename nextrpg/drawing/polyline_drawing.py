@@ -9,5 +9,5 @@ from nextrpg.geometry.coordinate import Coordinate
 
 class PolylineDrawing(PolygonDrawing):
     @override
-    def _draw(self, surface: Surface, points: list[Coordinate]) -> None:
+    def _draw(self, surface: Surface, points: tuple[Coordinate, ...]) -> None:
         lines(surface, self.color.pygame, closed=False, points=points)
