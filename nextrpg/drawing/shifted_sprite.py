@@ -25,12 +25,12 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class ShiftedSprite:
     resource: Sprite
-    offset_input: Coordinate | Size | DirectionalOffset
+    offset: Coordinate | Size | DirectionalOffset
     anchor: Anchor = Anchor.TOP_LEFT
 
     @cached_property
-    def offset(self) -> Size:
-        return self.offset_input.size
+    def offset_size(self) -> Size:
+        return self.offset.size
 
     @cached_property
     def drawing_group(self) -> DrawingGroup:
@@ -39,8 +39,8 @@ class ShiftedSprite:
         return DrawingGroup(self)
 
     def __add__(self, other: Coordinate | Size | DirectionalOffset) -> Self:
-        offset = self.offset + other.size
-        return replace(self, offset_input=offset)
+        offset = self.offset_size + other.size
+        return replace(self, offset=offset)
 
     def __sub__(self, other: Coordinate | Size | DirectionalOffset) -> Self:
         return self + -other
@@ -48,9 +48,9 @@ class ShiftedSprite:
     def __mul__(
         self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
     ) -> Self:
-        offset = self.offset * scaling
+        offset = self.offset_size * scaling
         resource = self.resource * scaling
-        return replace(self, resource=resource, offset_input=offset)
+        return replace(self, resource=resource, offset=offset)
 
     def tick(self, time_delta: Millisecond) -> Self:
         resource = self.resource.tick(time_delta)
@@ -62,15 +62,13 @@ class ShiftedSprite:
 
     def flip(self, horizontal: bool = False, vertical: bool = False) -> Self:
         resource = self.resource.flip(horizontal, vertical)
-        offset = self.offset
+        offset = self.offset_size
         if horizontal:
             offset = offset.negate_width
         if vertical:
             offset = offset.negate_height
         anchor = -self.anchor
-        return replace(
-            self, resource=resource, offset_input=offset, anchor=anchor
-        )
+        return replace(self, resource=resource, offset=offset, anchor=anchor)
 
     def alpha(self, alpha: Alpha) -> Self:
         resource = self.resource.alpha(alpha)
@@ -84,7 +82,7 @@ class ShiftedSprite:
         self, origin: Coordinate
     ) -> tuple[DrawingOnScreen, ...]:
         return self.resource.drawing_on_screens(
-            origin + self.offset, self.anchor
+            origin + self.offset_size, self.anchor
         )
 
     def blur(self, radius: BlurRadius) -> Self:
@@ -92,9 +90,9 @@ class ShiftedSprite:
         return replace(self, resource=resource)
 
     def rotate(self, degree: Degree) -> Self:
-        offset = self.offset.directional_offset
+        offset = self.offset_size.directional_offset
         rotated = replace(offset, degree=offset.degree + degree)
-        return replace(self, offset_input=rotated)
+        return replace(self, offset=rotated)
 
 
 def shifted_sprites(
