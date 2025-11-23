@@ -44,7 +44,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         return self._tick_after_character_and_coordinate(time_delta, ticked)
 
     def can_move(
-        self, coordinate: Coordinate, others: Collection[CharacterOnScreen]
+        self, coordinate: Coordinate, others: Iterable[CharacterOnScreen]
     ) -> bool:
         if not self.spec.collide_with_others:
             return True
