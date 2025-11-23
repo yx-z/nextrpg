@@ -14,6 +14,7 @@ from nextrpg.geometry.dimension import (
     WidthAndHeightScaling,
     WidthScaling,
 )
+from nextrpg.geometry.directional_offset import Degree, DirectionalOffset
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.sizable import Sizable
 
@@ -23,6 +24,8 @@ if TYPE_CHECKING:
     from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
     from nextrpg.drawing.shifted_sprite import ShiftedSprite
+
+type BlurRadius = int
 
 
 @runtime_checkable
@@ -58,13 +61,15 @@ class Sprite(Sizable, Protocol):
         return self + -shift
 
     def shift(
-        self, shift: Coordinate | Size, anchor: Anchor = Anchor.TOP_LEFT
+        self,
+        shift: Coordinate | Size | DirectionalOffset,
+        anchor: Anchor = Anchor.TOP_LEFT,
     ) -> ShiftedSprite:
         from nextrpg.drawing.shifted_sprite import (
             ShiftedSprite,
         )
 
-        return ShiftedSprite(self, shift.size, anchor)
+        return ShiftedSprite(self, shift, anchor)
 
     def animation_on_screen(
         self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
@@ -109,8 +114,11 @@ class Sprite(Sizable, Protocol):
     def crop(self, area: RectangleAreaOnScreen) -> Drawing | DrawingGroup:
         return self.drawing.crop(area)
 
-    def blur(self, radius: int) -> Drawing:
+    def blur(self, radius: BlurRadius) -> Drawing:
         return self.drawing.blur(radius)
+
+    def rotate(self, degree: Degree) -> Drawing | DrawingGroup:
+        return self.drawing.rotate(degree)
 
 
 def tick_optional[T](resource: T | None, time_delta: Millisecond) -> T | None:

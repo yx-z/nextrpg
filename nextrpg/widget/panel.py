@@ -46,7 +46,8 @@ class PanelOnScreen(WidgetGroupOnScreen):
         return self.on_screen
 
     @property
-    def _init_visible(self) -> range: ...
+    def _init_visible(self) -> range:
+        top_left = self.widget.config.padding.top_left
 
 
 @dataclass(frozen=True, kw_only=True)

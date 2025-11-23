@@ -4,10 +4,12 @@ from typing import TYPE_CHECKING, NamedTuple, Self, overload, override
 
 if TYPE_CHECKING:
     from nextrpg.geometry.coordinate import Coordinate, XAxis, YAxis
+    from nextrpg.geometry.directional_offset import DirectionalOffset
     from nextrpg.geometry.padding import Padding
 
 type Pixel = int | float
 type PixelPerMillisecond = int | float
+type ValueScaling = int | float
 
 
 @dataclass(frozen=True)
@@ -29,16 +31,16 @@ class Dimension:
     def __sub__(self, other: Self) -> Self:
         return self + -other
 
-    def __mul__(self, other: int | float) -> Self:
+    def __mul__(self, other: ValueScaling) -> Self:
         return type(self)(self.value * other)
 
-    def __rmul__(self, other: int | float) -> Self:
+    def __rmul__(self, other: ValueScaling) -> Self:
         return self * other
 
-    def __truediv__(self, other: int | float) -> Self:
+    def __truediv__(self, other: ValueScaling) -> Self:
         return self * (1.0 / other)
 
-    def __rtruediv__(self, other: int | float) -> Self:
+    def __rtruediv__(self, other: ValueScaling) -> Self:
         return other * (1.0 / self)
 
 
@@ -49,33 +51,46 @@ class _Scaling(Dimension):
 
 
 class WidthScaling(_Scaling):
-    pass
-
-
-class WidthAndHeightScaling(_Scaling):
     @overload
-    def __mul__(self, arg: int | float) -> WidthScaling: ...
+    def __mul__(self, other: ValueScaling) -> WidthScaling: ...
 
     @overload
-    def __mul__(self, arg: Width) -> Width: ...
+    def __mul__(self, other: Width) -> Width: ...
 
-    def __mul__(self, arg: int | float | Width) -> WidthScaling | Width:
-        if isinstance(arg, Width):
-            return Width(self.value * arg.value)
-        return WidthScaling(self.value * arg)
+    def __mul__(self, other: ValueScaling | Width) -> WidthScaling | Width:
+        if isinstance(other, Width):
+            return Width(self.value * other.value)
+        return WidthScaling(self.value * other)
 
 
 class HeightScaling(_Scaling):
     @overload
-    def __mul__(self, arg: int | float) -> HeightScaling: ...
+    def __mul__(self, other: ValueScaling) -> HeightScaling: ...
 
     @overload
-    def __mul__(self, arg: Height) -> Height: ...
+    def __mul__(self, other: Height) -> Height: ...
 
-    def __mul__(self, arg: int | float | Height) -> HeightScaling | Height:
-        if isinstance(arg, Height):
-            return Height(self.value * arg.value)
-        return HeightScaling(self.value * arg)
+    def __mul__(self, other: ValueScaling | Height) -> HeightScaling | Height:
+        if isinstance(other, Height):
+            return Height(self.value * other.value)
+        return HeightScaling(self.value * other)
+
+
+class WidthAndHeightScaling(_Scaling):
+    @overload
+    def __mul__(self, other: ValueScaling) -> WidthAndHeightScaling: ...
+
+    @overload
+    def __mul__(self, other: Size) -> Size: ...
+
+    def __mul__(
+        self, other: ValueScaling | Size
+    ) -> WidthAndHeightScaling | Size:
+        if isinstance(other, Size):
+            return Size(
+                self.value * other.width_value, self.value * other.height_value
+            )
+        return WidthAndHeightScaling(self.value * other)
 
 
 class Width(Dimension):
@@ -86,37 +101,61 @@ class Width(Dimension):
         return XAxis(self.value)
 
     @overload
-    def __mul__(self, arg: int | float | WidthScaling) -> Width: ...
+    def __mul__(self, other: ValueScaling | WidthScaling) -> Width: ...
 
     @overload
-    def __mul__(self, arg: Height) -> Size: ...
+    def __mul__(self, other: Height) -> Size: ...
 
-    def __mul__(self, arg: int | float | WidthScaling | Height) -> Width | Size:
-        if isinstance(arg, Height):
-            return Size(self.value, arg.value)
-        if isinstance(arg, int | float):
-            return Width(self.value * arg)
-        return Width(self.value * arg.value)
+    def __mul__(
+        self, other: ValueScaling | WidthScaling | Height
+    ) -> Width | Size:
+        if isinstance(other, Height):
+            return Size(self.value, other.value)
+        if isinstance(other, int | float):
+            return Width(self.value * other)
+        return Width(self.value * other.value)
 
     @overload
-    def __truediv__(self, arg: int | float | WidthScaling) -> Width: ...
+    def __truediv__(self, other: ValueScaling | WidthScaling) -> Width: ...
 
     @overload
-    def __truediv__(self, arg: Width) -> WidthScaling: ...
+    def __truediv__(self, other: Width) -> WidthScaling: ...
 
     def __truediv__(
-        self, arg: int | float | WidthScaling | Width
+        self, other: ValueScaling | WidthScaling | Width
     ) -> Width | WidthScaling:
-        if isinstance(arg, Width):
-            return WidthScaling(self.value / arg.value)
+        if isinstance(other, Width):
+            return WidthScaling(self.value / other.value)
 
-        if isinstance(arg, int | float):
-            return Width(self.value / arg)
-        return Width(self.value / arg.value)
+        if isinstance(other, int | float):
+            return Width(self.value / other)
+        return Width(self.value / other.value)
 
     @cached_property
     def with_zero_height(self) -> Size:
         return self * Height(0)
+
+    @overload
+    def __add__(self, other: int | float | Width) -> Width: ...
+
+    @overload
+    def __add__(self, other: Size) -> Size: ...
+
+    def __add__(self, other: int | float | Width | Size) -> Width | Size:
+        if isinstance(other, Size):
+            return Size(self.value + other.width_value, other.height_value)
+        if isinstance(other, Width):
+            return Width(self.value + other.value)
+        return Width(self.value + other)
+
+    @overload
+    def __sub__(self, other: Width) -> Width: ...
+
+    @overload
+    def __sub__(self, other: Size) -> Size: ...
+
+    def __sub__(self, other: Width | Size) -> Width | Size:
+        return self + -other
 
 
 class Height(Dimension):
@@ -127,39 +166,61 @@ class Height(Dimension):
         return YAxis(self.value)
 
     @overload
-    def __mul__(self, arg: int | float | HeightScaling) -> Height: ...
+    def __mul__(self, other: ValueScaling | HeightScaling) -> Height: ...
 
     @overload
-    def __mul__(self, arg: Width) -> Size: ...
+    def __mul__(self, other: Width) -> Size: ...
 
     def __mul__(
-        self, arg: int | float | HeightScaling | Width
+        self, other: ValueScaling | HeightScaling | Width
     ) -> Height | Size:
-        if isinstance(arg, Width):
-            return Size(arg.value, self.value)
-        if isinstance(arg, int | float):
-            return Height(self.value * arg)
-        return Height(self.value * arg.value)
+        if isinstance(other, Width):
+            return Size(other.value, self.value)
+        if isinstance(other, int | float):
+            return Height(self.value * other)
+        return Height(self.value * other.value)
 
     @overload
-    def __truediv__(self, arg: int | float | HeightScaling) -> Height: ...
+    def __truediv__(self, other: ValueScaling | HeightScaling) -> Height: ...
 
     @overload
-    def __truediv__(self, arg: Height) -> HeightScaling: ...
+    def __truediv__(self, other: Height) -> HeightScaling: ...
 
     def __truediv__(
-        self, arg: int | float | HeightScaling | Height
+        self, other: ValueScaling | HeightScaling | Height
     ) -> Height | HeightScaling:
-        if isinstance(arg, Height):
-            return HeightScaling(self.value / arg.value)
+        if isinstance(other, Height):
+            return HeightScaling(self.value / other.value)
 
-        if isinstance(arg, int | float):
-            return Height(self.value / arg)
-        return Height(self.value / arg.value)
+        if isinstance(other, int | float):
+            return Height(self.value / other)
+        return Height(self.value / other.value)
 
     @cached_property
     def with_zero_width(self) -> Size:
         return Width(0) * self
+
+    @overload
+    def __add__(self, other: int | float | Height) -> Height: ...
+
+    @overload
+    def __add__(self, other: Size) -> Size: ...
+
+    def __add__(self, other: int | float | Height | Size) -> Height | Size:
+        if isinstance(other, Size):
+            return Size(other.width_value, self.value + other.height_value)
+        if isinstance(other, Height):
+            return Height(self.value + other.value)
+        return Height(self.value + other)
+
+    @overload
+    def __sub__(self, other: Height) -> Height: ...
+
+    @overload
+    def __sub__(self, other: Size) -> Size: ...
+
+    def __sub__(self, other: Height | Size) -> Height | Size:
+        return self + -other
 
 
 class Size(NamedTuple):
@@ -190,27 +251,12 @@ class Size(NamedTuple):
         return Size(-self.width_value, -self.height_value)
 
     def __add__(self, other: Size | Width | Height | Padding) -> Size:
-        from nextrpg.geometry.padding import Padding
-
-        if isinstance(other, Padding):
+        if isinstance(other, Size):
             return Size(
-                self.width_value + other.left.value + other.right.value,
-                self.height_value + other.top.value + other.bottom.value,
+                self.width_value + other.width_value,
+                self.height_value + other.height_value,
             )
-
-        if isinstance(other, Width):
-            return Size(self.width_value + other.value, self.height_value)
-
-        if isinstance(other, Height):
-            return Size(self.width_value, self.height_value + other.value)
-
-        return Size(
-            self.width_value + other.width_value,
-            self.height_value + other.height_value,
-        )
-
-    def __radd__(self, other: Size | Width | Height | Padding) -> Size:
-        return self + other
+        return other + self
 
     def __sub__(self, other: Size | Width | Height | Padding) -> Size:
         return self + -other
@@ -227,11 +273,6 @@ class Size(NamedTuple):
         return Size(
             self.width_value * scaling.value, self.height_value * scaling.value
         )
-
-    def __rmul__(
-        self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
-    ) -> Size:
-        return self * scaling
 
     def __truediv__(
         self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
@@ -253,13 +294,17 @@ class Size(NamedTuple):
         return Coordinate(self.width_value, self.height_value)
 
     @property
-    def save_data(self) -> tuple[Pixel, ...]:
-        return tuple(self)
+    def save_data(self) -> Self:
+        return self
 
     @classmethod
     def load_from_save(cls, data: list[Pixel]) -> Self:
         assert len(data) == 2, f"Size only takes [left, top]. Got {data}."
         return cls(*data)
+
+    @property
+    def directional_offset(self) -> DirectionalOffset:
+        return self.coordinate.directional_offset
 
 
 ZERO_SIZE = Size(0, 0)

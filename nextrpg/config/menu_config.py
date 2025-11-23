@@ -4,6 +4,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING
 
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.sprite import BlurRadius
 
 if TYPE_CHECKING:
     from nextrpg.core.tmx_loader import TmxLoader
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 class MenuConfig:
     widget_input: Callable[[], WidgetGroup]
     tmx_input: TmxLoader | Callable[[], TmxLoader]
-    blur_radius: int = 2
+    blur_radius: BlurRadius = 2
     fade_duration_override: Millisecond | None = None
 
     @cached_property

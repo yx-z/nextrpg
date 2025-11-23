@@ -4,8 +4,6 @@ from nextrpg import (
     Button,
     ButtonConfig,
     ButtonOnScreen,
-    Direction,
-    DirectionalOffset,
     FadeIn,
     GameSaveMeta,
     GameState,
@@ -25,7 +23,7 @@ NUM_SAVE_SLOTS = 3
 PADDING_WIDTH = Width(10)
 PADDING_HEIGHT = Height(10)
 
-WIDGET_OFFSET = DirectionalOffset(Direction.DOWN, 50)
+WIDGET_OFFSET = Size(0, 50)
 ENTER_ANIMATION = TimedAnimationSpec(FadeIn).compose(
     MoveTo, offset=WIDGET_OFFSET
 )

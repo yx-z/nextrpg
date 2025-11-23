@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Self
 
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import Alpha
-from nextrpg.drawing.sprite import Sprite
+from nextrpg.drawing.sprite import BlurRadius, Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import (
@@ -15,6 +15,7 @@ from nextrpg.geometry.dimension import (
     WidthAndHeightScaling,
     WidthScaling,
 )
+from nextrpg.geometry.directional_offset import Degree, DirectionalOffset
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing import Drawing
@@ -25,8 +26,12 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class ShiftedSprite:
     resource: Sprite
-    offset: Size
+    offset_input: Coordinate | Size | DirectionalOffset
     anchor: Anchor = Anchor.TOP_LEFT
+
+    @cached_property
+    def offset(self) -> Size:
+        return self.offset_input.size
 
     @cached_property
     def drawing_group(self) -> DrawingGroup:
@@ -34,11 +39,11 @@ class ShiftedSprite:
 
         return DrawingGroup(self)
 
-    def __add__(self, other: Coordinate | Size) -> Self:
+    def __add__(self, other: Coordinate | Size | DirectionalOffset) -> Self:
         offset = self.offset + other.size
-        return replace(self, offset=offset)
+        return replace(self, offset_input=offset)
 
-    def __sub__(self, other: Coordinate | Size) -> Self:
+    def __sub__(self, other: Coordinate | Size | DirectionalOffset) -> Self:
         return self + -other
 
     def __mul__(
@@ -46,7 +51,7 @@ class ShiftedSprite:
     ) -> Self:
         offset = self.offset * scaling
         resource = self.resource * scaling
-        return replace(self, resource=resource, shift=offset)
+        return replace(self, resource=resource, offset_input=offset)
 
     def tick(self, time_delta: Millisecond) -> Self:
         resource = self.resource.tick(time_delta)
@@ -64,7 +69,9 @@ class ShiftedSprite:
         if vertical:
             offset = offset.negate_height
         anchor = -self.anchor
-        return replace(self, resource=resource, offset=offset, anchor=anchor)
+        return replace(
+            self, resource=resource, offset_input=offset, anchor=anchor
+        )
 
     def alpha(self, alpha: Alpha) -> Self:
         resource = self.resource.alpha(alpha)
@@ -81,9 +88,14 @@ class ShiftedSprite:
             origin + self.offset, self.anchor
         )
 
-    def blur(self, radius: int) -> Self:
+    def blur(self, radius: BlurRadius) -> Self:
         resource = self.resource.blur(radius)
         return replace(self, resource=resource)
+
+    def rotate(self, degree: Degree) -> Self:
+        offset = self.offset.directional_offset
+        rotated = replace(offset, degree=offset.degree + degree)
+        return replace(self, offset_input=rotated)
 
 
 def shifted_sprites(

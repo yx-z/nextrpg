@@ -16,7 +16,8 @@ from nextrpg.core.dataclass_with_default import private_init_below
 from nextrpg.core.time import Millisecond
 from nextrpg.event.io_event import IoEvent, KeyPressDown, KeyPressUp
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.direction import Direction, DirectionalOffset
+from nextrpg.geometry.direction import Direction
+from nextrpg.geometry.directional_offset import DirectionalOffset
 
 
 @dataclass(frozen=True)

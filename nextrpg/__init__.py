@@ -146,7 +146,7 @@ from nextrpg.drawing.shifted_sprite import (
     ShiftedSprite,
     shifted_sprites,
 )
-from nextrpg.drawing.sprite import Sprite, tick_all, tick_optional
+from nextrpg.drawing.sprite import BlurRadius, Sprite, tick_all, tick_optional
 from nextrpg.drawing.sprite_on_screen import (
     SpriteOnScreen,
     animate,
@@ -230,7 +230,11 @@ from nextrpg.geometry.dimension import (
     WidthAndHeightScaling,
     WidthScaling,
 )
-from nextrpg.geometry.direction import Direction, DirectionalOffset
+from nextrpg.geometry.direction import Direction
+from nextrpg.geometry.directional_offset import (
+    Degree,
+    DirectionalOffset,
+)
 from nextrpg.geometry.padding import (
     Padding,
     padding_for_all_sides,

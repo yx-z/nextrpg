@@ -7,13 +7,14 @@ from pygame import Surface
 
 from nextrpg.drawing.color import Alpha
 from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.sprite import BlurRadius
 from nextrpg.drawing.sprite_on_screen import (
     SpriteOnScreen,
 )
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Size, Width
-from nextrpg.geometry.direction import DirectionalOffset
+from nextrpg.geometry.directional_offset import DirectionalOffset
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 
@@ -43,7 +44,7 @@ class DrawingOnScreen(SpriteOnScreen):
     def pygame(self) -> tuple[Surface, Coordinate]:
         return self.drawing.pygame, self.top_left
 
-    def blur(self, radius: int) -> Self:
+    def blur(self, radius: BlurRadius) -> Self:
         drawing = self.drawing.blur(radius)
         return replace(self, drawing=drawing)
 

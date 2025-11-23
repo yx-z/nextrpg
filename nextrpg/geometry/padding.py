@@ -1,9 +1,9 @@
 from dataclasses import dataclass, replace
 from functools import cached_property
-from typing import Self
+from typing import Self, overload
 
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.dimension import Height, Pixel, Width
+from nextrpg.geometry.dimension import Height, Pixel, Size, Width
 from nextrpg.geometry.sizable import Sizable
 
 
@@ -22,6 +22,35 @@ class Padding:
             bottom=-self.bottom,
             right=-self.right,
         )
+
+    @overload
+    def __add__(self, other: Padding) -> Self: ...
+
+    @overload
+    def __add__(self, other: Size) -> Size: ...
+
+    def __add__(self, other: Padding | Size) -> Self | Size:
+        if isinstance(other, Padding):
+            return replace(
+                self,
+                top=self.top + other.top,
+                left=self.left + other.left,
+                bottom=self.bottom + other.bottom,
+                right=self.right + other.right,
+            )
+        return Size(
+            self.left.value + other.width.value + self.right.value,
+            self.top.value + other.height.value + self.bottom.value,
+        )
+
+    @overload
+    def __sub__(self, other: Padding) -> Self: ...
+
+    @overload
+    def __sub__(self, other: Size) -> Size: ...
+
+    def __sub__(self, other: Padding | Size) -> Self | Size:
+        return self + -other
 
     @cached_property
     def top_left(self) -> Coordinate:

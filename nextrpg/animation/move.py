@@ -7,19 +7,21 @@ from nextrpg.core.dataclass_with_default import (
     dataclass_with_default,
 )
 from nextrpg.drawing.drawing_group import DrawingGroup
-from nextrpg.geometry.direction import DirectionalOffset
+from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Size
+from nextrpg.geometry.directional_offset import DirectionalOffset
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class Move(TimedAnimationGroup, ABC):
-    offset: DirectionalOffset
+    offset: Coordinate | Size | DirectionalOffset
 
     @override
     @cached_property
     def drawing(self) -> DrawingGroup:
         drawing = super().drawing
         resource = tuple(
-            relative_drawing + (self.move_percentage * self.offset).shift
+            relative_drawing + self.offset
             for relative_drawing in drawing.resources
         )
         return DrawingGroup(resource)

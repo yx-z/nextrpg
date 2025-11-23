@@ -28,7 +28,7 @@ def move_above_icon(
 
 @dataclass_with_default(frozen=True)
 class PanelConfig:
-    children_padding: Padding = padding_for_both_sides(Width(10), Height(10))
+    padding: Padding = padding_for_both_sides(Width(10), Height(10))
     more_above_icon_input: Sprite | Callable[[], Sprite] | None = None
     more_below_icon_input: Sprite | Callable[[], Sprite] | None = None
 

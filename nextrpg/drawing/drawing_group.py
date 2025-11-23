@@ -13,10 +13,11 @@ from nextrpg.drawing.shifted_sprite import (
     ShiftedSprite,
     shifted_sprites,
 )
-from nextrpg.drawing.sprite import Sprite, tick_all
+from nextrpg.drawing.sprite import BlurRadius, Sprite, tick_all
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import HeightScaling, Size, WidthScaling
+from nextrpg.geometry.directional_offset import Degree
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
 if TYPE_CHECKING:
@@ -121,16 +122,22 @@ class DrawingGroup(Sprite, HasMetadata):
         return replace(self, resource=tuple(res))
 
     @override
-    def blur(self, radius: int) -> Drawing:
+    def blur(self, radius: BlurRadius) -> Drawing:
         return self.combined_drawing.blur(radius)
 
     @cached_property
     def combined_drawing(self) -> Drawing:
         return self._drawing_group_on_screen.drawing_on_screen.drawing
 
+    @override
     @cached_property
     def pygame(self) -> Surface:
         return self.combined_drawing.pygame
+
+    @override
+    def rotate(self, degree: Degree) -> Self:
+        resource = tuple(res.rotate(degree) for res in self.resources)
+        return replace(self, resource=resource)
 
     @cached_property
     def _drawing_group_on_screen(self) -> DrawingGroupOnScreen:

@@ -4,9 +4,10 @@ from typing import TYPE_CHECKING, NamedTuple, Self, overload, override
 
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.dimension import Dimension, Height, Pixel, Size, Width
-from nextrpg.geometry.direction import Direction, DirectionalOffset
+from nextrpg.geometry.direction import Direction
 
 if TYPE_CHECKING:
+    from nextrpg.geometry.directional_offset import DirectionalOffset
     from nextrpg.geometry.sizable_proxy import (
         BottomCenterSizable,
         BottomLeftSizable,
@@ -125,7 +126,7 @@ class Coordinate(NamedTuple):
             return Coordinate(
                 self.left_value + arg.left_value, self.top_value + arg.top_value
             )
-        return self + arg.shift
+        return self + arg.size
 
     def __sub__(
         self, arg: DirectionalOffset | Size | Width | Height | Coordinate
@@ -224,13 +225,21 @@ class Coordinate(NamedTuple):
                 return self.as_bottom_right_of(sizable)
 
     @property
-    def save_data(self) -> tuple[Pixel, ...]:
-        return tuple(self)
+    def save_data(self) -> Self:
+        return self
 
     @classmethod
     def load_from_save(cls, data: list[Pixel]) -> Self:
         assert len(data) == 2, f"Coordinate only takes [left, top]. Got {data}."
         return cls(*data)
+
+    @property
+    def directional_offset(self) -> DirectionalOffset:
+        from nextrpg.geometry.directional_offset import DirectionalOffset
+
+        degree = self.relative_to(ORIGIN)
+        distance = self.distance(ORIGIN)
+        return DirectionalOffset(degree, distance)
 
 
 ORIGIN = Coordinate(0, 0)

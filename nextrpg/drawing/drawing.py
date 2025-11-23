@@ -5,18 +5,16 @@ from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Self, override
 
-import pygame
-from pygame import BLEND_RGBA_MULT, SRCALPHA, Surface
-from pygame.transform import flip, gaussian_blur, smoothscale
+from pygame import BLEND_RGBA_MULT, SRCALPHA, Surface, image
+from pygame.transform import flip, gaussian_blur, rotate, smoothscale
 
-from nextrpg.config.config import config
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.log import log
 from nextrpg.core.metadata import METADATA_AS_CACHE_KEY, HasMetadata, Metadata
 from nextrpg.core.save import LoadFromSave
 from nextrpg.drawing.color import TRANSPARENT, WHITE, Alpha, Color
 from nextrpg.drawing.shifted_sprite import ShiftedSprite
-from nextrpg.drawing.sprite import Sprite
+from nextrpg.drawing.sprite import BlurRadius, Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
 from nextrpg.geometry.dimension import (
@@ -26,6 +24,7 @@ from nextrpg.geometry.dimension import (
     WidthAndHeightScaling,
     WidthScaling,
 )
+from nextrpg.geometry.directional_offset import Degree
 from nextrpg.geometry.padding import Padding
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
@@ -60,7 +59,7 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
     def save_data_this_class(self) -> str | bytes:
         if isinstance(self.resource, Surface):
             io = BytesIO()
-            pygame.image.save(self.surface, io)
+            image.save(self.surface, io)
             return io.getvalue()
         return os.fspath(self.resource)
 
@@ -69,7 +68,7 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
     def load_this_class_from_save(cls, data: str | bytes) -> Self:
         if isinstance(data, bytes):
             io = BytesIO(data)
-            surface = pygame.image.load(io).convert_alpha()
+            surface = image.load(io).convert_alpha()
             return cls(surface)
         path = Path(data)
         return cls(path)
@@ -180,12 +179,19 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
             return self.resource
 
         log().debug(t"Loading {self.resource}")
-        return pygame.image.load(self.resource).convert_alpha()
+        return image.load(self.resource).convert_alpha()
 
     @override
-    def blur(self, radius: int) -> Self:
+    def blur(self, radius: BlurRadius) -> Self:
         surface = gaussian_blur(self.surface, radius)
         return replace(self, resource=surface).add_metadata(blur_radius=radius)
+
+    @override
+    def rotate(self, degree: Degree) -> Self:
+        surface = rotate(self.surface, degree)
+        return replace(self, resource=surface).add_metadata(
+            rotate_degree=degree
+        )
 
     @override
     def cut(self, area: RectangleAreaOnScreen) -> Self:
@@ -219,10 +225,12 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
         return rect.drawing - padding.top_left
 
     def to_file(self, file: Path) -> None:
-        pygame.image.save(self.surface, file)
+        image.save(self.surface, file)
 
     @property
     def _debug_surface(self) -> Surface | None:
+        from nextrpg.config.config import config
+
         if (
             not (debug := config().system.debug)
             or not (color := debug.drawing_background_color)
