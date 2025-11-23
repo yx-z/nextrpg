@@ -321,4 +321,4 @@ def _tile_id(layer: TiledTileLayer, coordinate: _TileCoordinate) -> _Gid:
 
 
 def _sort_by_bottom(animation_on_screen_like: SpriteOnScreen) -> YAxis:
-    return animation_on_screen_like.visible_rectangle_area_on_screen.bottom
+    return animation_on_screen_like.rectangle_area_on_screen.bottom

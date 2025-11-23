@@ -262,12 +262,10 @@ class SayEventCharacterAddOn(SayEventAddOn):
     def _character_position(self) -> _CharacterPosition:
         if self.scene.drawing_on_screens_shift:
             rect = (
-                self.character.drawing_on_screen.visible_rectangle_area_on_screen
+                self.character.drawing_on_screen.rectangle_area_on_screen
             ) + self.scene.drawing_on_screens_shift
         else:
-            rect = (
-                self.character.drawing_on_screen.visible_rectangle_area_on_screen
-            )
+            rect = self.character.drawing_on_screen.rectangle_area_on_screen
 
         at_left = rect.center in left_screen_area()
         if at_top := rect.center in top_screen_area():

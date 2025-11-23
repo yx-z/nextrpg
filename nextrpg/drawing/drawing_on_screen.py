@@ -14,7 +14,6 @@ from nextrpg.drawing.sprite_on_screen import (
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.directional_offset import DirectionalOffset
-from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 from nextrpg.geometry.size import Height, Size, Width
 
 
@@ -31,14 +30,6 @@ class DrawingOnScreen(SpriteOnScreen):
         if self.anchor is Anchor.TOP_LEFT:
             return self.coordinate
         return self.coordinate.as_anchor_of(self, self.anchor).top_left
-
-    @override
-    @cached_property
-    def visible_rectangle_area_on_screen(self) -> RectangleAreaOnScreen:
-        shift = self.drawing.visible_rectangle_area_on_screen.top_left
-        size = self.drawing.visible_rectangle_area_on_screen.size
-        coordinate = self.top_left + shift
-        return coordinate.as_top_left_of(size).rectangle_area_on_screen
 
     @cached_property
     def pygame(self) -> tuple[Surface, Coordinate]:
