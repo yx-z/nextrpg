@@ -271,7 +271,7 @@ class EventfulScene(
         assert (
             self._event
         ), f"Expect _complete_event with an ongoing _event. Got {self}"
-        loger.debug(t"Event {self._event} with {started_npc.name} completed.")
+        logger.debug(t"Event {self._event} with {started_npc.name} completed.")
         return replace(
             self,
             player=self.player.complete_event,
