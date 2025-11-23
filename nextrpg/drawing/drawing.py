@@ -33,6 +33,8 @@ from nextrpg.geometry.size import Size
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 
+logger = log("drawing")
+
 
 def _metadata_or_path(
     cls: type, resource: Path | Surface, *args: Any, **kwargs: Any
@@ -180,7 +182,7 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
         if isinstance(self.resource, Surface):
             return self.resource
 
-        log().debug(t"Loading {self.resource}")
+        logger.debug(t"Loading {self.resource}")
         return image.load(self.resource).convert_alpha()
 
     @override

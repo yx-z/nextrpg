@@ -34,6 +34,8 @@ from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.scene import Scene
 from nextrpg.sound.scene_with_sound import SceneWithSound
 
+logger = log("event")
+
 
 @dataclass(frozen=True, kw_only=True)
 class EventfulScene(
@@ -234,7 +236,7 @@ class EventfulScene(
             started.player, started._started_npc, started, state
         )
         event_callable = next(event_generator)
-        log().debug(t"Event {event_callable} with {npc.name} started.")
+        logger.debug(t"Event {event_callable} with {npc.name} started.")
         ticked_with_event = replace(started, _event=event_generator)
         event = event_callable(ticked_with_event)
         return event, state
@@ -269,7 +271,7 @@ class EventfulScene(
         assert (
             self._event
         ), f"Expect _complete_event with an ongoing _event. Got {self}"
-        log().debug(t"Event {self._event} with {started_npc.name} completed.")
+        loger.debug(t"Event {self._event} with {started_npc.name} completed.")
         return replace(
             self,
             player=self.player.complete_event,

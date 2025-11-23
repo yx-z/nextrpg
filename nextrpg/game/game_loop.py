@@ -22,6 +22,8 @@ from nextrpg.game.game_state import GameState
 from nextrpg.gui.window import Window
 from nextrpg.scene.scene import Scene
 
+logger = log("loop")
+
 _last_scene: Scene | None = None
 
 
@@ -57,7 +59,7 @@ class GameLoop:
         loop = replace(loop, _scene=ticked_scene, state=state)
 
         fps_info = f"FPS: {self._clock.get_fps():.0f}"
-        log().debug(t"{type_name(self._scene)} {fps_info}", duration=None)
+        logger.debug(t"{type_name(self._scene)} {fps_info}", duration=None)
         ticked_window = loop._window.tick(fps_info)
         loop = replace(loop, _window=ticked_window)
         loop._window.blits(loop._scene.drawing_on_screens, time_delta)

@@ -1,9 +1,5 @@
-import logging
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, replace
 from functools import cached_property
-from inspect import stack
-from logging import Logger
-from pathlib import Path
 from string.templatelib import Interpolation, Template
 from typing import TYPE_CHECKING, Any
 
@@ -22,15 +18,9 @@ class _DurationFromConfig:
 _FROM_CONFIG = _DurationFromConfig()
 
 
-def _log_name() -> str:
-    file = Path(stack()[2].filename)
-    # "file.py" -> "file"
-    return file.name.split(".")[0]
-
-
 @dataclass(frozen=True)
 class log:
-    component: str = field(default_factory=_log_name)
+    component: str
 
     def debug(
         self,
@@ -122,11 +112,6 @@ def pop_messages(time_delta: Millisecond) -> tuple[LogEntry, ...]:
     )
     _pop(time_delta)
     return msgs
-
-
-def console(name: str | None = None) -> Logger:
-    log_name = name or _log_name()
-    return logging.getLogger(log_name)
 
 
 @dataclass(frozen=True)

@@ -40,9 +40,7 @@ class DebugConfig:
     log_level: LogLevel = LogLevel.DEBUG
     log_duration: Millisecond = 2000
     exclude_loggers: tuple[str, ...] = ()
-    console_log_configs: frozendict[str, Any] = frozendict(
-        {"format": "%(levelname)s - %(name)s - %(message)s"}
-    )
+    console_log_configs: frozendict[str, Any] = frozendict()
 
 
 def log_only(log_level: LogLevel = LogLevel.DEBUG) -> DebugConfig:

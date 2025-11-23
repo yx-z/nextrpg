@@ -1,3 +1,4 @@
+import logging
 from collections.abc import Callable, Hashable
 from dataclasses import dataclass, fields, is_dataclass
 from typing import TYPE_CHECKING, Any
@@ -27,8 +28,6 @@ class cached[T, K, **P]:
     def __call__[Type: type](self, cls: Type) -> Type:
 
         def new(klass: type[T], *args: P.args, **kwargs: P.kwargs) -> T:
-            from nextrpg.core.log import console
-
             if not (instances := getattr(klass, "_nextrpg_instances", None)):
                 from nextrpg.config.config import config
 
@@ -47,7 +46,7 @@ class cached[T, K, **P]:
 
             instance = object.__new__(klass)
             instances[key] = instance
-            console().debug(f"Cache size for {klass} is {len(instances)}.")
+            logging.debug(f"Cache size for {klass} is {len(instances)}.")
             return instance
 
         cls.__new__ = new

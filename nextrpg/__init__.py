@@ -98,7 +98,6 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.log import (
     LogEntry,
     MessageKeyAndDrawing,
-    console,
     log,
     pop_messages,
 )
@@ -241,12 +240,7 @@ from nextrpg.geometry.scaling import (
     WidthScaling,
 )
 from nextrpg.geometry.sizable import Sizable
-from nextrpg.geometry.size import (
-    ZERO_SIZE,
-    Height,
-    Size,
-    Width,
-)
+from nextrpg.geometry.size import ZERO_SIZE, Height, Size, Width
 from nextrpg.geometry.walk import Walk
 from nextrpg.gui.screen_area import (
     bottom_left_screen_area,

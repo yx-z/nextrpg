@@ -1,3 +1,4 @@
+import logging
 from ast import fix_missing_locations, parse, unparse
 from collections.abc import Callable
 from inspect import getsource, isfunction
@@ -5,7 +6,6 @@ from textwrap import dedent
 from typing import TYPE_CHECKING, Any, Generator
 
 from nextrpg.config.config import config
-from nextrpg.core.log import console
 
 if TYPE_CHECKING:
     from nextrpg.event.rpg_event_scene import RpgEventScene
@@ -26,7 +26,7 @@ def transform_event[**P](
     for transformer in config().event.event_transformer.transformers:
         tree = transformer.visit(tree)
     tree = fix_missing_locations(tree)
-    console().debug(f"Parsed code for {fun}\n{unparse(tree)}")
+    logging.debug(f"Parsed code for {fun}\n{unparse(tree)}")
     code = compile(tree, __file__, "exec")
     ctx = function.__globals__ | {
         v: c.cell_contents

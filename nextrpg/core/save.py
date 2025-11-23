@@ -122,7 +122,7 @@ def _config() -> SaveConfig:
 def _log() -> log:
     from nextrpg.core.log import log
 
-    return log()
+    return log("save")
 
 
 @cached(lambda resource_config: resource_config.save_slot_cache_size)

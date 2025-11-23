@@ -48,6 +48,8 @@ from nextrpg.map.map_shift import center_player
 from nextrpg.scene.scene import Scene
 from nextrpg.widget.menu_scene import MenuScene
 
+logger = log("map")
+
 
 def _infer_creation_function() -> ModuleAndAttribute[Callable]:
     frame = inspect.stack()[2]
@@ -88,7 +90,7 @@ class MapScene(EventfulScene):
         return replace(self, player=self.player.stop)
 
     def init_player(self, player_spec: PlayerSpec) -> PlayerOnScreen:
-        log().debug(t"Spawn player at {player_spec.unique_name}.")
+        logger.debug(t"Spawn player at {player_spec.unique_name}.")
         if not (coordinate := player_spec.coordinate_override):
             player_object = self._map_loader.get_object(player_spec.unique_name)
             coordinate = Coordinate(player_object.x, player_object.y)
@@ -121,7 +123,7 @@ class MapScene(EventfulScene):
     @cached_property
     def drawing_on_screens_shift(self) -> Coordinate:
         shift = center_player(self.player.center, self._map_loader.map_size)
-        log().debug(
+        logger.debug(
             t"Player center coordinate {self.player.center}. Shift {shift}",
             duration=None,
         )

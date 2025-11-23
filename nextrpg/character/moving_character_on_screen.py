@@ -10,6 +10,8 @@ from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.rectangle_area_on_screen import RectangleAreaOnScreen
 
+logger = log("character")
+
 
 @dataclass(frozen=True, kw_only=True)
 class MovingCharacterOnScreen(CharacterOnScreen, ABC):
@@ -53,7 +55,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
             coordinate
         )
         if collision := self._collide(collision_rectangle, others):
-            log().debug(t"Collided {collision.points}")
+            logger.debug(t"Collided {collision.points}")
             return False
         return True
 

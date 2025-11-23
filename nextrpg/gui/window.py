@@ -34,6 +34,8 @@ from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.scaling import WidthAndHeightScaling
 from nextrpg.geometry.size import Height, Size
 
+logger = log("window")
+
 
 @dataclass_with_default(frozen=True)
 class Window:
@@ -92,7 +94,7 @@ class Window:
         if isinstance(event, WindowResize):
             return self._resize(event.size)
         if isinstance(event, MouseButtonDown):
-            log().debug(t"Mouse clicked at {event.coordinate}")
+            logger.debug(t"Mouse clicked at {event.coordinate}")
         return self
 
     def blits(
@@ -100,7 +102,7 @@ class Window:
         drawing_on_screens: Iterable[DrawingOnScreen],
         time_delta: Millisecond,
     ) -> None:
-        log().debug(
+        logger.debug(
             t"Size {self.current_config.size} Shift {self._center_shift}",
             duration=None,
         )
