@@ -1,9 +1,49 @@
-from dataclasses import dataclass
+from collections.abc import Callable
+from functools import cached_property
+from typing import TYPE_CHECKING
 
+from nextrpg.core.dataclass_with_default import dataclass_with_default
+from nextrpg.drawing.color import WHITE, Color
+from nextrpg.drawing.sprite import Sprite
+from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Height, Width
 from nextrpg.geometry.padding import Padding, padding_for_both_sides
 
+if TYPE_CHECKING:
+    from nextrpg.drawing.drawing import Drawing
 
-@dataclass(frozen=True)
+
+def move_above_icon(
+    points: tuple[Coordinate, ...] = (
+        Coordinate(10, 0),
+        Coordinate(0, 5),
+        Coordinate(20, 5),
+    ),
+    color: Color = WHITE,
+) -> Drawing:
+    from nextrpg.drawing.polygon_drawing import PolygonDrawing
+
+    return PolygonDrawing(points, color).drawing
+
+
+@dataclass_with_default(frozen=True)
 class PanelConfig:
     children_padding: Padding = padding_for_both_sides(Width(10), Height(10))
+    more_above_icon_input: Sprite | Callable[[], Sprite] | None = None
+    more_below_icon_input: Sprite | Callable[[], Sprite] | None = None
+
+    @cached_property
+    def more_above_icon(self) -> Sprite:
+        if callable(self.more_above_icon_input):
+            return self.more_above_icon_input()
+        if self.more_above_icon_input:
+            return self.more_above_icon_input
+        return move_above_icon()
+
+    @cached_property
+    def more_below_icon(self) -> Sprite:
+        if callable(self.more_below_icon_input):
+            return self.more_below_icon_input()
+        if self.more_below_icon_input:
+            return self.more_below_icon_input
+        return self.more_above_icon.flip(vertical=True)

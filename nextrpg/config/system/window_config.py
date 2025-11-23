@@ -1,16 +1,14 @@
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, Self, override
+from typing import Any, Self, override
 
 from pygame import DOUBLEBUF, FULLSCREEN, RESIZABLE
 
 from nextrpg.core.save import UpdateSavable
 from nextrpg.drawing.color import BLACK, Color
+from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.dimension import Size
-
-if TYPE_CHECKING:
-    from nextrpg.drawing.drawing import Drawing
 
 
 @dataclass(frozen=True)
@@ -22,10 +20,10 @@ class WindowConfig(UpdateSavable[dict[str, Any]]):
     full_screen: bool = False
     allow_resize: bool = True
     include_fps_in_window_title: bool = False
-    icon_input: Drawing | Callable[[], Drawing] | None = None
+    icon_input: Sprite | Callable[[], Sprite] | None = None
 
     @cached_property
-    def icon(self) -> Drawing | None:
+    def icon(self) -> Sprite | None:
         if self.icon_input is None:
             return None
         if callable(self.icon_input):

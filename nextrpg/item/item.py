@@ -1,10 +1,9 @@
 from collections.abc import Callable
 from dataclasses import dataclass
-from functools import cached_property
 
 from nextrpg.config.config import config
 from nextrpg.config.item_config import BaseItemKey, ItemCategory
-from nextrpg.drawing.drawing import Drawing
+from nextrpg.drawing.sprite import Sprite
 
 
 @dataclass(frozen=True)
@@ -12,11 +11,11 @@ class Item:
     key: BaseItemKey
     name: str
     description: str = ""
-    icon_input: Drawing | Callable[[], Drawing] | None = None
+    icon_input: Sprite | Callable[[], Sprite] | None = None
     category: ItemCategory = ItemCategory.GENERIC
 
-    @cached_property
-    def icon(self) -> Drawing | None:
+    @property
+    def icon(self) -> Sprite | None:
         if (source := self.icon_input) is None:
             source = config().item.icons.get(self.category)
         if callable(source):

@@ -1,6 +1,8 @@
 from functools import cached_property
 from typing import TYPE_CHECKING, Protocol, Self, runtime_checkable
 
+from pygame import Surface
+
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import Alpha
 from nextrpg.geometry.anchor import Anchor
@@ -26,6 +28,10 @@ if TYPE_CHECKING:
 class Sprite(Sizable, Protocol):
     @property
     def drawing(self) -> Drawing | DrawingGroup: ...
+
+    @cached_property
+    def pygame(self) -> Surface:
+        return self.drawing.pygame
 
     @cached_property
     def top_left(self) -> Coordinate:
@@ -98,6 +104,9 @@ class Sprite(Sizable, Protocol):
 
     def cut(self, area: RectangleAreaOnScreen) -> Drawing | DrawingGroup:
         return self.drawing.cut(area)
+
+    def crop(self, area: RectangleAreaOnScreen) -> Drawing | DrawingGroup:
+        return self.drawing.crop(area)
 
     def blur(self, radius: int) -> Drawing:
         return self.drawing.blur(radius)

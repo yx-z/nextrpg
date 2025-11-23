@@ -2,6 +2,7 @@ from typing import Callable
 
 from nextrpg import (
     Button,
+    ButtonConfig,
     ButtonOnScreen,
     Direction,
     DirectionalOffset,
@@ -14,6 +15,7 @@ from nextrpg import (
     Panel,
     PanelOnScreen,
     SaveIo,
+    Size,
     Text,
     TimedAnimationSpec,
     Width,
@@ -61,6 +63,8 @@ def create_save_slot(
         ) -> OnClickResult:
             return click_save_slot(btn, state, slt)
 
-        button = Button(text=text, on_click=on_click)
+        size = Size(200, 150)
+        config = ButtonConfig(padding_or_size=size)
+        button = Button(text=text, on_click=on_click, config=config)
         res.append(button)
     return tuple(res)

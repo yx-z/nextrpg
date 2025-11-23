@@ -2,9 +2,9 @@ from dataclasses import dataclass
 from functools import cached_property
 
 from nextrpg.config.config import config
-from nextrpg.drawing.drawing import Drawing
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.polyline_drawing import PolylineDrawing
+from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import ORIGIN
 from nextrpg.geometry.dimension import Height, Size, Width
@@ -12,7 +12,7 @@ from nextrpg.geometry.dimension import Height, Size, Width
 
 @dataclass(frozen=True)
 class NineSlice:
-    drawing: Drawing
+    sprite: Sprite
     top: Height
     left: Width
     bottom: Height
@@ -63,7 +63,7 @@ class NineSlice:
         return DrawingGroup(tuple(parts))
 
     def _stretch_row(
-        self, size: Size, left: Drawing, center: Drawing, right: Drawing
+        self, size: Size, left: Sprite, center: Sprite, right: Sprite
     ) -> DrawingGroup:
         relative_center = center + self.left.with_zero_height
         relative_right = right.shift(
@@ -72,71 +72,71 @@ class NineSlice:
         return DrawingGroup((left, relative_center, relative_right))
 
     @cached_property
-    def _top_left(self) -> Drawing:
+    def _top_left(self) -> Sprite:
         size = self.left * self.top
         area = ORIGIN.as_top_left_of(size).rectangle_area_on_screen
-        return self.drawing.crop(area)
+        return self.sprite.crop(area)
 
     @cached_property
-    def _top_center(self) -> Drawing:
+    def _top_center(self) -> Sprite:
         top_left = ORIGIN + self.left
         size = self._center_width * self.top
         area = top_left.as_top_left_of(size).rectangle_area_on_screen
-        return self.drawing.crop(area)
+        return self.sprite.crop(area)
 
     @cached_property
-    def _top_right(self) -> Drawing:
-        top_left = ORIGIN + self.drawing.width - self.right
+    def _top_right(self) -> Sprite:
+        top_left = ORIGIN + self.sprite.width - self.right
         size = self.right * self.top
         area = top_left.as_top_left_of(size).rectangle_area_on_screen
-        return self.drawing.crop(area)
+        return self.sprite.crop(area)
 
     @cached_property
-    def _center_left(self) -> Drawing:
+    def _center_left(self) -> Sprite:
         top_left = ORIGIN + self.top
         size = self.left * self._center_height
         area = top_left.as_top_left_of(size).rectangle_area_on_screen
-        return self.drawing.crop(area)
+        return self.sprite.crop(area)
 
     @cached_property
-    def _center(self) -> Drawing:
+    def _center(self) -> Sprite:
         top_left = ORIGIN + self.top + self.left
         size = self._center_width * self._center_height
         area = top_left.as_top_left_of(size).rectangle_area_on_screen
-        return self.drawing.crop(area)
+        return self.sprite.crop(area)
 
     @cached_property
-    def _center_right(self) -> Drawing:
-        top_left = ORIGIN + self.drawing.width - self.right + self.top
+    def _center_right(self) -> Sprite:
+        top_left = ORIGIN + self.sprite.width - self.right + self.top
         size = self.right * self._center_height
         area = top_left.as_top_left_of(size).rectangle_area_on_screen
-        return self.drawing.crop(area)
+        return self.sprite.crop(area)
 
     @cached_property
-    def _bottom_left(self) -> Drawing:
-        top_left = ORIGIN + self.drawing.height - self.bottom
+    def _bottom_left(self) -> Sprite:
+        top_left = ORIGIN + self.sprite.height - self.bottom
         size = self.left * self.bottom
         area = top_left.as_top_left_of(size).rectangle_area_on_screen
-        return self.drawing.crop(area)
+        return self.sprite.crop(area)
 
     @cached_property
-    def _bottom_center(self) -> Drawing:
-        top_left = ORIGIN + self.left + self.drawing.height - self.bottom
+    def _bottom_center(self) -> Sprite:
+        top_left = ORIGIN + self.left + self.sprite.height - self.bottom
         size = self._center_width * self.bottom
         area = top_left.as_top_left_of(size).rectangle_area_on_screen
-        return self.drawing.crop(area)
+        return self.sprite.crop(area)
 
     @cached_property
-    def _bottom_right(self) -> Drawing:
-        top_left = ORIGIN + self.drawing.size - self.right - self.bottom
+    def _bottom_right(self) -> Sprite:
+        top_left = ORIGIN + self.sprite.size - self.right - self.bottom
         size = self.right * self.bottom
         area = top_left.anchor(size).rectangle_area_on_screen
-        return self.drawing.crop(area)
+        return self.sprite.crop(area)
 
     @cached_property
     def _center_width(self) -> Width:
-        return self.drawing.width - self.left - self.right
+        return self.sprite.width - self.left - self.right
 
     @cached_property
     def _center_height(self) -> Height:
-        return self.drawing.height - self.top - self.bottom
+        return self.sprite.height - self.top - self.bottom

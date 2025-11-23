@@ -51,7 +51,7 @@ class Window:
         os.environ.setdefault("SDL_VIDEO_CENTERED", "1")
         set_caption(self.current_config.title)
         if icon := self.current_config.icon:
-            set_icon(icon.pygame)
+            set_icon(icon.drawing.pygame)
 
     def tick(self, fps_info: str | None = None) -> Self:
         updated_config = config().system.window

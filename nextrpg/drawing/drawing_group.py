@@ -1,8 +1,8 @@
 from dataclasses import dataclass, replace
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, Self, override
+from typing import TYPE_CHECKING, Self, override
 
-from frozendict import frozendict
+from pygame import Surface
 
 from nextrpg.core.metadata import HasMetadata, Metadata
 from nextrpg.core.time import Millisecond
@@ -102,8 +102,21 @@ class DrawingGroup(Sprite, HasMetadata):
             relative_area = top_left.as_top_left_of(
                 area.size
             ).rectangle_area_on_screen
-            resource = relative.resource.cut(relative_area)
-            relative_drawing = replace(relative, resource=resource)
+            cut = relative.resource.cut(relative_area)
+            relative_drawing = replace(relative, resource=cut)
+            res.append(relative_drawing)
+        return replace(self, resource=tuple(res))
+
+    @override
+    def crop(self, area: RectangleAreaOnScreen) -> Self:
+        res: list[ShiftedSprite] = []
+        for relative in self.resources:
+            top_left = area.top_left - relative.top_left(ORIGIN)
+            relative_area = top_left.as_top_left_of(
+                area.size
+            ).rectangle_area_on_screen
+            cropped = relative.resource.crop(relative_area)
+            relative_drawing = replace(relative, resource=cropped)
             res.append(relative_drawing)
         return replace(self, resource=tuple(res))
 
@@ -114,6 +127,10 @@ class DrawingGroup(Sprite, HasMetadata):
     @cached_property
     def combined_drawing(self) -> Drawing:
         return self._drawing_group_on_screen.drawing_on_screen.drawing
+
+    @cached_property
+    def pygame(self) -> Surface:
+        return self.combined_drawing.pygame
 
     @cached_property
     def _drawing_group_on_screen(self) -> DrawingGroupOnScreen:
