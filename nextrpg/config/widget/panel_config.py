@@ -31,6 +31,8 @@ class PanelConfig:
     padding: Padding = padding_for_both_sides(Width(10), Height(10))
     more_above_icon_input: Sprite | Callable[[], Sprite] | None = None
     more_below_icon_input: Sprite | Callable[[], Sprite] | None = None
+    more_on_left_icon_input: Sprite | Callable[[], Sprite] | None = None
+    more_on_right_icon_input: Sprite | Callable[[], Sprite] | None = None
 
     @cached_property
     def more_above_icon(self) -> Sprite:
@@ -47,3 +49,19 @@ class PanelConfig:
         if self.more_below_icon_input:
             return self.more_below_icon_input
         return self.more_above_icon.flip(vertical=True)
+
+    @cached_property
+    def more_on_left_icon(self) -> Sprite:
+        if callable(self.more_on_left_icon_input):
+            return self.more_on_left_icon_input()
+        if self.more_on_left_icon_input:
+            return self.more_on_left_icon_input
+        return self.more_above_icon.rotate(90)
+
+    @cached_property
+    def more_on_right_icon(self) -> Sprite:
+        if callable(self.more_on_right_icon_input):
+            return self.more_on_right_icon_input()
+        if self.more_on_right_icon_input:
+            return self.more_on_right_icon_input
+        return self.more_above_icon.rotate(-90)
