@@ -2,14 +2,13 @@ from dataclasses import KW_ONLY, dataclass, field
 from functools import cached_property
 from typing import ClassVar, override
 
-from nextrpg import WidgetOnScreen
 from nextrpg.config.config import config
 from nextrpg.config.widget.panel_config import PanelConfig
 from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.geometry.area_on_screen import AreaOnScreen
-from nextrpg.widget.widget import Widget
+from nextrpg.widget.widget import Widget, WidgetOnScreen
 from nextrpg.widget.widget_group import WidgetGroup, WidgetGroupOnScreen
 
 

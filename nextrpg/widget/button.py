@@ -30,7 +30,7 @@ from nextrpg.widget.sizable_widget import (
     SizableWidget,
     SizableWidgetOnScreen,
 )
-from nextrpg.widget.widget import WidgetOnScreen, WidgetSpec
+from nextrpg.widget.widget import WidgetOnScreen
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
