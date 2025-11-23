@@ -8,6 +8,7 @@ from nextrpg.core.dataclass_with_default import (
 )
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import Percentage
 from nextrpg.geometry.directional_offset import DirectionalOffset
 from nextrpg.geometry.size import Size
 
@@ -29,18 +30,18 @@ class Move(TimedAnimationGroup, ABC):
 
     @property
     @abstractmethod
-    def move_percentage(self) -> float: ...
+    def move_percentage(self) -> Percentage: ...
 
 
 class MoveFrom(Move):
     @override
     @cached_property
-    def move_percentage(self) -> float:
+    def move_percentage(self) -> Percentage:
         return min(self._timer.completed_percentage, 1)
 
 
 class MoveTo(Move):
     @override
     @cached_property
-    def move_percentage(self) -> float:
+    def move_percentage(self) -> Percentage:
         return min(-self._timer.remaining_percentage, 0)

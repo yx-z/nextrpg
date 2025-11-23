@@ -9,6 +9,8 @@ from frozendict import frozendict
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import Color
 
+type LOG_LEVEL = int
+
 
 class LogLevel(IntEnum):
     DEBUG = auto()
@@ -16,7 +18,7 @@ class LogLevel(IntEnum):
     ERROR = auto()
 
     @cached_property
-    def standard(self) -> int:
+    def stdlib(self) -> LOG_LEVEL:
         return _LOG_LEVEL[self]
 
 

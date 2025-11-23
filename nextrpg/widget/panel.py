@@ -2,14 +2,14 @@ from dataclasses import KW_ONLY, dataclass, field
 from functools import cached_property
 from typing import ClassVar
 
-from nextrpg import ScrollDirection
 from nextrpg.config.config import config
 from nextrpg.config.widget.panel_config import PanelConfig
-from nextrpg.core.dataclass_with_default import private_init_below
+from nextrpg.core.dataclass_with_default import default, private_init_below
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.area_on_screen import AreaOnScreen
-from nextrpg.widget.sizable_widget import SizableWidget
+from nextrpg.widget.scroll_direction import ScrollDirection
+from nextrpg.widget.sizable_widget import SizableWidget, SizableWidgetOnScreen
 from nextrpg.widget.widget_group import WidgetGroup, WidgetGroupOnScreen
 
 
@@ -17,6 +17,9 @@ from nextrpg.widget.widget_group import WidgetGroup, WidgetGroupOnScreen
 class PanelOnScreen(WidgetGroupOnScreen):
     widget: Panel
     _: KW_ONLY = private_init_below()
+    _visible_children: tuple[tuple[int, SizableWidgetOnScreen]] = default(
+        lambda self: self._init_visible_children
+    )
 
     @cached_property
     def children_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
@@ -56,7 +59,9 @@ class PanelOnScreen(WidgetGroupOnScreen):
         return self.on_screen
 
     @cached_property
-    def _visible(self) -> range:
+    def _visible_children(
+        self,
+    ) -> tuple[tuple[int, SizableWidgetOnScreen], ...]:
         top_left = self.widget.config.padding.top_left
         ...
 

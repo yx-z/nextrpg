@@ -9,6 +9,7 @@ from nextrpg.geometry.direction import Direction
 from nextrpg.geometry.size import Size
 
 type Degree = int | float
+type Radian = float
 
 
 @dataclass(frozen=True)
@@ -40,7 +41,7 @@ class DirectionalOffset:
         return Size(width, height)
 
     @cached_property
-    def radian(self) -> float:
+    def radian(self) -> Radian:
         return radians(self.degree)
 
     @cached_property

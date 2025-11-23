@@ -89,7 +89,7 @@ def _toggle_debug() -> None:
     else:
         debug = force_debug_config()
         logging.basicConfig(
-            level=debug.log_level.standard, **debug.console_log_configs
+            level=debug.log_level.stdlib, **debug.console_log_configs
         )
         system = replace(cfg.system, debug=debug)
     cfg = replace(cfg, system=system)

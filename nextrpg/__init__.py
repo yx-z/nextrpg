@@ -217,11 +217,17 @@ from nextrpg.game.game_state import GameState
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.geometry.coordinate import ORIGIN, Coordinate
-from nextrpg.geometry.dimension import Dimension, Pixel, PixelPerMillisecond
+from nextrpg.geometry.dimension import (
+    Dimension,
+    Percentage,
+    Pixel,
+    PixelPerMillisecond,
+)
 from nextrpg.geometry.direction import Direction
 from nextrpg.geometry.directional_offset import (
     Degree,
     DirectionalOffset,
+    Radian,
 )
 from nextrpg.geometry.padding import (
     Padding,

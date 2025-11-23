@@ -31,6 +31,7 @@ from nextrpg.event.io_event import (
 )
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.dimension import ValueScaling
 from nextrpg.geometry.scaling import WidthAndHeightScaling
 from nextrpg.geometry.size import Height, Size
 
@@ -128,7 +129,7 @@ class Window:
         return set_mode(cfg.size, cfg.flag)
 
     @cached_property
-    def _scaling(self) -> float:
+    def _scaling(self) -> ValueScaling:
         current_width, current_height = self.current_config.size
         initial_width, initial_height = self.initial_config.size
         width_ratio = current_width / initial_width

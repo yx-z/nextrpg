@@ -260,7 +260,7 @@ class Coordinate(NamedTuple):
 ORIGIN = Coordinate(0, 0)
 
 
-def _angle_difference(a1: float, a2: float) -> float:
+def _angle_difference(a1: float, a2: float) -> Degree:
     return abs((a1 - a2 + 180) % 360 - 180)
 
 

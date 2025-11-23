@@ -4,6 +4,7 @@ from typing import Self
 type Pixel = int | float
 type PixelPerMillisecond = int | float
 type ValueScaling = int | float
+type Percentage = float
 
 
 @dataclass(frozen=True)

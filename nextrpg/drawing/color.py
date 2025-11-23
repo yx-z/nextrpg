@@ -26,10 +26,6 @@ class Color(LoadFromSave):
     def pygame(self) -> tuple[int, ...]:
         return self.red, self.green, self.blue, self.alpha
 
-    @cached_property
-    def percentage_alpha(self) -> float:
-        return self.alpha / 255
-
     @override
     @cached_property
     def save_data_this_class(self) -> tuple[int, ...]:
