@@ -3,10 +3,10 @@ from math import atan2, degrees, hypot
 from typing import TYPE_CHECKING, NamedTuple, Self, overload, override
 
 from nextrpg.geometry.anchor import Anchor
-from nextrpg.geometry.dimension import Dimension, Height, Pixel, Size, Width
 from nextrpg.geometry.direction import Direction
 
 if TYPE_CHECKING:
+    from nextrpg.geometry.dimension import Dimension, Height, Pixel, Size, Width
     from nextrpg.geometry.directional_offset import DirectionalOffset
     from nextrpg.geometry.sizable_proxy import (
         BottomCenterSizable,
@@ -25,9 +25,13 @@ if TYPE_CHECKING:
 class XAxis(Dimension):
     @cached_property
     def width(self) -> Width:
+        from nextrpg.geometry.dimension import Width
+
         return Width(self.value)
 
     def __add__(self, other: Pixel | Width) -> XAxis:
+        from nextrpg.geometry.dimension import Width
+
         if isinstance(other, Width):
             return XAxis(self.value + other.value)
         return XAxis(self.value + other)
@@ -39,6 +43,8 @@ class XAxis(Dimension):
     def __sub__(self, other: XAxis) -> Width: ...
 
     def __sub__(self, other: Pixel | Width | XAxis) -> XAxis | Width:
+        from nextrpg.geometry.dimension import Width
+
         if isinstance(other, XAxis):
             return Width(self.value - other.value)
         if isinstance(other, Width):
@@ -56,9 +62,13 @@ class XAxis(Dimension):
 class YAxis(Dimension):
     @cached_property
     def height(self) -> Height:
+        from nextrpg.geometry.dimension import Height
+
         return Height(self.value)
 
     def __add__(self, other: Pixel | Height) -> YAxis:
+        from nextrpg.geometry.dimension import Height
+
         if isinstance(other, Height):
             return YAxis(self.value + other.value)
         return YAxis(self.value + other)
@@ -70,6 +80,8 @@ class YAxis(Dimension):
     def __sub__(self, other: YAxis) -> Height: ...
 
     def __sub__(self, other: Pixel | Height | YAxis) -> YAxis | Height:
+        from nextrpg.geometry.dimension import Height
+
         if isinstance(other, YAxis):
             return Height(self.value - other.value)
         if isinstance(other, Height):
@@ -108,7 +120,7 @@ class Coordinate(NamedTuple):
         return Coordinate(-self.left_value, -self.top_value)
 
     def __add__(
-        self, arg: Coordinate | DirectionalOffset | Size | Width | Height
+        self, arg: Coordinate | Width | Height | Size | DirectionalOffset
     ) -> Coordinate:
         if isinstance(arg, Width):
             return Coordinate(self.left_value + arg.value, self.top_value)
@@ -129,7 +141,7 @@ class Coordinate(NamedTuple):
         return self + arg.size
 
     def __sub__(
-        self, arg: DirectionalOffset | Size | Width | Height | Coordinate
+        self, arg: Coordinate | Width | Height | Size | DirectionalOffset
     ) -> Coordinate:
         return self + -arg
 

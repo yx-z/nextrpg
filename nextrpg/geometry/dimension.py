@@ -2,8 +2,9 @@ from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING, NamedTuple, Self, overload, override
 
+from nextrpg.geometry.coordinate import Coordinate, XAxis, YAxis
+
 if TYPE_CHECKING:
-    from nextrpg.geometry.coordinate import Coordinate, XAxis, YAxis
     from nextrpg.geometry.directional_offset import DirectionalOffset
     from nextrpg.geometry.padding import Padding
 
@@ -96,8 +97,6 @@ class WidthAndHeightScaling(_Scaling):
 class Width(Dimension):
     @cached_property
     def x_axis(self) -> XAxis:
-        from nextrpg.geometry.coordinate import XAxis
-
         return XAxis(self.value)
 
     @overload
@@ -161,8 +160,6 @@ class Width(Dimension):
 class Height(Dimension):
     @cached_property
     def y_axis(self) -> YAxis:
-        from nextrpg.geometry.coordinate import YAxis
-
         return YAxis(self.value)
 
     @overload
@@ -250,15 +247,19 @@ class Size(NamedTuple):
     def __neg__(self) -> Size:
         return Size(-self.width_value, -self.height_value)
 
-    def __add__(self, other: Size | Width | Height | Padding) -> Size:
+    def __add__(
+        self, other: Coordinate | Width | Height | Size | Padding
+    ) -> Size:
         if isinstance(other, Size):
             return Size(
                 self.width_value + other.width_value,
                 self.height_value + other.height_value,
             )
-        return other + self
+        return (other + self).size
 
-    def __sub__(self, other: Size | Width | Height | Padding) -> Size:
+    def __sub__(
+        self, other: Coordinate | Width | Height | Size | Padding
+    ) -> Size:
         return self + -other
 
     def __mul__(
@@ -289,8 +290,6 @@ class Size(NamedTuple):
 
     @property
     def coordinate(self) -> Coordinate:
-        from nextrpg.geometry.coordinate import Coordinate
-
         return Coordinate(self.width_value, self.height_value)
 
     @property
