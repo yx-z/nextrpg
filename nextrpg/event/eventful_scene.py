@@ -254,8 +254,9 @@ class EventfulScene(
             return completed, state
 
     def _complete_event(self, event_completion: EventCompletion) -> Self:
+        started_npc = self._started_npc
         assert (
-            started_npc := self._started_npc
+            started_npc
         ), f"Expect _complete_event with a started_npc. Got {self}"
         npcs = tuple(
             (

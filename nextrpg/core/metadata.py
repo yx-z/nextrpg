@@ -13,8 +13,9 @@ class HasMetadata(Protocol):
         assert is_dataclass(
             self
         ), f"Can only add metadata to dataclasses. Got {self}."
+        meta = getattr(self, "metadata", None)
         assert isinstance(
-            meta := getattr(self, "metadata", None), tuple
+            meta, tuple
         ), f"Need self.metadata tuple[tuple[str, Any]]. Got {self}."
         metadata = meta + tuple(kwargs.items())
         return replace(self, metadata=metadata)

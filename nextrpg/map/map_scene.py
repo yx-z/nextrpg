@@ -262,8 +262,9 @@ def _init_moving_npc(spec: NpcSpec, poly: AreaOnScreen) -> MovingNpcOnScreen:
 
 def _init_area_npc(spec: NpcSpec, poly: AreaOnScreen) -> NpcOnScreen:
     coordinate = poly.top_left
+    color = spec.character_drawing or TRANSPARENT
     assert isinstance(
-        color := spec.character_drawing or TRANSPARENT, Color
+        color, Color
     ), f"Expect Color in NpcSpec. Got {spec.character_drawing}"
     if isinstance(poly, RectangleAreaOnScreen):
         drawing = RectangleDrawing(poly.size, color)

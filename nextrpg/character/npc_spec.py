@@ -141,8 +141,9 @@ class StrictNpcSpec(NpcSpec, CharacterSpec, UpdateFromSave[dict[str, Any]]):
 def to_strict_npc_spec(
     spec: NpcSpec, character_drawing: CharacterDrawing | None = None
 ) -> StrictNpcSpec:
+    character_drawing = character_drawing or spec.character_drawing
     assert (
-        character_drawing := character_drawing or spec.character_drawing
+        character_drawing
     ), f"'{spec.unique_name}' is missing CharacterDrawing."
     return StrictNpcSpec(
         unique_name=spec.unique_name,

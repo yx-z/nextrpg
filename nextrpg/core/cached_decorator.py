@@ -14,9 +14,8 @@ def key_by_first_arg[K: Hashable](cls: type, *args: Any, **kwargs: Any) -> K:
     assert is_dataclass(
         cls
     ), f"Expect a dataclass to infer first argument as key. Got {cls}"
-    assert (
-        all_fields := fields(cls)
-    ), f"Expect dataclass with fields. Got {cls}."
+    all_fields = fields(cls)
+    assert all_fields, f"Expect dataclass with fields. Got {cls}."
     return kwargs.get(all_fields[0].name)
 
 

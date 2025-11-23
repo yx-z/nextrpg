@@ -55,9 +55,8 @@ def click_load(
     save_io = SaveIo(str(slot))
 
     def load_game(st: GameState) -> tuple[Scene, GameState]:
-        assert (
-            game := save_io.load(GameSave)
-        ), f"Expect GameSave at save slot {slot}"
+        game = save_io.load(GameSave)
+        assert game, f"Expect GameSave at save slot {slot}"
         return game.scene, game.state
 
     if save_io.load(GameSaveMeta):

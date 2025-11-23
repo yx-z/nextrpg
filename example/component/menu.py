@@ -32,8 +32,9 @@ def tmx() -> TmxLoader:
 
 
 def title_scene(button: ButtonOnScreen, state: GameState) -> TransitionScene:
+    menu_scene = last_scene()
     assert isinstance(
-        menu_scene := last_scene(), MenuScene
+        menu_scene, MenuScene
     ), f"Expect button called on a MenuScene. Got {menu_scene}"
     menu_scene.parent.stop_sound()
     return TransitionScene(title)
