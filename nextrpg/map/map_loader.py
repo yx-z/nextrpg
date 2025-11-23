@@ -1,4 +1,5 @@
 import heapq
+from collections.abc import Iterable
 from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self
@@ -42,13 +43,13 @@ class ForegroundLayers:
         return replace(self, tiles=tiles)
 
     def drawing_on_screens(
-        self, characters: tuple[CharacterOnScreen, ...]
+        self, characters: Iterable[CharacterOnScreen]
     ) -> tuple[DrawingOnScreen, ...]:
         character_drawing_on_screens = sorted(
-            [
+            (
                 DrawingOnScreens(tuple(character.drawing_on_screens))
                 for character in characters
-            ],
+            ),
             key=_sort_by_bottom,
         )
         tile_drawing_on_screens = [

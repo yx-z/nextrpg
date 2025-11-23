@@ -1,4 +1,5 @@
 import os
+from collections.abc import Collection, Iterable
 from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import Self
@@ -95,7 +96,7 @@ class Window:
 
     def blits(
         self,
-        drawing_on_screens: tuple[DrawingOnScreen, ...],
+        drawing_on_screens: Iterable[DrawingOnScreen],
         time_delta: Millisecond,
     ) -> None:
         log().debug(
@@ -104,10 +105,10 @@ class Window:
         )
         self._screen.fill(self.current_config.background.pygame)
 
-        if msgs := pop_messages(time_delta):
-            drawing_on_screens += _log(msgs)
         base = Surface(self.initial_config.size, SRCALPHA).convert_alpha()
         base.blits(d.pygame for d in drawing_on_screens)
+        if msgs := pop_messages(time_delta):
+            base.blits(d.pygame for d in _log(msgs))
         scaled = Drawing(base) * WidthAndHeightScaling(self._scaling)
         self._screen.blit(scaled.pygame, self._center_shift)
         flip()
@@ -169,7 +170,7 @@ def _set_window_config(window_config: WindowConfig) -> None:
     set_config(full_config)
 
 
-def _log(entries: tuple[LogEntry, ...]) -> tuple[DrawingOnScreen, ...]:
+def _log(entries: Collection[LogEntry]) -> list[DrawingOnScreen]:
     components = tuple(Text(e.component) for e in entries)
     component_width = max(t.width for t in components)
 
@@ -209,5 +210,4 @@ def _log(entries: tuple[LogEntry, ...]) -> tuple[DrawingOnScreen, ...]:
         drawing_on_screens = DrawingOnScreens(tuple(res))
         background = drawing_on_screens.rectangle_area_on_screen.fill(color)
         res.insert(0, background)
-
-    return tuple(res)
+    return res

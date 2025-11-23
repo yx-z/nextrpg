@@ -1,3 +1,4 @@
+from collections.abc import Collection
 from dataclasses import KW_ONLY, replace
 from functools import cached_property
 from typing import Any, Self, override
@@ -77,7 +78,7 @@ class CharacterOnScreen(
         return self.tick_with_others(time_delta, [])
 
     def tick_with_others(
-        self, time_delta: Millisecond, others: tuple[CharacterOnScreen, ...]
+        self, time_delta: Millisecond, others: Collection[CharacterOnScreen]
     ) -> Self:
         character_drawing = self.character_drawing.tick_idle(time_delta)
         return replace(self, character_drawing=character_drawing)

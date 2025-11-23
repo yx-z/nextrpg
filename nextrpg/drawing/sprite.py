@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from functools import cached_property
 from typing import TYPE_CHECKING, Protocol, Self, runtime_checkable
 
@@ -119,6 +120,6 @@ def tick_optional[T](resource: T | None, time_delta: Millisecond) -> T | None:
 
 
 def tick_all[T](
-    resource: tuple[T, ...], time_delta: Millisecond
+    resource: Iterable[T], time_delta: Millisecond
 ) -> tuple[T, ...]:
     return tuple(t.tick(time_delta) for t in resource)

@@ -1,3 +1,4 @@
+from collections.abc import Collection
 from dataclasses import dataclass
 from functools import cached_property
 from typing import TYPE_CHECKING, override
@@ -83,7 +84,7 @@ class PolygonAreaOnScreen(AreaOnScreen):
 
 
 def get_bounding_rectangle_area_on_screen(
-    points: tuple[Coordinate, ...],
+    points: Collection[Coordinate],
 ) -> RectangleAreaOnScreen:
     min_x = min(c.left for c in points)
     min_y = min(c.top for c in points)

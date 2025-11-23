@@ -1,3 +1,4 @@
+from collections.abc import Collection
 from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import Self, override
@@ -78,7 +79,7 @@ class PlayerOnScreen(MovingCharacterOnScreen):
 
     @override
     def can_move(
-        self, coordinate: Coordinate, others: tuple[CharacterOnScreen, ...]
+        self, coordinate: Coordinate, others: Collection[CharacterOnScreen]
     ) -> bool:
         if (
             debug := config().system.debug

@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from itertools import cycle, pairwise
@@ -39,12 +40,12 @@ class WidgetGroupOnScreen(WidgetOnScreen):
             for drawing_on_screen in child._drawing_on_screens_without_parent
         )
 
-    def replace_children(self, children: tuple[Widget, ...]) -> Self:
+    def replace_children(self, children: Iterable[Widget]) -> Self:
         children = self._init_children(children)
         return replace(self, _children=children)
 
     def _init_children(
-        self, children: tuple[Widget, ...]
+        self, children: Iterable[Widget]
     ) -> tuple[WidgetOnScreen, ...]:
         assert children, "Require non-empty children."
         with_parent = tuple(child.with_parent(self) for child in children)
@@ -133,7 +134,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
             children.append(child)
         return self._with_children(children)
 
-    def _with_children(self, children: list[WidgetOnScreen]) -> Self:
+    def _with_children(self, children: Iterable[WidgetOnScreen]) -> Self:
         children_with_parent = tuple(
             child.with_parent(self) for child in children
         )

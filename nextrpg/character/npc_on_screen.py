@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Any, Self, override
@@ -38,6 +39,6 @@ class NpcOnScreen(CharacterOnScreen):
 
 
 def replace_npc(
-    npcs: tuple[NpcOnScreen, ...], updated: NpcOnScreen
+    npcs: Iterable[NpcOnScreen], updated: NpcOnScreen
 ) -> tuple[NpcOnScreen, ...]:
     return tuple(updated if n.has_same_name(updated) else n for n in npcs)

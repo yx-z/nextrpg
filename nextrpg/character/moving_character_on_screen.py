@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections.abc import Collection, Iterable
 from dataclasses import dataclass, replace
 from typing import Self, override
 
@@ -23,7 +24,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
 
     @override
     def tick_with_others(
-        self, time_delta: Millisecond, others: tuple[CharacterOnScreen, ...]
+        self, time_delta: Millisecond, others: Collection[CharacterOnScreen]
     ) -> Self:
         if not self.moving or (
             not self.can_move(moved_coordinate := self.move(time_delta), others)
@@ -43,7 +44,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
         return self._tick_after_character_and_coordinate(time_delta, ticked)
 
     def can_move(
-        self, coordinate: Coordinate, others: tuple[CharacterOnScreen, ...]
+        self, coordinate: Coordinate, others: Collection[CharacterOnScreen]
     ) -> bool:
         if not self.spec.collide_with_others:
             return True
@@ -64,7 +65,7 @@ class MovingCharacterOnScreen(CharacterOnScreen, ABC):
     def _collide(
         self,
         bounding_rect: RectangleAreaOnScreen,
-        others: tuple[CharacterOnScreen, ...],
+        others: Iterable[CharacterOnScreen],
     ) -> AreaOnScreen | None:
         other_rectangle_area_on_screens = tuple(
             c.collision_rectangle_area_on_screen
