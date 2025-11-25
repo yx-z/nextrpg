@@ -1,15 +1,18 @@
-from dataclasses import KW_ONLY, dataclass, field
+from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
-from typing import ClassVar
+from typing import ClassVar, Iterable, Self, override
 
 from nextrpg.config.config import config
 from nextrpg.config.widget.panel_config import PanelConfig
 from nextrpg.core.dataclass_with_default import default, private_init_below
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.area_on_screen import AreaOnScreen
+from nextrpg.geometry.size import ZERO_HEIGHT, ZERO_WIDTH
 from nextrpg.widget.scroll_direction import ScrollDirection
 from nextrpg.widget.sizable_widget import SizableWidget, SizableWidgetOnScreen
+from nextrpg.widget.widget import Widget, WidgetOnScreen
 from nextrpg.widget.widget_group import WidgetGroup, WidgetGroupOnScreen
 
 
@@ -17,18 +20,17 @@ from nextrpg.widget.widget_group import WidgetGroup, WidgetGroupOnScreen
 class PanelOnScreen(WidgetGroupOnScreen):
     widget: Panel
     _: KW_ONLY = private_init_below()
-    _visible_children: tuple[tuple[int, SizableWidgetOnScreen]] = default(
-        lambda self: self._init_visible_children
-    )
+    _visible: range = default(lambda self: self._init_visible)
 
     @cached_property
     def children_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         drawing_on_screens = [
-            drawing_on_screen
-            for _, widget in self._visible_children
-            for drawing_on_screen in widget._drawing_on_screens_without_parent
+            DrawingOnScreens(
+                self._children[i]._drawing_on_screens_without_parent
+            )
+            for i in self._visible
         ]
-        if self._visible_children[0][0] != 0:
+        if self._visible.start != 0:
             if self._is_vertical:
                 icon = self.widget.config.more_above_icon.drawing_on_screens(
                     self.area.top_center, Anchor.BOTTOM_CENTER
@@ -38,7 +40,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
                     self.area.center_left, Anchor.CENTER_RIGHT
                 )
             drawing_on_screens += icon
-        if self._visible_children[-1][0] != len(self._children):
+        if self._visible.stop != len(self._children):
             if self._is_vertical:
                 icon = self.widget.config.more_below_icon.drawing_on_screens(
                     self.area.bottom_center, Anchor.TOP_CENTER
@@ -57,12 +59,46 @@ class PanelOnScreen(WidgetGroupOnScreen):
         ), f"Expect AreaOnScreen for {self.widget.name}. Got {self.on_screen}."
         return self.on_screen
 
-    @cached_property
-    def _visible_children(
-        self,
-    ) -> tuple[tuple[int, SizableWidgetOnScreen], ...]:
-        top_left = self.widget.config.padding.top_left
-        ...
+    @override
+    def _step(self, forward: bool) -> Self:
+        stepped = super()._step(forward)
+
+    @property
+    def _init_visible(self) -> range:
+        end = 1
+        if self._is_vertical:
+            height = ZERO_HEIGHT
+            while end <= len(self._children) and height < self.area.height:
+                height += self._children[end - 1].widget.size.height
+                end += 1
+        else:
+            width = ZERO_WIDTH
+            while end <= len(self._children) and width < self.area.width:
+                width += self._children[end - 1].widget.size.width
+        return range(end)
+
+    @override
+    def _init_children(
+        self, children: Iterable[Widget]
+    ) -> tuple[WidgetOnScreen, ...]:
+        children_on_screen: tuple[SizableWidgetOnScreen, ...] = (
+            super()._init_children(children)
+        )
+        top_left = self.area.points[0] + self.widget.config.padding.top_left
+        res: list[WidgetOnScreen] = []
+        for child in children_on_screen:
+            anchored = child.widget.anchored(top_left)
+            child_widget_on_screen = replace(child, widget=anchored)
+            res.append(child_widget_on_screen)
+            if self._is_vertical:
+                top_left += (
+                    anchored.size.height + self.widget.config.padding.height
+                )
+            else:
+                top_left += (
+                    anchored.size.width + self.widget.config.padding.width
+                )
+        return tuple(res)
 
     @cached_property
     def _is_vertical(self) -> bool:

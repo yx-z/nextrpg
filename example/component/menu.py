@@ -66,4 +66,4 @@ def click_save_slot(
     assert isinstance(panel, PanelOnScreen)
     button = create_save_slot(slot, click_save_slot)
     child = button.with_parent(panel).select
-    return panel.replace_child(child)
+    return panel.replace(child)

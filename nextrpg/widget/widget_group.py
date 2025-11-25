@@ -31,6 +31,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     _children: tuple[WidgetOnScreen, ...] = default(
         lambda self: self._init_children(self.widget.children)
     )
+    _selected: int = 0
 
     @cached_property
     def children_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
@@ -40,9 +41,21 @@ class WidgetGroupOnScreen(WidgetOnScreen):
             for drawing_on_screen in child._drawing_on_screens_without_parent
         )
 
-    def replace_child(self, child: WidgetOnScreen) -> Self:
+    def append(self, child: WidgetOnScreen) -> Self:
+        children = self._children + (child,)
+        return replace(self, _children=children)
+
+    def remove(self, child: WidgetOnScreen) -> Self:
         children = tuple(
-            child if child.widget.metadata == c.widget.metadata else c
+            c
+            for c in self._children
+            if c.widget.metadata != child.widget.metadata
+        )
+        return replace(self, _children=children)
+
+    def replace(self, child: WidgetOnScreen) -> Self:
+        children = tuple(
+            child if c.widget.metadata == child.widget.metadata else c
             for c in self._children
         )
         return replace(self, _children=children)
@@ -102,13 +115,6 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         background = tick_optional(self.background, time_delta)
         ticked_with_background = replace(ticked, background=background)
         return ticked_with_background, state
-
-    @cached_property
-    def _selected(self) -> WidgetOnScreen | None:
-        for child in self._children:
-            if isinstance(child, WidgetOnScreen) and child.is_selected:
-                return child
-        return None
 
     def _step(self, forward: bool) -> Self:
         if len(self._children) < 2 or (
