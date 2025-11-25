@@ -51,8 +51,8 @@ class Width(Dimension):
         return Width(self.value / other.value)
 
     @cached_property
-    def with_zero_height(self) -> Size:
-        return self * Height(0)
+    def size(self) -> Size:
+        return self * ZERO_HEIGHT
 
     @overload
     def __add__(self, other: int | float | Width) -> Width: ...
@@ -114,8 +114,8 @@ class Height(Dimension):
         return Height(self.value / other.value)
 
     @cached_property
-    def with_zero_width(self) -> Size:
-        return Width(0) * self
+    def size(self) -> Size:
+        return ZERO_WIDTH * self
 
     @overload
     def __add__(self, other: int | float | Height) -> Height: ...
@@ -226,4 +226,6 @@ class Size(NamedTuple):
         return self.coordinate.directional_offset
 
 
+ZERO_WIDTH = Width(0)
+ZERO_HEIGHT = Height(0)
 ZERO_SIZE = Size(0, 0)

@@ -31,6 +31,7 @@ class DrawingOnScreen(SpriteOnScreen):
             return self.coordinate
         return self.coordinate.as_anchor_of(self, self.anchor).top_left
 
+    @override
     @cached_property
     def pygame(self) -> tuple[Surface, Coordinate]:
         return self.drawing.pygame, self.top_left
@@ -46,16 +47,12 @@ class DrawingOnScreen(SpriteOnScreen):
     def to_file(self, file: Path) -> None:
         self.drawing.to_file(file)
 
+    @override
     def __add__(
         self, other: Coordinate | Size | Width | Height | DirectionalOffset
-    ) -> DrawingOnScreen:
+    ) -> Self:
         coordinate = self.coordinate + other
         return replace(self, coordinate=coordinate)
-
-    def __sub__(
-        self, other: Coordinate | Size | Width | Height | DirectionalOffset
-    ) -> DrawingOnScreen:
-        return self + -other
 
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:

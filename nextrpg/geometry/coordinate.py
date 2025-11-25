@@ -7,7 +7,7 @@ from nextrpg.geometry.dimension import Dimension, Pixel
 from nextrpg.geometry.direction import Direction
 
 if TYPE_CHECKING:
-    from nextrpg.geometry.directional_offset import DirectionalOffset
+    from nextrpg.geometry.directional_offset import Degree, DirectionalOffset
     from nextrpg.geometry.sizable_proxy import (
         BottomCenterSizable,
         BottomLeftSizable,
@@ -56,7 +56,7 @@ class XAxis(Dimension):
         return Coordinate(self.value, y_axis.value)
 
     @cached_property
-    def with_zero_y_axis(self) -> Coordinate:
+    def coordinate(self) -> Coordinate:
         return self @ YAxis(0)
 
 
@@ -93,7 +93,7 @@ class YAxis(Dimension):
         return Coordinate(x_axis.value, self.value)
 
     @cached_property
-    def with_zero_x_axis(self) -> Coordinate:
+    def coordinate(self) -> Coordinate:
         return self @ XAxis(0)
 
 

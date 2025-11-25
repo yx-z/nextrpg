@@ -101,7 +101,11 @@ from nextrpg.core.log import (
     log,
     pop_messages,
 )
-from nextrpg.core.metadata import METADATA_AS_CACHE_KEY, HasMetadata, Metadata
+from nextrpg.core.metadata import (
+    METADATA_TUPLE_AS_CACHE_KEY,
+    HasMetadata,
+    Metadata,
+)
 from nextrpg.core.module_and_attribute import (
     ModuleAndAttribute,
     to_module_and_attribute,
@@ -246,7 +250,14 @@ from nextrpg.geometry.scaling import (
     WidthScaling,
 )
 from nextrpg.geometry.sizable import Sizable
-from nextrpg.geometry.size import ZERO_SIZE, Height, Size, Width
+from nextrpg.geometry.size import (
+    ZERO_HEIGHT,
+    ZERO_SIZE,
+    ZERO_WIDTH,
+    Height,
+    Size,
+    Width,
+)
 from nextrpg.geometry.walk import Walk
 from nextrpg.gui.screen_area import (
     bottom_left_screen_area,

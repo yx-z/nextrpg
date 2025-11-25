@@ -17,7 +17,7 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
-from nextrpg.core.metadata import METADATA_AS_CACHE_KEY, Metadata
+from nextrpg.core.metadata import METADATA_TUPLE_AS_CACHE_KEY, Metadata
 from nextrpg.core.time import Millisecond
 from nextrpg.core.tmx_loader import TmxLoader, get_geometry, is_rect
 from nextrpg.drawing.drawing import Drawing
@@ -237,7 +237,7 @@ class MapLoader(TmxLoader):
         return drawing.drawing_on_screen(coordinate)
 
     def _metadata(self, gid: _Gid) -> Metadata:
-        return METADATA_AS_CACHE_KEY, ("tmx", self.file), ("gid", gid)
+        return METADATA_TUPLE_AS_CACHE_KEY, ("tmx", self.file), ("gid", gid)
 
     @property
     def collision_visuals(self) -> tuple[DrawingOnScreen, ...]:

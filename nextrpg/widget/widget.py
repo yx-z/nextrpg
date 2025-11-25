@@ -14,6 +14,7 @@ from nextrpg.core.dataclass_with_default import (
     default,
     private_init_below,
 )
+from nextrpg.core.metadata import HasMetadata, Metadata
 from nextrpg.core.time import Millisecond
 from nextrpg.core.util import type_name
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
@@ -161,8 +162,7 @@ class WidgetOnScreen(Scene):
     def _tick_without_parent_and_animation(
         self, time_delta: Millisecond, state: GameState
     ) -> tuple[Self, GameState]:
-        return self, stat
-        e
+        return self, state
 
     @property
     @abstractmethod
@@ -193,7 +193,7 @@ class WidgetOnScreen(Scene):
 
 
 @dataclass_with_default(frozen=True)
-class Widget[_WidgetOnScreen: WidgetOnScreen]:
+class Widget[_WidgetOnScreen: WidgetOnScreen](HasMetadata):
     # Must be a subclass of WidgetOnScreen.
     widget_on_screen_type: ClassVar[type]
     enter_animation: TimedAnimationSpec | None = None
@@ -201,6 +201,7 @@ class Widget[_WidgetOnScreen: WidgetOnScreen]:
         lambda self: self._init_exit_animation
     )
     name: str | None = None
+    metadata: Metadata = ()
 
     def with_same_parent_as(self, parent: WidgetOnScreen) -> _WidgetOnScreen:
         assert (

@@ -40,8 +40,11 @@ class WidgetGroupOnScreen(WidgetOnScreen):
             for drawing_on_screen in child._drawing_on_screens_without_parent
         )
 
-    def replace_children(self, children: Iterable[Widget]) -> Self:
-        children = self._init_children(children)
+    def replace_child(self, child: WidgetOnScreen) -> Self:
+        children = tuple(
+            child if child.widget.metadata == c.widget.metadata else c
+            for c in self._children
+        )
         return replace(self, _children=children)
 
     def _init_children(

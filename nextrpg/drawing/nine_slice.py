@@ -40,35 +40,31 @@ class NineSlice:
             stretched_center,
             stretched_center_right,
         )
-        center_row = center_row_group + self.top.with_zero_width
+        center_row = center_row_group + self.top.size
 
         stretched_bottom_center = self._bottom_center * width_scale
         bottom_row_group = self._stretch_row(
             size, self._bottom_left, stretched_bottom_center, self._bottom_right
         )
-        bottom_row = bottom_row_group.shift(
-            size.height.with_zero_width, Anchor.BOTTOM_LEFT
-        )
+        bottom_row = bottom_row_group.shift(size.height, Anchor.BOTTOM_LEFT)
 
         parts = [top_row, center_row, bottom_row]
         if (debug := config().system.debug) and (
             color := debug.draw_group_link_color
         ):
-            points = (ORIGIN, size.height.with_zero_width.coordinate)
+            points = (ORIGIN, size.height.size.coordinate)
             vertical_line = PolylineDrawing(points, color).drawing
             parts += [
-                vertical_line + self.left.with_zero_height,
-                vertical_line + (size.width - self.right).with_zero_height,
+                vertical_line + self.left.size,
+                vertical_line + (size.width - self.right).size,
             ]
         return DrawingGroup(tuple(parts))
 
     def _stretch_row(
         self, size: Size, left: Sprite, center: Sprite, right: Sprite
     ) -> DrawingGroup:
-        relative_center = center + self.left.with_zero_height
-        relative_right = right.shift(
-            size.width.with_zero_height, Anchor.TOP_RIGHT
-        )
+        relative_center = center + self.left.size
+        relative_right = right.shift(size.width, Anchor.TOP_RIGHT)
         return DrawingGroup((left, relative_center, relative_right))
 
     @cached_property

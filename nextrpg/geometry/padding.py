@@ -5,15 +5,15 @@ from typing import Self, overload
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import Pixel
 from nextrpg.geometry.sizable import Sizable
-from nextrpg.geometry.size import Height, Size, Width
+from nextrpg.geometry.size import ZERO_HEIGHT, ZERO_WIDTH, Height, Size, Width
 
 
 @dataclass(frozen=True)
 class Padding:
-    top: Height = Height(0)
-    left: Width = Width(0)
-    bottom: Height = Height(0)
-    right: Width = Width(0)
+    top: Height = ZERO_HEIGHT
+    left: Width = ZERO_WIDTH
+    bottom: Height = ZERO_HEIGHT
+    right: Width = ZERO_WIDTH
 
     def __neg__(self) -> Self:
         return replace(
@@ -56,6 +56,14 @@ class Padding:
     @cached_property
     def top_left(self) -> Coordinate:
         return (self.top * self.left).coordinate
+
+    @cached_property
+    def width(self) -> Width:
+        return self.left + self.right
+
+    @cached_property
+    def height(self) -> Height:
+        return self.top + self.bottom
 
 
 def padding_for_both_sides(width: Width, height: Height) -> Padding:

@@ -16,7 +16,7 @@ from nextrpg.geometry.scaling import (
     WidthScaling,
 )
 from nextrpg.geometry.sizable import Sizable
-from nextrpg.geometry.size import Size
+from nextrpg.geometry.size import Height, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.animation.animation_on_screen import AnimationOnScreen
@@ -54,15 +54,19 @@ class Sprite(Sizable, Protocol):
     def drawings(self) -> tuple[Drawing, ...]:
         return self.drawing.drawings
 
-    def __add__(self, shift: Coordinate | Size) -> ShiftedSprite:
+    def __add__(
+        self, shift: Coordinate | Width | Height | Size | DirectionalOffset
+    ) -> ShiftedSprite:
         return self.shift(shift.size)
 
-    def __sub__(self, shift: Coordinate | Size) -> ShiftedSprite:
+    def __sub__(
+        self, shift: Coordinate | Width | Height | Size | DirectionalOffset
+    ) -> ShiftedSprite:
         return self + -shift
 
     def shift(
         self,
-        shift: Coordinate | Size | DirectionalOffset,
+        shift: Coordinate | Width | Height | Size | DirectionalOffset,
         anchor: Anchor = Anchor.TOP_LEFT,
     ) -> ShiftedSprite:
         from nextrpg.drawing.shifted_sprite import (

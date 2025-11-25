@@ -117,10 +117,10 @@ class SayEventAddOn:
         match self.config.avatar_position:
             case AvatarPosition.LEFT:
                 shift = self._text.bottom_left - self.config.padding.width
-                return self._avatar.shift(shift.size, Anchor.BOTTOM_RIGHT)
+                return self._avatar.shift(shift, Anchor.BOTTOM_RIGHT)
             case AvatarPosition.RIGHT:
                 shift = self._text.bottom_right + self.config.padding.width
-                return self._avatar.shift(shift.size, Anchor.BOTTOM_LEFT)
+                return self._avatar.shift(shift, Anchor.BOTTOM_LEFT)
 
     @cached_property
     def _name_relative_to_text(self) -> ShiftedSprite | None:
@@ -128,7 +128,7 @@ class SayEventAddOn:
             return None
         text = Text(self._name, self.config.name_text_config)
         return text.drawing.shift(
-            -self.config.padding.height.with_zero_width, Anchor.BOTTOM_LEFT
+            -self.config.padding.height, Anchor.BOTTOM_LEFT
         )
 
     @cached_property

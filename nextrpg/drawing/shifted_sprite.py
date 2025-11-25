@@ -14,7 +14,7 @@ from nextrpg.geometry.scaling import (
     WidthAndHeightScaling,
     WidthScaling,
 )
-from nextrpg.geometry.size import ZERO_SIZE, Size
+from nextrpg.geometry.size import ZERO_SIZE, Height, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing import Drawing
@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 @dataclass(frozen=True)
 class ShiftedSprite:
     resource: Sprite
-    offset: Coordinate | Size | DirectionalOffset
+    offset: Coordinate | Width | Height | Size | DirectionalOffset
     anchor: Anchor = Anchor.TOP_LEFT
 
     @cached_property
@@ -38,11 +38,15 @@ class ShiftedSprite:
 
         return DrawingGroup(self)
 
-    def __add__(self, other: Coordinate | Size | DirectionalOffset) -> Self:
+    def __add__(
+        self, other: Coordinate | Width | Height | Size | DirectionalOffset
+    ) -> Self:
         offset = self.offset_size + other.size
         return replace(self, offset=offset)
 
-    def __sub__(self, other: Coordinate | Size | DirectionalOffset) -> Self:
+    def __sub__(
+        self, other: Coordinate | Width | Height | Size | DirectionalOffset
+    ) -> Self:
         return self + -other
 
     def __mul__(

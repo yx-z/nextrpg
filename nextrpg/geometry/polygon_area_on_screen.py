@@ -58,16 +58,23 @@ class PolygonAreaOnScreen(AreaOnScreen):
         return True
 
     @override
-    def __contains__(self, coordinate: Coordinate) -> bool:
+    def __contains__(self, other: Coordinate | AreaOnScreen) -> bool:
+        if isinstance(other, AreaOnScreen):
+            return all(c in self for c in other.points)
+
         inside = False
-        for i in range(len(self.points)):
-            x1, y1 = self.points[i]
-            x2, y2 = self.points[(i + 1) % len(self.points)]
-            if (y1 > coordinate.top_value) != (y2 > coordinate.top_value):
-                x_intersect = (x2 - x1) * (coordinate.top_value - y1) / (
-                    y2 - y1 + 1e-12
-                ) + x1
-                if coordinate.left_value < x_intersect:
+        px = other.left_value
+        py = other.top_value
+        points = self.points
+        n = len(points)
+        for i in range(n):
+            x1, y1 = points[i]
+            x2, y2 = points[(i + 1) % n]
+            if y1 == y2:
+                continue
+            if (y1 > py) != (y2 > py):
+                x_intersect = (x2 - x1) * (py - y1) / (y2 - y1) + x1
+                if px < x_intersect:
                     inside = not inside
         return inside
 

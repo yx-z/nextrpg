@@ -10,7 +10,8 @@ from nextrpg.drawing.shifted_sprite import ShiftedSprite
 from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.size import Size
+from nextrpg.geometry.directional_offset import DirectionalOffset
+from nextrpg.geometry.size import Height, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.drawing.text_group import TextGroup
@@ -58,9 +59,21 @@ class Text(Sprite):
 
     @override
     def __add__(
-        self, other: Coordinate | Size | str | Text | TextGroup
+        self,
+        other: (
+            Coordinate
+            | Width
+            | Height
+            | Size
+            | DirectionalOffset
+            | str
+            | Text
+            | TextGroup
+        ),
     ) -> ShiftedSprite | TextGroup:
-        if isinstance(other, Coordinate | Size):
+        if isinstance(
+            other, Coordinate | Width | Height | Size | DirectionalOffset
+        ):
             return self.shift(other)
 
         from nextrpg.drawing.text_group import TextGroup
@@ -106,7 +119,7 @@ class Text(Sprite):
 
     def _line_shift(self, index: int) -> Size:
         height = self.config.font.text_height + self.config.line_spacing
-        return (height * index).with_zero_width
+        return (height * index).size
 
     def _drawing(self, line: str) -> Drawing:
         surface = self.config.font.pygame.render(

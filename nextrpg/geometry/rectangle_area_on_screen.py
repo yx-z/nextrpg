@@ -36,10 +36,13 @@ class RectangleAreaOnScreen(AreaOnScreen, Sizable):
         )
 
     @override
-    def __contains__(self, coordinate: Coordinate) -> bool:
+    @override
+    def __contains__(self, other: Coordinate | AreaOnScreen) -> bool:
+        if isinstance(other, AreaOnScreen):
+            return all(p in self for p in other.points)
         return (
-            self.left < coordinate.left < self.right
-            and self.top < coordinate.top < self.bottom
+            self.left <= other.left <= self.right
+            and self.top <= other.top <= self.bottom
         )
 
     @override

@@ -35,7 +35,7 @@ def create_save_panel(
     click_save_slot: Callable[[ButtonOnScreen, GameState, int], OnClickResult],
 ) -> Callable[[ButtonOnScreen, GameState], PanelOnScreen]:
     def on_click(button: ButtonOnScreen, state: GameState) -> PanelOnScreen:
-        children = create_save_slot(click_save_slot)
+        children = create_save_slots(click_save_slot)
         panel = Panel(
             name=PANEL_NAME, children=children, enter_animation=ENTER_ANIMATION
         )
@@ -45,24 +45,31 @@ def create_save_panel(
 
 
 def create_save_slot(
+    slot: int,
+    click_save_slot: Callable[[ButtonOnScreen, GameState, int], OnClickResult],
+) -> Button:
+    save_io = SaveIo(str(slot))
+    if game_save_meta := save_io.load(GameSaveMeta):
+        title = f"Save #{slot + 1}: {game_save_meta.save_time_str}"
+    else:
+        title = f"Empty Save Slot #{slot}"
+    text = Text(title)
+
+    def on_click(btn: ButtonOnScreen, state: GameState) -> OnClickResult:
+        return click_save_slot(btn, state, slot)
+
+    size = Size(200, 150)
+    config = ButtonConfig(padding_or_size=size)
+    metadata = (("slot", slot),)
+    return Button(
+        text=text, on_click=on_click, config=config, metadata=metadata
+    )
+
+
+def create_save_slots(
     click_save_slot: Callable[[ButtonOnScreen, GameState, int], OnClickResult],
 ) -> tuple[Button, ...]:
-    res: list[Button] = []
-    for slot in range(NUM_SAVE_SLOTS, 1):
-        save_io = SaveIo(str(slot))
-        if game_save_meta := save_io.load(GameSaveMeta):
-            title = f"Save #{slot + 1}: {game_save_meta.save_time_str}"
-        else:
-            title = f"Empty Save Slot #{slot}"
-        text = Text(title)
-
-        def on_click(
-            btn: ButtonOnScreen, state: GameState, slt: int = slot
-        ) -> OnClickResult:
-            return click_save_slot(btn, state, slt)
-
-        size = Size(200, 150)
-        config = ButtonConfig(padding_or_size=size)
-        button = Button(text=text, on_click=on_click, config=config)
-        res.append(button)
-    return tuple(res)
+    return tuple(
+        create_save_slot(slot, click_save_slot)
+        for slot in range(NUM_SAVE_SLOTS)
+    )

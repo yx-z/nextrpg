@@ -25,11 +25,10 @@ class PanelOnScreen(WidgetGroupOnScreen):
     def children_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         drawing_on_screens = [
             drawing_on_screen
-            for i, child in enumerate(self._children)
-            if i in self._visible
-            for drawing_on_screen in child._drawing_on_screens_without_parent
+            for _, widget in self._visible_children
+            for drawing_on_screen in widget._drawing_on_screens_without_parent
         ]
-        if self._visible.start != 0:
+        if self._visible_children[0][0] != 0:
             if self._is_vertical:
                 icon = self.widget.config.more_above_icon.drawing_on_screens(
                     self.area.top_center, Anchor.BOTTOM_CENTER
@@ -39,7 +38,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
                     self.area.center_left, Anchor.CENTER_RIGHT
                 )
             drawing_on_screens += icon
-        if self._visible.stop != len(self._children):
+        if self._visible_children[-1][0] != len(self._children):
             if self._is_vertical:
                 icon = self.widget.config.more_below_icon.drawing_on_screens(
                     self.area.bottom_center, Anchor.TOP_CENTER

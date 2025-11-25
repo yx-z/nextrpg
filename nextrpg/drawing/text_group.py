@@ -10,7 +10,8 @@ from nextrpg.drawing.sprite import Sprite
 from nextrpg.drawing.text import Text
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.size import Height, Size, Width
+from nextrpg.geometry.directional_offset import DirectionalOffset
+from nextrpg.geometry.size import ZERO_HEIGHT, ZERO_WIDTH, Height, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.drawing.text_on_screen import TextOnScreen
@@ -69,9 +70,14 @@ class TextGroup(Sprite):
 
     @override
     def __add__(
-        self, other: Coordinate | Size | str | Text
+        self,
+        other: (
+            Coordinate | Width | Height | Size | DirectionalOffset | str | Text
+        ),
     ) -> ShiftedSprite | TextGroup:
-        if isinstance(other, Coordinate | Size):
+        if isinstance(
+            other, Coordinate | Width | Height | Size | DirectionalOffset
+        ):
             return self.shift(other)
 
         if isinstance(other, str):
@@ -90,9 +96,9 @@ class TextGroup(Sprite):
             lines += [[t] for t in text.line_texts[1:]]
 
         res: list[ShiftedSprite] = []
-        curr_height = Height(0)
+        curr_height = ZERO_HEIGHT
         for line in lines:
-            curr_width = Width(0)
+            curr_width = ZERO_WIDTH
             line_height = max(word.height for word in line)
             for word in line:
                 height_diff = line_height - word.height

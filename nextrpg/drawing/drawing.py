@@ -10,7 +10,11 @@ from pygame.transform import flip, gaussian_blur, rotate, smoothscale
 
 from nextrpg.core.cached_decorator import cached
 from nextrpg.core.log import log
-from nextrpg.core.metadata import METADATA_AS_CACHE_KEY, HasMetadata, Metadata
+from nextrpg.core.metadata import (
+    METADATA_TUPLE_AS_CACHE_KEY,
+    HasMetadata,
+    Metadata,
+)
 from nextrpg.core.save import LoadFromSave
 from nextrpg.drawing.color import TRANSPARENT, WHITE, Alpha, Color
 from nextrpg.drawing.shifted_sprite import ShiftedSprite
@@ -42,7 +46,7 @@ def _metadata_or_path(
     if isinstance(resource, Surface):
         if (metadata := kwargs.get("metadata")) and metadata[
             0
-        ] == METADATA_AS_CACHE_KEY:
+        ] == METADATA_TUPLE_AS_CACHE_KEY:
             return metadata
         return None
     return resource

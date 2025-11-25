@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from functools import cached_property
-from typing import override
+from typing import Self, override
 
 from pygame import SRCALPHA, Surface
 
@@ -10,12 +10,23 @@ from nextrpg.drawing.sprite_on_screen import (
     SpriteOnScreen,
 )
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.size import Size
+from nextrpg.geometry.directional_offset import DirectionalOffset
+from nextrpg.geometry.size import Height, Size, Width
 
 
 @dataclass(frozen=True)
 class DrawingOnScreens(SpriteOnScreen):
     drawing_on_screens: tuple[DrawingOnScreen, ...]
+
+    @override
+    def __add__(
+        self, other: Coordinate | Width | Height | Size | DirectionalOffset
+    ) -> Self:
+        drawing_on_screens = tuple(
+            drawing_on_screen + other
+            for drawing_on_screen in self.drawing_on_screens
+        )
+        return replace(self, drawing_on_screens=drawing_on_screens)
 
     @override
     @cached_property

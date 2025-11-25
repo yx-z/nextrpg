@@ -41,7 +41,7 @@ def title_scene(button: ButtonOnScreen, state: GameState) -> TransitionScene:
 
 
 def menu_widget() -> WidgetGroup:
-    save_panel = create_save_panel(click_save)
+    save_panel = create_save_panel(click_save_slot)
     save_button = Button(name="save", on_click=save_panel)
 
     title_button = Button(name="title", on_click=title_scene)
@@ -53,7 +53,7 @@ def menu_widget() -> WidgetGroup:
     )
 
 
-def click_save(
+def click_save_slot(
     from_button: ButtonOnScreen, state: GameState, slot: int
 ) -> PanelOnScreen:
     map_scene = from_button.root
@@ -64,5 +64,6 @@ def click_save(
 
     panel = from_button.parent
     assert isinstance(panel, PanelOnScreen)
-    buttons = create_save_slot(click_save)
-    return panel.replace_children(buttons)
+    button = create_save_slot(slot, click_save_slot)
+    child = button.with_parent(panel).select
+    return panel.replace_child(child)

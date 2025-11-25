@@ -33,7 +33,7 @@ from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.dimension import ValueScaling
 from nextrpg.geometry.scaling import WidthAndHeightScaling
-from nextrpg.geometry.size import Height, Size
+from nextrpg.geometry.size import ZERO_HEIGHT, Size
 
 logger = log("window")
 
@@ -178,7 +178,7 @@ def _log(entries: Collection[LogEntry]) -> list[DrawingOnScreen]:
     components = tuple(Text(e.component) for e in entries)
     component_width = max(t.width for t in components)
 
-    height = Height(0)
+    height = ZERO_HEIGHT
     res: list[DrawingOnScreen] = []
     for component, entry in zip(components, entries):
         if isinstance(content := entry.formatted, MessageKeyAndDrawing):
@@ -191,7 +191,7 @@ def _log(entries: Collection[LogEntry]) -> list[DrawingOnScreen]:
             line_height = message.height
         height += max(line_height, component.height)
 
-        component_coordinate = height.with_zero_width.coordinate
+        component_coordinate = height.size.coordinate
         res += component.drawing_on_screens(component_coordinate)
 
         message_coordinate = component_coordinate + component_width

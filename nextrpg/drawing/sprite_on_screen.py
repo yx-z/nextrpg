@@ -8,11 +8,14 @@ from typing import (
     runtime_checkable,
 )
 
+from pygame import Surface
+
 from nextrpg.core.time import Millisecond
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
+from nextrpg.geometry.directional_offset import DirectionalOffset
 from nextrpg.geometry.sizable import Sizable
-from nextrpg.geometry.size import Size
+from nextrpg.geometry.size import Height, Size, Width
 
 if TYPE_CHECKING:
     from nextrpg.animation.animation_group import AnimationGroup
@@ -33,6 +36,20 @@ if TYPE_CHECKING:
 @runtime_checkable
 class SpriteOnScreen(Sizable, Protocol):
     drawing_on_screens: tuple[DrawingOnScreen, ...]
+
+    @cached_property
+    def pygame(self) -> tuple[Surface, Coordinate]:
+        return self.drawing_on_screen.pygame
+
+    def __add__(
+        self, other: Coordinate | Width | Height | Size | DirectionalOffset
+    ) -> SpriteOnScreen:
+        return self._drawing_on_screens + other
+
+    def __sub__(
+        self, other: Coordinate | Width | Height | Size | DirectionalOffset
+    ) -> SpriteOnScreen:
+        return self._drawing_on_screens + -other
 
     @cached_property
     def drawing_on_screen(self) -> DrawingOnScreen:
