@@ -19,7 +19,7 @@ class LabelOnScreen(SizableWidgetOnScreen):
 
     @override
     @cached_property
-    def drawing(self) -> DrawingGroup:
+    def sprite(self) -> DrawingGroup:
         return self.widget.text.drawing
 
 

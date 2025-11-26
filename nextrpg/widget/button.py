@@ -3,6 +3,7 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import ClassVar, Self, override
 
+from nextrpg import ShiftedSprite
 from nextrpg.animation.cycle import Cycle
 from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.config.config import config
@@ -14,6 +15,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
+from nextrpg.drawing.color import TRANSPARENT, Color
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.sprite import Sprite
 from nextrpg.drawing.text import Text
@@ -39,7 +41,7 @@ class ButtonOnScreen(SizableWidgetOnScreen):
 
     @override
     @cached_property
-    def drawing(self) -> Sprite:
+    def sprite(self) -> Sprite:
         if self.is_selected:
             return self.widget.active
         return self.widget.idle
@@ -98,7 +100,7 @@ class Button(BaseButton):
     text: str | Text | TextGroup = default(lambda self: self.name)
     config: ButtonConfig = field(default_factory=lambda: config().widget.button)
     _: KW_ONLY = private_init_below()
-    idle: Sprite = default(lambda self: self._shift(self._text))
+    idle: Sprite = default(lambda self: self._init_idle)
     active: Sprite = default(lambda self: self._init_active)
 
     @property
@@ -109,22 +111,28 @@ class Button(BaseButton):
             self.config.border_radius,
             self.config.border_width,
         )
-        background = self._text.drawings[0].background(
-            self.config.background_color,
-            self._padding,
-            self.config.border_radius,
-        )
+        background = self._background(self.config.background_color)
 
         background_group = DrawingGroup((background_border, background))
         backgrounds = background_group + self._padding.top_left
         fade_in = FadeIn(backgrounds, self.config.fade_duration)
         fade_out = FadeOut(backgrounds, self.config.fade_duration)
         animation = Cycle((fade_out, fade_in))
-        return DrawingGroup((animation, self.idle))
+        return DrawingGroup((animation, self._shifted_text))
 
-    def _shift(self, resource: Sprite) -> Sprite:
-        shifted = resource + self._padding.top_left.size
-        return DrawingGroup(shifted)
+    @property
+    def _init_idle(self) -> Sprite:
+        background = self._background(TRANSPARENT)
+        return DrawingGroup((background, self._shifted_text))
+
+    @cached_property
+    def _shifted_text(self) -> ShiftedSprite:
+        return self._text + self._padding.top_left
+
+    def _background(self, color: Color) -> ShiftedSprite:
+        return self._text.drawings[0].background(
+            color, self._padding, self.config.border_radius
+        )
 
     @cached_property
     def _text(self) -> Text | TextGroup:

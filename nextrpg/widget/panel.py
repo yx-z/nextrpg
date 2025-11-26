@@ -101,7 +101,6 @@ class PanelOnScreen(WidgetGroupOnScreen):
     def _visible_children(
         self, sentinel: SizableWidgetOnScreen, is_forward: bool
     ) -> tuple[_IndexedChild, ...]:
-        sentinel = sentinel.deselect
         res: list[_IndexedChild] = []
         if is_forward:
             if self._is_vertical:
@@ -125,7 +124,6 @@ class PanelOnScreen(WidgetGroupOnScreen):
 
         found_sentinel = False
         for i, child in iterable:
-            child = child.deselect
             if not found_sentinel:
                 if child is sentinel:
                     found_sentinel = True

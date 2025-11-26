@@ -26,7 +26,7 @@ class SizableWidgetOnScreen(WidgetOnScreen):
     def _drawing_on_screens_without_parent_and_animation(
         self,
     ) -> tuple[DrawingOnScreen, ...]:
-        return self.drawing.drawing_on_screens(
+        return self.sprite.drawing_on_screens(
             self.coordinate, self.widget.anchor
         )
 
@@ -41,7 +41,7 @@ class SizableWidgetOnScreen(WidgetOnScreen):
 
     @property
     @abstractmethod
-    def drawing(self) -> Sprite: ...
+    def sprite(self) -> Sprite: ...
 
 
 @dataclass(frozen=True)
