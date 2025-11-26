@@ -1,4 +1,4 @@
-from collections.abc import Iterable
+from collections.abc import Collection, Iterable
 from dataclasses import KW_ONLY, dataclass, replace
 from functools import cached_property
 from itertools import cycle, pairwise
@@ -31,7 +31,6 @@ class WidgetGroupOnScreen(WidgetOnScreen):
     _children: tuple[WidgetOnScreen, ...] = default(
         lambda self: self._init_children(self.widget.children)
     )
-    _selected: int = 0
 
     @cached_property
     def children_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
@@ -61,9 +60,10 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         return replace(self, _children=children)
 
     def _init_children(
-        self, children: Iterable[Widget]
+        self, children: Collection[Widget]
     ) -> tuple[WidgetOnScreen, ...]:
-        assert children, "Require non-empty children."
+        if not children:
+            return ()
         with_parent = tuple(child.with_parent(self) for child in children)
         if any(child.is_selected for child in with_parent):
             return with_parent
@@ -90,6 +90,10 @@ class WidgetGroupOnScreen(WidgetOnScreen):
                 return stepped, state
         with_children = self._with_children(children)
         return with_children, state
+
+    @cached_property
+    def _selected(self) -> WidgetOnScreen:
+        return next(child for child in self._children if child.is_selected)
 
     @override
     @cached_property

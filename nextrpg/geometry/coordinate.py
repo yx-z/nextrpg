@@ -3,7 +3,7 @@ from math import atan2, degrees, hypot
 from typing import TYPE_CHECKING, NamedTuple, Self, overload, override
 
 from nextrpg.geometry.anchor import Anchor
-from nextrpg.geometry.dimension import Dimension, Pixel
+from nextrpg.geometry.dimension import Dimension, Pixel, ValueScaling
 from nextrpg.geometry.direction import Direction
 
 if TYPE_CHECKING:
@@ -119,6 +119,12 @@ class Coordinate(NamedTuple):
 
     def __neg__(self) -> Coordinate:
         return Coordinate(-self.left_value, -self.top_value)
+
+    def __mul__(self, scaling: ValueScaling) -> Coordinate:
+        return Coordinate(self.left_value * scaling, self.top_value * scaling)
+
+    def __rmul__(self, scaling: ValueScaling) -> Coordinate:
+        return self * scaling
 
     def __add__(
         self, arg: Coordinate | Width | Height | Size | DirectionalOffset

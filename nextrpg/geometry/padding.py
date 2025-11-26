@@ -58,6 +58,18 @@ class Padding:
         return (self.top * self.left).coordinate
 
     @cached_property
+    def top_right(self) -> Coordinate:
+        return (self.top * self.right).coordinate
+
+    @cached_property
+    def bottom_left(self) -> Coordinate:
+        return (self.bottom * self.left).coordinate
+
+    @cached_property
+    def bottom_right(self) -> Coordinate:
+        return (self.bottom * self.right).coordinate
+
+    @cached_property
     def width(self) -> Width:
         return self.left + self.right
 

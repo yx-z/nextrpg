@@ -15,6 +15,12 @@ from nextrpg.widget.widget import Widget, WidgetOnScreen
 class SizableWidgetOnScreen(WidgetOnScreen):
     widget: SizableWidget
 
+    def anchored(
+        self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
+    ) -> Self:
+        widget = self.widget.anchored(coordinate, anchor)
+        return replace(self, widget=widget)
+
     @override
     @cached_property
     def _drawing_on_screens_without_parent_and_animation(

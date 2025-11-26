@@ -183,7 +183,10 @@ class Size(NamedTuple):
         return self + -other
 
     def __mul__(
-        self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
+        self,
+        scaling: (
+            ValueScaling | WidthScaling | HeightScaling | WidthAndHeightScaling
+        ),
     ) -> Size:
         if isinstance(scaling, WidthScaling):
             return Size(self.width_value * scaling.value, self.height_value)
@@ -191,9 +194,19 @@ class Size(NamedTuple):
         if isinstance(scaling, HeightScaling):
             return Size(self.width_value, self.height_value * scaling.value)
 
-        return Size(
-            self.width_value * scaling.value, self.height_value * scaling.value
-        )
+        if isinstance(scaling, WidthAndHeightScaling):
+            value = scaling.value
+        else:
+            value = scaling
+        return Size(self.width_value * value, self.height_value * value)
+
+    def __rmul__(
+        self,
+        scaling: (
+            ValueScaling | WidthScaling | HeightScaling | WidthAndHeightScaling
+        ),
+    ) -> Size:
+        return self * scaling
 
     def __truediv__(
         self, scaling: WidthScaling | HeightScaling | WidthAndHeightScaling
