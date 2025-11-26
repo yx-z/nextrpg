@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from functools import cached_property
 from typing import (
     TYPE_CHECKING,
@@ -31,6 +32,7 @@ if TYPE_CHECKING:
     from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
     from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
+    from nextrpg.game.game_state import GameState
 
 
 @runtime_checkable
@@ -169,3 +171,14 @@ def animate(
     if issubclass(animation_type, TimedAnimationGroup):
         return TimedAnimationOnScreens(resources)
     return AnimationOnScreens(resources)
+
+
+def tick_all_with_state[T](
+    tickables: Iterable[T], time_delta: Millisecond, state: GameState
+) -> tuple[T, GameState]:
+    res: list[T] = []
+    for tickable in tickables:
+        ticked, state = tickable.tick(time_delta, state)
+        res.append(ticked)
+    all_ticked = tuple(res)
+    return all_ticked, state

@@ -85,8 +85,10 @@ class WidgetGroupOnScreen(WidgetOnScreen):
 
         if isinstance(event, KeyPressDown):
             key = (self.widget.scroll_direction, event.key_mapping)
-            if (forward := _SCROLL_AND_KEY_TO_FORWARD.get(key)) is not None:
-                stepped = self._step(forward)
+            if (
+                is_forward := _SCROLL_AND_KEY_TO_IS_FORWARD.get(key)
+            ) is not None:
+                stepped = self._step(is_forward)
                 return stepped, state
         with_children = self._with_children(children)
         return with_children, state
@@ -120,21 +122,21 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         ticked_with_background = replace(ticked, background=background)
         return ticked_with_background, state
 
-    def _step(self, forward: bool) -> Self:
+    def _step(self, is_forward: bool) -> Self:
         if len(self._children) < 2 or (
             not self.widget.loop
             and (
-                (not forward and self._selected is self._children[0])
-                or (forward and self._selected is self._children[-1])
+                (not is_forward and self._selected is self._children[0])
+                or (is_forward and self._selected is self._children[-1])
             )
         ):
             return self
 
         for w1, w2 in pairwise(cycle(self._children)):
-            if not forward and w2 is self._selected:
+            if not is_forward and w2 is self._selected:
                 target = w1
                 break
-            if forward and w1 is self._selected:
+            if is_forward and w1 is self._selected:
                 target = w2
                 break
 
@@ -165,7 +167,7 @@ class WidgetGroup[_WidgetGroupOnScreen: WidgetOnScreen](
     widget_on_screen_type: ClassVar[type] = WidgetGroupOnScreen
 
 
-_SCROLL_AND_KEY_TO_FORWARD = {
+_SCROLL_AND_KEY_TO_IS_FORWARD = {
     (ScrollDirection.HORIZONTAL, KeyMappingConfig.left): False,
     (ScrollDirection.HORIZONTAL, KeyMappingConfig.right): True,
     (ScrollDirection.VERTICAL, KeyMappingConfig.up): False,

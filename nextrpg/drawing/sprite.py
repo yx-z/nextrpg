@@ -132,6 +132,6 @@ def tick_optional[T](resource: T | None, time_delta: Millisecond) -> T | None:
 
 
 def tick_all[T](
-    resource: Iterable[T], time_delta: Millisecond
+    tickables: Iterable[T], time_delta: Millisecond
 ) -> tuple[T, ...]:
-    return tuple(t.tick(time_delta) for t in resource)
+    return tuple(t.tick(time_delta) for t in tickables)

@@ -58,7 +58,7 @@ def create_save_slot(
     def on_click(btn: ButtonOnScreen, state: GameState) -> OnClickResult:
         return click_save_slot(btn, state, slot)
 
-    size = Size(200, 100)
+    size = Size(400, 100)
     config = ButtonConfig(padding_or_size=size)
     metadata = (("slot", slot),)
     return Button(
