@@ -47,7 +47,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
                     self.area.center_left, Anchor.CENTER_RIGHT
                 )
             drawing_on_screens += icon
-        if self._visible[-1].index != len(self._children):
+        if self._visible[-1].index != self._last_index:
             if self._is_vertical:
                 icon = self.widget.config.more_below_icon.drawing_on_screens(
                     self.area.bottom_center, Anchor.TOP_CENTER
@@ -95,6 +95,10 @@ class PanelOnScreen(WidgetGroupOnScreen):
     @cached_property
     def _is_vertical(self) -> bool:
         return self.widget.scroll_direction is ScrollDirection.VERTICAL
+
+    @cached_property
+    def _last_index(self) -> int:
+        return len(self._children) - 1
 
     @cached_property
     def _selected_index(self) -> int:
