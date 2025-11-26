@@ -23,7 +23,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
     _: KW_ONLY = private_init_below()
     _visible: tuple[_IndexedChild, ...] = default(
         lambda self: (
-            self._visible_children(self._children[0], is_forward=True)
+            self._visible_children(index=0, is_forward=True)
             if self._children
             else ()
         )
@@ -83,7 +83,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
         stepped = super()._step(is_forward)
         if stepped._selected.deselect in self._visible:
             return stepped
-        visible = stepped._visible_children(stepped._selected, is_forward)
+        visible = stepped._visible_children(stepped._selected_index, is_forward)
         return replace(stepped, _visible=visible)
 
     @cached_property
@@ -99,7 +99,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
         return self._children.index(self._selected)
 
     def _visible_children(
-        self, sentinel: SizableWidgetOnScreen, is_forward: bool
+        self, index: int, is_forward: bool
     ) -> tuple[_IndexedChild, ...]:
         res: list[_IndexedChild] = []
         if is_forward:
@@ -125,7 +125,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
         found_sentinel = False
         for i, child in iterable:
             if not found_sentinel:
-                if child is sentinel:
+                if i == index:
                     found_sentinel = True
                 else:
                     continue
