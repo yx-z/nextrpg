@@ -5,8 +5,10 @@ from typing import ClassVar, Literal, Self, override
 from nextrpg.config.config import config
 from nextrpg.config.widget.panel_config import PanelConfig
 from nextrpg.core.dataclass_with_default import default, private_init_below
+from nextrpg.core.time import Millisecond
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
+from nextrpg.game.game_state import GameState
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.area_on_screen import AreaOnScreen
 from nextrpg.widget.scroll_direction import ScrollDirection
@@ -57,6 +59,20 @@ class PanelOnScreen(WidgetGroupOnScreen):
             drawing_on_screens += icon
         return tuple(drawing_on_screens)
 
+    @override
+    def _tick_without_parent_and_animation(
+        self, time_delta: Millisecond, state: GameState
+    ) -> tuple[Self, GameState]:
+        ticked, state = super()._tick_without_parent_and_animation(
+            time_delta, state
+        )
+        visible: list[_IndexedChild] = []
+        for child in self._visible:
+            child, state = child.tick_without_parent(time_delta, state)
+            visible.append(child)
+        with_visible = replace(ticked, _visible=tuple(visible))
+        return with_visible, state
+
     @cached_property
     def area(self) -> AreaOnScreen:
         assert isinstance(
@@ -104,7 +120,9 @@ class PanelOnScreen(WidgetGroupOnScreen):
         for i, child in iterable:
             if not found_sentinel and child is not sentinel:
                 continue
-            anchored = child.anchored(coordinate, anchor).deselect
+            anchored = child.anchored(coordinate, anchor)
+            if i == self._selected_index:
+                anchored = anchored.select
             anchored_drawing = DrawingOnScreens(
                 anchored._drawing_on_screens_without_parent
             )
@@ -114,7 +132,14 @@ class PanelOnScreen(WidgetGroupOnScreen):
                 break
             indexed_child = _IndexedChild(i, anchored)
             res.append(indexed_child)
-            coordinate += sign * (anchored_drawing.size + padding)
+            if self._is_vertical:
+                coordinate += sign * (
+                    anchored_drawing.height + self.widget.config.padding.height
+                )
+            else:
+                coordinate += sign * (
+                    anchored_drawing.width + self.widget.config.padding.width
+                )
         if is_forward:
             return tuple(res)
         else:
@@ -134,6 +159,16 @@ class Panel(WidgetGroup[PanelOnScreen]):
 class _IndexedChild:
     index: int
     child: SizableWidgetOnScreen
+
+    def tick_without_parent(
+        self, time_delta: Millisecond, state: GameState
+    ) -> tuple[Self, GameState]:
+        if res := self.child._tick_without_parent(time_delta, state):
+            child, state = res
+            ticked = replace(self, child=child)
+        else:
+            ticked = self
+        return ticked, state
 
     def drawing_on_screens(
         self, selected_index: int
