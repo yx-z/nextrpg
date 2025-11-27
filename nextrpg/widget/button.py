@@ -15,7 +15,7 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.color import TRANSPARENT, Color
+from nextrpg.drawing.color import Color
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.sprite import Sprite
 from nextrpg.drawing.text import Text
@@ -103,18 +103,20 @@ class Button(BaseButton):
     idle: Sprite = default(lambda self: self._init_idle)
     active: Sprite = default(lambda self: self._init_active)
 
-    @property
-    def _init_active(self) -> Sprite:
+    @cached_property
+    def _border(self) -> ShiftedSprite:
         background_border = self._text.drawings[0].background(
             self.config.border_color,
             self._padding,
             self.config.border_radius,
             self.config.border_width,
         )
-        background = self._background(self.config.background_color)
+        return self._shift(background_border)
 
-        background_group = DrawingGroup((background_border, background))
-        backgrounds = background_group + self._padding.top_left
+    @property
+    def _init_active(self) -> Sprite:
+        background = self._background(self.config.active_background_color)
+        backgrounds = DrawingGroup((self._border, background))
         fade_in = FadeIn(backgrounds, self.config.fade_duration)
         fade_out = FadeOut(backgrounds, self.config.fade_duration)
         animation = Cycle((fade_out, fade_in))
@@ -122,17 +124,21 @@ class Button(BaseButton):
 
     @property
     def _init_idle(self) -> Sprite:
-        background = self._background(TRANSPARENT)
-        return DrawingGroup((background, self._shifted_text))
+        background = self._background(self.config.idle_background_color)
+        return DrawingGroup((self._border, background, self._shifted_text))
 
     @cached_property
     def _shifted_text(self) -> ShiftedSprite:
-        return self._text + self._padding.top_left
+        return self._shift(self._text)
+
+    def _shift(self, sprite: Sprite | ShiftedSprite) -> ShiftedSprite:
+        return sprite + self._padding.top_left
 
     def _background(self, color: Color) -> ShiftedSprite:
-        return self._text.drawings[0].background(
+        background = self._text.drawings[0].background(
             color, self._padding, self.config.border_radius
         )
+        return self._shift(background)
 
     @cached_property
     def _text(self) -> Text | TextGroup:

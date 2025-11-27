@@ -19,7 +19,7 @@ from nextrpg import (
     Width,
 )
 
-NUM_SAVE_SLOTS = 3
+NUM_SAVE_SLOTS = 10
 PADDING_WIDTH = Width(10)
 PADDING_HEIGHT = Height(10)
 
@@ -52,7 +52,7 @@ def create_save_slot(
     if game_save_meta := save_io.load(GameSaveMeta):
         title = f"Save #{slot + 1}: {game_save_meta.save_time_str}"
     else:
-        title = f"Empty Save Slot #{slot}"
+        title = f"Empty Save Slot #{slot + 1}"
     text = Text(title)
 
     def on_click(btn: ButtonOnScreen, state: GameState) -> OnClickResult:
