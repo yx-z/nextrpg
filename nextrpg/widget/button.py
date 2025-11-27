@@ -119,8 +119,8 @@ class Button(BaseButton):
         backgrounds = DrawingGroup((self._border, background))
         fade_in = FadeIn(backgrounds, self.config.fade_duration)
         fade_out = FadeOut(backgrounds, self.config.fade_duration)
-        animation = Cycle((fade_out, fade_in))
-        return DrawingGroup((animation, self._shifted_text))
+        animation = Cycle((fade_in, fade_out))
+        return DrawingGroup((self.idle, animation, self._shifted_text))
 
     @property
     def _init_idle(self) -> Sprite:
