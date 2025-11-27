@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from nextrpg.config.drawing.text_config import TextConfig
 from nextrpg.core.time import Millisecond
-from nextrpg.drawing.color import BLACK, WHITE, Color
+from nextrpg.drawing.color import BLACK, Color
 from nextrpg.geometry.dimension import Pixel
 from nextrpg.geometry.padding import Padding, padding_for_all_sides
 from nextrpg.geometry.size import Size
@@ -15,9 +15,9 @@ class ButtonConfig:
     fade_duration_input: Millisecond | None = None
     border_width: Pixel = 2
     border_radius: Pixel = 5
-    active_background_color: Color = BLACK.with_percentage_alpha(0.7)
+    active_background_color: Color = BLACK.with_percentage_alpha(0.5)
     idle_background_color: Color = BLACK.with_percentage_alpha(0.1)
-    border_color: Color = WHITE.with_percentage_alpha(0.5)
+    border_color: Color = BLACK.with_percentage_alpha(0.5)
 
     @property
     def fade_duration(self) -> Millisecond:
