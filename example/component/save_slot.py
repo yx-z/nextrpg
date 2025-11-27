@@ -37,7 +37,10 @@ def create_save_panel(
     def on_click(button: ButtonOnScreen, state: GameState) -> PanelOnScreen:
         children = create_save_slots(click_save_slot)
         panel = Panel(
-            name=PANEL_NAME, children=children, enter_animation=ENTER_ANIMATION
+            name=PANEL_NAME,
+            children=children,
+            enter_animation=ENTER_ANIMATION,
+            loop=False,
         )
         return panel.with_same_parent_as(button)
 

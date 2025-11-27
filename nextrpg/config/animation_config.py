@@ -5,4 +5,4 @@ from nextrpg.core.time import Millisecond
 
 @dataclass(frozen=True)
 class AnimationConfig:
-    default_timed_animation_duration: Millisecond = 400
+    default_timed_animation_duration: Millisecond = 500

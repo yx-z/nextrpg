@@ -106,7 +106,9 @@ class PanelOnScreen(WidgetGroupOnScreen):
 
     def _visible_children(self, is_forward: bool) -> tuple[_IndexedChild, ...]:
         if not is_forward:
-            stepped = self._step(is_forward=True)
+            widget = replace(self.widget, loop=True)
+            allow_loop = replace(self, widget=widget)
+            stepped = allow_loop._step(is_forward=True)
             while self._selected_index != stepped._selected_index:
                 stepped = stepped._step(is_forward=True)
             return stepped._visible
