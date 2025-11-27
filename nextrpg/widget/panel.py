@@ -22,21 +22,15 @@ class PanelOnScreen(WidgetGroupOnScreen):
     widget: Panel
     _: KW_ONLY = private_init_below()
     _visible: tuple[_IndexedChild, ...] = default(
-        lambda self: (
-            self._visible_children(index=0, is_forward=True)
-            if self._children
-            else ()
-        )
+        lambda self: self._visible_children(is_forward=True)
     )
 
     @cached_property
     def children_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         drawing_on_screens = [
             drawing_on_screen
-            for child in self._visible
-            for drawing_on_screen in child.drawing_on_screens(
-                self._selected_index
-            )
+            for widget in self._visible
+            for drawing_on_screen in widget.child._drawing_on_screens_without_parent
         ]
         if self._visible and self._visible[0].index != 0:
             if self._is_vertical:
@@ -81,10 +75,14 @@ class PanelOnScreen(WidgetGroupOnScreen):
     @override
     def _step(self, is_forward: bool) -> Self:
         stepped = super()._step(is_forward)
-        if stepped._selected.deselect in self._visible:
+        if stepped._selected_index in stepped._visible_indices:
             return stepped
-        visible = stepped._visible_children(stepped._selected_index, is_forward)
+        visible = stepped._visible_children(is_forward)
         return replace(stepped, _visible=visible)
+
+    @cached_property
+    def _visible_indices(self) -> tuple[int, ...]:
+        return tuple(child.index for child in self._visible)
 
     @cached_property
     def _is_vertical(self) -> bool:
@@ -98,9 +96,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
     def _selected_index(self) -> int:
         return self._children.index(self._selected)
 
-    def _visible_children(
-        self, index: int, is_forward: bool
-    ) -> tuple[_IndexedChild, ...]:
+    def _visible_children(self, is_forward: bool) -> tuple[_IndexedChild, ...]:
         res: list[_IndexedChild] = []
         if is_forward:
             if self._is_vertical:
@@ -122,11 +118,11 @@ class PanelOnScreen(WidgetGroupOnScreen):
             sign = -1
         coordinate = self.area.at_anchor(anchor) + sign * padding
 
-        found_sentinel = False
+        found = False
         for i, child in iterable:
-            if not found_sentinel:
-                if i == index:
-                    found_sentinel = True
+            if not found:
+                if i == self._selected_index:
+                    found = True
                 else:
                     continue
 
@@ -134,9 +130,11 @@ class PanelOnScreen(WidgetGroupOnScreen):
             anchored_drawing = DrawingOnScreens(
                 anchored._drawing_on_screens_without_parent
             )
-            if anchored_drawing not in self.area:
+            if (
+                i != self._selected_index
+                and anchored_drawing.rectangle_area_on_screen not in self.area
+            ):
                 break
-
             indexed_child = _IndexedChild(i, anchored)
             res.append(indexed_child)
             if self._is_vertical:
@@ -176,12 +174,3 @@ class _IndexedChild:
         else:
             ticked = self
         return ticked, state
-
-    def drawing_on_screens(
-        self, selected_index: int
-    ) -> tuple[DrawingOnScreen, ...]:
-        if self.index == selected_index:
-            widget = self.child.select
-        else:
-            widget = self.child
-        return widget._drawing_on_screens_without_parent

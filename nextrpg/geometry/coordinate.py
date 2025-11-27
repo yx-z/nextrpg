@@ -229,7 +229,7 @@ class Coordinate(NamedTuple):
             case Anchor.TOP_LEFT:
                 return self.as_top_left_of(sizable)
             case Anchor.TOP_CENTER:
-                return self.as_center_left_of(sizable)
+                return self.as_top_center_of(sizable)
             case Anchor.TOP_RIGHT:
                 return self.as_top_right_of(sizable)
             case Anchor.CENTER_LEFT:

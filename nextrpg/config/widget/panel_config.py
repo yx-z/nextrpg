@@ -6,8 +6,7 @@ from nextrpg.core.dataclass_with_default import dataclass_with_default
 from nextrpg.drawing.color import WHITE, Color
 from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.coordinate import Coordinate
-from nextrpg.geometry.padding import Padding, padding_for_both_sides
-from nextrpg.geometry.size import Height, Width
+from nextrpg.geometry.padding import Padding, padding_for_all_sides
 
 if TYPE_CHECKING:
     from nextrpg.drawing.drawing import Drawing
@@ -28,7 +27,7 @@ def move_above_icon(
 
 @dataclass_with_default(frozen=True)
 class PanelConfig:
-    padding: Padding = padding_for_both_sides(Width(10), Height(10))
+    padding: Padding = padding_for_all_sides(10)
     more_above_icon_input: Sprite | Callable[[], Sprite] | None = None
     more_below_icon_input: Sprite | Callable[[], Sprite] | None = None
     more_on_left_icon_input: Sprite | Callable[[], Sprite] | None = None
