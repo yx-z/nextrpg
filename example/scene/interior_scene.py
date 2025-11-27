@@ -1,5 +1,5 @@
 from dataclasses import dataclass, replace
-from functools import cache, cached_property
+from functools import cached_property
 from typing import Literal, Self, override
 
 from example.scene.character import create_character_drawing
@@ -48,7 +48,6 @@ def interior_scene(player: PlayerSpec, state: GameState) -> MapScene:
     )
 
 
-@cache
 def bgm() -> Sound:
     return Sound(SOUND_DIR / "bgm1.mp3", loop=True, config=bgm_config())
 

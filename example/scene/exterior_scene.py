@@ -1,4 +1,3 @@
-from functools import cache
 from typing import Literal
 
 from example.item.item import ItemKey
@@ -42,6 +41,5 @@ def pick_up_fruit(
     return DISMISS_EVENT
 
 
-@cache
 def bgm() -> Sound:
     return Sound(SOUND_DIR / "bgm2.mp3", loop=True, config=bgm_config())
