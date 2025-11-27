@@ -105,35 +105,27 @@ class PanelOnScreen(WidgetGroupOnScreen):
         return self._children.index(self._selected)
 
     def _visible_children(self, is_forward: bool) -> tuple[_IndexedChild, ...]:
-        res: list[_IndexedChild] = []
-        if is_forward:
-            if self._is_vertical:
-                anchor = Anchor.TOP_CENTER
-                padding = self.widget.config.padding.top
-            else:
-                anchor = Anchor.CENTER_LEFT
-                padding = self.widget.config.padding.left
-            iterable = enumerate(self._children)
-            sign = 1
-        else:
-            if self._is_vertical:
-                anchor = Anchor.BOTTOM_CENTER
-                padding = self.widget.config.padding.bottom
-            else:
-                anchor = Anchor.CENTER_RIGHT
-                padding = self.widget.config.padding.right
-            iterable = reversed(list(enumerate(self._children)))
-            sign = -1
-        coordinate = self.area.at_anchor(anchor) + sign * padding
+        if not is_forward:
+            stepped = self._step(is_forward=True)
+            while self._selected_index != stepped._selected_index:
+                stepped = stepped._step(is_forward=True)
+            return stepped._visible
 
+        res: list[_IndexedChild] = []
+        if self._is_vertical:
+            anchor = Anchor.TOP_CENTER
+            padding = self.widget.config.padding.top
+        else:
+            anchor = Anchor.CENTER_LEFT
+            padding = self.widget.config.padding.left
+        coordinate = self.area.at_anchor(anchor) + padding
         found = False
-        for i, child in iterable:
+        for i, child in enumerate(self._children):
             if not found:
                 if i == self._selected_index:
                     found = True
                 else:
                     continue
-
             anchored = child.anchored(coordinate, anchor)
             anchored_drawing = DrawingOnScreens(
                 anchored._drawing_on_screens_without_parent
@@ -146,17 +138,14 @@ class PanelOnScreen(WidgetGroupOnScreen):
             indexed_child = _IndexedChild(i, anchored)
             res.append(indexed_child)
             if self._is_vertical:
-                coordinate += sign * (
+                coordinate += (
                     anchored_drawing.height + self.widget.config.padding.height
                 )
             else:
-                coordinate += sign * (
+                coordinate += (
                     anchored_drawing.width + self.widget.config.padding.width
                 )
-        if is_forward:
-            return tuple(res)
-        else:
-            return tuple(reversed(res))
+        return tuple(res)
 
 
 @dataclass(frozen=True, kw_only=True)
