@@ -76,7 +76,15 @@ class PanelOnScreen(WidgetGroupOnScreen):
     def _step(self, is_forward: bool) -> Self:
         stepped = super()._step(is_forward)
         if stepped._selected_index in stepped._visible_indices:
-            return stepped
+            visible = tuple(
+                (
+                    child.select
+                    if child.index == stepped._selected_index
+                    else child.deselect
+                )
+                for child in stepped._visible
+            )
+            return replace(stepped, _visible=visible)
         visible = stepped._visible_children(is_forward)
         return replace(stepped, _visible=visible)
 
@@ -164,6 +172,14 @@ class Panel(WidgetGroup[PanelOnScreen]):
 class _IndexedChild:
     index: int
     child: SizableWidgetOnScreen
+
+    @cached_property
+    def deselect(self) -> Self:
+        return replace(self, child=self.child.deselect)
+
+    @cached_property
+    def select(self) -> Self:
+        return replace(self, child=self.child.select)
 
     def tick(
         self, time_delta: Millisecond, state: GameState
