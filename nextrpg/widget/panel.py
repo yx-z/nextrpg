@@ -62,7 +62,9 @@ class PanelOnScreen(WidgetGroupOnScreen):
         )
 
     @cached_property
-    def _visible_children_drawing_on_screens(self) -> list[DrawingOnScreen]:
+    def _visible_children_drawing_on_screens(
+        self,
+    ) -> tuple[DrawingOnScreen, ...]:
         drawing_on_screens: list[DrawingOnScreen] = []
         coordinate = self.area.at_anchor(self._anchor) + self._initial_padding
         for i in self._visible:
