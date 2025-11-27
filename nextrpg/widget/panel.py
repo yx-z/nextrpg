@@ -24,35 +24,11 @@ class PanelOnScreen(WidgetGroupOnScreen):
 
     @cached_property
     def children_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        drawing_on_screens: list[DrawingOnScreen] = []
-        coordinate = self.area.at_anchor(self._anchor) + self._initial_padding
-        for i in self._visible:
-            child = self._children[i]
-            anchored_drawing = self._child_drawing(child, coordinate)
-            drawing_on_screens += anchored_drawing.drawing_on_screens
-            coordinate += self._to_next_child(anchored_drawing)
-
-        if self._visible.start != 0:
-            if self._is_vertical:
-                icon = self.widget.config.more_above_icon.drawing_on_screens(
-                    self.area.top_center, Anchor.BOTTOM_CENTER
-                )
-            else:
-                icon = self.widget.config.more_on_left_icon.drawing_on_screens(
-                    self.area.center_left, Anchor.CENTER_RIGHT
-                )
-            drawing_on_screens += icon
-        if self._visible.stop != len(self._children):
-            if self._is_vertical:
-                icon = self.widget.config.more_below_icon.drawing_on_screens(
-                    self.area.bottom_center, Anchor.TOP_CENTER
-                )
-            else:
-                icon = self.widget.config.more_on_right_icon.drawing_on_screens(
-                    self.area.center_right, Anchor.CENTER_LEFT
-                )
-            drawing_on_screens += icon
-        return tuple(drawing_on_screens)
+        return (
+            self._visible_children_drawing_on_screens
+            + self._more_before_icon
+            + self._more_after_icon
+        )
 
     @cached_property
     def area(self) -> AreaOnScreen:
@@ -60,6 +36,41 @@ class PanelOnScreen(WidgetGroupOnScreen):
             self.on_screen, AreaOnScreen
         ), f"Expect AreaOnScreen for {self.widget.name}. Got {self.on_screen}."
         return self.on_screen
+
+    @cached_property
+    def _more_after_icon(self) -> tuple[DrawingOnScreen, ...]:
+        if self._visible.stop == len(self._children):
+            return ()
+        if self._is_vertical:
+            return self.widget.config.more_below_icon.drawing_on_screens(
+                self.area.bottom_center, Anchor.TOP_CENTER
+            )
+        return self.widget.config.more_on_right_icon.drawing_on_screens(
+            self.area.center_right, Anchor.CENTER_LEFT
+        )
+
+    @cached_property
+    def _more_before_icon(self) -> tuple[DrawingOnScreen, ...]:
+        if not self._visible.start:
+            return ()
+        if self._is_vertical:
+            return self.widget.config.more_above_icon.drawing_on_screens(
+                self.area.top_center, Anchor.BOTTOM_CENTER
+            )
+        return self.widget.config.more_on_left_icon.drawing_on_screens(
+            self.area.center_left, Anchor.CENTER_RIGHT
+        )
+
+    @cached_property
+    def _visible_children_drawing_on_screens(self) -> list[DrawingOnScreen]:
+        drawing_on_screens: list[DrawingOnScreen] = []
+        coordinate = self.area.at_anchor(self._anchor) + self._initial_padding
+        for i in self._visible:
+            child = self._children[i]
+            anchored_drawing = self._child_drawing(child, coordinate)
+            drawing_on_screens += anchored_drawing.drawing_on_screens
+            coordinate += self._to_next_child(anchored_drawing)
+        return tuple(drawing_on_screens)
 
     @override
     def _step(self, is_forward: bool) -> Self:
@@ -102,11 +113,9 @@ class PanelOnScreen(WidgetGroupOnScreen):
                 i != self._selected_index
                 and anchored_drawing.rectangle_area_on_screen not in self.area
             ):
-                break
+                return range(self._selected_index, i)
             coordinate += self._to_next_child(anchored_drawing)
-        else:
-            return range(self._selected_index, len(self._children))
-        return range(self._selected_index, i)
+        return range(self._selected_index, len(self._children))
 
     def _to_next_child(self, current_child: DrawingOnScreens) -> Width | Height:
         if self._is_vertical:
