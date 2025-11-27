@@ -50,9 +50,9 @@ def create_save_slot(
 ) -> Button:
     save_io = SaveIo(str(slot))
     if game_save_meta := save_io.load(GameSaveMeta):
-        title = f"Save #{slot + 1}: {game_save_meta.save_time_str}"
+        title = f"Save #{slot}: {game_save_meta.save_time_str}"
     else:
-        title = f"Empty Save Slot #{slot + 1}"
+        title = f"Empty Save Slot #{slot}"
     text = Text(title)
 
     def on_click(btn: ButtonOnScreen, state: GameState) -> OnClickResult:
@@ -71,5 +71,5 @@ def create_save_slots(
 ) -> tuple[Button, ...]:
     return tuple(
         create_save_slot(slot, click_save_slot)
-        for slot in range(NUM_SAVE_SLOTS)
+        for slot in range(1, NUM_SAVE_SLOTS + 1)
     )

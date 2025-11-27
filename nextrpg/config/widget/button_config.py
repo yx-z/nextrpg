@@ -15,9 +15,9 @@ class ButtonConfig:
     fade_duration_input: Millisecond | None = None
     border_width: Pixel = 2
     border_radius: Pixel = 5
-    active_background_color: Color = BLACK.with_percentage_alpha(0.5)
-    idle_background_color: Color = BLACK.with_percentage_alpha(0.1)
-    border_color: Color = BLACK.with_percentage_alpha(0.5)
+    active_background_color: Color = BLACK.with_percentage_alpha(0.6)
+    idle_background_color: Color = BLACK.with_percentage_alpha(0.3)
+    border_color: Color = BLACK.with_percentage_alpha(0.3)
 
     @property
     def fade_duration(self) -> Millisecond:
