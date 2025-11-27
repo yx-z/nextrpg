@@ -9,6 +9,7 @@ from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.area_on_screen import AreaOnScreen
+from nextrpg.geometry.size import Height, Width
 from nextrpg.widget.scroll_direction import ScrollDirection
 from nextrpg.widget.sizable_widget import SizableWidget
 from nextrpg.widget.widget_group import WidgetGroup, WidgetGroupOnScreen
@@ -23,16 +24,10 @@ class PanelOnScreen(WidgetGroupOnScreen):
     @cached_property
     def children_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         drawing_on_screens: list[DrawingOnScreen] = []
-        if self._is_vertical:
-            anchor = Anchor.TOP_CENTER
-            padding = self.widget.config.padding.top
-        else:
-            anchor = Anchor.CENTER_LEFT
-            padding = self.widget.config.padding.left
-        coordinate = self.area.at_anchor(anchor) + padding
+        coordinate = self.area.at_anchor(self._anchor) + self._initial_padding
         for i in self._visible:
             child = self._children[i]
-            anchored = child.anchored(coordinate, anchor)
+            anchored = child.anchored(coordinate, self._anchor)
             anchored_drawing = DrawingOnScreens(
                 anchored._drawing_on_screens_without_parent
             )
@@ -103,13 +98,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
                 stepped = stepped._step(is_forward=True)
             return stepped._visible
 
-        if self._is_vertical:
-            anchor = Anchor.TOP_CENTER
-            padding = self.widget.config.padding.top
-        else:
-            anchor = Anchor.CENTER_LEFT
-            padding = self.widget.config.padding.left
-        coordinate = self.area.at_anchor(anchor) + padding
+        coordinate = self.area.at_anchor(self._anchor) + self._initial_padding
         found = False
         for i, child in enumerate(self._children):
             if not found:
@@ -117,7 +106,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
                     found = True
                 else:
                     continue
-            anchored = child.anchored(coordinate, anchor)
+            anchored = child.anchored(coordinate, self._anchor)
             anchored_drawing = DrawingOnScreens(
                 anchored._drawing_on_screens_without_parent
             )
@@ -127,16 +116,30 @@ class PanelOnScreen(WidgetGroupOnScreen):
             ):
                 break
             if self._is_vertical:
-                coordinate += (
-                    anchored_drawing.height + self.widget.config.padding.height
-                )
+                coordinate += anchored_drawing.height + self._padding
             else:
-                coordinate += (
-                    anchored_drawing.width + self.widget.config.padding.width
-                )
+                coordinate += anchored_drawing.width + self._padding
         else:
             return range(self._selected_index, len(self._children))
         return range(self._selected_index, i)
+
+    @cached_property
+    def _anchor(self) -> Anchor:
+        if self._is_vertical:
+            return Anchor.TOP_CENTER
+        return Anchor.CENTER_LEFT
+
+    @cached_property
+    def _initial_padding(self) -> Width | Height:
+        if self._is_vertical:
+            return self.widget.config.padding.top
+        return self.widget.config.padding.left
+
+    @cached_property
+    def _padding(self) -> Width | Height:
+        if self._is_vertical:
+            return self.widget.config.padding.height
+        return self.widget.config.padding.width
 
 
 @dataclass(frozen=True, kw_only=True)
