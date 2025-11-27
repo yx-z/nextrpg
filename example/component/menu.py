@@ -1,5 +1,3 @@
-from functools import cache
-
 from example.component.component_common import TMX_DIR
 from example.component.save_slot import (
     ENTER_ANIMATION,
@@ -25,7 +23,6 @@ from nextrpg import (
 )
 
 
-@cache
 def tmx() -> TmxLoader:
     tmx_path = TMX_DIR / "menu.tmx"
     return TmxLoader(tmx_path)
