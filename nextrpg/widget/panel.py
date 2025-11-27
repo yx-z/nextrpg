@@ -20,7 +20,7 @@ from nextrpg.widget.widget_group import WidgetGroup, WidgetGroupOnScreen
 class PanelOnScreen(WidgetGroupOnScreen):
     widget: Panel
     _: KW_ONLY = private_init_below()
-    _visible: range = default(lambda self: self._visible_range(is_forward=True))
+    _visible: range = default(lambda self: self._visible_range_forward)
 
     @cached_property
     def children_drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
@@ -79,7 +79,10 @@ class PanelOnScreen(WidgetGroupOnScreen):
         stepped = super()._step(is_forward)
         if stepped._selected_index in stepped._visible:
             return stepped
-        visible = stepped._visible_range(is_forward)
+        if is_forward:
+            visible = stepped._visible_range_forward
+        else:
+            visible = stepped._visible_range_backward
         return replace(stepped, _visible=visible)
 
     @cached_property
@@ -90,18 +93,19 @@ class PanelOnScreen(WidgetGroupOnScreen):
     def _selected_index(self) -> int:
         return self._children.index(self._selected)
 
-    def _visible_range(self, is_forward: bool) -> range:
+    @cached_property
+    def _visible_range_backward(self) -> range:
+        widget = replace(self.widget, loop=True)
+        allow_loop = replace(self, widget=widget)
+        stepped = allow_loop._step(is_forward=True)
+        while self._selected_index != stepped._selected_index:
+            stepped = stepped._step(is_forward=True)
+        return stepped._visible
+
+    @cached_property
+    def _visible_range_forward(self) -> range:
         if not self._children:
             return range(0)
-
-        if not is_forward:
-            widget = replace(self.widget, loop=True)
-            allow_loop = replace(self, widget=widget)
-            stepped = allow_loop._step(is_forward=True)
-            while self._selected_index != stepped._selected_index:
-                stepped = stepped._step(is_forward=True)
-            return stepped._visible
-
         coordinate = self.area.at_anchor(self._anchor) + self._initial_padding
         found = False
         for i, child in enumerate(self._children):
