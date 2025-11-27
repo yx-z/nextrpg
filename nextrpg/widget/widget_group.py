@@ -94,8 +94,11 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         return with_children, state
 
     @cached_property
-    def _selected(self) -> WidgetOnScreen:
-        return next(child for child in self._children if child.is_selected)
+    def _selected(self) -> WidgetOnScreen | None:
+        for child in self._children:
+            if child.is_selected:
+                return child
+        return None
 
     @override
     @cached_property
