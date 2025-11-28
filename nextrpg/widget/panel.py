@@ -115,10 +115,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
                 else:
                     continue
             anchored_drawing = self._child_drawing(child, coordinate)
-            if (
-                i != self._selected_index
-                and anchored_drawing.rectangle_area_on_screen not in self.area
-            ):
+            if anchored_drawing.rectangle_area_on_screen not in self.area:
                 return range(self._selected_index, i)
             coordinate += self._to_next_child(anchored_drawing)
         return range(self._selected_index, len(self._children))
