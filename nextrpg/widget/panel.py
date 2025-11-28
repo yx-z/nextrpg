@@ -39,7 +39,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
 
     @cached_property
     def _more_after_icon(self) -> tuple[DrawingOnScreen, ...]:
-        if self._visible.stop == len(self._children):
+        if self._visible.stop == len(self._children) or self.widget.loop:
             return ()
         if self._is_vertical:
             return self.widget.config.more_below_icon.drawing_on_screens(
@@ -51,7 +51,7 @@ class PanelOnScreen(WidgetGroupOnScreen):
 
     @cached_property
     def _more_before_icon(self) -> tuple[DrawingOnScreen, ...]:
-        if not self._visible.start:
+        if not self._visible.start or self.widget.loop:
             return ()
         if self._is_vertical:
             return self.widget.config.more_above_icon.drawing_on_screens(

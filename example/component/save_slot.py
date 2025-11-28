@@ -42,7 +42,7 @@ def create_save_panel(
             enter_animation=ENTER_ANIMATION,
             loop=False,
         )
-        return panel.with_same_parent_as(button)
+        return panel.with_parent(button.parent)
 
     return on_click
 

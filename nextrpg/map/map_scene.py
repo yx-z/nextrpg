@@ -152,7 +152,7 @@ class MapScene(EventfulScene):
         ):
             menu_scene = MenuScene(
                 parent=self.stop_player,
-                widget=menu.panel,
+                widget=menu.widget,
                 name_to_on_screens=menu.tmx.name_to_on_screens,
                 **menu.kwargs,
             )

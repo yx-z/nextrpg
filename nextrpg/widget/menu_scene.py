@@ -15,14 +15,14 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.drawing.sprite_on_screen import animate
-from nextrpg.widget.panel import PanelOnScreen
+from nextrpg.widget.widget_group import WidgetGroupOnScreen
 
 if TYPE_CHECKING:
     from nextrpg.map.map_scene import MapScene
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
-class MenuScene(PanelOnScreen):
+class MenuScene(WidgetGroupOnScreen):
     parent: MapScene
     config: MenuConfig = field(default_factory=lambda: config().menu)
     is_selected: bool = True

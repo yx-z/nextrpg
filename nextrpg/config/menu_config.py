@@ -7,13 +7,13 @@ from nextrpg.core.time import Millisecond
 from nextrpg.drawing.sprite import BlurRadius
 
 if TYPE_CHECKING:
-    from nextrpg.widget.panel import Panel
     from nextrpg.widget.tmx_widget_loader import TmxWidgetLoader
+    from nextrpg.widget.widget_group import WidgetGroup
 
 
 @dataclass(frozen=True)
 class MenuConfig:
-    panel_input: Callable[[], Panel]
+    widget_input: Callable[[], WidgetGroup]
     tmx_input: TmxWidgetLoader | Callable[[], TmxWidgetLoader]
     blur_radius: BlurRadius = 2
     fade_duration_override: Millisecond | None = None
@@ -28,8 +28,8 @@ class MenuConfig:
         return self.kwargs_input
 
     @cached_property
-    def panel(self) -> Panel:
-        return self.panel_input()
+    def widget(self) -> WidgetGroup:
+        return self.widget_input()
 
     @cached_property
     def tmx(self) -> TmxWidgetLoader:
