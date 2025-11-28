@@ -69,9 +69,11 @@ class DrawingGroup(Sprite, HasMetadata):
     def drawing_on_screens(
         self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
     ) -> tuple[DrawingOnScreen, ...]:
-        return self.group_on_screen(coordinate, anchor).drawing_on_screens
+        return self.drawing_group_on_screen(
+            coordinate, anchor
+        ).drawing_on_screens
 
-    def group_on_screen(
+    def drawing_group_on_screen(
         self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
     ) -> DrawingGroupOnScreen:
         from nextrpg.drawing.drawing_group_on_screen import DrawingGroupOnScreen
