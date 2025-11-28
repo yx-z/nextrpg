@@ -17,27 +17,35 @@ from nextrpg.core.dataclass_with_default import (
 
 @cached(lambda resource_config: resource_config.sound_cache_size)
 @dataclass_with_default(frozen=True)
+class _Sound:
+    file: str | Path
+    pygame: pygame.Sound = default(lambda self: self._init_loaded)
+
+    @property
+    def _init_loaded(self) -> pygame.Sound:
+        return pygame.Sound(self.file)
+
+
+@dataclass_with_default(frozen=True)
 class Sound:
     file: str | Path
     loop: bool = False
     config: SoundConfig = field(default_factory=lambda: config().system.sound)
     _: KW_ONLY = private_init_below()
     started: bool = False
-    _loaded: pygame.Sound = default(lambda self: self._init_loaded)
+    _sound: _Sound = default(lambda self: _Sound(self.file))
 
     def play(self) -> Self:
         if not self.started:
-            self._loaded.play(self._loop, fade_ms=self.config.fade_in_duration)
+            self._sound.pygame.play(
+                self._loop, fade_ms=self.config.fade_in_duration
+            )
         return replace(self, started=True)
 
     def stop(self) -> Self:
         if self.started:
-            self._loaded.fadeout(self.config.fade_out_duration)
+            self._sound.pygame.fadeout(self.config.fade_out_duration)
         return replace(self, started=False)
-
-    @property
-    def _init_loaded(self) -> pygame.Sound:
-        return pygame.Sound(self.file)
 
     @cached_property
     def _loop(self) -> int:
