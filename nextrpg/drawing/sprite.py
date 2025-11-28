@@ -56,7 +56,9 @@ class Sprite(Sizable, Protocol):
         return self.drawing.drawings
 
     def __radd__(self, other: str) -> TextGroup:
-        return self + other
+        from nextrpg.drawing.text_group import TextGroup
+
+        return TextGroup((other, self))
 
     @overload
     def __add__(self, other: str) -> TextGroup: ...

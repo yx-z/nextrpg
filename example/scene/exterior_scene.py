@@ -13,6 +13,8 @@ from nextrpg import (
     PlayerOnScreen,
     PlayerSpec,
     Sound,
+    Text,
+    config,
 )
 
 
@@ -36,7 +38,11 @@ def pick_up_fruit(
 ) -> Literal[DISMISS_EVENT]:
     sound().play()
     scene.fade_out_character(fruit)
-    scene: "You picked up the fruit!"
+
+    text_config = config().event.say_event.text_config
+    icon = config().item.get_icon(ItemKey.FRUIT)
+    scene: Text("You picked up the fruit! ", text_config) + icon
+
     state.update_event(inventory_update=+ItemKey.FRUIT)
     return DISMISS_EVENT
 

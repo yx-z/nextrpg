@@ -9,7 +9,7 @@ from frozendict import frozendict
 from nextrpg.core.save import LoadFromSaveEnum
 
 if TYPE_CHECKING:
-    from nextrpg.drawing.drawing import Drawing
+    from nextrpg.drawing.sprite import Sprite
     from nextrpg.item.item import Item
 
 
@@ -50,7 +50,7 @@ class ItemKeyAndQuantity:
 @dataclass(frozen=True)
 class ItemConfig:
     items: tuple[Item, ...] = frozendict()
-    icons: frozendict[ItemCategory, Drawing | Callable[[], Drawing]] = (
+    icons: frozendict[ItemCategory, Sprite | Callable[[], Sprite]] = (
         frozendict()
     )
 
@@ -64,3 +64,6 @@ class ItemConfig:
     @cached_property
     def item_dict(self) -> dict[BaseItemKey, Item]:
         return {item.key: item for item in self.items}
+
+    def get_icon(self, key: BaseItemKey) -> Sprite:
+        return self.item_dict[key].icon
