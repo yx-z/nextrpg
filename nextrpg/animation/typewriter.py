@@ -27,7 +27,7 @@ class Typewriter(AbstractAnimationOnScreen):
     @override
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
         text = self.text_on_screen.text[: self._index + 1]
-        text_on_screen = replace(self.text_on_screen, text=text)
+        text_on_screen = replace(self.text_on_screen, text_input=text)
         return text_on_screen.drawing_on_screens
 
     @override

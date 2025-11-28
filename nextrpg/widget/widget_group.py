@@ -60,11 +60,14 @@ class WidgetGroupOnScreen(WidgetOnScreen):
         return replace(self, _children=children)
 
     def _init_children(
-        self, children: Collection[Widget]
+        self, children: Widget | Collection[Widget]
     ) -> tuple[WidgetOnScreen, ...]:
         if not children:
             return ()
-        with_parent = tuple(child.with_parent(self) for child in children)
+        if isinstance(children, Widget):
+            with_parent = (children.with_parent(self),)
+        else:
+            with_parent = tuple(child.with_parent(self) for child in children)
         if any(child.is_selected for child in with_parent):
             return with_parent
         return (with_parent[0].select,) + with_parent[1:]
@@ -163,7 +166,7 @@ class WidgetGroupOnScreen(WidgetOnScreen):
 class WidgetGroup[_WidgetGroupOnScreen: WidgetOnScreen](
     Widget[_WidgetGroupOnScreen]
 ):
-    children: tuple[Widget, ...]
+    children: Widget | tuple[Widget, ...]
     scroll_direction: ScrollDirection = ScrollDirection.VERTICAL
     loop: bool = True
     _: KW_ONLY = private_init_below()

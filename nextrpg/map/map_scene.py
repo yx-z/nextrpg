@@ -59,7 +59,7 @@ def _infer_creation_function() -> ModuleAndAttribute[Callable]:
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class MapScene(EventfulScene):
-    tmx: Path
+    tmx: str | Path
     player_spec: PlayerSpec
     move: MapMove | tuple[MapMove, ...] = ()
     npc_specs: NpcSpec | tuple[NpcSpec, ...] = ()
@@ -67,9 +67,7 @@ class MapScene(EventfulScene):
         default_factory=_infer_creation_function
     )
     _: KW_ONLY = private_init_below()
-    _map_loader_input: MapLoader | Callable[[MapScene], MapLoader] = default(
-        lambda self: MapLoader(self.tmx)
-    )
+    _map_loader: MapLoader = default(lambda self: MapLoader(self.tmx))
     npcs: tuple[NpcOnScreen, ...] = default(
         lambda self: tuple(self._init_npc(n) for n in self._npc_specs)
     )
@@ -116,7 +114,7 @@ class MapScene(EventfulScene):
     ) -> tuple[Self, GameState]:
         ticked, state = super().tick_without_event(time_delta, state)
         map_loader = self._map_loader.tick(time_delta)
-        tick_with_map_loader = replace(ticked, _map_loader_input=map_loader)
+        tick_with_map_loader = replace(ticked, _map_loader=map_loader)
         return tick_with_map_loader, state
 
     @override
@@ -158,12 +156,6 @@ class MapScene(EventfulScene):
             )
             return menu_scene, state
         return super().event(event, state)
-
-    @cached_property
-    def _map_loader(self) -> MapLoader:
-        if callable(self._map_loader_input):
-            return self._map_loader_input(self)
-        return self._map_loader_input
 
     @cached_property
     def _moves(self) -> tuple[MapMove, ...]:

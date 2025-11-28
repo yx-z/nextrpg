@@ -19,7 +19,6 @@ from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.shifted_sprite import ShiftedSprite
 from nextrpg.drawing.sprite import Sprite
 from nextrpg.drawing.text import Text
-from nextrpg.drawing.text_group import TextGroup
 from nextrpg.event.io_event import IoEvent, is_key_press
 from nextrpg.game.game_state import GameState
 from nextrpg.geometry.padding import (
@@ -97,7 +96,7 @@ class BaseButton(SizableWidget[ButtonOnScreen]):
 
 @dataclass_with_default(frozen=True, kw_only=True)
 class Button(BaseButton):
-    text: str | Text | TextGroup = default(lambda self: self.name)
+    text: str | Sprite = default(lambda self: self.name)
     config: ButtonConfig = field(default_factory=lambda: config().widget.button)
     _: KW_ONLY = private_init_below()
     idle: Sprite = default(lambda self: self._init_idle)
@@ -141,7 +140,7 @@ class Button(BaseButton):
         return self._shift(background)
 
     @cached_property
-    def _text(self) -> Text | TextGroup:
+    def _text(self) -> Sprite:
         if isinstance(self.text, str):
             return Text(self.text, self.config.text_config)
         return self.text

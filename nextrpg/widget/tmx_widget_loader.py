@@ -18,7 +18,7 @@ from nextrpg.geometry.coordinate import Coordinate
 @cached(lambda resource_config: resource_config.tmx_widget_loader_cache_size)
 @dataclass(frozen=True)
 class TmxWidgetLoader:
-    tmx: Path | TmxLoader
+    tmx: str | Path | TmxLoader
 
     def background(
         self,

@@ -48,7 +48,7 @@ def get_coordinate(obj: TiledObject) -> Coordinate:
 @cached(lambda resource_config: resource_config.tmx_loader_cache_size)
 @dataclass_with_default(frozen=True)
 class TmxLoader:
-    file: Path
+    file: str | Path
     _: KW_ONLY = private_init_below()
     _tmx: TiledMap = default(lambda self: load_pygame(str(self.file)))
 

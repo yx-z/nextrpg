@@ -68,18 +68,19 @@ class Text(Sprite):
             | DirectionalOffset
             | str
             | Text
+            | Sprite
             | TextGroup
         ),
     ) -> ShiftedSprite | TextGroup:
+        from nextrpg.drawing.text_group import TextGroup
+
         if isinstance(
             other, Coordinate | Width | Height | Size | DirectionalOffset
         ):
             return self.shift(other)
 
-        from nextrpg.drawing.text_group import TextGroup
-
         if isinstance(other, TextGroup):
-            texts = (self,) + other.texts
+            texts = (self,) + other.text_or_sprites
             return replace(other, texts=texts)
 
         if isinstance(other, str):

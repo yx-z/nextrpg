@@ -19,19 +19,22 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class TextGroup(Sprite):
-    resource: Text | tuple[Text, ...]
+    resource: str | Text | Sprite | tuple[str | Text | Sprite, ...]
     config: TextGroupConfig = field(
         default_factory=lambda: config().drawing.text_group
     )
 
     @cached_property
-    def texts(self) -> tuple[Text, ...]:
-        if isinstance(self.resource, Text):
-            return (self.resource,)
-        return self.resource
+    def text_or_sprites(self) -> tuple[Text | Sprite, ...]:
+        if isinstance(self.resource, str | Text | Sprite):
+            return (_text_or_sprite(self.resource),)
+        return tuple(_text_or_sprite(resource) for resource in self.resource)
 
     def __len__(self) -> int:
-        return sum(len(text) for text in self.texts)
+        return sum(
+            len(text) if isinstance(text, str | Text) else 1
+            for text in self.text_or_sprites
+        )
 
     def text_on_screen(
         self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
@@ -44,19 +47,25 @@ class TextGroup(Sprite):
         if item.step not in (None, 1):
             raise ValueError("TextGroup slicing only supports step=1")
 
-        texts: list[Text] = []
+        texts: list[Text | Sprite] = []
         start = item.start or 0
-        stop = item.stop
         idx = 0
-        for text in self.texts:
-            msg_len = len(text.message)
-            if stop is not None and idx >= stop:
-                break
-            text_start = max(start - idx, 0)
-            if text_start < msg_len:
-                text_stop = stop - idx if stop is not None else msg_len
-                texts.append(text[text_start:text_stop])
-            idx += msg_len
+        for text_or_sprite in self.text_or_sprites:
+            if isinstance(text_or_sprite, Text):
+                msg_len = len(text_or_sprite.message)
+                if item.stop is not None and idx >= item.stop:
+                    break
+                text_start = max(start - idx, 0)
+                if text_start < msg_len:
+                    if item.stop is not None:
+                        text_stop = item.stop - idx
+                    else:
+                        text_stop = msg_len
+                    texts.append(text_or_sprite[text_start:text_stop])
+                idx += msg_len
+            else:
+                texts.append(text_or_sprite)
+                idx += 1
         return replace(self, resource=tuple(texts))
 
     def __radd__(self, other: str) -> TextGroup:
@@ -79,40 +88,52 @@ class TextGroup(Sprite):
             other, Coordinate | Width | Height | Size | DirectionalOffset
         ):
             return self.shift(other)
-
-        if isinstance(other, str):
-            text = Text(other)
-        else:
-            text = other
-        texts = self.texts + (text,)
+        texts = self.text_or_sprites + (_text_or_sprite(other),)
         return replace(self, resource=texts)
 
     @override
     @cached_property
     def drawing(self) -> DrawingGroup:
-        lines = [[t] for t in self._no_wrap[0].line_texts]
-        for text in self._no_wrap[1:]:
-            lines[-1].append(text.line_texts[0])
-            lines += [[t] for t in text.line_texts[1:]]
+        lines = [[t] for t in _text_or_sprite_line(self._no_wrap[0])]
+        for text_or_sprite in self._no_wrap[1:]:
+            line = _text_or_sprite_line(text_or_sprite)
+            lines[-1].append(line[0])
+            lines += [[t] for t in line[1:]]
 
         res: list[ShiftedSprite] = []
         curr_height = ZERO_HEIGHT
         for line in lines:
             curr_width = ZERO_WIDTH
             line_height = max(word.height for word in line)
-            for word in line:
-                height_diff = line_height - word.height
+            for sprite in line:
+                height_diff = line_height - sprite.height
                 shift = curr_width * (curr_height + height_diff)
-                res.append(word.drawing + shift)
-                curr_width += word.width + self.config.margin
+                res.append(sprite.drawing + shift)
+                curr_width += sprite.width + self.config.margin
             curr_height += line_height + self.config.line_spacing
         return DrawingGroup(tuple(res))
 
     @cached_property
-    def _no_wrap(self) -> tuple[Text, ...]:
-        return tuple(_no_wrap(t) for t in self.texts)
+    def _no_wrap(self) -> tuple[Text | Sprite, ...]:
+        return tuple(_no_wrap(t) for t in self.text_or_sprites)
 
 
-def _no_wrap(text: Text) -> Text:
-    cfg = replace(text.config, wrap=None)
-    return replace(text, config=cfg)
+def _no_wrap(text_or_sprite: Text | Sprite) -> Text | Sprite:
+    if isinstance(text_or_sprite, Text):
+        cfg = replace(text_or_sprite.config, wrap=None)
+        return replace(text_or_sprite, config=cfg)
+    return text_or_sprite
+
+
+def _text_or_sprite(text_or_sprite: str | Text | Sprite) -> Text | Sprite:
+    if isinstance(text_or_sprite, str):
+        return Text(text_or_sprite)
+    return text_or_sprite
+
+
+def _text_or_sprite_line(
+    text_or_sprite: Text | Sprite,
+) -> tuple[Text | Sprite, ...]:
+    if isinstance(text_or_sprite, Text):
+        return text_or_sprite.line_texts
+    return (text_or_sprite,)

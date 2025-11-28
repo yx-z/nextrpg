@@ -41,8 +41,8 @@ logger = log("drawing")
 
 
 def _metadata_or_path(
-    cls: type, resource: Path | Surface, *args: Any, **kwargs: Any
-) -> Path | Metadata | None:
+    cls: type, resource: str | Path | Surface, *args: Any, **kwargs: Any
+) -> str | Path | Metadata | None:
     if isinstance(resource, Surface):
         if (metadata := kwargs.get("metadata")) and metadata[
             0
@@ -58,7 +58,7 @@ def _metadata_or_path(
 )
 @dataclass(frozen=True)
 class Drawing(Sprite, HasMetadata, LoadFromSave):
-    resource: Path | Surface
+    resource: str | Path | Surface
     allow_background_in_debug: bool = True
     _: KW_ONLY = None
     metadata: Metadata = ()
@@ -225,7 +225,7 @@ class Drawing(Sprite, HasMetadata, LoadFromSave):
         )
         return rect.drawing - padding.top_left
 
-    def to_file(self, file: Path) -> None:
+    def to_file(self, file: str | Path) -> None:
         image.save(self.surface, file)
 
     @property

@@ -44,7 +44,7 @@ class DrawingOnScreen(SpriteOnScreen):
         drawing = self.drawing.alpha(alpha)
         return replace(self, drawing=drawing)
 
-    def to_file(self, file: Path) -> None:
+    def to_file(self, file: str | Path) -> None:
         self.drawing.to_file(file)
 
     @override

@@ -1,6 +1,6 @@
 from collections.abc import Iterable
 from functools import cached_property
-from typing import TYPE_CHECKING, Protocol, Self, runtime_checkable
+from typing import TYPE_CHECKING, Protocol, Self, overload, runtime_checkable
 
 from pygame import Surface
 
@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from nextrpg.drawing.drawing_group import DrawingGroup
     from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
     from nextrpg.drawing.shifted_sprite import ShiftedSprite
+    from nextrpg.drawing.text_group import TextGroup
 
 type BlurRadius = int
 
@@ -54,10 +55,26 @@ class Sprite(Sizable, Protocol):
     def drawings(self) -> tuple[Drawing, ...]:
         return self.drawing.drawings
 
+    def __radd__(self, other: str) -> TextGroup:
+        return self + other
+
+    @overload
+    def __add__(self, other: str) -> TextGroup: ...
+
+    @overload
     def __add__(
-        self, shift: Coordinate | Width | Height | Size | DirectionalOffset
-    ) -> ShiftedSprite:
-        return self.shift(shift.size)
+        self, other: Coordinate | Width | Height | Size | DirectionalOffset
+    ) -> ShiftedSprite: ...
+
+    def __add__(
+        self,
+        other: str | Coordinate | Width | Height | Size | DirectionalOffset,
+    ) -> TextGroup | ShiftedSprite:
+        from nextrpg.drawing.text_group import TextGroup
+
+        if isinstance(other, str):
+            return TextGroup((self, other))
+        return self.shift(other.size)
 
     def __sub__(
         self, shift: Coordinate | Width | Height | Size | DirectionalOffset

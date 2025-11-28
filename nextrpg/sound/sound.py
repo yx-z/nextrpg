@@ -18,7 +18,7 @@ from nextrpg.core.dataclass_with_default import (
 @cached(lambda resource_config: resource_config.sound_cache_size)
 @dataclass_with_default(frozen=True)
 class Sound:
-    file: Path
+    file: str | Path
     loop: bool = False
     config: SoundConfig = field(default_factory=lambda: config().system.sound)
     _: KW_ONLY = private_init_below()

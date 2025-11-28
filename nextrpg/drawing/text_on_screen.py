@@ -14,8 +14,14 @@ from nextrpg.geometry.coordinate import Coordinate
 @dataclass(frozen=True)
 class TextOnScreen(SpriteOnScreen):
     coordinate: Coordinate
-    text: Text | TextGroup
+    text_input: Text | TextGroup
     anchor: Anchor = Anchor.TOP_LEFT
+
+    @cached_property
+    def text(self) -> Text | TextGroup:
+        if isinstance(self.text_input, str):
+            return Text(self.text_input)
+        return self.text_input
 
     @cached_property
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
