@@ -1,10 +1,12 @@
-from dataclasses import dataclass
+from collections.abc import Iterable
+from dataclasses import dataclass, fields
 from functools import cached_property
 from typing import Any, TypeIs
 
 import pygame
 from pygame import KEYDOWN, KEYUP, MOUSEBUTTONDOWN, QUIT, VIDEORESIZE, Event
 
+from nextrpg.config.config import config
 from nextrpg.config.system.key_mapping_config import KeyCode, KeyMapping
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.size import Size
@@ -26,13 +28,19 @@ class WindowResize(IoEvent):
 
 
 def is_key_press(
-    event: IoEvent, key: KeyMapping | KeyCode | None
+    event: IoEvent, key: KeyMapping | KeyCode
 ) -> TypeIs[KeyPressDown]:
-    if isinstance(key, KeyMapping):
-        key_code = key.resolve
-    else:
-        key_code = key
-    return isinstance(event, KeyPressDown) and event.key == key_code
+    if not isinstance(event, KeyPressDown):
+        return False
+    if isinstance(key, int):
+        return event.key == key
+    key_mappings = config().system.key_mapping
+    key_mapping = getattr(key_mappings, key.name)
+    return (
+        event.key == key_mapping
+        or isinstance(key_mapping, Iterable)
+        and event.key in key_mapping
+    )
 
 
 class _KeyPressEvent(IoEvent):
@@ -42,7 +50,14 @@ class _KeyPressEvent(IoEvent):
 
     @cached_property
     def key_mapping(self) -> KeyMapping | None:
-        return KeyMapping.from_key(self.key)
+        key_mappings = config().system.key_mapping
+        for field in fields(key_mappings):
+            key_codes = getattr(key_mappings, field.name)
+            if self.key == key_codes or (
+                isinstance(key_codes, Iterable) and self.key in key_codes
+            ):
+                return KeyMapping(field.name)
+        return None
 
 
 class KeyPressDown(_KeyPressEvent):
