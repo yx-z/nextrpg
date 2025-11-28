@@ -49,9 +49,11 @@ def menu_widget() -> WidgetGroup:
         name="buttons",
         children=buttons,
         scroll_direction=ScrollDirection.HORIZONTAL,
+    )
+    return WidgetGroup(
+        children=(panel,),
         enter_animation=ENTER_ANIMATION,
     )
-    return WidgetGroup(children=(panel,))
 
 
 def click_save_slot(
