@@ -44,29 +44,33 @@ class TextGroup(Sprite):
         return TextOnScreen(coordinate, self, anchor)
 
     def __getitem__(self, item: slice) -> Self:
-        if item.step not in (None, 1):
-            raise ValueError("TextGroup slicing only supports step=1")
+        assert item.step in (
+            None,
+            1,
+        ), f"TextGroup slicing only supports step=1 | None. Got {item.step}"
 
-        texts: list[Text | Sprite] = []
+        res: list[Text | Sprite] = []
         start = item.start or 0
         idx = 0
         for text_or_sprite in self.text_or_sprites:
+            if item.stop is not None and idx >= item.stop:
+                break
             if isinstance(text_or_sprite, Text):
                 msg_len = len(text_or_sprite.message)
-                if item.stop is not None and idx >= item.stop:
-                    break
-                text_start = max(start - idx, 0)
-                if text_start < msg_len:
-                    if item.stop is not None:
-                        text_stop = item.stop - idx
-                    else:
-                        text_stop = msg_len
-                    texts.append(text_or_sprite[text_start:text_stop])
-                idx += msg_len
             else:
-                texts.append(text_or_sprite)
-                idx += 1
-        return replace(self, resource=tuple(texts))
+                msg_len = 1
+            if isinstance(text_or_sprite, Text):
+                local_start = max(start - idx, 0)
+                if item.stop is None:
+                    local_stop = msg_len
+                else:
+                    local_stop = max(item.stop - idx, 0)
+                it = text_or_sprite[local_start:local_stop]
+            else:
+                it = text_or_sprite
+            res.append(it)
+            idx += msg_len
+        return replace(self, resource=tuple(res))
 
     def __radd__(self, other: str) -> TextGroup:
         return self + other

@@ -43,6 +43,4 @@ class Typewriter(AbstractAnimationOnScreen):
     @cached_property
     def is_complete(self) -> bool:
         num_chars = len(self.text_on_screen.text)
-        return (
-            self._index >= num_chars and self._timer_per_character.is_complete
-        )
+        return self._index > num_chars
