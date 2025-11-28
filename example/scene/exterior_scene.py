@@ -1,6 +1,9 @@
+from typing import Literal
+
 from example.item.item import ItemKey
 from example.scene.scene_common import SOUND_DIR, TMX_DIR, bgm_config, sound
 from nextrpg import (
+    DISMISS_EVENT,
     EventfulScene,
     GameState,
     MapMove,
@@ -32,8 +35,9 @@ def pick_up_fruit(
     fruit: NpcOnScreen,
     scene: EventfulScene,
     state: GameState,
-) -> None:
+) -> Literal[DISMISS_EVENT]:
     sound().play()
+    scene.fade_out_character(fruit)
 
     cfg = config().event.say_event.text_config
     icon = config().item.get_icon(ItemKey.FRUIT)
@@ -42,6 +46,7 @@ def pick_up_fruit(
     )
 
     state.update_event(inventory_update=+ItemKey.FRUIT)
+    return DISMISS_EVENT
 
 
 def bgm() -> Sound:

@@ -10,6 +10,7 @@ from pygame import (
     K_RETURN,
     K_RIGHT,
     K_SPACE,
+    K_TAB,
     K_UP,
     K_a,
     K_d,
@@ -43,7 +44,7 @@ class KeyMappingConfig(metaclass=_KeyMappingMeta):
     up: KeyCode | tuple[KeyCode, ...] = (K_UP, K_w)
     down: KeyCode | tuple[KeyCode, ...] = (K_DOWN, K_s)
     confirm: KeyCode | tuple[KeyCode, ...] = (K_RETURN, K_SPACE)
-    cancel: KeyCode | tuple[KeyCode, ...] = K_ESCAPE
+    cancel: KeyCode | tuple[KeyCode, ...] = (K_ESCAPE, K_TAB)
     full_screen_toggle: KeyCode | tuple[KeyCode, ...] = K_F1
     include_fps_in_title_toggle: KeyCode | tuple[KeyCode, ...] = K_F2
     debug_toggle: KeyCode | tuple[KeyCode, ...] = K_F3
