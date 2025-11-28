@@ -63,6 +63,7 @@ def click_load(
 
     def load_game(st: GameState) -> tuple[Scene, GameState]:
         game = save_io.load(GameSave)
+        assert game, f"Save slot #{slot} is empty."
         return game.scene, game.state
 
     if save_io.load(GameSaveMeta):

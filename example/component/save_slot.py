@@ -16,6 +16,7 @@ from nextrpg import (
     Size,
     Text,
     TimedAnimationSpec,
+    WidgetOnScreen,
     Width,
 )
 
@@ -42,7 +43,11 @@ def create_save_panel(
             enter_animation=ENTER_ANIMATION,
             loop=False,
         )
-        return panel.with_parent(button.parent)
+        parent: WidgetOnScreen = button.parent
+        assert isinstance(
+            parent, WidgetOnScreen
+        ), f"Expect WidgetOnScreen. Got {parent}."
+        return panel.with_parent(parent)
 
     return on_click
 

@@ -11,6 +11,7 @@ from nextrpg import (
     ButtonOnScreen,
     GameSave,
     GameState,
+    MapScene,
     Panel,
     PanelOnScreen,
     SaveIo,
@@ -18,6 +19,7 @@ from nextrpg import (
     TmxWidgetLoader,
     TransitionScene,
     WidgetGroup,
+    WidgetOnScreen,
     last_scene,
 )
 
@@ -27,7 +29,13 @@ def tmx() -> TmxWidgetLoader:
 
 
 def title_scene(button: ButtonOnScreen, state: GameState) -> TransitionScene:
-    last_scene().root.stop_sound()
+    map_scene: WidgetOnScreen = last_scene()
+    assert isinstance(
+        map_scene, WidgetOnScreen
+    ), f"Expect WidgetOnScreen. Got {map_scene}."
+    root: MapScene = map_scene.root
+    assert isinstance(root, MapScene), f"Expect MapScene. Got {root}."
+    root.stop_sound()
     return TransitionScene(title)
 
 
@@ -53,7 +61,10 @@ def click_save_slot(
     save_io = SaveIo(str(slot))
     save_io.save(game_save).result()
 
-    panel = from_button.parent
+    panel: PanelOnScreen = from_button.parent
+    assert isinstance(
+        panel, PanelOnScreen
+    ), f"Expect PanelOnScreen. Got {panel}."
     button = create_save_slot(slot, click_save_slot)
     child = button.with_parent(panel).select
     return panel.replace(child)
