@@ -36,7 +36,7 @@ type SayEventArg = str | Coordinate | Millisecond | Size | Sprite | AvatarPositi
 @dataclass(frozen=True)
 class SayEventScene(RpgEventScene):
     character_or_scene: CharacterOnScreen | Scene
-    message: str | Text | TextGroup
+    message: str | Text | Sprite | TextGroup
     args: tuple[SayEventArg, ...] = ()
 
     @override

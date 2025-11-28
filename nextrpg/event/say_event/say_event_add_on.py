@@ -32,7 +32,7 @@ from nextrpg.gui.screen_area import (
 @dataclass(frozen=True)
 class SayEventAddOn:
     config: SayEventConfig
-    message: str | Text | TextGroup
+    message: str | Text | Sprite | TextGroup
 
     @cached_property
     def background(self) -> SpriteOnScreen:
@@ -62,7 +62,11 @@ class SayEventAddOn:
             self._add_on_top_left
             - self._background_relative_to_text.offset_size
         )
-        return self._text.text_on_screen(top_left)
+        if isinstance(self._text, Text | TextGroup):
+            text = self._text
+        else:
+            text = TextGroup(self._text)
+        return text.text_on_screen(top_left)
 
     @cached_property
     def _add_on_top_left(self) -> Coordinate:
@@ -132,7 +136,7 @@ class SayEventAddOn:
         )
 
     @cached_property
-    def _text(self) -> Text | TextGroup:
+    def _text(self) -> Text | Sprite | TextGroup:
         if isinstance(self.message, str):
             return Text(self.message, self.config.text_config)
         return self.message
@@ -288,7 +292,7 @@ class _CharacterPosition:
 
 @dataclass(frozen=True, kw_only=True)
 class _Background(AnimationOnScreen):
-    text: Text | TextGroup
+    text: Sprite
 
     @override
     @cached_property

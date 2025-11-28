@@ -14,7 +14,7 @@ from nextrpg.geometry.coordinate import Coordinate
 @dataclass(frozen=True)
 class TextOnScreen(SpriteOnScreen):
     coordinate: Coordinate
-    text_input: Text | TextGroup
+    text_input: str | Text | TextGroup
     anchor: Anchor = Anchor.TOP_LEFT
 
     @cached_property
