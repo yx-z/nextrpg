@@ -151,7 +151,10 @@ class MapScene(EventfulScene):
             event, KeyMappingConfig.cancel
         ):
             menu_scene = MenuScene(
-                parent=self.stop_player, widget=menu.widget, tmx=menu.tmx
+                parent=self.stop_player,
+                widget=menu.panel,
+                name_to_on_screens=menu.tmx.name_to_on_screens,
+                **menu.kwargs,
             )
             return menu_scene, state
         return super().event(event, state)

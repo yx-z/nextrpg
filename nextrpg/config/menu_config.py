@@ -1,29 +1,38 @@
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import cached_property
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.sprite import BlurRadius
 
 if TYPE_CHECKING:
-    from nextrpg.core.tmx_loader import TmxLoader
-    from nextrpg.widget.widget_group import WidgetGroup
+    from nextrpg.widget.panel import Panel
+    from nextrpg.widget.tmx_widget_loader import TmxWidgetLoader
 
 
 @dataclass(frozen=True)
 class MenuConfig:
-    widget_input: Callable[[], WidgetGroup]
-    tmx_input: TmxLoader | Callable[[], TmxLoader]
+    panel_input: Callable[[], Panel]
+    tmx_input: TmxWidgetLoader | Callable[[], TmxWidgetLoader]
     blur_radius: BlurRadius = 2
     fade_duration_override: Millisecond | None = None
+    kwargs_input: dict[str, Any] | Callable[[], dict[str, Any]] = field(
+        default_factory=dict
+    )
 
     @cached_property
-    def widget(self) -> WidgetGroup:
-        return self.widget_input()
+    def kwargs(self) -> dict[str, Any]:
+        if callable(self.kwargs_input):
+            return self.kwargs_input()
+        return self.kwargs_input
 
     @cached_property
-    def tmx(self) -> TmxLoader:
+    def panel(self) -> Panel:
+        return self.panel_input()
+
+    @cached_property
+    def tmx(self) -> TmxWidgetLoader:
         if callable(self.tmx_input):
             return self.tmx_input()
         return self.tmx_input

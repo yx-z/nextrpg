@@ -2,7 +2,6 @@ from dataclasses import KW_ONLY, dataclass, field, replace
 from functools import cached_property
 from typing import ClassVar, Self, override
 
-from nextrpg import Coordinate
 from nextrpg.config.config import config
 from nextrpg.config.widget.panel_config import PanelConfig
 from nextrpg.core.dataclass_with_default import default, private_init_below
@@ -10,6 +9,7 @@ from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.area_on_screen import AreaOnScreen
+from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.size import Height, Width
 from nextrpg.widget.scroll_direction import ScrollDirection
 from nextrpg.widget.sizable_widget import SizableWidget, SizableWidgetOnScreen

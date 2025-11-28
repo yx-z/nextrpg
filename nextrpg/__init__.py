@@ -293,7 +293,7 @@ from nextrpg.widget.menu_scene import MenuScene
 from nextrpg.widget.panel import Panel, PanelOnScreen
 from nextrpg.widget.scroll_direction import ScrollDirection
 from nextrpg.widget.sizable_widget import SizableWidget, SizableWidgetOnScreen
-from nextrpg.widget.tmx_widget_group_on_screen import TmxWidgetGroupOnScreen
+from nextrpg.widget.tmx_widget_loader import TmxWidgetLoader
 from nextrpg.widget.widget import Widget, WidgetOnScreen
 from nextrpg.widget.widget_group import (
     WidgetGroup,

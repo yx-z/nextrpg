@@ -9,13 +9,13 @@ from nextrpg import (
     GameSaveMeta,
     GameState,
     MapScene,
+    Panel,
+    PanelOnScreen,
     SaveIo,
     Scene,
     ScrollDirection,
-    TmxLoader,
-    TmxWidgetGroupOnScreen,
+    TmxWidgetLoader,
     TransitionScene,
-    WidgetGroup,
     quit,
 )
 
@@ -28,24 +28,31 @@ def click_start(start: ButtonOnScreen, state: GameState) -> TransitionScene:
     return TransitionScene(new_game)
 
 
-def title(state: GameState) -> TmxWidgetGroupOnScreen:
-    start = Button(name="start", on_click=click_start)
+def title(state: GameState) -> PanelOnScreen:
+    start = Button(text="start", on_click=click_start)
 
     load_panel = create_save_panel(click_load)
-    load = Button(name="load", on_click=load_panel)
+    load = Button(text="load", on_click=load_panel)
 
-    # TODO: Implement.
-    options = Button(name="options", on_click=lambda _, __: print("Options..."))
-    exit_button = Button(name="exit", on_click=quit)
+    # TODO: Implement on_click.
+    options = Button(text="options", on_click=lambda _, __: print("Options..."))
+    exit_button = Button(text="exit", on_click=quit)
 
     children = (start, load, options, exit_button)
-    group = WidgetGroup(
-        children=children, scroll_direction=ScrollDirection.HORIZONTAL
+    panel = Panel(
+        name="buttons",
+        children=children,
+        scroll_direction=ScrollDirection.HORIZONTAL,
     )
-    tmx_path = TMX_DIR / "title.tmx"
-    tmx_loader = TmxLoader(tmx_path)
-    return TmxWidgetGroupOnScreen(
-        tmx=tmx_loader, background_layer="background", widget=group
+
+    tmx_widget_loader = TmxWidgetLoader(TMX_DIR / "title.tmx")
+    background = tmx_widget_loader.background("background")
+    name_to_on_screens = tmx_widget_loader.name_to_on_screens
+    return PanelOnScreen(
+        widget=panel,
+        background=background,
+        name_to_on_screens=name_to_on_screens,
+        is_selected=True,
     )
 
 

@@ -45,7 +45,7 @@ def get_coordinate(obj: TiledObject) -> Coordinate:
     return Coordinate(obj.x, obj.y)
 
 
-@cached(lambda resource_config: resource_config.tmx_cache_size)
+@cached(lambda resource_config: resource_config.tmx_loader_cache_size)
 @dataclass_with_default(frozen=True)
 class TmxLoader:
     file: Path

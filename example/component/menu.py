@@ -13,19 +13,18 @@ from nextrpg import (
     GameState,
     MapScene,
     MenuScene,
+    Panel,
     PanelOnScreen,
     SaveIo,
     ScrollDirection,
-    TmxLoader,
+    TmxWidgetLoader,
     TransitionScene,
-    WidgetGroup,
     last_scene,
 )
 
 
-def tmx() -> TmxLoader:
-    tmx_path = TMX_DIR / "menu.tmx"
-    return TmxLoader(tmx_path)
+def tmx() -> TmxWidgetLoader:
+    return TmxWidgetLoader(TMX_DIR / "menu.tmx")
 
 
 def title_scene(button: ButtonOnScreen, state: GameState) -> TransitionScene:
@@ -37,14 +36,15 @@ def title_scene(button: ButtonOnScreen, state: GameState) -> TransitionScene:
     return TransitionScene(title)
 
 
-def menu_widget() -> WidgetGroup:
+def menu_widget() -> Panel:
     save_panel = create_save_panel(click_save_slot)
-    save_button = Button(name="save", on_click=save_panel)
+    save_button = Button(text="save", on_click=save_panel)
 
-    title_button = Button(name="title", on_click=title_scene)
-    widgets = (save_button, title_button)
-    return WidgetGroup(
-        children=widgets,
+    title_button = Button(text="title", on_click=title_scene)
+    buttons = (save_button, title_button)
+    return Panel(
+        name="buttons",
+        children=buttons,
         scroll_direction=ScrollDirection.HORIZONTAL,
         enter_animation=ENTER_ANIMATION,
     )

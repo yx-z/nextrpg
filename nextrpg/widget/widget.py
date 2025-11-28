@@ -30,8 +30,8 @@ class WidgetOnScreen(Scene):
     widget: Widget
     name_to_on_screens: frozendict[str, Coordinate | AreaOnScreen]
     parent: Scene | None = field(default=None, repr=False)
-    _: KW_ONLY = private_init_below()
     is_selected: bool = False
+    _: KW_ONLY = private_init_below()
     _enter_animation: TimedAnimationOnScreens | None = default(
         lambda self: self._init_enter_animation
     )

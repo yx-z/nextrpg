@@ -3,7 +3,6 @@ from dataclasses import KW_ONLY, field, replace
 from functools import cached_property
 from typing import ClassVar, Self, override
 
-from nextrpg import ShiftedSprite
 from nextrpg.animation.cycle import Cycle
 from nextrpg.animation.fade import FadeIn, FadeOut
 from nextrpg.config.config import config
@@ -17,6 +16,7 @@ from nextrpg.core.dataclass_with_default import (
 from nextrpg.core.time import Millisecond
 from nextrpg.drawing.color import Color
 from nextrpg.drawing.drawing_group import DrawingGroup
+from nextrpg.drawing.shifted_sprite import ShiftedSprite
 from nextrpg.drawing.sprite import Sprite
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
