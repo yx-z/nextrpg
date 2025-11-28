@@ -155,7 +155,7 @@ from nextrpg.drawing.sprite_on_screen import (
     animate,
 )
 from nextrpg.drawing.sprite_sheet import SpriteSheet, SpriteSheetSelection
-from nextrpg.drawing.text import Text
+from nextrpg.drawing.text import LineDrawingAndHeight, Text
 from nextrpg.drawing.text_group import TextGroup
 from nextrpg.drawing.text_on_screen import TextOnScreen
 from nextrpg.event.background_event import (

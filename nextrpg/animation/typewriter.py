@@ -11,7 +11,9 @@ from nextrpg.core.dataclass_with_default import (
     private_init_below,
 )
 from nextrpg.core.time import Millisecond, Timer
+from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
+from nextrpg.drawing.shifted_sprite import ShiftedSprite
 from nextrpg.drawing.text_on_screen import TextOnScreen
 
 
@@ -26,9 +28,16 @@ class Typewriter(AbstractAnimationOnScreen):
     @cached_property
     @override
     def drawing_on_screens(self) -> tuple[DrawingOnScreen, ...]:
-        text = self.text_on_screen.text[: self._index + 1]
-        text_on_screen = replace(self.text_on_screen, text_input=text)
-        return text_on_screen.drawing_on_screens
+        trimmed = self.text_on_screen.text[: self._index + 1]
+        drawings: list[ShiftedSprite] = []
+        for orig, trim in zip(
+            self.text_on_screen.text.line_drawing_and_heights,
+            trimmed.line_drawing_and_heights,
+        ):
+            height_diff = orig.height - trim.height
+            drawings.append(trim.drawing + height_diff)
+        drawing_group = DrawingGroup(tuple(drawings))
+        return drawing_group.drawing_on_screens(self.text_on_screen.coordinate)
 
     @override
     def _tick_before_complete(self, time_delta: Millisecond) -> Self:

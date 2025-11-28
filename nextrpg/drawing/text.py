@@ -35,11 +35,20 @@ class Text(Sprite):
     @override
     @cached_property
     def drawing(self) -> DrawingGroup:
-        draws = tuple(
-            self._drawing(line) + self._line_shift(i)
-            for i, line in enumerate(self.lines)
-        )
-        return DrawingGroup(draws)
+        drawing = tuple(d.drawing for d in self.line_drawing_and_heights)
+        return DrawingGroup(drawing)
+
+    @cached_property
+    def line_drawing_and_heights(self) -> tuple[LineDrawingAndHeight, ...]:
+        line_height = self.config.font.text_height + self.config.line_spacing
+        res: list[LineDrawingAndHeight] = []
+        for i, line in enumerate(self.lines):
+            line_drawing = self._drawing(line) + i * line_height
+            drawing_and_height = LineDrawingAndHeight(
+                DrawingGroup(line_drawing), line_height
+            )
+            res.append(drawing_and_height)
+        return tuple(res)
 
     def text_on_screen(
         self, coordinate: Coordinate, anchor: Anchor = Anchor.TOP_LEFT
@@ -118,12 +127,14 @@ class Text(Sprite):
                 line_buffer = []
         return tuple(lines)
 
-    def _line_shift(self, index: int) -> Size:
-        height = self.config.font.text_height + self.config.line_spacing
-        return (height * index).size
-
     def _drawing(self, line: str) -> Drawing:
         surface = self.config.font.pygame.render(
             line, antialias=True, color=self.config.color.pygame
         )
         return Drawing(surface, allow_background_in_debug=False)
+
+
+@dataclass(frozen=True)
+class LineDrawingAndHeight:
+    drawing: DrawingGroup
+    height: Height

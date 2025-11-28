@@ -7,7 +7,7 @@ from nextrpg.config.drawing.text_group_config import TextGroupConfig
 from nextrpg.drawing.drawing_group import DrawingGroup
 from nextrpg.drawing.shifted_sprite import ShiftedSprite
 from nextrpg.drawing.sprite import Sprite
-from nextrpg.drawing.text import Text
+from nextrpg.drawing.text import LineDrawingAndHeight, Text
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.directional_offset import DirectionalOffset
@@ -98,24 +98,37 @@ class TextGroup(Sprite):
     @override
     @cached_property
     def drawing(self) -> DrawingGroup:
+        sprites = tuple(d.drawing for d in self.line_drawing_and_heights)
+        return DrawingGroup(sprites)
+
+    @cached_property
+    def line_drawing_and_heights(self) -> tuple[LineDrawingAndHeight, ...]:
         lines = [[t] for t in _text_or_sprite_line(self._no_wrap[0])]
         for text_or_sprite in self._no_wrap[1:]:
             line = _text_or_sprite_line(text_or_sprite)
+            # Concatenate the current line to the previous line so that
+            # the text is continuous.
             lines[-1].append(line[0])
             lines += [[t] for t in line[1:]]
 
-        res: list[ShiftedSprite] = []
+        res: list[LineDrawingAndHeight] = []
         curr_height = ZERO_HEIGHT
         for line in lines:
             curr_width = ZERO_WIDTH
-            line_height = max(word.height for word in line)
+            line_height = (
+                max(sprite.height for sprite in line) + self.config.line_spacing
+            )
+            line_group: list[ShiftedSprite] = []
             for sprite in line:
                 height_diff = line_height - sprite.height
                 shift = curr_width * (curr_height + height_diff)
-                res.append(sprite.drawing + shift)
+                line_group.append(sprite.drawing + shift)
                 curr_width += sprite.width + self.config.margin
-            curr_height += line_height + self.config.line_spacing
-        return DrawingGroup(tuple(res))
+            drawing_group = DrawingGroup(tuple(line_group))
+            line_res = LineDrawingAndHeight(drawing_group, line_height)
+            res.append(line_res)
+            curr_height += line_height
+        return tuple(res)
 
     @cached_property
     def _no_wrap(self) -> tuple[Text | Sprite, ...]:

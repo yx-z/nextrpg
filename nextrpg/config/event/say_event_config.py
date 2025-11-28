@@ -82,7 +82,7 @@ class SayEventConfig:
     background_edge_center_to_tip: Width = Width(5)
     fade_duration: Millisecond = 200
     padding: Size = Size(12, 12)
-    text_delay: Millisecond = 20
+    text_delay: Millisecond = 15
     name_override: str | None = None
     scene_coordinate_input: Coordinate | None = None
     character_coordinate_input: Coordinate | None = None
