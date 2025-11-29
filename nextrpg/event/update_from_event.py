@@ -4,17 +4,17 @@ from typing import Self, override
 from nextrpg.character.npc_on_screen import NpcOnScreen, replace_npc
 from nextrpg.character.player_on_screen import PlayerOnScreen
 from nextrpg.core.time import Millisecond
-from nextrpg.event.eventful_scene import EventfulScene
-from nextrpg.event.rpg_event_scene import (
-    RpgEventScene,
+from nextrpg.event.event_scene import (
+    EventScene,
     register_rpg_event_scene,
 )
+from nextrpg.event.eventful_scene import EventfulScene
 from nextrpg.game.game_state import GameState
 from nextrpg.scene.scene import Scene
 
 
 @dataclass(frozen=True)
-class UpdateFromEvent(RpgEventScene):
+class UpdateFromEvent(EventScene):
     update: PlayerOnScreen | NpcOnScreen | EventfulScene | GameState
 
     @override

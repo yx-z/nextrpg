@@ -102,7 +102,7 @@ def _is_rpg_event(name: str) -> bool:
 
 
 def _is_rpg_event_scene(name: str) -> bool:
-    from nextrpg.event.rpg_event_scene import (
+    from nextrpg.event.event_scene import (
         registered_rpg_event_scenes,
     )
 

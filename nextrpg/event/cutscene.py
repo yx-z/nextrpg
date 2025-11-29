@@ -6,9 +6,9 @@ from typing import Any, overload
 from nextrpg.config.config import config
 from nextrpg.config.event.cutscene_config import CutsceneConfig
 from nextrpg.drawing.drawing_on_screens import DrawingOnScreens
+from nextrpg.event.event_scene import EventGenerator
 from nextrpg.event.fade_in_event_scene import fade_in
 from nextrpg.event.fade_out_event_scene import fade_out
-from nextrpg.event.rpg_event_scene import EventGenerator
 from nextrpg.geometry.coordinate import ORIGIN
 from nextrpg.gui.screen_area import screen_area, screen_size
 

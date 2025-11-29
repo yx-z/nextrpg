@@ -22,13 +22,13 @@ from nextrpg.event.background_event import (
     BackgroundEvent,
     BackgroundEventSentinel,
 )
-from nextrpg.event.event_transformer import register_rpg_event
-from nextrpg.event.eventful_scene import EventfulScene
-from nextrpg.event.rpg_event_scene import (
+from nextrpg.event.event_scene import (
     EventGenerator,
-    RpgEventScene,
+    EventScene,
     register_rpg_event_scene,
 )
+from nextrpg.event.event_transformer import register_rpg_event
+from nextrpg.event.eventful_scene import EventfulScene
 from nextrpg.event.update_from_event import update_from_event
 from nextrpg.game.game_state import GameState
 from nextrpg.scene.scene import Scene
@@ -58,7 +58,7 @@ class BackgroundFadeOutEvent(BackgroundEvent):
 
 
 @dataclass_with_default(frozen=True)
-class FadeOutEventScene(RpgEventScene):
+class FadeOutEventScene(EventScene):
     resource: BackgroundEventSentinel | SpriteOnScreen
     wait: bool = True
     duration: Millisecond = field(

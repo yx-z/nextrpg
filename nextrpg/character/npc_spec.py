@@ -24,12 +24,12 @@ from nextrpg.event.event_transformer import transform_event
 
 if TYPE_CHECKING:
     from nextrpg.character.npc_on_screen import NpcOnScreen
-    from nextrpg.event.eventful_scene import EventfulScene
-    from nextrpg.event.rpg_event_scene import (
+    from nextrpg.event.event_scene import (
         DISMISS_EVENT,
         EventGenerator,
-        RpgEventScene,
+        EventScene,
     )
+    from nextrpg.event.eventful_scene import EventfulScene
     from nextrpg.game.game_state import GameState
 
 
@@ -52,7 +52,7 @@ class EventSpec(UpdateFromSave[dict[str, Any]]):
     start_mode: NpcEventStartMode = NpcEventStartMode.CONFIRM
     _: KW_ONLY = private_init_below()
     generator: Callable[
-        [*EventSpecParams], Generator[RpgEventScene, Any, None]
+        [*EventSpecParams], Generator[EventScene, Any, None]
     ] = default(lambda self: transform_event(self.event))
 
     def with_event(self, event: RpgEvent) -> Self:

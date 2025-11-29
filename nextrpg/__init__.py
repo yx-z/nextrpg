@@ -165,6 +165,15 @@ from nextrpg.event.background_event import (
 from nextrpg.event.code_transformer import ADD_PARENT, ADD_YIELD, ANNOTATE_SAY
 from nextrpg.event.cutscene import cutscene
 from nextrpg.event.event_as_attr import EventAsAttr
+from nextrpg.event.event_scene import (
+    DISMISS_EVENT,
+    EventCallable,
+    EventCompletion,
+    EventGenerator,
+    EventScene,
+    register_rpg_event_scene,
+    registered_rpg_event_scenes,
+)
 from nextrpg.event.event_transformer import (
     register_rpg_event,
     registered_rpg_events,
@@ -191,15 +200,6 @@ from nextrpg.event.io_event import (
     is_key_press,
     quit,
     to_io_event,
-)
-from nextrpg.event.rpg_event_scene import (
-    DISMISS_EVENT,
-    EventCallable,
-    EventCompletion,
-    EventGenerator,
-    RpgEventScene,
-    register_rpg_event_scene,
-    registered_rpg_event_scenes,
 )
 from nextrpg.event.say_event.say_event_add_on import (
     SayEventAddOn,

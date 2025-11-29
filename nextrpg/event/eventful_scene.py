@@ -22,13 +22,13 @@ from nextrpg.event.background_event import (
     BackgroundEventSentinel,
 )
 from nextrpg.event.event_as_attr import EventAsAttr
-from nextrpg.event.io_event import IoEvent, is_key_press
-from nextrpg.event.rpg_event_scene import (
+from nextrpg.event.event_scene import (
     DISMISS_EVENT,
     EventCallable,
     EventCompletion,
     EventGenerator,
 )
+from nextrpg.event.io_event import IoEvent, is_key_press
 from nextrpg.game.game_state import GameState
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.scene import Scene

@@ -13,11 +13,11 @@ from nextrpg.drawing.drawing_on_screen import DrawingOnScreen
 from nextrpg.drawing.sprite import Sprite
 from nextrpg.drawing.text import Text
 from nextrpg.drawing.text_group import TextGroup
-from nextrpg.event.io_event import IoEvent
-from nextrpg.event.rpg_event_scene import (
-    RpgEventScene,
+from nextrpg.event.event_scene import (
+    EventScene,
     register_rpg_event_scene,
 )
+from nextrpg.event.io_event import IoEvent
 from nextrpg.event.say_event.say_event_add_on import (
     SayEventAddOn,
     SayEventCharacterAddOn,
@@ -34,7 +34,7 @@ type SayEventArg = str | Coordinate | Millisecond | Size | Sprite | AvatarPositi
 
 
 @dataclass(frozen=True)
-class SayEventScene(RpgEventScene):
+class SayEventScene(EventScene):
     character_or_scene: CharacterOnScreen | Scene
     message: str | Text | Sprite | TextGroup
     args: tuple[SayEventArg, ...] = ()

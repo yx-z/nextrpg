@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class RpgEventScene(Scene):
+class EventScene(Scene):
     parent: EventfulScene
 
     @cached_property
@@ -42,7 +42,7 @@ class RpgEventScene(Scene):
 
 
 def register_rpg_event_scene[R, **P](
-    cls: type[RpgEventScene],
+    cls: type[EventScene],
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     def decorate(f: Callable[P, R]) -> Callable[P, R]:
         def decorated(*args: P.args, **kwargs: P.kwargs) -> R:
@@ -63,6 +63,6 @@ class _DontRestartEvent:
 
 DISMISS_EVENT = _DontRestartEvent()
 
-type EventCallable = Callable[[EventfulScene], RpgEventScene]
+type EventCallable = Callable[[EventfulScene], EventScene]
 type EventCompletion = Literal[DISMISS_EVENT] | Any | None
 type EventGenerator = Generator[EventCallable, Any, EventCompletion]

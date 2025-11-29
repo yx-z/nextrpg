@@ -22,15 +22,15 @@ from nextrpg.drawing.sprite_on_screen import (
     animate,
 )
 from nextrpg.drawing.text_on_screen import TextOnScreen
+from nextrpg.event.event_scene import EventScene
 from nextrpg.event.io_event import IoEvent, is_key_press
-from nextrpg.event.rpg_event_scene import RpgEventScene
 from nextrpg.game.game_state import GameState
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.scene.scene import Scene
 
 
 @dataclass_with_default(frozen=True, kw_only=True)
-class SayEventState(RpgEventScene, ABC):
+class SayEventState(EventScene, ABC):
     unique_name: str | None
     config: SayEventConfig
     _: KW_ONLY = private_init_below()

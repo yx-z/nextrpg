@@ -8,12 +8,12 @@ from typing import TYPE_CHECKING, Any, Generator
 from nextrpg.config.config import config
 
 if TYPE_CHECKING:
-    from nextrpg.event.rpg_event_scene import RpgEventScene
+    from nextrpg.event.event_scene import EventScene
 
 
 def transform_event[**P](
     fun: Callable[P, None], name_override: str | None = None
-) -> Callable[P, Generator[RpgEventScene, Any, None]]:
+) -> Callable[P, Generator[EventScene, Any, None]]:
     if isfunction(fun):
         function = fun
         name = fun.__name__
