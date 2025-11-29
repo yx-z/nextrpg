@@ -36,8 +36,8 @@ class SayEventState(EventScene, ABC):
     _: KW_ONLY = private_init_below()
     initial_coordinate: Coordinate | None = default(
         lambda self: (
-            self.parent.get_character(name).coordinate
-            if (name := self.unique_name)
+            self.parent.get_character(self.unique_name).coordinate
+            if self.unique_name
             else None
         )
     )
