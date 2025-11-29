@@ -41,11 +41,9 @@ def pick_up_fruit(
 
     cfg = config().event.say_event.text_config
     icon = config().item.get_icon(ItemKey.FRUIT)
-    scene: (
-        Text("You picked up the fruit! ", cfg) + icon + Text("\nTry it!", cfg)
-    )
+    scene: Text("You picked up the fruit! ", cfg) + icon
 
-    state.update_event(inventory_update=+ItemKey.FRUIT)
+    state.update_event(inventory_update=ItemKey.FRUIT)
     return DISMISS_EVENT
 
 
