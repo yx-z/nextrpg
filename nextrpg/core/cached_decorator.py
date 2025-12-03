@@ -8,6 +8,8 @@ from cachetools import LRUCache
 if TYPE_CHECKING:
     from nextrpg.config.system.resource_config import ResourceConfig
 
+logger = logging.getLogger("cached_decorator")
+
 
 def key_by_first_arg[K: Hashable](cls: type, *args: Any, **kwargs: Any) -> K:
     if args:
@@ -46,7 +48,7 @@ class cached[T, K, **P]:
 
             instance = object.__new__(klass)
             instances[key] = instance
-            logging.debug(f"Cache size for {klass} is {len(instances)}.")
+            logger.debug(f"Cache size for {klass} is {len(instances)}.")
             return instance
 
         cls.__new__ = new

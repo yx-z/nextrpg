@@ -10,6 +10,8 @@ from nextrpg.config.config import config
 if TYPE_CHECKING:
     from nextrpg.event.event_scene import EventScene
 
+logger = logging.getLogger("event_transformer")
+
 
 def transform_event[**P](
     fun: Callable[P, None], name_override: str | None = None
@@ -26,7 +28,7 @@ def transform_event[**P](
     for transformer in config().event.event_transformer.transformers:
         tree = transformer.visit(tree)
     tree = fix_missing_locations(tree)
-    logging.debug(f"Parsed code for {fun}\n{unparse(tree)}")
+    logger.debug(f"Parsed code for {fun}\n{unparse(tree)}")
     code = compile(tree, __file__, "exec")
     ctx = function.__globals__ | {
         v: c.cell_contents
