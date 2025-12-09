@@ -29,24 +29,24 @@ class Config:
 
 _initial_config: Config | None = None
 _config: Config | None = None
-_last_debug_config: DebugConfig | None = None
+_latest_debug_config: DebugConfig | None = None
 
 
 def set_config(cfg: Config) -> Config:
     global _initial_config
     global _config
-    global _last_debug_config
+    global _latest_debug_config
     if not _initial_config:
         _initial_config = cfg
     if cfg.system.debug:
-        _last_debug_config = cfg.system.debug
+        _latest_debug_config = cfg.system.debug
     _config = cfg
-    return _config
+    return cfg
 
 
 def force_debug_config() -> DebugConfig:
-    if _last_debug_config:
-        return _last_debug_config
+    if _latest_debug_config:
+        return _latest_debug_config
     debug = DebugConfig()
     current_config = config()
     system = replace(current_config.system, debug=debug)

@@ -89,11 +89,11 @@ class Window:
 
     def event(self, event: IoEvent) -> Self:
         if is_key_press(event, KeyMappingConfig.full_screen_toggle):
-            return self._toggle_full_screen()
+            return self.toggle_full_screen()
         if is_key_press(event, KeyMappingConfig.include_fps_in_title_toggle):
-            return self._toggle_include_fps_in_window_title()
+            return self.toggle_include_fps_in_window_title()
         if isinstance(event, WindowResize):
-            return self._resize(event.size)
+            return self.resize(event.size)
         if isinstance(event, MouseButtonDown):
             logger.debug(t"Mouse clicked at {event.coordinate}")
         return self
@@ -117,7 +117,20 @@ class Window:
         self._screen.blit(scaled.pygame, self._center_shift)
         flip()
 
-    def _toggle_include_fps_in_window_title(self) -> Self:
+    def toggle_full_screen(self) -> Self:
+        full_screen = not self.current_config.full_screen
+        updated_config = replace(self.current_config, full_screen=full_screen)
+        _set_window_config(updated_config)
+        return self.tick()
+
+    def resize(self, size: Size) -> Self:
+        if size == self.current_config.size:
+            return self
+        updated_config = replace(self.current_config, size=size)
+        _set_window_config(updated_config)
+        return self.tick()
+
+    def toggle_include_fps_in_window_title(self) -> Self:
         window_config = replace(
             self.current_config,
             include_fps_in_window_title=not self.current_config.include_fps_in_window_title,
@@ -143,19 +156,6 @@ class Window:
         width_shift = (current_width - self._scaling * initial_width) / 2
         height_shift = (current_height - self._scaling * initial_height) / 2
         return Coordinate(width_shift, height_shift)
-
-    def _toggle_full_screen(self) -> Self:
-        full_screen = not self.current_config.full_screen
-        updated_config = replace(self.current_config, full_screen=full_screen)
-        _set_window_config(updated_config)
-        return self.tick()
-
-    def _resize(self, size: Size) -> Self:
-        if size == self.current_config.size:
-            return self
-        updated_config = replace(self.current_config, size=size)
-        _set_window_config(updated_config)
-        return self.tick()
 
     @cached_property
     def _saved_config(self) -> WindowConfig | None:
