@@ -169,9 +169,10 @@ class Window:
 
 def _set_window_config(window_config: WindowConfig) -> None:
     SaveIo().save(window_config)
-    system_config = replace(config().system, window=window_config)
-    full_config = replace(config(), system=system_config)
-    set_config(full_config)
+    current_config = config()
+    system_config = replace(current_config.system, window=window_config)
+    cfg = replace(current_config, system=system_config)
+    set_config(cfg)
 
 
 def _log(entries: Collection[LogEntry]) -> list[DrawingOnScreen]:
