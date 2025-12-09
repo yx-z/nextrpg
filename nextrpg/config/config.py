@@ -59,13 +59,15 @@ def force_debug_config() -> DebugConfig:
 def config() -> Config:
     global _config
     if not _config:
-        set_config(Config())
+        cfg = Config()
+        set_config(cfg)
     return _config
 
 
 def initial_config() -> Config:
     if not _initial_config:
-        set_config(Config())
+        cfg = Config()
+        set_config(cfg)
     return _initial_config
 
 
