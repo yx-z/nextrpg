@@ -45,7 +45,6 @@ def set_config(cfg: Config) -> Config:
 
 
 def force_debug_config() -> DebugConfig:
-    global _last_debug_config
     if _last_debug_config:
         return _last_debug_config
     debug = DebugConfig()
@@ -57,18 +56,17 @@ def force_debug_config() -> DebugConfig:
 
 
 def config() -> Config:
-    global _config
-    if not _config:
-        cfg = Config()
-        set_config(cfg)
-    return _config
+    if _config:
+        return _config
+    cfg = Config()
+    return set_config(cfg)
 
 
 def initial_config() -> Config:
-    if not _initial_config:
-        cfg = Config()
-        set_config(cfg)
-    return _initial_config
+    if _initial_config:
+        return _initial_config
+    cfg = Config()
+    return set_config(cfg)
 
 
 @contextmanager
