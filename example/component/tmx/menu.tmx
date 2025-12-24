@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="1280" height="720" tilewidth="1" tileheight="1" infinite="0" nextlayerid="6" nextobjectid="12">
+ <objectgroup id="5" name="buttons">
+  <object id="10" name="panel" x="274" y="139" width="750" height="480"/>
+  <object id="11" name="buttons" x="90.9091" y="33.3333" width="1139.39" height="69.697"/>
+ </objectgroup>
+</map>
