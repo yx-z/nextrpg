@@ -1,6 +1,6 @@
 import logging
 import os
-from dataclasses import dataclass, replace
+from dataclasses import replace
 from functools import cached_property
 from io import BytesIO
 from pathlib import Path
@@ -10,6 +10,7 @@ from pygame import BLEND_RGBA_MULT, SRCALPHA, Surface, image
 from pygame.transform import flip, gaussian_blur, rotate, smoothscale
 
 from nextrpg.core.cached_decorator import cached
+from nextrpg.core.dataclass_with_default import dataclass_with_default, default
 from nextrpg.core.logger import Logger
 from nextrpg.core.metadata import METADATA_CACHE_KEY, HasMetadata, Metadata
 from nextrpg.core.save import LoadFromSave
@@ -39,27 +40,29 @@ on_screen_logger = Logger("drawing")
 console_logger = logging.getLogger("drawing")
 
 
-def _metadata_or_path(
-    cls: type, resource: str | Path | Surface, *args: Any, **kwargs: Any
-) -> str | Path | Metadata | None:
-    if isinstance(resource, Surface):
-        if (metadata := kwargs.get("metadata")) and metadata[
-            0
-        ] == METADATA_CACHE_KEY:
-            return metadata
-        return None
-    return resource
+def _metadata_key(cls: type, *args: Any, **kwargs: Any) -> Metadata | None:
+    if (metadata := kwargs.get("metadata")) and metadata[
+        0
+    ] == METADATA_CACHE_KEY:
+        return metadata
+    return None
+
+
+def _default_metadata(self: Drawing) -> Metadata:
+    if isinstance(self.resource, Surface):
+        return ()
+    return METADATA_CACHE_KEY, ("resource", str(self.resource))
 
 
 @cached(
     lambda resource_config: resource_config.drawing_cache_size,
-    _metadata_or_path,
+    _metadata_key,
 )
-@dataclass(frozen=True)
+@dataclass_with_default(frozen=True)
 class Drawing(Sprite, HasMetadata, LoadFromSave):
     resource: str | Path | Surface
     allow_background_in_debug: bool = True
-    metadata: Metadata = ()
+    metadata: Metadata = default(_default_metadata)
 
     @override
     def save_data_this_class(self) -> str | bytes:
