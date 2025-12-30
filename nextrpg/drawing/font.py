@@ -50,10 +50,8 @@ class Font:
             font.set_italic(self.italic)
         else:
             font = SysFont(self.name, height, self.bold, self.italic)
-        if self.underline:
-            font.set_underline(True)
-        if self.strikethrough:
-            font.set_strikethrough(True)
+        font.set_underline(self.underline)
+        font.set_strikethrough(self.strikethrough)
         if self.script:
             font.set_script(self.script)
         return font
@@ -61,7 +59,3 @@ class Font:
     def text_size(self, text: str) -> Size:
         width, height = self.pygame.size(text)
         return Size(width, height)
-
-    @cached_property
-    def text_height(self) -> Height:
-        return Height(self.pygame.get_linesize())

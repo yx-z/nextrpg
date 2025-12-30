@@ -40,7 +40,7 @@ class Text(Sprite):
 
     @cached_property
     def line_drawing_and_heights(self) -> tuple[LineDrawingAndHeight, ...]:
-        line_height = self.config.font.text_height + self.config.line_spacing
+        line_height = self.config.font.height + self.config.line_spacing
         res: list[LineDrawingAndHeight] = []
         for i, line in enumerate(self.lines):
             line_drawing = self._drawing(line) + i * line_height
