@@ -3,7 +3,7 @@ from dataclasses import dataclass, replace
 from functools import cached_property
 from typing import Any, Self, override
 
-from pygame import DOUBLEBUF, FULLSCREEN, RESIZABLE
+from pygame import DOUBLEBUF, FULLSCREEN, HWSURFACE, RESIZABLE
 
 from nextrpg.core.save import UpdateSavable
 from nextrpg.drawing.color import BLACK, Color
@@ -20,6 +20,7 @@ class WindowConfig(UpdateSavable[dict[str, Any]]):
     full_screen: bool = False
     allow_resize: bool = True
     include_fps_in_window_title: bool = False
+    hardware_surface: bool = True
     icon_input: Sprite | Callable[[], Sprite] | None = None
 
     @cached_property
@@ -47,6 +48,8 @@ class WindowConfig(UpdateSavable[dict[str, Any]]):
     @cached_property
     def flag(self) -> _WindowFlag:
         flag = 0
+        if self.hardware_surface:
+            flag |= HWSURFACE
         if self.double_buffer:
             flag |= DOUBLEBUF
         if self.full_screen:
