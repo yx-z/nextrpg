@@ -7,8 +7,15 @@ from typing import (
 )
 
 
+class _PrivateInitType:
+    pass
+
+
+_PRIVATE_INIT = _PrivateInitType()
+
+
 def private_init_below() -> Any:
-    return None
+    return _PRIVATE_INIT
 
 
 @dataclass(frozen=True)
