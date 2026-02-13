@@ -9,7 +9,7 @@ from nextrpg.geometry.size import Height
 def _widget_metadata_text() -> TextConfig:
     from nextrpg.config.config import config
 
-    return config().drawing.text.with_height(Height(12))
+    return config().drawing.text.with_font_size(Height(12))
 
 
 @dataclass(frozen=True)

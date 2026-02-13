@@ -1,17 +1,24 @@
 from dataclasses import dataclass, replace
 from functools import cached_property
+import os
 from pathlib import Path
 from typing import Self
 
 import pygame
 from pygame.font import SysFont
 
-from nextrpg.geometry.size import Height, Size
+from nextrpg.geometry.dimension import Pixel
+from nextrpg.geometry.size import Size
+
+
+@dataclass(frozen=True)
+class FontSize:
+    value: Pixel
 
 
 @dataclass(frozen=True)
 class Font:
-    height: Height
+    font_size: FontSize
     name: str | Path | None = None
     bold: bool = False
     italic: bool = False
@@ -38,18 +45,18 @@ class Font:
     def with_script(self, script: str) -> Self:
         return replace(self, script=script)
 
-    def with_height(self, height: Height) -> Self:
-        return replace(self, height=height)
+    def with_font_size(self, font_size: FontSize) -> Self:
+        return replace(self, font_size=font_size)
 
     @cached_property
     def pygame(self) -> pygame.Font:
-        height = int(self.height.value)
-        if isinstance(self.name, Path):
+        if isinstance(self.name, Path) or os.path.exists(self.name):
             font = pygame.Font(self.name)
             font.set_bold(self.bold)
             font.set_italic(self.italic)
         else:
-            font = SysFont(self.name, height, self.bold, self.italic)
+            size_px = int(self.font_size.value)
+            font = SysFont(self.name, size_px, self.bold, self.italic)
         font.set_underline(self.underline)
         font.set_strikethrough(self.strikethrough)
         if self.script:

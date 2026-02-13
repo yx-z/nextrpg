@@ -151,7 +151,7 @@ from nextrpg.drawing.drawing_on_screens import (
     DrawingOnScreens,
     drawing_on_screens,
 )
-from nextrpg.drawing.font import Font
+from nextrpg.drawing.font import Font, FontSize
 from nextrpg.drawing.nine_slice import NineSlice
 from nextrpg.drawing.polygon_drawing import PolygonDrawing
 from nextrpg.drawing.polyline_drawing import PolylineDrawing

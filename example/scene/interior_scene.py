@@ -107,7 +107,7 @@ class StatefulGreet(LoadFromSave[int]):
         cfg = config().event.say_event.text_config
         # Customized text color/font config.
         # fmt: off
-        scene["Interior Scene"]: Text("Greetings!", cfg.with_height(Height(40))) + Text(
+        scene["Interior Scene"]: Text("Greetings!", cfg.with_font_size(Height(40))) + Text(
         """This is...
         a sample """, cfg) + Text("nextrpg event", cfg.with_color(Color(128, 0, 255)))
         # fmt: on

@@ -11,7 +11,7 @@ from nextrpg.drawing.sprite import Sprite
 from nextrpg.geometry.anchor import Anchor
 from nextrpg.geometry.coordinate import Coordinate
 from nextrpg.geometry.directional_offset import DirectionalOffset
-from nextrpg.geometry.size import Height, Size, Width
+from nextrpg.geometry.size import Height, Size, Width, ZERO_HEIGHT
 
 if TYPE_CHECKING:
     from nextrpg.drawing.text_group import TextGroup
@@ -40,14 +40,16 @@ class Text(Sprite):
 
     @cached_property
     def line_drawing_and_heights(self) -> tuple[LineDrawingAndHeight, ...]:
-        line_height = self.config.font.height + self.config.line_spacing
         res: list[LineDrawingAndHeight] = []
-        for i, line in enumerate(self.lines):
-            line_drawing = self._drawing(line) + i * line_height
-            drawing_and_height = LineDrawingAndHeight(
-                DrawingGroup(line_drawing), line_height
-            )
-            res.append(drawing_and_height)
+        cumulative_height = ZERO_HEIGHT
+        for line in self.lines:
+            line_content_height = self.config.font.text_size(line).height
+            line_height = line_content_height + self.config.line_spacing
+            line_drawing = self._drawing(line) + cumulative_height
+            drawing_group = DrawingGroup(line_drawing)  
+            line_drawing_and_height = LineDrawingAndHeight(drawing_group, line_height) 
+            res.append(line_drawing_and_height)
+            cumulative_height += line_drawing_and_height.height
         return tuple(res)
 
     def text_on_screen(

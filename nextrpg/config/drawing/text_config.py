@@ -3,13 +3,13 @@ from functools import cached_property
 from typing import Self
 
 from nextrpg.drawing.color import WHITE, Color
-from nextrpg.drawing.font import Font
+from nextrpg.drawing.font import Font, FontSize
 from nextrpg.geometry.size import Height, Width
 
 
 @dataclass(frozen=True)
 class TextConfig:
-    font: Font = Font(Height(28))
+    font: Font = Font(FontSize(28))
     color: Color = WHITE
     line_spacing: Height = Height(8)
     wrap: Width | None = None
@@ -23,8 +23,8 @@ class TextConfig:
     def with_wrap(self, wrap: Width) -> Self:
         return replace(self, wrap=wrap)
 
-    def with_height(self, height: Height) -> Self:
-        font = self.font.with_height(height)
+    def with_font_size(self, height: Height) -> Self:
+        font = self.font.with_font_size(FontSize(height.value))
         return replace(self, font=font)
 
     def with_color(self, color: Color) -> Self:
