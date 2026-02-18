@@ -7,5 +7,7 @@ class ItemKey(BaseItemKey):
     FRUIT = auto()
 
 
-ITEMS = (Item(ItemKey.FRUIT, "fruit", icon_input=Drawing("icon/fruit.png")),)
+ITEMS = (
+    Item(ItemKey.FRUIT, "fruit", icon_input=Drawing("example/icon/fruit.png")),
+)
 ITEM_CONFIG = ItemConfig(items=ITEMS)
